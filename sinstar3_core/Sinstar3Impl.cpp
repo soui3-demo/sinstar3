@@ -1,6 +1,6 @@
 #include "StdAfx.h"
 #include "Sinstar3Impl.h"
-
+#include "SouiEnv.h"
 
 #include <initguid.h>
 
@@ -9,11 +9,12 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HINSTANCE hInst)
 :m_pTxtSvr(pTxtSvr)
 ,m_hInst(hInst)
 {
-
+	new CSouiEnv(hInst);
 }
 
 CSinstar3Impl::~CSinstar3Impl(void)
 {
+	delete CSouiEnv::getSingletonPtr();
 }
 
 
@@ -130,3 +131,4 @@ HRESULT CSinstar3Impl::OnQueryInterface(REFIID riid, void **ppvObject)
 {
 	return E_NOINTERFACE;
 }
+

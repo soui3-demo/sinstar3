@@ -23,3 +23,14 @@
 #include "../include/unknownimpl.h"
 
 #include "sinstar3_core.h"
+
+#define	 DLL_SOUI
+#include <souistd.h>
+#include <core/SHostDialog.h>
+#include <control/SMessageBox.h>
+#include <control/souictrls.h>
+#include <com-cfg.h>
+#include "resource.h"
+#define R_IN_CPP	//定义这个开关来
+#include "res\resource.h"
+using namespace SOUI;
