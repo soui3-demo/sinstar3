@@ -195,9 +195,7 @@ UINT WINAPI ImeToAsciiEx (UINT uVKey,UINT uScanCode,CONST LPBYTE lpbKeyState,LPD
 	if(!ppUiWnd)	goto exit;
 	
 	(*ppUiWnd)->m_pCurContext=&ctx;
-//	BOOL bKeyDown=lpbKeyState[uVKey]&0x80;
 	BOOL bKeyDown=TRUE;
-	//BOOL bKeyDown=(GetKeyState(uVKey) & 0x80);
 	if((*ppUiWnd)->m_pBaiduJP3)
 	{
 		GUID guid;
@@ -217,7 +215,7 @@ exit:
 	return ctx._nMsgInBuf;
 }
 
-BOOL PASCAL IsCompStr(HIMC hIMC)
+BOOL IsCompStr(HIMC hIMC)
 {
 	LPINPUTCONTEXT lpIMC;
 	LPCOMPOSITIONSTRING lpCompStr;

@@ -179,7 +179,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\sinstar3_core\core_loader.cpp"
+				RelativePath="..\core_loader\core_loader.cpp"
 				>
 			</File>
 			<File
@@ -249,7 +249,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\sinstar3_core\core_loader.h"
+				RelativePath="..\core_loader\core_loader.h"
 				>
 			</File>
 			<File

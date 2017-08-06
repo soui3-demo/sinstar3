@@ -1,4 +1,7 @@
-#include "StdAfx.h"
+// Windows м╥нд╪Ч:
+#include <windows.h>
+#include <tchar.h>
+
 #include "core_loader.h"
 #include <crtdbg.h>
 

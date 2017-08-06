@@ -24,7 +24,7 @@
 #include "../include/version.h"
 #include "../include/sinstar-i.h"
 
-#include "../sinstar3_core/core_loader.h"
+#include "../core_loader/core_loader.h"
 
 extern HINSTANCE g_hInst;
 extern DWORD g_dwSystemInfoFlags;
