@@ -20,5 +20,6 @@
 
 #include "../include/sinstar-i.h"
 #include "../include/TextService-i.h"
+#include "../include/unknownimpl.h"
 
 #include "sinstar3_core.h"

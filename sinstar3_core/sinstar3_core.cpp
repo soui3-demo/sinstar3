@@ -7,9 +7,8 @@
 
 EXTERN_C BAIDUJP3_API  ISinstar* BaiduJP3_Create(CTextService* pTxtSvr,HINSTANCE hInst)
 {
-	//CBaiduJP3Imp*  pRet= new CBaiduJP3Imp(pTxtSvr,hInst);
-	//return pRet;
-	return NULL;
+	CBaiduJP3Imp*  pRet= new CUnknownImpl<CBaiduJP3Imp>(pTxtSvr,hInst);
+	return pRet;
 }
 
 EXTERN_C BAIDUJP3_API  void BaiduJP3_Delete(ISinstar* pBaiduJP3)

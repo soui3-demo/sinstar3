@@ -9,6 +9,8 @@ public:
 	CBaiduJP3Imp(CTextService *pTxtSvr,HINSTANCE hInst);
 	virtual ~CBaiduJP3Imp(void);
 
+	virtual void Init(CTextService * pTxtSvc);
+
 	virtual void OnIMESelect(BOOL bSelect);
 	virtual void OnCompositionStarted();
 	virtual void OnCompositionChanged();
@@ -34,6 +36,8 @@ public:
 	virtual INT_PTR MessageBox(HWND hWnd,LPCTSTR lpText,LPCTSTR lpCaption,UINT uType);
 
 public:
+	virtual void OnFinalRelease();
+	virtual HRESULT OnQueryInterface(REFIID riid, void **ppvObject);
 };
 
 

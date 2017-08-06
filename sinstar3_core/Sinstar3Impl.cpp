@@ -14,6 +14,13 @@ CBaiduJP3Imp::~CBaiduJP3Imp(void)
 {
 }
 
+
+void CBaiduJP3Imp::Init(CTextService * pTxtSvc)
+{
+
+}
+
+
 void CBaiduJP3Imp:: ProcessKeyStoke(LPVOID lpImeContext,UINT vkCode,LPARAM lParam,BOOL bKeyDown,BOOL *pbEaten)
 {
 }
@@ -116,4 +123,14 @@ void CBaiduJP3Imp::CheckDefIME()
 INT_PTR CBaiduJP3Imp::MessageBox(HWND hWnd,LPCTSTR lpText,LPCTSTR lpCaption,UINT uType)
 {
 	return 0;
+}
+
+void CBaiduJP3Imp::OnFinalRelease()
+{
+
+}
+
+HRESULT CBaiduJP3Imp::OnQueryInterface(REFIID riid, void **ppvObject)
+{
+	return E_NOINTERFACE;
 }
