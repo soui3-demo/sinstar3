@@ -157,22 +157,6 @@ LRESULT CUiWnd::WindowProc(UINT uMsg,WPARAM wParam,LPARAM lParam)
 
 LRESULT CUiWnd::OnTimer(WPARAM nEventID)
 {
-	if(nEventID==TIMERID_CHKDEFIME)
-	{
-		// 有focus才做检查，否则在多个app中弹出这个对话框
-		if ( m_bActivate)
-		{
-			static BOOL bChkDefIME=FALSE;
-			if(!bChkDefIME && !IsCompositing())
-			{//正在输入过程中不检查
-				bChkDefIME=TRUE;
-				// 判断是否已经是默认输入法
-				BOOL bDefIME=IsDefaultIme();
-				if(!bDefIME && m_pBaiduJP3)	m_pBaiduJP3->CheckDefIME();
-			}
-			if(bChkDefIME)	KillTimer(m_hWnd,nEventID);//防止多个线程的情况下Timer没有被中止
-		}
-	}
 	return 0;
 }
 
@@ -192,7 +176,8 @@ POINT CUiWnd::GetAbsPos(HWND hWnd,DWORD dwStyle,POINT ptCur,RECT rc)
 	if(dwStyle==CFS_DEFAULT)
 		GetCaretPos(&pt);
 	else if(dwStyle==CFS_EXCLUDE)
-		pt.x=ptCur.x,pt.y=rc.bottom-m_nFontHei+HEI_LINEMARGIN;
+		pt.x=ptCur.x,
+		pt.y=rc.bottom-m_nFontHei+HEI_LINEMARGIN;
 	else
 		pt=ptCur;
 	ClientToScreen(hWnd,&pt);
@@ -425,7 +410,6 @@ LRESULT CUiWnd::OnCreate()
 	Helper_Trace(_T("CUiWnd::OnCreate,hWnd:%08x"),m_hWnd);
 	_InitBaiduJP3();
 	m_wndComp.Create(WS_EX_TOOLWINDOW|WS_EX_LAYERED|WS_EX_NOACTIVATE,WS_POPUP|WS_DISABLED,m_hWnd,0,g_hInst);
-	SetTimer(m_hWnd,TIMERID_CHKDEFIME,2000,NULL);
 	PostMessage(WM_IME_NOTIFY,IMN_SETCONVERSIONMODE,0);
 	return 0;
 }

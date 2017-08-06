@@ -16,3 +16,9 @@
 
 
 // TODO: 在此处引用程序需要的其他头文件
+#include "resource.h"
+
+#include "../include/sinstar-i.h"
+#include "../include/TextService-i.h"
+
+#include "sinstar3_core.h"
