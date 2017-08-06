@@ -1,6 +1,5 @@
 #include "StdAfx.h"
 #include "Sinstar3Impl.h"
-#include "SouiEnv.h"
 
 #include <initguid.h>
 
@@ -9,12 +8,15 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HINSTANCE hInst)
 :m_pTxtSvr(pTxtSvr)
 ,m_hInst(hInst)
 {
-	new CSouiEnv(hInst);
+	theCore->AddRef();
+	m_pImeWnd = new CImeWnd();
 }
 
 CSinstar3Impl::~CSinstar3Impl(void)
 {
-	delete CSouiEnv::getSingletonPtr();
+	m_pImeWnd->DestroyWindow();
+	delete m_pImeWnd;
+	theCore->Release();
 }
 
 
@@ -42,6 +44,7 @@ void CSinstar3Impl::OnSetFocusSegmentPosition(POINT pt,int nHei)
 
 void CSinstar3Impl::OnCompositionStarted()
 {
+	m_pImeWnd->Create(NULL);
 }
 
 void CSinstar3Impl::OnCompositionChanged()
@@ -50,7 +53,7 @@ void CSinstar3Impl::OnCompositionChanged()
 
 void CSinstar3Impl::OnCompositionTerminated()
 {
-
+	m_pImeWnd->DestroyWindow();
 }
 
 void CSinstar3Impl::OnSetFocus(BOOL bFocus)
