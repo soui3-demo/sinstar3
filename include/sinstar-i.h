@@ -5,7 +5,6 @@
 
 interface ISinstar : public IUnknown
 {
-	virtual void Init(CTextService * pTxtSvc) = NULL;
 	virtual void OnIMESelect(BOOL bSelect)=NULL;
 	virtual void OnCompositionStarted()=NULL;
 	virtual void OnCompositionChanged()=NULL;
@@ -30,7 +29,7 @@ interface ISinstar : public IUnknown
 	virtual HMODULE GetModule()=NULL;
 };
 
-typedef ISinstar *(*FUN_BaiduJP3_Create)(CTextService *,HINSTANCE);
+typedef ISinstar *(*FUN_BaiduJP3_Create)(ITextService *,HINSTANCE);
 typedef void (*FUN_BaiduJP3_Delete)(ISinstar*);
 typedef BOOL (*FUN_BaiduJP3_Config)(HWND);
 typedef HRESULT (*FUN_BaiduJP3_CanUnloadNow)();

@@ -7,7 +7,7 @@
 #endif
 
 
-EXTERN_C BAIDUJP3_API  ISinstar* BaiduJP3_Create(CTextService* pTxtSvr,HINSTANCE hInst);
+EXTERN_C BAIDUJP3_API  ISinstar* BaiduJP3_Create(ITextService* pTxtSvr,HINSTANCE hInst);
 
 EXTERN_C BAIDUJP3_API  void BaiduJP3_Delete(ISinstar* pBaiduJP3);
 

@@ -45,9 +45,8 @@ enum EInputMethod
 	Hiragana,		// Æ½¼ÙÃû
 };
 
-class CTextService
+interface ITextService
 {
-public:
 	virtual BOOL IsCompositing()=NULL;
 	virtual void StartComposition(LPVOID lpImeContext)=NULL;
 	virtual void ReplaceSelCompositionW(LPVOID lpImeContext,int nLeft,int nRight,WCHAR *wszComp,int nLen)=NULL;

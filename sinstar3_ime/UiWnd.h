@@ -8,7 +8,7 @@
 class CUiWnd :
 	public CSimpleWnd,
 	public CHotKeyMgr,
-	public CTextService
+	public ITextService
 {
 public:
 	CUiWnd(void);

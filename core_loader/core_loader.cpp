@@ -21,7 +21,7 @@ void CBaiduIMEModule::SetBaiduJP3Path(LPCTSTR pszPath)
 	_tcscat(m_szPath,_T("\\sinstar3_core.dll"));
 }
 
-ISinstar *CBaiduIMEModule::BaiduJP3_Create(CTextService *pTxtSvr,HINSTANCE hInst)
+ISinstar *CBaiduIMEModule::BaiduJP3_Create(ITextService *pTxtSvr,HINSTANCE hInst)
 {
 	BOOL bLoad=FALSE;
 	HMODULE hBaiduJP3=GetModuleHandle(m_szPath);

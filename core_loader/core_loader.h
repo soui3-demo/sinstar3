@@ -6,7 +6,7 @@ class CBaiduIMEModule
 public:
 	static CBaiduIMEModule & GetInstance();
 
-	ISinstar *BaiduJP3_Create(CTextService *pTxtSvr,HINSTANCE hInst);
+	ISinstar *BaiduJP3_Create(ITextService *pTxtSvr,HINSTANCE hInst);
 	BOOL BaiduJP3_Delete(ISinstar * pBaiduJP3);
 	BOOL BaiduJP3_OpenConfig(HWND hParent);
 	void SetBaiduJP3Path(LPCTSTR pszPath);

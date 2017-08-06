@@ -5,9 +5,9 @@
 #include "Sinstar3Impl.h"
 
 
-EXTERN_C BAIDUJP3_API  ISinstar* BaiduJP3_Create(CTextService* pTxtSvr,HINSTANCE hInst)
+EXTERN_C BAIDUJP3_API  ISinstar* BaiduJP3_Create(ITextService* pTxtSvr,HINSTANCE hInst)
 {
-	CBaiduJP3Imp*  pRet= new CUnknownImpl<CBaiduJP3Imp>(pTxtSvr,hInst);
+	CSinstar3Impl*  pRet= new CUnknownImpl<CSinstar3Impl>(pTxtSvr,hInst);
 	return pRet;
 }
 

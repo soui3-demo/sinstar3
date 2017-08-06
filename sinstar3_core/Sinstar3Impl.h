@@ -2,14 +2,12 @@
 #include "../include/sinstar-i.h"
 
 
-class CBaiduJP3Imp:
+class CSinstar3Impl:
 	public ISinstar
 {
 public:
-	CBaiduJP3Imp(CTextService *pTxtSvr,HINSTANCE hInst);
-	virtual ~CBaiduJP3Imp(void);
-
-	virtual void Init(CTextService * pTxtSvc);
+	CSinstar3Impl(ITextService *pTxtSvr,HINSTANCE hInst);
+	virtual ~CSinstar3Impl(void);
 
 	virtual void OnIMESelect(BOOL bSelect);
 	virtual void OnCompositionStarted();
@@ -38,6 +36,11 @@ public:
 public:
 	virtual void OnFinalRelease();
 	virtual HRESULT OnQueryInterface(REFIID riid, void **ppvObject);
+
+private:
+	ITextService	*m_pTxtSvr;
+	HINSTANCE		 m_hInst;
+
 };
 
 
