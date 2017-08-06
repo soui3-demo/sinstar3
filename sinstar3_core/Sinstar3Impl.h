@@ -1,6 +1,7 @@
 #pragma once
 #include "../include/sinstar-i.h"
 
+#include "ImeWnd.h"
 
 class CSinstar3Impl:
 	public ISinstar
@@ -39,8 +40,8 @@ public:
 
 private:
 	ITextService	*m_pTxtSvr;
+	CImeWnd			*m_pImeWnd;
 	HINSTANCE		 m_hInst;
-
 };
 
 
