@@ -41,11 +41,13 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="$(SOUIPATH)\utilities\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;SINSTAR3_IME_EXPORTS;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
+				RuntimeLibrary="1"
 				UsePrecompiledHeader="0"
+				BrowseInformation="1"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
@@ -63,6 +65,7 @@
 				LinkIncremental="2"
 				ModuleDefinitionFile="sinstar3_ime.def"
 				GenerateDebugInformation="true"
+				AssemblyDebug="1"
 				SubSystem="2"
 				TargetMachine="1"
 			/>

@@ -17,13 +17,14 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 		g_hInst=hModule;
 		{
 			TCHAR szPath[MAX_PATH];
-//			CImeUtil::Comm_GetInstallPath(szPath,MAX_PATH);
-
-#if defined(_WIN64)
-			//PathAppend( szPath, _T("x64"));
-			_tcscat_s( szPath, _T("\\x64"));			
-#endif
-
+			CRegKey reg;
+			LONG ret = reg.Open(HKEY_CURRENT_USER,_T("SOFTWARE\\SetoutSoft\\sinstar3"),KEY_READ);
+			if(ret == ERROR_SUCCESS)
+			{
+				ULONG len = MAX_PATH;
+				reg.QueryStringValue(_T("path_client"),szPath,&len);
+				reg.Close();
+			}
 			CBaiduIMEModule::GetInstance().SetBaiduJP3Path(szPath);			
 		}
 		CUiWnd::RegisterClass(hModule);
@@ -44,8 +45,8 @@ STDAPI DllUnregisterServer(void)
 	TCHAR szPath[MAX_PATH];
 	GetModuleFileName(g_hInst,szPath,MAX_PATH);
 	TCHAR *p=_tcsrchr(szPath,_T('\\'));
+	
 	return FALSE;
-	//return CIMEMan::RemoveIME(p+1)?S_OK:E_FAIL;
 }
 
 STDAPI DllRegisterServer(void)
@@ -60,7 +61,6 @@ STDAPI DllRegisterServer(void)
 	if (!ImmInstallIME(szPath, PRODUCT_NAME))
 	{
 		DWORD dwErr=GetLastError();
-		//DllUnregisterServer(); // 不能删除，原来正在使用的时候可能安装失败。
 		return E_FAIL;
 	}
 

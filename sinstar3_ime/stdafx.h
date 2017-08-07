@@ -21,8 +21,14 @@
 
 #include "imeContext.h"
 
+#ifndef SASSERT
+#include <assert.h>
+#define SASSERT(x) assert(x)
+#endif
+
 #include "../include/version.h"
 #include "../include/sinstar-i.h"
+#include "../include/reg.h"
 
 #include "../core_loader/core_loader.h"
 
