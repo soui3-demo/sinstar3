@@ -32,10 +32,9 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 
 	//将程序的运行路径修改到项目所在目录所在的目录
 	TCHAR szCurrentDir[MAX_PATH] = { 0 };
-	GetModuleFileName(NULL, szCurrentDir, sizeof(szCurrentDir));
-	LPTSTR lpInsertPos = _tcsrchr(szCurrentDir, _T('\\'));
-	//_tcscpy(lpInsertPos + 1, _T("..\\SouiWizard1"));
-	SetCurrentDirectory(szCurrentDir);
+	GetModuleFileName(hInst, szCurrentDir, sizeof(szCurrentDir));
+	LPTSTR lpInsertPos = _tcsstr(szCurrentDir, _T("\\data"));
+	_tcscpy(lpInsertPos,_T("\\sinstar3_core"));
 
 	BOOL bLoaded=FALSE;
 	CAutoRefPtr<SOUI::IImgDecoderFactory> pImgDecoderFactory;
@@ -48,7 +47,7 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 	pRenderFactory->SetImgDecoderFactory(pImgDecoderFactory);
 	
 	m_theApp = new SApplication(pRenderFactory, hInst);
-	m_theApp->SetAppDir(L"E:\\sinstar3.git\\sinstar3_core");
+	m_theApp->SetAppDir(szCurrentDir);
 	//从DLL加载系统资源
 	HMODULE hModSysResource = LoadLibrary(SYS_NAMED_RESOURCE);
 	if (hModSysResource)

@@ -4,15 +4,17 @@
 
 #include "core_loader.h"
 #include <crtdbg.h>
-
+#include "../include/autolock.h"
 
 CBaiduIMEModule::CBaiduIMEModule(void)
 {
 	m_szPath[0]=0;
+	InitializeCriticalSection(&m_cs);
 }
 
 CBaiduIMEModule::~CBaiduIMEModule(void)
 {
+	DeleteCriticalSection(&m_cs);
 }
 
 void CBaiduIMEModule::SetBaiduJP3Path(LPCTSTR pszPath)
@@ -23,6 +25,7 @@ void CBaiduIMEModule::SetBaiduJP3Path(LPCTSTR pszPath)
 
 ISinstar *CBaiduIMEModule::BaiduJP3_Create(ITextService *pTxtSvr,HINSTANCE hInst)
 {
+	CAutoLock lock(&m_cs);
 	BOOL bLoad=FALSE;
 	HMODULE hBaiduJP3=GetModuleHandle(m_szPath);
 	if(!hBaiduJP3)
@@ -30,7 +33,10 @@ ISinstar *CBaiduIMEModule::BaiduJP3_Create(ITextService *pTxtSvr,HINSTANCE hInst
 		hBaiduJP3=LoadLibrary(m_szPath);
 		bLoad=TRUE;
 	}
-	if(!hBaiduJP3) return NULL;
+	if(!hBaiduJP3) 
+	{
+		return NULL;
+	}
 	FUN_BaiduJP3_Create funCreate=(FUN_BaiduJP3_Create)GetProcAddress(hBaiduJP3,"BaiduJP3_Create");
 	FUN_BaiduJP3_Delete funDelete=(FUN_BaiduJP3_Delete)GetProcAddress(hBaiduJP3,"BaiduJP3_Delete");
 	FUN_BaiduJP3_CanUnloadNow funCanUnloadNow=(FUN_BaiduJP3_CanUnloadNow)GetProcAddress(hBaiduJP3,"BaiduJP3_CanUnloadNow");
@@ -45,6 +51,8 @@ ISinstar *CBaiduIMEModule::BaiduJP3_Create(ITextService *pTxtSvr,HINSTANCE hInst
 
 BOOL CBaiduIMEModule::BaiduJP3_Delete(ISinstar * pBaiduJP3)
 {
+	CAutoLock lock(&m_cs);
+
 	HMODULE hBaiduJP3=pBaiduJP3->GetModule();
 	FUN_BaiduJP3_Delete funDelete=(FUN_BaiduJP3_Delete)GetProcAddress(hBaiduJP3,"BaiduJP3_Delete");
 	FUN_BaiduJP3_CanUnloadNow funCanUnloadNow=(FUN_BaiduJP3_CanUnloadNow)GetProcAddress(hBaiduJP3,"BaiduJP3_CanUnloadNow");

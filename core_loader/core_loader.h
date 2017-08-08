@@ -15,4 +15,5 @@ private:
 	~CBaiduIMEModule(void);
 
 	TCHAR	m_szPath[MAX_PATH];
+	CRITICAL_SECTION	m_cs;
 };
