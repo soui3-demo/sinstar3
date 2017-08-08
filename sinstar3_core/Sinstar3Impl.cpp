@@ -7,27 +7,28 @@
 CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HINSTANCE hInst)
 :m_pTxtSvr(pTxtSvr)
 ,m_hInst(hInst)
+,m_pImeWnd(NULL)
 {
 	theCore->AddRef();
-	m_pImeWnd = new CImeWnd();
+// 	m_pImeWnd = new CImeWnd();
 }
 
 CSinstar3Impl::~CSinstar3Impl(void)
 {
-	if(m_pImeWnd->IsWindow())
-		m_pImeWnd->DestroyWindow();
-	delete m_pImeWnd;
+// 	if(m_pImeWnd->IsWindow())
+// 		m_pImeWnd->DestroyWindow();
+// 	delete m_pImeWnd;
 	theCore->Release();
 }
 
 
 void CSinstar3Impl:: ProcessKeyStoke(LPVOID lpImeContext,UINT vkCode,LPARAM lParam,BOOL bKeyDown,BOOL *pbEaten)
 {
-	*pbEaten = TRUE;
-	if(!m_pImeWnd->IsWindow())
-	{
-		m_pTxtSvr->StartComposition(lpImeContext);
-	}
+// 	*pbEaten = TRUE;
+// 	if(!m_pImeWnd->IsWindow())
+// 	{
+// 		m_pTxtSvr->StartComposition(lpImeContext);
+// 	}
 }
 
 void CSinstar3Impl:: TranslateKey(LPVOID lpImeContext,UINT vkCode,UINT uScanCode,BOOL bKeyDown,BOOL *pbEaten)
@@ -50,9 +51,8 @@ void CSinstar3Impl::OnSetFocusSegmentPosition(POINT pt,int nHei)
 
 void CSinstar3Impl::OnCompositionStarted()
 {
-	m_pImeWnd->Create(NULL);
-	m_pImeWnd->SetWindowPos(HWND_TOPMOST,0,0,0,0,SWP_NOSIZE|SWP_SHOWWINDOW|SWP_NOACTIVATE);
-	//m_pImeWnd->ShowWindow(SW_SHOWNOACTIVATE);
+// 	m_pImeWnd->Create(NULL);
+// 	m_pImeWnd->SetWindowPos(HWND_TOPMOST,0,0,0,0,SWP_NOSIZE|SWP_SHOWWINDOW|SWP_NOACTIVATE);
 }
 
 void CSinstar3Impl::OnCompositionChanged()
@@ -61,7 +61,7 @@ void CSinstar3Impl::OnCompositionChanged()
 
 void CSinstar3Impl::OnCompositionTerminated()
 {
-	m_pImeWnd->DestroyWindow();
+// 	m_pImeWnd->DestroyWindow();
 }
 
 void CSinstar3Impl::OnSetFocus(BOOL bFocus)
