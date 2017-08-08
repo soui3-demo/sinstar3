@@ -11,7 +11,7 @@
 #define _baidu_ime_version_c		0
 #define _baidu_ime_version_d		1
 
-#define _baidu_ime_name				启程输入之星
+#define _baidu_ime_name				启程输入法
 
 
 #define _baidu_ime_string(a)		#a
