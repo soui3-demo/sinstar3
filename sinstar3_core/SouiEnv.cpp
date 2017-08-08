@@ -3,7 +3,7 @@
 
 
 //从PE文件加载，注意从文件加载路径位置
-#define RES_TYPE 1
+#define RES_TYPE 0
 // #define RES_TYPE 0   //从文件中加载资源，加载失败再从PE加载
 // #define RES_TYPE 1   //从PE资源中加载UI资源
 // #define RES_TYPE 2   //从zip包中加载资源
@@ -46,7 +46,9 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 	SASSERT_FMT(bLoaded,_T("load interface [%s] failed!"),_T("imgdecoder"));
 
 	pRenderFactory->SetImgDecoderFactory(pImgDecoderFactory);
-	SApplication *theApp = new SApplication(pRenderFactory, hInst);
+	
+	m_theApp = new SApplication(pRenderFactory, hInst);
+	m_theApp->SetAppDir(L"E:\\sinstar3.git\\sinstar3_core");
 	//从DLL加载系统资源
 	HMODULE hModSysResource = LoadLibrary(SYS_NAMED_RESOURCE);
 	if (hModSysResource)
@@ -54,7 +56,7 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 		CAutoRefPtr<IResProvider> sysResProvider;
 		CreateResProvider(RES_PE, (IObjRef**)&sysResProvider);
 		sysResProvider->Init((WPARAM)hModSysResource, 0);
-		theApp->LoadSystemNamedResource(sysResProvider);
+		m_theApp->LoadSystemNamedResource(sysResProvider);
 		FreeLibrary(hModSysResource);
 	}else
 	{
@@ -64,18 +66,20 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 	CAutoRefPtr<IResProvider>   pResProvider;
 #if (RES_TYPE == 0)
 	CreateResProvider(RES_FILE, (IObjRef**)&pResProvider);
-	if (!pResProvider->Init((LPARAM)_T("uires"), 0))
+	SStringT strPath = m_theApp->GetAppDir();
+	strPath+=_T("\\uires");
+	if (!pResProvider->Init((LPARAM)(LPCTSTR)strPath, 0))
 	{
 		SASSERT(0);
-		return 1;
+		return ;
 	}
 #else 
 	CreateResProvider(RES_PE, (IObjRef**)&pResProvider);
 	pResProvider->Init((WPARAM)hInst, 0);
 #endif
 
-	theApp->InitXmlNamedID(namedXmlID,ARRAYSIZE(namedXmlID),TRUE);
-	theApp->AddResProvider(pResProvider);
+	m_theApp->InitXmlNamedID(namedXmlID,ARRAYSIZE(namedXmlID),TRUE);
+	m_theApp->AddResProvider(pResProvider);
 
 }
 

@@ -14,7 +14,8 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HINSTANCE hInst)
 
 CSinstar3Impl::~CSinstar3Impl(void)
 {
-	m_pImeWnd->DestroyWindow();
+	if(m_pImeWnd->IsWindow())
+		m_pImeWnd->DestroyWindow();
 	delete m_pImeWnd;
 	theCore->Release();
 }
@@ -22,6 +23,11 @@ CSinstar3Impl::~CSinstar3Impl(void)
 
 void CSinstar3Impl:: ProcessKeyStoke(LPVOID lpImeContext,UINT vkCode,LPARAM lParam,BOOL bKeyDown,BOOL *pbEaten)
 {
+	*pbEaten = TRUE;
+	if(!m_pImeWnd->IsWindow())
+	{
+		m_pTxtSvr->StartComposition(lpImeContext);
+	}
 }
 
 void CSinstar3Impl:: TranslateKey(LPVOID lpImeContext,UINT vkCode,UINT uScanCode,BOOL bKeyDown,BOOL *pbEaten)
@@ -45,6 +51,8 @@ void CSinstar3Impl::OnSetFocusSegmentPosition(POINT pt,int nHei)
 void CSinstar3Impl::OnCompositionStarted()
 {
 	m_pImeWnd->Create(NULL);
+	m_pImeWnd->SetWindowPos(HWND_TOPMOST,0,0,0,0,SWP_NOSIZE|SWP_SHOWWINDOW|SWP_NOACTIVATE);
+	//m_pImeWnd->ShowWindow(SW_SHOWNOACTIVATE);
 }
 
 void CSinstar3Impl::OnCompositionChanged()

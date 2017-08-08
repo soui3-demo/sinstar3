@@ -416,9 +416,9 @@ LRESULT CUiWnd::OnCreate()
 
 LRESULT CUiWnd::OnDestroy()
 {
-	Helper_Trace(_T("CUiWnd::OnDestroy"));
-	m_wndComp.Destroy();
 	_UninitBaiduJP3();
+	m_wndComp.Destroy();
+	Helper_Trace(_T("CUiWnd::OnDestroy"));
 	return 0;
 }
 

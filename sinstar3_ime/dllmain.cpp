@@ -26,7 +26,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 				reg.Close();
 			}
 #ifdef _WIN64
-			_tcscat(szPath,_T("\x64"));
+			_tcscat(szPath,_T("\\x64"));
 #endif
 			CBaiduIMEModule::GetInstance().SetBaiduJP3Path(szPath);			
 		}

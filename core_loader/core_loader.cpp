@@ -39,7 +39,7 @@ ISinstar *CBaiduIMEModule::BaiduJP3_Create(ITextService *pTxtSvr,HINSTANCE hInst
 		if(bLoad) FreeLibrary(hBaiduJP3);
 		return NULL;
 	}
-	ISinstar *pRet = funCreate(pTxtSvr,hInst);
+	ISinstar *pRet = funCreate(pTxtSvr,hBaiduJP3);
 	return pRet;
 }
 
