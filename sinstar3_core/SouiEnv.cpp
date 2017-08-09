@@ -28,7 +28,7 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 
 	int nRet = 0;
 
-	SComMgr	* pComMgr = new SComMgr;
+	m_pComMgr = new SComMgr;
 
 	//将程序的运行路径修改到项目所在目录所在的目录
 	TCHAR szCurrentDir[MAX_PATH] = { 0 };
@@ -39,9 +39,9 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 	BOOL bLoaded=FALSE;
 	CAutoRefPtr<SOUI::IImgDecoderFactory> pImgDecoderFactory;
 	CAutoRefPtr<SOUI::IRenderFactory> pRenderFactory;
-	bLoaded = pComMgr->CreateRender_GDI((IObjRef**)&pRenderFactory);
+	bLoaded = m_pComMgr->CreateRender_GDI((IObjRef**)&pRenderFactory);
 	SASSERT_FMT(bLoaded,_T("load interface [render] failed!"));
-	bLoaded=pComMgr->CreateImgDecoder((IObjRef**)&pImgDecoderFactory);
+	bLoaded=m_pComMgr->CreateImgDecoder((IObjRef**)&pImgDecoderFactory);
 	SASSERT_FMT(bLoaded,_T("load interface [%s] failed!"),_T("imgdecoder"));
 
 	pRenderFactory->SetImgDecoderFactory(pImgDecoderFactory);
@@ -80,14 +80,11 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 	m_theApp->InitXmlNamedID(namedXmlID,ARRAYSIZE(namedXmlID),TRUE);
 	m_theApp->AddResProvider(pResProvider);
 
-	m_imgDecoder = pImgDecoderFactory;
-	m_render = pRenderFactory;
 }
 
 CSouiEnv::~CSouiEnv(void)
 {
-	delete m_theApp;
-	m_imgDecoder = NULL;
-	m_render = NULL;
+ 	delete m_theApp;
+	delete m_pComMgr;
 	OleUninitialize();
 }

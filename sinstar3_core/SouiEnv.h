@@ -8,6 +8,5 @@ public:
 
 private:
 	SApplication	* m_theApp;
-	CAutoRefPtr<IObjRef> m_imgDecoder;
-	CAutoRefPtr<IObjRef> m_render;
+	SComMgr	*		  m_pComMgr;
 };

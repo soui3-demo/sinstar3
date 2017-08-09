@@ -31,15 +31,13 @@ EXTERN_C BAIDUJP3_API BOOL BaiduJP3_Config(HWND hWnd)
 }
 
 
-CSinstar3Core::CSinstar3Core(HINSTANCE hInst):m_cRef(0)
+CSinstar3Core::CSinstar3Core(HINSTANCE hInst):m_cRef(0),m_hInst(hInst)
 {
 	InitializeCriticalSection(&m_cs);
-	new CSouiEnv(hInst);
 }
 
 CSinstar3Core::~CSinstar3Core()
 {
-	delete CSouiEnv::getSingletonPtr();
 	DeleteCriticalSection(&m_cs);
 }
 
@@ -49,7 +47,7 @@ LONG CSinstar3Core::AddRef()
 
 	if(m_cRef == 0)
 	{
-
+		new CSouiEnv(m_hInst);
 	}
 
 	return ++m_cRef;
@@ -61,7 +59,7 @@ LONG CSinstar3Core::Release()
 	LONG ret = --m_cRef;
 	if(ret == 0)
 	{
-
+		delete CSouiEnv::getSingletonPtr();
 	}
 	return ret;
 }

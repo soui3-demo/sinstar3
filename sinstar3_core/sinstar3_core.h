@@ -27,6 +27,7 @@ public:
 	LONG GetRefCount();
 private:
 	LONG m_cRef;
+	HINSTANCE m_hInst;
 	CRITICAL_SECTION m_cs;
 };
 
