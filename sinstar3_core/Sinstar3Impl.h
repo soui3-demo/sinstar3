@@ -42,6 +42,7 @@ private:
 	ITextService	*m_pTxtSvr;
 	CImeWnd			*m_pImeWnd;
 	HINSTANCE		 m_hInst;
+
 };
 
 
