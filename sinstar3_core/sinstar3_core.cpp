@@ -5,6 +5,7 @@
 #include "Sinstar3Impl.h"
 #include "../include/autolock.h"
 #include "SouiEnv.h"
+#include "Minidump.h"
 
 CSinstar3Core	*theCore = NULL;
 
@@ -47,6 +48,7 @@ LONG CSinstar3Core::AddRef()
 
 	if(m_cRef == 0)
 	{
+		CMinidump::Enable();
 		new CSouiEnv(m_hInst);
 	}
 

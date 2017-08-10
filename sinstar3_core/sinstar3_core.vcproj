@@ -373,6 +373,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Minidump.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\sinstar3_core.cpp"
 				>
 			</File>
@@ -432,6 +436,10 @@
 			</File>
 			<File
 				RelativePath=".\ImeWnd.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Minidump.h"
 				>
 			</File>
 			<File
