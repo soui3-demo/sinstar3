@@ -1,0 +1,20 @@
+﻿<SOUI 
+  name="wnd_status_bar" 
+  width="200" 
+  height="60"   
+  resizable="0" 
+  wndType="normal"
+  translucent="1"
+  toolwindow="1"
+>
+  <root skin="_skin.sys.wnd.bkgnd" cache="1" layout="vbox">
+    <window size="-1,0" weight="1" layout="hbox" tip="line1">
+      <icon size="-1,-1" src="ICON_LOGO:16"/>
+      <text size="-1,-1" name="txt_comp_name">五笔型86</text>
+      <button size="30,30" name="btn_bar_mode">BM</button>
+    </window>
+    <window size="-1,0" weight="1" layout="hbox" tip="line2">
+      <text size="-1,-2">1 启程输入法3</text>
+    </window>
+  </root>
+</SOUI>

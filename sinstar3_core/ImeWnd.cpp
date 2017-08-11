@@ -5,7 +5,7 @@ namespace SOUI
 {
 
 
-CImeWnd::CImeWnd():SHostWnd(UIRES.LAYOUT.wnd_composition)
+CImeWnd::CImeWnd(LPCTSTR pszLayout):SHostWnd(pszLayout)
 {
 
 }
@@ -25,18 +25,6 @@ void CImeWnd::OnMouseMove(UINT nFlags, CPoint point)
 	{
 		::ReleaseCapture();
 	}
-}
-
-void CImeWnd::SetCompStr(const SStringT &strComp)
-{
-	m_strComp = strComp;
-	if(IsWindow())
-		FindChildByID(R.id.txt_comps)->SetWindowText(m_strComp);
-}
-
-SStringT CImeWnd::GetCompStr() const
-{
-	return m_strComp;
 }
 
 }

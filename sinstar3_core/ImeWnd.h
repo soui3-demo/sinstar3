@@ -6,10 +6,8 @@ namespace SOUI
 class CImeWnd : public SHostWnd
 {
 public:
-	CImeWnd();
+	CImeWnd(LPCTSTR pszLayout);
 
-	void SetCompStr(const SStringT &strComp);
-	SStringT GetCompStr() const;
 protected:
 
 	BOOL OnSetCursor(HWND wnd, UINT nHitTest, UINT message);
@@ -20,8 +18,6 @@ protected:
 		MSG_WM_MOUSEMOVE(OnMouseMove)
 		CHAIN_MSG_MAP(__super)
 	END_MSG_MAP()
-
-	SStringT m_strComp;
 };
 
 }

@@ -4,6 +4,7 @@
   </UIDEF>
   <LAYOUT>
     <file name="wnd_composition" path="xml\wnd_composition.xml"/>
+    <file name="wnd_status_bar" path="xml\wnd_status_bar.xml"/>
   </LAYOUT>
 
   <values>
@@ -13,8 +14,9 @@
   </values>
 
   <IMG>
+    <file name="logo_32" path="image\logo_32.png"/>
   </IMG>
   <ICON>
-    <file name="ICON_LOGO"  path="image\soui.ico"/>
+    <file name="ICON_LOGO"  path="image\sinstar3.ico"/>
   </ICON>
 </resource>
