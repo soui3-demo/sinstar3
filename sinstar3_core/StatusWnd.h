@@ -15,6 +15,7 @@ namespace SOUI
 
 		BEGIN_MSG_MAP_EX(CStatusWnd)
 			MSG_WM_CREATE(OnCreate)
+			CHAIN_MSG_MAP(__super)
 		END_MSG_MAP()
 	};
 

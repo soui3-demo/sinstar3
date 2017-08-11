@@ -14,15 +14,12 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HINSTANCE hInst)
 	theCore->AddRef();
  	m_pCompWnd = new CCompWnd();
 	m_pStatusWnd = new CStatusWnd();
-	m_pStatusWnd->Create(NULL,WS_DISABLED|WS_POPUP,WS_EX_TOOLWINDOW,0,0,0,0);
+	m_pStatusWnd->Create();
 }
 
 CSinstar3Impl::~CSinstar3Impl(void)
 {
-	if(m_pCompWnd->IsWindow())
-		m_pCompWnd->DestroyWindow();
 	delete m_pCompWnd;
-	m_pStatusWnd->DestroyWindow();
 	delete m_pStatusWnd;
 	theCore->Release();
 }
@@ -57,7 +54,6 @@ void CSinstar3Impl:: TranslateKey(LPVOID lpImeContext,UINT vkCode,UINT uScanCode
 
 void CSinstar3Impl::OnIMESelect(BOOL bSelect)
 {
-
 }
 
 void CSinstar3Impl::OnSetCaretPosition(POINT pt,int nHei)
@@ -76,7 +72,7 @@ void CSinstar3Impl::OnSetFocusSegmentPosition(POINT pt,int nHei)
 
 void CSinstar3Impl::OnCompositionStarted()
 {
-	m_pCompWnd->Create(NULL,WS_POPUP|WS_DISABLED,WS_EX_TOOLWINDOW,0,0,0,0);
+	m_pCompWnd->Create();
 	m_pCompWnd->SetWindowPos(HWND_TOPMOST,m_ptCaret.x,m_ptCaret.y+m_nCaretHeight+5,0,0,SWP_NOSIZE|SWP_SHOWWINDOW|SWP_NOACTIVATE);
 }
 
@@ -93,10 +89,9 @@ void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 {
 	CRect rcWnd;
 	m_pStatusWnd->CSimpleWnd::GetWindowRect(&rcWnd);
-	SLOG_INFO("CSinstar3Impl::OnSetFocus: bFocus:"<<bFocus<<", rcWnd("<<rcWnd.left<<","<<rcWnd.top<<","<<rcWnd.Width()<<","<<rcWnd.Height()<<")");
 	if(bFocus)
 	{
-		m_pStatusWnd->SetWindowPos(HWND_TOPMOST,0,0,0,0,SWP_NOSIZE|SWP_NOACTIVATE|SWP_SHOWWINDOW);
+		m_pStatusWnd->SetWindowPos(HWND_TOPMOST,0,0,0,0,SWP_NOSIZE|SWP_NOMOVE|SWP_NOACTIVATE|SWP_SHOWWINDOW);
 	}else
 	{
 		m_pStatusWnd->ShowWindow(SW_HIDE);

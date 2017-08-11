@@ -8,6 +8,7 @@ class CImeWnd : public SHostWnd
 public:
 	CImeWnd(LPCTSTR pszLayout);
 
+	HWND Create();
 protected:
 
 	BOOL OnSetCursor(HWND wnd, UINT nHitTest, UINT message);

@@ -14,7 +14,8 @@
       <button size="30,30" name="btn_bar_mode">BM</button>
     </window>
     <window size="-1,0" weight="1" layout="hbox" tip="line2">
-      <text size="-1,-2">1 启程输入法3</text>
+      <text size="-1,-2">1 打开</text>
+      <text size="-1,-2">1 关闭</text>
     </window>
   </root>
 </SOUI>

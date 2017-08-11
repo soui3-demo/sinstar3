@@ -27,4 +27,9 @@ void CImeWnd::OnMouseMove(UINT nFlags, CPoint point)
 	}
 }
 
+HWND CImeWnd::Create()
+{
+	return CSimpleWnd::Create(_T("SinstarWindow"),WS_DISABLED|WS_POPUP,WS_EX_TOOLWINDOW,0,0,0,0,NULL,NULL);
+}
+
 }
