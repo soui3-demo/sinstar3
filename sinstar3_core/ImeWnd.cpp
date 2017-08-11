@@ -5,7 +5,7 @@ namespace SOUI
 {
 
 
-CImeWnd::CImeWnd():SHostWnd(UIRES.LAYOUT.XML_MAINWND)
+CImeWnd::CImeWnd():SHostWnd(UIRES.LAYOUT.wnd_composition)
 {
 
 }

@@ -3,7 +3,7 @@
     <file name="XML_INIT" path="uidef\init.xml"/>
   </UIDEF>
   <LAYOUT>
-    <file name="XML_MAINWND" path="xml\dlg_main.xml"/>
+    <file name="wnd_composition" path="xml\wnd_composition.xml"/>
   </LAYOUT>
 
   <values>
