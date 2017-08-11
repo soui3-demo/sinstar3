@@ -8,6 +8,7 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HINSTANCE hInst)
 :m_pTxtSvr(pTxtSvr)
 ,m_hInst(hInst)
 ,m_pImeWnd(NULL)
+,m_nCaretHeight(30)
 {
 	theCore->AddRef();
  	m_pImeWnd = new CImeWnd();
@@ -56,6 +57,12 @@ void CSinstar3Impl::OnIMESelect(BOOL bSelect)
 
 void CSinstar3Impl::OnSetCaretPosition(POINT pt,int nHei)
 {
+	m_ptCaret = pt;
+	m_nCaretHeight = nHei;
+	if(m_pImeWnd->IsWindow())
+	{
+		m_pImeWnd->SetWindowPos(0,m_ptCaret.x,m_ptCaret.y+m_nCaretHeight+5,0,0,SWP_NOZORDER|SWP_NOSIZE|SWP_NOACTIVATE);
+	}
 }
 
 void CSinstar3Impl::OnSetFocusSegmentPosition(POINT pt,int nHei)
@@ -65,7 +72,7 @@ void CSinstar3Impl::OnSetFocusSegmentPosition(POINT pt,int nHei)
 void CSinstar3Impl::OnCompositionStarted()
 {
 	m_pImeWnd->Create(NULL,WS_POPUP|WS_DISABLED,WS_EX_TOOLWINDOW,0,0,0,0);
-	m_pImeWnd->SetWindowPos(HWND_TOPMOST,0,0,0,0,SWP_NOSIZE|SWP_SHOWWINDOW|SWP_NOACTIVATE);
+	m_pImeWnd->SetWindowPos(HWND_TOPMOST,m_ptCaret.x,m_ptCaret.y+m_nCaretHeight+5,0,0,SWP_NOSIZE|SWP_SHOWWINDOW|SWP_NOACTIVATE);
 }
 
 void CSinstar3Impl::OnCompositionChanged()
