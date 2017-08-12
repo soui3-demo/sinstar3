@@ -1,6 +1,5 @@
 #include "StdAfx.h"
 #include "SouiEnv.h"
-#include "SimpleWnd3.h"
 
 //从PE文件加载，注意从文件加载路径位置
 #define RES_TYPE 0
@@ -61,7 +60,7 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 
 	pRenderFactory->SetImgDecoderFactory(pImgDecoderFactory);
 	
-	m_theApp = new SApplication(pRenderFactory, hInst,_T("Sinstar3_Wnd"),new SObjectDefaultRegister,FALSE);
+	m_theApp = new SApplication(pRenderFactory, hInst,_T("Sinstar3_Wnd"));
 	m_theApp->SetAppDir(szCurrentDir);
 	m_theApp->SetToolTipFactory(new SToolTipFactory());
 	m_theApp->GetToolTipFactory()->Release();
