@@ -1,6 +1,6 @@
 #include "StdAfx.h"
 #include "SouiEnv.h"
-
+#include "SimpleWnd3.h"
 
 //从PE文件加载，注意从文件加载路径位置
 #define RES_TYPE 0
@@ -21,6 +21,21 @@ ROBJ_IN_CPP
 template<>
 CSouiEnv* SSingleton<CSouiEnv>::ms_Singleton = NULL;
 
+class SToolTipFactory : public TObjRefImpl<IToolTipFactory>
+{
+public:
+	IToolTip * CreateToolTip(HWND hHost)
+	{
+		return NULL;
+	}
+
+	void DestroyToolTip(IToolTip *pToolTip)
+	{		
+	}
+};
+
+
+
 CSouiEnv::CSouiEnv(HINSTANCE hInst)
 {
 	HRESULT hRes = OleInitialize(NULL);
@@ -28,7 +43,7 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 
 	int nRet = 0;
 
-	m_pComMgr = new SComMgr;
+	m_pComMgr = new SComMgr(_T("imgdecoder-png"));
 
 	//将程序的运行路径修改到项目所在目录所在的目录
 	TCHAR szCurrentDir[MAX_PATH] = { 0 };
@@ -46,8 +61,11 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 
 	pRenderFactory->SetImgDecoderFactory(pImgDecoderFactory);
 	
-	m_theApp = new SApplication(pRenderFactory, hInst);
+	m_theApp = new SApplication(pRenderFactory, hInst,_T("Sinstar3_Wnd"),new SObjectDefaultRegister,FALSE);
 	m_theApp->SetAppDir(szCurrentDir);
+	m_theApp->SetToolTipFactory(new SToolTipFactory());
+	m_theApp->GetToolTipFactory()->Release();
+
 	//从DLL加载系统资源
 	HMODULE hModSysResource = LoadLibrary(SYS_NAMED_RESOURCE);
 	if (hModSysResource)

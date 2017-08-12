@@ -4,7 +4,6 @@
 #include "CompWnd.h"
 #include "StatusWnd.h"
 
-
 class CSinstar3Impl:
 	public ISinstar
 {
@@ -44,6 +43,7 @@ private:
 	ITextService	*m_pTxtSvr;
 	CCompWnd		*m_pCompWnd;
 	CStatusWnd		*m_pStatusWnd;
+
 	HINSTANCE		 m_hInst;
 
 	CPoint			 m_ptCaret;

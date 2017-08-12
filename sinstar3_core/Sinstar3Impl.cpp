@@ -19,8 +19,9 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HINSTANCE hInst)
 
 CSinstar3Impl::~CSinstar3Impl(void)
 {
-	delete m_pCompWnd;
+	m_pStatusWnd->DestroyWindow();
 	delete m_pStatusWnd;
+	delete m_pCompWnd;
 	theCore->Release();
 }
 
@@ -87,8 +88,7 @@ void CSinstar3Impl::OnCompositionTerminated()
 
 void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 {
-	CRect rcWnd;
-	m_pStatusWnd->CSimpleWnd::GetWindowRect(&rcWnd);
+	SLOG_INFO("GetThreadID="<<GetCurrentThreadId()<<" focus="<<bFocus);
 	if(bFocus)
 	{
 		m_pStatusWnd->SetWindowPos(HWND_TOPMOST,0,0,0,0,SWP_NOSIZE|SWP_NOMOVE|SWP_NOACTIVATE|SWP_SHOWWINDOW);

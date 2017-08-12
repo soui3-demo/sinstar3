@@ -34,3 +34,4 @@
 #define R_IN_CPP	//定义这个开关来
 #include "res\resource.h"
 using namespace SOUI;
+
