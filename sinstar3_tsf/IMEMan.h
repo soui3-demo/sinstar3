@@ -212,7 +212,7 @@ public:
 				for( unsigned int i = 0; i < vectorOrder.size(); i++)
 				{				
 					_stprintf_s(szEntry,_T("%d"),i+1);
-					RegSetValueEx( hKPreload, szEntry, 0, REG_SZ,(LPBYTE)(vectorOrder[i].c_str()), (vectorOrder[i].length() + 1) * sizeof(TCHAR));
+					RegSetValueEx( hKPreload, szEntry, 0, REG_SZ,(LPBYTE)(vectorOrder[i].c_str()), (DWORD)(vectorOrder[i].length() + 1) * sizeof(TCHAR));
 				}
 			}
 
@@ -262,7 +262,7 @@ public:
 					for( unsigned int i = 0; i < vectorOrder.size(); i++)
 					{				
 						_stprintf_s(szEntry,_T("%d"),i+1);
-						RegSetValueEx( hKPreload, szEntry, 0, REG_SZ,(LPBYTE)(vectorOrder[i].c_str()), (vectorOrder[i].length() + 1) * sizeof(TCHAR));
+						RegSetValueEx( hKPreload, szEntry, 0, REG_SZ,(LPBYTE)(vectorOrder[i].c_str()), (DWORD)(vectorOrder[i].length() + 1) * sizeof(TCHAR));
 					}
 
 					//for( int i = 0; i < dwIndex - 1; i++)
@@ -279,7 +279,7 @@ public:
 					// 如果只有我们一个输入法了，删除我们的，把英文美式键盘加进来。
 					//
 					TCHAR szValue[32] = _T("00000409");
-					RegSetValueEx( hKPreload, _T("1"), 0, REG_SZ, (LPBYTE)(szValue), (_tcslen(szValue) + 1) * sizeof(TCHAR));
+					RegSetValueEx( hKPreload, _T("1"), 0, REG_SZ, (LPBYTE)(szValue), (DWORD)(_tcslen(szValue) + 1) * sizeof(TCHAR));
 				}
 			}
 
@@ -931,7 +931,7 @@ public:
 			{
 				TCHAR szEntry[32];
 				_stprintf_s( szEntry,_T("%d"), i+1);
-				RegSetValueEx( hKPreload, szEntry, 0, REG_SZ,(LPBYTE)(vectorOrder[i].c_str()), (vectorOrder[i].length() + 1) * sizeof(TCHAR));
+				RegSetValueEx( hKPreload, szEntry, 0, REG_SZ,(LPBYTE)(vectorOrder[i].c_str()), (DWORD)(vectorOrder[i].length() + 1) * sizeof(TCHAR));
 			}
 
 			//for(DWORD i=0;i<dwIndex;i++)
@@ -1386,7 +1386,7 @@ public:
 								{
 									// found it
 									bFound = TRUE;									
-									RegSetValueEx( hSubKey, _T("Layout Text"), 0, REG_SZ, (BYTE*)pszDesr, (_tcslen( pszDesr) + 1) * sizeof(TCHAR));
+									RegSetValueEx( hSubKey, _T("Layout Text"), 0, REG_SZ, (BYTE*)pszDesr, (DWORD)(_tcslen( pszDesr) + 1) * sizeof(TCHAR));
 								}
 							}
 							else

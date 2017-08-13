@@ -421,10 +421,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\msgListnerWnd.h"
-				>
-			</File>
-			<File
 				RelativePath=".\resource.h"
 				>
 			</File>

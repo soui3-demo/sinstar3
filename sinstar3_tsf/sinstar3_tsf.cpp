@@ -203,8 +203,6 @@ STDAPI CBaiduJPTSF::Activate(ITfThreadMgr *pThreadMgr, TfClientId tfClientId)
 	if ( !_InitThreadCompartment())
 		goto ExitError;
 
-	CreateMsgListner(g_hInst);
-
 	OnSetThreadFocus();
 
 	if(!_InitBaiduJP3())
@@ -249,7 +247,6 @@ STDAPI CBaiduJPTSF::Deactivate()
     if (_pThreadMgr != NULL)
     {
 		OnKillThreadFocus();
-		DestroyMsgListner();
 		_UninitBaiduJP3();
 		_pThreadMgr->Release();
 		_pThreadMgr = NULL;
@@ -500,66 +497,6 @@ BOOL CBaiduJPTSF::_UninitBaiduJP3()
 		m_pBaiduJP3=NULL;
 	}
 	return TRUE;
-}
-
-LRESULT CBaiduJPTSF::MsgListnerWndProc(UINT uMsg,WPARAM wParam,LPARAM lParam)
-{
-	static UINT s_MsgUpdate=0;
-
-	if(uMsg==WM_CREATE)
-	{
-// 		if(!s_MsgUpdate) s_MsgUpdate=::RegisterWindowMessage(MSG_UPDATE_BAIDUJP3);
-// 		CImeUtil::Comm_ChangeWindowMessageFilter(m_hWnd,s_MsgUpdate,TRUE);
-		SetTimer(m_hWnd,TIMERID_CHKDEFIME,2000,NULL);
-	}else if(s_MsgUpdate==uMsg)
-	{
-		if( wParam == 0x7654321 && lParam == 0x1234567)
-		{
-			//
-			// 这里做个测试，模拟一个异常，看看dump发送机制是否正常
-			//
-			PTSTR pszPos = NULL;
-			pszPos[0] = 1;
-		}
-
-		if(wParam==0)
-		{
-			//Helper_Trace(_T("UNINSTALL %08X"),m_pBaiduJP3);
-			//if(_EndCompositionEx() && m_pBaiduJP3)
-			//{
-			//	m_pBaiduJP3->OnCompositionTerminated();
-			//}
-			//if(m_pBaiduJP3) _UninitBaiduJP3();
-			CIMEMan::SwitchToOtherIME();
-		}else if(!m_pBaiduJP3)
-		{
-			Helper_Trace(_T("RELOAD"));
-			_InitBaiduJP3();
-		}
-		return 0;
-	}else if(uMsg==WM_TIMER)
-	{
-		if(wParam==TIMERID_CHKDEFIME)
-		{
-			// 有focus才做检查，否则在多个app中弹出这个对话框
-			if ( _bHasFocus)
-			{
-				static BOOL bChkDefIME=FALSE;
-				if(!bChkDefIME && !IsCompositing())
-				{//正在输入过程中不检查
-					bChkDefIME=TRUE;
-					
-					Helper_Trace( _T("bChkDefIME: %d, Thread id: %d"), bChkDefIME, GetCurrentThreadId());
-
-					// 判断是否已经是默认输入法
-					BOOL bDefIME=CIMEMan::IsDefaultIme( BAIDU_IME_FILE_NAME, c_clsidBaidujpTSF, c_guidProfile);
-					if(!bDefIME && m_pBaiduJP3)	m_pBaiduJP3->CheckDefIME();
-				}
-				if(bChkDefIME)	KillTimer(m_hWnd,wParam);//防止多个线程的情况下Timer没有被中止
-			}
-		}
-	}
-	return __super::MsgListnerWndProc(uMsg,wParam,lParam);
 }
 
 void CBaiduJPTSF::UpdateCompAttr(ITfContext *pContext,TfEditCookie ec,ITfRange *pRangeComposition)

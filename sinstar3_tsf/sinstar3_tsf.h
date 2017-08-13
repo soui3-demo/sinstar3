@@ -13,8 +13,7 @@ class CBaiduJPTSF : public ITfTextInputProcessor,
 					 public ITfTextLayoutSink,
 					 public ITfFnConfigure,
 					 public ITfCompartmentEventSink,
-					 public ITextService,
-					 public CMsgListnerWnd
+					 public ITextService
 {
 public:
     CBaiduJPTSF();
@@ -78,9 +77,6 @@ public:
 
     // CClassFactory factory callback
     static HRESULT CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj);
-	
-	//CMsgListnerWnd
-	virtual LRESULT MsgListnerWndProc(UINT uMsg,WPARAM wParam,LPARAM lParam);
 
 	//ITextService
 	BOOL IsCompositing();
