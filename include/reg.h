@@ -1,9 +1,31 @@
 #pragma once
+#include <WinReg.h>
+
+#ifndef ATLTRACE
 #define ATLTRACE            __noop
 #define ATLTRACE2           __noop
+#endif
 
-#include <atl.mini/atldef.h>
-#include <WinReg.h>
+#ifndef ATLTRACENOTIMPL
+#define ATLENSURE_THROW(a,b)
+#endif
+
+#ifndef ATLTRACENOTIMPL
+#define ATLTRACENOTIMPL(funcname)   return E_NOTIMPL
+#endif
+
+#ifndef ATLASSERT
+#define ATLASSERT SASSERT
+#endif // ATLASSERT
+
+#ifndef ATLASSUME
+#define ATLASSUME(expr) do { ATLASSERT(expr); __analysis_assume(!!(expr)); } while(0)
+#endif // ATLASSUME
+
+#ifndef ATL_NO_VTABLE
+#define ATL_NO_VTABLE    __declspec(novtable)
+#endif
+
 
 class CRegKey
 {

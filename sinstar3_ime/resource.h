@@ -2,8 +2,7 @@
 // Microsoft Visual C++ generated include file.
 // Used by baidujpIME.rc
 //
-#define IDI_ICON1                       101
-#define IDI_BAIDUTYPE                   101
+#define IDI_SINSTAR3                   101
 
 // Next default values for new objects
 // 
