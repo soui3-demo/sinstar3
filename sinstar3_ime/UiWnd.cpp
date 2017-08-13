@@ -382,7 +382,7 @@ LRESULT CUiWnd::OnSetContext(BOOL bActivate,LPARAM lParam)
 	return 0;
 }
 
-BOOL CUiWnd::_InitBaiduJP3()
+BOOL CUiWnd::_InitSinstar3()
 {
 	m_pSinstar3=CCoreLoader::GetInstance().Sinstar3_Create(this,g_hInst);
 	if(!m_pSinstar3) return FALSE;
@@ -392,7 +392,7 @@ BOOL CUiWnd::_InitBaiduJP3()
 	return TRUE;
 }
 
-BOOL CUiWnd::_UninitBaiduJP3()
+BOOL CUiWnd::_UninitSinstar3()
 {
 	if(m_pSinstar3)
 	{
@@ -408,7 +408,7 @@ LRESULT CUiWnd::OnCreate()
 	if(g_dwSystemInfoFlags & IME_SYSINFO_WINLOGON) return -1;
 
 	Helper_Trace(_T("CUiWnd::OnCreate,hWnd:%08x"),m_hWnd);
-	_InitBaiduJP3();
+	_InitSinstar3();
 	m_wndComp.Create(WS_EX_TOOLWINDOW|WS_EX_LAYERED|WS_EX_NOACTIVATE,WS_POPUP|WS_DISABLED,m_hWnd,0,g_hInst);
 	PostMessage(WM_IME_NOTIFY,IMN_SETCONVERSIONMODE,0);
 	return 0;
@@ -416,7 +416,7 @@ LRESULT CUiWnd::OnCreate()
 
 LRESULT CUiWnd::OnDestroy()
 {
-	_UninitBaiduJP3();
+	_UninitSinstar3();
 	m_wndComp.Destroy();
 	Helper_Trace(_T("CUiWnd::OnDestroy"));
 	return 0;

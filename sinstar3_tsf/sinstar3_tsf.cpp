@@ -93,7 +93,7 @@ CSinstar3Tsf::CSinstar3Tsf()
 
 	_dwCookieTextLayoutSink = TF_INVALID_COOKIE;
 
-	m_pBaiduJP3=NULL;
+	m_pSinstar3=NULL;
 
 	_bHasFocus=FALSE;
 
@@ -201,7 +201,7 @@ STDAPI CSinstar3Tsf::Activate(ITfThreadMgr *pThreadMgr, TfClientId tfClientId)
 
 	OnSetThreadFocus();
 
-	if(!_InitBaiduJP3())
+	if(!_InitSinstar3())
  		goto ExitError;
 
 	
@@ -228,8 +228,8 @@ STDAPI CSinstar3Tsf::Deactivate()
 		ITfContext *pCtx=(ITfContext *)GetImeContext();
 		if(pCtx) 
 			EndComposition(pCtx);
-		else if(m_pBaiduJP3)
-			m_pBaiduJP3->OnCompositionTerminated();
+		else if(m_pSinstar3)
+			m_pSinstar3->OnCompositionTerminated();
 		ReleaseImeContext(pCtx);
 	}
 	if (_pThreadMgr)
@@ -243,7 +243,7 @@ STDAPI CSinstar3Tsf::Deactivate()
     if (_pThreadMgr != NULL)
     {
 		OnKillThreadFocus();
-		_UninitBaiduJP3();
+		_UninitSinstar3();
 		_pThreadMgr->Release();
 		_pThreadMgr = NULL;
 	}
@@ -473,24 +473,24 @@ BOOL CSinstar3Tsf::_InitDisplayAttributeGuidAtom()
 	return (hr == S_OK);
 }
 
-BOOL CSinstar3Tsf::_InitBaiduJP3()
+BOOL CSinstar3Tsf::_InitSinstar3()
 {
-	m_pBaiduJP3=CCoreLoader::GetInstance().Sinstar3_Create(this,theModule->GetModule());
-	if(!m_pBaiduJP3) return FALSE;
- 	m_pBaiduJP3->OnIMESelect(_bHasFocus);
- 	m_pBaiduJP3->OnSetFocus(_bHasFocus && _bInEditDocument);
+	m_pSinstar3=CCoreLoader::GetInstance().Sinstar3_Create(this,theModule->GetModule());
+	if(!m_pSinstar3) return FALSE;
+ 	m_pSinstar3->OnIMESelect(_bHasFocus);
+ 	m_pSinstar3->OnSetFocus(_bHasFocus && _bInEditDocument);
  	OnChange(GUID_COMPARTMENT_KEYBOARD_OPENCLOSE);
  	OnChange(GUID_COMPARTMENT_KEYBOARD_INPUTMODE_CONVERSION);
 	return TRUE;
 }
 
-BOOL CSinstar3Tsf::_UninitBaiduJP3()
+BOOL CSinstar3Tsf::_UninitSinstar3()
 {
-	if(m_pBaiduJP3)
+	if(m_pSinstar3)
 	{
-		m_pBaiduJP3->OnIMESelect(FALSE);
-		CCoreLoader::GetInstance().Sinstar3_Delete(m_pBaiduJP3);
-		m_pBaiduJP3=NULL;
+		m_pSinstar3->OnIMESelect(FALSE);
+		CCoreLoader::GetInstance().Sinstar3_Delete(m_pSinstar3);
+		m_pSinstar3=NULL;
 	}
 	return TRUE;
 }
@@ -502,14 +502,14 @@ void CSinstar3Tsf::UpdateCompAttr(ITfContext *pContext,TfEditCookie ec,ITfRange 
 	if(pRangeComposition->IsEmpty(ec,&bEmpty)==S_OK && bEmpty) return;
 
 	pRangeComposition->Collapse(ec,TF_ANCHOR_START);
-	int nSegs=m_pBaiduJP3->GetCompositionSegments();
+	int nSegs=m_pSinstar3->GetCompositionSegments();
 	int nBegin=0;
 	for(int i=0;i<nSegs;i++)
 	{
 		LONG cch=0;
-		int nEnd=m_pBaiduJP3->GetCompositionSegmentEnd(i);
+		int nEnd=m_pSinstar3->GetCompositionSegmentEnd(i);
 		pRangeComposition->ShiftEnd(ec,nEnd-nBegin,&cch,NULL);
-		_SetCompositionDisplayAttributes(ec, pContext, pRangeComposition,(TF_DA_ATTR_INFO)m_pBaiduJP3->GetCompositionSegmentAttr(i));
+		_SetCompositionDisplayAttributes(ec, pContext, pRangeComposition,(TF_DA_ATTR_INFO)m_pSinstar3->GetCompositionSegmentAttr(i));
 		nBegin=nEnd;
 		pRangeComposition->Collapse(ec,TF_ANCHOR_END);
 	}

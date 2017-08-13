@@ -387,7 +387,6 @@ public:
 		return TRUE;
 	}
 
-	// BAIDU_IME_FILE_NAME, JP_IME_DESC
 	static BOOL InstalIME( PCTSTR pszIMEFileName, PCTSTR pszDesc)
 	{
 		TCHAR szMsg[256] = _T("");
@@ -424,10 +423,10 @@ public:
 		//
 		// unload ime
 		//
-		HKL hBaiduIme = GetKeyboardLayoutFromFileName( pszFileName);
-		if ( hBaiduIme != NULL)
+		HKL hSinstar3IME = GetKeyboardLayoutFromFileName( pszFileName);
+		if ( hSinstar3IME != NULL)
 		{
-			UnloadKeyboardLayout( hBaiduIme);
+			UnloadKeyboardLayout( hSinstar3IME);
 		}
 
 		return TRUE;
@@ -593,278 +592,6 @@ public:
 		UnregisterServer( rclsid);
 		return TRUE;
 	}
-
-	// BAIDU_IME_FILE_NAME, c_clsidBaidujpTSF, c_guidProfile
-	static BOOL IsDefaultIme( PCTSTR pszIMEFileName, REFCLSID rclsid, REFGUID guidProfile)
-	{
-		if( IsVistaOrAbove())
-		{
-			HMODULE hInputDLL = LoadLibrary(TEXT("input.dll"));
-			if( hInputDLL == NULL)
-			{
-				return FALSE;
-			}
-
-			//
-			// enum enabled layout
-			//
-			UINT nNum = 0;
-			LAYOUTORTIPPROFILE* pProfile = NULL;
-
-			PTF_ENUMENABLEDLAYOUTORTIP pfnEnumEnabledLayoutOrTip = (PTF_ENUMENABLEDLAYOUTORTIP)GetProcAddress(hInputDLL, "EnumEnabledLayoutOrTip");
-			if( pfnEnumEnabledLayoutOrTip != NULL)
-			{
-				nNum = pfnEnumEnabledLayoutOrTip( NULL, NULL, NULL, NULL, 0);
-				if ( nNum > 0)
-				{
-					pProfile = (LAYOUTORTIPPROFILE*)malloc( sizeof( LAYOUTORTIPPROFILE) * nNum);
-					if ( pProfile != NULL)
-					{
-						nNum = pfnEnumEnabledLayoutOrTip( NULL, NULL, NULL, pProfile, nNum);
-					}
-				}
-			}
-
-			BOOL bIsDefaultIME = FALSE;
-			LANGID idLang = TEXTSERVICE_LANGID;
-			for ( UINT i = 0; i < nNum; i++)
-			{
-				//
-				// 找到了我们的tip
-				//
-				if ( idLang == pProfile[i].langid && IsEqualGUID( pProfile[i].clsid, rclsid) && IsEqualGUID( pProfile[i].guidProfile, guidProfile))
-				{
-					if ( pProfile[i].dwFlags == 1)
-					{
-						bIsDefaultIME = TRUE;
-					}
-					break;
-				}
-			}
-
-			if ( pProfile != NULL)
-			{
-				free ( pProfile);
-			}
-
-			FreeLibrary( hInputDLL);
-
-			return bIsDefaultIME;
-		}
-		else
-		{
-			HKL hDefIME = 0;
-			SystemParametersInfo(SPI_GETDEFAULTINPUTLANG, 0, &hDefIME, 0);
-			HKL hKlBaidu = GetKeyboardLayoutFromFileName( pszIMEFileName);
-			if( hKlBaidu == hDefIME)
-			{
-				return TRUE;
-			}
-			else
-			{
-				return FALSE;
-			}
-		}
-	}
-
-	static BOOL SetDefaultImeVista( REFCLSID rclsid, REFGUID guidProfile, BOOL bSet)
-	{
-		TCHAR szMsg[512];
-
-		BOOL bRet = FALSE;
-
-		HMODULE hInputDLL = LoadLibrary(TEXT("input.dll"));
-		if( hInputDLL == NULL)
-		{
-			return FALSE;
-		}
-
-		// swprintf(wsLang,L"0x%04X:0x%08X",((DWORD)hKlDef)&0x0000FFFF,(DWORD)hKlDef);
-
-		//
-		// The string format of the layout list is:
-		// <LangID 1>:<KLID 1>;[...<LangID N>:<KLID N> 
-		// for example:
-		// 0804:00000804
-		//
-
-		// The string format of the text service profile list is:
-		// <LangID 1>:{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}; 
-		// for example:
-		//  0411:{8AEF41B2-882A-444E-8FAB-0D4189BDC80C}{2DBC159B-424B-417A-906D-BAE4B0A6967E}
-		//		
-
-		//
-		// 读取保存在配置文件中上个默认输入法的ID(可能为空)
-		//
-		TCHAR szSavedID[256] = _T("");
-		//TCHAR szIniFile[MAX_PATH] = _T("");
-		//GetModuleFileName( NULL, szIniFile, sizeof(szIniFile) / sizeof(TCHAR));
-		//PathRemoveFileSpec( szIniFile);
-		//PathAppend( szIniFile, _T("setting.ini"));
-		//CImeUtil::Comm_GetIniPath( szIniFile, ARRAYSIZE(szIniFile));		
-		//GetPrivateProfileString( _T("ime_sys_setting"), _T("default_ime"), _T(""), szSavedID, sizeof( szSavedID) / sizeof(TCHAR), szIniFile);
-
-		//
-		// enum enabled layout
-		//
-		UINT nNum = 0;
-		LAYOUTORTIPPROFILE* pProfile = NULL;
-
-		PTF_ENUMENABLEDLAYOUTORTIP pfnEnumEnabledLayoutOrTip = (PTF_ENUMENABLEDLAYOUTORTIP)GetProcAddress(hInputDLL, "EnumEnabledLayoutOrTip");
-		if( pfnEnumEnabledLayoutOrTip != NULL)
-		{
-			nNum = pfnEnumEnabledLayoutOrTip( NULL, NULL, NULL, NULL, 0);
-			if ( nNum > 0)
-			{
-				pProfile = (LAYOUTORTIPPROFILE*)malloc( sizeof( LAYOUTORTIPPROFILE) * nNum);
-				if ( pProfile != NULL)
-				{
-					nNum = pfnEnumEnabledLayoutOrTip( NULL, NULL, NULL, pProfile, nNum);
-				}
-			}
-		}
-
-		//
-		// 找到我们的输入法ID，不要用合成的办法
-		//
-		TCHAR szID[512] = _T("");
-		LANGID idLang = TEXTSERVICE_LANGID;
-		for ( UINT i = 0; i < nNum; i++)
-		{
-			if ( idLang == pProfile[i].langid && IsEqualGUID( pProfile[i].clsid, rclsid) && IsEqualGUID( pProfile[i].guidProfile, guidProfile))
-			{
-				_tcscpy_s( szID, pProfile[i].szId);
-				break;
-			}
-		}
-
-		_stprintf_s( szMsg, _T("our ime is the %s\n"), szID);
-		OutputDebugString( szMsg);
-
-		if ( _tcslen( szID) != 0)
-		{
-			BOOL bIsDefault = FALSE;
-			BOOL bSavedValid = FALSE;
-
-			TCHAR szFirstIme[256] = _T("");
-			TCHAR szFirstJPIme[256] = _T("");
-
-			for ( UINT i = 0; i < nNum; i++)
-			{
-				_stprintf_s( szMsg, _T("dwProfileType: %d, dwFlags: %d, szId: %s\n"), 
-					pProfile[i].dwProfileType, pProfile[i].dwFlags, pProfile[i].szId);
-				OutputDebugString( szMsg);
-
-				if ( pProfile[i].dwFlags == 0)
-				{
-					if ( _tcslen( szFirstIme) == 0)
-					{
-						_tcscpy_s( szFirstIme, pProfile[i].szId);
-					}
-
-					if ( pProfile[i].langid == idLang && _tcslen( szFirstJPIme) == 0)
-					{
-						_tcscpy_s( szFirstJPIme, pProfile[i].szId);
-					}
-				}
-
-				//
-				// 找到现在的默认输入法
-				//.
-				if ( pProfile[i].dwFlags == 1)
-				{
-					_stprintf_s( szMsg, _T("default ime is the %s\n"), pProfile[i].szId);
-					OutputDebugString( szMsg);
-
-					if ( _tcsicmp( szID, pProfile[i].szId) == 0)
-					{
-						_stprintf_s( szMsg, _T("our ime is the default ime\n"));
-						OutputDebugString( szMsg);
-
-						bIsDefault = TRUE;					
-					}
-					else
-					{
-						//
-						// 要设置我们的输入法为默认的输入法，先保存原来的默认输入法
-						//
-						if ( bSet)
-						{
-							//WritePrivateProfileString( _T("ime_sys_setting"), _T("default_ime"), pProfile[i].szId, szIniFile);
-							break;
-						}
-					}
-				}
-
-				if ( _tcsicmp( szSavedID, pProfile[i].szId) == 0)
-				{
-					bSavedValid = TRUE;
-				}
-			}		
-
-			if ( bSet)
-			{
-				if( bIsDefault)
-				{
-					//
-					// 要设置我们的输入法为默认输入法，如果它已经是默认输入法了，退出。
-					//
-					return TRUE;
-				}
-			}		
-			else
-			{
-				if ( bIsDefault)
-				{
-					if ( bSavedValid)
-					{
-						_tcscpy_s( szID, szSavedID);
-					}
-					else
-					{
-						if ( _tcslen( szFirstJPIme) > 0)
-						{
-							_tcscpy_s( szID, szFirstJPIme);
-						}
-						else if ( _tcslen( szFirstIme) > 0)
-						{
-							_tcscpy_s( szID, szFirstIme);
-						}
-						else
-						{
-							return FALSE;
-						}
-					}
-				}
-				else
-				{
-					//
-					// 要取消我们的输入法为默认输入法，如果它已经不是默认输入法了，退出。
-					//
-					return TRUE;
-				}
-			}
-
-			PTF_SETDEFAULTLAYOUTORTIP pfnSetDefaultLayoutOrTip = (PTF_SETDEFAULTLAYOUTORTIP)GetProcAddress(hInputDLL, "SetDefaultLayoutOrTip");
-			if( pfnSetDefaultLayoutOrTip != NULL)
-			{
-				bRet = pfnSetDefaultLayoutOrTip( szID, 0);
-				_stprintf_s( szMsg, _T("set %s to default ime, result: %d\n"), szID, bRet);
-				OutputDebugString( szMsg);
-			}
-		}
-
-		if ( pProfile != NULL)
-		{
-			free ( pProfile);
-		}
-
-		FreeLibrary( hInputDLL);
-
-		return bRet;
-	}
-
 	static BOOL ChangeDefaultIME(PCTSTR pszKLID)
 	{
 		TCHAR szMsg[256] = _T("");
@@ -952,7 +679,6 @@ public:
 		return bRet;
 	}
 
-	// BAIDU_IME_FILE_NAME, c_clsidBaidujpTSF, c_guidProfile
 	static BOOL EnsureDefault(PCTSTR pszIMEFileName, REFCLSID rclsid, REFGUID guidProfile)
 	{
 		TCHAR szKLID[256] = _T("");
@@ -1001,25 +727,25 @@ public:
 
 		HKL hDefIME=0;
 		SystemParametersInfo(SPI_GETDEFAULTINPUTLANG,0,&hDefIME,0);
-		HKL hKlBaidu=GetKeyboardLayoutFromFileName(pszIMEFileName);
+		HKL hKlSinstar3=GetKeyboardLayoutFromFileName(pszIMEFileName);
 
-		_stprintf_s( szMsg, _T("hDefIME: %x, hKlBaidu: %x\n"), hDefIME, hKlBaidu);
+		_stprintf_s( szMsg, _T("hDefIME: %x, hKl: %x\n"), hDefIME, hKlSinstar3);
 		OutputDebugString( szMsg);
 
-		if(hKlBaidu!=hDefIME) return TRUE;
+		if(hKlSinstar3!=hDefIME) return TRUE;
 
-		TCHAR szBaiduJPKLID[256] = _T("");
+		TCHAR szSinstar3KLID[256] = _T("");
 		HKEY hKey = NULL;
 		LONG nRet = RegOpenKeyEx( HKEY_LOCAL_MACHINE, _T("SYSTEM\\CurrentControlSet\\Control\\Keyboard Layouts"), 0, KEY_READ, &hKey);
 		if ( ERROR_SUCCESS == nRet)
 		{
-			GetImeKLID( hKey, pszIMEFileName, szBaiduJPKLID, 256);
+			GetImeKLID( hKey, pszIMEFileName, szSinstar3KLID, 256);
 			RegCloseKey( hKey);
 		}
 
 		TCHAR szKLID[256] = _T("");
 
-		if( _tcslen( szBaiduJPKLID) != 0)
+		if( _tcslen( szSinstar3KLID) != 0)
 		{
 			HKEY hKPreload = 0;
 			if( ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER,_T("Keyboard Layout\\preload"), 0, KEY_ALL_ACCESS, &hKPreload))
@@ -1031,7 +757,7 @@ public:
 				DWORD dwIndex = 0;
 				while( RegEnumValue( hKPreload, dwIndex, szEntry, &dwSizeEntry, NULL, NULL,(LPBYTE)szImeIDs, &dwSizeID) == ERROR_SUCCESS)
 				{
-					if( _tcsicmp( szBaiduJPKLID, szImeIDs) !=0)
+					if( _tcsicmp( szSinstar3KLID, szImeIDs) !=0)
 					{
 						_tcscpy_s( szKLID, szImeIDs);
 						break;
@@ -1075,7 +801,7 @@ public:
 		return ChangeDefaultIME( szKLID);
 	}
 
-	// BAIDU_IME_FILE_NAME
+	// IME_FILE_NAME
 	static BOOL Enable( PCTSTR pszIMEFileName, BOOL bEnable)
 	{
 		//
@@ -1127,7 +853,7 @@ public:
 		return TRUE;
 	}
 
-	// c_clsidBaidujpTSF, c_guidProfile
+	// c_clsidSinstar3TSF, c_guidProfile
 	static BOOL Enable( REFCLSID rclsid, REFGUID guidProfile, BOOL bEnable)
 	{
 		BOOL bCom = FALSE;
@@ -1157,26 +883,6 @@ public:
 		return (hr == S_OK);
 	}
 
-	// BAIDU_IME_FILE_NAME, c_clsidBaidujpTSF, c_guidProfile
-	static BOOL SetDefaultIME( PCTSTR pszIMEFileName, REFCLSID rclsid, REFGUID guidProfile, BOOL bSet)
-	{	
-		if( IsVistaOrAbove())
-		{
-			return SetDefaultImeVista( rclsid, guidProfile, bSet);
-		}
-		else
-		{
-			if ( bSet)
-			{
-				return XP_DefaultIME_Set( pszIMEFileName);
-			}
-			else
-			{
-				return XP_DefaultIME_Clear( pszIMEFileName);
-			}
-		}
-	}
-
 	static HKL Load( PCTSTR pszIMEFileName)
 	{
 		TCHAR szKLID[256] = _T("");
@@ -1201,10 +907,10 @@ public:
 	{
 		BOOL bOK = FALSE;
 		//HKL hPre = ActivateKeyboardLayout( HKL_PREV, 0);
-		HKL hKlBaidu = GetKeyboardLayoutFromFileName( pszIMEFileName);
-		if( hKlBaidu != NULL)
+		HKL hKlSinstar3 = GetKeyboardLayoutFromFileName( pszIMEFileName);
+		if( hKlSinstar3 != NULL)
 		{
-			bOK = UnloadKeyboardLayout( hKlBaidu);
+			bOK = UnloadKeyboardLayout( hKlSinstar3);
 		}
 
 		return bOK;

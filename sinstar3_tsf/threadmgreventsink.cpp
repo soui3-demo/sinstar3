@@ -47,9 +47,9 @@ STDAPI CSinstar3Tsf::OnSetFocus(ITfDocumentMgr *pDocMgrFocus, ITfDocumentMgr *pD
     //
 	_bInEditDocument = _InitTextEditSink(pDocMgrFocus);	
 	
-	if(m_pBaiduJP3)
+	if(m_pSinstar3)
 	{
-		m_pBaiduJP3->OnSetFocus(_bHasFocus && _bInEditDocument);
+		m_pSinstar3->OnSetFocus(_bHasFocus && _bInEditDocument);
 	}
 
     return S_OK;
@@ -60,9 +60,9 @@ STDAPI CSinstar3Tsf::OnSetThreadFocus()
 	Helper_Trace(_T("OnSetThreadFocus"));
 
 	_bHasFocus=TRUE;
-	if(m_pBaiduJP3)
+	if(m_pSinstar3)
 	{
-		m_pBaiduJP3->OnSetFocus(_bHasFocus && _bInEditDocument);
+		m_pSinstar3->OnSetFocus(_bHasFocus && _bInEditDocument);
 	}
 	return S_OK;
 }
@@ -72,9 +72,9 @@ STDAPI CSinstar3Tsf::OnKillThreadFocus()
 	Helper_Trace(_T("OnKillThreadFocus"));
 
 	_bHasFocus=FALSE;
-	if(m_pBaiduJP3)
+	if(m_pSinstar3)
 	{
-		m_pBaiduJP3->OnSetFocus(FALSE);
+		m_pSinstar3->OnSetFocus(FALSE);
 	}
 	return S_OK;
 }

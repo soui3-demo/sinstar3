@@ -156,7 +156,7 @@ EInputMethod CSinstar3Tsf::GetConversionMode()
 	assert( _pThreadMgr != NULL);
 
 	HRESULT hr = S_OK;
-	EInputMethod eInputMode =m_pBaiduJP3?m_pBaiduJP3->GetDefInputMode():Hiragana;
+	EInputMethod eInputMode =m_pSinstar3?m_pSinstar3->GetDefInputMode():Hiragana;
 	ITfCompartmentMgr *pCompMgr = NULL;
 	
 
@@ -335,9 +335,9 @@ STDAPI CSinstar3Tsf::OnChange(REFGUID rguidCompartment)
 	if (IsEqualGUID(rguidCompartment,GUID_COMPARTMENT_KEYBOARD_OPENCLOSE))
 	{//update input mode flags
 		BOOL bOpen=_IsKeyboardOpen();
-		if(m_pBaiduJP3)
+		if(m_pSinstar3)
 		{
-			m_pBaiduJP3->OnOpenStatusChanged(bOpen);
+			m_pSinstar3->OnOpenStatusChanged(bOpen);
 		}
 	}
 	//响应输入模式变化
@@ -345,7 +345,7 @@ STDAPI CSinstar3Tsf::OnChange(REFGUID rguidCompartment)
 	{
 		EInputMethod mode=GetConversionMode();
 		if(!_IsKeyboardOpen()) mode=HalfAlphanumeric;
-		if(m_pBaiduJP3) m_pBaiduJP3->OnConversionModeChanged(mode);
+		if(m_pSinstar3) m_pSinstar3->OnConversionModeChanged(mode);
 	}
 
     return S_OK;

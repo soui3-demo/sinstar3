@@ -133,8 +133,8 @@ public:
 	
 private:
 
-	BOOL _InitBaiduJP3();
-	BOOL _UninitBaiduJP3();
+	BOOL _InitSinstar3();
+	BOOL _UninitSinstar3();
 
     // initialize and uninitialize ThreadMgrEventSink.
     BOOL _InitThreadMgrEventSink();
@@ -176,7 +176,7 @@ private:
     DWORD _dwTextEditSinkCookie;
 
 public:
-	ISinstar* m_pBaiduJP3;
+	ISinstar*   m_pSinstar3;
 	BOOL		_bHasFocus;
 	BOOL _bGetLayoutChangeMsg;
 	DWORD		_dwLastLayoutChangeTime;

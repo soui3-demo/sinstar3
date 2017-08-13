@@ -55,8 +55,8 @@ public:
 	BOOL		m_bActivate;
 	CCompWndInline m_wndComp;//在notepad中使用的Inline窗口
 private:
-	BOOL _InitBaiduJP3();
-	BOOL _UninitBaiduJP3();
+	BOOL _InitSinstar3();
+	BOOL _UninitSinstar3();
 	BOOL IsIMEMessage(UINT message);
 	POINT GetAbsPos(HWND hWnd,DWORD dwStyle,POINT ptCur,RECT rc);
 	BOOL AttachToIMC(BOOL bAttach);

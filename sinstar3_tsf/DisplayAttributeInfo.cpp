@@ -23,7 +23,7 @@
 //----------------------------------------------------------------------------
 
 // the registry key of this text service to save the custmized display attribute
-const TCHAR c_szAttributeInfoKey[] = TEXT("Software\\Baidu\\Type");
+const TCHAR c_szAttributeInfoKey[] = TEXT("Software\\SetoutSoft\\Sinstar3");
 
 // the registry values of the custmized display attributes
 const TCHAR CDisplayAttributeInfoInput::_s_szValueName[] = TEXT("DisplayAttributeInput");
@@ -36,9 +36,9 @@ const TCHAR CDisplayAttributeInfoTargetConverted::_s_szValueName[] = TEXT("Displ
 //
 //----------------------------------------------------------------------------
 
-const WCHAR CDisplayAttributeInfoInput::_s_szDescription[] = L"Baidu Type Display Attribute Input";
-const WCHAR CDisplayAttributeInfoConverted::_s_szDescription[] = L"Baidu Type Display Attribute Converted";
-const WCHAR CDisplayAttributeInfoTargetConverted::_s_szDescription[] = L"Baidu Type Display Attribute Target Converted";
+const WCHAR CDisplayAttributeInfoInput::_s_szDescription[] = L"Sinstar3 Display Attribute Input";
+const WCHAR CDisplayAttributeInfoConverted::_s_szDescription[] = L"Sinstar3 Display Attribute Converted";
+const WCHAR CDisplayAttributeInfoTargetConverted::_s_szDescription[] = L"Sinstar3 Display Attribute Target Converted";
 
 
 //+---------------------------------------------------------------------------

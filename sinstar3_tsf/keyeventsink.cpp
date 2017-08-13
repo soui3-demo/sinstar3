@@ -9,26 +9,26 @@ STDAPI CSinstar3Tsf::OnSetFocus(BOOL fForeground)
 
 STDAPI CSinstar3Tsf::OnTestKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {
-	if (!m_pBaiduJP3 || _IsKeyboardDisabled()/* || !_IsKeyboardOpen()*/)
+	if (!m_pSinstar3 || _IsKeyboardDisabled()/* || !_IsKeyboardOpen()*/)
 	{
 		*pfEaten = FALSE;
 		return S_OK;
 	}
 
-	m_pBaiduJP3->ProcessKeyStoke(pContext,wParam,lParam, TRUE, pfEaten);
+	m_pSinstar3->ProcessKeyStoke(pContext,wParam,lParam, TRUE, pfEaten);
 
 	Helper_Trace(_T("OnTestKeyDown: wParam:%08x,lparam:%08x"),wParam,lParam);
     return S_OK;
 }
 STDAPI CSinstar3Tsf::OnTestKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {
-	if (!m_pBaiduJP3 || _IsKeyboardDisabled()/* || !_IsKeyboardOpen()*/)
+	if (!m_pSinstar3 || _IsKeyboardDisabled()/* || !_IsKeyboardOpen()*/)
 	{
 		*pfEaten = FALSE;
 		return S_OK;
 	}
 
-	m_pBaiduJP3->ProcessKeyStoke(pContext,wParam, lParam,FALSE, pfEaten);
+	m_pSinstar3->ProcessKeyStoke(pContext,wParam, lParam,FALSE, pfEaten);
 
 	return S_OK;
 }
@@ -44,7 +44,7 @@ STDAPI CSinstar3Tsf::OnKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM lPara
 	OnTestKeyDown(pContext,wParam,lParam,pfEaten);
  	if(*pfEaten)
 	{
-		m_pBaiduJP3->TranslateKey(pContext,wParam, MapVirtualKey(wParam,0), TRUE, pfEaten);
+		m_pSinstar3->TranslateKey(pContext,wParam, MapVirtualKey(wParam,0), TRUE, pfEaten);
 	}
 	_bInKeyProc=FALSE;
 	return S_OK;
@@ -56,7 +56,7 @@ STDAPI CSinstar3Tsf::OnKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lParam,
 	OnTestKeyUp(pContext,wParam,lParam,pfEaten);
 	if(*pfEaten)
 	{
-		m_pBaiduJP3->TranslateKey(pContext,wParam, MapVirtualKey(wParam,0), FALSE, pfEaten);
+		m_pSinstar3->TranslateKey(pContext,wParam, MapVirtualKey(wParam,0), FALSE, pfEaten);
 	}
     return S_OK;
 }
@@ -64,7 +64,7 @@ STDAPI CSinstar3Tsf::OnKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lParam,
 STDAPI CSinstar3Tsf::OnPreservedKey(ITfContext *pic, REFGUID rguid, BOOL *pfEaten)
 {
 	Helper_Trace(L"OnPreservedKey");
-	*pfEaten=m_pBaiduJP3->OnHotkey(pic,rguid);
+	*pfEaten=m_pSinstar3->OnHotkey(pic,rguid);
 	return S_OK;
 }
 

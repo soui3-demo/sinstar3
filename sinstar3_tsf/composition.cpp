@@ -103,7 +103,7 @@ void CSinstar3Tsf::_TerminateComposition(TfEditCookie ec, ITfContext *pContext)
     if (_pComposition != NULL)
     {
 		_ClearCompositionDisplayAttributes(ec,pContext);
-		if(m_pBaiduJP3) m_pBaiduJP3->OnCompositionTerminated();
+		if(m_pSinstar3) m_pSinstar3->OnCompositionTerminated();
 		_pComposition->EndComposition(ec);
 
 		if ( pContext != NULL)
@@ -141,10 +141,10 @@ BOOL CSinstar3Tsf::_EndCompositionEx()
 		hr=pRange->GetContext(&pCtx);
 		if(pCtx) _EndComposition(pCtx);
 	}
-	if((!pRange || !pCtx) && m_pBaiduJP3)
+	if((!pRange || !pCtx) && m_pSinstar3)
 	{
 		_bPosSaved = FALSE;
-		m_pBaiduJP3->OnCompositionTerminated();
+		m_pSinstar3->OnCompositionTerminated();
 		return FALSE;
 	}
 	return TRUE;

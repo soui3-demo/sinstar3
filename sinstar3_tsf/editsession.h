@@ -128,7 +128,7 @@ public:
 		RECT rc;
 		LONG cch=0;
 
-		if ( _pTextService->_pComposition == NULL || _pTextService->m_pBaiduJP3==NULL) return S_FALSE;
+		if ( _pTextService->_pComposition == NULL || _pTextService->m_pSinstar3==NULL) return S_FALSE;
 
 		//
 		// 在qq，open office，甚至今朝的截屏中，这个hWnd都是隐藏的。
@@ -167,7 +167,7 @@ public:
 		if ( _pTextService->_pComposition->GetRange( &range) == S_OK && range != NULL)
 		{
 			RECT rcLast = { -1, -1, -1, -1};
-			int nLen=_pTextService->m_pBaiduJP3->GetCompositionSegmentEnd(_pTextService->m_pBaiduJP3->GetCompositionSegments()-1);
+			int nLen=_pTextService->m_pSinstar3->GetCompositionSegmentEnd(_pTextService->m_pSinstar3->GetCompositionSegments()-1);
 
 			GetLastLineRect( ec, range, nLen, rcLast, TRUE);			
 
@@ -176,38 +176,37 @@ public:
 			// Ren zhijie 2011-03-15 20:28
 			//
 
-			//if(rcLast.left>=0 && rcLast.top>=0) _pTextService->m_pBaiduJP3->OnSetCaretPosition( *(POINT*)&rcLast, rcLast.bottom - rcLast.top);
-			_pTextService->m_pBaiduJP3->OnSetCaretPosition( *(POINT*)&rcLast, rcLast.bottom - rcLast.top);			
+			_pTextService->m_pSinstar3->OnSetCaretPosition( *(POINT*)&rcLast, rcLast.bottom - rcLast.top);			
 			Helper_Trace(_T("SetCaret Pos 1:%d,%d, height: %d"),rcLast.left,rcLast.top, rcLast.bottom - rcLast.top);
 			
 			range->Release();
 		}
 
-		int nSeg=_pTextService->m_pBaiduJP3->GetCompositionSegments();
+		int nSeg=_pTextService->m_pSinstar3->GetCompositionSegments();
 		int nBegin=0;
 		memset(&rc,0xff,sizeof(RECT));
 		for(int i=0;i<nSeg;i++)
 		{
-			UINT uAttr=_pTextService->m_pBaiduJP3->GetCompositionSegmentAttr(i);
+			UINT uAttr=_pTextService->m_pSinstar3->GetCompositionSegmentAttr(i);
 			if(uAttr==RG_ATTR_TARGET_CONVERTED || uAttr==RG_ATTR_TARGET_NOTCONVERTED)
 			{
 				//_pTextService->_GetSegRange(ec,&pRange,nBegin,nBegin);
 				//hr=_pContextView->GetTextExt(ec, pRange, &rc, &fClipped);
-				int nEnd = _pTextService->m_pBaiduJP3->GetCompositionSegmentEnd(i);
+				int nEnd = _pTextService->m_pSinstar3->GetCompositionSegmentEnd(i);
 				_pTextService->_GetSegRange(ec,&pRange,nBegin, nEnd);
 				hr = GetLastLineRect( ec, pRange, nEnd-nBegin, rc, FALSE);
 				break;
 			}
-			nBegin=_pTextService->m_pBaiduJP3->GetCompositionSegmentEnd(i);
+			nBegin=_pTextService->m_pSinstar3->GetCompositionSegmentEnd(i);
 		}
 		if(rc.bottom-rc.top>=1)
 		{//获得有效的候选位置
 			Helper_Trace(_T("SetCaret Pos 2:%d,%d, height: %d"),rc.left, rc.top, rc.bottom - rc.top);
-			_pTextService->m_pBaiduJP3->OnSetFocusSegmentPosition(*(POINT*)&rc,rc.bottom-rc.top);
+			_pTextService->m_pSinstar3->OnSetFocusSegmentPosition(*(POINT*)&rc,rc.bottom-rc.top);
 		}else if(rc.left==-1 && rc.top==-1)
 		{
 			Helper_Trace(_T("SetCaret Pos 3:%d,%d, height: %d"),rc.left, rc.top, 0);
-			_pTextService->m_pBaiduJP3->OnSetFocusSegmentPosition(*(POINT*)&rc,0);
+			_pTextService->m_pSinstar3->OnSetFocusSegmentPosition(*(POINT*)&rc,0);
 		}		
 
 		return S_OK;
@@ -255,7 +254,7 @@ public:
 		// of the CTextService class. So this instance of the CTextService 
 		// class can know now it is in the composition stage.
 		_pTextService->_SetComposition(pComposition);
-		_pTextService->m_pBaiduJP3->OnCompositionStarted();
+		_pTextService->m_pSinstar3->OnCompositionStarted();
 
 		// 
 		//  set selection to the adjusted range
@@ -345,7 +344,7 @@ public:
 		// set the display attribute to the composition range.
 		//
 		_pTextService->UpdateCompAttr(_pContext,ec,pRangeComposition);
- 		if(_pTextService->m_pBaiduJP3) _pTextService->m_pBaiduJP3->OnCompositionChanged();
+ 		if(_pTextService->m_pSinstar3) _pTextService->m_pSinstar3->OnCompositionChanged();
 Exit:
 		tfSelection.range->Release();
 		return S_OK;
@@ -411,7 +410,7 @@ public:
 			}
 		}
 		_pContext->SetSelection(ec, 1, &tfSelection);
-		if(_pTextService->m_pBaiduJP3) _pTextService->m_pBaiduJP3->OnCompositionChanged();
+		if(_pTextService->m_pSinstar3) _pTextService->m_pSinstar3->OnCompositionChanged();
 Exit:
 		tfSelection.range->Release();
 		return S_OK;
@@ -506,7 +505,7 @@ public:
 			_pTextService->_bPosSaved = FALSE;
 
 			POINT pt={-1,-1};
-			_pTextService->m_pBaiduJP3->OnSetFocusSegmentPosition(pt,0);
+			_pTextService->m_pSinstar3->OnSetFocusSegmentPosition(pt,0);
 			pRangeComposition->SetText(ec,0,m_pszCompStr,m_nCompStrLen);
 
 			pRangeComposition->Clone(&tfSelection.range);
@@ -516,7 +515,7 @@ public:
 
 			_pTextService->UpdateCompAttr(_pContext,ec,pRangeComposition);
 
-			if(_pTextService->m_pBaiduJP3) _pTextService->m_pBaiduJP3->OnCompositionChanged();
+			if(_pTextService->m_pSinstar3) _pTextService->m_pSinstar3->OnCompositionChanged();
 		}else
 		{
 			_pContext->SetSelection(ec,1,&tfSelection);
