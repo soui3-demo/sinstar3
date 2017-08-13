@@ -9,7 +9,7 @@
 >
   <root skin="_skin.sys.wnd.bkgnd" cache="1" layout="vbox">
     <window size="-1,0" weight="1" layout="hbox" tip="line1">
-      <icon size="-1,-1" src="ICON_LOGO:16"/>
+      <img size="16,16" skin="logo"/>
       <text size="-1,-1" name="txt_comp_name">五笔型86</text>
       <button size="30,30" name="btn_bar_mode">BM</button>
     </window>
