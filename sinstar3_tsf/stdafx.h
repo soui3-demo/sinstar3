@@ -25,3 +25,9 @@
 #define ASSERT_HR(hr) _ASSERT(SUCCEEDED(hr))
 #define ASSERT_RET(x,ret) _ASSERT(x);if(!x) ret
 
+#ifndef ARRAYSIZE
+#define ARRAYSIZE(a) (sizeof(a)/sizeof(a[0]))
+#endif
+
+
+#define TEXTSERVICE_LANGID			MAKELANGID(LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED)

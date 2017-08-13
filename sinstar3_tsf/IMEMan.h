@@ -626,13 +626,13 @@ public:
 			}
 
 			BOOL bIsDefaultIME = FALSE;
-			LANGID idJP = TEXTSERVICE_LANGID;
+			LANGID idLang = TEXTSERVICE_LANGID;
 			for ( UINT i = 0; i < nNum; i++)
 			{
 				//
 				// 找到了我们的tip
 				//
-				if ( idJP == pProfile[i].langid && IsEqualGUID( pProfile[i].clsid, rclsid) && IsEqualGUID( pProfile[i].guidProfile, guidProfile))
+				if ( idLang == pProfile[i].langid && IsEqualGUID( pProfile[i].clsid, rclsid) && IsEqualGUID( pProfile[i].guidProfile, guidProfile))
 				{
 					if ( pProfile[i].dwFlags == 1)
 					{
@@ -729,10 +729,10 @@ public:
 		// 找到我们的输入法ID，不要用合成的办法
 		//
 		TCHAR szID[512] = _T("");
-		LANGID idJP = TEXTSERVICE_LANGID;
+		LANGID idLang = TEXTSERVICE_LANGID;
 		for ( UINT i = 0; i < nNum; i++)
 		{
-			if ( idJP == pProfile[i].langid && IsEqualGUID( pProfile[i].clsid, rclsid) && IsEqualGUID( pProfile[i].guidProfile, guidProfile))
+			if ( idLang == pProfile[i].langid && IsEqualGUID( pProfile[i].clsid, rclsid) && IsEqualGUID( pProfile[i].guidProfile, guidProfile))
 			{
 				_tcscpy_s( szID, pProfile[i].szId);
 				break;
@@ -763,7 +763,7 @@ public:
 						_tcscpy_s( szFirstIme, pProfile[i].szId);
 					}
 
-					if ( pProfile[i].langid == idJP && _tcslen( szFirstJPIme) == 0)
+					if ( pProfile[i].langid == idLang && _tcslen( szFirstJPIme) == 0)
 					{
 						_tcscpy_s( szFirstJPIme, pProfile[i].szId);
 					}

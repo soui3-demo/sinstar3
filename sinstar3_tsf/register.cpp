@@ -22,6 +22,8 @@ static const TCHAR KInProcSvr32[] = TEXT("InProcServer32");
 static const TCHAR KModelName[] = TEXT("ThreadingModel");
 static const TCHAR KTextServiceModel[] = TEXT("Apartment");
 
+#define TEXTSERVICE_ICON_INDEX  0
+#define	SINSTAR3_IME_FILE_NAME	_T("sinstar3_ime.ime")
 
 
 //+---------------------------------------------------------------------------
