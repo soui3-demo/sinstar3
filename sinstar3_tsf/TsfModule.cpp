@@ -18,7 +18,10 @@ void CTsfModule::OnInit()
 void CTsfModule::OnFinalRelease()
 {
 	if(m_classFactory)
+	{
 		delete m_classFactory;
+		m_classFactory = NULL;
+	}
 }
 
 void CTsfModule::BuildClassFactory()

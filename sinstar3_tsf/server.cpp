@@ -62,10 +62,10 @@ DllRegisterServer分三步注册
 1. 注册自己为COM组件
 
 [HKEY_CLASSES_ROOT\CLSID\{21E929DF-F2B7-4023-B374-804EF91ECF3C}]
-@="百度拼音输入法"
+@="启程输入法"
 
 [HKEY_CLASSES_ROOT\CLSID\{21E929DF-F2B7-4023-B374-804EF91ECF3C}\InProcServer32]
-@="d:\\anyplace\\aaa\\navi\\output\\debug\\bdime.dll"
+@="d:\\anyplace\\aaa\\navi\\output\\debug\\sinstar3_tsf.dll"
 "ThreadingModel"="Apartment"
 
 2. 在CTF注册profile
@@ -78,8 +78,8 @@ DllRegisterServer分三步注册
 
 ->AddLanguageProfile(...):
 [%BDIME_CTF_ROOT%\LanguageProfile\0x00000804\{D1BD2208-FE45-4B68-93A9-6963DCC10ECB}]
-"Description"="百度拼音输入法"
-"IconFile"="d:\\anyplace\\aaa\\navi\\output\\debug\\bdime.dll"
+"Description"="启程输入法"
+"IconFile"="d:\\anyplace\\aaa\\navi\\output\\debug\\sinstar3_tsf.dll"
 "IconIndex"=dword:00000000
 
 
