@@ -367,10 +367,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\sinstar3_ime.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\sinstar3_ime.def"
 				>
 			</File>
@@ -449,7 +445,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\sinstar3_ime.h"
+				RelativePath="..\include\sinstar3_guids.h"
 				>
 			</File>
 			<File

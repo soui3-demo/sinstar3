@@ -7,8 +7,8 @@ public:
 	static CCoreLoader & GetInstance();
 
 	ISinstar *Sinstar3_Create(ITextService *pTxtSvr,HINSTANCE hInst);
-	BOOL Sinstar3_Delete(ISinstar * pBaiduJP3);
-	BOOL BaiduJP3_OpenConfig(HWND hParent);
+	BOOL Sinstar3_Delete(ISinstar * pSinstar3);
+	BOOL Sinstar3_OpenConfig(HWND hParent);
 	void SetCorePath(LPCTSTR pszPath);
 private:
 	CCoreLoader(void);

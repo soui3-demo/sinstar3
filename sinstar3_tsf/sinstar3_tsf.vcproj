@@ -441,7 +441,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\sinstar3_guids.h"
+				RelativePath="..\include\sinstar3_guids.h"
 				>
 			</File>
 			<File

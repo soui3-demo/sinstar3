@@ -18,7 +18,7 @@ void CCompStrEx::Init(void)
 	bComposing=_bComposing;
 }
 
-void CCompStrEx::Insert(ISinstar *pBaiduJP3,int nLeft,int nRight,LPCWSTR pszComp,int nLen)
+void CCompStrEx::Insert(ISinstar *pSinstar3,int nLeft,int nRight,LPCWSTR pszComp,int nLen)
 {
 	int x1,x2;
 	if(nLeft==-1 && nRight==-1)
@@ -48,11 +48,11 @@ void CCompStrEx::Insert(ISinstar *pBaiduJP3,int nLeft,int nRight,LPCWSTR pszComp
 	dwCompAttrLen=dwCompStrLen;
 	if(dwCompStrLen>0)
 	{
-		int nClauseCount=pBaiduJP3->GetCompositionSegments();
+		int nClauseCount=pSinstar3->GetCompositionSegments();
 		for(int i=0;i<nClauseCount;i++)
 		{
-			dwCompCls[i+1]=pBaiduJP3->GetCompositionSegmentEnd(i);
-			BYTE byAttr=pBaiduJP3->GetCompositionSegmentAttr(i);
+			dwCompCls[i+1]=pSinstar3->GetCompositionSegmentEnd(i);
+			BYTE byAttr=pSinstar3->GetCompositionSegmentAttr(i);
 			ARRAY_SET(byCompAttr+dwCompCls[i],byAttr,dwCompCls[i+1]-dwCompCls[i]);
 		}
 		dwCompClauseLen=(nClauseCount+1)*sizeof(DWORD);

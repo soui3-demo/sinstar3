@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "UiWnd.h"
 #include "CompStrEx.h"
+#include "../include/sinstar3_guids.h"
 
 BOOL CUiWnd::IsCompositing()
 {
@@ -345,7 +346,7 @@ BOOL CUiWnd::GetLanguageBarItemMgr(ITfLangBarItemMgr **ppLangBarMgr,GUID *pGuidT
 	if(!_QueryLangBarItemMgr(ppLangBarMgr))
 		return FALSE;
 
-	//*pGuidTIP=c_clsidBaidujpTSF;
+	*pGuidTIP=c_clsidSinstar3TSF;
 	return TRUE;
 }
 

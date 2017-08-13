@@ -302,7 +302,7 @@ STDMETHODIMP CSinstar3Tsf::OnLayoutChange(ITfContext *pContext, TfLayoutCode lco
 
 STDMETHODIMP CSinstar3Tsf::Show(	HWND hwndParent,LANGID langid,REFGUID rguidProfile)
 {
-	CCoreLoader::GetInstance().BaiduJP3_OpenConfig(hwndParent);
+	CCoreLoader::GetInstance().Sinstar3_OpenConfig(hwndParent);
 	return S_OK;
 }
 
@@ -443,7 +443,7 @@ BOOL   CSinstar3Tsf::ReleaseImeContext(LPVOID lpImeContext)
 BOOL CSinstar3Tsf::GetLanguageBarItemMgr(ITfLangBarItemMgr **ppLangBarMgr,GUID *pclsidTIP)
 {
 	if(!_pThreadMgr) return NULL;
-	*pclsidTIP=c_clsidBaidujpTSF;
+	*pclsidTIP=c_clsidSinstar3TSF;
 	return SUCCEEDED(_pThreadMgr->QueryInterface(IID_ITfLangBarItemMgr,(void **)ppLangBarMgr));
 }
 

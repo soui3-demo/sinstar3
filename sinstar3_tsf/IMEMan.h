@@ -11,7 +11,7 @@
 #include <list>
 #include <vector>
 
-#include "sinstar3_guids.h"
+#include "../include/sinstar3_guids.h"
 
 using namespace std;
 typedef basic_string<TCHAR> tstring;

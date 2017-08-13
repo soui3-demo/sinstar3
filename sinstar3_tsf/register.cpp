@@ -44,14 +44,14 @@ BOOL RegisterProfiles()
     if (hr != S_OK)
         return E_FAIL;
 
-    hr = pInputProcessProfiles->Register(c_clsidBaidujpTSF);
+    hr = pInputProcessProfiles->Register(c_clsidSinstar3TSF);
 
     if (hr != S_OK)
         goto Exit;
 
     GetModuleFileNameW(theModule->GetModule(), achIconFile, ARRAYSIZE(achIconFile));
 
-    hr = pInputProcessProfiles->AddLanguageProfile(c_clsidBaidujpTSF,
+    hr = pInputProcessProfiles->AddLanguageProfile(c_clsidSinstar3TSF,
                                   TEXTSERVICE_LANGID, 
                                   c_guidProfile, 
                                   PRODUCT_WNAME, 
@@ -72,12 +72,12 @@ BOOL RegisterProfiles()
 	HKL hKLBaiduJP=CIMEMan::GetKeyboardLayoutFromFileName( SINSTAR3_IME_FILE_NAME);
 	if ( hKLBaiduJP)
 	{
-		hr = pInputProcessProfiles->SubstituteKeyboardLayout( c_clsidBaidujpTSF, TEXTSERVICE_LANGID, c_guidProfile, hKLBaiduJP);
+		hr = pInputProcessProfiles->SubstituteKeyboardLayout( c_clsidSinstar3TSF, TEXTSERVICE_LANGID, c_guidProfile, hKLBaiduJP);
 		Helper_Trace(_T("SubstituteKeyboardLayout:%d"),SUCCEEDED(hr));
 	}
 
-	hr = pInputProcessProfiles->EnableLanguageProfile( c_clsidBaidujpTSF, TEXTSERVICE_LANGID, c_guidProfile, TRUE);
-	hr = pInputProcessProfiles->EnableLanguageProfileByDefault( c_clsidBaidujpTSF, TEXTSERVICE_LANGID, c_guidProfile, TRUE);
+	hr = pInputProcessProfiles->EnableLanguageProfile( c_clsidSinstar3TSF, TEXTSERVICE_LANGID, c_guidProfile, TRUE);
+	hr = pInputProcessProfiles->EnableLanguageProfileByDefault( c_clsidSinstar3TSF, TEXTSERVICE_LANGID, c_guidProfile, TRUE);
 
 
 Exit:
@@ -102,7 +102,7 @@ void UnregisterProfiles()
     if (hr != S_OK)
         return;
 
-    pInputProcessProfiles->Unregister(c_clsidBaidujpTSF);
+    pInputProcessProfiles->Unregister(c_clsidSinstar3TSF);
     pInputProcessProfiles->Release();
 }
 
@@ -126,16 +126,16 @@ BOOL RegisterCategories()
     //
     // register this text service to GUID_TFCAT_TIP_KEYBOARD category.
     //
-    hr = pCategoryMgr->RegisterCategory(c_clsidBaidujpTSF,
+    hr = pCategoryMgr->RegisterCategory(c_clsidSinstar3TSF,
                                         GUID_TFCAT_TIP_KEYBOARD, 
-                                        c_clsidBaidujpTSF);
+                                        c_clsidSinstar3TSF);
 
     //
     // register this text service to GUID_TFCAT_DISPLAYATTRIBUTEPROVIDER category.
     //
-    hr = pCategoryMgr->RegisterCategory(c_clsidBaidujpTSF,
+    hr = pCategoryMgr->RegisterCategory(c_clsidSinstar3TSF,
                                         GUID_TFCAT_DISPLAYATTRIBUTEPROVIDER, 
-                                        c_clsidBaidujpTSF);
+                                        c_clsidSinstar3TSF);
 
 
     pCategoryMgr->Release();
@@ -162,16 +162,16 @@ void UnregisterCategories()
     //
     // unregister this text service from GUID_TFCAT_TIP_KEYBOARD category.
     //
-    pCategoryMgr->UnregisterCategory(c_clsidBaidujpTSF,
+    pCategoryMgr->UnregisterCategory(c_clsidSinstar3TSF,
                                      GUID_TFCAT_TIP_KEYBOARD, 
-                                     c_clsidBaidujpTSF);
+                                     c_clsidSinstar3TSF);
 
     //
     // unregister this text service from GUID_TFCAT_DISPLAYATTRIBUTEPROVIDER category.
     //
-    pCategoryMgr->UnregisterCategory(c_clsidBaidujpTSF,
+    pCategoryMgr->UnregisterCategory(c_clsidSinstar3TSF,
                                      GUID_TFCAT_DISPLAYATTRIBUTEPROVIDER, 
-                                     c_clsidBaidujpTSF);
+                                     c_clsidSinstar3TSF);
 
     pCategoryMgr->Release();
     return;
@@ -262,7 +262,7 @@ BOOL RegisterServer()
     TCHAR achIMEKey[ARRAYSIZE(KInfoKeyPrefix) + CLSID_STRLEN];
     TCHAR achFileName[MAX_PATH];
 
-    if (!CLSIDToString(c_clsidBaidujpTSF, achIMEKey + ARRAYSIZE(KInfoKeyPrefix) - 1))
+    if (!CLSIDToString(c_clsidSinstar3TSF, achIMEKey + ARRAYSIZE(KInfoKeyPrefix) - 1))
         return FALSE;
     memcpy(achIMEKey, KInfoKeyPrefix, sizeof(KInfoKeyPrefix)-sizeof(TCHAR));
 
@@ -297,7 +297,7 @@ void UnregisterServer()
 {
     TCHAR achIMEKey[ARRAYSIZE(KInfoKeyPrefix) + CLSID_STRLEN];
 
-    if (!CLSIDToString(c_clsidBaidujpTSF, achIMEKey + ARRAYSIZE(KInfoKeyPrefix) - 1))
+    if (!CLSIDToString(c_clsidSinstar3TSF, achIMEKey + ARRAYSIZE(KInfoKeyPrefix) - 1))
         return;
     memcpy(achIMEKey, KInfoKeyPrefix, sizeof(KInfoKeyPrefix)-sizeof(TCHAR));
 

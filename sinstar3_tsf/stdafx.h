@@ -17,10 +17,10 @@
 #include "../include/reg.h"
 #include "../include/version.h"
 #include "../include/TextService-i.h"
+#include "../include/sinstar3_guids.h"
 
 #include "TsfModule.h"
 #include "Globals.h"
-#include "sinstar3_guids.h"
 
 #define ASSERT_HR(hr) _ASSERT(SUCCEEDED(hr))
 #define ASSERT_RET(x,ret) _ASSERT(x);if(!x) ret

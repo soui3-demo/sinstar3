@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by baidujpIME.rc
+// Used by sinstar3_ime.rc
 //
 #define IDI_SINSTAR3                   101
 

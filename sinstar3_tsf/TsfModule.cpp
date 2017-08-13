@@ -25,7 +25,7 @@ void CTsfModule::BuildClassFactory()
 {
 	CAutoLock autoLock(&m_cs);
 	if(m_classFactory == NULL)
-		m_classFactory = new CClassFactory(c_clsidBaidujpTSF, CSinstar3Tsf::CreateInstance);
+		m_classFactory = new CClassFactory(c_clsidSinstar3TSF, CSinstar3Tsf::CreateInstance);
 
 }
 

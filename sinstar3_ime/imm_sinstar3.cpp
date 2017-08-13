@@ -36,7 +36,7 @@ BOOL WINAPI ImeConfigure(HKL hKL,HWND hWnd, DWORD dwMode, LPVOID lpData)
 {	
 	switch (dwMode) {
 	case IME_CONFIG_GENERAL:
-		return CCoreLoader::GetInstance().BaiduJP3_OpenConfig(hWnd);
+		return CCoreLoader::GetInstance().Sinstar3_OpenConfig(hWnd);
 	default:
 		return (FALSE);
 	}
@@ -72,10 +72,10 @@ void Context_Init(LPINPUTCONTEXT lpIMC)
 		pCompStr->Init();
 		ImmUnlockIMCC(lpIMC->hCompStr);
 	}
-	CUiWnd **pBaiduJPIME=(CUiWnd**)ImmLockIMCC(lpIMC->hPrivate);
-	if(pBaiduJPIME)
+	CUiWnd **ppUiWnd=(CUiWnd**)ImmLockIMCC(lpIMC->hPrivate);
+	if(ppUiWnd)
 	{
-		*pBaiduJPIME=NULL;
+		*ppUiWnd=NULL;
 		ImmUnlockIMCC(lpIMC->hPrivate);
 	}
 }

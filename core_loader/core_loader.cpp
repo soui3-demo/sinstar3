@@ -27,53 +27,53 @@ ISinstar *CCoreLoader::Sinstar3_Create(ITextService *pTxtSvr,HINSTANCE hInst)
 {
 	CAutoLock lock(&m_cs);
 	BOOL bLoad=FALSE;
-	HMODULE hBaiduJP3=GetModuleHandle(m_szPath);
-	if(!hBaiduJP3)
+	HMODULE hCoreModule=GetModuleHandle(m_szPath);
+	if(!hCoreModule)
 	{
-		hBaiduJP3=LoadLibrary(m_szPath);
+		hCoreModule=LoadLibrary(m_szPath);
 		bLoad=TRUE;
 	}
-	if(!hBaiduJP3) 
+	if(!hCoreModule) 
 	{
 		return NULL;
 	}
-	FUN_Sinstar3_Create funCreate=(FUN_Sinstar3_Create)GetProcAddress(hBaiduJP3,"Sinstar3_Create");
-	FUN_Sinstar3_Delete funDelete=(FUN_Sinstar3_Delete)GetProcAddress(hBaiduJP3,"Sinstar3_Delete");
-	FUN_Sinstar3_CanUnloadNow funCanUnloadNow=(FUN_Sinstar3_CanUnloadNow)GetProcAddress(hBaiduJP3,"Sinstar3_CanUnloadNow");
+	FUN_Sinstar3_Create funCreate=(FUN_Sinstar3_Create)GetProcAddress(hCoreModule,"Sinstar3_Create");
+	FUN_Sinstar3_Delete funDelete=(FUN_Sinstar3_Delete)GetProcAddress(hCoreModule,"Sinstar3_Delete");
+	FUN_Sinstar3_CanUnloadNow funCanUnloadNow=(FUN_Sinstar3_CanUnloadNow)GetProcAddress(hCoreModule,"Sinstar3_CanUnloadNow");
 	if(!funCreate || !funDelete || !funCanUnloadNow)
 	{
-		if(bLoad) FreeLibrary(hBaiduJP3);
+		if(bLoad) FreeLibrary(hCoreModule);
 		return NULL;
 	}
-	ISinstar *pRet = funCreate(pTxtSvr,hBaiduJP3);
+	ISinstar *pRet = funCreate(pTxtSvr,hCoreModule);
 	return pRet;
 }
 
-BOOL CCoreLoader::Sinstar3_Delete(ISinstar * pBaiduJP3)
+BOOL CCoreLoader::Sinstar3_Delete(ISinstar * pSinstar3)
 {
 	CAutoLock lock(&m_cs);
 
-	HMODULE hBaiduJP3=pBaiduJP3->GetModule();
-	FUN_Sinstar3_Delete funDelete=(FUN_Sinstar3_Delete)GetProcAddress(hBaiduJP3,"Sinstar3_Delete");
-	FUN_Sinstar3_CanUnloadNow funCanUnloadNow=(FUN_Sinstar3_CanUnloadNow)GetProcAddress(hBaiduJP3,"Sinstar3_CanUnloadNow");
+	HMODULE hCoreModule=pSinstar3->GetModule();
+	FUN_Sinstar3_Delete funDelete=(FUN_Sinstar3_Delete)GetProcAddress(hCoreModule,"Sinstar3_Delete");
+	FUN_Sinstar3_CanUnloadNow funCanUnloadNow=(FUN_Sinstar3_CanUnloadNow)GetProcAddress(hCoreModule,"Sinstar3_CanUnloadNow");
 	_ASSERT(funDelete && funCanUnloadNow);
-	funDelete(pBaiduJP3);
+	funDelete(pSinstar3);
 	if(funCanUnloadNow()==S_OK)
 	{
-		FreeLibrary(hBaiduJP3);
+		FreeLibrary(hCoreModule);
 	}
 	return TRUE;
 }
 
-BOOL CCoreLoader::BaiduJP3_OpenConfig(HWND hParent)
+BOOL CCoreLoader::Sinstar3_OpenConfig(HWND hParent)
 {
 	BOOL bNeedFree=FALSE;
-	HMODULE	hBaiduJP3=LoadLibrary(m_szPath);
-	if(!hBaiduJP3) return FALSE;
+	HMODULE	hCoreModule=LoadLibrary(m_szPath);
+	if(!hCoreModule) return FALSE;
 	BOOL bRet=FALSE;
-	FUN_Sinstar3_Config funConfig=(FUN_Sinstar3_Config)GetProcAddress(hBaiduJP3,"Sinstar3_Config");
+	FUN_Sinstar3_Config funConfig=(FUN_Sinstar3_Config)GetProcAddress(hCoreModule,"Sinstar3_Config");
 	if(funConfig) bRet=funConfig(hParent);
-	FreeLibrary(hBaiduJP3);
+	FreeLibrary(hCoreModule);
 	return bRet;
 }
 

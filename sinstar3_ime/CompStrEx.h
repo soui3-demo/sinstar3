@@ -23,7 +23,7 @@ public:
 	}
 
 	void Init(void);
-	void Insert(ISinstar *pBaiduJP3,int nLeft,int nRight,LPCWSTR pszComp,int nLen);
+	void Insert(ISinstar *pSinstar3,int nLeft,int nRight,LPCWSTR pszComp,int nLen);
 	void MoveCaret(int nPos,BOOL bSet);
 	DWORD  GetTargetPos();
  	BYTE				byCompReadAttr[MAXCOMPSIZE*2];
