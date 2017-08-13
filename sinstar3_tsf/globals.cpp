@@ -1,9 +1,6 @@
 #include "stdafx.h"
 
 
-LONG g_cRefDll = -1; // -1 /w no refs, for win95 InterlockedIncrement/Decrement compat
-
-
 BOOL IsRangeCovered(TfEditCookie ec, ITfRange *pRangeTest, ITfRange *pRangeCover)
 {
 	LONG lResult;
