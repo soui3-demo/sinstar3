@@ -16,7 +16,7 @@ DEFINE_GUID(GUID_COMPARTMENT_MSCANDIDATEUI_WINDOW,
 //
 //----------------------------------------------------------------------------
 
-BOOL CBaiduJPTSF::_IsKeyboardDisabled()
+BOOL CSinstar3Tsf::_IsKeyboardDisabled()
 {
     ITfCompartmentMgr *pCompMgr = NULL;
     ITfDocumentMgr *pDocMgrFocus = NULL;
@@ -95,7 +95,7 @@ Exit:
 //
 //----------------------------------------------------------------------------
 
-BOOL CBaiduJPTSF::_IsKeyboardOpen()
+BOOL CSinstar3Tsf::_IsKeyboardOpen()
 {
     ITfCompartmentMgr *pCompMgr = NULL;
     BOOL fOpen = FALSE;
@@ -129,7 +129,7 @@ BOOL CBaiduJPTSF::_IsKeyboardOpen()
 //
 //----------------------------------------------------------------------------
 
-HRESULT CBaiduJPTSF::_SetKeyboardOpen(BOOL fOpen)
+HRESULT CSinstar3Tsf::_SetKeyboardOpen(BOOL fOpen)
 {
     HRESULT hr = E_FAIL;
     ITfCompartmentMgr *pCompMgr = NULL;
@@ -151,7 +151,7 @@ HRESULT CBaiduJPTSF::_SetKeyboardOpen(BOOL fOpen)
 }
 
 
-EInputMethod CBaiduJPTSF::GetConversionMode()
+EInputMethod CSinstar3Tsf::GetConversionMode()
 {
 	assert( _pThreadMgr != NULL);
 
@@ -204,7 +204,7 @@ EInputMethod CBaiduJPTSF::GetConversionMode()
 	return eInputMode;
 }
 
-void CBaiduJPTSF::SetConversionMode( EInputMethod eInputMode)
+void CSinstar3Tsf::SetConversionMode( EInputMethod eInputMode)
 {
 	assert( _pThreadMgr != NULL);
 
@@ -258,7 +258,7 @@ void CBaiduJPTSF::SetConversionMode( EInputMethod eInputMode)
 	}
 }
 
-BOOL CBaiduJPTSF::_InitThreadCompartment()
+BOOL CSinstar3Tsf::_InitThreadCompartment()
 {
     ITfCompartmentMgr *pCompartmentMgr;
     ITfCompartment *pCompartment;
@@ -297,7 +297,7 @@ BOOL CBaiduJPTSF::_InitThreadCompartment()
     return fRet;
 }
 
-void CBaiduJPTSF::_UninitThreadCompartment()
+void CSinstar3Tsf::_UninitThreadCompartment()
 {
     ITfCompartmentMgr *pCompartmentMgr;
     ITfCompartment *pCompartment;
@@ -328,7 +328,7 @@ void CBaiduJPTSF::_UninitThreadCompartment()
 //
 //----------------------------------------------------------------------------
 
-STDAPI CBaiduJPTSF::OnChange(REFGUID rguidCompartment)
+STDAPI CSinstar3Tsf::OnChange(REFGUID rguidCompartment)
 {	
 	if(!_pThreadMgr) return S_OK;
 	//响应键盘开启状态变化
@@ -351,7 +351,7 @@ STDAPI CBaiduJPTSF::OnChange(REFGUID rguidCompartment)
     return S_OK;
 }
 
-void CBaiduJPTSF::ShowCandidateWindow()
+void CSinstar3Tsf::ShowCandidateWindow()
 {
 	assert( _pThreadMgr != NULL);
 

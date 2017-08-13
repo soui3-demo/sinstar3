@@ -3,7 +3,7 @@
 #include <Ctffunc.h>
 
 
-class CBaiduJPTSF : public ITfTextInputProcessor,
+class CSinstar3Tsf : public ITfTextInputProcessor,
                      public ITfThreadMgrEventSink,
 					 public ITfThreadFocusSink,
                      public ITfTextEditSink,
@@ -16,8 +16,8 @@ class CBaiduJPTSF : public ITfTextInputProcessor,
 					 public ITextService
 {
 public:
-    CBaiduJPTSF();
-    virtual ~CBaiduJPTSF();
+    CSinstar3Tsf();
+    virtual ~CSinstar3Tsf();
 
     // IUnknown
 	IUNKNOWN_BEGIN(IID_ITfTextInputProcessor,ITfTextInputProcessor)
@@ -128,7 +128,7 @@ public:
 	void UpdateCompAttr(ITfContext *pContext,TfEditCookie ec,ITfRange *pRangeComposition);
 	void _ClearCompositionDisplayAttributes(TfEditCookie ec, ITfContext *pContext);
 
-	void CBaiduJPTSF::ShowCandidateWindow();
+	void CSinstar3Tsf::ShowCandidateWindow();
 	
 private:
 

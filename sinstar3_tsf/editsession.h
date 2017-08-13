@@ -7,7 +7,7 @@
 class CEditSessionBase : public ITfEditSession
 {
 public:
-    CEditSessionBase(CBaiduJPTSF *pTextService, ITfContext *pContext)
+    CEditSessionBase(CSinstar3Tsf *pTextService, ITfContext *pContext)
     {
         _cRef = 1;
         _pContext = pContext;
@@ -29,14 +29,14 @@ public:
 
 protected:
     ITfContext *_pContext;
-    CBaiduJPTSF *_pTextService;
+    CSinstar3Tsf *_pTextService;
 
 };
 
 class CEditSessionEndComposition : public CEditSessionBase
 {
 public:
-	CEditSessionEndComposition(CBaiduJPTSF *pTextService, ITfContext *pContext) 
+	CEditSessionEndComposition(CSinstar3Tsf *pTextService, ITfContext *pContext) 
 		: CEditSessionBase(pTextService, pContext)
 	{
 	}
@@ -64,7 +64,7 @@ class CEditSessionGetTextExtent : public CEditSessionBase
 {
 public:
 
-	CEditSessionGetTextExtent(CBaiduJPTSF *pTextService, ITfContext *pContext, ITfContextView *pContextView) 
+	CEditSessionGetTextExtent(CSinstar3Tsf *pTextService, ITfContext *pContext, ITfContextView *pContextView) 
 		: CEditSessionBase(pTextService, pContext)
 	{
 		_pContextView = pContextView;
@@ -221,7 +221,7 @@ private:
 class CEditSessionStartComposition : public CEditSessionBase
 {
 public:
-	CEditSessionStartComposition(CBaiduJPTSF *pTextService, ITfContext *pContext) : CEditSessionBase(pTextService, pContext)
+	CEditSessionStartComposition(CSinstar3Tsf *pTextService, ITfContext *pContext) : CEditSessionBase(pTextService, pContext)
 	{
 	}
 
@@ -276,7 +276,7 @@ public:
 class CEditSessionKeyIn:public CEditSessionBase
 {
 public:
-	CEditSessionKeyIn(CBaiduJPTSF *pTextService, ITfContext *pContext,int nLeft,int nRight,LPWSTR pszBuf,int nLen) 
+	CEditSessionKeyIn(CSinstar3Tsf *pTextService, ITfContext *pContext,int nLeft,int nRight,LPWSTR pszBuf,int nLen) 
 		: CEditSessionBase(pTextService, pContext)
 	{
 		if(nLen) 
@@ -362,7 +362,7 @@ private:
 class CEditSessionMoveCaret:public CEditSessionBase
 {
 public:
-	CEditSessionMoveCaret(CBaiduJPTSF *pTextService, ITfContext *pContext,int nPos,BOOL bSet,ITfComposition *pComposition) 
+	CEditSessionMoveCaret(CSinstar3Tsf *pTextService, ITfContext *pContext,int nPos,BOOL bSet,ITfComposition *pComposition) 
 		: CEditSessionBase(pTextService, pContext)
 	{
 		m_nPos=nPos;
@@ -431,7 +431,7 @@ public:
 	WCHAR *m_pszResultStr,*m_pszCompStr;
 	int    m_nResStrLen,m_nCompStrLen;
 
-	CEditSessionUpdateResultAndComp(CBaiduJPTSF *pTextService, ITfContext *pContext,LPCWSTR pszResultStr,int nResStrLen,LPCWSTR pszCompStr,int nCompStrLen) 
+	CEditSessionUpdateResultAndComp(CSinstar3Tsf *pTextService, ITfContext *pContext,LPCWSTR pszResultStr,int nResStrLen,LPCWSTR pszCompStr,int nCompStrLen) 
 		: CEditSessionBase(pTextService, pContext)
 	{
 		if(pszResultStr)

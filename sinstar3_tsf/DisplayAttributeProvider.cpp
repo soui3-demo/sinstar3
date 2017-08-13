@@ -24,7 +24,7 @@
 //
 //----------------------------------------------------------------------------
 
-STDAPI CBaiduJPTSF::EnumDisplayAttributeInfo(IEnumTfDisplayAttributeInfo **ppEnum)
+STDAPI CSinstar3Tsf::EnumDisplayAttributeInfo(IEnumTfDisplayAttributeInfo **ppEnum)
 {
     CEnumDisplayAttributeInfo *pAttributeEnum;
 
@@ -47,7 +47,7 @@ STDAPI CBaiduJPTSF::EnumDisplayAttributeInfo(IEnumTfDisplayAttributeInfo **ppEnu
 //
 //----------------------------------------------------------------------------
 
-STDAPI CBaiduJPTSF::GetDisplayAttributeInfo(REFGUID guidInfo, ITfDisplayAttributeInfo **ppInfo)
+STDAPI CSinstar3Tsf::GetDisplayAttributeInfo(REFGUID guidInfo, ITfDisplayAttributeInfo **ppInfo)
 {
     if (ppInfo == NULL)
         return E_INVALIDARG;

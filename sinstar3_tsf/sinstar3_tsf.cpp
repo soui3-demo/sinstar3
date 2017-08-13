@@ -6,9 +6,9 @@
 
 
 /* static */
-HRESULT CBaiduJPTSF::CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj)
+HRESULT CSinstar3Tsf::CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj)
 {
-    CBaiduJPTSF *pCase;
+    CSinstar3Tsf *pCase;
     HRESULT hr;
 
     if (ppvObj == NULL)
@@ -19,7 +19,7 @@ HRESULT CBaiduJPTSF::CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppv
     if (NULL != pUnkOuter)
         return CLASS_E_NOAGGREGATION;
 
-    if ((pCase = new CBaiduJPTSF) == NULL)
+    if ((pCase = new CSinstar3Tsf) == NULL)
         return E_OUTOFMEMORY;
 
     hr = pCase->QueryInterface(riid, ppvObj);
@@ -58,7 +58,7 @@ PCTSTR pszAppList_Use_Ms_Method[] =
 //
 //----------------------------------------------------------------------------
 
-CBaiduJPTSF::CBaiduJPTSF()
+CSinstar3Tsf::CSinstar3Tsf()
 {
 	XLOG_FUNCTION;
 
@@ -139,7 +139,7 @@ CBaiduJPTSF::CBaiduJPTSF()
 //
 //----------------------------------------------------------------------------
 
-CBaiduJPTSF::~CBaiduJPTSF()
+CSinstar3Tsf::~CSinstar3Tsf()
 {
 	XLOG_FUNCTION;
 
@@ -147,7 +147,7 @@ CBaiduJPTSF::~CBaiduJPTSF()
     DllRelease();
 }
 
-STDAPI CBaiduJPTSF::Activate(ITfThreadMgr *pThreadMgr, TfClientId tfClientId)
+STDAPI CSinstar3Tsf::Activate(ITfThreadMgr *pThreadMgr, TfClientId tfClientId)
 {
 	Helper_Trace(L"Activate %x %x", pThreadMgr, tfClientId);
 
@@ -222,7 +222,7 @@ ExitError:
 //
 //----------------------------------------------------------------------------
 
-STDAPI CBaiduJPTSF::Deactivate()
+STDAPI CSinstar3Tsf::Deactivate()
 {
 	Helper_Trace(_T("Deactivate"));
 	//确保输入过程结束
@@ -259,7 +259,7 @@ STDAPI CBaiduJPTSF::Deactivate()
     return S_OK;
 }
 
-STDMETHODIMP CBaiduJPTSF::OnLayoutChange(ITfContext *pContext, TfLayoutCode lcode, ITfContextView *pContextView)
+STDMETHODIMP CSinstar3Tsf::OnLayoutChange(ITfContext *pContext, TfLayoutCode lcode, ITfContextView *pContextView)
 {
 	Helper_Trace(_T("OnLayoutChange _pComposition=%08X"),_pComposition);
 	switch (lcode)
@@ -304,26 +304,26 @@ STDMETHODIMP CBaiduJPTSF::OnLayoutChange(ITfContext *pContext, TfLayoutCode lcod
 	return S_OK;
 }
 
-STDMETHODIMP CBaiduJPTSF::Show(	HWND hwndParent,LANGID langid,REFGUID rguidProfile)
+STDMETHODIMP CSinstar3Tsf::Show(	HWND hwndParent,LANGID langid,REFGUID rguidProfile)
 {
 	CBaiduIMEModule::GetInstance().BaiduJP3_OpenConfig(hwndParent);
 	return S_OK;
 }
 
-STDMETHODIMP CBaiduJPTSF::GetDisplayName(BSTR* pbstrName)
+STDMETHODIMP CSinstar3Tsf::GetDisplayName(BSTR* pbstrName)
 {
 	*pbstrName=SysAllocString(L"BAIDUTYPE");
 	return S_OK;
 }
 
 
-BOOL CBaiduJPTSF::IsCompositing()
+BOOL CSinstar3Tsf::IsCompositing()
 {
 	return _IsComposing();
 }
 
 
-HRESULT CBaiduJPTSF::_AdviseTextLayoutSink(ITfContext *pContext)
+HRESULT CSinstar3Tsf::_AdviseTextLayoutSink(ITfContext *pContext)
 {
 	HRESULT hr;
 	ITfSource *pSource = NULL;
@@ -344,7 +344,7 @@ Exit:
 	return hr;
 }
 
-HRESULT CBaiduJPTSF::_UnadviseTextLayoutSink(ITfContext *pContext)
+HRESULT CSinstar3Tsf::_UnadviseTextLayoutSink(ITfContext *pContext)
 {
 	HRESULT hr;
 	ITfSource *pSource = NULL;
@@ -366,35 +366,35 @@ Exit:
 	return hr;
 }
 
-void CBaiduJPTSF::StartComposition(LPVOID pImeContext)
+void CSinstar3Tsf::StartComposition(LPVOID pImeContext)
 {
 	//TSF输入法中不需要实现该接口，而是在开始输入后的editsession中来开启一次输入过程
 }
 
 
-void CBaiduJPTSF::EndComposition(LPVOID pImeContext)
+void CSinstar3Tsf::EndComposition(LPVOID pImeContext)
 {
 	_EndComposition((ITfContext*)pImeContext);
 }
 
 
-void CBaiduJPTSF::ReplaceSelCompositionW(LPVOID pImeContext,int nLeft,int nRight,WCHAR* wszComp,int nLen)
+void CSinstar3Tsf::ReplaceSelCompositionW(LPVOID pImeContext,int nLeft,int nRight,WCHAR* wszComp,int nLen)
 {
 	_ChangeComposition((ITfContext*)pImeContext,nLeft,nRight,wszComp,nLen);
 }
 
-void CBaiduJPTSF::UpdateResultAndCompositionStringW(LPVOID lpImeContext,WCHAR *wszResultStr,int nResStrLen,WCHAR *wszCompStr,int nCompStrLen)
+void CSinstar3Tsf::UpdateResultAndCompositionStringW(LPVOID lpImeContext,WCHAR *wszResultStr,int nResStrLen,WCHAR *wszCompStr,int nCompStrLen)
 {
 	_UpdateResultAndCompositionStringW((ITfContext*)lpImeContext,wszResultStr,nResStrLen,wszCompStr,nCompStrLen);
 }
 
-int  CBaiduJPTSF::MoveCaretPos(LPVOID lpImeContext,int nPos,BOOL bSet)
+int  CSinstar3Tsf::MoveCaretPos(LPVOID lpImeContext,int nPos,BOOL bSet)
 {
 	return _MoveCaretPos((ITfContext*)lpImeContext,nPos,bSet);
 }
 
 
-LPVOID CBaiduJPTSF::GetImeContext()
+LPVOID CSinstar3Tsf::GetImeContext()
 {
 
 	if(!_pThreadMgr) return NULL;
@@ -429,7 +429,7 @@ LPVOID CBaiduJPTSF::GetImeContext()
 	return NULL;
 }
 
-BOOL   CBaiduJPTSF::ReleaseImeContext(LPVOID lpImeContext)
+BOOL   CSinstar3Tsf::ReleaseImeContext(LPVOID lpImeContext)
 {
 	if(!lpImeContext) return FALSE;
 	ITfContext *pContext=(ITfContext*)lpImeContext;
@@ -444,14 +444,14 @@ BOOL   CBaiduJPTSF::ReleaseImeContext(LPVOID lpImeContext)
 	return TRUE;
 }
 
-BOOL CBaiduJPTSF::GetLanguageBarItemMgr(ITfLangBarItemMgr **ppLangBarMgr,GUID *pclsidTIP)
+BOOL CSinstar3Tsf::GetLanguageBarItemMgr(ITfLangBarItemMgr **ppLangBarMgr,GUID *pclsidTIP)
 {
 	if(!_pThreadMgr) return NULL;
 	*pclsidTIP=c_clsidBaidujpTSF;
 	return SUCCEEDED(_pThreadMgr->QueryInterface(IID_ITfLangBarItemMgr,(void **)ppLangBarMgr));
 }
 
-BOOL CBaiduJPTSF::_InitDisplayAttributeGuidAtom()
+BOOL CSinstar3Tsf::_InitDisplayAttributeGuidAtom()
 {
 	ITfCategoryMgr *pCategoryMgr;
 	HRESULT hr;
@@ -477,7 +477,7 @@ BOOL CBaiduJPTSF::_InitDisplayAttributeGuidAtom()
 	return (hr == S_OK);
 }
 
-BOOL CBaiduJPTSF::_InitBaiduJP3()
+BOOL CSinstar3Tsf::_InitBaiduJP3()
 {
 	m_pBaiduJP3=CBaiduIMEModule::GetInstance().BaiduJP3_Create(this,g_hInst);
 	if(!m_pBaiduJP3) return FALSE;
@@ -488,7 +488,7 @@ BOOL CBaiduJPTSF::_InitBaiduJP3()
 	return TRUE;
 }
 
-BOOL CBaiduJPTSF::_UninitBaiduJP3()
+BOOL CSinstar3Tsf::_UninitBaiduJP3()
 {
 	if(m_pBaiduJP3)
 	{
@@ -499,9 +499,9 @@ BOOL CBaiduJPTSF::_UninitBaiduJP3()
 	return TRUE;
 }
 
-void CBaiduJPTSF::UpdateCompAttr(ITfContext *pContext,TfEditCookie ec,ITfRange *pRangeComposition)
+void CSinstar3Tsf::UpdateCompAttr(ITfContext *pContext,TfEditCookie ec,ITfRange *pRangeComposition)
 {
-	//做一个简单的处理，当range为空时baidujp3中的数据可能和TSF中的数据不一致
+	//做一个简单的处理，当range为空时Core中的数据可能和TSF中的数据不一致
 	BOOL bEmpty=FALSE;
 	if(pRangeComposition->IsEmpty(ec,&bEmpty)==S_OK && bEmpty) return;
 
@@ -525,7 +525,7 @@ void CBaiduJPTSF::UpdateCompAttr(ITfContext *pContext,TfEditCookie ec,ITfRange *
 //
 //----------------------------------------------------------------------------
 
-void CBaiduJPTSF::_ClearCompositionDisplayAttributes(TfEditCookie ec, ITfContext *pContext)
+void CSinstar3Tsf::_ClearCompositionDisplayAttributes(TfEditCookie ec, ITfContext *pContext)
 {
 	ITfRange *pRangeComposition;
 	ITfProperty *pDisplayAttributeProperty;
@@ -547,7 +547,7 @@ void CBaiduJPTSF::_ClearCompositionDisplayAttributes(TfEditCookie ec, ITfContext
 	pRangeComposition->Release();
 }
 
-BOOL CBaiduJPTSF::RegisterIMEHotKey(REFGUID guidHotKey,LPCWSTR pszName,const PRESERVEDKEY *pKey)
+BOOL CSinstar3Tsf::RegisterIMEHotKey(REFGUID guidHotKey,LPCWSTR pszName,const PRESERVEDKEY *pKey)
 {
 	ITfKeystrokeMgr *pKeystrokeMgr;
 	HRESULT hr;
@@ -566,7 +566,7 @@ BOOL CBaiduJPTSF::RegisterIMEHotKey(REFGUID guidHotKey,LPCWSTR pszName,const PRE
 	return (hr == S_OK);
 }
 
-BOOL CBaiduJPTSF::UnregisterIMEHotKey(REFGUID guidHotKey,const PRESERVEDKEY *pKey)
+BOOL CSinstar3Tsf::UnregisterIMEHotKey(REFGUID guidHotKey,const PRESERVEDKEY *pKey)
 {
 	ITfKeystrokeMgr *pKeystrokeMgr;
 

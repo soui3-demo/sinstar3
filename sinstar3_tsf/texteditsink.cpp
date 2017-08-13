@@ -2,7 +2,7 @@
 #include "sinstar3_tsf.h"
 #include "editsession.h"
 
-CBaiduJPTSF *g_pCurTSF=NULL;
+CSinstar3Tsf *g_pCurTSF=NULL;
 
 
 VOID CALLBACK OnTimerProc(HWND hwnd,
@@ -34,7 +34,7 @@ VOID CALLBACK OnTimerProc(HWND hwnd,
 	}
 }
 
-STDAPI CBaiduJPTSF::OnEndEdit(ITfContext *pContext, TfEditCookie ecReadOnly, ITfEditRecord *pEditRecord)
+STDAPI CSinstar3Tsf::OnEndEdit(ITfContext *pContext, TfEditCookie ecReadOnly, ITfEditRecord *pEditRecord)
 {
     BOOL fSelectionChanged;
     IEnumTfRanges *pEnumTextChanges;
@@ -121,7 +121,7 @@ STDAPI CBaiduJPTSF::OnEndEdit(ITfContext *pContext, TfEditCookie ecReadOnly, ITf
 // Always release any previous sink.
 //----------------------------------------------------------------------------
 
-BOOL CBaiduJPTSF::_InitTextEditSink(ITfDocumentMgr *pDocMgr)
+BOOL CSinstar3Tsf::_InitTextEditSink(ITfDocumentMgr *pDocMgr)
 {
     ITfSource *pSource;
     BOOL fRet;

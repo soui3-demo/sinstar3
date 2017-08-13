@@ -28,17 +28,13 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
 #endif
 			CBaiduIMEModule::GetInstance().SetBaiduJP3Path(szPath);			
 
-			CMsgListnerWnd::RegisterWnd(g_hInst);
 		}
 		break;
 
 	case DLL_PROCESS_DETACH:
 		{
 			Helper_Trace(L"DLL_PROCESS_DETACH");
-			CMsgListnerWnd::UnregisterWnd(g_hInst);
-
 			DeleteCriticalSection(&g_cs);
-			
 		}
 		break;
 

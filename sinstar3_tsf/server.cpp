@@ -161,7 +161,7 @@ void BuildGlobalObjects(void)
 {
     // Build CClassFactory Objects
 
-    g_ObjectInfo[0] = new CClassFactory(c_clsidBaidujpTSF, CBaiduJPTSF::CreateInstance);
+    g_ObjectInfo[0] = new CClassFactory(c_clsidBaidujpTSF, CSinstar3Tsf::CreateInstance);
 
     // You can add more object info here.
     // Don't forget to increase number of item for g_ObjectInfo[],

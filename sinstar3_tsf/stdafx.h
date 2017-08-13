@@ -21,7 +21,6 @@
 #include "../include/common_def.h"
 #include "../include/BaiduJP3_WndMsg.h"
 #include "../include/TextService-i.h"
-#include "msgListnerWnd.h"
 #include "IMEMan.h"
 
 #define XLOG_FUNCTION 

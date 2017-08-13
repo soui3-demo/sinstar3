@@ -2,7 +2,7 @@
 #include "sinstar3_tsf.h"
 #include "EditSession.h"
 
-STDAPI CBaiduJPTSF::OnCompositionTerminated(TfEditCookie ecWrite, ITfComposition *pComposition)
+STDAPI CSinstar3Tsf::OnCompositionTerminated(TfEditCookie ecWrite, ITfComposition *pComposition)
 {
 	XLOG_FUNCTION;
 	Helper_Trace(_T("OnCompositionTerminated"));
@@ -21,19 +21,19 @@ STDAPI CBaiduJPTSF::OnCompositionTerminated(TfEditCookie ecWrite, ITfComposition
 }
 
 
-BOOL CBaiduJPTSF::_IsComposing()
+BOOL CSinstar3Tsf::_IsComposing()
 {
     return _pComposition != NULL;
 }
 
 
-void CBaiduJPTSF::_SetComposition(ITfComposition *pComposition)
+void CSinstar3Tsf::_SetComposition(ITfComposition *pComposition)
 {
     _pComposition = pComposition;
 }
 
 
-void CBaiduJPTSF::_StartComposition(ITfContext *pContext)
+void CSinstar3Tsf::_StartComposition(ITfContext *pContext)
 {
     CEditSessionStartComposition *pStartCompositionEditSession;
 	Helper_Trace(_T("$$$$$_StartComposition"));
@@ -51,7 +51,7 @@ void CBaiduJPTSF::_StartComposition(ITfContext *pContext)
     }
 }
 
-BOOL CBaiduJPTSF::_SetCompositionDisplayAttributes(TfEditCookie ec, ITfContext *pContext,ITfRange *pRange, TF_DA_ATTR_INFO attr)
+BOOL CSinstar3Tsf::_SetCompositionDisplayAttributes(TfEditCookie ec, ITfContext *pContext,ITfRange *pRange, TF_DA_ATTR_INFO attr)
 {
 	ITfProperty *pDisplayAttributeProperty;
 	HRESULT hr;
@@ -81,7 +81,7 @@ BOOL CBaiduJPTSF::_SetCompositionDisplayAttributes(TfEditCookie ec, ITfContext *
 	return (hr == S_OK);	
 }
 
-BOOL CBaiduJPTSF::_GetSegRange(TfEditCookie ec,ITfRange **pRange,int nLeft,int nRight)
+BOOL CSinstar3Tsf::_GetSegRange(TfEditCookie ec,ITfRange **pRange,int nLeft,int nRight)
 {
 	LONG cch=0;
 	assert(_IsComposing());
@@ -97,7 +97,7 @@ BOOL CBaiduJPTSF::_GetSegRange(TfEditCookie ec,ITfRange **pRange,int nLeft,int n
 	return TRUE;
 }
 
-void CBaiduJPTSF::_TerminateComposition(TfEditCookie ec, ITfContext *pContext)
+void CSinstar3Tsf::_TerminateComposition(TfEditCookie ec, ITfContext *pContext)
 {
 	_bPosSaved = FALSE;
 
@@ -119,7 +119,7 @@ void CBaiduJPTSF::_TerminateComposition(TfEditCookie ec, ITfContext *pContext)
 }
 
 
-void CBaiduJPTSF::_EndComposition(ITfContext *pContext)
+void CSinstar3Tsf::_EndComposition(ITfContext *pContext)
 {
 	XLOG_FUNCTION;
 
@@ -133,7 +133,7 @@ void CBaiduJPTSF::_EndComposition(ITfContext *pContext)
     }
 }
 
-BOOL CBaiduJPTSF::_EndCompositionEx()
+BOOL CSinstar3Tsf::_EndCompositionEx()
 {
 	if(!_IsComposing()) return FALSE;
 	HRESULT hr;
@@ -155,7 +155,7 @@ BOOL CBaiduJPTSF::_EndCompositionEx()
 }
 
 
-void CBaiduJPTSF::_ChangeComposition(ITfContext *pContext,int nLeft,int nRight,WCHAR* wszComp,int nLen)
+void CSinstar3Tsf::_ChangeComposition(ITfContext *pContext,int nLeft,int nRight,WCHAR* wszComp,int nLen)
 {
 	HRESULT hr;
 
@@ -167,7 +167,7 @@ void CBaiduJPTSF::_ChangeComposition(ITfContext *pContext,int nLeft,int nRight,W
 	}
 }
 
-void CBaiduJPTSF::_UpdateResultAndCompositionStringW(ITfContext * pContext,WCHAR *wszResultStr,int nResStrLen,WCHAR *wszCompStr,int nCompStrLen)
+void CSinstar3Tsf::_UpdateResultAndCompositionStringW(ITfContext * pContext,WCHAR *wszResultStr,int nResStrLen,WCHAR *wszCompStr,int nCompStrLen)
 {
 	HRESULT hr;
 
@@ -179,7 +179,7 @@ void CBaiduJPTSF::_UpdateResultAndCompositionStringW(ITfContext * pContext,WCHAR
 	}
 }
 
-int  CBaiduJPTSF::_MoveCaretPos(ITfContext *pContext,int nPos,BOOL bSet)
+int  CSinstar3Tsf::_MoveCaretPos(ITfContext *pContext,int nPos,BOOL bSet)
 {
 	if(!_IsComposing()) return 0;
 	CEditSessionMoveCaret *pEditSession;

@@ -1,13 +1,13 @@
 #include "stdafx.h"
 #include "sinstar3_tsf.h"
 
-STDAPI CBaiduJPTSF::OnSetFocus(BOOL fForeground)
+STDAPI CSinstar3Tsf::OnSetFocus(BOOL fForeground)
 {
 	Helper_Trace(L"ITfKeyEventSink::OnSetFocus, fForeground: %d", fForeground);
     return S_OK;
 }
 
-STDAPI CBaiduJPTSF::OnTestKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
+STDAPI CSinstar3Tsf::OnTestKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {
 	if (!m_pBaiduJP3 || _IsKeyboardDisabled()/* || !_IsKeyboardOpen()*/)
 	{
@@ -20,7 +20,7 @@ STDAPI CBaiduJPTSF::OnTestKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM lP
 	Helper_Trace(_T("OnTestKeyDown: wParam:%08x,lparam:%08x"),wParam,lParam);
     return S_OK;
 }
-STDAPI CBaiduJPTSF::OnTestKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
+STDAPI CSinstar3Tsf::OnTestKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {
 	if (!m_pBaiduJP3 || _IsKeyboardDisabled()/* || !_IsKeyboardOpen()*/)
 	{
@@ -35,7 +35,7 @@ STDAPI CBaiduJPTSF::OnTestKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lPar
 
 #include "editsession.h"
 
-STDAPI CBaiduJPTSF::OnKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
+STDAPI CSinstar3Tsf::OnKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {
 	HRESULT hr = E_FAIL;
 	Helper_Trace(L"OnKeyDown: %x %x", wParam, lParam);
@@ -50,7 +50,7 @@ STDAPI CBaiduJPTSF::OnKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM lParam
 	return S_OK;
 }
 
-STDAPI CBaiduJPTSF::OnKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
+STDAPI CSinstar3Tsf::OnKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {
 	Helper_Trace(L"OnKeyUp: %x %x", wParam, lParam);
 	OnTestKeyUp(pContext,wParam,lParam,pfEaten);
@@ -61,14 +61,14 @@ STDAPI CBaiduJPTSF::OnKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lParam, 
     return S_OK;
 }
 
-STDAPI CBaiduJPTSF::OnPreservedKey(ITfContext *pic, REFGUID rguid, BOOL *pfEaten)
+STDAPI CSinstar3Tsf::OnPreservedKey(ITfContext *pic, REFGUID rguid, BOOL *pfEaten)
 {
 	Helper_Trace(L"OnPreservedKey");
 	*pfEaten=m_pBaiduJP3->OnHotkey(pic,rguid);
 	return S_OK;
 }
 
-BOOL CBaiduJPTSF::_InitKeyEventSink()
+BOOL CSinstar3Tsf::_InitKeyEventSink()
 {
     ITfKeystrokeMgr *pKeystrokeMgr;
     HRESULT hr;
@@ -83,7 +83,7 @@ BOOL CBaiduJPTSF::_InitKeyEventSink()
     return (hr == S_OK);
 }
 
-void CBaiduJPTSF::_UninitKeyEventSink()
+void CSinstar3Tsf::_UninitKeyEventSink()
 {
     ITfKeystrokeMgr *pKeystrokeMgr;
 

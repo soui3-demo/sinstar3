@@ -9,7 +9,7 @@
 // a document.
 //----------------------------------------------------------------------------
 
-STDAPI CBaiduJPTSF::OnInitDocumentMgr(ITfDocumentMgr *pDocMgr)
+STDAPI CSinstar3Tsf::OnInitDocumentMgr(ITfDocumentMgr *pDocMgr)
 {
 	Helper_Trace(_T("OnInitDocumentMgr"));
 
@@ -24,7 +24,7 @@ STDAPI CBaiduJPTSF::OnInitDocumentMgr(ITfDocumentMgr *pDocMgr)
 // document.
 //----------------------------------------------------------------------------
 
-STDAPI CBaiduJPTSF::OnUninitDocumentMgr(ITfDocumentMgr *pDocMgr)
+STDAPI CSinstar3Tsf::OnUninitDocumentMgr(ITfDocumentMgr *pDocMgr)
 {
 	Helper_Trace(_T("OnUninitDocumentMgr"));
     return S_OK;
@@ -39,7 +39,7 @@ STDAPI CBaiduJPTSF::OnUninitDocumentMgr(ITfDocumentMgr *pDocMgr)
 // focus document, or now no document holds the input focus.
 //----------------------------------------------------------------------------
 
-STDAPI CBaiduJPTSF::OnSetFocus(ITfDocumentMgr *pDocMgrFocus, ITfDocumentMgr *pDocMgrPrevFocus)
+STDAPI CSinstar3Tsf::OnSetFocus(ITfDocumentMgr *pDocMgrFocus, ITfDocumentMgr *pDocMgrPrevFocus)
 {
 	Helper_Trace(L"ITfThreadMgrEventSink::OnSetFocus, pDocMgrFocus is %x, pDocMgrPrevFocus is %x", pDocMgrFocus, pDocMgrPrevFocus);
     //
@@ -55,7 +55,7 @@ STDAPI CBaiduJPTSF::OnSetFocus(ITfDocumentMgr *pDocMgrFocus, ITfDocumentMgr *pDo
     return S_OK;
 }
 
-STDAPI CBaiduJPTSF::OnSetThreadFocus()
+STDAPI CSinstar3Tsf::OnSetThreadFocus()
 {
 	Helper_Trace(_T("OnSetThreadFocus"));
 
@@ -67,7 +67,7 @@ STDAPI CBaiduJPTSF::OnSetThreadFocus()
 	return S_OK;
 }
 
-STDAPI CBaiduJPTSF::OnKillThreadFocus()
+STDAPI CSinstar3Tsf::OnKillThreadFocus()
 {
 	Helper_Trace(_T("OnKillThreadFocus"));
 
@@ -86,7 +86,7 @@ STDAPI CBaiduJPTSF::OnKillThreadFocus()
 // Sink called by the framework when a context is pushed.
 //----------------------------------------------------------------------------
 
-STDAPI CBaiduJPTSF::OnPushContext(ITfContext *pContext)
+STDAPI CSinstar3Tsf::OnPushContext(ITfContext *pContext)
 {
 	Helper_Trace(_T("###PushContext =%08x"),pContext);
     return S_OK;
@@ -99,7 +99,7 @@ STDAPI CBaiduJPTSF::OnPushContext(ITfContext *pContext)
 // Sink called by the framework when a context is popped.
 //----------------------------------------------------------------------------
 
-STDAPI CBaiduJPTSF::OnPopContext(ITfContext *pContext)
+STDAPI CSinstar3Tsf::OnPopContext(ITfContext *pContext)
 {
 	XLOG_FUNCTION;
 	Helper_Trace(_T("PopContext =%08x"),pContext);
@@ -113,7 +113,7 @@ STDAPI CBaiduJPTSF::OnPopContext(ITfContext *pContext)
 // Advise our sink.
 //----------------------------------------------------------------------------
 
-BOOL CBaiduJPTSF::_InitThreadMgrEventSink()
+BOOL CSinstar3Tsf::_InitThreadMgrEventSink()
 {
     CComPtr<ITfSource> pSource;
 
@@ -145,7 +145,7 @@ BOOL CBaiduJPTSF::_InitThreadMgrEventSink()
 // Unadvise our sink.
 //----------------------------------------------------------------------------
 
-void CBaiduJPTSF::_UninitThreadMgrEventSink()
+void CSinstar3Tsf::_UninitThreadMgrEventSink()
 {
     ITfSource *pSource;
 
