@@ -28,7 +28,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 #ifdef _WIN64
 			_tcscat(szPath,_T("\\x64"));
 #endif
-			CCoreLoader::GetInstance().SetBaiduJP3Path(szPath);			
+			CCoreLoader::GetInstance().SetCorePath(szPath);			
 		}
 		CUiWnd::RegisterClass(hModule);
 		break;

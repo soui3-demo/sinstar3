@@ -11,7 +11,7 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HINSTANCE hInst)
 ,m_pStatusWnd(NULL)
 ,m_nCaretHeight(30)
 {
-	theCore->AddRef();
+	theModule->AddRef();
  	m_pCompWnd = new CCompWnd();
 	m_pStatusWnd = new CStatusWnd();
 	m_pStatusWnd->Create();
@@ -22,7 +22,7 @@ CSinstar3Impl::~CSinstar3Impl(void)
 	m_pStatusWnd->DestroyWindow();
 	delete m_pStatusWnd;
 	delete m_pCompWnd;
-	theCore->Release();
+	theModule->Release();
 }
 
 

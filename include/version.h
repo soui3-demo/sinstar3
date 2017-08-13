@@ -18,6 +18,8 @@
 #define baidu_ime_string(a)			_baidu_ime_string(a)
 #define _baidu_ime_tstring(a)		_T(#a)
 #define baidu_ime_tstring(a)		_baidu_ime_tstring(a)
+#define _baidu_ime_wstring(a)		L#a
+#define baidu_ime_wstring(a)		_baidu_ime_wstring(a)
 
 #define _baidu_ime_int_version(a,b,c,d)		a,b,c,d
 #define baidu_ime_int_version(a,b,c,d)		_baidu_ime_int_version(a,b,c,d)
@@ -32,3 +34,4 @@
 #define VERSION_INT		baidu_ime_int_version( _baidu_ime_version_a, _baidu_ime_version_b, _baidu_ime_version_c, _baidu_ime_version_d)
 #define VERSION_STR		baidu_ime_str_version( _baidu_ime_version_a, _baidu_ime_version_b, _baidu_ime_version_c, _baidu_ime_version_d)
 #define PRODUCT_NAME	baidu_ime_tstring( _baidu_ime_name)
+#define PRODUCT_WNAME	baidu_ime_wstring( _baidu_ime_name)

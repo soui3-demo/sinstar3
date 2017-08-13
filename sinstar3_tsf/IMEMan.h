@@ -10,6 +10,9 @@
 #include <map>
 #include <list>
 #include <vector>
+
+#include "sinstar3_guids.h"
+
 using namespace std;
 typedef basic_string<TCHAR> tstring;
 
@@ -18,16 +21,15 @@ typedef basic_string<TCHAR> tstring;
 
 #define CLSID_STRLEN 38
 
-#include "../include/common_def.h"
-#include "../include/common_tsf_def.h"
 
 #pragma comment(lib, "shlwapi.lib")
 #pragma comment(lib, "Imm32.lib")
 
-typedef struct tagLAYOUTORTIPPROFILE {
-	DWORD  dwProfileType;       // InputProcessor or HKL 
 #define LOTP_INPUTPROCESSOR 1
 #define LOTP_KEYBOARDLAYOUT 2
+
+typedef struct tagLAYOUTORTIPPROFILE {
+	DWORD  dwProfileType;       // InputProcessor or HKL 
 	LANGID langid;              // language id 
 	CLSID  clsid;               // CLSID of tip 
 	GUID   guidProfile;         // profile description 
@@ -74,9 +76,7 @@ public:
 	}
 
 	//
-	// 21:58 2010-11-1
-	// Ren zhijie
-	// 从注册表中找到ime jp所在位置，得到KLID
+	// 从注册表中找到ime所在位置，得到KLID
 	//
 	static BOOL GetImeKLID( HKEY hKey, PCTSTR pszImeFileName, PTSTR pwszKLID, size_t nMaxSize) 
 	{ 
@@ -1309,109 +1309,4 @@ public:
 		return TRUE;
 	}
 
-	static BOOL ChangeIMEDesc( PCTSTR pszImeFileName, PCTSTR pszDesr)
-	{	
-		TCHAR szKLID[256] = _T("");
-		HKEY hKey = NULL;
-		LONG nRet = RegOpenKeyEx( HKEY_LOCAL_MACHINE, _T("SYSTEM\\CurrentControlSet\\Control\\Keyboard Layouts"), 0, KEY_ALL_ACCESS, &hKey);
-		if ( ERROR_SUCCESS == nRet)
-		{
-			BOOL	bFound = FALSE;
-			TCHAR	szMsg[256] = _T("");
-
-			TCHAR	achKey[MAX_KEY_LENGTH];		// buffer for subkey name
-			DWORD	cbName;						// size of name string 
-			TCHAR	szClass[MAX_PATH] = _T("");	// buffer for class name 
-			DWORD	cchClassName = MAX_PATH;	// size of class string 
-			DWORD	cSubKeys=0;					// number of subkeys 
-			DWORD	cbMaxSubKey;				// longest subkey size 
-			DWORD	cchMaxClass;				// longest class string 
-			DWORD	cValues;					// number of values for key 
-			DWORD	cchMaxValue;				// longest value name 
-			DWORD	cbMaxValueData;				// longest value data 
-			DWORD	cbSecurityDescriptor;		// size of security descriptor 
-			FILETIME ftLastWriteTime;			// last write time 
-
-			DWORD i, retCode; 	
-
-			// Get the class name and the value count. 
-			retCode = RegQueryInfoKey(
-				hKey,					// key handle 
-				szClass,				// buffer for class name 
-				&cchClassName,			// size of class string 
-				NULL,					// reserved 
-				&cSubKeys,				// number of subkeys 
-				&cbMaxSubKey,			// longest subkey size 
-				&cchMaxClass,			// longest class string 
-				&cValues,				// number of values for this key 
-				&cchMaxValue,			// longest value name 
-				&cbMaxValueData,		// longest value data 
-				&cbSecurityDescriptor,	// security descriptor 
-				&ftLastWriteTime);		// last write time 
-
-			// Enumerate the subkeys, until RegEnumKeyEx fails.
-			if ( cSubKeys != 0)
-			{
-				//_stprintf_s( szMsg, _T("\nNumber of subkeys: %d\n"), cSubKeys);
-				//OutputDebugString( szMsg);
-
-				for ( i = 0; i < cSubKeys; i++) 
-				{ 
-					cbName = MAX_KEY_LENGTH;
-					retCode = RegEnumKeyEx(hKey, i,
-						achKey, 
-						&cbName, 
-						NULL, 
-						NULL, 
-						NULL, 
-						&ftLastWriteTime); 
-					if ( retCode == ERROR_SUCCESS) 
-					{
-						//_stprintf_s( szMsg, _T("(%d) %s\n"), i+1, achKey);
-						//OutputDebugString( szMsg);
-
-						HKEY hSubKey = NULL;
-						retCode = RegOpenKeyEx( hKey, achKey, 0, KEY_ALL_ACCESS, &hSubKey);
-						if ( ERROR_SUCCESS == retCode)
-						{
-							DWORD dwValueMaxLen = MAX_PATH;
-							WCHAR szValue[MAX_PATH] = L"";
-							retCode = RegQueryValueEx( hSubKey, _T("IME file"), NULL, NULL, (LPBYTE)szValue, &dwValueMaxLen);
-							if ( ERROR_SUCCESS == retCode)
-							{
-								//_stprintf_s( szMsg, _T("value: %s\n"), szValue);
-								//OutputDebugString( szMsg);
-
-								if ( _tcsicmp( szValue, pszImeFileName) == 0)
-								{
-									// found it
-									bFound = TRUE;									
-									RegSetValueEx( hSubKey, _T("Layout Text"), 0, REG_SZ, (BYTE*)pszDesr, (DWORD)(_tcslen( pszDesr) + 1) * sizeof(TCHAR));
-								}
-							}
-							else
-							{
-								//_stprintf_s( szMsg, _T("RegQueryValueEx failed, error code: %d\n"), GetLastError());
-								//OutputDebugString( szMsg);
-							}
-
-							RegCloseKey( hSubKey);
-						}
-					}
-
-					if ( bFound)
-					{
-						break;
-					}
-				}
-			}
-
-			RegCloseKey( hKey);
-		}
-
-		Unload( BAIDU_IME_FILE_NAME);
-		Load( BAIDU_IME_FILE_NAME);
-
-		return TRUE;
-	}	
 };

@@ -1,11 +1,7 @@
 #include "stdafx.h"
 
-HINSTANCE g_hInst;
 
 LONG g_cRefDll = -1; // -1 /w no refs, for win95 InterlockedIncrement/Decrement compat
-
-CRITICAL_SECTION g_cs;
-
 
 
 BOOL IsRangeCovered(TfEditCookie ec, ITfRange *pRangeTest, ITfRange *pRangeCover)

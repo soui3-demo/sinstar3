@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "sinstar3_tsf.h"
 
+CTsfModule	*theModule = NULL;
+
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
 {
 	switch (dwReason)
@@ -9,10 +11,8 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
 #ifdef _DEBUG
 		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF|_CRTDBG_LEAK_CHECK_DF);
 #endif
-		g_hInst=hInstance;
+		theModule = new CTsfModule(hInstance);
 		{
-			if (!InitializeCriticalSectionAndSpinCount(&g_cs, 0))
-				return FALSE;
 
 			TCHAR szPath[MAX_PATH];
 			CRegKey reg;
@@ -26,7 +26,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
 #ifdef _WIN64
 			_tcscat(szPath,_T("\\x64"));
 #endif
-			CCoreLoader::GetInstance().SetBaiduJP3Path(szPath);			
+			CCoreLoader::GetInstance().SetCorePath(szPath);			
 
 		}
 		break;
@@ -34,7 +34,8 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
 	case DLL_PROCESS_DETACH:
 		{
 			Helper_Trace(L"DLL_PROCESS_DETACH");
-			DeleteCriticalSection(&g_cs);
+			delete theModule;
+			theModule = NULL;
 		}
 		break;
 

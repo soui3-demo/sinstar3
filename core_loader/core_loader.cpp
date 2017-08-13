@@ -17,7 +17,7 @@ CCoreLoader::~CCoreLoader(void)
 	DeleteCriticalSection(&m_cs);
 }
 
-void CCoreLoader::SetBaiduJP3Path(LPCTSTR pszPath)
+void CCoreLoader::SetCorePath(LPCTSTR pszPath)
 {
 	_tcscpy(m_szPath,pszPath);
 	_tcscat(m_szPath,_T("\\sinstar3_core.dll"));

@@ -7,23 +7,20 @@
 #include "SouiEnv.h"
 #include "Minidump.h"
 
-CSinstar3Core	*theCore = NULL;
-
-
 EXTERN_C SINSTAR3_API  ISinstar* Sinstar3_Create(ITextService* pTxtSvr,HINSTANCE hInst)
 {
 	CSinstar3Impl*  pRet= new CUnknownImpl<CSinstar3Impl>(pTxtSvr,hInst);
 	return pRet;
 }
 
-EXTERN_C SINSTAR3_API  void Sinstar3_Delete(ISinstar* pBaiduJP3)
+EXTERN_C SINSTAR3_API  void Sinstar3_Delete(ISinstar* pSinstar3)
 {
-	pBaiduJP3->Release();
+	pSinstar3->Release();
 }
 
 EXTERN_C SINSTAR3_API HRESULT Sinstar3_CanUnloadNow()
 {
-	return theCore->GetRefCount()==0;
+	return theModule->GetRefCount()==0;
 }
 
 EXTERN_C SINSTAR3_API BOOL Sinstar3_Config(HWND hWnd)
@@ -32,42 +29,21 @@ EXTERN_C SINSTAR3_API BOOL Sinstar3_Config(HWND hWnd)
 }
 
 
-CSinstar3Core::CSinstar3Core(HINSTANCE hInst):m_cRef(0),m_hInst(hInst)
+CSinstar3Core::CSinstar3Core(HINSTANCE hInst):CModuleRef(hInst)
 {
-	InitializeCriticalSection(&m_cs);
 }
 
 CSinstar3Core::~CSinstar3Core()
 {
-	DeleteCriticalSection(&m_cs);
 }
 
-LONG CSinstar3Core::AddRef()
+void CSinstar3Core::OnInit()
 {
-	CAutoLock lock(&m_cs);
-
-	if(m_cRef == 0)
-	{
-		CMinidump::Enable();
-		new CSouiEnv(m_hInst);
-	}
-
-	return ++m_cRef;
+	CMinidump::Enable();
+	new CSouiEnv(GetModule());
 }
 
-LONG CSinstar3Core::Release()
+void CSinstar3Core::OnFinalRelease()
 {
-	CAutoLock lock(&m_cs);
-	LONG ret = --m_cRef;
-	if(ret == 0)
-	{
-		delete CSouiEnv::getSingletonPtr();
-	}
-	return ret;
-}
-
-LONG CSinstar3Core::GetRefCount()
-{
-	CAutoLock lock(&m_cs);
-	return m_cRef;
+	delete CSouiEnv::getSingletonPtr();
 }

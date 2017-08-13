@@ -101,7 +101,6 @@ STDAPI CSinstar3Tsf::OnPushContext(ITfContext *pContext)
 
 STDAPI CSinstar3Tsf::OnPopContext(ITfContext *pContext)
 {
-	XLOG_FUNCTION;
 	Helper_Trace(_T("PopContext =%08x"),pContext);
     return S_OK;
 }

@@ -27,7 +27,8 @@ public:
 	LRESULT OnCreate();
 	LRESULT OnDestroy();
 	LRESULT OnTimer(WPARAM nEventID);
-	//CTextService
+
+	//ITextService
 	BOOL IsCompositing();
 	void StartComposition(LPVOID lpImeContext);
 	void ReplaceSelCompositionW(LPVOID lpImeContext,int nLeft,int nRight,WCHAR *wszComp,int nLen);
@@ -47,7 +48,7 @@ public:
 #endif//ENABLE_LANGUAGEBAR
 	LRESULT DoWildRequest(WPARAM wParam,LPARAM lParam){return E_NOTIMPL;}
 
-	ISinstar* m_pBaiduJP3;
+	ISinstar* m_pSinstar3;
 	CImeContext *m_pCurContext;
 	int        m_nFontHei;
 	HFONT		m_fntComp;

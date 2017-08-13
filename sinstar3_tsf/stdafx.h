@@ -15,14 +15,13 @@
 #include "../core_loader/core_loader.h"
 #include "../include/unknown.h"
 #include "../include/reg.h"
-
-#include "Globals.h"
-
-#include "../include/common_def.h"
+#include "../include/version.h"
 #include "../include/TextService-i.h"
-#include "IMEMan.h"
 
-#define XLOG_FUNCTION 
-#define BD_VERIFY(x) _ASSERT(x)
-#define BD_VERIFY_HR(hr) _ASSERT(SUCCEEDED(hr))
-#define BD_VERIFY_RET(x,ret) _ASSERT(x);if(!x) ret
+#include "TsfModule.h"
+#include "Globals.h"
+#include "sinstar3_guids.h"
+
+#define ASSERT_HR(hr) _ASSERT(SUCCEEDED(hr))
+#define ASSERT_RET(x,ret) _ASSERT(x);if(!x) ret
+

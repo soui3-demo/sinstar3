@@ -85,7 +85,7 @@ const TF_DISPLAYATTRIBUTE CDisplayAttributeInfoTargetConverted::_s_DisplayAttrib
 
 CDisplayAttributeInfo::CDisplayAttributeInfo()
 {
-    DllAddRef();
+    theModule->AddRef();
 
     _pguid = NULL;
     _pDisplayAttribute = NULL;
@@ -102,7 +102,7 @@ CDisplayAttributeInfo::CDisplayAttributeInfo()
 
 CDisplayAttributeInfo::~CDisplayAttributeInfo()
 {
-    DllRelease();
+    theModule->Release();
 }
 
 STDAPI CDisplayAttributeInfo::GetGUID(GUID *pguid)

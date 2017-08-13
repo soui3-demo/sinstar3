@@ -26,7 +26,7 @@
 
 CEnumDisplayAttributeInfo::CEnumDisplayAttributeInfo()
 {
-    DllAddRef();
+    theModule->AddRef();
 
     _iIndex = 0;
     _cRef = 1;
@@ -40,7 +40,7 @@ CEnumDisplayAttributeInfo::CEnumDisplayAttributeInfo()
 
 CEnumDisplayAttributeInfo::~CEnumDisplayAttributeInfo()
 {
-    DllRelease();
+    theModule->Release();
 }
 
 STDAPI CEnumDisplayAttributeInfo::Clone(IEnumTfDisplayAttributeInfo **ppEnum)

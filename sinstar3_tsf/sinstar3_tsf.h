@@ -2,7 +2,6 @@
 
 #include <Ctffunc.h>
 
-
 class CSinstar3Tsf : public ITfTextInputProcessor,
                      public ITfThreadMgrEventSink,
 					 public ITfThreadFocusSink,
@@ -15,6 +14,10 @@ class CSinstar3Tsf : public ITfTextInputProcessor,
 					 public ITfCompartmentEventSink,
 					 public ITextService
 {
+public:
+	// CClassFactory factory callback
+	static HRESULT CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj);
+
 public:
     CSinstar3Tsf();
     virtual ~CSinstar3Tsf();
@@ -75,8 +78,6 @@ public:
 	// ITfCompartmentEventSink
     STDMETHODIMP OnChange(REFGUID rguidCompartment);
 
-    // CClassFactory factory callback
-    static HRESULT CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj);
 
 	//ITextService
 	BOOL IsCompositing();

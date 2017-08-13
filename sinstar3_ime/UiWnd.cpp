@@ -11,7 +11,7 @@ LRESULT CALLBACK UIWndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 	CUiWnd *pUiWnd=(CUiWnd *)GetWindowLongPtr(hWnd,GWLP_USERDATA);
 	switch(uMsg)
 	{
-	case WM_CREATE:
+	case WM_NCCREATE:
 		_ASSERT(pUiWnd==NULL);
 		pUiWnd=new CUiWnd;
 		pUiWnd->Attach(hWnd);
@@ -59,7 +59,7 @@ void CUiWnd::UnregisterClass(HINSTANCE hInstance)
 
 CUiWnd::CUiWnd(void)
 {
-	m_pBaiduJP3=NULL;
+	m_pSinstar3=NULL;
 	m_pCurContext=NULL;
 	m_nFontHei=20;
 	m_fntComp=0;
@@ -132,7 +132,7 @@ LRESULT CUiWnd::WindowProc(UINT uMsg,WPARAM wParam,LPARAM lParam)
 	case WM_IME_SETCONTEXT:
 		return OnSetContext(wParam,lParam);
 	case WM_IME_STARTCOMPOSITION:
-		if(m_pBaiduJP3 && m_pBaiduJP3->ShowCompWnd())
+		if(m_pSinstar3 && m_pSinstar3->ShowCompWnd())
 		{
 			m_wndComp.m_bValid=TRUE;
 			m_wndComp.ShowWindow(SW_SHOWNOACTIVATE);
@@ -166,7 +166,7 @@ LRESULT CUiWnd::OnImeSelect(BOOL bSelect,LPARAM lParam)
 	AttachToIMC(bSelect);
 	OnImeNotify(IMN_SETOPENSTATUS,0);
 	OnImeNotify(IMN_SETCONVERSIONMODE,0);
-	if(m_pBaiduJP3) m_pBaiduJP3->OnIMESelect(bSelect);
+	if(m_pSinstar3) m_pSinstar3->OnIMESelect(bSelect);
 	return 0;
 }
 
@@ -219,13 +219,13 @@ LRESULT CUiWnd::OnImeNotify(WPARAM wParam,LPARAM lParam)
 	switch(wParam)
 	{
 	case IMN_OPENSTATUSWINDOW:
-		if(m_pBaiduJP3) m_pBaiduJP3->OnSetFocus(TRUE);
+		if(m_pSinstar3) m_pSinstar3->OnSetFocus(TRUE);
 		//if(m_wndComp.m_bValid) m_wndComp.ShowWindow(SW_SHOWNOACTIVATE);
 		m_wndComp.ShowWindow(m_wndComp.m_bValid ? SW_SHOWNOACTIVATE : SW_HIDE);
 		Helper_Trace(_T("IMN_OPENSTATUSWINDOW"));
 		break;
 	case IMN_CLOSESTATUSWINDOW:
-		if(m_pBaiduJP3) m_pBaiduJP3->OnSetFocus(FALSE);
+		if(m_pSinstar3) m_pSinstar3->OnSetFocus(FALSE);
 		if(m_wndComp.m_bValid) m_wndComp.ShowWindow(SW_HIDE);
 		Helper_Trace(_T("IMN_CLOSESTATUSWINDOW"));
 		break;
@@ -236,18 +236,18 @@ LRESULT CUiWnd::OnImeNotify(WPARAM wParam,LPARAM lParam)
 	case IMN_CLOSECANDIDATE:
 		break;
 	case IMN_SETOPENSTATUS:
-		if(m_pBaiduJP3) m_pBaiduJP3->OnOpenStatusChanged(ImmGetOpenStatus(hIMC));
+		if(m_pSinstar3) m_pSinstar3->OnOpenStatusChanged(ImmGetOpenStatus(hIMC));
 		break;
 	case IMN_SETCONVERSIONMODE:
-		if(m_pBaiduJP3)
+		if(m_pSinstar3)
 		{
 			EInputMethod mode=GetConversionMode();
 			if(ImmGetOpenStatus(hIMC)==FALSE) mode=HalfAlphanumeric;
-			m_pBaiduJP3->OnConversionModeChanged(mode);
+			m_pSinstar3->OnConversionModeChanged(mode);
 		}
 		break;
 	case IMN_SETCOMPOSITIONWINDOW:
-		if(m_pBaiduJP3 && hIMC && m_bActivate)
+		if(m_pSinstar3 && hIMC && m_bActivate)
 		{
 			LPINPUTCONTEXT lpIMC=(LPINPUTCONTEXT)ImmLockIMC(hIMC);
 			if(lpIMC)
@@ -277,7 +277,7 @@ LRESULT CUiWnd::OnImeNotify(WPARAM wParam,LPARAM lParam)
 						} 
 					}
 					pt.y-=HEI_LINEMARGIN;
-					m_pBaiduJP3->OnSetCaretPosition(pt,m_nFontHei);
+					m_pSinstar3->OnSetCaretPosition(pt,m_nFontHei);
 					Helper_Trace(_T("IMN_SETCOMPOSITIONWINDOW,pt=(%d,%d)"),pt.x,pt.y);
 					ImmUnlockIMCC(lpIMC->hCompStr);
 				}
@@ -286,7 +286,7 @@ LRESULT CUiWnd::OnImeNotify(WPARAM wParam,LPARAM lParam)
 		}
 		break;
 	case IMN_SETCANDIDATEPOS:
-		if(m_pBaiduJP3 && hIMC)
+		if(m_pSinstar3 && hIMC)
 		{
 			LPINPUTCONTEXT lpIMC=(LPINPUTCONTEXT)ImmLockIMC(hIMC);
 			if(lpIMC)
@@ -316,7 +316,7 @@ LRESULT CUiWnd::OnImeNotify(WPARAM wParam,LPARAM lParam)
 						}
 						pt.y-=HEI_LINEMARGIN;
 						Helper_Trace(_T("IMN_SETCANDIDATEPOS,pt=(%d,%d)"),pt.x,pt.y);
-						m_pBaiduJP3->OnSetFocusSegmentPosition(pt,m_nFontHei);
+						m_pSinstar3->OnSetFocusSegmentPosition(pt,m_nFontHei);
 					}
 					ImmUnlockIMCC(lpIMC->hCompStr);
 				}
@@ -384,21 +384,21 @@ LRESULT CUiWnd::OnSetContext(BOOL bActivate,LPARAM lParam)
 
 BOOL CUiWnd::_InitBaiduJP3()
 {
-	m_pBaiduJP3=CCoreLoader::GetInstance().Sinstar3_Create(this,g_hInst);
-	if(!m_pBaiduJP3) return FALSE;
-	m_pBaiduJP3->OnIMESelect(m_bActivate);
+	m_pSinstar3=CCoreLoader::GetInstance().Sinstar3_Create(this,g_hInst);
+	if(!m_pSinstar3) return FALSE;
+	m_pSinstar3->OnIMESelect(m_bActivate);
 	HIMC hIMC=(HIMC)GetWindowLongPtr(m_hWnd,IMMGWLP_IMC);
-	m_pBaiduJP3->OnSetFocus(hIMC!=0);
+	m_pSinstar3->OnSetFocus(hIMC!=0);
 	return TRUE;
 }
 
 BOOL CUiWnd::_UninitBaiduJP3()
 {
-	if(m_pBaiduJP3)
+	if(m_pSinstar3)
 	{
-		m_pBaiduJP3->OnIMESelect(FALSE);
-		CCoreLoader::GetInstance().Sinstar3_Delete(m_pBaiduJP3);
-		m_pBaiduJP3=NULL;
+		m_pSinstar3->OnIMESelect(FALSE);
+		CCoreLoader::GetInstance().Sinstar3_Delete(m_pSinstar3);
+		m_pSinstar3=NULL;
 	}
 	return TRUE;
 }

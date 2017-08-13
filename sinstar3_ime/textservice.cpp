@@ -28,7 +28,7 @@ void CUiWnd::StartComposition(LPVOID lpImeContext)
 	ImmUnlockIMCC(pCtx->_lpContext->hCompStr);
 	pCtx->GenerateMessage(WM_IME_STARTCOMPOSITION,0,0);
 	pCtx->GenerateMessage(WM_IME_NOTIFY,IMN_SETCOMPOSITIONWINDOW,0);
-	if(m_pBaiduJP3) m_pBaiduJP3->OnCompositionStarted();
+	if(m_pSinstar3) m_pSinstar3->OnCompositionStarted();
 }
 
 //使用指定数据替换当前编码串
@@ -39,21 +39,21 @@ void CUiWnd::ReplaceSelCompositionW(LPVOID lpImeContext,int nLeft,int nRight,WCH
 {
 #ifdef _UNICODE
 	_ASSERT(lpImeContext);
-	_ASSERT(m_pBaiduJP3);
+	_ASSERT(m_pSinstar3);
 	if(!IsCompositing()) StartComposition(lpImeContext);
 	CImeContext *pCtx=(CImeContext *)lpImeContext;
 	CCompStrEx *pCompStr=(CCompStrEx *)ImmLockIMCC(pCtx->_lpContext->hCompStr);
 	if(pCompStr)
 	{
-		pCompStr->Insert(m_pBaiduJP3,nLeft,nRight,wszComp,nLen);
+		pCompStr->Insert(m_pSinstar3,nLeft,nRight,wszComp,nLen);
 		pCtx->GenerateMessage(WM_IME_COMPOSITION,0,GCS_CURSORPOS|GCS_COMP|GCS_COMPREAD);
-		if(m_pBaiduJP3)
+		if(m_pSinstar3)
 		{
-			m_pBaiduJP3->OnCompositionChanged();
+			m_pSinstar3->OnCompositionChanged();
 			if(pCompStr->GetTargetPos()==-1)
 			{
 				POINT pt={-1,-1};
-				m_pBaiduJP3->OnSetFocusSegmentPosition(pt,0);
+				m_pSinstar3->OnSetFocusSegmentPosition(pt,0);
 			}
 		}
 		pCtx->GenerateMessage(WM_IME_NOTIFY,IMN_CHANGECANDIDATE,0);
@@ -76,23 +76,23 @@ void CUiWnd::UpdateResultAndCompositionStringW(LPVOID lpImeContext,WCHAR *wszRes
 {
 #ifdef _UNICODE
 	_ASSERT(lpImeContext);
-	_ASSERT(m_pBaiduJP3);
+	_ASSERT(m_pSinstar3);
 	if(!IsCompositing()) StartComposition(lpImeContext);
 	CImeContext *pCtx=(CImeContext *)lpImeContext;
 	CCompStrEx *pCompStr=(CCompStrEx *)ImmLockIMCC(pCtx->_lpContext->hCompStr);
 	if(pCompStr)
 	{
 		pCompStr->Init();
-		pCompStr->Insert(m_pBaiduJP3,0,-1,wszCompStr,nCompStrLen);
+		pCompStr->Insert(m_pSinstar3,0,-1,wszCompStr,nCompStrLen);
 		pCompStr->dwResultStrLen=nResStrLen;
 		_tcsncpy(pCompStr->szResultStr,wszResultStr,nResStrLen);
 		pCtx->GenerateMessage(WM_IME_COMPOSITION,0,GCS_CURSORPOS|GCS_COMP|GCS_COMPREAD|GCS_RESULTSTR);
 		pCtx->GenerateMessage(WM_IME_NOTIFY,IMN_CHANGECANDIDATE,0);
-		if(m_pBaiduJP3)
+		if(m_pSinstar3)
 		{
-			m_pBaiduJP3->OnCompositionChanged();
+			m_pSinstar3->OnCompositionChanged();
 			POINT pt={-1,-1};
-			m_pBaiduJP3->OnSetFocusSegmentPosition(pt,0);
+			m_pSinstar3->OnSetFocusSegmentPosition(pt,0);
 		}
 		pCtx->GenerateMessage(WM_IME_NOTIFY,IMN_SETCOMPOSITIONWINDOW,0);
 		ImmUnlockIMCC(pCtx->_lpContext->hCompStr);
@@ -124,7 +124,7 @@ void CUiWnd::EndComposition(LPVOID lpImeContext)
 	ImmUnlockIMCC(pCtx->_lpContext->hCompStr);
 	pCtx->GenerateMessage(WM_IME_NOTIFY,IMN_CLOSECANDIDATE,0);
 	pCtx->GenerateMessage(WM_IME_ENDCOMPOSITION,0,0);
-	if(m_pBaiduJP3) m_pBaiduJP3->OnCompositionTerminated();
+	if(m_pSinstar3) m_pSinstar3->OnCompositionTerminated();
 
 }
 
@@ -143,7 +143,7 @@ int  CUiWnd::MoveCaretPos(LPVOID lpImeContext,int nPos,BOOL bSet)
 		{
 			pCtx->GenerateMessage(WM_IME_COMPOSITION,0,GCS_CURSORPOS|GCS_COMPREAD|GCS_COMP);
 			pCtx->GenerateMessage(WM_IME_NOTIFY,IMN_CHANGECANDIDATE,0);
-			if(m_pBaiduJP3) m_pBaiduJP3->OnCompositionChanged();
+			if(m_pSinstar3) m_pSinstar3->OnCompositionChanged();
 		}
 	}
 	ImmUnlockIMCC(pCtx->_lpContext->hCompStr);
@@ -209,7 +209,7 @@ void  CUiWnd::SetConversionMode(EInputMethod mode)
 
 EInputMethod CUiWnd::GetConversionMode()
 {
-	EInputMethod eInputMode =m_pBaiduJP3?m_pBaiduJP3->GetDefInputMode():Hiragana;
+	EInputMethod eInputMode =m_pSinstar3?m_pSinstar3->GetDefInputMode():Hiragana;
 
 	CImeContext *pCtx=(CImeContext *)GetImeContext();
 	if(!pCtx) return HalfAlphanumeric;

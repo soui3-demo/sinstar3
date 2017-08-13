@@ -4,7 +4,6 @@
 
 STDAPI CSinstar3Tsf::OnCompositionTerminated(TfEditCookie ecWrite, ITfComposition *pComposition)
 {
-	XLOG_FUNCTION;
 	Helper_Trace(_T("OnCompositionTerminated"));
 	ITfContext *pCtx=(ITfContext *)GetImeContext();
 	_TerminateComposition(ecWrite,pCtx);
@@ -101,7 +100,6 @@ void CSinstar3Tsf::_TerminateComposition(TfEditCookie ec, ITfContext *pContext)
 {
 	_bPosSaved = FALSE;
 
-	XLOG_FUNCTION;
     if (_pComposition != NULL)
     {
 		_ClearCompositionDisplayAttributes(ec,pContext);
@@ -121,8 +119,6 @@ void CSinstar3Tsf::_TerminateComposition(TfEditCookie ec, ITfContext *pContext)
 
 void CSinstar3Tsf::_EndComposition(ITfContext *pContext)
 {
-	XLOG_FUNCTION;
-
     CEditSessionEndComposition *pEditSession;
     HRESULT hr;
 

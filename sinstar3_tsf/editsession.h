@@ -228,8 +228,6 @@ public:
 	// ITfEditSession
 	STDMETHODIMP DoEditSession(TfEditCookie ec)
 	{
-		XLOG_FUNCTION;
-
 		CComPtr<ITfInsertAtSelection> pInsertAtSelection;
 		CComPtr<ITfRange> pRangeInsert;
 		CComPtr<ITfContextComposition> pContextComposition;
@@ -238,20 +236,20 @@ public:
 
 		// A special interface is required to insert text at the selection
 		hr = _pContext->QueryInterface(IID_ITfInsertAtSelection, (void **)&pInsertAtSelection);
-		BD_VERIFY_HR(hr);
+		ASSERT_HR(hr);
 
 		// insert the text
 		hr = pInsertAtSelection->InsertTextAtSelection(ec, TF_IAS_QUERYONLY, NULL, 0, &pRangeInsert);
-		BD_VERIFY_HR(hr);
+		ASSERT_HR(hr);
 
 		// get an interface on the context to deal with compositions
 		hr = _pContext->QueryInterface(IID_ITfContextComposition, (void **)&pContextComposition);
-		BD_VERIFY_HR(hr);
+		ASSERT_HR(hr);
 
 		// start the new composition
 		hr = pContextComposition->StartComposition(ec, pRangeInsert, _pTextService, &pComposition);
-		BD_VERIFY_HR(hr);
-		BD_VERIFY_RET(pComposition, return E_FAIL);
+		ASSERT_HR(hr);
+		ASSERT_RET(pComposition, return E_FAIL);
 
 		// Store the pointer of this new composition object in the instance 
 		// of the CTextService class. So this instance of the CTextService 

@@ -13,12 +13,14 @@
 //
 //////////////////////////////////////////////////////////////////////
 #include "stdafx.h"
+#include "IMEMan.h"
 
 #define CLSID_STRLEN 38  // strlen("{xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx}")
 
-static const TCHAR c_szInfoKeyPrefix[] = TEXT("CLSID\\");
-static const TCHAR c_szInProcSvr32[] = TEXT("InProcServer32");
-static const TCHAR c_szModelName[] = TEXT("ThreadingModel");
+static const TCHAR KInfoKeyPrefix[] = TEXT("CLSID\\");
+static const TCHAR KInProcSvr32[] = TEXT("InProcServer32");
+static const TCHAR KModelName[] = TEXT("ThreadingModel");
+static const TCHAR KTextServiceModel[] = TEXT("Apartment");
 
 
 
@@ -45,13 +47,13 @@ BOOL RegisterProfiles()
     if (hr != S_OK)
         goto Exit;
 
-    GetModuleFileNameW(g_hInst, achIconFile, ARRAYSIZE(achIconFile));
+    GetModuleFileNameW(theModule->GetModule(), achIconFile, ARRAYSIZE(achIconFile));
 
     hr = pInputProcessProfiles->AddLanguageProfile(c_clsidBaidujpTSF,
                                   TEXTSERVICE_LANGID, 
                                   c_guidProfile, 
-                                  JP_IME_DESC_W, 
-                                  (ULONG)wcslen(JP_IME_DESC_W),
+                                  PRODUCT_WNAME, 
+                                  (ULONG)wcslen(PRODUCT_WNAME),
                                   achIconFile,
                                   (ULONG)wcslen(achIconFile),
                                   TEXTSERVICE_ICON_INDEX);
@@ -65,7 +67,7 @@ BOOL RegisterProfiles()
 	// 另一方面， 如果系统开启了高级文字服务，用户打开word进行文字编辑，在选择日文输入法时，为了避免系统同时显示我们的ime, tsf两种模式的输入法，
 	// 可以使用SubstituteKeyboardLayout函数来设置，这样就只显示tsf输入法给用户选择了。
 	//
-	HKL hKLBaiduJP=CIMEMan::GetKeyboardLayoutFromFileName( BAIDU_IME_FILE_NAME);
+	HKL hKLBaiduJP=CIMEMan::GetKeyboardLayoutFromFileName( SINSTAR3_IME_FILE_NAME);
 	if ( hKLBaiduJP)
 	{
 		hr = pInputProcessProfiles->SubstituteKeyboardLayout( c_clsidBaidujpTSF, TEXTSERVICE_LANGID, c_guidProfile, hKLBaiduJP);
@@ -255,26 +257,26 @@ BOOL RegisterServer()
     HKEY hKey;
     HKEY hSubKey;
     BOOL fRet;
-    TCHAR achIMEKey[ARRAYSIZE(c_szInfoKeyPrefix) + CLSID_STRLEN];
+    TCHAR achIMEKey[ARRAYSIZE(KInfoKeyPrefix) + CLSID_STRLEN];
     TCHAR achFileName[MAX_PATH];
 
-    if (!CLSIDToString(c_clsidBaidujpTSF, achIMEKey + ARRAYSIZE(c_szInfoKeyPrefix) - 1))
+    if (!CLSIDToString(c_clsidBaidujpTSF, achIMEKey + ARRAYSIZE(KInfoKeyPrefix) - 1))
         return FALSE;
-    memcpy(achIMEKey, c_szInfoKeyPrefix, sizeof(c_szInfoKeyPrefix)-sizeof(TCHAR));
+    memcpy(achIMEKey, KInfoKeyPrefix, sizeof(KInfoKeyPrefix)-sizeof(TCHAR));
 
     if (fRet = RegCreateKeyEx(HKEY_CLASSES_ROOT, achIMEKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey, &dw)
             == ERROR_SUCCESS)
     {
-        fRet &= RegSetValueEx(hKey, NULL, 0, REG_SZ, (BYTE *)JP_IME_DESC, (_tcslen(JP_IME_DESC)+1)*sizeof(TCHAR))
+        fRet &= RegSetValueEx(hKey, NULL, 0, REG_SZ, (BYTE *)PRODUCT_NAME, (_tcslen(PRODUCT_NAME)+1)*sizeof(TCHAR))
             == ERROR_SUCCESS;
 
-        if (fRet &= RegCreateKeyEx(hKey, c_szInProcSvr32, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hSubKey, &dw)
+        if (fRet &= RegCreateKeyEx(hKey, KInProcSvr32, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hSubKey, &dw)
             == ERROR_SUCCESS)
         {
-            dw = GetModuleFileName(g_hInst, achFileName, ARRAYSIZE(achFileName));
+            dw = GetModuleFileName(theModule->GetModule(), achFileName, ARRAYSIZE(achFileName));
 
             fRet &= RegSetValueEx(hSubKey, NULL, 0, REG_SZ, (BYTE *)achFileName, (lstrlen(achFileName)+1)*sizeof(TCHAR)) == ERROR_SUCCESS;
-            fRet &= RegSetValueEx(hSubKey, c_szModelName, 0, REG_SZ, (BYTE *)TEXTSERVICE_MODEL, (_tcslen(TEXTSERVICE_MODEL)+1)*sizeof(TCHAR)) == ERROR_SUCCESS;
+            fRet &= RegSetValueEx(hSubKey, KModelName, 0, REG_SZ, (BYTE *)KTextServiceModel, (_tcslen(KTextServiceModel)+1)*sizeof(TCHAR)) == ERROR_SUCCESS;
             RegCloseKey(hSubKey);
         }
         RegCloseKey(hKey);
@@ -291,11 +293,11 @@ BOOL RegisterServer()
 
 void UnregisterServer()
 {
-    TCHAR achIMEKey[ARRAYSIZE(c_szInfoKeyPrefix) + CLSID_STRLEN];
+    TCHAR achIMEKey[ARRAYSIZE(KInfoKeyPrefix) + CLSID_STRLEN];
 
-    if (!CLSIDToString(c_clsidBaidujpTSF, achIMEKey + ARRAYSIZE(c_szInfoKeyPrefix) - 1))
+    if (!CLSIDToString(c_clsidBaidujpTSF, achIMEKey + ARRAYSIZE(KInfoKeyPrefix) - 1))
         return;
-    memcpy(achIMEKey, c_szInfoKeyPrefix, sizeof(c_szInfoKeyPrefix)-sizeof(TCHAR));
+    memcpy(achIMEKey, KInfoKeyPrefix, sizeof(KInfoKeyPrefix)-sizeof(TCHAR));
 
     RecurseDeleteKey(HKEY_CLASSES_ROOT, achIMEKey);
 }

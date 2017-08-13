@@ -9,7 +9,7 @@ public:
 	ISinstar *Sinstar3_Create(ITextService *pTxtSvr,HINSTANCE hInst);
 	BOOL Sinstar3_Delete(ISinstar * pBaiduJP3);
 	BOOL BaiduJP3_OpenConfig(HWND hParent);
-	void SetBaiduJP3Path(LPCTSTR pszPath);
+	void SetCorePath(LPCTSTR pszPath);
 private:
 	CCoreLoader(void);
 	~CCoreLoader(void);

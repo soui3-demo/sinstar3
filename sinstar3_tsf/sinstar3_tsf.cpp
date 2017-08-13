@@ -60,9 +60,7 @@ PCTSTR pszAppList_Use_Ms_Method[] =
 
 CSinstar3Tsf::CSinstar3Tsf()
 {
-	XLOG_FUNCTION;
-
-    DllAddRef();
+    theModule->AddRef();
 
     //
     // Initialize the thread manager pointer.
@@ -141,10 +139,8 @@ CSinstar3Tsf::CSinstar3Tsf()
 
 CSinstar3Tsf::~CSinstar3Tsf()
 {
-	XLOG_FUNCTION;
-
 	Deactivate();
-    DllRelease();
+    theModule->Release();
 }
 
 STDAPI CSinstar3Tsf::Activate(ITfThreadMgr *pThreadMgr, TfClientId tfClientId)
@@ -228,7 +224,7 @@ STDAPI CSinstar3Tsf::Deactivate()
 	//确保输入过程结束
 	if(_IsComposing())
 	{
-		BD_VERIFY(_pThreadMgr);
+		_ASSERT(_pThreadMgr);
 		ITfContext *pCtx=(ITfContext *)GetImeContext();
 		if(pCtx) 
 			EndComposition(pCtx);
@@ -479,7 +475,7 @@ BOOL CSinstar3Tsf::_InitDisplayAttributeGuidAtom()
 
 BOOL CSinstar3Tsf::_InitBaiduJP3()
 {
-	m_pBaiduJP3=CCoreLoader::GetInstance().Sinstar3_Create(this,g_hInst);
+	m_pBaiduJP3=CCoreLoader::GetInstance().Sinstar3_Create(this,theModule->GetModule());
 	if(!m_pBaiduJP3) return FALSE;
  	m_pBaiduJP3->OnIMESelect(_bHasFocus);
  	m_pBaiduJP3->OnSetFocus(_bHasFocus && _bInEditDocument);

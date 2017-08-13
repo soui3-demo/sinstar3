@@ -142,7 +142,7 @@ BOOL WINAPI ImeSetActiveContext(HIMC hIMC,BOOL fFlag)
  		CUiWnd **ppUiWnd=(CUiWnd**)ImmLockIMCC(lpIMC->hPrivate);
  		if(ppUiWnd && ppUiWnd[0] && !IsBadWritePtr(ppUiWnd[0],sizeof(CUiWnd)))
  		{
- 			if(ppUiWnd[0]->m_pBaiduJP3) ppUiWnd[0]->m_pBaiduJP3->OnSetFocus(fFlag);
+ 			if(ppUiWnd[0]->m_pSinstar3) ppUiWnd[0]->m_pSinstar3->OnSetFocus(fFlag);
  		}
  		ImmUnlockIMCC(lpIMC->hPrivate); 
  		ImmUnlockIMC(hIMC);
@@ -166,7 +166,7 @@ BOOL WINAPI ImeProcessKey(HIMC hIMC,UINT uVKey,LPARAM lKeyData,CONST LPBYTE lpbK
 	}
 	(*ppUiWnd)->m_pCurContext=&ctx;
 
-	if((*ppUiWnd)->m_pBaiduJP3)
+	if((*ppUiWnd)->m_pSinstar3)
 	{
 		BOOL bKeyDown=(lKeyData&0x80000000)==0;
 		if(bKeyDown && (*ppUiWnd)->ProcessHotKey(uVKey,lpbKeyState))
@@ -174,7 +174,7 @@ BOOL WINAPI ImeProcessKey(HIMC hIMC,UINT uVKey,LPARAM lKeyData,CONST LPBYTE lpbK
 			bRet=TRUE;
 		}else
 		{
-			(*ppUiWnd)->m_pBaiduJP3->ProcessKeyStoke(&ctx,uVKey,lKeyData,bKeyDown,&bRet);
+			(*ppUiWnd)->m_pSinstar3->ProcessKeyStoke(&ctx,uVKey,lKeyData,bKeyDown,&bRet);
 		}
 	}
 	(*ppUiWnd)->m_pCurContext=NULL;
@@ -196,16 +196,16 @@ UINT WINAPI ImeToAsciiEx (UINT uVKey,UINT uScanCode,CONST LPBYTE lpbKeyState,LPD
 	
 	(*ppUiWnd)->m_pCurContext=&ctx;
 	BOOL bKeyDown=TRUE;
-	if((*ppUiWnd)->m_pBaiduJP3)
+	if((*ppUiWnd)->m_pSinstar3)
 	{
 		GUID guid;
 		if(bKeyDown && (*ppUiWnd)->ProcessHotKey(uVKey,lpbKeyState,&guid))
 		{
-			(*ppUiWnd)->m_pBaiduJP3->OnHotkey(&ctx,guid);
+			(*ppUiWnd)->m_pSinstar3->OnHotkey(&ctx,guid);
 		}else
 		{
 			BOOL bEaten=FALSE;
-			(*ppUiWnd)->m_pBaiduJP3->TranslateKey(&ctx,uVKey,uScanCode,bKeyDown,&bEaten);
+			(*ppUiWnd)->m_pSinstar3->TranslateKey(&ctx,uVKey,uScanCode,bKeyDown,&bEaten);
 			if(!bEaten) ctx._nMsgInBuf=0;
 		}
 	}
