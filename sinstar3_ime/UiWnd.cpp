@@ -384,7 +384,7 @@ LRESULT CUiWnd::OnSetContext(BOOL bActivate,LPARAM lParam)
 
 BOOL CUiWnd::_InitBaiduJP3()
 {
-	m_pBaiduJP3=CBaiduIMEModule::GetInstance().BaiduJP3_Create(this,g_hInst);
+	m_pBaiduJP3=CCoreLoader::GetInstance().Sinstar3_Create(this,g_hInst);
 	if(!m_pBaiduJP3) return FALSE;
 	m_pBaiduJP3->OnIMESelect(m_bActivate);
 	HIMC hIMC=(HIMC)GetWindowLongPtr(m_hWnd,IMMGWLP_IMC);
@@ -397,7 +397,7 @@ BOOL CUiWnd::_UninitBaiduJP3()
 	if(m_pBaiduJP3)
 	{
 		m_pBaiduJP3->OnIMESelect(FALSE);
-		CBaiduIMEModule::GetInstance().BaiduJP3_Delete(m_pBaiduJP3);
+		CCoreLoader::GetInstance().Sinstar3_Delete(m_pBaiduJP3);
 		m_pBaiduJP3=NULL;
 	}
 	return TRUE;

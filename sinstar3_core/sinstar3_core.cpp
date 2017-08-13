@@ -10,23 +10,23 @@
 CSinstar3Core	*theCore = NULL;
 
 
-EXTERN_C BAIDUJP3_API  ISinstar* BaiduJP3_Create(ITextService* pTxtSvr,HINSTANCE hInst)
+EXTERN_C SINSTAR3_API  ISinstar* Sinstar3_Create(ITextService* pTxtSvr,HINSTANCE hInst)
 {
 	CSinstar3Impl*  pRet= new CUnknownImpl<CSinstar3Impl>(pTxtSvr,hInst);
 	return pRet;
 }
 
-EXTERN_C BAIDUJP3_API  void BaiduJP3_Delete(ISinstar* pBaiduJP3)
+EXTERN_C SINSTAR3_API  void Sinstar3_Delete(ISinstar* pBaiduJP3)
 {
 	pBaiduJP3->Release();
 }
 
-EXTERN_C BAIDUJP3_API HRESULT BaiduJP3_CanUnloadNow()
+EXTERN_C SINSTAR3_API HRESULT Sinstar3_CanUnloadNow()
 {
 	return theCore->GetRefCount()==0;
 }
 
-EXTERN_C BAIDUJP3_API BOOL BaiduJP3_Config(HWND hWnd)
+EXTERN_C SINSTAR3_API BOOL Sinstar3_Config(HWND hWnd)
 {
 	return FALSE;
 }

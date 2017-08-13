@@ -26,7 +26,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
 #ifdef _WIN64
 			_tcscat(szPath,_T("\\x64"));
 #endif
-			CBaiduIMEModule::GetInstance().SetBaiduJP3Path(szPath);			
+			CCoreLoader::GetInstance().SetBaiduJP3Path(szPath);			
 
 		}
 		break;

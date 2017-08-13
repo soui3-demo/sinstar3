@@ -1,18 +1,18 @@
 #pragma once
 #include "../include/sinstar-i.h"
 
-class CBaiduIMEModule
+class CCoreLoader
 {
 public:
-	static CBaiduIMEModule & GetInstance();
+	static CCoreLoader & GetInstance();
 
-	ISinstar *BaiduJP3_Create(ITextService *pTxtSvr,HINSTANCE hInst);
-	BOOL BaiduJP3_Delete(ISinstar * pBaiduJP3);
+	ISinstar *Sinstar3_Create(ITextService *pTxtSvr,HINSTANCE hInst);
+	BOOL Sinstar3_Delete(ISinstar * pBaiduJP3);
 	BOOL BaiduJP3_OpenConfig(HWND hParent);
 	void SetBaiduJP3Path(LPCTSTR pszPath);
 private:
-	CBaiduIMEModule(void);
-	~CBaiduIMEModule(void);
+	CCoreLoader(void);
+	~CCoreLoader(void);
 
 	TCHAR	m_szPath[MAX_PATH];
 	CRITICAL_SECTION	m_cs;

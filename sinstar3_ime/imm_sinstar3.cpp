@@ -36,7 +36,7 @@ BOOL WINAPI ImeConfigure(HKL hKL,HWND hWnd, DWORD dwMode, LPVOID lpData)
 {	
 	switch (dwMode) {
 	case IME_CONFIG_GENERAL:
-		return CBaiduIMEModule::GetInstance().BaiduJP3_OpenConfig(hWnd);
+		return CCoreLoader::GetInstance().BaiduJP3_OpenConfig(hWnd);
 	default:
 		return (FALSE);
 	}

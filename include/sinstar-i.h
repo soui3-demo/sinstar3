@@ -29,7 +29,7 @@ interface ISinstar : public IUnknown
 	virtual HMODULE GetModule()=NULL;
 };
 
-typedef ISinstar *(*FUN_BaiduJP3_Create)(ITextService *,HINSTANCE);
-typedef void (*FUN_BaiduJP3_Delete)(ISinstar*);
-typedef BOOL (*FUN_BaiduJP3_Config)(HWND);
-typedef HRESULT (*FUN_BaiduJP3_CanUnloadNow)();
+typedef ISinstar *(*FUN_Sinstar3_Create)(ITextService *,HINSTANCE);
+typedef void (*FUN_Sinstar3_Delete)(ISinstar*);
+typedef BOOL (*FUN_Sinstar3_Config)(HWND);
+typedef HRESULT (*FUN_Sinstar3_CanUnloadNow)();

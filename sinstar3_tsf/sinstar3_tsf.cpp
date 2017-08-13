@@ -306,7 +306,7 @@ STDMETHODIMP CSinstar3Tsf::OnLayoutChange(ITfContext *pContext, TfLayoutCode lco
 
 STDMETHODIMP CSinstar3Tsf::Show(	HWND hwndParent,LANGID langid,REFGUID rguidProfile)
 {
-	CBaiduIMEModule::GetInstance().BaiduJP3_OpenConfig(hwndParent);
+	CCoreLoader::GetInstance().BaiduJP3_OpenConfig(hwndParent);
 	return S_OK;
 }
 
@@ -479,7 +479,7 @@ BOOL CSinstar3Tsf::_InitDisplayAttributeGuidAtom()
 
 BOOL CSinstar3Tsf::_InitBaiduJP3()
 {
-	m_pBaiduJP3=CBaiduIMEModule::GetInstance().BaiduJP3_Create(this,g_hInst);
+	m_pBaiduJP3=CCoreLoader::GetInstance().Sinstar3_Create(this,g_hInst);
 	if(!m_pBaiduJP3) return FALSE;
  	m_pBaiduJP3->OnIMESelect(_bHasFocus);
  	m_pBaiduJP3->OnSetFocus(_bHasFocus && _bInEditDocument);
@@ -493,7 +493,7 @@ BOOL CSinstar3Tsf::_UninitBaiduJP3()
 	if(m_pBaiduJP3)
 	{
 		m_pBaiduJP3->OnIMESelect(FALSE);
-		CBaiduIMEModule::GetInstance().BaiduJP3_Delete(m_pBaiduJP3);
+		CCoreLoader::GetInstance().Sinstar3_Delete(m_pBaiduJP3);
 		m_pBaiduJP3=NULL;
 	}
 	return TRUE;
