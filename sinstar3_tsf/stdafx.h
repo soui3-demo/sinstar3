@@ -19,7 +19,6 @@
 #include "Globals.h"
 
 #include "../include/common_def.h"
-#include "../include/BaiduJP3_WndMsg.h"
 #include "../include/TextService-i.h"
 #include "IMEMan.h"
 
