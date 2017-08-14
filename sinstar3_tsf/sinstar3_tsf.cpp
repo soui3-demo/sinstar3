@@ -364,7 +364,7 @@ Exit:
 
 void CSinstar3Tsf::StartComposition(LPVOID pImeContext)
 {
-	//TSF输入法中不需要实现该接口，而是在开始输入后的editsession中来开启一次输入过程
+	_StartComposition((ITfContext*)pImeContext);
 }
 
 
