@@ -47,10 +47,12 @@ void CSinstar3Impl:: TranslateKey(LPVOID lpImeContext,UINT vkCode,UINT uScanCode
 	{
 		SStringT strComp = m_pCompWnd->GetCompStr();
 		if(strComp.IsEmpty())
+		{
 			m_pTxtSvr->StartComposition(lpImeContext);
+			m_pTxtSvr->ReplaceSelCompositionW(lpImeContext,0,-1,NULL,0);
+		}
 		strComp.Append(vkCode);
 		m_pCompWnd->SetCompStr(strComp);
-		m_pTxtSvr->UpdateResultAndCompositionStringW(lpImeContext,NULL,0,strComp,strComp.GetLength());
 	}else if(vkCode == VK_ESCAPE || vkCode == VK_RETURN)
 	{
 		m_pTxtSvr->UpdateResultAndCompositionStringW(lpImeContext,L"∆Ù≥Ã ‰»Î∑®3",6,NULL,0);

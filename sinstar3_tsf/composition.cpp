@@ -28,6 +28,7 @@ BOOL CSinstar3Tsf::_IsComposing()
 
 void CSinstar3Tsf::_SetComposition(ITfComposition *pComposition)
 {
+	SLOG_INFO("_SetComposition,pComposition:"<<pComposition);
     _pComposition = pComposition;
 }
 

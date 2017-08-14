@@ -49,6 +49,11 @@ interface ITextService
 {
 	virtual BOOL IsCompositing()=NULL;
 	virtual void StartComposition(LPVOID lpImeContext)=NULL;
+
+	//使用指定数据替换当前编码串
+	// nLeft,nRight: [-1,-1]:在当前光标位置插入
+	//				 [0,-1]:替换全部内容
+	//				 [left,right]:替换该范围，都不能为负值
 	virtual void ReplaceSelCompositionW(LPVOID lpImeContext,int nLeft,int nRight,const WCHAR *wszComp,int nLen)=NULL;
 	virtual void UpdateResultAndCompositionStringW(LPVOID lpImeContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen)=NULL;
 	virtual void EndComposition(LPVOID lpImeContext)=NULL;

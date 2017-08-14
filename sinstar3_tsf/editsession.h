@@ -43,6 +43,7 @@ public:
 	// ITfEditSession
 	STDMETHODIMP DoEditSession(TfEditCookie ec)
 	{
+		SLOG_INFO("DoEditSession:TfEditCookie:"<<ec);
 		ITfRange * pRange;
 		if ( _pTextService->_pComposition->GetRange( &pRange) == S_OK && pRange != NULL)
 		{

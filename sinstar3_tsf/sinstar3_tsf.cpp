@@ -257,7 +257,7 @@ STDAPI CSinstar3Tsf::Deactivate()
 
 STDMETHODIMP CSinstar3Tsf::OnLayoutChange(ITfContext *pContext, TfLayoutCode lcode, ITfContextView *pContextView)
 {
-	SLOGFMTF("OnLayoutChange _pComposition=%08X",_pComposition);
+	SLOG_INFO("OnLayoutChange _pComposition:"<<_pComposition);
 	switch (lcode)
 	{
 	case TF_LC_CHANGE:
@@ -364,21 +364,12 @@ Exit:
 
 void CSinstar3Tsf::StartComposition(LPVOID pImeContext)
 {
-	HRESULT hr;
-
-	CEditSessionKeyIn *pEditSession;
-	ITfContext *pContext = (ITfContext*)pImeContext;
-	if (pEditSession = new CEditSessionKeyIn(this, pContext,0,0,NULL,0))
-	{
-		pContext->RequestEditSession(_tfClientId, pEditSession, (_bInKeyProc?TF_ES_SYNC:TF_ES_ASYNCDONTCARE) | TF_ES_READWRITE, &hr);
-		pEditSession->Release();
-	}
 }
 
 
 void CSinstar3Tsf::EndComposition(LPVOID pImeContext)
 {
-	_EndComposition((ITfContext*)pImeContext);
+	//_EndComposition((ITfContext*)pImeContext);
 }
 
 
