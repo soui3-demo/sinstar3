@@ -364,7 +364,15 @@ Exit:
 
 void CSinstar3Tsf::StartComposition(LPVOID pImeContext)
 {
-	_StartComposition((ITfContext*)pImeContext);
+	HRESULT hr;
+
+	CEditSessionKeyIn *pEditSession;
+	ITfContext *pContext = (ITfContext*)pImeContext;
+	if (pEditSession = new CEditSessionKeyIn(this, pContext,0,0,NULL,0))
+	{
+		pContext->RequestEditSession(_tfClientId, pEditSession, (_bInKeyProc?TF_ES_SYNC:TF_ES_ASYNCDONTCARE) | TF_ES_READWRITE, &hr);
+		pEditSession->Release();
+	}
 }
 
 
@@ -374,12 +382,12 @@ void CSinstar3Tsf::EndComposition(LPVOID pImeContext)
 }
 
 
-void CSinstar3Tsf::ReplaceSelCompositionW(LPVOID pImeContext,int nLeft,int nRight,WCHAR* wszComp,int nLen)
+void CSinstar3Tsf::ReplaceSelCompositionW(LPVOID pImeContext,int nLeft,int nRight,const WCHAR* wszComp,int nLen)
 {
 	_ChangeComposition((ITfContext*)pImeContext,nLeft,nRight,wszComp,nLen);
 }
 
-void CSinstar3Tsf::UpdateResultAndCompositionStringW(LPVOID lpImeContext,WCHAR *wszResultStr,int nResStrLen,WCHAR *wszCompStr,int nCompStrLen)
+void CSinstar3Tsf::UpdateResultAndCompositionStringW(LPVOID lpImeContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen)
 {
 	_UpdateResultAndCompositionStringW((ITfContext*)lpImeContext,wszResultStr,nResStrLen,wszCompStr,nCompStrLen);
 }

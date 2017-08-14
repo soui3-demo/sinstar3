@@ -49,8 +49,8 @@ interface ITextService
 {
 	virtual BOOL IsCompositing()=NULL;
 	virtual void StartComposition(LPVOID lpImeContext)=NULL;
-	virtual void ReplaceSelCompositionW(LPVOID lpImeContext,int nLeft,int nRight,WCHAR *wszComp,int nLen)=NULL;
-	virtual void UpdateResultAndCompositionStringW(LPVOID lpImeContext,WCHAR *wszResultStr,int nResStrLen,WCHAR *wszCompStr,int nCompStrLen)=NULL;
+	virtual void ReplaceSelCompositionW(LPVOID lpImeContext,int nLeft,int nRight,const WCHAR *wszComp,int nLen)=NULL;
+	virtual void UpdateResultAndCompositionStringW(LPVOID lpImeContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen)=NULL;
 	virtual void EndComposition(LPVOID lpImeContext)=NULL;
 	virtual int  MoveCaretPos(LPVOID lpImeContext,int nPos,BOOL bSet)=NULL;
 	virtual LPVOID GetImeContext()=NULL;

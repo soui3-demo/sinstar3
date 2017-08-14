@@ -273,7 +273,7 @@ public:
 class CEditSessionKeyIn:public CEditSessionBase
 {
 public:
-	CEditSessionKeyIn(CSinstar3Tsf *pTextService, ITfContext *pContext,int nLeft,int nRight,LPWSTR pszBuf,int nLen) 
+	CEditSessionKeyIn(CSinstar3Tsf *pTextService, ITfContext *pContext,int nLeft,int nRight,LPCWSTR pszBuf,int nLen) 
 		: CEditSessionBase(pTextService, pContext)
 	{
 		if(nLen) 

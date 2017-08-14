@@ -28,11 +28,21 @@ CSinstar3Impl::~CSinstar3Impl(void)
 
 void CSinstar3Impl:: ProcessKeyStoke(LPVOID lpImeContext,UINT vkCode,LPARAM lParam,BOOL bKeyDown,BOOL *pbEaten)
 {
-	*pbEaten = TRUE;
 	if(!bKeyDown)
 	{
+		*pbEaten = FALSE;
+		return;
+	}else
+	{
+		*pbEaten = TRUE;
 		return;
 	}
+}
+
+void CSinstar3Impl:: TranslateKey(LPVOID lpImeContext,UINT vkCode,UINT uScanCode,BOOL bKeyDown,BOOL *pbEaten)
+{
+	if(!bKeyDown) return;
+
 	if(isprint(vkCode))
 	{
 		SStringT strComp = m_pCompWnd->GetCompStr();
@@ -40,17 +50,13 @@ void CSinstar3Impl:: ProcessKeyStoke(LPVOID lpImeContext,UINT vkCode,LPARAM lPar
 			m_pTxtSvr->StartComposition(lpImeContext);
 		strComp.Append(vkCode);
 		m_pCompWnd->SetCompStr(strComp);
+		m_pTxtSvr->UpdateResultAndCompositionStringW(lpImeContext,NULL,0,strComp,strComp.GetLength());
 	}else if(vkCode == VK_ESCAPE || vkCode == VK_RETURN)
 	{
 		m_pTxtSvr->UpdateResultAndCompositionStringW(lpImeContext,L"Æô³ÌÊäÈë·¨3",6,NULL,0);
 		m_pTxtSvr->EndComposition(lpImeContext);
 		m_pCompWnd->SetCompStr(_T(""));
 	}
-}
-
-void CSinstar3Impl:: TranslateKey(LPVOID lpImeContext,UINT vkCode,UINT uScanCode,BOOL bKeyDown,BOOL *pbEaten)
-{
-
 }
 
 void CSinstar3Impl::OnIMESelect(BOOL bSelect)

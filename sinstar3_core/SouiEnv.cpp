@@ -70,6 +70,9 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 	SASSERT_FMT(bLoaded,_T("load ILog4zManager failed!"),_T("log4z"));
 
 	m_theApp->SetLogManager(pLogMgr);
+
+	_tcscpy(lpInsertPos,_T("\\data\\log"));
+	pLogMgr->setLoggerPath(0,S_CT2A(szCurrentDir));
 	pLogMgr->start();
 
 	//从DLL加载系统资源

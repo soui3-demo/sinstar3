@@ -31,8 +31,8 @@ public:
 	//ITextService
 	BOOL IsCompositing();
 	void StartComposition(LPVOID lpImeContext);
-	void ReplaceSelCompositionW(LPVOID lpImeContext,int nLeft,int nRight,WCHAR *wszComp,int nLen);
-	void UpdateResultAndCompositionStringW(LPVOID lpImeContext,WCHAR *wszResultStr,int nResStrLen,WCHAR *wszCompStr,int nCompStrLen);
+	void ReplaceSelCompositionW(LPVOID lpImeContext,int nLeft,int nRight,const WCHAR *wszComp,int nLen);
+	void UpdateResultAndCompositionStringW(LPVOID lpImeContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen);
 	void EndComposition(LPVOID lpImeContext);
 	int  MoveCaretPos(LPVOID lpImeContext,int nPos,BOOL bSet);
 	LPVOID GetImeContext();

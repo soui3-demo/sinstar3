@@ -36,7 +36,7 @@ void CUiWnd::StartComposition(LPVOID lpImeContext)
 // nLeft,nRight: [-1,-1]:在当前光标位置插入
 //				 [0,-1]:替换全部内容
 //				 [left,right]:替换该范围，都不能为负值
-void CUiWnd::ReplaceSelCompositionW(LPVOID lpImeContext,int nLeft,int nRight,WCHAR *wszComp,int nLen)
+void CUiWnd::ReplaceSelCompositionW(LPVOID lpImeContext,int nLeft,int nRight,const WCHAR *wszComp,int nLen)
 {
 #ifdef _UNICODE
 	_ASSERT(lpImeContext);
@@ -73,7 +73,7 @@ void CUiWnd::ReplaceSelCompositionW(LPVOID lpImeContext,int nLeft,int nRight,WCH
 
 }
 
-void CUiWnd::UpdateResultAndCompositionStringW(LPVOID lpImeContext,WCHAR *wszResultStr,int nResStrLen,WCHAR *wszCompStr,int nCompStrLen)
+void CUiWnd::UpdateResultAndCompositionStringW(LPVOID lpImeContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen)
 {
 #ifdef _UNICODE
 	_ASSERT(lpImeContext);

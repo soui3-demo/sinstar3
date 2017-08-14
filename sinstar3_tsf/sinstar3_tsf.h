@@ -82,8 +82,8 @@ public:
 	//ITextService
 	BOOL IsCompositing();
 	void StartComposition(LPVOID pImeContext);
-	void ReplaceSelCompositionW(LPVOID pImeContext,int nLeft,int nRight,WCHAR* wszComp,int nLen);
-	void UpdateResultAndCompositionStringW(LPVOID lpImeContext,WCHAR *wszResultStr,int nResStrLen,WCHAR *wszCompStr,int nCompStrLen);
+	void ReplaceSelCompositionW(LPVOID pImeContext,int nLeft,int nRight,const WCHAR* wszComp,int nLen);
+	void UpdateResultAndCompositionStringW(LPVOID lpImeContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen);
 	void EndComposition(LPVOID pImeContext);
 	int  MoveCaretPos(LPVOID lpImeContext,int nPos,BOOL bSet);
 	LPVOID GetImeContext();
@@ -115,8 +115,8 @@ public:
 
     // functions for the composition object.
 	void _StartComposition(ITfContext *pContext);
-	void _ChangeComposition(ITfContext *pContext,int nLeft,int nRight,WCHAR* wszComp,int nLen);
-	void _UpdateResultAndCompositionStringW(ITfContext * pContext,WCHAR *wszResultStr,int nResStrLen,WCHAR *wszCompStr,int nCompStrLen);
+	void _ChangeComposition(ITfContext *pContext,int nLeft,int nRight,const WCHAR* wszComp,int nLen);
+	void _UpdateResultAndCompositionStringW(ITfContext * pContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen);
 	void _EndComposition(ITfContext *pContext);
 	BOOL _EndCompositionEx();
 	int  _MoveCaretPos(ITfContext *pContext,int nPos,BOOL bSet);

@@ -151,7 +151,7 @@ BOOL CSinstar3Tsf::_EndCompositionEx()
 }
 
 
-void CSinstar3Tsf::_ChangeComposition(ITfContext *pContext,int nLeft,int nRight,WCHAR* wszComp,int nLen)
+void CSinstar3Tsf::_ChangeComposition(ITfContext *pContext,int nLeft,int nRight,const WCHAR* wszComp,int nLen)
 {
 	HRESULT hr;
 
@@ -163,7 +163,7 @@ void CSinstar3Tsf::_ChangeComposition(ITfContext *pContext,int nLeft,int nRight,
 	}
 }
 
-void CSinstar3Tsf::_UpdateResultAndCompositionStringW(ITfContext * pContext,WCHAR *wszResultStr,int nResStrLen,WCHAR *wszCompStr,int nCompStrLen)
+void CSinstar3Tsf::_UpdateResultAndCompositionStringW(ITfContext * pContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen)
 {
 	HRESULT hr;
 
