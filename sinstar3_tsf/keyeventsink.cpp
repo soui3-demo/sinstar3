@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "sinstar3_tsf.h"
+#include "editsession.h"
 
 STDAPI CSinstar3Tsf::OnSetFocus(BOOL fForeground)
 {
@@ -33,7 +34,6 @@ STDAPI CSinstar3Tsf::OnTestKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lPa
 	return S_OK;
 }
 
-#include "editsession.h"
 
 STDAPI CSinstar3Tsf::OnKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {
