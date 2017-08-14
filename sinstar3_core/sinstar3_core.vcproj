@@ -500,6 +500,10 @@
 				RelativePath=".\sinstar3_core.rc"
 				>
 			</File>
+			<File
+				RelativePath=".\res\version.rc2"
+				>
+			</File>
 		</Filter>
 		<File
 			RelativePath=".\ReadMe.txt"

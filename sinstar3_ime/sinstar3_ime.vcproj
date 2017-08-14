@@ -482,6 +482,10 @@
 				RelativePath=".\sinstar3_ime.rc"
 				>
 			</File>
+			<File
+				RelativePath=".\res\version.rc2"
+				>
+			</File>
 		</Filter>
 		<File
 			RelativePath=".\ReadMe.txt"

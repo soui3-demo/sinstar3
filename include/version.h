@@ -11,7 +11,10 @@
 #define _sinstar3_ime_version_c		0
 #define _sinstar3_ime_version_d		1
 
-#define _sinstar3_ime_name				启程输入法
+#define _sinstar3_ime_name			启程输入法
+#define _sinstar3_ime				启程输入法IME模块
+#define _sinstar3_tsf				启程输入法TSF模块
+
 
 
 #define _sinstar3_ime_string(a)		#a
@@ -34,3 +37,6 @@
 #define VERSION_STR		sinstar3_ime_str_version( _sinstar3_ime_version_a, _sinstar3_ime_version_b, _sinstar3_ime_version_c, _sinstar3_ime_version_d)
 #define PRODUCT_NAME	sinstar3_ime_tstring( _sinstar3_ime_name)
 #define PRODUCT_WNAME	sinstar3_ime_wstring( _sinstar3_ime_name)
+
+#define PRODUCT_IME	sinstar3_ime_tstring( _sinstar3_ime)
+#define PRODUCT_TSF	sinstar3_ime_wstring( _sinstar3_tsf)
