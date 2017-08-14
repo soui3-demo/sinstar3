@@ -29,6 +29,7 @@
 #include "../include/version.h"
 #include "../include/sinstar-i.h"
 #include "../include/reg.h"
+#include "../include/slog_wrapper.h"
 
 #include "../core_loader/core_loader.h"
 

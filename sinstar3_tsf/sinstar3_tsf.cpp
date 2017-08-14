@@ -473,9 +473,13 @@ BOOL CSinstar3Tsf::_InitDisplayAttributeGuidAtom()
 	return (hr == S_OK);
 }
 
+CLogStateListener g_LogListener;
+
 BOOL CSinstar3Tsf::_InitSinstar3()
 {
 	m_pSinstar3=CCoreLoader::GetInstance().Sinstar3_Create(this,theModule->GetModule());
+	CCoreLoader::GetInstance().Sinstar3_SetLogStateListener(&g_LogListener);
+
 	if(!m_pSinstar3) return FALSE;
  	m_pSinstar3->OnIMESelect(_bHasFocus);
  	m_pSinstar3->OnSetFocus(_bHasFocus && _bInEditDocument);

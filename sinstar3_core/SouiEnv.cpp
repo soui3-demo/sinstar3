@@ -65,6 +65,13 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 	m_theApp->SetToolTipFactory(new SToolTipFactory());
 	m_theApp->GetToolTipFactory()->Release();
 
+	CAutoRefPtr<ILog4zManager> pLogMgr;
+	bLoaded = m_pComMgr->CreateLog4z((IObjRef**)&pLogMgr);
+	SASSERT_FMT(bLoaded,_T("load ILog4zManager failed!"),_T("log4z"));
+
+	m_theApp->SetLogManager(pLogMgr);
+	pLogMgr->start();
+
 	//从DLL加载系统资源
 	HMODULE hModSysResource = LoadLibrary(SYS_NAMED_RESOURCE);
 	if (hModSysResource)

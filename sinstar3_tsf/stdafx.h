@@ -18,6 +18,7 @@
 #include "../include/version.h"
 #include "../include/TextService-i.h"
 #include "../include/sinstar3_guids.h"
+#include "../include/slog_wrapper.h"
 
 #include "TsfModule.h"
 #include "Globals.h"

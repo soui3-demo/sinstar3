@@ -28,8 +28,13 @@ EXTERN_C SINSTAR3_API BOOL Sinstar3_Config(HWND hWnd)
 	return FALSE;
 }
 
+EXTERN_C SINSTAR3_API void Sinstar3_SetLogStateListener(ILogStateListener *pListener)
+{
+	theModule->SetLogStateListener(pListener);
+}
 
-CSinstar3Core::CSinstar3Core(HINSTANCE hInst):CModuleRef(hInst)
+
+CSinstar3Core::CSinstar3Core(HINSTANCE hInst):CModuleRef(hInst),m_pLogStateListener(NULL)
 {
 }
 
@@ -41,9 +46,26 @@ void CSinstar3Core::OnInit()
 {
 	CMinidump::Enable();
 	new CSouiEnv(GetModule());
+	if(m_pLogStateListener)
+	{
+		m_pLogStateListener->OnLogMgrReady(CSouiEnv::getSingleton().theApp()->GetLogManager());
+	}
 }
 
 void CSinstar3Core::OnFinalRelease()
 {
+	if(m_pLogStateListener)
+	{
+		m_pLogStateListener->OnLogMgrFree();
+	}
 	delete CSouiEnv::getSingletonPtr();
+}
+
+void CSinstar3Core::SetLogStateListener(ILogStateListener *pListener)
+{
+	m_pLogStateListener = pListener;
+	if(CSouiEnv::getSingletonPtr())
+	{
+		m_pLogStateListener->OnLogMgrReady(CSouiEnv::getSingleton().theApp()->GetLogManager());
+	}
 }

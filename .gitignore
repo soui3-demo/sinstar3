@@ -21,6 +21,7 @@
 *.clw
 *.scc
 *.suo
+*.dll
 x64
 Release
 Debug

@@ -29,7 +29,19 @@ interface ISinstar : public IUnknown
 	virtual HMODULE GetModule()=NULL;
 };
 
+namespace SOUI
+{
+	struct ILog4zManager;
+}
+
+interface ILogStateListener
+{
+	virtual void OnLogMgrReady(SOUI::ILog4zManager *)=0;
+	virtual void OnLogMgrFree()=0;
+};
+
 typedef ISinstar *(*FUN_Sinstar3_Create)(ITextService *,HINSTANCE);
 typedef void (*FUN_Sinstar3_Delete)(ISinstar*);
 typedef BOOL (*FUN_Sinstar3_Config)(HWND);
 typedef HRESULT (*FUN_Sinstar3_CanUnloadNow)();
+typedef void (*FUN_Sinstar3_SetLogStateListener)(ILogStateListener *pListener);

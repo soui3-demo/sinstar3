@@ -77,6 +77,18 @@ BOOL CCoreLoader::Sinstar3_OpenConfig(HWND hParent)
 	return bRet;
 }
 
+void CCoreLoader::Sinstar3_SetLogStateListener(ILogStateListener *pListener)
+{
+	CAutoLock lock(&m_cs);
+
+	HMODULE	hCoreModule=LoadLibrary(m_szPath);
+	if(!hCoreModule) return;
+	BOOL bRet=FALSE;
+	FUN_Sinstar3_SetLogStateListener funSetLogStateListener=(FUN_Sinstar3_SetLogStateListener)GetProcAddress(hCoreModule,"Sinstar3_SetLogStateListener");
+	if(funSetLogStateListener) funSetLogStateListener(pListener);
+	FreeLibrary(hCoreModule);
+}
+
 CCoreLoader & CCoreLoader::GetInstance()
 {
 	static CCoreLoader thiz;
