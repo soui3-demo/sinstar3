@@ -4,7 +4,7 @@
 
 STDAPI CSinstar3Tsf::OnSetFocus(BOOL fForeground)
 {
-	Helper_Trace(L"ITfKeyEventSink::OnSetFocus, fForeground: %d", fForeground);
+	SLOG_INFO("ITfKeyEventSink::OnSetFocus, fForeground:"<<fForeground);
     return S_OK;
 }
 
@@ -18,9 +18,10 @@ STDAPI CSinstar3Tsf::OnTestKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM l
 
 	m_pSinstar3->ProcessKeyStoke(pContext,wParam,lParam, TRUE, pfEaten);
 
-	Helper_Trace(_T("OnTestKeyDown: wParam:%08x,lparam:%08x"),wParam,lParam);
+	SLOGFMTF("OnTestKeyDown: wParam:%08x,lparam:%08x",wParam,lParam);
     return S_OK;
 }
+
 STDAPI CSinstar3Tsf::OnTestKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {
 	if (!m_pSinstar3 || _IsKeyboardDisabled()/* || !_IsKeyboardOpen()*/)
@@ -38,7 +39,7 @@ STDAPI CSinstar3Tsf::OnTestKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lPa
 STDAPI CSinstar3Tsf::OnKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {
 	HRESULT hr = E_FAIL;
-	Helper_Trace(L"OnKeyDown: %x %x", wParam, lParam);
+	SLOGFMTF("OnKeyDown: %x %x", wParam, lParam);
 	_bInKeyProc=TRUE;
 
 	OnTestKeyDown(pContext,wParam,lParam,pfEaten);
@@ -52,7 +53,7 @@ STDAPI CSinstar3Tsf::OnKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM lPara
 
 STDAPI CSinstar3Tsf::OnKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {
-	Helper_Trace(L"OnKeyUp: %x %x", wParam, lParam);
+	SLOGFMTF("OnKeyUp: %x %x", wParam, lParam);
 	OnTestKeyUp(pContext,wParam,lParam,pfEaten);
 	if(*pfEaten)
 	{
@@ -63,7 +64,7 @@ STDAPI CSinstar3Tsf::OnKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lParam,
 
 STDAPI CSinstar3Tsf::OnPreservedKey(ITfContext *pic, REFGUID rguid, BOOL *pfEaten)
 {
-	Helper_Trace(L"OnPreservedKey");
+	SLOGFMTF("OnPreservedKey");
 	*pfEaten=m_pSinstar3->OnHotkey(pic,rguid);
 	return S_OK;
 }

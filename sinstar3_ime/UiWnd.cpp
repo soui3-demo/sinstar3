@@ -107,7 +107,6 @@ LRESULT CUiWnd::WindowProc(UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
 	HIMC hIMC=(HIMC)GetWindowLongPtr(m_hWnd,IMMGWLP_IMC);
 	if(!hIMC && IsIMEMessage(uMsg)) return 0;
-//	Helper_Trace(_T("UIWndProc, uMsg:%08X(%d),wParam:%08X(%d),lParam:%08X(%d)"),uMsg,uMsg,wParam,wParam,lParam,lParam);
 	switch(uMsg)
 	{
 	case WM_MOUSEACTIVATE:
@@ -162,7 +161,7 @@ LRESULT CUiWnd::OnTimer(WPARAM nEventID)
 
 LRESULT CUiWnd::OnImeSelect(BOOL bSelect,LPARAM lParam)
 {
-	Helper_Trace(_T("OnImeSelect,bSelect:%d,lParam:%08x(%d)"),bSelect,lParam,lParam);
+	SLOGFMTF("OnImeSelect,bSelect:%d,lParam:%08x(%d)",bSelect,lParam,lParam);
 	AttachToIMC(bSelect);
 	OnImeNotify(IMN_SETOPENSTATUS,0);
 	OnImeNotify(IMN_SETCONVERSIONMODE,0);
@@ -186,7 +185,7 @@ POINT CUiWnd::GetAbsPos(HWND hWnd,DWORD dwStyle,POINT ptCur,RECT rc)
 
 LRESULT CUiWnd::OnImeControl(WPARAM wParam,LPARAM lParam)
 {
-	Helper_Trace(_T("OnImeControl, wParam:%08X(%d),lParam:%08X(%d)"),wParam,wParam,lParam,lParam);
+	SLOGFMTF("OnImeControl, wParam:%08X(%d),lParam:%08X(%d)",wParam,wParam,lParam,lParam);
 	LPINPUTCONTEXT lpIMC;
 	HIMC hIMC=(HIMC)GetWindowLongPtr(m_hWnd,IMMGWLP_IMC);
 	_ASSERT(hIMC);
@@ -214,20 +213,18 @@ LRESULT CUiWnd::OnImeControl(WPARAM wParam,LPARAM lParam)
 
 LRESULT CUiWnd::OnImeNotify(WPARAM wParam,LPARAM lParam)
 {
-//	Helper_Trace(_T("OnImeNotify, wParam:%08X(%d),lParam:%08X(%d)"),wParam,wParam,lParam,lParam);
 	HIMC hIMC=(HIMC)GetWindowLongPtr(m_hWnd,IMMGWLP_IMC);
 	switch(wParam)
 	{
 	case IMN_OPENSTATUSWINDOW:
 		if(m_pSinstar3) m_pSinstar3->OnSetFocus(TRUE);
-		//if(m_wndComp.m_bValid) m_wndComp.ShowWindow(SW_SHOWNOACTIVATE);
 		m_wndComp.ShowWindow(m_wndComp.m_bValid ? SW_SHOWNOACTIVATE : SW_HIDE);
-		Helper_Trace(_T("IMN_OPENSTATUSWINDOW"));
+		SLOGFMTF("IMN_OPENSTATUSWINDOW");
 		break;
 	case IMN_CLOSESTATUSWINDOW:
 		if(m_pSinstar3) m_pSinstar3->OnSetFocus(FALSE);
 		if(m_wndComp.m_bValid) m_wndComp.ShowWindow(SW_HIDE);
-		Helper_Trace(_T("IMN_CLOSESTATUSWINDOW"));
+		SLOGFMTF("IMN_CLOSESTATUSWINDOW");
 		break;
 	case IMN_OPENCANDIDATE:
 		OnImeNotify(IMN_SETCOMPOSITIONFONT,0);		break;
@@ -278,7 +275,7 @@ LRESULT CUiWnd::OnImeNotify(WPARAM wParam,LPARAM lParam)
 					}
 					pt.y-=HEI_LINEMARGIN;
 					m_pSinstar3->OnSetCaretPosition(pt,m_nFontHei);
-					Helper_Trace(_T("IMN_SETCOMPOSITIONWINDOW,pt=(%d,%d)"),pt.x,pt.y);
+					SLOGFMTF("IMN_SETCOMPOSITIONWINDOW,pt=(%d,%d)",pt.x,pt.y);
 					ImmUnlockIMCC(lpIMC->hCompStr);
 				}
 				ImmUnlockIMC(hIMC);
@@ -315,7 +312,7 @@ LRESULT CUiWnd::OnImeNotify(WPARAM wParam,LPARAM lParam)
 							}
 						}
 						pt.y-=HEI_LINEMARGIN;
-						Helper_Trace(_T("IMN_SETCANDIDATEPOS,pt=(%d,%d)"),pt.x,pt.y);
+						SLOGFMTF("IMN_SETCANDIDATEPOS,pt=(%d,%d)",pt.x,pt.y);
 						m_pSinstar3->OnSetFocusSegmentPosition(pt,m_nFontHei);
 					}
 					ImmUnlockIMCC(lpIMC->hCompStr);
@@ -369,7 +366,7 @@ LRESULT CUiWnd::OnImeNotify(WPARAM wParam,LPARAM lParam)
 
 LRESULT CUiWnd::OnSetContext(BOOL bActivate,LPARAM lParam)
 {
-	Helper_Trace(_T("OnSetContext,bActivate:%d"),bActivate);
+	SLOGFMTF("OnSetContext,bActivate:%d",bActivate);
 	m_bActivate=bActivate;
 	if(bActivate)
 	{
@@ -411,7 +408,7 @@ LRESULT CUiWnd::OnCreate()
 {
 	if(g_dwSystemInfoFlags & IME_SYSINFO_WINLOGON) return -1;
 
-	Helper_Trace(_T("CUiWnd::OnCreate,hWnd:%08x"),m_hWnd);
+	SLOGFMTF("CUiWnd::OnCreate,hWnd:%08x",m_hWnd);
 	_InitSinstar3();
 	m_wndComp.Create(WS_EX_TOOLWINDOW|WS_EX_LAYERED|WS_EX_NOACTIVATE,WS_POPUP|WS_DISABLED,m_hWnd,0,g_hInst);
 	PostMessage(WM_IME_NOTIFY,IMN_SETCONVERSIONMODE,0);
@@ -422,7 +419,7 @@ LRESULT CUiWnd::OnDestroy()
 {
 	_UninitSinstar3();
 	m_wndComp.Destroy();
-	Helper_Trace(_T("CUiWnd::OnDestroy"));
+	SLOGFMTF("CUiWnd::OnDestroy");
 	return 0;
 }
 

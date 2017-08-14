@@ -17,8 +17,6 @@
 #define GLOBALS_H
 
 
-void Helper_Trace(LPCTSTR pszFormat,...);
-
 BOOL IsRangeCovered(TfEditCookie ec, ITfRange *pRangeTest, ITfRange *pRangeCover);
 
 BOOL AdviseSink(IUnknown *pSource, IUnknown *pSink, REFIID riid, DWORD *pdwCookie);

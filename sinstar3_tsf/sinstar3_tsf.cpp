@@ -145,7 +145,7 @@ CSinstar3Tsf::~CSinstar3Tsf()
 
 STDAPI CSinstar3Tsf::Activate(ITfThreadMgr *pThreadMgr, TfClientId tfClientId)
 {
-	Helper_Trace(L"Activate %x %x", pThreadMgr, tfClientId);
+	SLOGFMTF("Activate %x %x", pThreadMgr, tfClientId);
 
 	SHORT sSt=GetKeyState(VK_KANA);
 	if(GetKeyState(VK_KANA)&0x01)
@@ -220,7 +220,7 @@ ExitError:
 
 STDAPI CSinstar3Tsf::Deactivate()
 {
-	Helper_Trace(_T("Deactivate"));
+	SLOGFMTF("Deactivate");
 	//确保输入过程结束
 	if(_IsComposing())
 	{
@@ -257,7 +257,7 @@ STDAPI CSinstar3Tsf::Deactivate()
 
 STDMETHODIMP CSinstar3Tsf::OnLayoutChange(ITfContext *pContext, TfLayoutCode lcode, ITfContextView *pContextView)
 {
-	Helper_Trace(_T("OnLayoutChange _pComposition=%08X"),_pComposition);
+	SLOGFMTF("OnLayoutChange _pComposition=%08X",_pComposition);
 	switch (lcode)
 	{
 	case TF_LC_CHANGE:
@@ -283,13 +283,13 @@ STDMETHODIMP CSinstar3Tsf::OnLayoutChange(ITfContext *pContext, TfLayoutCode lco
 
 	case TF_LC_DESTROY:
 		{
-			Helper_Trace(_T("LayoutChange:Destroy"));
+			SLOGFMTF("LayoutChange:Destroy");
 		}
 		break;
 
 	case TF_LC_CREATE:
 		{
-			Helper_Trace(_T("LayoutChange:Create"));
+			SLOGFMTF("LayoutChange:Create");
 		}
 		break;
 

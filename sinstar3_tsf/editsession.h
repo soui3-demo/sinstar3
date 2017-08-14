@@ -89,7 +89,7 @@ public:
 			HRESULT hr = _pContextView->GetTextExt( ec, range, &rc, &fClipped);
 			if ( hr == S_OK)
 			{
-				Helper_Trace(_T("GetTextExt, 0, %d, %d, %d, %d"), rc.left, rc.top, rc.right, rc.bottom);
+				SLOGFMTF("GetTextExt, 0, %d, %d, %d, %d", rc.left, rc.top, rc.right, rc.bottom);
 				rcLast = rc;
 			}
 
@@ -100,7 +100,7 @@ public:
 				{
 					if ( _pContextView->GetTextExt( ec, range, &rc, &fClipped) == S_OK)
 					{
-						Helper_Trace(_T("GetTextExt, %d, %d, %d, %d, %d"), i, rc.left, rc.top, rc.right, rc.bottom);
+						SLOGFMTF("GetTextExt, %d, %d, %d, %d, %d", i, rc.left, rc.top, rc.right, rc.bottom);
 
 						if ( rc.bottom > rcLast.bottom)
 						{
@@ -177,7 +177,7 @@ public:
 			//
 
 			_pTextService->m_pSinstar3->OnSetCaretPosition( *(POINT*)&rcLast, rcLast.bottom - rcLast.top);			
-			Helper_Trace(_T("SetCaret Pos 1:%d,%d, height: %d"),rcLast.left,rcLast.top, rcLast.bottom - rcLast.top);
+			SLOGFMTF("SetCaret Pos 1:%d,%d, height: %d",rcLast.left,rcLast.top, rcLast.bottom - rcLast.top);
 			
 			range->Release();
 		}
@@ -201,11 +201,11 @@ public:
 		}
 		if(rc.bottom-rc.top>=1)
 		{//获得有效的候选位置
-			Helper_Trace(_T("SetCaret Pos 2:%d,%d, height: %d"),rc.left, rc.top, rc.bottom - rc.top);
+			SLOGFMTF("SetCaret Pos 2:%d,%d, height: %d",rc.left, rc.top, rc.bottom - rc.top);
 			_pTextService->m_pSinstar3->OnSetFocusSegmentPosition(*(POINT*)&rc,rc.bottom-rc.top);
 		}else if(rc.left==-1 && rc.top==-1)
 		{
-			Helper_Trace(_T("SetCaret Pos 3:%d,%d, height: %d"),rc.left, rc.top, 0);
+			SLOGFMTF("SetCaret Pos 3:%d,%d, height: %d",rc.left, rc.top, 0);
 			_pTextService->m_pSinstar3->OnSetFocusSegmentPosition(*(POINT*)&rc,0);
 		}		
 

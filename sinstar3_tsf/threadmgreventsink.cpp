@@ -11,7 +11,7 @@
 
 STDAPI CSinstar3Tsf::OnInitDocumentMgr(ITfDocumentMgr *pDocMgr)
 {
-	Helper_Trace(_T("OnInitDocumentMgr"));
+	SLOGFMTF("OnInitDocumentMgr");
 
     return S_OK;
 }
@@ -26,7 +26,7 @@ STDAPI CSinstar3Tsf::OnInitDocumentMgr(ITfDocumentMgr *pDocMgr)
 
 STDAPI CSinstar3Tsf::OnUninitDocumentMgr(ITfDocumentMgr *pDocMgr)
 {
-	Helper_Trace(_T("OnUninitDocumentMgr"));
+	SLOGFMTF("OnUninitDocumentMgr");
     return S_OK;
 }
 
@@ -41,7 +41,7 @@ STDAPI CSinstar3Tsf::OnUninitDocumentMgr(ITfDocumentMgr *pDocMgr)
 
 STDAPI CSinstar3Tsf::OnSetFocus(ITfDocumentMgr *pDocMgrFocus, ITfDocumentMgr *pDocMgrPrevFocus)
 {
-	Helper_Trace(L"ITfThreadMgrEventSink::OnSetFocus, pDocMgrFocus is %x, pDocMgrPrevFocus is %x", pDocMgrFocus, pDocMgrPrevFocus);
+	SLOGFMTF("ITfThreadMgrEventSink::OnSetFocus, pDocMgrFocus is %x, pDocMgrPrevFocus is %x", pDocMgrFocus, pDocMgrPrevFocus);
     //
     // Whenever focus is changed, initialize the TextEditSink.
     //
@@ -57,7 +57,7 @@ STDAPI CSinstar3Tsf::OnSetFocus(ITfDocumentMgr *pDocMgrFocus, ITfDocumentMgr *pD
 
 STDAPI CSinstar3Tsf::OnSetThreadFocus()
 {
-	Helper_Trace(_T("OnSetThreadFocus"));
+	SLOGFMTF("OnSetThreadFocus");
 
 	_bHasFocus=TRUE;
 	if(m_pSinstar3)
@@ -69,7 +69,7 @@ STDAPI CSinstar3Tsf::OnSetThreadFocus()
 
 STDAPI CSinstar3Tsf::OnKillThreadFocus()
 {
-	Helper_Trace(_T("OnKillThreadFocus"));
+	SLOGFMTF("OnKillThreadFocus");
 
 	_bHasFocus=FALSE;
 	if(m_pSinstar3)
@@ -88,7 +88,7 @@ STDAPI CSinstar3Tsf::OnKillThreadFocus()
 
 STDAPI CSinstar3Tsf::OnPushContext(ITfContext *pContext)
 {
-	Helper_Trace(_T("###PushContext =%08x"),pContext);
+	SLOGFMTF("###PushContext =%08x",pContext);
     return S_OK;
 }
 
@@ -101,7 +101,7 @@ STDAPI CSinstar3Tsf::OnPushContext(ITfContext *pContext)
 
 STDAPI CSinstar3Tsf::OnPopContext(ITfContext *pContext)
 {
-	Helper_Trace(_T("PopContext =%08x"),pContext);
+	SLOGFMTF("PopContext =%08x",pContext);
     return S_OK;
 }
 

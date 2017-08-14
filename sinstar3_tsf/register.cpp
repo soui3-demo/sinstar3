@@ -73,7 +73,7 @@ BOOL RegisterProfiles()
 	if ( hKLBaiduJP)
 	{
 		hr = pInputProcessProfiles->SubstituteKeyboardLayout( c_clsidSinstar3TSF, TEXTSERVICE_LANGID, c_guidProfile, hKLBaiduJP);
-		Helper_Trace(_T("SubstituteKeyboardLayout:%d"),SUCCEEDED(hr));
+		SLOGFMTF("SubstituteKeyboardLayout:%d",SUCCEEDED(hr));
 	}
 
 	hr = pInputProcessProfiles->EnableLanguageProfile( c_clsidSinstar3TSF, TEXTSERVICE_LANGID, c_guidProfile, TRUE);

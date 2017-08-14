@@ -11,6 +11,8 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
 #ifdef _DEBUG
 		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF|_CRTDBG_LEAK_CHECK_DF);
 #endif
+		SLOG_INFO(L"DLL_PROCESS_ATTACH");
+
 		theModule = new CTsfModule(hInstance);
 		{
 
@@ -33,7 +35,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
 
 	case DLL_PROCESS_DETACH:
 		{
-			Helper_Trace(L"DLL_PROCESS_DETACH");
+			SLOG_INFO(L"DLL_PROCESS_DETACH");
 			delete theModule;
 			theModule = NULL;
 		}
@@ -41,13 +43,13 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
 
 	case DLL_THREAD_ATTACH:
 		{
-			Helper_Trace(L"DLL_THREAD_ATTACH");
+			SLOG_INFO(L"DLL_THREAD_ATTACH");
 		}
 		break;
 
 	case DLL_THREAD_DETACH:
 		{
-			Helper_Trace(L"DLL_THREAD_DETACH");
+			SLOG_INFO(L"DLL_THREAD_DETACH");
 		}
 		break;
 	}

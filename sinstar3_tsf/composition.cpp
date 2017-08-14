@@ -4,7 +4,7 @@
 
 STDAPI CSinstar3Tsf::OnCompositionTerminated(TfEditCookie ecWrite, ITfComposition *pComposition)
 {
-	Helper_Trace(_T("OnCompositionTerminated"));
+	SLOG_INFO("OnCompositionTerminated");
 	ITfContext *pCtx=(ITfContext *)GetImeContext();
 	_TerminateComposition(ecWrite,pCtx);
 	ReleaseImeContext(pCtx);
@@ -35,7 +35,7 @@ void CSinstar3Tsf::_SetComposition(ITfComposition *pComposition)
 void CSinstar3Tsf::_StartComposition(ITfContext *pContext)
 {
     CEditSessionStartComposition *pStartCompositionEditSession;
-	Helper_Trace(_T("$$$$$_StartComposition"));
+	SLOG_INFO("$$$$$_StartComposition");
 
 	_AdviseTextLayoutSink(pContext);
     if (pStartCompositionEditSession = new CEditSessionStartComposition(this, pContext))

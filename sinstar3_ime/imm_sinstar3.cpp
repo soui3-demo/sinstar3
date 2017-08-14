@@ -91,7 +91,7 @@ BOOL InitIMCC(HIMCC & hIMCC,DWORD dwSize)
 
 BOOL WINAPI ImeSelect(HIMC hIMC, BOOL fSelect)
 {
-	Helper_Trace(L"\nImeSelect,hIMC=%08X,fSelect=%d",hIMC,fSelect);
+	SLOGFMTF("\nImeSelect,hIMC=%08X,fSelect=%d",hIMC,fSelect);
 	if(fSelect)
 	{
 		LPINPUTCONTEXT lpIMC=ImmLockIMC(hIMC);
@@ -133,7 +133,7 @@ BOOL WINAPI ImeSelect(HIMC hIMC, BOOL fSelect)
 
 BOOL WINAPI ImeSetActiveContext(HIMC hIMC,BOOL fFlag)
 {
-	Helper_Trace(L"\nImeSetActiveContext,hIMC=%08X,fFlag=%d!!!!!!!!!!!!!!!!!!!!",hIMC,fFlag);
+	SLOGFMTF("\nImeSetActiveContext,hIMC=%08X,fFlag=%d!!!!!!!!!!!!!!!!!!!!",hIMC,fFlag);
  	if(hIMC)
  	{
   		LPINPUTCONTEXT lpIMC=ImmLockIMC(hIMC);
@@ -243,11 +243,11 @@ BOOL IsCompStr(HIMC hIMC)
 BOOL WINAPI NotifyIME(HIMC hIMC,DWORD dwAction,DWORD dwIndex,DWORD dwValue)
 {
 	BOOL bRet = FALSE;
-	Helper_Trace(_T("NotifyIME, hIMC:%08x,action:%08x(%d),index:%d,value:%d"),hIMC,dwAction,dwAction,dwIndex,dwValue);
+	SLOGFMTF("NotifyIME, hIMC:%08x,action:%08x(%d),index:%d,value:%d",hIMC,dwAction,dwAction,dwIndex,dwValue);
 	LPINPUTCONTEXT lpIMC=(LPINPUTCONTEXT)ImmLockIMC(hIMC);;
 	if(!lpIMC)
 	{
-		Helper_Trace(_T("NotifyIME, Lock IMC Failed"));
+		SLOGFMTF("NotifyIME, Lock IMC Failed");
 		return FALSE;
 	}
 	CUiWnd **ppUiWnd=(CUiWnd**)ImmLockIMCC(lpIMC->hPrivate);

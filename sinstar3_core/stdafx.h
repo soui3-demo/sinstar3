@@ -24,6 +24,8 @@
 
 #include "sinstar3_core.h"
 
+#define LOG_FILTER "sinstar3_core"
+
 #define	 DLL_SOUI
 #include <souistd.h>
 #include <core/SHostDialog.h>

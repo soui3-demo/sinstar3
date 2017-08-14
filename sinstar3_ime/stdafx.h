@@ -31,9 +31,11 @@
 #include "../include/reg.h"
 #include "../include/slog_wrapper.h"
 
+#define LOG_FILTER "sinstar3_ime"
+#include <helper/slog-def.h>
+
 #include "../core_loader/core_loader.h"
 
 extern HINSTANCE g_hInst;
 extern DWORD g_dwSystemInfoFlags;
 
-void Helper_Trace(LPCTSTR pszFormat,...);
