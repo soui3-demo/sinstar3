@@ -382,9 +382,13 @@ LRESULT CUiWnd::OnSetContext(BOOL bActivate,LPARAM lParam)
 	return 0;
 }
 
+CLogStateListener g_LogListener;
+
 BOOL CUiWnd::_InitSinstar3()
 {
 	m_pSinstar3=CCoreLoader::GetInstance().Sinstar3_Create(this,g_hInst);
+	CCoreLoader::GetInstance().Sinstar3_SetLogStateListener(&g_LogListener);
+
 	if(!m_pSinstar3) return FALSE;
 	m_pSinstar3->OnIMESelect(m_bActivate);
 	HIMC hIMC=(HIMC)GetWindowLongPtr(m_hWnd,IMMGWLP_IMC);

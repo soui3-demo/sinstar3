@@ -121,7 +121,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(SOUIPATH)\utilities\include"
+				AdditionalIncludeDirectories="$(SOUIPATH)\SOUI\include;$(SOUIPATH)\utilities\include;$(SOUIPATH)\config"
 				PreprocessorDefinitions="WIN64;_DEBUG;_WINDOWS;_USRDLL;SINSTAR3_IME_EXPORTS;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -142,7 +142,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="souid.lib"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="$(SOUIPATH)\bin64"
 				ModuleDefinitionFile="sinstar3_ime.def"
 				GenerateDebugInformation="true"
 				AssemblyDebug="0"
