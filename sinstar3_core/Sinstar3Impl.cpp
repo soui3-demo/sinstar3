@@ -28,20 +28,13 @@ CSinstar3Impl::~CSinstar3Impl(void)
 
 void CSinstar3Impl:: ProcessKeyStoke(LPVOID lpImeContext,UINT vkCode,LPARAM lParam,BOOL bKeyDown,BOOL *pbEaten)
 {
-	if(!bKeyDown)
-	{
-		*pbEaten = FALSE;
-		return;
-	}else
-	{
-		*pbEaten = TRUE;
-		return;
-	}
+	*pbEaten = bKeyDown;
+	return;
 }
 
 void CSinstar3Impl:: TranslateKey(LPVOID lpImeContext,UINT vkCode,UINT uScanCode,BOOL bKeyDown,BOOL *pbEaten)
 {
-	if(!bKeyDown) return;
+	*pbEaten = TRUE;
 
 	if(isprint(vkCode))
 	{
@@ -49,10 +42,10 @@ void CSinstar3Impl:: TranslateKey(LPVOID lpImeContext,UINT vkCode,UINT uScanCode
 		if(strComp.IsEmpty())
 		{
 			m_pTxtSvr->StartComposition(lpImeContext);
-			m_pTxtSvr->ReplaceSelCompositionW(lpImeContext,0,-1,NULL,0);
 		}
 		strComp.Append(vkCode);
 		m_pCompWnd->SetCompStr(strComp);
+		m_pTxtSvr->ReplaceSelCompositionW(lpImeContext,0,-1,strComp,strComp.GetLength());
 	}else if(vkCode == VK_ESCAPE || vkCode == VK_RETURN)
 	{
 		m_pTxtSvr->UpdateResultAndCompositionStringW(lpImeContext,L"∆Ù≥Ã ‰»Î∑®3",6,NULL,0);
@@ -97,13 +90,8 @@ void CSinstar3Impl::OnCompositionTerminated()
 void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 {
 	SLOG_INFO("GetThreadID="<<GetCurrentThreadId()<<" focus="<<bFocus);
-	if(bFocus)
-	{
-		m_pStatusWnd->SetWindowPos(HWND_TOPMOST,0,0,0,0,SWP_NOSIZE|SWP_NOMOVE|SWP_NOACTIVATE|SWP_SHOWWINDOW);
-	}else
-	{
-		m_pStatusWnd->ShowWindow(SW_HIDE);
-	}
+	m_pStatusWnd->Show(bFocus);
+	m_pCompWnd->Show(bFocus);
 }
 
 int  CSinstar3Impl::GetCompositionSegments()

@@ -9,6 +9,7 @@ public:
 	CImeWnd(LPCTSTR pszLayout);
 
 	HWND Create();
+	void Show(BOOL bShow);
 protected:
 
 	BOOL OnSetCursor(HWND wnd, UINT nHitTest, UINT message);
