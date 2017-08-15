@@ -384,7 +384,7 @@ void CSinstar3Tsf::EndComposition(LPVOID pImeContext)
 
 void CSinstar3Tsf::ReplaceSelCompositionW(LPVOID pImeContext,int nLeft,int nRight,const WCHAR* wszComp,int nLen)
 {
-	_ChangeComposition((ITfContext*)pImeContext,nLeft,nRight,wszComp,nLen);
+	_ChangeComposition((ITfContext*)pImeContext,nLeft,nRight,NULL,0);
 }
 
 void CSinstar3Tsf::UpdateResultAndCompositionStringW(LPVOID lpImeContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen)

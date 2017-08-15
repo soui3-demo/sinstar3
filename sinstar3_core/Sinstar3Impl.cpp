@@ -47,10 +47,12 @@ void CSinstar3Impl:: TranslateKey(LPVOID lpImeContext,UINT vkCode,UINT uScanCode
 	{
 		SStringT strComp = m_pCompWnd->GetCompStr();
 		if(strComp.IsEmpty())
+		{
 			m_pTxtSvr->StartComposition(lpImeContext);
+			m_pTxtSvr->ReplaceSelCompositionW(lpImeContext,0,-1,strComp,strComp.GetLength());
+		}
 		strComp.Append(vkCode);
 		m_pCompWnd->SetCompStr(strComp);
-		m_pTxtSvr->UpdateResultAndCompositionStringW(lpImeContext,NULL,0,strComp,strComp.GetLength());
 	}else if(vkCode == VK_ESCAPE || vkCode == VK_RETURN)
 	{
 		m_pTxtSvr->UpdateResultAndCompositionStringW(lpImeContext,L"Æô³ÌÊäÈë·¨3",6,NULL,0);
@@ -98,9 +100,15 @@ void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 	if(bFocus)
 	{
 		m_pStatusWnd->SetWindowPos(HWND_TOPMOST,0,0,0,0,SWP_NOSIZE|SWP_NOMOVE|SWP_NOACTIVATE|SWP_SHOWWINDOW);
+		if(m_pCompWnd->IsWindow())
+		{
+			m_pCompWnd->SetWindowPos(HWND_TOPMOST,0,0,0,0,SWP_NOSIZE|SWP_NOMOVE|SWP_NOACTIVATE|SWP_SHOWWINDOW);
+		}
 	}else
 	{
 		m_pStatusWnd->ShowWindow(SW_HIDE);
+		if(m_pCompWnd->IsWindow())
+			m_pCompWnd->ShowWindow(SW_HIDE);
 	}
 }
 
