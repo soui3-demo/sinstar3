@@ -9,24 +9,77 @@ CEditSessionBase::CEditSessionBase(CSinstar3Tsf *pTextService, ITfContext *pCont
 	_cRef = 1;
 }
 
-
 //////////////////////////////////////////////////////////////////////////
-CEditSessionEndComposition::CEditSessionEndComposition(CSinstar3Tsf *pTextService, ITfContext *pContext) 
+CEsStartComposition::CEsStartComposition(CSinstar3Tsf *pTextService, ITfContext *pContext) 
 : CEditSessionBase(pTextService, pContext)
 {
 
 }
 
-STDMETHODIMP CEditSessionEndComposition::DoEditSession(TfEditCookie ec)
+STDMETHODIMP CEsStartComposition::DoEditSession(TfEditCookie ec)
+{
+	CComPtr<ITfInsertAtSelection> pInsertAtSelection;
+	CComPtr<ITfRange> pRangeInsert;
+	CComPtr<ITfContextComposition> pContextComposition;
+	CComPtr<ITfComposition> pComposition;
+	HRESULT hr = E_FAIL;
+
+	//正在输入过程中不能重新开始
+	if(_pTextService->IsCompositing())
+		return hr;
+
+	// A special interface is required to insert text at the selection
+	hr = _pContext->QueryInterface(IID_ITfInsertAtSelection, (void **)&pInsertAtSelection);
+	ASSERT_HR(hr);
+
+	// insert the text
+	hr = pInsertAtSelection->InsertTextAtSelection(ec, TF_IAS_QUERYONLY, NULL, 0, &pRangeInsert);
+	ASSERT_HR(hr);
+
+	// get an interface on the context to deal with compositions
+	hr = _pContext->QueryInterface(IID_ITfContextComposition, (void **)&pContextComposition);
+	ASSERT_HR(hr);
+
+	// start the new composition
+	hr = pContextComposition->StartComposition(ec, pRangeInsert, _pTextService, &pComposition);
+	ASSERT_HR(hr);
+	ASSERT_RET(pComposition, return E_FAIL);
+
+	// 
+	//  set selection to the adjusted range
+	// 
+	TF_SELECTION tfSelection;
+	tfSelection.range = pRangeInsert;
+	tfSelection.style.ase = TF_AE_NONE;
+	tfSelection.style.fInterimChar = FALSE;
+	_pContext->SetSelection(ec, 1, &tfSelection);
+
+	// Store the pointer of this new composition object in the instance 
+	// of the CTextService class. So this instance of the CTextService 
+	// class can know now it is in the composition stage.
+	_pTextService->OnStartComposition(pComposition);
+
+	return S_OK;
+}
+
+//////////////////////////////////////////////////////////////////////////
+CEsEndComposition::CEsEndComposition(CSinstar3Tsf *pTextService, ITfContext *pContext) 
+: CEditSessionBase(pTextService, pContext)
+{
+
+}
+
+STDMETHODIMP CEsEndComposition::DoEditSession(TfEditCookie ec)
 {
 	SLOG_INFO("DoEditSession:TfEditCookie:"<<ec);
-	if(_pTextService->IsCompositing())
+	ITfComposition * pComposition = _pTextService->GetITfComposition();
+	if(!pComposition)
 	{
 		SLOG_WARN("CEditSessionEndComposition::DoEditSession not in compositing");
-		return S_OK;
+		return E_FAIL;
 	}
-	ITfRange * pRange;
-	if ( _pTextService->_pComposition->GetRange( &pRange) == S_OK && pRange != NULL)
+	CComPtr<ITfRange> pRange;
+	if ( pComposition->GetRange( &pRange) == S_OK && pRange != NULL)
 	{
 		TF_SELECTION sel={0};
 		sel.style.ase = TF_AE_NONE;
@@ -34,22 +87,21 @@ STDMETHODIMP CEditSessionEndComposition::DoEditSession(TfEditCookie ec)
 		sel.range=pRange;
 		pRange->Collapse(ec,TF_ANCHOR_END);
 		_pContext->SetSelection(ec,1,&sel);
-		pRange->Release();
 	}
-	_pTextService->_TerminateComposition(ec, _pContext);
+	pComposition->EndComposition(ec);
 	return S_OK;
 }
 
 
 //////////////////////////////////////////////////////////////////////////
-CEditSessionGetTextExtent::CEditSessionGetTextExtent(CSinstar3Tsf *pTextService, ITfContext *pContext, ITfContextView *pContextView) 
+CEsGetTextExtent::CEsGetTextExtent(CSinstar3Tsf *pTextService, ITfContext *pContext, ITfContextView *pContextView) 
 : CEditSessionBase(pTextService, pContext)
 , _pContextView(pContextView)
 {
 }
 
 
-STDMETHODIMP CEditSessionGetTextExtent::DoEditSession(TfEditCookie ec)
+STDMETHODIMP CEsGetTextExtent::DoEditSession(TfEditCookie ec)
 {
 	ULONG uFatched=0;
 	CComPtr<ITfRange> pRange;
@@ -57,23 +109,19 @@ STDMETHODIMP CEditSessionGetTextExtent::DoEditSession(TfEditCookie ec)
 	RECT rc;
 	LONG cch=0;
 
-	if ( _pTextService->_pComposition == NULL || _pTextService->m_pSinstar3==NULL) return S_FALSE;
+	if ( !_pTextService->_IsComposing() || _pTextService->m_pSinstar3==NULL) return S_FALSE;
 
 
 
-	ITfRange* range = NULL;
+	CComPtr<ITfRange> range;
 	if ( _pTextService->_pComposition->GetRange( &range) == S_OK && range != NULL)
 	{
 		RECT rcLast = { -1, -1, -1, -1};
 		int nLen=_pTextService->m_pSinstar3->GetCompositionSegmentEnd(_pTextService->m_pSinstar3->GetCompositionSegments()-1);
 
 		GetLastLineRect( ec, range, nLen, rcLast, TRUE);			
-
-
 		_pTextService->m_pSinstar3->OnSetCaretPosition( *(POINT*)&rcLast, rcLast.bottom - rcLast.top);			
 		SLOGFMTF("SetCaret Pos 1:%d,%d, height: %d",rcLast.left,rcLast.top, rcLast.bottom - rcLast.top);
-
-		range->Release();
 	}
 
 	int nSeg=_pTextService->m_pSinstar3->GetCompositionSegments();
@@ -106,7 +154,7 @@ STDMETHODIMP CEditSessionGetTextExtent::DoEditSession(TfEditCookie ec)
 	return S_OK;
 }
 
-BOOL CEditSessionGetTextExtent::GetLastLineRect(TfEditCookie ec, ITfRange* range, int nLen, RECT& rcLast, BOOL bUseSavedPos)
+BOOL CEsGetTextExtent::GetLastLineRect(TfEditCookie ec, ITfRange* range, int nLen, RECT& rcLast, BOOL bUseSavedPos)
 {
 	RECT rt = { 0, 0, 20, 20 };
 
@@ -152,61 +200,9 @@ BOOL CEditSessionGetTextExtent::GetLastLineRect(TfEditCookie ec, ITfRange* range
 
 
 
-//////////////////////////////////////////////////////////////////////////
-CEditSessionStartComposition::CEditSessionStartComposition(CSinstar3Tsf *pTextService, ITfContext *pContext) 
-: CEditSessionBase(pTextService, pContext)
-{
-
-}
-
-STDMETHODIMP CEditSessionStartComposition::DoEditSession(TfEditCookie ec)
-{
-	CComPtr<ITfInsertAtSelection> pInsertAtSelection;
-	CComPtr<ITfRange> pRangeInsert;
-	CComPtr<ITfContextComposition> pContextComposition;
-	ITfComposition *pComposition = NULL;
-	HRESULT hr = E_FAIL;
-
-	// A special interface is required to insert text at the selection
-	hr = _pContext->QueryInterface(IID_ITfInsertAtSelection, (void **)&pInsertAtSelection);
-	ASSERT_HR(hr);
-
-	// insert the text
-	hr = pInsertAtSelection->InsertTextAtSelection(ec, TF_IAS_QUERYONLY, NULL, 0, &pRangeInsert);
-	ASSERT_HR(hr);
-
-	// get an interface on the context to deal with compositions
-	hr = _pContext->QueryInterface(IID_ITfContextComposition, (void **)&pContextComposition);
-	ASSERT_HR(hr);
-
-	// start the new composition
-	hr = pContextComposition->StartComposition(ec, pRangeInsert, _pTextService, &pComposition);
-	ASSERT_HR(hr);
-	ASSERT_RET(pComposition, return E_FAIL);
-
-	if(_pTextService->IsCompositing())
-		return S_OK;
-
-	// Store the pointer of this new composition object in the instance 
-	// of the CTextService class. So this instance of the CTextService 
-	// class can know now it is in the composition stage.
-	_pTextService->_SetComposition(pComposition);
-	_pTextService->m_pSinstar3->OnCompositionStarted();
-
-	// 
-	//  set selection to the adjusted range
-	// 
-	TF_SELECTION tfSelection;
-	tfSelection.range = pRangeInsert;
-	tfSelection.style.ase = TF_AE_NONE;
-	tfSelection.style.fInterimChar = FALSE;
-	_pContext->SetSelection(ec, 1, &tfSelection);
-
-	return S_OK;
-}
 
 //////////////////////////////////////////////////////////////////////////
-CEditSessionKeyIn::CEditSessionKeyIn(CSinstar3Tsf *pTextService, ITfContext *pContext,int nLeft,int nRight,LPCWSTR pszBuf,int nLen) : CEditSessionBase(pTextService, pContext)
+CEsChangeComposition::CEsChangeComposition(CSinstar3Tsf *pTextService, ITfContext *pContext,int nLeft,int nRight,LPCWSTR pszBuf,int nLen) : CEditSessionBase(pTextService, pContext)
 {
 	if(nLen) 
 	{
@@ -220,13 +216,13 @@ CEditSessionKeyIn::CEditSessionKeyIn(CSinstar3Tsf *pTextService, ITfContext *pCo
 	m_nLen=nLen;
 }
 
-CEditSessionKeyIn::~CEditSessionKeyIn()
+CEsChangeComposition::~CEsChangeComposition()
 {
 	if(m_pszBuf) delete []m_pszBuf;
 }
 
 
-STDMETHODIMP CEditSessionKeyIn::DoEditSession(TfEditCookie ec)
+STDMETHODIMP CEsChangeComposition::DoEditSession(TfEditCookie ec)
 {
 	if(!_pTextService->IsCompositing()) 
 		_pTextService->_StartComposition(_pContext);
@@ -287,7 +283,7 @@ STDMETHODIMP CEditSessionKeyIn::DoEditSession(TfEditCookie ec)
 }
 
 //////////////////////////////////////////////////////////////////////////
-CEditSessionMoveCaret::CEditSessionMoveCaret(CSinstar3Tsf *pTextService, 
+CEsMoveCaret::CEsMoveCaret(CSinstar3Tsf *pTextService, 
 											 ITfContext *pContext,
 											 int nPos,
 											 BOOL bSet,
@@ -300,7 +296,7 @@ CEditSessionMoveCaret::CEditSessionMoveCaret(CSinstar3Tsf *pTextService,
 }
 
 
-STDMETHODIMP CEditSessionMoveCaret::DoEditSession(TfEditCookie ec)
+STDMETHODIMP CEsMoveCaret::DoEditSession(TfEditCookie ec)
 {
 	CComPtr<ITfRange> pRangeComposition;
 	TF_SELECTION tfSelection;
@@ -340,7 +336,7 @@ STDMETHODIMP CEditSessionMoveCaret::DoEditSession(TfEditCookie ec)
 }
 
 //////////////////////////////////////////////////////////////////////////
-CEditSessionUpdateResultAndComp::CEditSessionUpdateResultAndComp(CSinstar3Tsf *pTextService, 
+CEsUpdateResultAndComp::CEsUpdateResultAndComp(CSinstar3Tsf *pTextService, 
 																 ITfContext *pContext,
 																 LPCWSTR pszResultStr,
 																 int nResStrLen,
@@ -372,13 +368,13 @@ CEditSessionUpdateResultAndComp::CEditSessionUpdateResultAndComp(CSinstar3Tsf *p
 	}
 }
 
-CEditSessionUpdateResultAndComp::~CEditSessionUpdateResultAndComp()
+CEsUpdateResultAndComp::~CEsUpdateResultAndComp()
 {
 	if(m_pszCompStr) delete []m_pszCompStr;
 	if(m_pszResultStr) delete []m_pszResultStr;
 }
 
-STDMETHODIMP CEditSessionUpdateResultAndComp::DoEditSession(TfEditCookie ec)
+STDMETHODIMP CEsUpdateResultAndComp::DoEditSession(TfEditCookie ec)
 {
 	CComPtr<ITfRange> pRangeComposition;
 	CComPtr<ITfProperty> pDisplayAttributeProperty;
@@ -390,17 +386,21 @@ STDMETHODIMP CEditSessionUpdateResultAndComp::DoEditSession(TfEditCookie ec)
 	{
 		_pTextService->_StartComposition(_pContext);
 	}
-	CComPtr<ITfComposition> pCompostion=_pTextService->_pComposition;
+	CComPtr<ITfComposition> pCompostion=_pTextService->GetITfComposition();
 	//将当前数据上屏
 	pCompostion->GetRange(&pRangeComposition);
-
+	if(!pRangeComposition)
+	{
+		SLOG_WARN("CEsUpdateResultAndComp::DoEditSession getRange return null");
+		return E_FAIL;
+	}
 	// get our the display attribute property
 	if (_pContext->GetProperty(GUID_PROP_ATTRIBUTE, &pDisplayAttributeProperty) == S_OK)
 	{
 		// clear the value over the range
 		pDisplayAttributeProperty->Clear(ec, pRangeComposition);
 	}
-
+	
 	if(m_pszResultStr)
 	{
 		pRangeComposition->SetText(ec,0,m_pszResultStr,m_nResStrLen);

@@ -92,14 +92,8 @@ public:
 	void SetConversionMode( EInputMethod eInputMode);
 	BOOL RegisterIMEHotKey(REFGUID guidHotKey,LPCWSTR pszName,const PRESERVEDKEY *pKey);
 	BOOL UnregisterIMEHotKey(REFGUID guidHotKey,const PRESERVEDKEY *pKey);
-	BOOL SetOpenStatus(LPVOID lpImeContext,BOOL bOpen)
-	{
-		return _SetKeyboardOpen(bOpen);
-	}
-	BOOL GetOpenStatus(LPVOID lpImeContext)
-	{
-		return _IsKeyboardOpen();
-	}
+	BOOL SetOpenStatus(LPVOID lpImeContext,BOOL bOpen);
+	BOOL GetOpenStatus(LPVOID lpImeContext);
 	BOOL GetLanguageBarItemMgr(ITfLangBarItemMgr **ppLangBarMgr,GUID *pGuidTIP);
 	LRESULT DoWildRequest(WPARAM wParam,LPARAM lParam){return E_NOTIMPL;}
 
@@ -114,22 +108,24 @@ public:
 
 
     // functions for the composition object.
+	void OnStartComposition(ITfComposition *pComposition);
+	void OnCompositionEnd();
+	ITfComposition* GetITfComposition(){return _pComposition;}
+
 	void _StartComposition(ITfContext *pContext);
 	void _ChangeComposition(ITfContext *pContext,int nLeft,int nRight,const WCHAR* wszComp,int nLen);
 	void _UpdateResultAndCompositionStringW(ITfContext * pContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen);
 	void _EndComposition(ITfContext *pContext);
 	BOOL _EndCompositionEx();
 	int  _MoveCaretPos(ITfContext *pContext,int nPos,BOOL bSet);
-	void _TerminateComposition(TfEditCookie ec, ITfContext *pContext);
 	BOOL _IsComposing();
-	void _SetComposition(ITfComposition *pComposition);
 	BOOL _SetCompositionDisplayAttributes(TfEditCookie ec, ITfContext *pContext,ITfRange *pRange, TF_DA_ATTR_INFO attr);
 	BOOL _GetSegRange(TfEditCookie ec,ITfRange **pRange,int nLeft,int nRight);
 	
 	void UpdateCompAttr(ITfContext *pContext,TfEditCookie ec,ITfRange *pRangeComposition);
 	void _ClearCompositionDisplayAttributes(TfEditCookie ec, ITfContext *pContext);
 
-	void CSinstar3Tsf::ShowCandidateWindow();
+	void ShowCandidateWindow();
 	
 private:
 
@@ -183,7 +179,7 @@ public:
 	BOOL		_bInKeyProc;
 
     // the current composition object.
-    ITfComposition *_pComposition;
+    CComPtr<ITfComposition> _pComposition;
 
 	// guidatom for the display attibute.
 	TfGuidAtom _gaDisplayAttributeInput;

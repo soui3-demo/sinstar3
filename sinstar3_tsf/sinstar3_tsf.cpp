@@ -60,6 +60,8 @@ PCTSTR pszAppList_Use_Ms_Method[] =
 
 CSinstar3Tsf::CSinstar3Tsf()
 {
+	_cRef = 1;
+
     theModule->AddRef();
 
     //
@@ -87,9 +89,6 @@ CSinstar3Tsf::CSinstar3Tsf()
     //
     // Initialize the composition object pointer.
     //
-    _pComposition = NULL;
-
-    _cRef = 1;
 
 	_dwCookieTextLayoutSink = TF_INVALID_COOKIE;
 
@@ -264,9 +263,9 @@ STDMETHODIMP CSinstar3Tsf::OnLayoutChange(ITfContext *pContext, TfLayoutCode lco
 		_bGetLayoutChangeMsg=TRUE;
 		if (IsCompositing())
 		{
-			CEditSessionGetTextExtent *pEditSession;
+			CEsGetTextExtent *pEditSession;
 
-			if ((pEditSession = new CEditSessionGetTextExtent(this, pContext, pContextView)) != NULL)
+			if ((pEditSession = new CEsGetTextExtent(this, pContext, pContextView)) != NULL)
 			{
 				HRESULT hr;
 				HRESULT hrSession;
@@ -502,6 +501,7 @@ void CSinstar3Tsf::UpdateCompAttr(ITfContext *pContext,TfEditCookie ec,ITfRange 
 {
 	//做一个简单的处理，当range为空时Core中的数据可能和TSF中的数据不一致
 	BOOL bEmpty=FALSE;
+	if(!pRangeComposition) return;
 	if(pRangeComposition->IsEmpty(ec,&bEmpty)==S_OK && bEmpty) return;
 
 	pRangeComposition->Collapse(ec,TF_ANCHOR_START);
@@ -526,8 +526,8 @@ void CSinstar3Tsf::UpdateCompAttr(ITfContext *pContext,TfEditCookie ec,ITfRange 
 
 void CSinstar3Tsf::_ClearCompositionDisplayAttributes(TfEditCookie ec, ITfContext *pContext)
 {
-	ITfRange *pRangeComposition;
-	ITfProperty *pDisplayAttributeProperty;
+	CComPtr<ITfRange> pRangeComposition;
+	CComPtr<ITfProperty> pDisplayAttributeProperty;
 
 	if(!pContext) return;
 	// get the compositon range.
@@ -539,11 +539,7 @@ void CSinstar3Tsf::_ClearCompositionDisplayAttributes(TfEditCookie ec, ITfContex
 	{
 		// clear the value over the range
 		pDisplayAttributeProperty->Clear(ec, pRangeComposition);
-
-		pDisplayAttributeProperty->Release();
 	}
-
-	pRangeComposition->Release();
 }
 
 BOOL CSinstar3Tsf::RegisterIMEHotKey(REFGUID guidHotKey,LPCWSTR pszName,const PRESERVEDKEY *pKey)
@@ -576,4 +572,20 @@ BOOL CSinstar3Tsf::UnregisterIMEHotKey(REFGUID guidHotKey,const PRESERVEDKEY *pK
 	pKeystrokeMgr->UnpreserveKey(guidHotKey, pKeyTF);
 	pKeystrokeMgr->Release();
 	return TRUE;
+}
+
+BOOL CSinstar3Tsf::SetOpenStatus(LPVOID lpImeContext,BOOL bOpen)
+{
+	return _SetKeyboardOpen(bOpen);
+}
+
+BOOL CSinstar3Tsf::GetOpenStatus(LPVOID lpImeContext)
+{
+	return _IsKeyboardOpen();
+}
+
+void CSinstar3Tsf::OnStartComposition(ITfComposition *pComposition)
+{
+	_pComposition = pComposition;
+	if(m_pSinstar3) m_pSinstar3->OnCompositionStarted();
 }

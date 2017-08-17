@@ -20,29 +20,29 @@ protected:
 };
 
 
-class CEditSessionStartComposition : public CEditSessionBase
+class CEsStartComposition : public CEditSessionBase
 {
 public:
-	CEditSessionStartComposition(CSinstar3Tsf *pTextService, ITfContext *pContext);
+	CEsStartComposition(CSinstar3Tsf *pTextService, ITfContext *pContext);
 
 	// ITfEditSession
 	STDMETHODIMP DoEditSession(TfEditCookie ec);
 };
 
-class CEditSessionEndComposition : public CEditSessionBase
+class CEsEndComposition : public CEditSessionBase
 {
 public:
-	CEditSessionEndComposition(CSinstar3Tsf *pTextService, ITfContext *pContext);
+	CEsEndComposition(CSinstar3Tsf *pTextService, ITfContext *pContext);
 	// ITfEditSession
 	STDMETHODIMP DoEditSession(TfEditCookie ec);
 };
 
 
-class CEditSessionGetTextExtent : public CEditSessionBase
+class CEsGetTextExtent : public CEditSessionBase
 {
 public:
 
-	CEditSessionGetTextExtent(CSinstar3Tsf *pTextService, ITfContext *pContext, ITfContextView *pContextView);
+	CEsGetTextExtent(CSinstar3Tsf *pTextService, ITfContext *pContext, ITfContextView *pContextView);
 
 	STDMETHODIMP DoEditSession(TfEditCookie ec);
 
@@ -54,11 +54,11 @@ private:
 
 
 
-class CEditSessionKeyIn:public CEditSessionBase
+class CEsChangeComposition:public CEditSessionBase
 {
 public:
-	CEditSessionKeyIn(CSinstar3Tsf *pTextService, ITfContext *pContext,int nLeft,int nRight,LPCWSTR pszBuf,int nLen);
-	~CEditSessionKeyIn();
+	CEsChangeComposition(CSinstar3Tsf *pTextService, ITfContext *pContext,int nLeft,int nRight,LPCWSTR pszBuf,int nLen);
+	~CEsChangeComposition();
 
 	// ITfEditSession
 	STDMETHODIMP DoEditSession(TfEditCookie ec);
@@ -69,10 +69,10 @@ private:
 };
 
 
-class CEditSessionMoveCaret:public CEditSessionBase
+class CEsMoveCaret:public CEditSessionBase
 {
 public:
-	CEditSessionMoveCaret(CSinstar3Tsf *pTextService, ITfContext *pContext,int nPos,BOOL bSet,ITfComposition *pComposition);
+	CEsMoveCaret(CSinstar3Tsf *pTextService, ITfContext *pContext,int nPos,BOOL bSet,ITfComposition *pComposition);
 
 	// ITfEditSession
 	STDMETHODIMP DoEditSession(TfEditCookie ec);
@@ -83,11 +83,11 @@ private:
 };
 
 
-class CEditSessionUpdateResultAndComp:public CEditSessionBase
+class CEsUpdateResultAndComp:public CEditSessionBase
 {
 public:
-	CEditSessionUpdateResultAndComp(CSinstar3Tsf *pTextService, ITfContext *pContext,LPCWSTR pszResultStr,int nResStrLen,LPCWSTR pszCompStr,int nCompStrLen);
-	~CEditSessionUpdateResultAndComp();
+	CEsUpdateResultAndComp(CSinstar3Tsf *pTextService, ITfContext *pContext,LPCWSTR pszResultStr,int nResStrLen,LPCWSTR pszCompStr,int nCompStrLen);
+	~CEsUpdateResultAndComp();
 
 	// ITfEditSession
 	STDMETHODIMP DoEditSession(TfEditCookie ec);
