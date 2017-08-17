@@ -117,6 +117,7 @@ public:
 	void _UpdateResultAndCompositionStringW(ITfContext * pContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen);
 	void _EndComposition(ITfContext *pContext);
 	BOOL _EndCompositionEx();
+	void _TerminateComposition(TfEditCookie ecWrite,ITfContext *pContext);
 	int  _MoveCaretPos(ITfContext *pContext,int nPos,BOOL bSet);
 	BOOL _IsComposing();
 	BOOL _SetCompositionDisplayAttributes(TfEditCookie ec, ITfContext *pContext,ITfRange *pRange, TF_DA_ATTR_INFO attr);
