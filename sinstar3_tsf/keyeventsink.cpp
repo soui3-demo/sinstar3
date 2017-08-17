@@ -54,11 +54,14 @@ STDAPI CSinstar3Tsf::OnKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM lPara
 STDAPI CSinstar3Tsf::OnKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {
 	SLOGFMTF("OnKeyUp: %x %x", wParam, lParam);
+	_bInKeyProc=TRUE;
 	OnTestKeyUp(pContext,wParam,lParam,pfEaten);
 	if(*pfEaten)
 	{
 		m_pSinstar3->TranslateKey(pContext,wParam, MapVirtualKey(wParam,0), FALSE, pfEaten);
 	}
+	_bInKeyProc=FALSE;
+
     return S_OK;
 }
 

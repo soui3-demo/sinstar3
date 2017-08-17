@@ -23,7 +23,7 @@ void CSinstar3Tsf::_StartComposition(ITfContext *pContext)
         // the CEsStartComposition will do all the work when the
         // CEsStartComposition::DoEditSession method is called by the context
 		HRESULT hrSession;
-		hr = pContext->RequestEditSession(_tfClientId, pStartCompositionEditSession, TF_ES_SYNC | TF_ES_READWRITE, &hrSession);
+		hr = pContext->RequestEditSession(_tfClientId, pStartCompositionEditSession, (_bInKeyProc?TF_ES_SYNC:TF_ES_ASYNCDONTCARE) | TF_ES_READWRITE, &hrSession);
         pStartCompositionEditSession->Release();
     }
 }

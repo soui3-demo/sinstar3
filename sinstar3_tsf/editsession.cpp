@@ -437,7 +437,7 @@ STDMETHODIMP CEsUpdateResultAndComp::DoEditSession(TfEditCookie ec)
 	}else
 	{
 		_pContext->SetSelection(ec,1,&tfSelection);
-		_pTextService->_EndComposition(_pContext);
+		//_pTextService->_EndComposition(_pContext);
 	}
 	return S_OK;
 }

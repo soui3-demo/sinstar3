@@ -363,12 +363,13 @@ Exit:
 
 void CSinstar3Tsf::StartComposition(LPVOID pImeContext)
 {
+	_StartComposition((ITfContext*)pImeContext);
 }
 
 
 void CSinstar3Tsf::EndComposition(LPVOID pImeContext)
 {
-	//_EndComposition((ITfContext*)pImeContext);
+	_EndComposition((ITfContext*)pImeContext);
 }
 
 
