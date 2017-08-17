@@ -365,6 +365,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\editsession.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\EnumDisplayAttributeInfo.cpp"
 				>
 			</File>
