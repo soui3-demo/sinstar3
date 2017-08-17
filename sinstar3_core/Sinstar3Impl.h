@@ -46,8 +46,6 @@ private:
 
 	HINSTANCE		 m_hInst;
 
-	CPoint			 m_ptCaret;
-	int				 m_nCaretHeight;
 
 };
 

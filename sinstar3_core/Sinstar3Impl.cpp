@@ -9,16 +9,17 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HINSTANCE hInst)
 ,m_hInst(hInst)
 ,m_pCompWnd(NULL)
 ,m_pStatusWnd(NULL)
-,m_nCaretHeight(30)
 {
 	theModule->AddRef();
  	m_pCompWnd = new CCompWnd();
 	m_pStatusWnd = new CStatusWnd();
 	m_pStatusWnd->Create();
+	m_pCompWnd->Create();
 }
 
 CSinstar3Impl::~CSinstar3Impl(void)
 {
+	m_pCompWnd->DestroyWindow();
 	m_pStatusWnd->DestroyWindow();
 	delete m_pStatusWnd;
 	delete m_pCompWnd;
@@ -60,12 +61,7 @@ void CSinstar3Impl::OnIMESelect(BOOL bSelect)
 
 void CSinstar3Impl::OnSetCaretPosition(POINT pt,int nHei)
 {
-	m_ptCaret = pt;
-	m_nCaretHeight = nHei;
-	if(m_pCompWnd->IsWindow())
-	{
-		m_pCompWnd->SetWindowPos(0,m_ptCaret.x,m_ptCaret.y+m_nCaretHeight+5,0,0,SWP_NOZORDER|SWP_NOSIZE|SWP_NOACTIVATE);
-	}
+	m_pCompWnd->MoveTo(pt,nHei);
 }
 
 void CSinstar3Impl::OnSetFocusSegmentPosition(POINT pt,int nHei)
@@ -74,8 +70,7 @@ void CSinstar3Impl::OnSetFocusSegmentPosition(POINT pt,int nHei)
 
 void CSinstar3Impl::OnCompositionStarted()
 {
-	m_pCompWnd->Create();
-	m_pCompWnd->SetWindowPos(HWND_TOPMOST,m_ptCaret.x,m_ptCaret.y+m_nCaretHeight+5,0,0,SWP_NOSIZE|SWP_SHOWWINDOW|SWP_NOACTIVATE);
+	m_pCompWnd->Show(TRUE);
 }
 
 void CSinstar3Impl::OnCompositionChanged()
@@ -84,7 +79,7 @@ void CSinstar3Impl::OnCompositionChanged()
 
 void CSinstar3Impl::OnCompositionTerminated()
 {
- 	m_pCompWnd->DestroyWindow();
+ 	m_pCompWnd->Show(FALSE);
 }
 
 void CSinstar3Impl::OnSetFocus(BOOL bFocus)
