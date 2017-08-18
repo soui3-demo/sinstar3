@@ -10,6 +10,8 @@ namespace SOUI
 		~SToggle2(void);
 
 	protected:
+		virtual CSize GetDesiredSize(LPCRECT pRcContainer);
+
 		void OnPaint(IRenderTarget *pRT);
 
 		SOUI_MSG_MAP_BEGIN()

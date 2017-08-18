@@ -20,7 +20,7 @@ BOOL CImeWnd::OnSetCursor(HWND wnd, UINT nHitTest, UINT message)
 void CImeWnd::OnMouseMove(UINT nFlags, CPoint point)
 {
 	SetMsgHandled(FALSE);
-	CRect rcWnd = GetWindowRect();
+	CRect rcWnd = SWindow::GetWindowRect();
 	if(!rcWnd.PtInRect(point))
 	{
 		::ReleaseCapture();
