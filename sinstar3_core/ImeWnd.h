@@ -18,6 +18,7 @@ protected:
 	BEGIN_MSG_MAP_EX(CImeWnd)
 		MSG_WM_SETCURSOR(OnSetCursor)
 		MSG_WM_MOUSEMOVE(OnMouseMove)
+		MSG_WM_ACTIVATE(OnActivate)
 		CHAIN_MSG_MAP(SHostWnd)
 	END_MSG_MAP()
 };

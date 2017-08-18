@@ -1,21 +1,28 @@
 ﻿<SOUI 
   name="wnd_status_bar" 
-  width="200" 
-  height="60"   
+  width="-1" 
+  height="-1"   
   resizable="0" 
   wndType="normal"
   translucent="1"
   toolwindow="1"
 >
-  <root skin="_skin.sys.wnd.bkgnd" cache="1" layout="vbox">
-    <window size="-1,0" weight="1" layout="hbox" tip="line1">
-      <img size="16,16" skin="logo"/>
-      <text size="-1,-1" name="txt_comp_name">五笔型86</text>
-      <button size="30,30" name="btn_bar_mode">BM</button>
+  <root size="-1,-1" layout="vbox">
+    <window size="124,25" name="status_line1" skin="bg_status1" layout="hbox">
+      <img size="-1,-1" name="img_logo" skin="logo"/>
+      <caption size="0,-2" weight="1" name="txt_comp" text="五笔型86"/>
+      <window size="-1,-1">
+        <imgbtn size="-1,-1" skin="btn_extend" name="btn_extend"/>
+        <imgbtn size="-1,-1" skin="btn_shrink" name="btn_shrink"/>
+      </window>      
     </window>
-    <window size="-1,0" weight="1" layout="hbox" tip="line2">
-      <text size="-1,-2">1 打开</text>
-      <text size="-1,-2">1 关闭</text>
+    <window size="124,22" name="statu_line2" padding="6,0,6,0" display="0">
+      <window size="-2,-2" skin="bg_status2" layout="hbox">
+        <toggle2 size="-1,-1" skin1="charmode_full" skin2="charmode_half" name="btn_charmode"/>
+        <imgbtn size="-1,-1" skin="btn_makeword" name="btn_makeword"/>
+        <toggle2 size="-1,-1" skin1="btn_record_enable" skin2="btn_record_disable" name="btn_record"/>
+        <toggle2 size="-1,-1" skin1="btn_sound_enable" skin2="btn_sound_disable" name="btn_sound"/>
+      </window>
     </window>
   </root>
 </SOUI>

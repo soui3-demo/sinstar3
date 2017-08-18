@@ -65,6 +65,8 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 	m_theApp->SetToolTipFactory(new SToolTipFactory());
 	m_theApp->GetToolTipFactory()->Release();
 
+	m_theApp->RegisterWindowClass<SToggle2>();
+
 	CAutoRefPtr<ILog4zManager> pLogMgr;
 	bLoaded = m_pComMgr->CreateLog4z((IObjRef**)&pLogMgr);
 	SASSERT_FMT(bLoaded,_T("load ILog4zManager failed!"),_T("log4z"));

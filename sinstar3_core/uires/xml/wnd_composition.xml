@@ -1,19 +1,21 @@
 ﻿<SOUI 
   name="wnd_composition" 
   width="-1" 
-  height="60"   
+  height="138"   
   resizable="0" 
   wndType="normal"
   translucent="1"
   toolwindow="1"
 >
-  <root skin="_skin.sys.wnd.bkgnd" cache="1" layout="vbox">
+  <root skin="bg_composition" cache="1" layout="vbox" padding="50,80,130,12">
     <window size="-1,0" weight="1" layout="hbox" tip="composition window">
       <text size="-1,-2" name="txt_comps"/>
     </window>
     <window size="-1,0" weight="1" layout="hbox" tip="candidate window">
+      <imgbtn size="-1,-1" display="0" skin="btn_prevpage" name="btn_prevpage"/>
       <text size="-1,-2">1 启程输入法3</text>
       <text size="-1,-2" extend_left="5">2 fuck</text>
+      <imgbtn size="-1,-1" display="0" skin="btn_nextpage" name="btn_nextpage"/>
     </window>
   </root>
 </SOUI>
