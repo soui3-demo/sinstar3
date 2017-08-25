@@ -20,20 +20,6 @@ ROBJ_IN_CPP
 template<>
 CSouiEnv* SSingleton<CSouiEnv>::ms_Singleton = NULL;
 
-class SToolTipFactory : public TObjRefImpl<IToolTipFactory>
-{
-public:
-	IToolTip * CreateToolTip(HWND hHost)
-	{
-		return NULL;
-	}
-
-	void DestroyToolTip(IToolTip *pToolTip)
-	{		
-	}
-};
-
-
 
 CSouiEnv::CSouiEnv(HINSTANCE hInst)
 {
@@ -62,10 +48,9 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 	
 	m_theApp = new SApplication(pRenderFactory, hInst,_T("Sinstar3_Wnd"));
 	m_theApp->SetAppDir(szCurrentDir);
-	m_theApp->SetToolTipFactory(new SToolTipFactory());
-	m_theApp->GetToolTipFactory()->Release();
 
 	m_theApp->RegisterWindowClass<SToggle2>();
+	m_theApp->RegisterWindowClass<SCandView>();
 
 	CAutoRefPtr<ILog4zManager> pLogMgr;
 	bLoaded = m_pComMgr->CreateLog4z((IObjRef**)&pLogMgr);
@@ -109,10 +94,12 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 	m_theApp->InitXmlNamedID(namedXmlID,ARRAYSIZE(namedXmlID),TRUE);
 	m_theApp->AddResProvider(pResProvider);
 
+	new CDataCenter;
 }
 
 CSouiEnv::~CSouiEnv(void)
 {
+	delete CDataCenter::getSingletonPtr();
  	delete m_theApp;
 	delete m_pComMgr;
 	OleUninitialize();

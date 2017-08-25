@@ -13,5 +13,6 @@
   </style>
 
   <objattr>
+    <candidate colorIndex="@color/cand_index" colorCand="@color/cand_text" colorComp="@color/cand_comp" colorWild="@color/cand_wild"/>
   </objattr>
 </UIDEF>

@@ -41,4 +41,14 @@ void CImeWnd::Show(BOOL bShow)
 		ShowWindow(SW_HIDE);
 }
 
+LRESULT CImeWnd::OnMouseEvent(UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	SetMsgHandled(FALSE);
+	if(GetToolTip())
+	{
+		GetToolTip()->RelayEvent(GetCurrentMessage());
+	}
+	return 0;
+}
+
 }

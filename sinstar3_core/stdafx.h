@@ -37,7 +37,8 @@
 #include "res\resource.h"
 
 
-#include "SToggle2.h"
-
+#include "controls/SToggle2.h"
+#include "controls/SCandView.h"
+#include "dataCenter/datacenter.h"
 using namespace SOUI;
 

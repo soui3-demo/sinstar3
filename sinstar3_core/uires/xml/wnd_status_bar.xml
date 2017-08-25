@@ -18,7 +18,7 @@
     </window>
     <window size="124,22" name="statu_line2" padding="6,0,6,0" display="0">
       <window size="-2,-2" skin="bg_status2" layout="hbox">
-        <toggle2 size="-1,-1" skin1="charmode_full" skin2="charmode_half" name="btn_charmode"/>
+        <toggle2 size="-1,-1" skin1="charmode_full" skin2="charmode_half" name="btn_charmode" tip="change mode"/>
         <imgbtn size="-1,-1" skin="btn_makeword" name="btn_makeword"/>
         <toggle2 size="-1,-1" skin1="btn_record_enable" skin2="btn_record_disable" name="btn_record"/>
         <toggle2 size="-1,-1" skin1="btn_sound_enable" skin2="btn_sound_disable" name="btn_sound"/>

@@ -1,8 +1,8 @@
 #pragma once
 #include "../include/sinstar-i.h"
 
-#include "CompWnd.h"
-#include "StatusWnd.h"
+#include "ui/CompWnd.h"
+#include "ui/StatusWnd.h"
 
 class CSinstar3Impl:
 	public ISinstar

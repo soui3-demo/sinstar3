@@ -329,7 +329,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\CompWnd.cpp"
+				RelativePath=".\ui\CompWnd.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\dataCenter\DataCenter.cpp"
 				>
 			</File>
 			<File
@@ -373,11 +377,15 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\ImeWnd.cpp"
+				RelativePath=".\ui\ImeWnd.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Minidump.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SCandView.cpp"
 				>
 			</File>
 			<File
@@ -393,7 +401,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\StatusWnd.cpp"
+				RelativePath=".\ui\StatusWnd.cpp"
 				>
 			</File>
 			<File
@@ -433,7 +441,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\SToggle2.cpp"
+				RelativePath=".\controls\SToggle2.cpp"
 				>
 			</File>
 		</Filter>
@@ -447,11 +455,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\CompWnd.h"
+				RelativePath=".\ui\CompWnd.h"
 				>
 			</File>
 			<File
-				RelativePath=".\ImeWnd.h"
+				RelativePath=".\dataCenter\DataCenter.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ui\ImeWnd.h"
 				>
 			</File>
 			<File
@@ -460,6 +472,10 @@
 			</File>
 			<File
 				RelativePath=".\resource.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SCandView.h"
 				>
 			</File>
 			<File
@@ -479,7 +495,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\StatusWnd.h"
+				RelativePath=".\ui\StatusWnd.h"
 				>
 			</File>
 			<File
@@ -487,7 +503,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\SToggle2.h"
+				RelativePath=".\controls\SToggle2.h"
 				>
 			</File>
 			<File
