@@ -7,7 +7,7 @@
   <imglist name="charmode_half" src="img:png_charmode_half" states="3"/>
   <imglist name="bg_status1" src="img:png_status1"/>
   <imglist name="bg_status2" src="img:png_status2"/>
-  <imgframe name="bg_composition" src="img:png_composition" margin="20,0,200,0"/>
+  <imgframe name="bg_composition" src="img:png_composition" margin="70,0,200,0"/>
   <imglist name="btn_extend" src="img:btn_extend" states="3"/>
   <imglist name="btn_shrink" src="img:btn_shrink" states="3"/>
   <imglist name="btn_makeword" src="img:btn_makeword" states="3"/>

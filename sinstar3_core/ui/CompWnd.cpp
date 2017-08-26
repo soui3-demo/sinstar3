@@ -27,10 +27,11 @@ namespace SOUI
 
 			ClearCandidate();
 
-			SStringT strCands[] = {L"启程输入法3",L"SOUI",L"启程软件",L"fuck"};
-			SStringT strComps[] = {L"abzd",L"aaaa",L"bbbb",L""};
-			int nOffset= strComp.GetLength()%3;
-			SetCandidateInfo(strCands+nOffset,strComps+nOffset,2);
+			SStringT strCands[] = {L"启程输入法3",L"SOUI",L"启程软件",L"fuck",L"启程输入法3",L"SOUI",L"启程软件",L"fuck"};
+			SStringT strComps[] = {L"abzd",L"aaaa",L"bbbb",L"",L"abzd",L"aaza",L"bbbb",L""};
+			int nOffset= strComp.GetLength()%6;
+			int nSize = smin(5,ARRAYSIZE(strComps)-nOffset-1);
+			SetCandidateInfo(strCands+nOffset,strComps+nOffset,nSize);
 		}
 	}
 
@@ -89,7 +90,7 @@ namespace SOUI
 		{
 			SWindow * pCand = m_pCandContainer->GetWindow(GSW_FIRSTCHILD);
 			int iCand = 0;
-			while(pCand)
+			while(pCand && iCand<nSize)
 			{
 				if(pCand->IsClass(SCandView::GetClassName()))
 				{

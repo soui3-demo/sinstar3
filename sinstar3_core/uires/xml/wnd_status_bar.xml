@@ -11,10 +11,7 @@
     <window size="124,25" name="status_line1" skin="bg_status1" layout="hbox">
       <img size="-1,-1" name="img_logo" skin="logo"/>
       <caption size="0,-2" weight="1" name="txt_comp" text="五笔型86"/>
-      <window size="-1,-1">
-        <imgbtn size="-1,-1" skin="btn_extend" name="btn_extend"/>
-        <imgbtn size="-1,-1" skin="btn_shrink" name="btn_shrink"/>
-      </window>      
+      <toggle2 size="-1,-1" skin1="btn_extend" skin2="btn_shrink" name="btn_status_mode"/>
     </window>
     <window size="124,22" name="statu_line2" padding="6,0,6,0" display="0">
       <window size="-2,-2" skin="bg_status2" layout="hbox">
