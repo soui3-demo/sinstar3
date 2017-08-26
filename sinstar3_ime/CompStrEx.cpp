@@ -6,14 +6,14 @@ void CCompStrEx::Init(void)
 	BOOL _bComposing=bComposing;
 	memset(this, 0, sizeof(CCompStrEx));
 	dwSize=sizeof(CCompStrEx);
- 	dwCompReadAttrOffset = (LPBYTE)byCompReadAttr - (LPBYTE)this;
- 	dwCompReadClauseOffset = (LPBYTE)dwCompReadCls - (LPBYTE)this;
- 	dwCompReadStrOffset = (LPBYTE)szCompReadStr - (LPBYTE)this;
-	dwCompReadAttrOffset =dwCompAttrOffset = (LPBYTE)byCompAttr - (LPBYTE)this;
-	dwCompReadClauseOffset = dwCompClauseOffset = (LPBYTE)dwCompCls - (LPBYTE)this;
-	dwCompReadStrOffset =dwCompStrOffset = (LPBYTE)szCompStr - (LPBYTE)this;
-	dwResultStrOffset = (LPBYTE)szResultStr - (LPBYTE)this;
-	dwPrivateOffset=(LPBYTE)&bComposing-(LPBYTE)this;
+ 	dwCompReadAttrOffset = (DWORD)((LPBYTE)byCompReadAttr - (LPBYTE)this);
+ 	dwCompReadClauseOffset = (DWORD)((LPBYTE)dwCompReadCls - (LPBYTE)this);
+ 	dwCompReadStrOffset = (DWORD)((LPBYTE)szCompReadStr - (LPBYTE)this);
+	dwCompReadAttrOffset = dwCompAttrOffset = (DWORD)((LPBYTE)byCompAttr - (LPBYTE)this);
+	dwCompReadClauseOffset = dwCompClauseOffset = (DWORD)((LPBYTE)dwCompCls - (LPBYTE)this);
+	dwCompReadStrOffset = dwCompStrOffset = (DWORD)((LPBYTE)szCompStr - (LPBYTE)this);
+	dwResultStrOffset = (DWORD)((LPBYTE)szResultStr - (LPBYTE)this);
+	dwPrivateOffset = (DWORD)((LPBYTE)&bComposing-(LPBYTE)this);
 	dwPrivateSize=sizeof(BOOL);
 	bComposing=_bComposing;
 }

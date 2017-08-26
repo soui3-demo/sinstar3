@@ -177,21 +177,16 @@ void  CUiWnd::SetConversionMode(EInputMethod mode)
 		DWORD dwMode=0;
 		switch( mode)
 		{
-		case Hiragana:
 		case HalfAlphanumeric:
-			dwMode = IME_CMODE_ROMAN | IME_CMODE_FULLSHAPE | IME_CMODE_NATIVE;						// 0x19
+			dwMode = IME_CMODE_ROMAN;						
 			break;
 
-		case FullKatakana:
-			dwMode = IME_CMODE_ROMAN | IME_CMODE_FULLSHAPE | IME_CMODE_KATAKANA | IME_CMODE_NATIVE;	// 0x1b
+		case HalfNative:
+			dwMode = IME_CMODE_ROMAN | IME_CMODE_NATIVE;	
 			break;
 
-		case FullAlphanumeric:
-			dwMode = IME_CMODE_ROMAN | IME_CMODE_FULLSHAPE;													// 0x18
-			break;
-
-		case HalfKatakana:
-			dwMode = IME_CMODE_ROMAN | IME_CMODE_KATAKANA | IME_CMODE_NATIVE;							// 0x13
+		case FullNative:
+			dwMode = IME_CMODE_ROMAN | IME_CMODE_FULLSHAPE | IME_CMODE_NATIVE;
 			break;
 
 		}
@@ -210,7 +205,7 @@ void  CUiWnd::SetConversionMode(EInputMethod mode)
 
 EInputMethod CUiWnd::GetConversionMode()
 {
-	EInputMethod eInputMode =m_pSinstar3?m_pSinstar3->GetDefInputMode():Hiragana;
+	EInputMethod eInputMode =m_pSinstar3?m_pSinstar3->GetDefInputMode():FullNative;
 
 	CImeContext *pCtx=(CImeContext *)GetImeContext();
 	if(!pCtx) return HalfAlphanumeric;
@@ -220,20 +215,12 @@ EInputMethod CUiWnd::GetConversionMode()
 
 	switch( dwMode)
 	{
-	case IME_CMODE_ROMAN | IME_CMODE_FULLSHAPE | IME_CMODE_NATIVE:						// 0x19
-		eInputMode = Hiragana;
+	case IME_CMODE_ROMAN | IME_CMODE_FULLSHAPE| IME_CMODE_NATIVE:	
+		eInputMode = FullNative;
 		break;
 
-	case IME_CMODE_ROMAN | IME_CMODE_FULLSHAPE | IME_CMODE_KATAKANA | IME_CMODE_NATIVE:	// 0x1b
-		eInputMode = FullKatakana;
-		break;
-
-	case IME_CMODE_ROMAN | IME_CMODE_FULLSHAPE:													// 0x18
-		eInputMode = FullAlphanumeric;
-		break;
-
-	case IME_CMODE_ROMAN | IME_CMODE_KATAKANA | IME_CMODE_NATIVE:						// 0x13
-		eInputMode = HalfKatakana;
+	case IME_CMODE_ROMAN| IME_CMODE_NATIVE:	
+		eInputMode = HalfNative;
 		break;
 
 	case IME_CMODE_ROMAN:																				// 0x10

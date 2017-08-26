@@ -173,24 +173,16 @@ EInputMethod CSinstar3Tsf::GetConversionMode()
 			{
 				switch( var.lVal)
 				{
-				case TF_CONVERSIONMODE_ROMAN | TF_CONVERSIONMODE_FULLSHAPE | TF_CONVERSIONMODE_NATIVE:						// 0x19
-					eInputMode = Hiragana;
-					break;
-
-				case TF_CONVERSIONMODE_ROMAN | TF_CONVERSIONMODE_FULLSHAPE | TF_CONVERSIONMODE_KATAKANA | IME_CMODE_NATIVE:	// 0x1b
-					eInputMode = FullKatakana;
-					break;
-
-				case TF_CONVERSIONMODE_ROMAN | TF_CONVERSIONMODE_FULLSHAPE:													// 0x18
-					eInputMode = FullAlphanumeric;
-					break;
-				
-				case TF_CONVERSIONMODE_ROMAN | TF_CONVERSIONMODE_KATAKANA | TF_CONVERSIONMODE_NATIVE:						// 0x13
-					eInputMode = HalfKatakana;
-					break;
-
 				case TF_CONVERSIONMODE_ROMAN:																				// 0x10
 					eInputMode = HalfAlphanumeric;
+					break;
+
+				case TF_CONVERSIONMODE_ROMAN | TF_CONVERSIONMODE_FULLSHAPE | TF_CONVERSIONMODE_NATIVE:						// 0x19
+					eInputMode = FullNative;
+					break;
+
+				case TF_CONVERSIONMODE_ROMAN | TF_CONVERSIONMODE_NATIVE:						
+					eInputMode = HalfNative;
 					break;
 				}
 			}
@@ -223,21 +215,16 @@ void CSinstar3Tsf::SetConversionMode( EInputMethod eInputMode)
 
 			switch( eInputMode)
 			{
-			case Hiragana:
 			case HalfAlphanumeric:
-				var.lVal = TF_CONVERSIONMODE_ROMAN | TF_CONVERSIONMODE_FULLSHAPE | TF_CONVERSIONMODE_NATIVE;						// 0x19
+				var.lVal = TF_CONVERSIONMODE_ROMAN;				
 				break;
 
-			case FullKatakana:
-				var.lVal = TF_CONVERSIONMODE_ROMAN | TF_CONVERSIONMODE_FULLSHAPE | TF_CONVERSIONMODE_KATAKANA | IME_CMODE_NATIVE;	// 0x1b
+			case HalfNative:
+				var.lVal = TF_CONVERSIONMODE_ROMAN | IME_CMODE_NATIVE;
 				break;
 
-			case FullAlphanumeric:
-				var.lVal = TF_CONVERSIONMODE_ROMAN | TF_CONVERSIONMODE_FULLSHAPE;													// 0x18
-				break;
-
-			case HalfKatakana:
-				var.lVal = TF_CONVERSIONMODE_ROMAN | TF_CONVERSIONMODE_KATAKANA | TF_CONVERSIONMODE_NATIVE;							// 0x13
+			case FullNative:
+				var.lVal = TF_CONVERSIONMODE_ROMAN | TF_CONVERSIONMODE_FULLSHAPE | IME_CMODE_NATIVE;													// 0x18
 				break;
 
 			}

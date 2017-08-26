@@ -38,11 +38,9 @@ typedef struct _PRESERVEDKEY
 // 输入模式
 enum EInputMethod
 {
-	FullAlphanumeric=100,// 全角英文数字
-	HalfAlphanumeric,// 半角英文数字
-	FullKatakana,	// 全角片假名
-	HalfKatakana,	// 半角片假名
-	Hiragana,		// 平假名
+	HalfAlphanumeric=100,// 半角英文数字
+	HalfNative,			 // 半角汉字
+	FullNative,			 // 全角汉字
 };
 
 interface ITextService
