@@ -13,7 +13,6 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
 #endif
 		SLOG_INFO(L"DLL_PROCESS_ATTACH");
 
-		theModule = new CTsfModule(hInstance);
 		{
 
 			TCHAR szPath[MAX_PATH];
@@ -25,6 +24,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
 				reg.QueryStringValue(_T("path_client"),szPath,&len);
 				reg.Close();
 			}
+			theModule = new CTsfModule(hInstance,szPath);
 #ifdef _WIN64
 			_tcscat(szPath,_T("\\x64"));
 #endif

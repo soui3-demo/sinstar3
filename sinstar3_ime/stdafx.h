@@ -35,7 +35,5 @@
 #include <helper/slog-def.h>
 
 #include "../core_loader/core_loader.h"
-
-extern HINSTANCE g_hInst;
-extern DWORD g_dwSystemInfoFlags;
+#include "ImeModule.h"
 

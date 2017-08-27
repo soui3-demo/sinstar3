@@ -2,6 +2,9 @@
 #include "stdafx.h"
 #include "uiwnd.h"
 #include <ShlObj.h>
+#include "ImeModule.h"
+
+CImeModule * theModule=NULL;
 
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
@@ -14,7 +17,6 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 #ifdef _DEBUG
 		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF|_CRTDBG_LEAK_CHECK_DF);
 #endif
-		g_hInst=hModule;
 		{
 			TCHAR szPath[MAX_PATH];
 			CRegKey reg;
@@ -25,6 +27,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 				reg.QueryStringValue(_T("path_client"),szPath,&len);
 				reg.Close();
 			}
+			theModule = new CImeModule(hModule,szPath);
 #ifdef _WIN64
 			_tcscat(szPath,_T("\\x64"));
 #endif
@@ -38,6 +41,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 		break;
 	case DLL_PROCESS_DETACH:
 		CUiWnd::UnregisterClass(hModule);
+		delete theModule;
 		break;
 	}
 	return TRUE;
@@ -46,9 +50,10 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 STDAPI DllUnregisterServer(void)
 {
 	TCHAR szPath[MAX_PATH];
-	GetModuleFileName(g_hInst,szPath,MAX_PATH);
+	GetModuleFileName(theModule->GetModule(),szPath,MAX_PATH);
 	TCHAR *p=_tcsrchr(szPath,_T('\\'));
 	
+	//todo:hjx
 	return FALSE;
 }
 
@@ -64,7 +69,7 @@ void GetSystemDir(LPTSTR szPath)
 STDAPI DllRegisterServer(void)
 {
 	TCHAR szPath[MAX_PATH];
-	GetModuleFileName(g_hInst,szPath,MAX_PATH);
+	GetModuleFileName(theModule->GetModule(),szPath,MAX_PATH);
 	TCHAR szSysDir[MAX_PATH];
 	GetSystemDir(szSysDir);
 	//确保当前IME位于系统目录

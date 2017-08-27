@@ -363,6 +363,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ImeModule.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\imm_sinstar3.cpp"
 				>
 			</File>
@@ -434,6 +438,10 @@
 			</File>
 			<File
 				RelativePath=".\imeContext.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ImeModule.h"
 				>
 			</File>
 			<File

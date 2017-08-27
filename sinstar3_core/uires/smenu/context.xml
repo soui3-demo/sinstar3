@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu itemHeight="26" iconMargin="4" textMargin="8" maxWidth="190">
+  <item text="系统设置" id="100"/>
+  <item text="快捷设置" contextHelpId="1" popup="1"/>
+  <item text="隐藏状态" id="101"/>
+  <item text="光标跟随" id="102"/>
+  <item text="输出繁体" id="103"/>
+  <sep/>
+  <item text="皮    肤" contextHelpId="2">
+    <item text="皮肤管理" id="201"/>
+    <item text="网上皮肤" id="202"/>
+    <sep/>
+  </item>
+  <item text="启程词典" contextHelpId="3">
+    <item text="词典输入" id="301"/>
+    <sep/>
+    <item text="关闭" id="302"/>
+    <sep/>
+  </item>
+  <item text="编码方案" contextHelpId="4" popup="1"/>
+  <item text="形码混输" contextHelpId="5">
+    <item text="拼音:单字" id="501"/>
+    <sep/>
+    <item text="拼音:二字词" id="502"/>
+    <item text="拼音:三字词" id="503"/>
+    <item text="拼音:多字词" id="504"/>
+    <sep/>
+    <item text="自定义短语" id="505"/>
+  </item>
+  <item text="数据管理" contextHelpId="6">
+    <item text="后台运行指示" id="601"/>
+    <sep/>
+  </item>
+  <item text="字 根 表" id="110"/>
+  <item text="打字速度" id="111"/>
+  <sep/>
+  <item text="查看帮助" id="112"/>
+</menu>

@@ -22,7 +22,6 @@
 #include "../include/TextService-i.h"
 #include "../include/unknownimpl.h"
 
-#include "sinstar3_core.h"
 
 #define LOG_FILTER "sinstar3_core"
 
@@ -42,3 +41,4 @@
 #include "dataCenter/datacenter.h"
 using namespace SOUI;
 
+#include "sinstar3_core.h"

@@ -7,7 +7,7 @@ BOOL WINAPI ImeInquire(LPIMEINFO lpIMEInfo,LPTSTR lpszUIClass,DWORD dwSystemInfo
 	if(!lpIMEInfo) return FALSE;
 
 	lpIMEInfo->dwPrivateDataSize = sizeof(LPVOID); 
-	g_dwSystemInfoFlags=dwSystemInfoFlags;
+	theModule->SetSysInfoFlags(dwSystemInfoFlags);
 
 	lpIMEInfo->fdwProperty = 
 #ifdef _UNICODE

@@ -3,8 +3,9 @@
 #include "ClassFactory.h"
 #include "sinstar3_tsf.h"
 
-CTsfModule::CTsfModule(HINSTANCE hInst):CModuleRef(hInst),m_classFactory(NULL)
+CTsfModule::CTsfModule(HINSTANCE hInst, LPCTSTR pszDataPath):CModuleRef(hInst),m_classFactory(NULL)
 {
+	_tcscpy(m_szDataPath,pszDataPath);
 }
 
 CTsfModule::~CTsfModule(void)

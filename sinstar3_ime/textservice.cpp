@@ -262,7 +262,7 @@ HMODULE GetMsctfModule()
 
 BOOL _QueryLangBarItemMgr(ITfLangBarItemMgr **pLangBarMgr)
 {
-	if(g_dwSystemInfoFlags&IME_SYSINFO_WINLOGON) return FALSE;
+	if(theModule->GetSysInfoFlags()&IME_SYSINFO_WINLOGON) return FALSE;
 	BOOL bRet=FALSE;
 	HMODULE hModMsctf=GetMsctfModule();
 	if(hModMsctf)
@@ -285,7 +285,7 @@ BOOL _QueryITfThreadMgr(ITfThreadMgr** ppITfThreadMgr)
 	typedef HRESULT (WINAPI *PTF_CREATETHREADMGR)(ITfThreadMgr**);
 
 	return FALSE;
-	if(g_dwSystemInfoFlags&IME_SYSINFO_WINLOGON) return FALSE;
+	if(theModule->GetSysInfoFlags()&IME_SYSINFO_WINLOGON) return FALSE;
 
 	HRESULT	hResult;
 

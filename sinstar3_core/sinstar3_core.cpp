@@ -28,9 +28,11 @@ EXTERN_C SINSTAR3_API BOOL Sinstar3_Config(HWND hWnd)
 	return FALSE;
 }
 
-EXTERN_C SINSTAR3_API void Sinstar3_SetLogStateListener(ILogStateListener *pListener)
+
+EXTERN_C SINSTAR3_API void Sinstar3_SetHostInfo(HostInfo *pHostInfo)
 {
-	theModule->SetLogStateListener(pListener);
+	theModule->SetLogStateListener(pHostInfo->pLogStateListener);
+	theModule->SetDataPath(pHostInfo->pszDataPath);
 }
 
 
@@ -68,4 +70,9 @@ void CSinstar3Core::SetLogStateListener(ILogStateListener *pListener)
 	{
 		m_pLogStateListener->OnLogMgrReady(CSouiEnv::getSingleton().theApp()->GetLogManager());
 	}
+}
+
+void CSinstar3Core::SetDataPath(LPCTSTR pszDataPath)
+{
+	m_strDataPath = pszDataPath;
 }

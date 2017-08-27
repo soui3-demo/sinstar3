@@ -40,8 +40,14 @@ interface ILogStateListener
 	virtual void OnLogMgrFree()=0;
 };
 
+struct HostInfo
+{
+	LPCTSTR			   pszDataPath;
+	ILogStateListener *pLogStateListener;
+};
+
 typedef ISinstar *(*FUN_Sinstar3_Create)(ITextService *,HINSTANCE);
 typedef void (*FUN_Sinstar3_Delete)(ISinstar*);
 typedef BOOL (*FUN_Sinstar3_Config)(HWND);
 typedef HRESULT (*FUN_Sinstar3_CanUnloadNow)();
-typedef void (*FUN_Sinstar3_SetLogStateListener)(ILogStateListener *pListener);
+typedef void (*FUN_Sinstar3_SetHostInfo)(HostInfo *pHostInfo);

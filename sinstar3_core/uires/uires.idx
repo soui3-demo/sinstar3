@@ -35,4 +35,7 @@
   <ICON>
     <file name="ICON_LOGO"  path="image\sinstar3.ico"/>
   </ICON>
+  <smenu>
+    <file name="context" path="smenu\context.xml"/>
+  </smenu>
 </resource>

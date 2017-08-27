@@ -156,7 +156,7 @@ EInputMethod CSinstar3Tsf::GetConversionMode()
 	assert( _pThreadMgr != NULL);
 
 	HRESULT hr = S_OK;
-	EInputMethod eInputMode =m_pSinstar3?m_pSinstar3->GetDefInputMode():Hiragana;
+	EInputMethod eInputMode =m_pSinstar3?m_pSinstar3->GetDefInputMode():FullNative;
 	ITfCompartmentMgr *pCompMgr = NULL;
 	
 

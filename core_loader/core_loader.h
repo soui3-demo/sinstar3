@@ -9,7 +9,7 @@ public:
 	ISinstar *Sinstar3_Create(ITextService *pTxtSvr,HINSTANCE hInst);
 	BOOL Sinstar3_Delete(ISinstar * pSinstar3);
 	BOOL Sinstar3_OpenConfig(HWND hParent);
-	void Sinstar3_SetLogStateListener(ILogStateListener *pListener);
+	void Sinstar3_SetHostInfo(HostInfo *pHostInfo);
 	void SetCorePath(LPCTSTR pszPath);
 private:
 	CCoreLoader(void);

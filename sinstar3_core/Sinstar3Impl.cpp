@@ -125,7 +125,7 @@ void CSinstar3Impl::ShowHelp()
 
 EInputMethod CSinstar3Impl::GetDefInputMode()
 {
-	return FullAlphanumeric;
+	return FullNative;
 }
 
 BOOL CSinstar3Impl::ShowCompWnd()

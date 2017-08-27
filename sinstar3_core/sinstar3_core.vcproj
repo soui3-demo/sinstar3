@@ -530,6 +530,10 @@
 			</File>
 		</Filter>
 		<File
+			RelativePath=".\uires\smenu\context.xml"
+			>
+		</File>
+		<File
 			RelativePath=".\ReadMe.txt"
 			>
 		</File>

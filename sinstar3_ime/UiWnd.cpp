@@ -383,8 +383,9 @@ CLogStateListener g_LogListener;
 
 BOOL CUiWnd::_InitSinstar3()
 {
-	m_pSinstar3=CCoreLoader::GetInstance().Sinstar3_Create(this,g_hInst);
-	CCoreLoader::GetInstance().Sinstar3_SetLogStateListener(&g_LogListener);
+	m_pSinstar3=CCoreLoader::GetInstance().Sinstar3_Create(this,theModule->GetModule());
+	HostInfo hostInfo={theModule->GetDataPath(),&g_LogListener};
+	CCoreLoader::GetInstance().Sinstar3_SetHostInfo(&hostInfo);
 
 	if(!m_pSinstar3) return FALSE;
 	m_pSinstar3->OnIMESelect(m_bActivate);
@@ -406,11 +407,11 @@ BOOL CUiWnd::_UninitSinstar3()
 
 LRESULT CUiWnd::OnCreate()
 {
-	if(g_dwSystemInfoFlags & IME_SYSINFO_WINLOGON) return -1;
+	if(theModule->GetSysInfoFlags() & IME_SYSINFO_WINLOGON) return -1;
 
 	SLOGFMTF("CUiWnd::OnCreate,hWnd:%08x",m_hWnd);
 	_InitSinstar3();
-	m_wndComp.Create(WS_EX_TOOLWINDOW|WS_EX_LAYERED|WS_EX_NOACTIVATE,WS_POPUP|WS_DISABLED,m_hWnd,0,g_hInst);
+	m_wndComp.Create(WS_EX_TOOLWINDOW|WS_EX_LAYERED|WS_EX_NOACTIVATE,WS_POPUP|WS_DISABLED,m_hWnd,0,theModule->GetModule());
 	PostMessage(WM_IME_NOTIFY,IMN_SETCONVERSIONMODE,0);
 	return 0;
 }
