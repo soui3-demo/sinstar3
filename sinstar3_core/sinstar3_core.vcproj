@@ -397,6 +397,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ui\SkinMananger.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\SouiEnv.cpp"
 				>
 			</File>
@@ -488,6 +492,10 @@
 			</File>
 			<File
 				RelativePath=".\Sinstar3Impl.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ui\SkinMananger.h"
 				>
 			</File>
 			<File

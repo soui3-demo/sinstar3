@@ -1,6 +1,8 @@
 #pragma once
 
 #include "ImeWnd.h"
+#include "SkinMananger.h"
+
 namespace SOUI
 {
 	class CStatusWnd :
@@ -25,8 +27,7 @@ namespace SOUI
 		END_MSG_MAP()
 
 	protected:
-		int InitSkinMenu(HMENU hMenu, const SStringW &strSkinPath,int nStartId);
-		SMap<int,SStringT> m_mapSkin;	//map of ID->skin path
+		CSkinMananger  m_pSkinManager;
 	};
 
 }

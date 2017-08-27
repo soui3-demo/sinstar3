@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <UIDEF>
+  <desc author="setoutsoft" name="haha" version="1.0"/>
+  
   <font face="宋体" size="15"/>
 
   <string src="values:string" />
