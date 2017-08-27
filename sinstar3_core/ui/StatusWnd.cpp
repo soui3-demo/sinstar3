@@ -2,6 +2,7 @@
 #include "StatusWnd.h"
 #include <helper/SMenu.h>
 #include <resprovider-zip/zipresprovider-param.h>
+#include "../SouiEnv.h"
 
 #define CMD_MENU_FIRST	 220
 namespace SOUI
@@ -36,14 +37,14 @@ namespace SOUI
 			if(SMap<int,SStringT>::CPair * p =m_mapSkin.Lookup(nRet))
 			{
 				SStringT skinPath = p->m_value;
-				SComMgr comMgr;
+				
 				IResProvider *pResProvider=NULL;
-				comMgr.CreateResProvider_ZIP((IObjRef**)&pResProvider);
+				CSouiEnv::getSingleton().theComMgr()->CreateResProvider_ZIP((IObjRef**)&pResProvider);
 				ZIPRES_PARAM param;
 				param.ZipFile(GETRENDERFACTORY, skinPath);
 				pResProvider->Init((WPARAM)&param,0);
 				
-				//SApplication::getSingleton().AddResProvider(pResProvider);
+				SApplication::getSingleton().AddResProvider(pResProvider);
 
 				//on skin changed
 
