@@ -33,24 +33,45 @@ namespace SOUI
 
 	void CStatusWnd::OnInitMenuPopup(HMENU menuPopup, UINT nIndex, BOOL bSysMenu)
 	{
-		if(nIndex == 6)
+		if(GetMenuContextHelpId(menuPopup)==2)
 		{
-			InitSkinMenu(menuPopup,theModule->GetDataPath());
+			m_mapSkin.RemoveAll();
+			InitSkinMenu(menuPopup,theModule->GetDataPath()+_T("\\skins"),230);
 		}
-		SLOG_INFO("OnInitMenuPopup, nIndex:"<<nIndex);
 	}
 
-	void CStatusWnd::InitSkinMenu(HMENU hMenu, const SStringT &strSkinPath)
+	int CStatusWnd::InitSkinMenu(HMENU hMenu, const SStringT &strSkinPath,int nStartId)
 	{
 		SMenu menu(hMenu);
-
-		menu.AppendMenu(0,630,L"skin1",0);
-		menu.AppendMenu(0,631,L"skin2",0);
-		menu.AppendMenu(0,632,L"skin3",0);
-		menu.AppendMenu(0,633,L"skin4",0);
-		::CheckMenuItem(hMenu,630,MF_CHECKED|MF_BYCOMMAND);
+		
+		WIN32_FIND_DATA findData;
+		HANDLE hFind = FindFirstFile(strSkinPath+_T("\\*.*"),&findData);
+		if(hFind != INVALID_HANDLE_VALUE)
+		{
+			do{
+				if(findData.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY)
+				{
+					if(_tcscmp(findData.cFileName,_T("."))!=0 && _tcscmp(findData.cFileName,_T(".."))!=0)
+					{
+						HMENU hSubMenu = CreatePopupMenu();
+						menu.AppendMenu(MF_POPUP,(UINT_PTR)hSubMenu,findData.cFileName,0);
+						nStartId=InitSkinMenu(hSubMenu,strSkinPath+_T("\\")+findData.cFileName,nStartId);
+					}
+				}else
+				{
+					TCHAR szName[200],szExt[100];
+					_tsplitpath(findData.cFileName,NULL,NULL,szName,szExt);
+					if(_tcsicmp(szExt,_T("sskn"))==0)
+					{
+						m_mapSkin[nStartId] = strSkinPath+_T("\\")+findData.cFileName;
+						menu.AppendMenu(0,nStartId++,szName,0);
+					}
+				}
+			}while(FindNextFile(hFind,&findData));
+		}
 		menu.Detach();
 
+		return nStartId;
 	}
 
 }

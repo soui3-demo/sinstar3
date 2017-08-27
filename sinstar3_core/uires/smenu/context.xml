@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu itemHeight="26" iconMargin="4" textMargin="8" maxWidth="190">
+<menu itemHeight="26" iconMargin="4" textMargin="8" maxWidth="190" contextHelpId="100">
   <item text="系统设置" id="100"/>
   <item text="快捷设置" contextHelpId="1" popup="1"/>
   <item text="隐藏状态" id="101"/>

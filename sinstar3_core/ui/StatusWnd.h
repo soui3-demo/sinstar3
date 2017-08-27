@@ -25,7 +25,8 @@ namespace SOUI
 		END_MSG_MAP()
 
 	protected:
-		void InitSkinMenu(HMENU hMenu, const SStringW &strSkinPath);
+		int InitSkinMenu(HMENU hMenu, const SStringW &strSkinPath,int nStartId);
+		SMap<int,SStringT> m_mapSkin;	//map of ID->skin path
 	};
 
 }
