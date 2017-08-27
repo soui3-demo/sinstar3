@@ -1,7 +1,9 @@
 #include "StdAfx.h"
 #include "StatusWnd.h"
 #include <helper/SMenu.h>
+#include <resprovider-zip/zipresprovider-param.h>
 
+#define CMD_MENU_FIRST	 220
 namespace SOUI
 {
 	CStatusWnd::CStatusWnd(void):CImeWnd(UIRES.LAYOUT.wnd_status_bar)
@@ -28,7 +30,26 @@ namespace SOUI
 		SMenu menu;
 		menu.LoadMenu(UIRES.smenu.context);
 		ClientToScreen(&pt);
-		menu.TrackPopupMenu(TPM_LEFTALIGN|TPM_BOTTOMALIGN,pt.x,pt.y,m_hWnd);
+		int nRet = menu.TrackPopupMenu(TPM_LEFTALIGN|TPM_BOTTOMALIGN|TPM_RETURNCMD,pt.x,pt.y,m_hWnd);
+		if(nRet>=CMD_MENU_FIRST && nRet <=CMD_MENU_FIRST+1000)
+		{//select menu
+			if(SMap<int,SStringT>::CPair * p =m_mapSkin.Lookup(nRet))
+			{
+				SStringT skinPath = p->m_value;
+				SComMgr comMgr;
+				IResProvider *pResProvider=NULL;
+				comMgr.CreateResProvider_ZIP((IObjRef**)&pResProvider);
+				ZIPRES_PARAM param;
+				param.ZipFile(GETRENDERFACTORY, skinPath);
+				pResProvider->Init((WPARAM)&param,0);
+				
+				//SApplication::getSingleton().AddResProvider(pResProvider);
+
+				//on skin changed
+
+				pResProvider->Release();
+			}
+		}
 	}
 
 	void CStatusWnd::OnInitMenuPopup(HMENU menuPopup, UINT nIndex, BOOL bSysMenu)
@@ -36,7 +57,7 @@ namespace SOUI
 		if(GetMenuContextHelpId(menuPopup)==2)
 		{
 			m_mapSkin.RemoveAll();
-			InitSkinMenu(menuPopup,theModule->GetDataPath()+_T("\\skins"),230);
+			InitSkinMenu(menuPopup,theModule->GetDataPath()+_T("\\skins"),CMD_MENU_FIRST);
 		}
 	}
 
@@ -61,7 +82,7 @@ namespace SOUI
 				{
 					TCHAR szName[200],szExt[100];
 					_tsplitpath(findData.cFileName,NULL,NULL,szName,szExt);
-					if(_tcsicmp(szExt,_T("sskn"))==0)
+					if(_tcsicmp(szExt,_T(".sskn"))==0)
 					{
 						m_mapSkin[nStartId] = strSkinPath+_T("\\")+findData.cFileName;
 						menu.AppendMenu(0,nStartId++,szName,0);
