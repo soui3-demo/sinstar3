@@ -68,6 +68,7 @@ namespace SOUI
 					}
 				}
 			}while(FindNextFile(hFind,&findData));
+			FindClose(hFind);
 		}
 		menu.Detach();
 
