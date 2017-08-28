@@ -7,7 +7,7 @@ namespace SOUI
 		SOUI_CLASS_NAME(EventDragMove,L"on_drag_move")
 	public:
 		EventDragMove(SObject *pSender):TplEventArgs<EventDragMove>(pSender){}
-		enum{EventID=EVT_EXTERNAL_BEGIN+1001};
+		enum{EventID=EVENT_DRAGMOVE};
 
 		CPoint ptMove;
 	};

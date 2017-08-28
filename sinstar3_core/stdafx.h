@@ -29,18 +29,21 @@
 #include <core/SHostDialog.h>
 #include <control/SMessageBox.h>
 #include <control/souictrls.h>
+#include <event/NotifyCenter.h>
 #include <com-cfg.h>
 #include "resource.h"
 #define R_IN_CPP	//定义这个开关来
 #include "res\resource.h"
+using namespace SOUI;
 
 #include "../include/reg.h"
+
+#include "global_def.h"
 
 #include "controls/SToggle2.h"
 #include "controls/SCandView.h"
 #include "controls/SCaption2.h"
 
 #include "dataCenter/datacenter.h"
-using namespace SOUI;
 
 #include "sinstar3_core.h"

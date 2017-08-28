@@ -7,6 +7,7 @@
 
 CSkinMananger::CSkinMananger(void)
 {
+	SNotifyCenter::getSingletonPtr()->addEvent(EVENTID(EventSetSkin));
 }
 
 CSkinMananger::~CSkinMananger(void)
@@ -64,6 +65,8 @@ BOOL CSkinMananger::SetSkin(int nSkinId)
 		SApplication::getSingleton().AddResProvider(pResProvider);
 
 		//on skin changed
+		EventSetSkin *pEvt = new EventSetSkin(this);
+		SNotifyCenter::getSingletonPtr()->FireEventAsync(pEvt);
 
 		pResProvider->Release();
 

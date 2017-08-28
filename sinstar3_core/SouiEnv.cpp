@@ -96,10 +96,12 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 	m_theApp->AddResProvider(pResProvider);
 
 	new CDataCenter;
+	new SNotifyCenter;
 }
 
 CSouiEnv::~CSouiEnv(void)
 {
+	delete SNotifyCenter::getSingletonPtr();
 	delete CDataCenter::getSingletonPtr();
  	delete m_theApp;
 	delete m_pComMgr;

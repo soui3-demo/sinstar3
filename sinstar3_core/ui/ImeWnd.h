@@ -3,7 +3,7 @@
 namespace SOUI
 {
 
-class CImeWnd : public SHostWnd
+class CImeWnd : public SHostWnd, public TAutoEventMapReg<CImeWnd>
 {
 public:
 	CImeWnd(LPCTSTR pszLayout);

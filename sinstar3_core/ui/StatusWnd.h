@@ -31,9 +31,11 @@ namespace SOUI
 	protected:
 
 		void OnDragStatus(EventArgs *e);
+		void OnSetSkin(EventArgs *e);
 
 		EVENT_MAP_BEGIN()
 			EVENT_HANDLER(EventDragMove::EventID,OnDragStatus)
+			EVENT_HANDLER(EventSetSkin::EventID,OnSetSkin)
 		EVENT_MAP_END()
 	protected:
 		CSkinMananger  m_pSkinManager;

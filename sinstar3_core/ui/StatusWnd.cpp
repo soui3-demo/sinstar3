@@ -81,4 +81,12 @@ namespace SOUI
 		__super::OnDestroy();
 	}
 
+	void CStatusWnd::OnSetSkin(EventArgs *e)
+	{
+		BOOL bVisible = IsWindowVisible();
+		DestroyWindow();
+		Create();
+		Show(bVisible);
+	}
+
 }
