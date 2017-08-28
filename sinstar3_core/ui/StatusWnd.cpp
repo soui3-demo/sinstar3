@@ -3,6 +3,7 @@
 #include <helper/SMenu.h>
 
 #define CMD_MENU_FIRST	 220
+#define SIZE_MAGNETIC	 5
 namespace SOUI
 {
 	CStatusWnd::CStatusWnd(void):CImeWnd(UIRES.LAYOUT.wnd_status_bar)
@@ -51,7 +52,17 @@ namespace SOUI
 		EventDragMove *e2 = sobj_cast<EventDragMove>(e);
 		CRect rcWnd;
 		CSimpleWnd::GetWindowRect(&rcWnd);
-		SetWindowPos(HWND_TOPMOST,rcWnd.left+e2->ptMove.x,rcWnd.top+e2->ptMove.y,0,0,SWP_NOSIZE|SWP_NOACTIVATE);
+
+		CPoint pt = rcWnd.TopLeft()+e2->ptMove;
+
+		RECT rcWorkArea;
+		SystemParametersInfo(SPI_GETWORKAREA,0,&rcWorkArea,0);
+
+		if(pt.x-rcWorkArea.left<=SIZE_MAGNETIC) pt.x=rcWorkArea.left;
+		if(pt.y-rcWorkArea.top<SIZE_MAGNETIC) pt.y=rcWorkArea.top;
+		if(rcWorkArea.right-pt.x-rcWnd.Width()<SIZE_MAGNETIC) pt.x=rcWorkArea.right-rcWnd.Width();
+		if(rcWorkArea.bottom-pt.y-rcWnd.Height()<SIZE_MAGNETIC) pt.y=rcWorkArea.bottom-rcWnd.Height();
+		SetWindowPos(NULL,pt.x,pt.y,0,0,SWP_NOSIZE|SWP_NOZORDER|SWP_NOACTIVATE);
 	}
 
 }
