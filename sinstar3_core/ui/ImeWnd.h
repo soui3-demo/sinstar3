@@ -10,6 +10,12 @@ public:
 
 	HWND Create();
 	void Show(BOOL bShow);
+
+protected:
+	virtual SWND OnSetSwndCapture(SWND swnd);
+	virtual BOOL OnReleaseSwndCapture();
+
+	BOOL m_canReleaseCapture;
 protected:
 
 	BOOL OnSetCursor(HWND wnd, UINT nHitTest, UINT message);

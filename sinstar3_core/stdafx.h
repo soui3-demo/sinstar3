@@ -38,6 +38,8 @@
 
 #include "controls/SToggle2.h"
 #include "controls/SCandView.h"
+#include "controls/SCaption2.h"
+
 #include "dataCenter/datacenter.h"
 using namespace SOUI;
 

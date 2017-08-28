@@ -389,6 +389,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\controls\SCaption2.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\sinstar3_core.cpp"
 				>
 			</File>
@@ -480,6 +484,10 @@
 			</File>
 			<File
 				RelativePath=".\controls\SCandView.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SCaption2.h"
 				>
 			</File>
 			<File

@@ -27,6 +27,13 @@ namespace SOUI
 		END_MSG_MAP()
 
 	protected:
+
+		void OnDragStatus(EventArgs *e);
+
+		EVENT_MAP_BEGIN()
+			EVENT_HANDLER(EventDragMove::EventID,OnDragStatus)
+		EVENT_MAP_END()
+	protected:
 		CSkinMananger  m_pSkinManager;
 	};
 

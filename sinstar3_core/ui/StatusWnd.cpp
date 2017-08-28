@@ -46,4 +46,12 @@ namespace SOUI
 		}
 	}
 
+	void CStatusWnd::OnDragStatus(EventArgs *e)
+	{
+		EventDragMove *e2 = sobj_cast<EventDragMove>(e);
+		CRect rcWnd;
+		CSimpleWnd::GetWindowRect(&rcWnd);
+		SetWindowPos(HWND_TOPMOST,rcWnd.left+e2->ptMove.x,rcWnd.top+e2->ptMove.y,0,0,SWP_NOSIZE|SWP_NOACTIVATE);
+	}
+
 }

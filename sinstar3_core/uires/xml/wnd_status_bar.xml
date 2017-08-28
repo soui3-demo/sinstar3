@@ -10,7 +10,7 @@
   <root size="-1,-1" layout="vbox">
     <window size="124,25" name="status_line1" skin="bg_status1" layout="hbox">
       <img size="-1,-1" name="img_logo" skin="logo"/>
-      <caption size="0,-2" weight="1" name="txt_comp" text="五笔型86"/>
+      <caption2 size="0,-2" weight="1" name="txt_comp" text="五笔型86" cursor="sizeall"/>
       <toggle2 size="-1,-1" skin1="btn_extend" skin2="btn_shrink" name="btn_status_mode"/>
     </window>
     <window size="124,22" name="statu_line2" padding="6,0,6,0" display="0">

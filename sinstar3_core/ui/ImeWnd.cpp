@@ -12,17 +12,21 @@ CImeWnd::CImeWnd(LPCTSTR pszLayout):SHostWnd(pszLayout)
 
 BOOL CImeWnd::OnSetCursor(HWND wnd, UINT nHitTest, UINT message)
 {
-	CSimpleWnd::SetCapture();
-	SetMsgHandled(FALSE);
+	if(::GetCapture()!=m_hWnd)
+	{
+		::SetCapture(m_hWnd);
+	}
 	return TRUE;
 }
 
 void CImeWnd::OnMouseMove(UINT nFlags, CPoint point)
 {
 	SetMsgHandled(FALSE);
+	__super::OnSetCursor(m_hWnd,HTCLIENT,WM_MOUSEMOVE);	//disable ime window receive wm_setcursor by user
 	CRect rcWnd = SWindow::GetWindowRect();
-	if(!rcWnd.PtInRect(point))
+	if(!rcWnd.PtInRect(point) && m_canReleaseCapture)
 	{
+		SLOG_INFO("ReleaseCapture");
 		::ReleaseCapture();
 	}
 }
@@ -49,6 +53,26 @@ LRESULT CImeWnd::OnMouseEvent(UINT uMsg, WPARAM wParam, LPARAM lParam)
 		GetToolTip()->RelayEvent(GetCurrentMessage());
 	}
 	return 0;
+}
+
+BOOL CImeWnd::OnReleaseSwndCapture()
+{
+	if(!SwndContainerImpl::OnReleaseSwndCapture()) return FALSE;
+	m_canReleaseCapture = TRUE;
+	SLOG_INFO("m_canReleaseCapture:TRUE");
+	CPoint pt;
+	GetCursorPos(&pt);
+	ScreenToClient(&pt);
+	PostMessage(WM_MOUSEMOVE,0,MAKELPARAM(pt.x,pt.y));
+	return TRUE;
+}
+
+SWND CImeWnd::OnSetSwndCapture(SWND swnd)
+{
+	SWND ret =  SwndContainerImpl::OnSetSwndCapture(swnd);
+	m_canReleaseCapture = FALSE;
+	SLOG_INFO("m_canReleaseCapture:FALSE");
+	return ret;
 }
 
 }
