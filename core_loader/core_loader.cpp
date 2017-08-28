@@ -23,7 +23,7 @@ void CCoreLoader::SetCorePath(LPCTSTR pszPath)
 	_tcscat(m_szPath,_T("\\sinstar3_core.dll"));
 }
 
-ISinstar *CCoreLoader::Sinstar3_Create(ITextService *pTxtSvr,HINSTANCE hInst)
+ISinstar *CCoreLoader::Sinstar3_Create(ITextService *pTxtSvr)
 {
 	CAutoLock lock(&m_cs);
 	BOOL bLoad=FALSE;
@@ -45,15 +45,15 @@ ISinstar *CCoreLoader::Sinstar3_Create(ITextService *pTxtSvr,HINSTANCE hInst)
 		if(bLoad) FreeLibrary(hCoreModule);
 		return NULL;
 	}
-	ISinstar *pRet = funCreate(pTxtSvr,hCoreModule);
+	ISinstar *pRet = funCreate(pTxtSvr);
 	return pRet;
 }
 
 BOOL CCoreLoader::Sinstar3_Delete(ISinstar * pSinstar3)
 {
 	CAutoLock lock(&m_cs);
-
-	HMODULE hCoreModule=pSinstar3->GetModule();
+	HMODULE hCoreModule=GetModuleHandle(m_szPath);
+	if(!hCoreModule) return FALSE;
 	FUN_Sinstar3_Delete funDelete=(FUN_Sinstar3_Delete)GetProcAddress(hCoreModule,"Sinstar3_Delete");
 	FUN_Sinstar3_CanUnloadNow funCanUnloadNow=(FUN_Sinstar3_CanUnloadNow)GetProcAddress(hCoreModule,"Sinstar3_CanUnloadNow");
 	_ASSERT(funDelete && funCanUnloadNow);

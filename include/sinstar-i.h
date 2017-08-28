@@ -26,7 +26,6 @@ interface ISinstar : public IUnknown
 	virtual BOOL ShowCompWnd() = NULL;
 	virtual LRESULT OnWildMessage(WPARAM wParam,LPARAM lParam)=NULL;
 	virtual INT_PTR MessageBox(HWND hWnd,LPCTSTR lpText,LPCTSTR lpCaption,UINT uType)=NULL;
-	virtual HMODULE GetModule()=NULL;
 };
 
 namespace SOUI
@@ -46,7 +45,7 @@ struct HostInfo
 	ILogStateListener *pLogStateListener;
 };
 
-typedef ISinstar *(*FUN_Sinstar3_Create)(ITextService *,HINSTANCE);
+typedef ISinstar *(*FUN_Sinstar3_Create)(ITextService *);
 typedef void (*FUN_Sinstar3_Delete)(ISinstar*);
 typedef BOOL (*FUN_Sinstar3_Config)(HWND);
 typedef HRESULT (*FUN_Sinstar3_CanUnloadNow)();

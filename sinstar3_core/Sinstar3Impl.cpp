@@ -4,9 +4,8 @@
 #include <initguid.h>
 
 
-CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HINSTANCE hInst)
+CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr)
 :m_pTxtSvr(pTxtSvr)
-,m_hInst(hInst)
 ,m_pCompWnd(NULL)
 ,m_pStatusWnd(NULL)
 {
@@ -136,11 +135,6 @@ BOOL CSinstar3Impl::ShowCompWnd()
 LRESULT CSinstar3Impl::OnWildMessage(WPARAM wParam,LPARAM lParam)
 {
 	return E_NOTIMPL;
-}
-
-HMODULE CSinstar3Impl::GetModule()
-{
-	return m_hInst;
 }
 
 void CSinstar3Impl::CheckDefIME()

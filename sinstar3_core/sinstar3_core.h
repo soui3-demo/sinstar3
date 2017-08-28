@@ -9,7 +9,7 @@
 #endif
 
 
-EXTERN_C SINSTAR3_API  ISinstar* Sinstar3_Create(ITextService* pTxtSvr,HINSTANCE hInst);
+EXTERN_C SINSTAR3_API  ISinstar* Sinstar3_Create(ITextService* pTxtSvr);
 
 EXTERN_C SINSTAR3_API  void Sinstar3_Delete(ISinstar* pSinstar3);
 

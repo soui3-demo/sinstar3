@@ -8,7 +8,7 @@ class CSinstar3Impl:
 	public ISinstar
 {
 public:
-	CSinstar3Impl(ITextService *pTxtSvr,HINSTANCE hInst);
+	CSinstar3Impl(ITextService *pTxtSvr);
 	virtual ~CSinstar3Impl(void);
 
 	virtual void OnIMESelect(BOOL bSelect);
@@ -31,7 +31,6 @@ public:
 	virtual EInputMethod GetDefInputMode();
 	virtual BOOL ShowCompWnd();
 	virtual LRESULT OnWildMessage(WPARAM wParam,LPARAM lParam);
-	virtual HMODULE GetModule();
 
 	virtual INT_PTR MessageBox(HWND hWnd,LPCTSTR lpText,LPCTSTR lpCaption,UINT uType);
 
@@ -43,10 +42,6 @@ private:
 	ITextService	*m_pTxtSvr;
 	CCompWnd		*m_pCompWnd;
 	CStatusWnd		*m_pStatusWnd;
-
-	HINSTANCE		 m_hInst;
-
-
 };
 
 
