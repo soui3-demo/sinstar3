@@ -22,7 +22,6 @@
 #include "../include/TextService-i.h"
 #include "../include/unknownimpl.h"
 
-
 #define LOG_FILTER "sinstar3_core"
 
 #define	 DLL_SOUI
@@ -35,6 +34,7 @@
 #define R_IN_CPP	//定义这个开关来
 #include "res\resource.h"
 
+#include "../include/reg.h"
 
 #include "controls/SToggle2.h"
 #include "controls/SCandView.h"

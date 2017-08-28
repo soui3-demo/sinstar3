@@ -19,9 +19,17 @@ namespace SOUI
 		int nRet = __super::OnCreate(lpCreateStruct);
 		if(nRet != 0) return nRet;
 
-		CRect rcWorkArea;
-		SystemParametersInfo(SPI_GETWORKAREA,0,&rcWorkArea,0);
-		SetWindowPos(HWND_TOPMOST,rcWorkArea.right-GetWindowRect().Width(),rcWorkArea.bottom-GetWindowRect().Height(),0,0,SWP_NOSIZE|SWP_NOZORDER|SWP_NOACTIVATE);
+		DWORD dwPos=-1;
+		theModule->GetRegKey().QueryDWORDValue(_T("status_pos"),dwPos);
+		CPoint pt(GET_X_LPARAM(dwPos),GET_Y_LPARAM(dwPos));
+		if(pt.x<0 || pt.y<0)
+		{
+			CRect rcWorkArea;
+			SystemParametersInfo(SPI_GETWORKAREA,0,&rcWorkArea,0);
+			pt.x = rcWorkArea.right-GetWindowRect().Width();
+			pt.y = rcWorkArea.bottom-GetWindowRect().Height();
+		}
+		SetWindowPos(HWND_TOPMOST,pt.x,pt.y,0,0,SWP_NOSIZE|SWP_NOZORDER|SWP_NOACTIVATE);
 		return 0;
 	}
 
@@ -63,6 +71,14 @@ namespace SOUI
 		if(rcWorkArea.right-pt.x-rcWnd.Width()<SIZE_MAGNETIC) pt.x=rcWorkArea.right-rcWnd.Width();
 		if(rcWorkArea.bottom-pt.y-rcWnd.Height()<SIZE_MAGNETIC) pt.y=rcWorkArea.bottom-rcWnd.Height();
 		SetWindowPos(NULL,pt.x,pt.y,0,0,SWP_NOSIZE|SWP_NOZORDER|SWP_NOACTIVATE);
+	}
+
+	void CStatusWnd::OnDestroy()
+	{
+		CRect rcWnd;
+		CSimpleWnd::GetWindowRect(&rcWnd);
+		theModule->GetRegKey().SetDWORDValue(_T("status_pos"),MAKELPARAM(rcWnd.left,rcWnd.top));
+		__super::OnDestroy();
 	}
 
 }

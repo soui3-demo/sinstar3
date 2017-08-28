@@ -14,6 +14,7 @@ namespace SOUI
 
 	protected:
 		int OnCreate(LPCREATESTRUCT lpCreateStruct);
+		void OnDestroy();
 
 		void OnRButtonUp(UINT nFlags,CPoint pt);
 		
@@ -22,6 +23,7 @@ namespace SOUI
 		BEGIN_MSG_MAP_EX(CStatusWnd)
 			MSG_WM_INITMENUPOPUP(OnInitMenuPopup)
 			MSG_WM_CREATE(OnCreate)
+			MSG_WM_DESTROY(OnDestroy)
 			MSG_WM_RBUTTONUP(OnRButtonUp)
 			CHAIN_MSG_MAP(CImeWnd)
 		END_MSG_MAP()
