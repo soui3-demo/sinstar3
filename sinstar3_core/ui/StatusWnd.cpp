@@ -2,7 +2,6 @@
 #include "StatusWnd.h"
 #include <helper/SMenu.h>
 
-#define CMD_MENU_FIRST	 220
 #define SIZE_MAGNETIC	 5
 namespace SOUI
 {
@@ -19,9 +18,7 @@ namespace SOUI
 		int nRet = __super::OnCreate(lpCreateStruct);
 		if(nRet != 0) return nRet;
 
-		DWORD dwPos=-1;
-		theModule->GetRegKey().QueryDWORDValue(_T("status_pos"),dwPos);
-		CPoint pt(GET_X_LPARAM(dwPos),GET_Y_LPARAM(dwPos));
+		CPoint pt =CDataCenter::GetAutoLockerInstance()->GetData().m_ptStatus;
 		if(pt.x<0 || pt.y<0)
 		{
 			CRect rcWorkArea;
@@ -40,7 +37,7 @@ namespace SOUI
 		ClientToScreen(&pt);
 		m_pSkinManager.ClearMap();
 		int nRet = menu.TrackPopupMenu(TPM_LEFTALIGN|TPM_BOTTOMALIGN|TPM_RETURNCMD,pt.x,pt.y,m_hWnd);
-		if(nRet>=CMD_MENU_FIRST && nRet <=CMD_MENU_FIRST+1000)
+		if(nRet>=CMD_MENU_DEF && nRet <=CMD_MENU_DEF+1000)
 		{//select menu
 			m_pSkinManager.SetSkin(nRet);
 		}
@@ -51,7 +48,12 @@ namespace SOUI
 	{
 		if(GetMenuContextHelpId(menuPopup)==2)
 		{
-			m_pSkinManager.InitSkinMenu(menuPopup,theModule->GetDataPath()+_T("\\skins"),CMD_MENU_FIRST);
+			SStringT strCurSkin = CDataCenter::GetAutoLockerInstance()->GetData().m_strSkin;
+			if(strCurSkin.IsEmpty())
+			{
+				CheckMenuItem(menuPopup,CMD_MENU_DEF,MF_CHECKED|MF_BYCOMMAND);
+			}
+			m_pSkinManager.InitSkinMenu(menuPopup,theModule->GetDataPath()+_T("\\skins"),CMD_MENU_DEF,strCurSkin);
 		}
 	}
 
@@ -71,13 +73,12 @@ namespace SOUI
 		if(rcWorkArea.right-pt.x-rcWnd.Width()<SIZE_MAGNETIC) pt.x=rcWorkArea.right-rcWnd.Width();
 		if(rcWorkArea.bottom-pt.y-rcWnd.Height()<SIZE_MAGNETIC) pt.y=rcWorkArea.bottom-rcWnd.Height();
 		SetWindowPos(NULL,pt.x,pt.y,0,0,SWP_NOSIZE|SWP_NOZORDER|SWP_NOACTIVATE);
+
+		CDataCenter::GetAutoLockerInstance()->GetData().m_ptStatus = pt;
 	}
 
 	void CStatusWnd::OnDestroy()
 	{
-		CRect rcWnd;
-		CSimpleWnd::GetWindowRect(&rcWnd);
-		theModule->GetRegKey().SetDWORDValue(_T("status_pos"),MAKELPARAM(rcWnd.left,rcWnd.top));
 		__super::OnDestroy();
 	}
 

@@ -117,4 +117,14 @@ namespace SOUI
 		}
 	}
 
+	void CCompWnd::OnSetSkin(EventArgs *e)
+	{
+		BOOL bVisible = IsWindowVisible();
+		CRect rcWnd;
+		CSimpleWnd::GetWindowRect(&rcWnd);
+		DestroyWindow();
+		Create();
+		SetWindowPos(NULL,rcWnd.left,rcWnd.top,0,0,SWP_NOZORDER|SWP_NOSIZE|SWP_NOACTIVATE);
+		Show(bVisible);
+	}
 }

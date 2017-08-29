@@ -1,5 +1,7 @@
 #pragma once
 
+#define CMD_MENU_DEF	 220
+
 class EventSetSkin : public TplEventArgs<EventSetSkin>
 {
 	SOUI_CLASS_NAME(EventSetSkin,L"on_set_skin")
@@ -16,7 +18,7 @@ public:
 
 	void ClearMap(){m_mapSkin.RemoveAll();}
 	BOOL SetSkin(int nSkinId);
-	int InitSkinMenu(HMENU hMenu, const SStringT &strSkinPath,int nStartId);
+	int InitSkinMenu(HMENU hMenu, const SStringT &strSkinPath,int nStartId,const SStringT &strCurSkin);
 	SStringT ExtractSkinInfo(SStringT strSkinPath);
 public:
 	virtual int GetID() const

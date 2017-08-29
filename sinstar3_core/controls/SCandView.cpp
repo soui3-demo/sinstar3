@@ -34,7 +34,7 @@ namespace SOUI
 		TCHAR cWild = 0;
 		{
 			CDataCenter::AutoLocker dataCenterAutoLocker = CDataCenter::GetAutoLockerInstance();
-			cWild = dataCenterAutoLocker->getCompInfo().cWild;
+			cWild = dataCenterAutoLocker->GetData().m_compInfo.cWild;
 		}
 		for(int i=0;i<m_strComp.GetLength();i++)
 		{

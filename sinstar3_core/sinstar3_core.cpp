@@ -6,6 +6,7 @@
 #include "../include/autolock.h"
 #include "SouiEnv.h"
 #include "Minidump.h"
+#include "dataCenter/DataCenter.h"
 
 EXTERN_C SINSTAR3_API  ISinstar* Sinstar3_Create(ITextService* pTxtSvr)
 {
@@ -38,12 +39,12 @@ EXTERN_C SINSTAR3_API void Sinstar3_SetHostInfo(HostInfo *pHostInfo)
 
 CSinstar3Core::CSinstar3Core(HINSTANCE hInst):CModuleRef(hInst),m_pLogStateListener(NULL)
 {
-	m_reg.Create(HKEY_CURRENT_USER,L"Software\\Setoutsoft\\sinstar3",NULL,REG_OPTION_NON_VOLATILE,KEY_WRITE|KEY_READ|KEY_WOW64_64KEY,0,NULL);
+	new CDataCenter();
 }
 
 CSinstar3Core::~CSinstar3Core()
 {
-	m_reg.Close();
+	delete CDataCenter::getSingletonPtr();
 }
 
 void CSinstar3Core::OnInit()

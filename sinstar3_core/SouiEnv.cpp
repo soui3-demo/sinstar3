@@ -94,15 +94,39 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 
 	m_theApp->InitXmlNamedID(namedXmlID,ARRAYSIZE(namedXmlID),TRUE);
 	m_theApp->AddResProvider(pResProvider);
+	CDataCenter::GetAutoLockerInstance()->GetData().m_defUiDefine = SUiDef::getSingletonPtr()->GetUiDef();
 
-	new CDataCenter;
+
+	if(!CDataCenter::GetAutoLockerInstance()->GetData().m_strSkin.IsEmpty())
+	{
+		SLOG_INFO("apply user skin");
+		IResProvider *pResProvider=NULL;
+		CSouiEnv::getSingleton().theComMgr()->CreateResProvider_ZIP((IObjRef**)&pResProvider);
+		ZIPRES_PARAM param;
+		param.ZipFile(GETRENDERFACTORY, CDataCenter::GetAutoLockerInstance()->GetData().m_strSkin);
+		if(pResProvider->Init((WPARAM)&param,0))
+		{
+			IUiDefInfo * pUiDef = SUiDef::getSingleton().CreateUiDefInfo(pResProvider,_T("uidef:xml_init"));
+			if(!pUiDef->GetSkinPool())
+			{//不允许皮肤中存在全局的skin数据
+				m_theApp->AddResProvider(pResProvider,NULL);
+				SUiDef::getSingleton().SetUiDef(pUiDef);
+			}else
+			{//外置皮肤中禁止出现全局skin表。
+				SLOG_WARN("previous skin is invalid");
+				CDataCenter::GetAutoLockerInstance()->GetData().m_strSkin.Empty();
+			}
+			pUiDef->Release();
+		}
+	}
 	new SNotifyCenter;
 }
 
 CSouiEnv::~CSouiEnv(void)
 {
+	CDataCenter::GetAutoLockerInstance()->GetData().m_defUiDefine=NULL;
+
 	delete SNotifyCenter::getSingletonPtr();
-	delete CDataCenter::getSingletonPtr();
  	delete m_theApp;
 	delete m_pComMgr;
 	OleUninitialize();

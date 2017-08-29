@@ -2,7 +2,6 @@
 #include "SkinMananger.h"
 #include <helper/SMenu.h>
 #include <helper/mybuffer.h>
-#include <resprovider-zip/zipresprovider-param.h>
 #include "../SouiEnv.h"
 
 CSkinMananger::CSkinMananger(void)
@@ -12,9 +11,10 @@ CSkinMananger::CSkinMananger(void)
 
 CSkinMananger::~CSkinMananger(void)
 {
+	SNotifyCenter::getSingletonPtr()->removeEvent(EventSetSkin::EventID);
 }
 
-int CSkinMananger::InitSkinMenu(HMENU hMenu, const SStringT &strSkinPath,int nStartId)
+int CSkinMananger::InitSkinMenu(HMENU hMenu, const SStringT &strSkinPath,int nStartId,const SStringT &strCurSkin)
 {
 	SMenu menu(hMenu);
 
@@ -29,7 +29,7 @@ int CSkinMananger::InitSkinMenu(HMENU hMenu, const SStringT &strSkinPath,int nSt
 				{
 					HMENU hSubMenu = CreatePopupMenu();
 					menu.AppendMenu(MF_POPUP,(UINT_PTR)hSubMenu,findData.cFileName,0);
-					nStartId=InitSkinMenu(hSubMenu,strSkinPath+_T("\\")+findData.cFileName,nStartId);
+					nStartId=InitSkinMenu(hSubMenu,strSkinPath+_T("\\")+findData.cFileName,nStartId,strCurSkin);
 				}
 			}else
 			{
@@ -37,10 +37,15 @@ int CSkinMananger::InitSkinMenu(HMENU hMenu, const SStringT &strSkinPath,int nSt
 				_tsplitpath(findData.cFileName,NULL,NULL,NULL,szExt);
 				if(_tcsicmp(szExt,_T(".sskn"))==0)
 				{
+					nStartId++;
 					SStringT strFullPath = strSkinPath+_T("\\")+findData.cFileName;
 					m_mapSkin[nStartId] = strFullPath;
 					SStringT strDesc = ExtractSkinInfo(strFullPath);
-					menu.AppendMenu(0,nStartId++,strDesc,0);
+					menu.AppendMenu(0,nStartId,strDesc,0);
+					if(strFullPath == strCurSkin)
+					{
+						CheckMenuItem(menu.m_hMenu,nStartId,MF_CHECKED|MF_BYCOMMAND);
+					}
 				}
 			}
 		}while(FindNextFile(hFind,&findData));
@@ -54,27 +59,61 @@ int CSkinMananger::InitSkinMenu(HMENU hMenu, const SStringT &strSkinPath,int nSt
 
 BOOL CSkinMananger::SetSkin(int nSkinId)
 {
+	SStringT strSkinPath;
 	if(SMap<int,SStringT>::CPair * p =m_mapSkin.Lookup(nSkinId))
 	{
-		IResProvider *pResProvider=NULL;
+		strSkinPath = p->m_value;
+	}
+	if(strSkinPath == CDataCenter::GetAutoLockerInstance()->GetData().m_strSkin)
+	{
+		return TRUE;
+	}
+
+	if(!strSkinPath.IsEmpty())
+	{
+		CAutoRefPtr<IResProvider> pResProvider;
 		CSouiEnv::getSingleton().theComMgr()->CreateResProvider_ZIP((IObjRef**)&pResProvider);
 		ZIPRES_PARAM param;
-		param.ZipFile(GETRENDERFACTORY, p->m_value);
-		pResProvider->Init((WPARAM)&param,0);
+		param.ZipFile(GETRENDERFACTORY, strSkinPath);
+		if(!pResProvider->Init((WPARAM)&param,0))
+			return FALSE;
 
-		SApplication::getSingleton().AddResProvider(pResProvider);
+		IUiDefInfo * pUiDef = SUiDef::getSingleton().CreateUiDefInfo(pResProvider,_T("uidef:xml_init"));
+		if(pUiDef->GetSkinPool())
+		{//不允许皮肤中存在全局的skin数据
+			pUiDef->Release();
+			return FALSE;
+		}
 
-		//on skin changed
-		EventSetSkin *pEvt = new EventSetSkin(this);
-		SNotifyCenter::getSingletonPtr()->FireEventAsync(pEvt);
+		if(!CDataCenter::GetAutoLockerInstance()->GetData().m_strSkin.IsEmpty())
+		{//清除正在使用的外置皮肤。
+			IResProvider *pLastRes = SApplication::getSingleton().GetTailResProvider();
+			SApplication::getSingleton().RemoveResProvider(pLastRes);
+			IUiDefInfo *pUiDefInfo = SUiDef::getSingleton().GetUiDef();
 
-		pResProvider->Release();
+			SStylePoolMgr::getSingleton().PopStylePool(pUiDefInfo->GetStylePool());
+		}
 
-		return TRUE;
-	}else
-	{
-		return FALSE;
+		SApplication::getSingleton().AddResProvider(pResProvider,NULL);
+		SUiDef::getSingleton().SetUiDef(pUiDef);
+		pUiDef->Release();
+
+	}else if(!CDataCenter::GetAutoLockerInstance()->GetData().m_strSkin.IsEmpty())
+	{//清除正在使用的外置皮肤。
+		IResProvider *pLastRes = SApplication::getSingleton().GetTailResProvider();
+		SApplication::getSingleton().RemoveResProvider(pLastRes);
+		IUiDefInfo *pUiDefInfo = SUiDef::getSingleton().GetUiDef();
+
+		SStylePoolMgr::getSingleton().PopStylePool(pUiDefInfo->GetStylePool());
 	}
+
+	CDataCenter::GetAutoLockerInstance()->GetData().m_strSkin = strSkinPath;
+
+	//notify skin changed
+	EventSetSkin *pEvt = new EventSetSkin(this);
+	SNotifyCenter::getSingletonPtr()->FireEventAsync(pEvt);
+	pEvt->Release();
+	return TRUE;
 }
 
 SOUI::SStringT CSkinMananger::ExtractSkinInfo(SStringT strSkinPath)

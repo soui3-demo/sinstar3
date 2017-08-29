@@ -31,6 +31,9 @@
 #include <control/souictrls.h>
 #include <event/NotifyCenter.h>
 #include <com-cfg.h>
+
+#include <resprovider-zip/zipresprovider-param.h>
+
 #include "resource.h"
 #define R_IN_CPP	//定义这个开关来
 #include "res\resource.h"

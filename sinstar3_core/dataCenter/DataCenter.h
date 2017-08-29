@@ -2,6 +2,25 @@
 
 namespace SOUI
 {
+	struct CompInfo
+	{
+		SStringT strCompName;
+		TCHAR    cWild;
+	};
+
+	class CMyData{
+	public:
+		CMyData();
+		~CMyData();
+		CompInfo	m_compInfo;
+
+		CAutoRefPtr<IUiDefInfo> m_defUiDefine;
+
+		SStringT	m_strSkin;
+		CPoint		m_ptStatus;
+
+		CRegKey		m_reg;
+	};
 
 class CDataCenter : public SSingleton<CDataCenter>
 {
@@ -71,20 +90,16 @@ public:
 		CDataCenter * p;
 	};
 
-	struct CompInfo
-	{
-		SStringT strCompName;
-		TCHAR    cWild;
-	};
 
 	static AutoLocker GetAutoLockerInstance();
 public:
 	void Lock();
 	void Unlock();
 
-	CompInfo & getCompInfo(){return m_compInfo;}
+	CMyData & GetData(){return m_data;}
 private:
-	CompInfo		m_compInfo;
+	CMyData	m_data;
+	
 	CRITICAL_SECTION m_cs;
 };
 

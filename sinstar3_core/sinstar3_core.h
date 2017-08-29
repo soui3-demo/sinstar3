@@ -30,7 +30,6 @@ public:
 
 	SOUI::SStringT GetDataPath() const {return m_strDataPath;}
 
-	CRegKey & GetRegKey() {return m_reg;}
 protected:
 	virtual void OnInit();
 
@@ -39,7 +38,6 @@ protected:
 	ILogStateListener * m_pLogStateListener;
 	SOUI::SStringT m_strDataPath;
 
-	CRegKey		   m_reg;
 	
 };
 

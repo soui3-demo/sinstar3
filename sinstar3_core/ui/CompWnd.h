@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ImeWnd.h"
-
+#include "SkinMananger.h"
 namespace SOUI
 {
 	class CCompWnd :
@@ -20,6 +20,13 @@ namespace SOUI
 		int GetCandPageSize() const {return m_nCandSize;}
 		void ClearCandidate();
 		void SetCandidateInfo(const SStringT * strCands, const SStringT * strComps, int nSize);
+
+	protected:
+		void OnSetSkin(EventArgs *e);
+		EVENT_MAP_BEGIN()
+			EVENT_HANDLER(EventSetSkin::EventID,OnSetSkin)
+		EVENT_MAP_END()
+
 	protected:
 		int OnCreate(LPCREATESTRUCT lpCreateStruct);
 

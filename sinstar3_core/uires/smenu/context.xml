@@ -10,6 +10,7 @@
     <item text="皮肤管理" id="201"/>
     <item text="网上皮肤" id="202"/>
     <sep/>
+    <item text="内置皮肤" id="220"/>
   </item>
   <item text="启程词典" contextHelpId="3">
     <item text="词典输入" id="301"/>
