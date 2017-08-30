@@ -329,10 +329,6 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\ui\CompWnd.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\dataCenter\DataCenter.cpp"
 				>
 			</File>
@@ -378,6 +374,10 @@
 			</File>
 			<File
 				RelativePath=".\ui\ImeWnd.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ui\InputWnd.cpp"
 				>
 			</File>
 			<File
@@ -463,10 +463,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ui\CompWnd.h"
-				>
-			</File>
-			<File
 				RelativePath=".\dataCenter\DataCenter.h"
 				>
 			</File>
@@ -476,6 +472,10 @@
 			</File>
 			<File
 				RelativePath=".\ui\ImeWnd.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ui\InputWnd.h"
 				>
 			</File>
 			<File

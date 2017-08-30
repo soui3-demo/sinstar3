@@ -1,7 +1,7 @@
 #pragma once
 #include "../include/sinstar-i.h"
 
-#include "ui/CompWnd.h"
+#include "ui/InputWnd.h"
 #include "ui/StatusWnd.h"
 
 class CSinstar3Impl:
@@ -40,7 +40,7 @@ public:
 
 private:
 	ITextService	*m_pTxtSvr;
-	CCompWnd		*m_pCompWnd;
+	CInputWnd		*m_pCompWnd;
 	CStatusWnd		*m_pStatusWnd;
 };
 

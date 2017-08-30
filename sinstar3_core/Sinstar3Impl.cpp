@@ -10,7 +10,7 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr)
 ,m_pStatusWnd(NULL)
 {
 	theModule->AddRef();
- 	m_pCompWnd = new CCompWnd();
+ 	m_pCompWnd = new CInputWnd();
 	m_pStatusWnd = new CStatusWnd();
 	m_pStatusWnd->Create();
 	m_pCompWnd->Create();
