@@ -112,6 +112,8 @@ namespace SOUI
 
 	void CInputWnd::OnInputInfoChanged()
 	{
+		m_pCompWnd->SetWindowText(m_inputInfo.strComposition);
+
 		SWindow * pCand = m_pCandContainer->GetWindow(GSW_FIRSTCHILD);
 		int iCand = 0;
 		while(pCand && iCand<m_inputInfo.nCands)
