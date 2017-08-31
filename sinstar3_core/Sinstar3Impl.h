@@ -39,6 +39,8 @@ public:
 	virtual HRESULT OnQueryInterface(REFIID riid, void **ppvObject);
 
 	virtual int GetID() const {	return SENDER_SINSTSR3;}
+protected:
+	void QueryCand(const SStringT &strComp);
 public:
 	LRESULT OnSvrNotify(UINT uMsg, WPARAM wParam, LPARAM lParam);
 

@@ -22,14 +22,7 @@ namespace SOUI
 	void CInputWnd::SetCompStr(const SStringT &strComp)
 	{
 		m_inputInfo.strComposition = strComp;
-
-		SStringT strCands[] = {L"启程输入法3",L"SOUI",L"启程软件",L"fuck",L"启程输入法3",L"SOUI",L"启程软件",L"fuck"};
-		SStringT strComps[] = {L"abzd",L"aaaa",L"bbbb",L"",L"abzd",L"aaza",L"bbbb",L""};
-		int nOffset= strComp.GetLength()%6;
-		int nSize = smin(5,ARRAYSIZE(strComps)-nOffset-1);
-		SetCandidateInfo(strCands+nOffset,strComps+nOffset,nSize);
-
-		OnInputInfoChanged();
+		OnInputInfoChanged(TRUE,FALSE);
 	}
 
 	SStringT CInputWnd::GetCompStr() const
@@ -70,31 +63,27 @@ namespace SOUI
 		m_pCompWnd = FindChildByName(R.name.txt_comps);
 		m_pCandContainer = FindChildByName(R.name.cand_container);
 		SASSERT(m_pCandContainer&&m_pCompWnd);
-		m_nCandSize = 0;
+		m_nPageSize = 0;
 		SWindow * pCand = m_pCandContainer->GetWindow(GSW_FIRSTCHILD);
 		while(pCand)
 		{
 			if(pCand->IsClass(SCandView::GetClassName()))
-				m_nCandSize++;
+				m_nPageSize++;
 			pCand = pCand->GetWindow(GSW_NEXTSIBLING);
 		}
 		return 0;
 	}
 
-	void CInputWnd::SetCandidateInfo(const SStringT * strCands, const SStringT * strComps,int nSize)
+	void CInputWnd::SetCandidateInfo(const SArray<SStringT> & strCands, const SArray<SStringT> & strComps,int nSize)
 	{
-		SASSERT(nSize <= m_nCandSize);
+		m_iPage = 0;
 		m_inputInfo.nCands = nSize;
-		m_inputInfo.strCands.RemoveAll();
-		for(int i=0;i<nSize;i++)
-		{
-			m_inputInfo.strCands.Add(strCands[i]);
-		}
-		m_inputInfo.strComps.RemoveAll();
-		for(int i=0;i<nSize;i++)
-		{
-			m_inputInfo.strComps.Add(strComps[i]);
-		}
+		m_inputInfo.strCands.Copy(strCands);
+		m_inputInfo.strComps.Copy(strComps);
+		FindChildByID(R.id.btn_prevpage)->SetVisible(FALSE,TRUE);
+		FindChildByID(R.id.btn_nextpage)->SetVisible(nSize > m_nPageSize,TRUE);
+			
+		OnInputInfoChanged(FALSE,TRUE);
 	}
 
 
@@ -105,36 +94,78 @@ namespace SOUI
 		cs.cx=0;
 		cs.cy=0;
 		OnCreate(&cs);
-		OnInputInfoChanged();
+		OnInputInfoChanged(TRUE,TRUE);
 	}
 
-	void CInputWnd::OnInputInfoChanged()
+	void CInputWnd::OnInputInfoChanged(BOOL bComp,BOOL bCand)
 	{
-		m_pCompWnd->SetWindowText(m_inputInfo.strComposition);
-
-		SWindow * pCand = m_pCandContainer->GetWindow(GSW_FIRSTCHILD);
-		int iCand = 0;
-		while(pCand && iCand<m_inputInfo.nCands)
+		if(bComp)
 		{
-			if(pCand->IsClass(SCandView::GetClassName()))
-			{
-				SCandView *pCand2 = (SCandView*)pCand;
-				pCand2->SetVisible(TRUE);
-				pCand2->SetData(m_inputInfo.strComposition,m_inputInfo.strCands[iCand],m_inputInfo.strComps[iCand]);
-				iCand ++;
-			}
-			pCand = pCand->GetWindow(GSW_NEXTSIBLING);
+			m_pCompWnd->SetWindowText(m_inputInfo.strComposition);
 		}
 
-		while(iCand < m_nCandSize && pCand)
+		if(bCand)
 		{
-			if(pCand->IsClass(SCandView::GetClassName()))
+			int iBegin = m_iPage * m_nPageSize;
+			int iEnd   = smin(iBegin + m_nPageSize,m_inputInfo.nCands);
+
+
+			SWindow * pCand = m_pCandContainer->GetWindow(GSW_FIRSTCHILD);
+			int iCand = iBegin;
+			while(pCand && iCand<iEnd)
 			{
-				SCandView *pCand2 = (SCandView*)pCand;
-				pCand2->SetVisible(FALSE);
-				iCand ++;
+				if(pCand->IsClass(SCandView::GetClassName()))
+				{
+					SCandView *pCand2 = (SCandView*)pCand;
+					pCand2->SetVisible(TRUE);
+					pCand2->SetData(m_inputInfo.strComposition,m_inputInfo.strCands[iCand],m_inputInfo.strComps[iCand]);
+					iCand ++;
+				}
+				pCand = pCand->GetWindow(GSW_NEXTSIBLING);
+			}
+
+			while(iCand < iBegin + m_nPageSize && pCand)
+			{
+				if(pCand->IsClass(SCandView::GetClassName()))
+				{
+					SCandView *pCand2 = (SCandView*)pCand;
+					pCand2->SetVisible(FALSE);
+					iCand ++;
+				}
 			}
 		}
+
+	}
+
+	void CInputWnd::OnBtnNextPage()
+	{
+		if(m_iPage*m_nPageSize<m_inputInfo.nCands)
+		{
+			m_iPage ++;
+			FindChildByID(R.id.btn_prevpage)->SetVisible(TRUE,TRUE);
+			if(m_iPage*m_nPageSize>=m_inputInfo.nCands)
+				FindChildByID(R.id.btn_nextpage)->SetVisible(FALSE,TRUE);
+		}
+	}
+
+	void CInputWnd::OnBtnPrevPage()
+	{
+		if(m_iPage>0)
+		{
+			m_iPage--;
+			FindChildByID(R.id.btn_nextpage)->SetVisible(TRUE,TRUE);
+			if(m_iPage==0)
+				FindChildByID(R.id.btn_prevpage)->SetVisible(FALSE,TRUE);
+		}
+	}
+
+	void CInputWnd::ClearCands()
+	{
+		m_inputInfo.strCands.RemoveAll();
+		m_inputInfo.strComps.RemoveAll();
+		m_inputInfo.nCands= 0;
+		FindChildByID(R.id.btn_nextpage)->SetVisible(FALSE,TRUE);
+		FindChildByID(R.id.btn_prevpage)->SetVisible(FALSE,TRUE);
 	}
 
 }

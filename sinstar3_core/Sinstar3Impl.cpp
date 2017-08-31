@@ -59,8 +59,8 @@ void CSinstar3Impl:: TranslateKey(LPVOID lpImeContext,UINT vkCode,UINT uScanCode
 			}
 
 			strComp.Append(vkCode);
-			m_pCompWnd->SetCompStr(strComp);
 			m_pTxtSvr->ReplaceSelCompositionW(lpImeContext,0,-1,strComp,strComp.GetLength());
+			QueryCand(strComp);
 		}
 	}else if(vkCode == VK_ESCAPE || vkCode == VK_RETURN)
 	{
@@ -74,8 +74,8 @@ void CSinstar3Impl:: TranslateKey(LPVOID lpImeContext,UINT vkCode,UINT uScanCode
 		{
 			strComp = strComp.Left(strComp.GetLength()-1);
 		}
-		m_pCompWnd->SetCompStr(strComp);
 		m_pTxtSvr->ReplaceSelCompositionW(lpImeContext,0,-1,strComp,strComp.GetLength());
+		QueryCand(strComp);
 	}
 }
 
@@ -181,7 +181,11 @@ HRESULT CSinstar3Impl::OnQueryInterface(REFIID riid, void **ppvObject)
 LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 {
 	PMSGDATA pMsg=ISComm_OnSeverNotify(m_hWnd,wp,lp);
-	if(wp==NT_COMPINFO)
+	if(wp == NT_KEYIN)
+	{
+
+	}
+	else if(wp==NT_COMPINFO)
 	{
 		CDataCenter::getSingleton().Lock();
 		CMyData &myData = CDataCenter::getSingleton().GetData();
@@ -196,5 +200,50 @@ LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 	}
 
 	return 0;
+}
+
+void CSinstar3Impl::QueryCand(const SStringT &strComp)
+{
+	m_pCompWnd->SetCompStr(strComp);
+	SStringA strCompA = S_CT2A(strComp);
+	if(strComp.IsEmpty())
+	{
+		m_pCompWnd->ClearCands();
+
+	}
+	else if(ISComm_QueryCand(strCompA,strCompA.GetLength(),0,m_hWnd) == ISACK_SUCCESS)
+	{
+		PMSGDATA pMsgData=ISComm_GetData();
+		LPBYTE pbyData,pCandData;
+		short i,sCount,sSingleWords=0;
+		short sCandCount = 0;
+		pbyData = pMsgData->byData+1;
+
+		SArray<SStringT> arrCands,arrComps;
+		memcpy(&sCount,pbyData,2);
+		pbyData+=2;
+		pCandData=pbyData;
+		//先找出单字数量
+		for(i=0;i<sCount;i++)
+		{
+			if(pCandData[1]==2) sSingleWords++;
+			pCandData+=pCandData[1]+2;	//偏移词组信息
+			pCandData+=pCandData[0]+1;	//偏移编码信息					
+		}
+		pCandData=pbyData;
+		for(i=0;i<sCount;i++)
+		{
+			BYTE byRate = pCandData[0];
+			BYTE * byCandText = pCandData+1;
+			arrCands.Add(S_CA2T(SStringA((char*)byCandText+1,byCandText[0])));
+			BYTE * byCandComp = byCandText + 1 + byCandText[0];
+			arrComps.Add(S_CA2T(SStringA((char*)byCandComp+1,byCandComp[0])));
+
+			pCandData+=pCandData[1]+2;	//偏移词组信息
+			pCandData+=pCandData[0]+1;	//偏移编码信息
+		}
+
+		m_pCompWnd->SetCandidateInfo(arrCands,arrComps,sCount);
+	}
 }
 

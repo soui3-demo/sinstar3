@@ -17,8 +17,8 @@ namespace SOUI
 		void MoveTo(CPoint pt,int nCaretHeight);
 		void Show(BOOL bShow);
 
-		int GetCandPageSize() const {return m_nCandSize;}
-		void SetCandidateInfo(const SStringT * strCands, const SStringT * strComps, int nSize);
+		int GetCandPageSize() const {return m_nPageSize;}
+		void SetCandidateInfo(const SArray<SStringT> & strCands, const SArray<SStringT> & strComps, int nSize);
 
 		class InputInfo
 		{
@@ -29,11 +29,15 @@ namespace SOUI
 			int nCands;
 		};
 	protected:
-		void OnInputInfoChanged();
+		void OnInputInfoChanged(BOOL bComp,BOOL bCand);
 	protected:
 		void OnSetSkin(EventArgs *e);
+		void OnBtnPrevPage();
+		void OnBtnNextPage();
 		EVENT_MAP_BEGIN()
 			EVENT_HANDLER(EventSetSkin::EventID,OnSetSkin)
+			EVENT_ID_COMMAND(R.id.btn_prevpage,OnBtnPrevPage)
+			EVENT_ID_COMMAND(R.id.btn_nextpage,OnBtnNextPage)
 		EVENT_MAP_END()
 
 	protected:
@@ -43,7 +47,8 @@ namespace SOUI
 			MSG_WM_CREATE(OnCreate)
 			CHAIN_MSG_MAP(__super)
 		END_MSG_MAP()
-		
+		void ClearCands();
+
 		SWindow * m_pCandContainer;
 		SWindow * m_pCompWnd;
 		CPoint			 m_ptCaret;
@@ -51,8 +56,8 @@ namespace SOUI
 		BOOL			 m_bLocated;
 		BOOL			 m_bShow;
 
-		int				 m_nCandSize;
-
+		int				 m_nPageSize;
+		int				 m_iPage;
 
 		InputInfo		 m_inputInfo;
 
