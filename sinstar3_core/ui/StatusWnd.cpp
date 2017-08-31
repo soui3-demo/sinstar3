@@ -18,6 +18,8 @@ namespace SOUI
 		int nRet = __super::OnCreate(lpCreateStruct);
 		if(nRet != 0) return nRet;
 
+		m_pBackGround = FindChildByID2<SStatusBackground>(R.id.status_bg);
+
 		CPoint pt =CDataCenter::GetAutoLockerInstance()->GetData().m_ptStatus;
 		if(pt.x<0 || pt.y<0)
 		{
@@ -81,8 +83,30 @@ namespace SOUI
 	{
 		BOOL bVisible = IsWindowVisible();
 		OnDestroy();
-		OnCreate(NULL);
+		CREATESTRUCT cs;
+		cs.cx=0;
+		cs.cy=0;
+		OnCreate(&cs);
 		Show(bVisible);
+	}
+
+
+	void CStatusWnd::OnBtnExtend()
+	{
+		m_pBackGround->SetMode(SStatusBackground::MODE_EXTEND);
+
+		FindChildByID(R.id.btn_status_extend)->SetVisible(TRUE,TRUE);
+		FindChildByID(R.id.btn_status_shrink)->SetVisible(TRUE,TRUE);
+		FindChildByID(R.id.btn_status_extend)->SetVisible(FALSE,TRUE);
+	}
+
+	void CStatusWnd::OnBtnShrink()
+	{
+		m_pBackGround->SetMode(SStatusBackground::MODE_SHRINK);
+
+		FindChildByID(R.id.btn_status_extend)->SetVisible(FALSE,TRUE);
+		FindChildByID(R.id.btn_status_shrink)->SetVisible(FALSE,TRUE);
+		FindChildByID(R.id.btn_status_extend)->SetVisible(TRUE,TRUE);
 	}
 
 }

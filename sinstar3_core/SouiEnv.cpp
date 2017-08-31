@@ -52,6 +52,7 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 	m_theApp->RegisterWindowClass<SToggle2>();
 	m_theApp->RegisterWindowClass<SCandView>();
 	m_theApp->RegisterWindowClass<SCaption2>();
+	m_theApp->RegisterWindowClass<SStatusBackground>();
 
 	CAutoRefPtr<ILog4zManager> pLogMgr;
 	bLoaded = m_pComMgr->CreateLog4z((IObjRef**)&pLogMgr);
@@ -117,6 +118,9 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 				CDataCenter::GetAutoLockerInstance()->GetData().m_strSkin.Empty();
 			}
 			pUiDef->Release();
+		}else
+		{
+			CDataCenter::GetAutoLockerInstance()->GetData().m_strSkin.Empty();
 		}
 	}
 	new SNotifyCenter;

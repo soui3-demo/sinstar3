@@ -46,6 +46,7 @@ using namespace SOUI;
 #include "controls/SToggle2.h"
 #include "controls/SCandView.h"
 #include "controls/SCaption2.h"
+#include "controls/SStatusBackground.h"
 
 #include "dataCenter/datacenter.h"
 

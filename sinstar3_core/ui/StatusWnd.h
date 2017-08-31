@@ -31,11 +31,17 @@ namespace SOUI
 		void OnDragStatus(EventArgs *e);
 		void OnSetSkin(EventArgs *e);
 
+		void OnBtnExtend();
+		void OnBtnShrink();
+		
 		EVENT_MAP_BEGIN()
 			EVENT_HANDLER(EventDragMove::EventID,OnDragStatus)
 			EVENT_HANDLER(EventSetSkin::EventID,OnSetSkin)
+			EVENT_ID_COMMAND(R.id.btn_status_shrink,OnBtnShrink)
+			EVENT_ID_COMMAND(R.id.btn_status_extend,OnBtnExtend)
 		EVENT_MAP_END()
 	protected:
+		SStatusBackground * m_pBackGround;
 		CSkinMananger  m_pSkinManager;
 	};
 

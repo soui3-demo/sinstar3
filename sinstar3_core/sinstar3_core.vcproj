@@ -409,6 +409,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\controls\SStatusBackground.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ui\StatusWnd.cpp"
 				>
 			</File>
@@ -512,6 +516,10 @@
 			</File>
 			<File
 				RelativePath=".\SouiEnv.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SStatusBackground.h"
 				>
 			</File>
 			<File
