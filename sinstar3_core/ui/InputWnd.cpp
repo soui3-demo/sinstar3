@@ -100,14 +100,12 @@ namespace SOUI
 
 	void CInputWnd::OnSetSkin(EventArgs *e)
 	{
-		BOOL bVisible = IsWindowVisible();
-		CRect rcWnd;
-		CSimpleWnd::GetWindowRect(&rcWnd);
-		DestroyWindow();
-		Create();
-		SetWindowPos(NULL,rcWnd.left,rcWnd.top,0,0,SWP_NOZORDER|SWP_NOSIZE|SWP_NOACTIVATE);
+		OnDestroy();
+		CREATESTRUCT cs;
+		cs.cx=0;
+		cs.cy=0;
+		OnCreate(&cs);
 		OnInputInfoChanged();
-		Show(bVisible);
 	}
 
 	void CInputWnd::OnInputInfoChanged()

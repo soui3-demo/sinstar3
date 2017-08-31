@@ -81,13 +81,11 @@ namespace SOUI
 
 	void CStatusWnd::OnSetSkin(EventArgs *e)
 	{
-		BOOL bVisible = IsWindowVisible();
 		OnDestroy();
 		CREATESTRUCT cs;
 		cs.cx=0;
 		cs.cy=0;
 		OnCreate(&cs);
-		Show(bVisible);
 	}
 
 
@@ -98,6 +96,7 @@ namespace SOUI
 		FindChildByID(R.id.btn_status_extend)->SetVisible(TRUE,TRUE);
 		FindChildByID(R.id.btn_status_shrink)->SetVisible(TRUE,TRUE);
 		FindChildByID(R.id.btn_status_extend)->SetVisible(FALSE,TRUE);
+		FindChildByID(R.id.status_extend)->SetVisible(TRUE,TRUE);
 	}
 
 	void CStatusWnd::OnBtnShrink()
@@ -107,6 +106,8 @@ namespace SOUI
 		FindChildByID(R.id.btn_status_extend)->SetVisible(FALSE,TRUE);
 		FindChildByID(R.id.btn_status_shrink)->SetVisible(FALSE,TRUE);
 		FindChildByID(R.id.btn_status_extend)->SetVisible(TRUE,TRUE);
+		FindChildByID(R.id.status_extend)->SetVisible(FALSE,TRUE);
+
 	}
 
 }
