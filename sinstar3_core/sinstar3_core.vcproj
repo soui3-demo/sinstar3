@@ -381,6 +381,26 @@
 				>
 			</File>
 			<File
+				RelativePath="..\iscomm\iscomm.c"
+				>
+				<FileConfiguration
+					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\Minidump.cpp"
 				>
 			</File>
@@ -480,6 +500,14 @@
 			</File>
 			<File
 				RelativePath=".\ui\InputWnd.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\iscomm.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\isProtocol.h"
 				>
 			</File>
 			<File
