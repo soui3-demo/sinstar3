@@ -19,43 +19,17 @@ static UINT    s_uMsgID=0;			//通讯消息ID
 
 static UINT		s_uCount=0;			//访问计数
 
+static TCHAR	s_szSvrPath[MAX_PATH]={0};	//服务器路径
+
 const UINT ISComm_GetCommMsgID(){
 	if(s_uMsgID==0) s_uMsgID=RegisterWindowMessage(MSG_NAME_SINSTAR2);
 	return s_uMsgID;
 }
 
-//获得配置文件
-BOOL ISComm_GetConfig(LPSTR pszConfig)
-{
-	TCHAR szPathSys[MAX_PATH];
-	GetSystemDirectory(szPathSys,MAX_PATH);
-	sprintf(pszConfig,"%s\\sinstar2.ini",szPathSys);
-	return GetFileAttributes(pszConfig)!=0xFFFFFFFF;
-}
 
-//获取服务器运行路径
-BOOL ISComm_GetSvrPath(LPSTR pszPath)
+void ISComm_SetSvrPath(LPCTSTR pszPath)
 {
-	char szConfig[MAX_PATH]={0};
-	if(!ISComm_GetConfig(szConfig)) return FALSE;
-	return GetPrivateProfileString("server","exe",NULL,pszPath,MAX_PATH,szConfig)!=0;
-}
-
-//保存服务器运行路径
-BOOL ISComm_SetSvrPath(LPSTR pszPath)
-{
-	char szConfig[MAX_PATH]={0};
-	if(!ISComm_GetConfig(szConfig)) return FALSE;
-	WritePrivateProfileString("server","exe",pszPath,szConfig);
-	return TRUE;
-}
-
-//获取服务器数据保存路径
-BOOL ISComm_GetDataPath(LPSTR pszPath)
-{
-	char szConfig[MAX_PATH]={0};
-	if(!ISComm_GetConfig(szConfig)) return FALSE;
-	return GetPrivateProfileString("server","data",NULL,pszPath,MAX_PATH,szConfig)!=0;
+	_tcscpy(s_szSvrPath,pszPath);
 }
 
 void ClearComm()
@@ -180,20 +154,19 @@ PMSGDATA ISComm_OnSeverNotify(HWND hWnd,WPARAM wParam,LPARAM lParam)
 
 BOOL ISComm_OpenServer()
 {
-	char szServerPath[MAX_PATH]={0};
 	STARTUPINFO         si={0};    
 	PROCESS_INFORMATION pi;         
 	DWORD dwWaitRet=1;
-	HWND  hWndActive=GetActiveWindow();
+	//HWND  hWndActive=GetActiveWindow();
 	//查询任务栏窗口句柄，确保系统已经成功启动。
-	HWND  hWndShell=FindWindow("Shell_TrayWnd",NULL);
+	HWND  hWndShell=FindWindow(_T("Shell_TrayWnd"),NULL);
+	if(s_szSvrPath[0]==0) return FALSE;
 	if(!hWndShell) return FALSE;
 	si.cb  = sizeof(si);  
 	si.dwFlags = STARTF_USESHOWWINDOW; 
 	si.wShowWindow  = SW_HIDE;
-	if(!ISComm_GetSvrPath(szServerPath)) return FALSE;
 	//以后台启动方式创建服务器进程
-	if(!CreateProcess(szServerPath,NULL,NULL,NULL,FALSE,CREATE_NEW_PROCESS_GROUP,NULL,NULL,&si,&pi))
+	if(!CreateProcess(s_szSvrPath,NULL,NULL,NULL,FALSE,CREATE_NEW_PROCESS_GROUP,NULL,NULL,&si,&pi))
 	{
 		return FALSE;
 	}
@@ -202,7 +175,7 @@ BOOL ISComm_OpenServer()
 	CloseHandle(pi.hProcess);
 	CloseHandle(pi.hThread);
 	//恢复当前活动窗口
-	SetForegroundWindow(hWndActive);
+	//SetForegroundWindow(hWndActive);
 	if(dwWaitRet!=0)
 	{
 		return FALSE;
@@ -213,13 +186,13 @@ BOOL ISComm_OpenServer()
 //生成一个保证不会被重复的客户ID
 HANDLE ISComm_GenerateClientID(DWORD *pdwID)
 {
-	char szClientID[50];
+	TCHAR szClientID[50];
 	DWORD dwID=0;
 	HANDLE hEvtClient=0;
 	for(;;)
 	{
 		dwID=GetTickCount();
-		sprintf(szClientID,"client-%08X",dwID);
+		_stprintf(szClientID,_T("client-%08X"),dwID);
 		hEvtClient=CreateEvent(NULL,TRUE,FALSE,szClientID);
 		if(GetLastError()==ERROR_ALREADY_EXISTS)
 			CloseHandle(hEvtClient);
@@ -290,7 +263,7 @@ DWORD ISComm_SendMsg(DWORD dwType,LPVOID pData,short sSize,HWND hWnd)
 	WaitForSingleObject(s_hMutexReq,INFINITE);
 	pIsBuf->sSize=sSize;
 	memcpy(pIsBuf->byData,pData,sSize);
-	dwRet=SendMessage(s_hWndServer,ISComm_GetCommMsgID(),dwType,(LPARAM)hWnd);
+	dwRet=(DWORD)SendMessage(s_hWndServer,ISComm_GetCommMsgID(),dwType,(LPARAM)hWnd);
 	//提取数据
 	pIsBuf=(PMSGDATA)s_pDataAck;
 	if(pIsBuf->sSize!=0)
@@ -334,7 +307,7 @@ char *    ISComm_GetUserDict()
 
 DWORD ISComm_KeyIn(LPCSTR pszText,short sSize,BYTE byMask,HWND hWnd)
 {
-	if(sSize==-1) sSize=strlen(pszText);
+	if(sSize==-1) sSize=(short)strlen(pszText);
 	if(sSize>=MAX_SENTLEN) return ISACK_ERRBUF;
 
 	s_byBuf[0]=byMask;
@@ -514,8 +487,8 @@ DWORD ISComm_Blur_Set(BOOL bBlur)
 DWORD ISComm_Blur_Add(char *pszSpell1,char *pszSpell2)
 {
 	char szBuf[50];
-	char cLen1=strlen(pszSpell1);
-	char cLen2=strlen(pszSpell2);
+	char cLen1=(char)strlen(pszSpell1);
+	char cLen2=(char)strlen(pszSpell2);
 	if(cLen1>6 || cLen1<0 || cLen2>6 || cLen2<0) return ISACK_ERROR;
 	memcpy(szBuf,pszSpell1,cLen1+1);
 	memcpy(szBuf+cLen1+1,pszSpell2,cLen2+1);
@@ -525,8 +498,8 @@ DWORD ISComm_Blur_Add(char *pszSpell1,char *pszSpell2)
 DWORD ISComm_Blur_Del(char *pszSpell1,char *pszSpell2)
 {
 	char szBuf[50];
-	char cLen1=strlen(pszSpell1);
-	char cLen2=strlen(pszSpell2);
+	char cLen1=(char)strlen(pszSpell1);
+	char cLen2=(char)strlen(pszSpell2);
 	if(cLen1>6 || cLen1<0 || cLen2>6 || cLen2<0) return ISACK_ERROR;
 	memcpy(szBuf,pszSpell1,cLen1+1);
 	memcpy(szBuf+cLen1+1,pszSpell2,cLen2+1);
@@ -588,7 +561,7 @@ DWORD ISComm_UserDict_List()
 	return ISComm_SendMsg(CT_USERDICT_LIST,NULL,0,0);
 }
 
-DWORD ISComm_UserDict_Open(LPCTSTR pszUserDict)
+DWORD ISComm_UserDict_Open(LPCSTR pszUserDict)
 {
 	return ISComm_SendMsg(CT_USERDICT_OPEN,(LPVOID)pszUserDict,(short)strlen(pszUserDict),0);
 }
@@ -619,7 +592,7 @@ DWORD ISComm_Comp_List()
 	return ISComm_SendMsg(CT_COMP_LIST,NULL,0,0);
 }
 
-DWORD ISComm_Comp_Open(LPCTSTR pszComp)
+DWORD ISComm_Comp_Open(LPCSTR pszComp)
 {
 	return ISComm_SendMsg(CT_COMP_OPEN,(LPVOID)pszComp,(short)strlen(pszComp),0);
 }
@@ -629,7 +602,7 @@ BOOL ISComm_IsSvrWorking()
 	return s_hWndServer!=0;
 }
 
-BOOL  ISComm_CheckComp(LPCTSTR pszComp,char cComplen,BYTE byMask)
+BOOL  ISComm_CheckComp(LPCSTR pszComp,char cComplen,BYTE byMask)
 {
 	char szBuf[MAX_COMPLEN+1];
 	if(cComplen<=s_CompInfo.cCodeMax) return TRUE;

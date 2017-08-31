@@ -116,8 +116,7 @@ extern "C"{
 
 const UINT ISComm_GetCommMsgID();
 BOOL ISComm_GetConfig(LPSTR pszConfig);
-BOOL ISComm_GetSvrPath(LPSTR pszPath);
-BOOL ISComm_SetSvrPath(LPSTR pszPath);
+void ISComm_SetSvrPath(LPCTSTR pszPath);
 BOOL ISComm_GetDataPath(LPSTR pszPath);
 
 DWORD ISComm_SendMsg(DWORD dwType,LPVOID pData,short sSize,HWND hWnd);
@@ -172,17 +171,17 @@ DWORD ISComm_SpellMemoryEx(LPCSTR pszText,char cTextLen,BYTE (*pbySpellID)[2]);
 DWORD ISComm_SymbolConvert(char cSymbol,char cType);
 
 DWORD ISComm_UserDict_List();
-DWORD ISComm_UserDict_Open(LPCTSTR pszUserDict);
+DWORD ISComm_UserDict_Open(LPCSTR pszUserDict);
 DWORD ISComm_UserDict_Max();
 DWORD ISComm_UserDict_Item(DWORD dwItem);
 DWORD ISComm_UserDict_Locate(LPCTSTR pszkey,char cKeyLen);
 
 DWORD ISComm_Comp_List();
-DWORD ISComm_Comp_Open(LPCTSTR pszComp);
+DWORD ISComm_Comp_Open(LPCSTR pszComp);
 BOOL ISComm_IsSvrWorking();
 DWORD ISComm_SkinChange(HWND hUIWnd);
 
-BOOL  ISComm_CheckComp(LPCTSTR pszComp,char cComplen,BYTE byMask);
+BOOL  ISComm_CheckComp(LPCSTR pszComp,char cComplen,BYTE byMask);
 DWORD ISComm_Bldsp_Get(BOOL *pbCe2,BOOL *pbCe3,BOOL *pbCa4);
 DWORD ISComm_Bldsp_Set(BYTE byMask,BOOL bCe2,BOOL bCe3,BOOL bCa4);
 
