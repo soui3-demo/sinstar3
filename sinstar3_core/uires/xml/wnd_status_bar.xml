@@ -28,7 +28,7 @@
     <status_bg size="-1,-1" layout="vbox" name="status_bg" bg_extend="bg_status_open" bg_shrink="bg_status_close">
       <window size="-2,0" weight="1" name="status_base" layout="hbox">
         <img size="-1,-1" name="img_logo" skin="logo"/>
-        <caption2 size="0,-2" weight="1" name="txt_comp" text="五笔型86" cursor="sizeall"/>
+        <caption2 size="0,-2" weight="1" name="txt_comp" cursor="sizeall"/>
         <window size ="-1,-1">
           <imgbtn pos="0,0" name="btn_status_extend" skin="btn_extend" visible="0"/>
           <imgbtn pos="0,0" name="btn_status_shrink" skin="btn_shrink"/>

@@ -36,7 +36,7 @@ namespace SOUI
 		m_reg.Create(HKEY_CURRENT_USER,L"Software\\Setoutsoft\\sinstar3",NULL,REG_OPTION_NON_VOLATILE,KEY_WRITE|KEY_READ|KEY_WOW64_64KEY,0,NULL);
 
 		m_compInfo.cWild = 'z';
-		m_compInfo.strCompName = _T("ŒÂ± 86");
+		m_compInfo.strCompName = _T("º”‘ÿ...");
 
 		TCHAR szSkin[MAX_PATH]={0};
 		ULONG nSize = MAX_PATH;

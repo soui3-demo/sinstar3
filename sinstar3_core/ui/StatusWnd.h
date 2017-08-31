@@ -30,6 +30,7 @@ namespace SOUI
 
 		void OnDragStatus(EventArgs *e);
 		void OnSetSkin(EventArgs *e);
+		void OnCompInfo(EventArgs *e);
 
 		void OnBtnExtend();
 		void OnBtnShrink();
@@ -37,6 +38,7 @@ namespace SOUI
 		EVENT_MAP_BEGIN()
 			EVENT_HANDLER(EventDragMove::EventID,OnDragStatus)
 			EVENT_HANDLER(EventSetSkin::EventID,OnSetSkin)
+			EVENT_HANDLER(EventSvrNotify::EventID,OnCompInfo)
 			EVENT_ID_COMMAND(R.id.btn_status_shrink,OnBtnShrink)
 			EVENT_ID_COMMAND(R.id.btn_status_extend,OnBtnExtend)
 		EVENT_MAP_END()

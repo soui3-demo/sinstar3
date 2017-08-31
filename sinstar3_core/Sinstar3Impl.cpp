@@ -11,22 +11,25 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr)
 {
 	theModule->AddRef();
 
-	SOUI::CSimpleWnd::Create(_T("sinstar3_msg_recv"),WS_DISABLED|WS_POPUP,WS_EX_TOOLWINDOW,0,0,0,0,HWND_MESSAGE,NULL);
-
  	m_pCompWnd = new CInputWnd();
 	m_pStatusWnd = new CStatusWnd();
 	m_pStatusWnd->Create();
 	m_pCompWnd->Create();
+
+	SOUI::CSimpleWnd::Create(_T("sinstar3_msg_recv"),WS_DISABLED|WS_POPUP,WS_EX_TOOLWINDOW,0,0,0,0,HWND_MESSAGE,NULL);
+	ISComm_Login(m_hWnd);
 }
 
 CSinstar3Impl::~CSinstar3Impl(void)
 {
+	ISComm_Logout(m_hWnd);
+	SOUI::CSimpleWnd::DestroyWindow();
+
 	m_pCompWnd->DestroyWindow();
 	m_pStatusWnd->DestroyWindow();
 	delete m_pStatusWnd;
 	delete m_pCompWnd;
 
-	SOUI::CSimpleWnd::DestroyWindow();
 
 	theModule->Release();
 }
@@ -159,8 +162,24 @@ HRESULT CSinstar3Impl::OnQueryInterface(REFIID riid, void **ppvObject)
 	return E_NOINTERFACE;
 }
 
-LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 {
+	PMSGDATA pMsg=ISComm_OnSeverNotify(m_hWnd,wp,lp);
+	if(wp==NT_COMPINFO)
+	{
+		CDataCenter::getSingleton().Lock();
+		CMyData &myData = CDataCenter::getSingleton().GetData();
+		myData.m_compInfo.strCompName = S_CA2T(ISComm_GetCompInfo()->szName);
+		myData.m_compInfo.cWild = ISComm_GetCompInfo()->cWildChar;
+		CDataCenter::getSingleton().Unlock();
+
+		EventSvrNotify *evt= new EventSvrNotify(this);
+		evt->wp = wp;
+		evt->lp = lp;
+		SNotifyCenter::getSingleton().FireEventAsync(evt);
+		evt->Release();
+	}
+
 	return 0;
 }
 

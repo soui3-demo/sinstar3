@@ -6,12 +6,10 @@
 
 CSkinMananger::CSkinMananger(void)
 {
-	SNotifyCenter::getSingletonPtr()->addEvent(EVENTID(EventSetSkin));
 }
 
 CSkinMananger::~CSkinMananger(void)
 {
-	SNotifyCenter::getSingletonPtr()->removeEvent(EventSetSkin::EventID);
 }
 
 int CSkinMananger::InitSkinMenu(HMENU hMenu, const SStringT &strSkinPath,int nStartId,const SStringT &strCurSkin)

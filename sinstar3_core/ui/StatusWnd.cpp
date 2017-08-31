@@ -28,6 +28,9 @@ namespace SOUI
 			pt.x = rcWorkArea.right-GetWindowRect().Width();
 			pt.y = rcWorkArea.bottom-GetWindowRect().Height();
 		}
+
+		FindChildByID(R.id.txt_comp)->SetWindowText(CDataCenter::GetAutoLockerInstance()->GetData().m_compInfo.strCompName);
+
 		SetWindowPos(HWND_TOPMOST,pt.x,pt.y,0,0,SWP_NOSIZE|SWP_NOZORDER|SWP_NOACTIVATE);
 		return 0;
 	}
@@ -108,6 +111,18 @@ namespace SOUI
 		FindChildByID(R.id.btn_status_extend)->SetVisible(TRUE,TRUE);
 		FindChildByID(R.id.status_extend)->SetVisible(FALSE,TRUE);
 
+	}
+
+	void CStatusWnd::OnCompInfo(EventArgs *e)
+	{
+		if(!IsWindow())
+			return;
+
+		EventSvrNotify *e2 = sobj_cast<EventSvrNotify>(e);
+		if(e2->wp == NT_COMPINFO)
+		{
+			FindChildByID(R.id.txt_comp)->SetWindowText(CDataCenter::GetAutoLockerInstance()->GetData().m_compInfo.strCompName);
+		}
 	}
 
 }

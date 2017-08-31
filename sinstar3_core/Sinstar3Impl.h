@@ -6,6 +6,7 @@
 
 class CSinstar3Impl:
 	public ISinstar,
+	public SOUI::SObject,
 	public SOUI::CSimpleWnd
 {
 public:
@@ -37,6 +38,7 @@ public:
 	virtual void OnFinalRelease();
 	virtual HRESULT OnQueryInterface(REFIID riid, void **ppvObject);
 
+	virtual int GetID() const {	return SENDER_SINSTSR3;}
 public:
 	LRESULT OnSvrNotify(UINT uMsg, WPARAM wParam, LPARAM lParam);
 

@@ -40,6 +40,7 @@
 using namespace SOUI;
 
 #include "../include/reg.h"
+#include "../include/isProtocol.h"
 #include "../include/iscomm.h"
 
 #include "global_def.h"

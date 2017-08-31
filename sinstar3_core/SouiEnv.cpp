@@ -124,6 +124,9 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 		}
 	}
 	new SNotifyCenter;
+
+	SNotifyCenter::getSingletonPtr()->addEvent(EVENTID(EventSvrNotify));
+	SNotifyCenter::getSingletonPtr()->addEvent(EVENTID(EventSetSkin));
 }
 
 CSouiEnv::~CSouiEnv(void)
@@ -131,6 +134,7 @@ CSouiEnv::~CSouiEnv(void)
 	CDataCenter::GetAutoLockerInstance()->GetData().m_defUiDefine=NULL;
 
 	delete SNotifyCenter::getSingletonPtr();
+
  	delete m_theApp;
 	delete m_pComMgr;
 	OleUninitialize();
