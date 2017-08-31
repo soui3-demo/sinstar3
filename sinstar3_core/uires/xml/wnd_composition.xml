@@ -7,6 +7,12 @@
   translucent="1"
   toolwindow="1"
 >
+  <skin>
+    <imgframe name="bg_composition" src="img:png_composition" margin="70,0,200,0"/>
+    <imglist name="btn_prevpage" src="img:btn_prevpage" states="3"/>
+    <imglist name="btn_nextpage" src="img:btn_nextpage" states="3"/>
+  </skin>
+
   <root skin="bg_composition" cache="1" layout="vbox" padding="50,80,130,12">
     <window size="-1,0" weight="1" layout="hbox" tip="composition window">
       <text size="-1,-2" name="txt_comps"/>

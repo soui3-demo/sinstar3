@@ -7,6 +7,23 @@
   translucent="1"
   toolwindow="1"
 >
+  <skin>
+    <imglist name="logo"	src="img:logo_32"/>
+    <imglist name="charmode" src="img:png_charmode" states="2"/>
+    <imglist name="charmode_full" src="img:png_charmode_full" states="3"/>
+    <imglist name="charmode_half" src="img:png_charmode_half" states="3"/>
+    <imglist name="bg_status1" src="img:png_status1"/>
+    <imglist name="bg_status2" src="img:png_status2"/>
+    <imglist name="btn_extend" src="img:btn_extend" states="3"/>
+    <imglist name="btn_shrink" src="img:btn_shrink" states="3"/>
+    <imglist name="btn_makeword" src="img:btn_makeword" states="3"/>
+    <imglist name="btn_query" src="img:btn_query" states="3"/>
+    <imglist name="btn_record_enable" src="img:btn_record_enable" states="3"/>
+    <imglist name="btn_record_disable" src="img:btn_record_disable" states="3"/>
+    <imglist name="btn_sound_enable" src="img:btn_sound_enable" states="3"/>
+    <imglist name="btn_sound_disable" src="img:btn_sound_disable" states="3"/>
+  </skin>
+
   <root size="-1,-1" layout="vbox">
     <window size="124,25" name="status_line1" skin="bg_status1" layout="hbox">
       <img size="-1,-1" name="img_logo" skin="logo"/>

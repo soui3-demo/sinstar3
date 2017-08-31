@@ -77,16 +77,11 @@ namespace SOUI
 		CDataCenter::GetAutoLockerInstance()->GetData().m_ptStatus = pt;
 	}
 
-	void CStatusWnd::OnDestroy()
-	{
-		__super::OnDestroy();
-	}
-
 	void CStatusWnd::OnSetSkin(EventArgs *e)
 	{
 		BOOL bVisible = IsWindowVisible();
-		DestroyWindow();
-		Create();
+		OnDestroy();
+		OnCreate(NULL);
 		Show(bVisible);
 	}
 
