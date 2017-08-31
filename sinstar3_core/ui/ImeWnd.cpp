@@ -14,6 +14,7 @@ BOOL CImeWnd::OnSetCursor(HWND wnd, UINT nHitTest, UINT message)
 {
 	if(::GetCapture()!=m_hWnd)
 	{
+		SLOG_INFO("SetCapture");
 		::SetCapture(m_hWnd);
 	}
 	return TRUE;
@@ -23,8 +24,9 @@ void CImeWnd::OnMouseMove(UINT nFlags, CPoint point)
 {
 	SetMsgHandled(FALSE);
 	__super::OnSetCursor(m_hWnd,HTCLIENT,WM_MOUSEMOVE);	//disable ime window receive wm_setcursor by user
-	CRect rcWnd = SWindow::GetWindowRect();
-	if(!rcWnd.PtInRect(point) && m_canReleaseCapture)
+	ClientToScreen(&point);
+	HWND hHitWnd = ::WindowFromPoint(point);
+	if(hHitWnd != m_hWnd && m_canReleaseCapture)
 	{
 		SLOG_INFO("ReleaseCapture");
 		::ReleaseCapture();
