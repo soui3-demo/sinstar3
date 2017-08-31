@@ -65,6 +65,29 @@ namespace SOUI
 		m_reg.Close();
 	}
 
+
+	static int CharCmp(const void * p1, const void * p2)
+	{
+		const char *c1 = (const char*)p1;
+		const char *c2 = (const char*)p2;
+		return (*c1) - (*c2);
+	}
+
+	void CompInfo::SetSvrCompInfo(const COMPINFO * compInfo)
+	{
+		cWild = compInfo->cWildChar;
+		strCompName = S_CA2T(compInfo->szName);
+		strcpy(szCode,compInfo->szCode);
+		nCodeNum = (int)strlen(szCode);
+		qsort(szCode,nCodeNum,sizeof(char),CharCmp);
+	}
+
+	BOOL CompInfo::IsCompChar(char cInput)
+	{
+		if(cWild == cInput) return TRUE;
+		return NULL != bsearch(&cInput,szCode,nCodeNum,1,CharCmp);
+	}
+
 }
 
 

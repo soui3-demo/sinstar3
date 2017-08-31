@@ -5,7 +5,13 @@ namespace SOUI
 	struct CompInfo
 	{
 		SStringT strCompName;
+		char szCode[50];
+		int  nCodeNum;
 		TCHAR    cWild;
+
+		void SetSvrCompInfo(const COMPINFO * compInfo);
+
+		BOOL IsCompChar(char cInput);
 	};
 
 	class CMyData{

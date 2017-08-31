@@ -47,20 +47,35 @@ void CSinstar3Impl:: TranslateKey(LPVOID lpImeContext,UINT vkCode,UINT uScanCode
 
 	if(isprint(vkCode))
 	{
-		SStringT strComp = m_pCompWnd->GetCompStr();
-		if(strComp.IsEmpty())
+		vkCode = tolower(vkCode);
+
+		BOOL bCompChar = CDataCenter::GetAutoLockerInstance()->GetData().m_compInfo.IsCompChar((char)vkCode);
+		if(bCompChar)
 		{
-			m_pTxtSvr->StartComposition(lpImeContext);
+			SStringT strComp = m_pCompWnd->GetCompStr();
+			if(strComp.IsEmpty())
+			{
+				m_pTxtSvr->StartComposition(lpImeContext);
+			}
+
+			strComp.Append(vkCode);
+			m_pCompWnd->SetCompStr(strComp);
+			m_pTxtSvr->ReplaceSelCompositionW(lpImeContext,0,-1,strComp,strComp.GetLength());
 		}
-		if(vkCode>='A' && vkCode<='Z') vkCode+=0x20;
-		strComp.Append(vkCode);
-		m_pCompWnd->SetCompStr(strComp);
-		m_pTxtSvr->ReplaceSelCompositionW(lpImeContext,0,-1,strComp,strComp.GetLength());
 	}else if(vkCode == VK_ESCAPE || vkCode == VK_RETURN)
 	{
 		m_pTxtSvr->UpdateResultAndCompositionStringW(lpImeContext,L"Æô³ÌÊäÈë·¨3",6,NULL,0);
 		m_pTxtSvr->EndComposition(lpImeContext);
 		m_pCompWnd->SetCompStr(_T(""));
+	}else if(vkCode == VK_BACK)
+	{
+		SStringT strComp = m_pCompWnd->GetCompStr();
+		if(strComp.GetLength()>0)
+		{
+			strComp = strComp.Left(strComp.GetLength()-1);
+		}
+		m_pCompWnd->SetCompStr(strComp);
+		m_pTxtSvr->ReplaceSelCompositionW(lpImeContext,0,-1,strComp,strComp.GetLength());
 	}
 }
 
@@ -170,8 +185,7 @@ LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 	{
 		CDataCenter::getSingleton().Lock();
 		CMyData &myData = CDataCenter::getSingleton().GetData();
-		myData.m_compInfo.strCompName = S_CA2T(ISComm_GetCompInfo()->szName);
-		myData.m_compInfo.cWild = ISComm_GetCompInfo()->cWildChar;
+		myData.m_compInfo.SetSvrCompInfo(ISComm_GetCompInfo());
 		CDataCenter::getSingleton().Unlock();
 
 		EventSvrNotify *evt= new EventSvrNotify(this);
