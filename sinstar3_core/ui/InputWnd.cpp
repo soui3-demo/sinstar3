@@ -120,7 +120,7 @@ namespace SOUI
 			{
 				SCandView *pCand2 = (SCandView*)pCand;
 				pCand2->SetVisible(TRUE);
-				pCand2->SetData(m_inputInfo.strCands[iCand],m_inputInfo.strComps[iCand]);
+				pCand2->SetData(m_inputInfo.strComposition,m_inputInfo.strCands[iCand],m_inputInfo.strComps[iCand]);
 				iCand ++;
 			}
 			pCand = pCand->GetWindow(GSW_NEXTSIBLING);

@@ -38,7 +38,7 @@ namespace SOUI
 		}
 		for(int i=0;i<m_strComp.GetLength();i++)
 		{
-			if(m_strComp[i] == cWild)
+			if(i<m_strInput.GetLength() && m_strInput[i] == cWild)
 				pRT->SetTextColor(m_crWild);
 			else
 				pRT->SetTextColor(m_crComp);
@@ -52,8 +52,9 @@ namespace SOUI
 	}
 
 
-	void SCandView::SetData(const SStringT & strText, const SStringT &strComp)
+	void SCandView::SetData(const SStringT strInput,const SStringT & strText, const SStringT &strComp)
 	{
+		m_strInput = strInput;
 		m_strCand = strText;
 		m_strComp = strComp;
 		RequestRelayout();

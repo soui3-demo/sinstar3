@@ -9,7 +9,7 @@ namespace SOUI
 		SCandView(void);
 		~SCandView(void);
 
-		void SetData(const SStringT & strText, const SStringT &strComp);
+		void SetData(const SStringT strInput,const SStringT & strText, const SStringT &strComp);
 	protected:
 		virtual CSize GetDesiredSize(int nParentWid, int nParentHei);
 
@@ -30,6 +30,7 @@ namespace SOUI
 		SOUI_ATTRS_END()
 
 		SStringT m_strIndex;
+		SStringT m_strInput;
 		SStringT m_strCand;
 		SStringT m_strComp;
 

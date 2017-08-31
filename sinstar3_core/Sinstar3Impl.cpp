@@ -52,6 +52,7 @@ void CSinstar3Impl:: TranslateKey(LPVOID lpImeContext,UINT vkCode,UINT uScanCode
 		{
 			m_pTxtSvr->StartComposition(lpImeContext);
 		}
+		if(vkCode>='A' && vkCode<='Z') vkCode+=0x20;
 		strComp.Append(vkCode);
 		m_pCompWnd->SetCompStr(strComp);
 		m_pTxtSvr->ReplaceSelCompositionW(lpImeContext,0,-1,strComp,strComp.GetLength());
