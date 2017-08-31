@@ -117,7 +117,7 @@ namespace SOUI
 				if(pCand->IsClass(SCandView::GetClassName()))
 				{
 					SCandView *pCand2 = (SCandView*)pCand;
-					pCand2->SetVisible(TRUE);
+					pCand2->SetVisible(TRUE,TRUE);
 					pCand2->SetData(m_inputInfo.strComposition,m_inputInfo.strCands[iCand],m_inputInfo.strComps[iCand]);
 					iCand ++;
 				}
@@ -129,9 +129,10 @@ namespace SOUI
 				if(pCand->IsClass(SCandView::GetClassName()))
 				{
 					SCandView *pCand2 = (SCandView*)pCand;
-					pCand2->SetVisible(FALSE);
+					pCand2->SetVisible(FALSE,TRUE);
 					iCand ++;
 				}
+				pCand = pCand->GetWindow(GSW_NEXTSIBLING);
 			}
 		}
 
@@ -145,6 +146,7 @@ namespace SOUI
 			FindChildByID(R.id.btn_prevpage)->SetVisible(TRUE,TRUE);
 			if(m_iPage*m_nPageSize>=m_inputInfo.nCands)
 				FindChildByID(R.id.btn_nextpage)->SetVisible(FALSE,TRUE);
+			OnInputInfoChanged(FALSE,TRUE);
 		}
 	}
 
@@ -156,6 +158,7 @@ namespace SOUI
 			FindChildByID(R.id.btn_nextpage)->SetVisible(TRUE,TRUE);
 			if(m_iPage==0)
 				FindChildByID(R.id.btn_prevpage)->SetVisible(FALSE,TRUE);
+			OnInputInfoChanged(FALSE,TRUE);
 		}
 	}
 
@@ -166,6 +169,7 @@ namespace SOUI
 		m_inputInfo.nCands= 0;
 		FindChildByID(R.id.btn_nextpage)->SetVisible(FALSE,TRUE);
 		FindChildByID(R.id.btn_prevpage)->SetVisible(FALSE,TRUE);
+		OnInputInfoChanged(FALSE,TRUE);
 	}
 
 }
