@@ -5,7 +5,8 @@
 #include "ui/StatusWnd.h"
 
 class CSinstar3Impl:
-	public ISinstar
+	public ISinstar,
+	public SOUI::CSimpleWnd
 {
 public:
 	CSinstar3Impl(ITextService *pTxtSvr);
@@ -32,12 +33,17 @@ public:
 	virtual BOOL ShowCompWnd();
 	virtual LRESULT OnWildMessage(WPARAM wParam,LPARAM lParam);
 
-	virtual INT_PTR MessageBox(HWND hWnd,LPCTSTR lpText,LPCTSTR lpCaption,UINT uType);
-
 public:
 	virtual void OnFinalRelease();
 	virtual HRESULT OnQueryInterface(REFIID riid, void **ppvObject);
 
+public:
+	LRESULT OnSvrNotify(UINT uMsg, WPARAM wParam, LPARAM lParam);
+
+	BEGIN_MSG_MAP_EX(CSinstar3Impl)
+		MESSAGE_HANDLER_EX(ISComm_GetCommMsgID(),OnSvrNotify)
+		CHAIN_MSG_MAP(SOUI::CSimpleWnd)
+	END_MSG_MAP()
 private:
 	ITextService	*m_pTxtSvr;
 	CInputWnd		*m_pCompWnd;

@@ -10,6 +10,9 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr)
 ,m_pStatusWnd(NULL)
 {
 	theModule->AddRef();
+
+	SOUI::CSimpleWnd::Create(_T("sinstar3_msg_recv"),WS_DISABLED|WS_POPUP,WS_EX_TOOLWINDOW,0,0,0,0,HWND_MESSAGE,NULL);
+
  	m_pCompWnd = new CInputWnd();
 	m_pStatusWnd = new CStatusWnd();
 	m_pStatusWnd->Create();
@@ -22,6 +25,9 @@ CSinstar3Impl::~CSinstar3Impl(void)
 	m_pStatusWnd->DestroyWindow();
 	delete m_pStatusWnd;
 	delete m_pCompWnd;
+
+	SOUI::CSimpleWnd::DestroyWindow();
+
 	theModule->Release();
 }
 
@@ -142,10 +148,6 @@ void CSinstar3Impl::CheckDefIME()
 
 }
 
-INT_PTR CSinstar3Impl::MessageBox(HWND hWnd,LPCTSTR lpText,LPCTSTR lpCaption,UINT uType)
-{
-	return 0;
-}
 
 void CSinstar3Impl::OnFinalRelease()
 {
@@ -155,5 +157,10 @@ void CSinstar3Impl::OnFinalRelease()
 HRESULT CSinstar3Impl::OnQueryInterface(REFIID riid, void **ppvObject)
 {
 	return E_NOINTERFACE;
+}
+
+LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	return 0;
 }
 

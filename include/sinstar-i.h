@@ -25,7 +25,6 @@ interface ISinstar : public IUnknown
 	virtual EInputMethod GetDefInputMode() = NULL;
 	virtual BOOL ShowCompWnd() = NULL;
 	virtual LRESULT OnWildMessage(WPARAM wParam,LPARAM lParam)=NULL;
-	virtual INT_PTR MessageBox(HWND hWnd,LPCTSTR lpText,LPCTSTR lpCaption,UINT uType)=NULL;
 };
 
 namespace SOUI
