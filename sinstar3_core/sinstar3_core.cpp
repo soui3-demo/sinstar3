@@ -8,6 +8,7 @@
 #include "Minidump.h"
 #include "dataCenter/DataCenter.h"
 
+
 EXTERN_C SINSTAR3_API  ISinstar* Sinstar3_Create(ITextService* pTxtSvr)
 {
 	CSinstar3Impl*  pRet= new CUnknownImpl<CSinstar3Impl>(pTxtSvr);
@@ -78,4 +79,11 @@ void CSinstar3Core::SetLogStateListener(ILogStateListener *pListener)
 void CSinstar3Core::SetDataPath(LPCTSTR pszDataPath)
 {
 	m_strDataPath = pszDataPath;
+
+	if(g_SettingsG.nRefCount == 0)
+	{//the first time
+		g_SettingsG.Load(m_strDataPath + _T("\\") + KSettingINI);
+	}
+	g_SettingsG.nRefCount ++;
+
 }

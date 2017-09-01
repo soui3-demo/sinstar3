@@ -51,5 +51,6 @@ using namespace SOUI;
 #include "controls/SStatusBackground.h"
 
 #include "dataCenter/datacenter.h"
+#include "dataCenter/Settings.h"
 
 #include "sinstar3_core.h"

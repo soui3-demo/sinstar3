@@ -14,6 +14,7 @@ namespace SOUI
 		BOOL IsCompChar(char cInput);
 	};
 
+
 	class CMyData{
 	public:
 		CMyData();

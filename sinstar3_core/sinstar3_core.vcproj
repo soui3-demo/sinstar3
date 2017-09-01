@@ -413,6 +413,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\dataCenter\Settings.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\sinstar3_core.cpp"
 				>
 			</File>
@@ -524,6 +528,10 @@
 			</File>
 			<File
 				RelativePath=".\controls\SCaption2.h"
+				>
+			</File>
+			<File
+				RelativePath=".\dataCenter\Settings.h"
 				>
 			</File>
 			<File
