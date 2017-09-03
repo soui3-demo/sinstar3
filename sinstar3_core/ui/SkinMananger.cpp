@@ -121,7 +121,7 @@ SOUI::SStringT CSkinMananger::ExtractSkinInfo(SStringT strSkinPath)
 	ZIPRES_PARAM param;
 	param.ZipFile(NULL, strSkinPath);
 	pResProvider->Init((WPARAM)&param,0);
-	int nSize = pResProvider->GetRawBufferSize(_T("uidef"),_T("xml_init"));
+	int nSize = (int)pResProvider->GetRawBufferSize(_T("uidef"),_T("xml_init"));
 	CMyBuffer<char> buffer(nSize);
 	pResProvider->GetRawBuffer(_T("uidef"),_T("xml_init"),buffer,nSize);
 	pResProvider->Release();

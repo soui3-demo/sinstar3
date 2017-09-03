@@ -34,18 +34,37 @@ EXTERN_C SINSTAR3_API BOOL Sinstar3_Config(HWND hWnd)
 EXTERN_C SINSTAR3_API void Sinstar3_SetHostInfo(HostInfo *pHostInfo)
 {
 	theModule->SetLogStateListener(pHostInfo->pLogStateListener);
-	theModule->SetDataPath(pHostInfo->pszDataPath);
 }
 
 
 CSinstar3Core::CSinstar3Core(HINSTANCE hInst):CModuleRef(hInst),m_pLogStateListener(NULL)
 {
+
+	TCHAR szPath[MAX_PATH];
+	CRegKey reg;
+	LONG ret = reg.Open(HKEY_LOCAL_MACHINE,_T("SOFTWARE\\SetoutSoft\\sinstar3"),KEY_READ|KEY_WOW64_64KEY);
+	if(ret == ERROR_SUCCESS)
+	{
+		ULONG len = MAX_PATH;
+		reg.QueryStringValue(_T("path_client"),szPath,&len);
+		reg.Close();
+	}
+	m_strDataPath = szPath;
+
+	if(g_SettingsG.nRefCount == 0)
+	{//the first time
+		g_SettingsG.Load(m_strDataPath + _T("\\") + KSettingINI);
+	}
+
+	g_SettingsG.nRefCount ++;
+
 	new CDataCenter();
 }
 
 CSinstar3Core::~CSinstar3Core()
 {
 	delete CDataCenter::getSingletonPtr();
+	g_SettingsG.nRefCount --;
 }
 
 void CSinstar3Core::OnInit()
@@ -74,16 +93,4 @@ void CSinstar3Core::SetLogStateListener(ILogStateListener *pListener)
 	{
 		m_pLogStateListener->OnLogMgrReady(CSouiEnv::getSingleton().theApp()->GetLogManager());
 	}
-}
-
-void CSinstar3Core::SetDataPath(LPCTSTR pszDataPath)
-{
-	m_strDataPath = pszDataPath;
-
-	if(g_SettingsG.nRefCount == 0)
-	{//the first time
-		g_SettingsG.Load(m_strDataPath + _T("\\") + KSettingINI);
-	}
-	g_SettingsG.nRefCount ++;
-
 }

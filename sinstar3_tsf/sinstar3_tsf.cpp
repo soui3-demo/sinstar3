@@ -478,7 +478,7 @@ BOOL CSinstar3Tsf::_InitSinstar3()
 {
 	m_pSinstar3=CCoreLoader::GetInstance().Sinstar3_Create(this);
 
-	HostInfo hostInfo={theModule->GetDataPath(),&g_LogListener};
+	HostInfo hostInfo={&g_LogListener};
 	CCoreLoader::GetInstance().Sinstar3_SetHostInfo(&hostInfo);
 
 	if(!m_pSinstar3) return FALSE;

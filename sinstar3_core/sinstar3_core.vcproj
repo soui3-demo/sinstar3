@@ -377,6 +377,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\InputState.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ui\InputWnd.cpp"
 				>
 			</File>
@@ -426,6 +430,10 @@
 			</File>
 			<File
 				RelativePath=".\ui\SkinMananger.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SMutexView.cpp"
 				>
 			</File>
 			<File
@@ -503,6 +511,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\inputContext.h"
+				>
+			</File>
+			<File
+				RelativePath=".\InputState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ui\InputWnd.h"
 				>
 			</File>
@@ -548,6 +564,10 @@
 			</File>
 			<File
 				RelativePath=".\ui\SkinMananger.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SMutexView.h"
 				>
 			</File>
 			<File

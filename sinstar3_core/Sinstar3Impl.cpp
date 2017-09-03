@@ -6,15 +6,15 @@
 
 CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr)
 :m_pTxtSvr(pTxtSvr)
-,m_pCompWnd(NULL)
+,m_pInputWnd(NULL)
 ,m_pStatusWnd(NULL)
 {
 	theModule->AddRef();
 
- 	m_pCompWnd = new CInputWnd();
+ 	m_pInputWnd = new CInputWnd();
 	m_pStatusWnd = new CStatusWnd();
 	m_pStatusWnd->Create();
-	m_pCompWnd->Create();
+	m_pInputWnd->Create();
 
 	SOUI::CSimpleWnd::Create(_T("sinstar3_msg_recv"),WS_DISABLED|WS_POPUP,WS_EX_TOOLWINDOW,0,0,0,0,HWND_MESSAGE,NULL);
 	ISComm_Login(m_hWnd);
@@ -25,10 +25,10 @@ CSinstar3Impl::~CSinstar3Impl(void)
 	ISComm_Logout(m_hWnd);
 	SOUI::CSimpleWnd::DestroyWindow();
 
-	m_pCompWnd->DestroyWindow();
+	m_pInputWnd->DestroyWindow();
 	m_pStatusWnd->DestroyWindow();
 	delete m_pStatusWnd;
-	delete m_pCompWnd;
+	delete m_pInputWnd;
 
 
 	theModule->Release();
@@ -45,6 +45,16 @@ void CSinstar3Impl:: TranslateKey(LPVOID lpImeContext,UINT vkCode,UINT uScanCode
 {
 	*pbEaten = TRUE;
 
+	if(m_inputState.GetInputContext()->strInput.IsEmpty())
+	{
+		m_pTxtSvr->StartComposition(lpImeContext);
+	}
+	if(m_inputState.HandleKeyDown(vkCode,uScanCode))
+	{
+		m_pInputWnd->OnInputContextChanged(m_inputState.GetInputContext());
+	}
+	return;
+
 	if(isprint(vkCode))
 	{
 		vkCode = tolower(vkCode);
@@ -52,7 +62,7 @@ void CSinstar3Impl:: TranslateKey(LPVOID lpImeContext,UINT vkCode,UINT uScanCode
 		BOOL bCompChar = CDataCenter::GetAutoLockerInstance()->GetData().m_compInfo.IsCompChar((char)vkCode);
 		if(bCompChar)
 		{
-			SStringT strComp = m_pCompWnd->GetCompStr();
+			SStringT strComp = m_pInputWnd->GetCompStr();
 			if(strComp.IsEmpty())
 			{
 				m_pTxtSvr->StartComposition(lpImeContext);
@@ -66,10 +76,10 @@ void CSinstar3Impl:: TranslateKey(LPVOID lpImeContext,UINT vkCode,UINT uScanCode
 	{
 		m_pTxtSvr->UpdateResultAndCompositionStringW(lpImeContext,L"启程输入法3",6,NULL,0);
 		m_pTxtSvr->EndComposition(lpImeContext);
-		m_pCompWnd->SetCompStr(_T(""));
+		m_pInputWnd->SetCompStr(_T(""));
 	}else if(vkCode == VK_BACK)
 	{
-		SStringT strComp = m_pCompWnd->GetCompStr();
+		SStringT strComp = m_pInputWnd->GetCompStr();
 		if(strComp.GetLength()>0)
 		{
 			strComp = strComp.Left(strComp.GetLength()-1);
@@ -85,7 +95,7 @@ void CSinstar3Impl::OnIMESelect(BOOL bSelect)
 
 void CSinstar3Impl::OnSetCaretPosition(POINT pt,int nHei)
 {
-	m_pCompWnd->MoveTo(pt,nHei);
+	m_pInputWnd->MoveTo(pt,nHei);
 }
 
 void CSinstar3Impl::OnSetFocusSegmentPosition(POINT pt,int nHei)
@@ -94,7 +104,7 @@ void CSinstar3Impl::OnSetFocusSegmentPosition(POINT pt,int nHei)
 
 void CSinstar3Impl::OnCompositionStarted()
 {
-	m_pCompWnd->Show(TRUE);
+	m_pInputWnd->Show(TRUE);
 }
 
 void CSinstar3Impl::OnCompositionChanged()
@@ -103,14 +113,14 @@ void CSinstar3Impl::OnCompositionChanged()
 
 void CSinstar3Impl::OnCompositionTerminated()
 {
- 	m_pCompWnd->Show(FALSE);
+ 	m_pInputWnd->Show(FALSE);
 }
 
 void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 {
 	SLOG_INFO("GetThreadID="<<GetCurrentThreadId()<<" focus="<<bFocus);
 	m_pStatusWnd->Show(bFocus);
-	m_pCompWnd->Show(bFocus);
+	m_pInputWnd->Show(bFocus);
 }
 
 int  CSinstar3Impl::GetCompositionSegments()
@@ -204,11 +214,11 @@ LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 
 void CSinstar3Impl::QueryCand(const SStringT &strComp)
 {
-	m_pCompWnd->SetCompStr(strComp);
+	m_pInputWnd->SetCompStr(strComp);
 	SStringA strCompA = S_CT2A(strComp);
 	if(strComp.IsEmpty())
 	{
-		m_pCompWnd->ClearCands();
+		m_pInputWnd->ClearCands();
 
 	}
 	else if(ISComm_QueryCand(strCompA,strCompA.GetLength(),0,m_hWnd) == ISACK_SUCCESS)
@@ -243,7 +253,7 @@ void CSinstar3Impl::QueryCand(const SStringT &strComp)
 			pCandData+=pCandData[0]+1;	//偏移编码信息
 		}
 
-		m_pCompWnd->SetCandidateInfo(arrCands,arrComps,sCount);
+		m_pInputWnd->SetCandidateInfo(arrCands,arrComps,sCount);
 	}
 }
 

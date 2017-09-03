@@ -29,11 +29,11 @@
 #endif//TF_MOD_ALT
 
 //热键定义，同TSF的TF_PRESERVEDKEY定义
-typedef struct _PRESERVEDKEY
+struct PRESERVEDKEY
 {
 	UINT uVKey;
 	UINT uModifiers;
-}PRESERVEDKEY;
+};
 
 // 输入模式
 enum EInputMethod

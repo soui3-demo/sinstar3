@@ -15,7 +15,16 @@
 
   <root skin="bg_composition" cache="1" layout="vbox" padding="50,80,130,12">
     <window size="-1,0" weight="1" layout="hbox" tip="composition window">
-      <text size="-1,-2" name="txt_comps"/>
+      <mutexView size="-1,-2" name="comp_normal" layout="hbox">
+        <text size="-1,-2" name="txt_comps"/>
+      </mutexView>
+      <mutexView size="-1,-2" name="comp_spell" visible="0" layout="hbox">
+        <text size="-1,-2" name="txt_comps" text="spell mode"/>
+      </mutexView>
+      <mutexView size="-1,-2" name="comp_umode"  visible="0" layout="hbox">
+        <text size="-1,-1" text="u:" colorText="#ff0000" padding_right="5"/>
+        <text size="-1,-2" name="txt_comps" text="umode"/>
+      </mutexView>  
     </window>
     <window size="-1,0" weight="1" layout="hbox" tip="candidate window" gravity="center">
       <imgbtn size="-1,-1" display="0" skin="btn_prevpage" name="btn_prevpage"/>

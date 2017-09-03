@@ -1,8 +1,8 @@
 #include "StdAfx.h"
 #include "Settings.h"
 
-#pragma data_seg(".sinstar3")
 //使用共享内存方式使设置信息在所有输入法进程中共享
+#pragma data_seg(".sinstar3")
 CSettingsGlobal	g_SettingsG;		//输入法全局设置
 #pragma data_seg()
 
@@ -30,6 +30,7 @@ const TCHAR * KSession = _T("IME");
 void CSettingsGlobal::Save(LPCTSTR pszIniFile)
 {
 	TCHAR szBuf[100]={0};
+	WritePrivateProfileInt(KSession,_T("CompMode"),compMode,pszIniFile);
 	WritePrivateProfileString(KSession,_T("PhonticLeft"),szPhonticLeft,pszIniFile);
 	WritePrivateProfileString(KSession,_T("PhonticRight"),szPhonticRight,pszIniFile);
 	WritePrivateProfileInt(KSession,_T("RateAdjust"),byRateAdjust,pszIniFile);
@@ -94,6 +95,7 @@ void CSettingsGlobal::Save(LPCTSTR pszIniFile)
 void CSettingsGlobal::Load(LPCTSTR pszIniFile)
 {
 	TCHAR szBuf[100];
+	compMode = (COMPMODE)GetPrivateProfileInt(KSession,_T("CompMode"),IM_SHAPECODE,pszIniFile);
 	GetPrivateProfileString(KSession,_T("PhonticLeft"),_T("["),szPhonticLeft,50,pszIniFile);
 	GetPrivateProfileString(KSession,_T("PhonticRight"),_T("]"),szPhonticRight,50,pszIniFile);
 	byRateAdjust=GetPrivateProfileInt(KSession,_T("RateAdjust"),1,pszIniFile);

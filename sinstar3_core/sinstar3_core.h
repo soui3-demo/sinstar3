@@ -26,7 +26,6 @@ public:
 	~CSinstar3Core();
 
 	void SetLogStateListener(ILogStateListener *pListener);
-	void SetDataPath(LPCTSTR pszDataPath);
 
 	SOUI::SStringT GetDataPath() const {return m_strDataPath;}
 

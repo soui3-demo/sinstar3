@@ -40,7 +40,6 @@ interface ILogStateListener
 
 struct HostInfo
 {
-	LPCTSTR			   pszDataPath;
 	ILogStateListener *pLogStateListener;
 };
 

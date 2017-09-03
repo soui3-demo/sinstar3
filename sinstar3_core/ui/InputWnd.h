@@ -2,6 +2,8 @@
 
 #include "ImeWnd.h"
 #include "SkinMananger.h"
+#include "../inputContext.h"
+
 namespace SOUI
 {
 	class CInputWnd :
@@ -28,6 +30,8 @@ namespace SOUI
 			SArray<SStringT> strComps;
 			int nCands;
 		};
+
+		void OnInputContextChanged(const InputContext * pInputCtx);
 	protected:
 		void OnInputInfoChanged(BOOL bComp,BOOL bCand);
 	protected:

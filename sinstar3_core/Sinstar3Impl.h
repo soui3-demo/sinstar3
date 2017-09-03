@@ -4,6 +4,8 @@
 #include "ui/InputWnd.h"
 #include "ui/StatusWnd.h"
 
+#include "InputState.h"
+
 class CSinstar3Impl:
 	public ISinstar,
 	public SOUI::SObject,
@@ -50,8 +52,11 @@ public:
 	END_MSG_MAP()
 private:
 	ITextService	*m_pTxtSvr;
-	CInputWnd		*m_pCompWnd;
+	CInputWnd		*m_pInputWnd;
 	CStatusWnd		*m_pStatusWnd;
+
+	CInputState		m_inputState;
+
 };
 
 

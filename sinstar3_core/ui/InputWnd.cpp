@@ -172,4 +172,32 @@ namespace SOUI
 		OnInputInfoChanged(FALSE,TRUE);
 	}
 
+	void CInputWnd::OnInputContextChanged(const InputContext * pInputCtx)
+	{
+		switch(pInputCtx->inState)
+		{
+		case INST_CODING:
+			if(pInputCtx->compMode == IM_SPELL)
+			{
+				SWindow * compSpell = FindChildByID(R.id.comp_spell);
+				compSpell->SetVisible(TRUE,TRUE);
+				compSpell->FindChildByID(R.id.txt_comps)->SetWindowText(S_CW2T(pInputCtx->strInput));
+			}
+			else
+			{
+				SWindow * compNormal = FindChildByID(R.id.comp_normal);
+				compNormal->SetVisible(TRUE,TRUE);
+				compNormal->FindChildByID(R.id.txt_comps)->SetWindowText(S_CW2T(pInputCtx->strInput));
+			}
+			break;
+		case INST_USERDEF:
+			{
+				SWindow * compUmode = FindChildByID(R.id.comp_umode);
+				compUmode->SetVisible(TRUE,TRUE);
+				compUmode->FindChildByID(R.id.txt_comps)->SetWindowText(S_CW2T(pInputCtx->strInput));
+			}
+			break;
+		}
+	}
+
 }

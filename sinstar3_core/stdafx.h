@@ -49,8 +49,13 @@ using namespace SOUI;
 #include "controls/SCandView.h"
 #include "controls/SCaption2.h"
 #include "controls/SStatusBackground.h"
+#include "controls/SMutexView.h"
 
 #include "dataCenter/datacenter.h"
+
+#include "inputContext.h"
+
 #include "dataCenter/Settings.h"
+
 
 #include "sinstar3_core.h"

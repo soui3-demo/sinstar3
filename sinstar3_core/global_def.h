@@ -35,16 +35,3 @@ namespace SOUI
 
 }
 
-enum COMPMODE
-{
-	IM_SPELL=0,	//拼音输入模式
-	IM_SHAPECODE,	//形码输入模式
-};
-
-enum ASTMODE
-{//输入时的联想类型
-	AST_NULL=0,	//无联想
-	AST_CAND,	//词组联想
-	AST_ENGLISH,//单词联想
-	AST_PHRASEREMIND,//词组提示
-};
