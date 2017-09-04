@@ -5,12 +5,12 @@
 
 namespace SOUI
 {
-	CInputWnd::CInputWnd(void)
+	CInputWnd::CInputWnd(const InputContext *pCtx)
 		:CImeWnd(UIRES.LAYOUT.wnd_composition)
 		,m_bLocated(FALSE)
 		,m_nCaretHeight(30)
-		,m_pCandContainer(NULL)
-		,m_pCompWnd(NULL)
+		,m_pInputContext(pCtx)
+		,m_iPage(0)
 	{
 	}
 
@@ -18,17 +18,6 @@ namespace SOUI
 	{
 	}
 
-
-	void CInputWnd::SetCompStr(const SStringT &strComp)
-	{
-		m_inputInfo.strComposition = strComp;
-		OnInputInfoChanged(TRUE,FALSE);
-	}
-
-	SStringT CInputWnd::GetCompStr() const
-	{
-		return m_inputInfo.strComposition;
-	}
 
 	void CInputWnd::MoveTo(CPoint pt,int nCaretHeight)
 	{
@@ -60,30 +49,7 @@ namespace SOUI
 		int nRet = __super::OnCreate(lpCreateStruct);
 		if(nRet != 0) return nRet;
 
-		m_pCompWnd = FindChildByName(R.name.txt_comps);
-		m_pCandContainer = FindChildByName(R.name.cand_container);
-		SASSERT(m_pCandContainer&&m_pCompWnd);
-		m_nPageSize = 0;
-		SWindow * pCand = m_pCandContainer->GetWindow(GSW_FIRSTCHILD);
-		while(pCand)
-		{
-			if(pCand->IsClass(SCandView::GetClassName()))
-				m_nPageSize++;
-			pCand = pCand->GetWindow(GSW_NEXTSIBLING);
-		}
 		return 0;
-	}
-
-	void CInputWnd::SetCandidateInfo(const SArray<SStringT> & strCands, const SArray<SStringT> & strComps,int nSize)
-	{
-		m_iPage = 0;
-		m_inputInfo.nCands = nSize;
-		m_inputInfo.strCands.Copy(strCands);
-		m_inputInfo.strComps.Copy(strComps);
-		FindChildByID(R.id.btn_prevpage)->SetVisible(FALSE,TRUE);
-		FindChildByID(R.id.btn_nextpage)->SetVisible(nSize > m_nPageSize,TRUE);
-			
-		OnInputInfoChanged(FALSE,TRUE);
 	}
 
 
@@ -94,110 +60,93 @@ namespace SOUI
 		cs.cx=0;
 		cs.cy=0;
 		OnCreate(&cs);
-		OnInputInfoChanged(TRUE,TRUE);
-	}
-
-	void CInputWnd::OnInputInfoChanged(BOOL bComp,BOOL bCand)
-	{
-		if(bComp)
-		{
-			m_pCompWnd->SetWindowText(m_inputInfo.strComposition);
-		}
-
-		if(bCand)
-		{
-			int iBegin = m_iPage * m_nPageSize;
-			int iEnd   = smin(iBegin + m_nPageSize,m_inputInfo.nCands);
-
-
-			SWindow * pCand = m_pCandContainer->GetWindow(GSW_FIRSTCHILD);
-			int iCand = iBegin;
-			while(pCand && iCand<iEnd)
-			{
-				if(pCand->IsClass(SCandView::GetClassName()))
-				{
-					SCandView *pCand2 = (SCandView*)pCand;
-					pCand2->SetVisible(TRUE,TRUE);
-					pCand2->SetData(m_inputInfo.strComposition,m_inputInfo.strCands[iCand],m_inputInfo.strComps[iCand]);
-					iCand ++;
-				}
-				pCand = pCand->GetWindow(GSW_NEXTSIBLING);
-			}
-
-			while(iCand < iBegin + m_nPageSize && pCand)
-			{
-				if(pCand->IsClass(SCandView::GetClassName()))
-				{
-					SCandView *pCand2 = (SCandView*)pCand;
-					pCand2->SetVisible(FALSE,TRUE);
-					iCand ++;
-				}
-				pCand = pCand->GetWindow(GSW_NEXTSIBLING);
-			}
-		}
-
+		UpdateUI();
 	}
 
 	void CInputWnd::OnBtnNextPage()
 	{
-		if(m_iPage*m_nPageSize<m_inputInfo.nCands)
-		{
-			m_iPage ++;
-			FindChildByID(R.id.btn_prevpage)->SetVisible(TRUE,TRUE);
-			if(m_iPage*m_nPageSize>=m_inputInfo.nCands)
-				FindChildByID(R.id.btn_nextpage)->SetVisible(FALSE,TRUE);
-			OnInputInfoChanged(FALSE,TRUE);
-		}
 	}
 
 	void CInputWnd::OnBtnPrevPage()
 	{
-		if(m_iPage>0)
-		{
-			m_iPage--;
-			FindChildByID(R.id.btn_nextpage)->SetVisible(TRUE,TRUE);
-			if(m_iPage==0)
-				FindChildByID(R.id.btn_prevpage)->SetVisible(FALSE,TRUE);
-			OnInputInfoChanged(FALSE,TRUE);
-		}
 	}
 
-	void CInputWnd::ClearCands()
-	{
-		m_inputInfo.strCands.RemoveAll();
-		m_inputInfo.strComps.RemoveAll();
-		m_inputInfo.nCands= 0;
-		FindChildByID(R.id.btn_nextpage)->SetVisible(FALSE,TRUE);
-		FindChildByID(R.id.btn_prevpage)->SetVisible(FALSE,TRUE);
-		OnInputInfoChanged(FALSE,TRUE);
-	}
 
-	void CInputWnd::OnInputContextChanged(const InputContext * pInputCtx)
+	void CInputWnd::UpdateUI()
 	{
-		switch(pInputCtx->inState)
+		switch(m_pInputContext->inState)
 		{
 		case INST_CODING:
-			if(pInputCtx->compMode == IM_SPELL)
+			if(m_pInputContext->compMode == IM_SPELL)
 			{
 				SWindow * compSpell = FindChildByID(R.id.comp_spell);
 				compSpell->SetVisible(TRUE,TRUE);
-				compSpell->FindChildByID(R.id.txt_comps)->SetWindowText(S_CW2T(pInputCtx->strInput));
+				compSpell->FindChildByID(R.id.txt_comps)->SetWindowText(SStringT(m_pInputContext->szInput,m_pInputContext->cInput));
 			}
 			else
 			{
 				SWindow * compNormal = FindChildByID(R.id.comp_normal);
 				compNormal->SetVisible(TRUE,TRUE);
-				compNormal->FindChildByID(R.id.txt_comps)->SetWindowText(S_CW2T(pInputCtx->strInput));
+				compNormal->FindChildByID(R.id.txt_comps)->SetWindowText(SStringT(m_pInputContext->szInput,m_pInputContext->cInput));
+			}
+			//update candidate
+			{
+				FindChildByID(R.id.cand_normal)->SetVisible(TRUE,TRUE);
+				SWindow * pCandContainer = FindChildByID(R.id.cand_container);
+
+				int nPageSize = GetCandMax(pCandContainer);
+				int iBegin = m_iPage * nPageSize;
+				int iEnd   = smin(iBegin + nPageSize,m_pInputContext->sCandCount);
+
+				SWindow * pCand = pCandContainer->GetWindow(GSW_FIRSTCHILD);
+				int iCand = iBegin;
+				while(pCand && iCand<iEnd)
+				{
+					if(pCand->IsClass(SCandView::GetClassName()))
+					{
+						SCandView *pCand2 = (SCandView*)pCand;
+						pCand2->SetVisible(TRUE,TRUE);
+						pCand2->SetCandData(SStringT(m_pInputContext->szInput,m_pInputContext->cInput),m_pInputContext->ppbyCandInfo[iCand]);
+						iCand ++;
+					}
+					pCand = pCand->GetWindow(GSW_NEXTSIBLING);
+				}
+
+				while(iCand < iBegin + nPageSize && pCand)
+				{
+					if(pCand->IsClass(SCandView::GetClassName()))
+					{
+						SCandView *pCand2 = (SCandView*)pCand;
+						pCand2->SetVisible(FALSE,TRUE);
+						iCand ++;
+					}
+					pCand = pCand->GetWindow(GSW_NEXTSIBLING);
+				}
 			}
 			break;
 		case INST_USERDEF:
 			{
 				SWindow * compUmode = FindChildByID(R.id.comp_umode);
 				compUmode->SetVisible(TRUE,TRUE);
-				compUmode->FindChildByID(R.id.txt_comps)->SetWindowText(S_CW2T(pInputCtx->strInput));
+				compUmode->FindChildByID(R.id.txt_comps)->SetWindowText(SStringT(m_pInputContext->szInput,m_pInputContext->cInput));
 			}
 			break;
 		}
+	}
+
+	int CInputWnd::GetCandMax(SWindow *pCandContainer) const
+	{
+		int nRet = 0;
+		SWindow * pCand = pCandContainer->GetWindow(GSW_FIRSTCHILD);
+		while(pCand)
+		{
+			if(pCand->IsClass(SCandView::GetClassName()))
+			{
+				nRet ++;
+			}
+			pCand = pCand->GetWindow(GSW_NEXTSIBLING);
+		}
+		return nRet;
 	}
 
 }

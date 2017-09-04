@@ -27,15 +27,32 @@
       </mutexView>  
     </window>
     <window size="-1,0" weight="1" layout="hbox" tip="candidate window" gravity="center">
-      <imgbtn size="-1,-1" display="0" skin="btn_prevpage" name="btn_prevpage"/>
-      <window size="-1,-1" layout="hbox" name="cand_container">
-        <candidate size="-1,-1" index="1:" colorIndex="rgb(255,0,0)" colorCand="@color/cand_text" colorComp="@color/cand_comp" colorWild="@color/cand_wild"/>
-        <candidate size="-1,-1" extend_left="5" index="2:" />
-        <candidate size="-1,-1" extend_left="5" index="3:" />
-        <candidate size="-1,-1" extend_left="5" index="4:" />
-        <candidate size="-1,-1" extend_left="5" index="5:" />
-      </window>
-      <imgbtn size="-1,-1" display="0" skin="btn_nextpage" name="btn_nextpage"/>
+      <mutexView size="-1,-1" layout="hbox" name="cand_normal">
+        <imgbtn size="-1,-1" display="0" skin="btn_prevpage" name="btn_prevpage"/>
+        <window size="-1,-1" layout="hbox" name="cand_container">
+          <candidate size="-1,-1" index="1:" colorIndex="rgb(255,0,0)" colorCand="@color/cand_text" colorComp="@color/cand_comp" colorWild="@color/cand_wild"/>
+          <candidate size="-1,-1" extend_left="5" index="2:" />
+          <candidate size="-1,-1" extend_left="5" index="3:" />
+          <candidate size="-1,-1" extend_left="5" index="4:" />
+          <candidate size="-1,-1" extend_left="5" index="5:" />
+        </window>
+        <imgbtn size="-1,-1" display="0" skin="btn_nextpage" name="btn_nextpage"/>
+      </mutexView>
+      <mutextView size="-1,-1" layout="hbox" name="cand_english">
+        <text size="-1,-1" text="ch:" colorText="#ff0000" name="txt_en_header"/>
+        <imgbtn size="-1,-1" display="0" skin="btn_prevpage" name="btn_prevpage"/>
+        <window size="-1,-1" layout="hbox" name="cand_container">
+          <candidate size="-1,-1" index="1:" colorIndex="rgb(255,0,0)" colorCand="@color/cand_text" colorComp="@color/cand_comp" colorWild="@color/cand_wild"/>
+          <candidate size="-1,-1" extend_left="5" index="2:" />
+          <candidate size="-1,-1" extend_left="5" index="3:" />
+          <candidate size="-1,-1" extend_left="5" index="4:" />
+          <candidate size="-1,-1" extend_left="5" index="5:" />
+        </window>
+        <imgbtn size="-1,-1" display="0" skin="btn_nextpage" name="btn_nextpage"/>
+      </mutextView>
+      <mutextView size="-1,-1" layout="hbox" name="cand_tip">
+        <text size="-1,-1" text="show tip in candidate view"/>
+      </mutextView>
     </window>
   </root>
 </SOUI>

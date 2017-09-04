@@ -9,7 +9,7 @@ namespace SOUI
 		SCandView(void);
 		~SCandView(void);
 
-		void SetData(const SStringT strInput,const SStringT & strText, const SStringT &strComp);
+		void SetCandData(const SStringT& strInput,const BYTE* pbyCandData);
 	protected:
 		virtual CSize GetDesiredSize(int nParentWid, int nParentHei);
 
@@ -38,6 +38,8 @@ namespace SOUI
 		COLORREF m_crCand;
 		COLORREF m_crComp;
 		COLORREF m_crWild;
+
+		BYTE	 m_byRate;
 	};
 
 }

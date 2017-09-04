@@ -3,7 +3,7 @@
 
 namespace SOUI
 {
-	SCandView::SCandView(void)
+	SCandView::SCandView(void):m_byRate(0)
 	{
 		m_bDisplay=0;
 	}
@@ -52,11 +52,14 @@ namespace SOUI
 	}
 
 
-	void SCandView::SetData(const SStringT strInput,const SStringT & strText, const SStringT &strComp)
+	void SCandView::SetCandData(const SStringT& strInput,const BYTE* pbyCandData)
 	{
 		m_strInput = strInput;
-		m_strCand = strText;
-		m_strComp = strComp;
+		m_byRate = pbyCandData[0];
+		const BYTE * p = pbyCandData+1;
+		m_strCand = S_CA2T(SStringA((const char*)p+1,p[0]));
+		p+=p[0]+1;
+		m_strComp = S_CA2T(SStringA((const char*)p+1,p[0]));
 		RequestRelayout();
 	}
 

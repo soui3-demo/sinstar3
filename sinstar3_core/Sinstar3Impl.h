@@ -8,6 +8,7 @@
 
 class CSinstar3Impl:
 	public ISinstar,
+	public IInputListener,
 	public SOUI::SObject,
 	public SOUI::CSimpleWnd
 {
@@ -42,7 +43,10 @@ public:
 
 	virtual int GetID() const {	return SENDER_SINSTSR3;}
 protected:
-	void QueryCand(const SStringT &strComp);
+	virtual HWND GetHwnd() const;
+	virtual void OnInputStart();
+	virtual void OnInputEnd(const SStringT & strInput);
+
 public:
 	LRESULT OnSvrNotify(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -50,12 +54,16 @@ public:
 		MESSAGE_HANDLER_EX(ISComm_GetCommMsgID(),OnSvrNotify)
 		CHAIN_MSG_MAP(SOUI::CSimpleWnd)
 	END_MSG_MAP()
+
+
 private:
 	ITextService	*m_pTxtSvr;
 	CInputWnd		*m_pInputWnd;
 	CStatusWnd		*m_pStatusWnd;
 
 	CInputState		m_inputState;
+
+	void			*m_pCurImeContext;
 
 };
 

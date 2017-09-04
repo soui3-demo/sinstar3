@@ -43,10 +43,19 @@ struct SPELLINFO
 	BYTE bySpellLen;	//拼音长度
 };
 
+//清除缓冲区数据
+#define CPC_STATE		(1<<0)
+#define CPC_CAND		(1<<1)
+#define CPC_COMP		(1<<2)
+#define CPC_ENGLISH		(1<<3)
+#define CPC_SPELL		(1<<4)
+#define CPC_SENTENCE	(1<<5)
+#define CPC_ALL			0xFFFFFFFF
 
 struct InputContext
 {
-	SStringW strInput;				//当前输入数据
+	TCHAR szInput[MAX_INPUT];		//当前输入数据
+	int   cInput;
 
 	COMPMODE compMode;				//当前的输入类型：形码输入还是拼音输入。
 	INSTATE	inState;				//当前输入状态
@@ -78,4 +87,6 @@ struct InputContext
 	//英文输入
 	LPBYTE  pbyEnSpell;				//英文拼写
 	LPBYTE  pbyEnPhontic;			//音标数据
+
+	BOOL    bShowTip;				//show tip in comp
 };

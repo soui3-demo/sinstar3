@@ -14,8 +14,9 @@ namespace SOUI
 
 	void SMutexView::OnShowWindow(BOOL bShow, UINT nStatus)
 	{
+		bool isVisible = IsVisible(FALSE);
 		SWindow::OnShowWindow(bShow,nStatus);
-		if(bShow && nStatus == NormalShow)
+		if(bShow!=isVisible && nStatus == NormalShow)
 		{//hide other show sibling
 			SWindow *pParent = GetParent();
 			if(!pParent) return;
