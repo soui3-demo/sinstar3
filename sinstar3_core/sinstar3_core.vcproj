@@ -441,6 +441,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\controls\SSpellView.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\controls\SStatusBackground.cpp"
 				>
 			</File>
@@ -572,6 +576,10 @@
 			</File>
 			<File
 				RelativePath=".\SouiEnv.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SSpellView.h"
 				>
 			</File>
 			<File

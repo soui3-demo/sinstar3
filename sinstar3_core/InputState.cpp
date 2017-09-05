@@ -85,23 +85,23 @@ void CInputState::OnInputEnd(const SStringT &strResult)
 	m_bCoding = FALSE;
 }
 
-BOOL CInputState::HandleKeyDown(UINT vKey,UINT uScanCode)
+BOOL CInputState::HandleKeyDown(UINT vKey,UINT uScanCode,const BYTE * lpbKeyState)
 {
 	if(isprint(vKey))
 	{
 		vKey = tolower(vKey);
 	}
 
-	if(UpdateInputMode(vKey,uScanCode))
+	if(UpdateInputMode(vKey,uScanCode,lpbKeyState))
 		return TRUE;
 
-	if(HandleShapeCodeKeyDown(vKey,uScanCode))
+	if(HandleShapeCodeKeyDown(vKey,uScanCode,lpbKeyState))
 		return TRUE;
 
 	return FALSE;
 }
 
-BOOL CInputState::UpdateInputMode(UINT vKey,UINT uScanCode)
+BOOL CInputState::UpdateInputMode(UINT vKey,UINT uScanCode,const BYTE * lpbKeyState)
 {
 	if(m_ctx.inState == INST_CODING 
 		&& m_ctx.cInput == 0 
@@ -152,7 +152,7 @@ BOOL CInputState::UpdateInputMode(UINT vKey,UINT uScanCode)
 	return FALSE;
 }
 
-BOOL CInputState::HandleShapeCodeKeyDown(UINT vKey,UINT uScanCode)
+BOOL CInputState::HandleShapeCodeKeyDown(UINT vKey,UINT uScanCode,const BYTE * lpbKeyState)
 {
 
 	if(isprint(vKey))

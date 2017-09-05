@@ -19,10 +19,11 @@
         <text size="-1,-2" name="txt_comps"/>
       </mutexView>
       <mutexView size="-1,-2" name="comp_spell" visible="0" layout="hbox">
-        <text size="-1,-2" name="txt_comps" text="spell mode"/>
+        <text size="-1,-2" text="t:" name="txt_temp_spell_flag" colorText="#ff0000" padding_right="5" display="0"/>
+        <spellView size="-1,-2" name="txt_comps"/>
       </mutexView>
       <mutexView size="-1,-2" name="comp_umode"  visible="0" layout="hbox">
-        <text size="-1,-1" text="u:" colorText="#ff0000" padding_right="5"/>
+        <text size="-1,-2" text="u:" colorText="#ff0000" padding_right="5"/>
         <text size="-1,-2" name="txt_comps" text="umode"/>
       </mutexView>  
     </window>

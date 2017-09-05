@@ -71,7 +71,7 @@ namespace SOUI
 	BOOL CInputWnd::OnBtnNextPage()
 	{
 		if(m_iCandEnd==-1) return FALSE;
-		if(m_iCandEnd>m_pInputContext->sCandCount) return FALSE;
+		if(m_iCandEnd>=m_pInputContext->sCandCount) return FALSE;
 		m_iCandFirst = m_iCandEnd;
 		UpdateUI();
 		return TRUE;
@@ -96,7 +96,10 @@ namespace SOUI
 			{
 				SWindow * compSpell = FindChildByID(R.id.comp_spell);
 				compSpell->SetVisible(TRUE,TRUE);
-				compSpell->FindChildByID(R.id.txt_comps)->SetWindowText(SStringT(m_pInputContext->szInput,m_pInputContext->cInput));
+				SWindow * pTempFlag = compSpell->FindChildByID(R.id.txt_temp_spell_flag);
+				pTempFlag->SetVisible(g_SettingsG.compMode != IM_SPELL,TRUE);
+				SSpellView * spellView = compSpell->FindChildByID2<SSpellView>(R.id.txt_comps);
+				spellView->UpdateByContext(m_pInputContext);
 			}
 			else
 			{
@@ -170,7 +173,7 @@ namespace SOUI
 		return nRet;
 	}
 
-	short CInputWnd::SelectCandidate(UINT vKey)
+	short CInputWnd::SelectCandidate(UINT vKey,const BYTE *lpbKeyState)
 	{
 		if(m_pInputContext->sCandCount == 0) return -1;
 		if(!isdigit(vKey)) return -1;
@@ -179,14 +182,15 @@ namespace SOUI
 		return idx;
 	}
 
-	BOOL CInputWnd::TurnCandPage(UINT vKey)
+	BOOL CInputWnd::TurnCandPage(UINT byInput,const BYTE *lpbKeyState)
 	{
-		if(vKey == '-')
-		{
-			return OnBtnPrevPage();
-		}else if(vKey == '=')
+		//联想状态及自定义状态只能使用上下箭头翻页,以避免与符号输入冲突
+		if(byInput==VK_DOWN || (!(lpbKeyState[VK_SHIFT]&0x80) && byInput==g_SettingsG.byTurnPageDownVK&& m_pInputContext->sbState!=SBST_ASSOCIATE && m_pInputContext->inState!=INST_USERDEF))
 		{
 			return OnBtnNextPage();
+		}else if(byInput==VK_UP || (!(lpbKeyState[VK_SHIFT]&0x80) && byInput==g_SettingsG.byTurnPageUpVK&& m_pInputContext->sbState!=SBST_ASSOCIATE && m_pInputContext->inState!=INST_USERDEF))
+		{
+			return OnBtnPrevPage();
 		}
 		return FALSE;
 	}

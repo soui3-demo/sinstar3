@@ -67,16 +67,18 @@ void CSinstar3Impl:: TranslateKey(LPVOID lpImeContext,UINT vkCode,UINT uScanCode
 
 	*pbEaten = TRUE;
 
-	if(m_pInputWnd->TurnCandPage(vkCode))
+	BYTE byKeyState[256];
+	GetKeyboardState(byKeyState);
+	if(m_pInputWnd->TurnCandPage(vkCode,byKeyState))
 		return;
 
-	short iSelCand = m_pInputWnd->SelectCandidate(vkCode);
+	short iSelCand = m_pInputWnd->SelectCandidate(vkCode,byKeyState);
 	if(iSelCand!=-1)
 	{
 		char * pCand = (char*)m_inputState.GetInputContext()->ppbyCandInfo[iSelCand] + 1;
 		m_inputState.OnInputEnd(S_CA2T(SStringA(pCand+1,pCand[0]),CP_ACP));
 	}
-	else if(m_inputState.HandleKeyDown(vkCode,uScanCode))
+	else if(m_inputState.HandleKeyDown(vkCode,uScanCode,byKeyState))
 	{
 		m_pInputWnd->UpdateUI();
 	}

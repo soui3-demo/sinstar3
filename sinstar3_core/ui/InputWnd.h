@@ -21,8 +21,8 @@ namespace SOUI
 
 		void UpdateUI();
 
-		short SelectCandidate(UINT vKey);
-		BOOL  TurnCandPage(UINT vKey);
+		short SelectCandidate(UINT vKey,const BYTE *lpbKeyState);
+		BOOL  TurnCandPage(UINT vKey,const BYTE *lpbKeyState);
 	protected:
 		int GetCandMax(SWindow *pWnd) const;
 	protected:
