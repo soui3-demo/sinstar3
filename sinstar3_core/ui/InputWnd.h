@@ -20,12 +20,15 @@ namespace SOUI
 		void Show(BOOL bShow);
 
 		void UpdateUI();
+
+		short SelectCandidate(UINT vKey);
+		BOOL  TurnCandPage(UINT vKey);
 	protected:
 		int GetCandMax(SWindow *pWnd) const;
 	protected:
 		void OnSetSkin(EventArgs *e);
-		void OnBtnPrevPage();
-		void OnBtnNextPage();
+		BOOL OnBtnPrevPage();
+		BOOL OnBtnNextPage();
 		EVENT_MAP_BEGIN()
 			EVENT_HANDLER(EventSetSkin::EventID,OnSetSkin)
 			EVENT_ID_COMMAND(R.id.btn_prevpage,OnBtnPrevPage)
@@ -44,7 +47,9 @@ namespace SOUI
 		BOOL			 m_bLocated;
 		BOOL			 m_bShow;
 
-		int				 m_iPage;
+		short			 m_iCandFirst;
+		short			 m_iCandEnd;
+		short			 m_cPageSize;
 		const InputContext	* m_pInputContext;
 	};
 

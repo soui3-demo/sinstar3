@@ -10,6 +10,7 @@ interface IInputListener{
 
 class CInputState
 {
+	friend class CSinstar3Impl;
 public:
 	CInputState(void);
 	~CInputState(void);
@@ -25,7 +26,6 @@ private:
 	void ClearContext(UINT ccMask);
 	//update input mode
 	BOOL UpdateInputMode(UINT vKey,UINT uScanCode);
-
 	BOOL HandleShapeCodeKeyDown(UINT vKey,UINT uScanCode);
 
 	InputContext m_ctx;

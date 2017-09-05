@@ -67,11 +67,19 @@ void CSinstar3Impl:: TranslateKey(LPVOID lpImeContext,UINT vkCode,UINT uScanCode
 
 	*pbEaten = TRUE;
 
-	if(m_inputState.HandleKeyDown(vkCode,uScanCode))
+	if(m_pInputWnd->TurnCandPage(vkCode))
+		return;
+
+	short iSelCand = m_pInputWnd->SelectCandidate(vkCode);
+	if(iSelCand!=-1)
+	{
+		char * pCand = (char*)m_inputState.GetInputContext()->ppbyCandInfo[iSelCand] + 1;
+		m_inputState.OnInputEnd(S_CA2T(SStringA(pCand+1,pCand[0]),CP_ACP));
+	}
+	else if(m_inputState.HandleKeyDown(vkCode,uScanCode))
 	{
 		m_pInputWnd->UpdateUI();
 	}
-	return;
 }
 
 void CSinstar3Impl::OnIMESelect(BOOL bSelect)
@@ -211,6 +219,9 @@ void CSinstar3Impl::OnInputStart()
 void CSinstar3Impl::OnInputEnd(const SStringT & strInput)
 {
 	if(!m_pCurImeContext) return;
+	SStringW strResult = S_CT2W(strInput);
+	m_pTxtSvr->UpdateResultAndCompositionStringW(m_pCurImeContext,strResult,strResult.GetLength(),NULL,0);
 	m_pTxtSvr->EndComposition(m_pCurImeContext);
+	m_pInputWnd->Show(FALSE);
 }
 

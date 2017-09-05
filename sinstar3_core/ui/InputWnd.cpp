@@ -10,7 +10,9 @@ namespace SOUI
 		,m_bLocated(FALSE)
 		,m_nCaretHeight(30)
 		,m_pInputContext(pCtx)
-		,m_iPage(0)
+		,m_iCandFirst(0)
+		,m_iCandEnd(-1)
+		,m_cPageSize(0)
 	{
 	}
 
@@ -40,6 +42,9 @@ namespace SOUI
 		m_bShow = bShow;
 		if(!bShow)
 		{
+			m_cPageSize = 0;
+			m_iCandFirst = 0;
+			m_iCandEnd = -1;
 			m_bLocated = FALSE;
 		}
 	}
@@ -63,12 +68,22 @@ namespace SOUI
 		UpdateUI();
 	}
 
-	void CInputWnd::OnBtnNextPage()
+	BOOL CInputWnd::OnBtnNextPage()
 	{
+		if(m_iCandEnd==-1) return FALSE;
+		if(m_iCandEnd>m_pInputContext->sCandCount) return FALSE;
+		m_iCandFirst = m_iCandEnd;
+		UpdateUI();
+		return TRUE;
 	}
 
-	void CInputWnd::OnBtnPrevPage()
+	BOOL CInputWnd::OnBtnPrevPage()
 	{
+		if(m_cPageSize==0) return FALSE;
+		if(m_iCandFirst< m_cPageSize) return FALSE;
+		m_iCandFirst -= m_cPageSize;
+		UpdateUI();
+		return TRUE;
 	}
 
 
@@ -91,12 +106,18 @@ namespace SOUI
 			}
 			//update candidate
 			{
-				FindChildByID(R.id.cand_normal)->SetVisible(TRUE,TRUE);
-				SWindow * pCandContainer = FindChildByID(R.id.cand_container);
+				SWindow * pCandNormal = FindChildByID(R.id.cand_normal);
+				pCandNormal->SetVisible(TRUE,TRUE);
+				SWindow * pCandContainer = pCandNormal->FindChildByID(R.id.cand_container);
 
 				int nPageSize = GetCandMax(pCandContainer);
-				int iBegin = m_iPage * nPageSize;
+				int iBegin = m_iCandFirst;
 				int iEnd   = smin(iBegin + nPageSize,m_pInputContext->sCandCount);
+				m_iCandEnd = iEnd;
+				m_cPageSize = nPageSize;
+				
+				pCandNormal->FindChildByID(R.id.btn_prevpage)->SetVisible(iBegin>0,TRUE);
+				pCandNormal->FindChildByID(R.id.btn_nextpage)->SetVisible(iEnd<m_pInputContext->sCandCount,TRUE);
 
 				SWindow * pCand = pCandContainer->GetWindow(GSW_FIRSTCHILD);
 				int iCand = iBegin;
@@ -147,6 +168,27 @@ namespace SOUI
 			pCand = pCand->GetWindow(GSW_NEXTSIBLING);
 		}
 		return nRet;
+	}
+
+	short CInputWnd::SelectCandidate(UINT vKey)
+	{
+		if(m_pInputContext->sCandCount == 0) return -1;
+		if(!isdigit(vKey)) return -1;
+		short idx = (vKey - '0' + m_iCandFirst -1 + 10)%10;
+		if(idx >= m_iCandEnd) return -1;
+		return idx;
+	}
+
+	BOOL CInputWnd::TurnCandPage(UINT vKey)
+	{
+		if(vKey == '-')
+		{
+			return OnBtnPrevPage();
+		}else if(vKey == '=')
+		{
+			return OnBtnNextPage();
+		}
+		return FALSE;
 	}
 
 }

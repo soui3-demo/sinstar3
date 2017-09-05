@@ -81,6 +81,7 @@ void CInputState::OnInputEnd(const SStringT &strResult)
 {
 	SASSERT(m_pListener);
 	m_pListener->OnInputEnd(strResult);
+	ClearContext(CPC_ALL);
 	m_bCoding = FALSE;
 }
 
