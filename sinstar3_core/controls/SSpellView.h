@@ -20,10 +20,10 @@ namespace SOUI
 		SOUI_MSG_MAP_END()
 
 		SOUI_ATTRS_BEGIN()
-			ATTR_COLOR(L"spell",m_crSpell,TRUE)
-			ATTR_COLOR(L"result",m_crResult,TRUE)
-			ATTR_COLOR(L"edit",m_crEdit,TRUE)
-			ATTR_COLOR(L"caret",m_crCaret,TRUE)
+			ATTR_COLOR(L"colorSpell",m_crSpell,TRUE)
+			ATTR_COLOR(L"colorResult",m_crResult,TRUE)
+			ATTR_COLOR(L"colorEdit",m_crEdit,TRUE)
+			ATTR_COLOR(L"colorCaret",m_crCaret,TRUE)
 		SOUI_ATTRS_END()
 
 	protected:

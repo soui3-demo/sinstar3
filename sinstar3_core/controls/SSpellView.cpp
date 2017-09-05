@@ -5,7 +5,12 @@ namespace SOUI
 {
 	static LPCTSTR g_szLine[]={_T("-"),_T("|"),_T("/"),_T("\\"),_T("<"),_T("*")};
 
-	SSpellView::SSpellView(void):m_ctx(NULL)
+	SSpellView::SSpellView(void)
+		:m_ctx(NULL)
+		,m_crSpell(RGBA(200,220,255,255))
+		,m_crResult(RGBA(200,200,200,255))
+		,m_crEdit(RGBA(255,255,0,255))
+		,m_crCaret(RGBA(51,102,204,255))
 	{
 	}
 

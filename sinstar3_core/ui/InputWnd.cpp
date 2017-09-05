@@ -105,7 +105,7 @@ namespace SOUI
 			{
 				SWindow * compNormal = FindChildByID(R.id.comp_normal);
 				compNormal->SetVisible(TRUE,TRUE);
-				compNormal->FindChildByID(R.id.txt_comps)->SetWindowText(SStringT(m_pInputContext->szInput,m_pInputContext->cInput));
+				compNormal->FindChildByID(R.id.txt_comps)->SetWindowText(S_CA2T(SStringA(m_pInputContext->szInput,m_pInputContext->cInput)));
 			}
 			//update candidate
 			{
@@ -130,7 +130,7 @@ namespace SOUI
 					{
 						SCandView *pCand2 = (SCandView*)pCand;
 						pCand2->SetVisible(TRUE,TRUE);
-						pCand2->SetCandData(SStringT(m_pInputContext->szInput,m_pInputContext->cInput),m_pInputContext->ppbyCandInfo[iCand]);
+						pCand2->SetCandData(S_CA2T(SStringA(m_pInputContext->szInput,m_pInputContext->cInput)),m_pInputContext->ppbyCandInfo[iCand]);
 						iCand ++;
 					}
 					pCand = pCand->GetWindow(GSW_NEXTSIBLING);
@@ -152,7 +152,7 @@ namespace SOUI
 			{
 				SWindow * compUmode = FindChildByID(R.id.comp_umode);
 				compUmode->SetVisible(TRUE,TRUE);
-				compUmode->FindChildByID(R.id.txt_comps)->SetWindowText(SStringT(m_pInputContext->szInput,m_pInputContext->cInput));
+				compUmode->FindChildByID(R.id.txt_comps)->SetWindowText(S_CA2T(SStringA(m_pInputContext->szInput,m_pInputContext->cInput)));
 			}
 			break;
 		}

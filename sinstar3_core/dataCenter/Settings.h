@@ -76,5 +76,17 @@ public:
 	TCHAR	szPlugin[100];		// plugin name
 };
 
+struct SETTINGSL
+{
+	BOOL	bHideStatus;		// 当前状态栏隐藏状态
+	BOOL	bMouseFollow;		// 鼠标跟随开关
+	BOOL	bEnglish;			// 英文单词输入开关
+	BOOL	bFullStatus;		// 状态栏展开标志
+	BOOL	bCharMode;			// 标点模式
+	BOOL	bSound;				// 发音标志
+	BOOL	bRecord;			// 记录输入语句
+	BOOL	bInputBig5;			// 繁体输出标志
+};
 
 extern CSettingsGlobal	g_SettingsG;
+extern SETTINGSL		g_SettingsL;

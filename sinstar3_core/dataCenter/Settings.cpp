@@ -6,6 +6,7 @@
 CSettingsGlobal	g_SettingsG;		//输入法全局设置
 #pragma data_seg()
 
+SETTINGSL		g_SettingsL;
 
 BOOL WritePrivateProfileInt(
 							LPCTSTR lpAppName,  // pointer to section name
@@ -96,6 +97,8 @@ void CSettingsGlobal::Load(LPCTSTR pszIniFile)
 {
 	TCHAR szBuf[100];
 	compMode = (COMPMODE)GetPrivateProfileInt(KSession,_T("CompMode"),IM_SHAPECODE,pszIniFile);
+	compMode = IM_SPELL;
+
 	GetPrivateProfileString(KSession,_T("PhonticLeft"),_T("["),szPhonticLeft,50,pszIniFile);
 	GetPrivateProfileString(KSession,_T("PhonticRight"),_T("]"),szPhonticRight,50,pszIniFile);
 	byRateAdjust=GetPrivateProfileInt(KSession,_T("RateAdjust"),1,pszIniFile);
