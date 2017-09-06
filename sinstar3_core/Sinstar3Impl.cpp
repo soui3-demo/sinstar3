@@ -209,13 +209,13 @@ void CSinstar3Impl::OnInputStart()
 	m_pTxtSvr->StartComposition(m_pCurImeContext);
 }
 
-void CSinstar3Impl::OnInputEnd(const SStringT & strInput)
+void CSinstar3Impl::OnInputEnd(const SStringT & strInput,int nDelay)
 {
 	if(!m_pCurImeContext) return;
 	SStringW strResult = S_CT2W(strInput);
 	m_pTxtSvr->UpdateResultAndCompositionStringW(m_pCurImeContext,strResult,strResult.GetLength(),NULL,0);
 	m_pTxtSvr->EndComposition(m_pCurImeContext);
-	m_pInputWnd->Show(FALSE);
+	m_pInputWnd->Hide(nDelay);
 }
 
 BOOL CSinstar3Impl::GoNextCandidatePage()
@@ -228,8 +228,14 @@ BOOL CSinstar3Impl::GoPrevCandidatePage()
 	return m_pInputWnd->GoPrevCandidatePage();
 }
 
-short CSinstar3Impl::SelectCandidate(UINT vKey,const BYTE * lpbKeyState)
+short CSinstar3Impl::SelectCandidate(short iCand)
 {
-	return m_pInputWnd->SelectCandidate(vKey,lpbKeyState);
+	return m_pInputWnd->SelectCandidate(iCand);
 }
+
+void CSinstar3Impl::CloseInputWnd(int nDelayMS)
+{
+	m_pInputWnd->Hide(nDelayMS);
+}
+
 

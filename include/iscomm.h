@@ -157,8 +157,8 @@ DWORD ISComm_PhraseDel(LPCSTR pszComp,char cCompLen,LPCSTR pszPhrase,char cPhras
 DWORD ISComm_LineQueryCand(LPCSTR pszComp,char cCompLen);
 int ISComm_PhraseRate(LPCSTR pszPhrase,char cPhraseLen);
 
-DWORD ISComm_QueryUserDict(LPCTSTR pszkey,char cKeyLen);
-DWORD ISComm_SortWordByBiHua(LPCTSTR pszBiHua,char cBiHuaLen,LPCTSTR pszWordList,short nWords);
+DWORD ISComm_QueryUserDict(LPCSTR pszkey,char cKeyLen);
+DWORD ISComm_SortWordByBiHua(LPCSTR pszBiHua,char cBiHuaLen,LPCSTR pszWordList,short nWords);
 
 DWORD ISComm_Blur_Set(BOOL bBlur);
 DWORD ISComm_Blur_Add(char *pszSpell1,char *pszSpell2);

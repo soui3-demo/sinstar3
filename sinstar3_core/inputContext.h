@@ -90,4 +90,5 @@ struct InputContext
 	LPBYTE  pbyEnPhontic;			//Òô±êÊý¾Ý
 
 	BOOL    bShowTip;				//show tip in comp
+	char	szTip[200];
 };

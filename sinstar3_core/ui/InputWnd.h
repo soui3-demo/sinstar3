@@ -18,12 +18,12 @@ namespace SOUI
 
 		void MoveTo(CPoint pt,int nCaretHeight);
 		void Show(BOOL bShow);
-
+		void Hide(int nDelay);
 		void UpdateUI();
 		
 		BOOL GoNextCandidatePage();
 		BOOL GoPrevCandidatePage();
-		short SelectCandidate(UINT vKey,const BYTE *lpbKeyState);
+		short SelectCandidate(short iCand);
 	protected:
 		int GetCandMax(SWindow *pWnd) const;
 	protected:
@@ -38,8 +38,9 @@ namespace SOUI
 
 	protected:
 		int OnCreate(LPCREATESTRUCT lpCreateStruct);
-
+		void OnTimer(UINT_PTR idEvent);
 		BEGIN_MSG_MAP_EX(CInputWnd)
+			MSG_WM_TIMER(OnTimer)
 			MSG_WM_CREATE(OnCreate)
 			CHAIN_MSG_MAP(__super)
 		END_MSG_MAP()

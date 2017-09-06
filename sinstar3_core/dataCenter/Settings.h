@@ -35,7 +35,6 @@ public:
 	BYTE	byPntcBlue;			// 音标颜色 Blue
 	BYTE	byTransStatus;		// 状态窗口透明度 50~255
 	BYTE    byTransInput;		// 输入窗口透明度50~255
-	char	cPageCands;			// 一屏的重码数
 	BOOL	bFastUMode;			// 快捷自定义模式切换
 	BOOL	bShowOpTip;			// 显示操作提示开关
 	TCHAR   szPhonticLeft[50];	// 音标左数据
@@ -69,7 +68,7 @@ public:
 	BOOL	bAutoDot;			// 智能小数点
 	BOOL	bAutoPrompt;		// 智能重码提示
 	BOOL	bDisableDelWordCand;// 禁止删除单字重码
-	TCHAR	szWebHeader[100];	// 自动转为英文输入模式的抬头
+	char	szWebHeader[100];	// 自动转为英文输入模式的抬头
 
 	BOOL	bCandSelNoNum;		// 禁用数字选择重码
 	BOOL	bOnlySimpleCode;	// 出简不出全

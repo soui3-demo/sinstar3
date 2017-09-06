@@ -45,11 +45,11 @@ public:
 protected:
 	virtual HWND GetHwnd() const;
 	virtual void OnInputStart();
-	virtual void OnInputEnd(const SStringT & strInput);
+	virtual void OnInputEnd(const SStringT & strInput,int nDelay);
 	virtual BOOL GoNextCandidatePage();
 	virtual BOOL GoPrevCandidatePage();
-	virtual short SelectCandidate(UINT vKey,const BYTE * lpbKeyState);
-
+	virtual short SelectCandidate(short iCand);
+	virtual void CloseInputWnd(int nDelayMS);
 public:
 	LRESULT OnSvrNotify(UINT uMsg, WPARAM wParam, LPARAM lParam);
 

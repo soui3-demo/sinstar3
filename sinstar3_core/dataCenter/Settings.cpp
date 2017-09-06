@@ -54,7 +54,6 @@ void CSettingsGlobal::Save(LPCTSTR pszIniFile)
 	WritePrivateProfileInt(KSession,_T("SwitchKey"),bySwitchKey,pszIniFile);
 	WritePrivateProfileInt(KSession,_T("TempSpellKey"),byTempSpellKey,pszIniFile);
 	WritePrivateProfileInt(KSession,_T("Forecast"),byForecast,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("PageCands"),cPageCands,pszIniFile);
 	WritePrivateProfileInt(KSession,_T("ShowTip"),bShowOpTip,pszIniFile);
 	WritePrivateProfileInt(KSession,_T("AutoMatch"),bAutoMatch,pszIniFile);
 
@@ -87,7 +86,7 @@ void CSettingsGlobal::Save(LPCTSTR pszIniFile)
 	WritePrivateProfileInt(KSession,_T("AutoPrompt"),bAutoPrompt,pszIniFile);
 	WritePrivateProfileInt(KSession,_T("DisableDelWordCand"),bDisableDelWordCand,pszIniFile);
 	WritePrivateProfileInt(KSession,_T("CandSelNoNum"),bCandSelNoNum,pszIniFile);
-	WritePrivateProfileString(KSession,_T("WebHeader"),szWebHeader,pszIniFile);
+	WritePrivateProfileString(KSession,_T("WebHeader"),S_CA2T(szWebHeader),pszIniFile);
 	WritePrivateProfileString(KSession,_T("Plugin"),szPlugin,pszIniFile);
 	WritePrivateProfileInt(KSession,_T("OnlySimpleCode"),bOnlySimpleCode,pszIniFile);
 
@@ -163,7 +162,10 @@ void CSettingsGlobal::Load(LPCTSTR pszIniFile)
 	bDisableDelWordCand=GetPrivateProfileInt(KSession,_T("DisableDelWordCand"),1,pszIniFile);
 	bCandSelNoNum=GetPrivateProfileInt(KSession,_T("CandSelNoNum"),0,pszIniFile);
 
-	GetPrivateProfileString(KSession,_T("WebHeader"),_T("www. http mail bbs. ftp:"),szWebHeader,100,pszIniFile);
+	TCHAR szTmp[100]={0};
+	GetPrivateProfileString(KSession,_T("WebHeader"),_T("www. http mail bbs. ftp:"),szTmp,100,pszIniFile);
+	SStringA strHeader = S_CT2A(szTmp);
+	strcpy(szWebHeader,strHeader);
 
 	GetPrivateProfileString(KSession,_T("Plugin"),_T(""),szPlugin,100,pszIniFile);
 	bOnlySimpleCode=GetPrivateProfileInt(KSession,_T("OnlySimpleCode"),0,pszIniFile);

@@ -2,6 +2,7 @@
 #include "InputWnd.h"
 
 #define SIZE_BELOW 5
+#define TIMERID_DELAY 100
 
 namespace SOUI
 {
@@ -167,11 +168,10 @@ namespace SOUI
 		return nRet;
 	}
 
-	short CInputWnd::SelectCandidate(UINT vKey,const BYTE *lpbKeyState)
+	short CInputWnd::SelectCandidate(short iCand)
 	{
 		if(m_pInputContext->sCandCount == 0) return -1;
-		if(!isdigit(vKey)) return -1;
-		short idx = (vKey - '0' + m_iCandFirst -1 + 10)%10;
+		short idx = (iCand + m_iCandFirst -1 + 10)%10;
 		if(idx >= m_iCandEnd) return -1;
 		return idx;
 	}
@@ -191,6 +191,29 @@ namespace SOUI
 		if(m_iCandEnd>=m_pInputContext->sCandCount) return FALSE;
 		m_iCandFirst = m_iCandEnd;
 		return TRUE;
+	}
+
+	void CInputWnd::Hide(int nDelay)
+	{
+		if(nDelay == 0)
+		{
+			Show(FALSE);
+		}else
+		{
+			SetTimer(TIMERID_DELAY,nDelay);
+		}
+	}
+
+	void CInputWnd::OnTimer(UINT_PTR idEvent)
+	{
+		if(idEvent == TIMERID_DELAY)
+		{
+			Show(FALSE);
+			KillTimer(idEvent);
+		}else
+		{
+			SetMsgHandled(FALSE);
+		}
 	}
 
 }

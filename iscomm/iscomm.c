@@ -328,7 +328,7 @@ DWORD ISComm_QueryComp(LPCSTR pszPhrase,char cPhraseLen)
 	return ISComm_SendMsg(CT_QUERYCOMP,(LPVOID)pszPhrase,cPhraseLen,0);
 }
 
-DWORD ISComm_QueryUserDict(LPCTSTR pszkey,char cKeyLen)
+DWORD ISComm_QueryUserDict(LPCSTR pszkey,char cKeyLen)
 {
 	return ISComm_SendMsg(CT_QUERYUDICT,(LPVOID)pszkey,cKeyLen,0);
 }
@@ -516,7 +516,7 @@ DWORD ISComm_Blur_Query()
 	return ISComm_SendMsg(CT_BLUR_QUERY,NULL,0,0);
 }
 
-DWORD ISComm_SortWordByBiHua(LPCTSTR pszBiHua,char cBiHuaLen,LPCTSTR pszWordList,short nWords)
+DWORD ISComm_SortWordByBiHua(LPCSTR pszBiHua,char cBiHuaLen,LPCSTR pszWordList,short nWords)
 {
 	char *pbuf=NULL;
 	DWORD dwRet;
