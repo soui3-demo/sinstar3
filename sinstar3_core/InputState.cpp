@@ -112,6 +112,9 @@ BOOL CInputState::HandleKeyDown(UINT vKey,UINT uScanCode,const BYTE * lpbKeyStat
 		vKey = tolower(vKey);
 	}
 
+	if(HandleCandidate(vKey,uScanCode,lpbKeyState))
+		return TRUE;
+
 	if(UpdateInputMode(vKey,uScanCode,lpbKeyState))
 		return TRUE;
 
@@ -899,6 +902,25 @@ BOOL CInputState::HandleSpellKeyDown(UINT byInput,UINT uScanCode,const BYTE * lp
 		}
 	}
 	return bHandle;
+}
+
+BOOL CInputState::HandleCandidate(UINT byInput,UINT uScanCode,const BYTE * lpbKeyState)
+{
+	//联想状态及自定义状态只能使用上下箭头翻页,以避免与符号输入冲突
+	if(byInput==VK_DOWN || (!(lpbKeyState[VK_SHIFT]&0x80) && byInput==g_SettingsG.byTurnPageDownVK&& m_ctx.sbState!=SBST_ASSOCIATE && m_ctx.inState!=INST_USERDEF))
+	{
+		return m_pListener->GoNextCandidatePage();
+	}else if(byInput==VK_UP || (!(lpbKeyState[VK_SHIFT]&0x80) && byInput==g_SettingsG.byTurnPageUpVK&& m_ctx.sbState!=SBST_ASSOCIATE && m_ctx.inState!=INST_USERDEF))
+	{
+		return m_pListener->GoPrevCandidatePage();
+	}
+	short iCand = m_pListener->SelectCandidate(byInput,lpbKeyState);
+	if(iCand == -1) return FALSE;
+
+	char * pCand = (char*)m_ctx.ppbyCandInfo[iCand] + 1;
+	OnInputEnd(S_CA2T(SStringA(pCand+1,pCand[0]),CP_ACP));
+	
+	return TRUE;
 }
 
 

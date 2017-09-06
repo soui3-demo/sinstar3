@@ -46,6 +46,9 @@ protected:
 	virtual HWND GetHwnd() const;
 	virtual void OnInputStart();
 	virtual void OnInputEnd(const SStringT & strInput);
+	virtual BOOL GoNextCandidatePage();
+	virtual BOOL GoPrevCandidatePage();
+	virtual short SelectCandidate(UINT vKey,const BYTE * lpbKeyState);
 
 public:
 	LRESULT OnSvrNotify(UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -54,6 +57,7 @@ public:
 		MESSAGE_HANDLER_EX(ISComm_GetCommMsgID(),OnSvrNotify)
 		CHAIN_MSG_MAP(SOUI::CSimpleWnd)
 	END_MSG_MAP()
+
 
 
 private:

@@ -6,6 +6,9 @@ interface IInputListener{
 	virtual HWND GetHwnd() const = 0;
 	virtual void OnInputStart() = 0;
 	virtual void OnInputEnd(const SStringT & strInput) = 0;
+	virtual BOOL GoNextCandidatePage() = 0;
+	virtual BOOL GoPrevCandidatePage() = 0;
+	virtual short SelectCandidate(UINT vKey,const BYTE * lpbKeyState)=0;
 };
 
 class CInputState
@@ -27,6 +30,8 @@ private:
 	void ClearContext(UINT ccMask);
 	//update input mode
 	BOOL UpdateInputMode(UINT vKey,UINT uScanCode,const BYTE * lpbKeyState);
+
+	BOOL HandleCandidate(UINT vKey,UINT uScanCode,const BYTE * lpbKeyState);
 
 	BOOL HandleShapeCodeKeyDown(UINT vKey,UINT uScanCode,const BYTE * lpbKeyState);
 

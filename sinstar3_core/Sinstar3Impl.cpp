@@ -69,16 +69,7 @@ void CSinstar3Impl:: TranslateKey(LPVOID lpImeContext,UINT vkCode,UINT uScanCode
 
 	BYTE byKeyState[256];
 	GetKeyboardState(byKeyState);
-	if(m_pInputWnd->TurnCandPage(vkCode,byKeyState))
-		return;
-
-	short iSelCand = m_pInputWnd->SelectCandidate(vkCode,byKeyState);
-	if(iSelCand!=-1)
-	{
-		char * pCand = (char*)m_inputState.GetInputContext()->ppbyCandInfo[iSelCand] + 1;
-		m_inputState.OnInputEnd(S_CA2T(SStringA(pCand+1,pCand[0]),CP_ACP));
-	}
-	else if(m_inputState.HandleKeyDown(vkCode,uScanCode,byKeyState))
+	if(m_inputState.HandleKeyDown(vkCode,uScanCode,byKeyState))
 	{
 		m_pInputWnd->UpdateUI();
 	}
@@ -225,5 +216,20 @@ void CSinstar3Impl::OnInputEnd(const SStringT & strInput)
 	m_pTxtSvr->UpdateResultAndCompositionStringW(m_pCurImeContext,strResult,strResult.GetLength(),NULL,0);
 	m_pTxtSvr->EndComposition(m_pCurImeContext);
 	m_pInputWnd->Show(FALSE);
+}
+
+BOOL CSinstar3Impl::GoNextCandidatePage()
+{
+	return m_pInputWnd->GoNextCandidatePage();
+}
+
+BOOL CSinstar3Impl::GoPrevCandidatePage()
+{
+	return m_pInputWnd->GoPrevCandidatePage();
+}
+
+short CSinstar3Impl::SelectCandidate(UINT vKey,const BYTE * lpbKeyState)
+{
+	return m_pInputWnd->SelectCandidate(vKey,lpbKeyState);
 }
 

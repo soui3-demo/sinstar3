@@ -97,7 +97,7 @@ void CSettingsGlobal::Load(LPCTSTR pszIniFile)
 {
 	TCHAR szBuf[100];
 	compMode = (COMPMODE)GetPrivateProfileInt(KSession,_T("CompMode"),IM_SHAPECODE,pszIniFile);
-	compMode = IM_SPELL;
+	compMode = IM_SHAPECODE;
 
 	GetPrivateProfileString(KSession,_T("PhonticLeft"),_T("["),szPhonticLeft,50,pszIniFile);
 	GetPrivateProfileString(KSession,_T("PhonticRight"),_T("]"),szPhonticRight,50,pszIniFile);

@@ -68,22 +68,16 @@ namespace SOUI
 		UpdateUI();
 	}
 
-	BOOL CInputWnd::OnBtnNextPage()
+	void CInputWnd::OnBtnNextPage()
 	{
-		if(m_iCandEnd==-1) return FALSE;
-		if(m_iCandEnd>=m_pInputContext->sCandCount) return FALSE;
-		m_iCandFirst = m_iCandEnd;
-		UpdateUI();
-		return TRUE;
+		if(GoNextCandidatePage())
+			UpdateUI();
 	}
 
-	BOOL CInputWnd::OnBtnPrevPage()
+	void CInputWnd::OnBtnPrevPage()
 	{
-		if(m_cPageSize==0) return FALSE;
-		if(m_iCandFirst< m_cPageSize) return FALSE;
-		m_iCandFirst -= m_cPageSize;
-		UpdateUI();
-		return TRUE;
+		if(GoPrevCandidatePage())
+			UpdateUI();
 	}
 
 
@@ -182,17 +176,21 @@ namespace SOUI
 		return idx;
 	}
 
-	BOOL CInputWnd::TurnCandPage(UINT byInput,const BYTE *lpbKeyState)
+
+	BOOL CInputWnd::GoPrevCandidatePage()
 	{
-		//联想状态及自定义状态只能使用上下箭头翻页,以避免与符号输入冲突
-		if(byInput==VK_DOWN || (!(lpbKeyState[VK_SHIFT]&0x80) && byInput==g_SettingsG.byTurnPageDownVK&& m_pInputContext->sbState!=SBST_ASSOCIATE && m_pInputContext->inState!=INST_USERDEF))
-		{
-			return OnBtnNextPage();
-		}else if(byInput==VK_UP || (!(lpbKeyState[VK_SHIFT]&0x80) && byInput==g_SettingsG.byTurnPageUpVK&& m_pInputContext->sbState!=SBST_ASSOCIATE && m_pInputContext->inState!=INST_USERDEF))
-		{
-			return OnBtnPrevPage();
-		}
-		return FALSE;
+		if(m_cPageSize==0) return FALSE;
+		if(m_iCandFirst< m_cPageSize) return FALSE;
+		m_iCandFirst -= m_cPageSize;
+		return TRUE;
+	}
+
+	BOOL CInputWnd::GoNextCandidatePage()
+	{
+		if(m_iCandEnd==-1) return FALSE;
+		if(m_iCandEnd>=m_pInputContext->sCandCount) return FALSE;
+		m_iCandFirst = m_iCandEnd;
+		return TRUE;
 	}
 
 }
