@@ -56,9 +56,15 @@ CSinstar3Impl::~CSinstar3Impl(void)
 
 void CSinstar3Impl:: ProcessKeyStoke(LPVOID lpImeContext,UINT vkCode,LPARAM lParam,BOOL bKeyDown,BOOL *pbEaten)
 {
+	if(!bKeyDown)
+	{
+		*pbEaten = FALSE;
+		return;
+	}
 	CAutoContext autoCtx(&m_pCurImeContext,lpImeContext);
-	*pbEaten = bKeyDown;
-	return;
+	BYTE byKeyState[256];
+	GetKeyboardState(byKeyState);
+	*pbEaten = m_inputState.TestKeyDown(vkCode,lParam,byKeyState);
 }
 
 void CSinstar3Impl:: TranslateKey(LPVOID lpImeContext,UINT vkCode,UINT uScanCode,BOOL bKeyDown,BOOL *pbEaten)
@@ -236,6 +242,18 @@ short CSinstar3Impl::SelectCandidate(short iCand)
 void CSinstar3Impl::CloseInputWnd(int nDelayMS)
 {
 	m_pInputWnd->Hide(nDelayMS);
+}
+
+BOOL CSinstar3Impl::SetOpenStatus(BOOL bOpen)
+{
+	SASSERT(m_pCurImeContext);
+	return m_pTxtSvr->SetOpenStatus(m_pCurImeContext,bOpen);
+}
+
+BOOL CSinstar3Impl::GetOpenStatus()
+{
+	SASSERT(m_pCurImeContext);
+	return m_pTxtSvr->GetOpenStatus(m_pCurImeContext);
 }
 
 

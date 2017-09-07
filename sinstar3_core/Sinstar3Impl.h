@@ -50,6 +50,9 @@ protected:
 	virtual BOOL GoPrevCandidatePage();
 	virtual short SelectCandidate(short iCand);
 	virtual void CloseInputWnd(int nDelayMS);
+	virtual BOOL SetOpenStatus(BOOL bOpen);
+	virtual BOOL GetOpenStatus();
+
 public:
 	LRESULT OnSvrNotify(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -57,6 +60,7 @@ public:
 		MESSAGE_HANDLER_EX(ISComm_GetCommMsgID(),OnSvrNotify)
 		CHAIN_MSG_MAP(SOUI::CSimpleWnd)
 	END_MSG_MAP()
+
 
 
 
