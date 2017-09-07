@@ -3,7 +3,7 @@
 
 namespace SOUI
 {
-	SCandView::SCandView(void):m_byRate(0)
+	SCandView::SCandView(void):m_byRate(0),m_cWild(0)
 	{
 		m_bDisplay=0;
 	}
@@ -31,20 +31,23 @@ namespace SOUI
 		pRT->MeasureText(m_strCand,m_strCand.GetLength(),&szBlock);
 		pt.x += szBlock.cx;
 
-		TCHAR cWild = 0;
+		if(m_cWild!=0 && m_strInput.Find(m_cWild)!=-1)
 		{
-			CDataCenter::AutoLocker dataCenterAutoLocker = CDataCenter::GetAutoLockerInstance();
-			cWild = dataCenterAutoLocker->GetData().m_compInfo.cWild;
-		}
-		for(int i=0;i<m_strComp.GetLength();i++)
+			for(int i=0;i<m_strComp.GetLength();i++)
+			{
+				if(i<m_strInput.GetLength() && m_strInput[i] == m_cWild)
+					pRT->SetTextColor(m_crWild);
+				else
+					pRT->SetTextColor(m_crComp);
+				pRT->TextOut(pt.x,pt.y,(LPCTSTR)m_strComp+i,1);
+				pRT->MeasureText((LPCTSTR)m_strComp+i,1,&szBlock);
+				pt.x += szBlock.cx;
+			}
+		}else if(m_strComp.GetLength()>m_strInput.GetLength())
 		{
-			if(i<m_strInput.GetLength() && m_strInput[i] == cWild)
-				pRT->SetTextColor(m_crWild);
-			else
-				pRT->SetTextColor(m_crComp);
-			pRT->TextOut(pt.x,pt.y,(LPCTSTR)m_strComp+i,1);
-			pRT->MeasureText((LPCTSTR)m_strComp+i,1,&szBlock);
-			pt.x += szBlock.cx;
+			SStringT strComp = m_strComp.Right(m_strComp.GetLength()-m_strInput.GetLength());
+			pRT->SetTextColor(m_crComp);
+			pRT->TextOut(pt.x,pt.y,(LPCTSTR)strComp,strComp.GetLength());
 		}
 
 		pRT->SetTextColor(crDef);
@@ -52,9 +55,11 @@ namespace SOUI
 	}
 
 
-	void SCandView::SetCandData(const SStringT& strInput,const BYTE* pbyCandData)
+	void SCandView::SetCandData(TCHAR cWild,const SStringT& strInput,const BYTE* pbyCandData)
 	{
+		m_cWild = cWild;
 		m_strInput = strInput;
+
 		m_byRate = pbyCandData[0];
 		const BYTE * p = pbyCandData+1;
 		m_strCand = S_CA2T(SStringA((const char*)p+1,p[0]));
@@ -78,10 +83,20 @@ namespace SOUI
 		szRet.cx += sz.cx;
 		szRet.cy = smax(szRet.cy,sz.cy);
 
-		pRT->MeasureText(m_strComp,m_strComp.GetLength(),&sz);
-		szRet.cx += sz.cx;
-		szRet.cy = smax(szRet.cy,sz.cy);
-
+		SStringT strComp;
+		if(m_cWild!=0 && m_strInput.Find(m_cWild)!=-1)
+		{
+			strComp = m_strComp;
+		}else if(m_strComp.GetLength()>m_strInput.GetLength())
+		{
+			strComp = m_strComp.Right(m_strComp.GetLength()-m_strInput.GetLength());
+		}
+		if(!strComp.IsEmpty()) 
+		{
+			pRT->MeasureText(strComp,strComp.GetLength(),&sz);
+			szRet.cx += sz.cx;
+			szRet.cy = smax(szRet.cy,sz.cy);
+		}
 		pRT->Release();
 		return szRet;
 	}

@@ -47,6 +47,9 @@ namespace SOUI
 			m_iCandFirst = 0;
 			m_iCandEnd = -1;
 			m_bLocated = FALSE;
+		}else
+		{
+			KillTimer(TIMERID_DELAY);
 		}
 	}
 
@@ -119,13 +122,14 @@ namespace SOUI
 
 				SWindow * pCand = pCandContainer->GetWindow(GSW_FIRSTCHILD);
 				int iCand = iBegin;
+				TCHAR cWild = m_pInputContext->compMode == IM_SHAPECODE ? (CDataCenter::GetAutoLockerInstance()->GetData().m_compInfo.cWild):0;
 				while(pCand && iCand<iEnd)
 				{
 					if(pCand->IsClass(SCandView::GetClassName()))
 					{
 						SCandView *pCand2 = (SCandView*)pCand;
 						pCand2->SetVisible(TRUE,TRUE);
-						pCand2->SetCandData(S_CA2T(SStringA(m_pInputContext->szInput,m_pInputContext->cInput)),m_pInputContext->ppbyCandInfo[iCand]);
+						pCand2->SetCandData(cWild,S_CA2T(SStringA(m_pInputContext->szInput,m_pInputContext->cInput)),m_pInputContext->ppbyCandInfo[iCand]);
 						iCand ++;
 					}
 					pCand = pCand->GetWindow(GSW_NEXTSIBLING);
@@ -171,7 +175,7 @@ namespace SOUI
 	short CInputWnd::SelectCandidate(short iCand)
 	{
 		if(m_pInputContext->sCandCount == 0) return -1;
-		short idx = (iCand + m_iCandFirst -1 + 10)%10;
+		short idx = iCand + m_iCandFirst;
 		if(idx >= m_iCandEnd) return -1;
 		return idx;
 	}

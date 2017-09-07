@@ -339,11 +339,6 @@ void CInputState::OnInputEnd(const SStringT &strResult,byte byMask,BOOL bDelay)
 
 BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeyState)
 {
-	if(isprint(uVKey))
-	{
-		uVKey = tolower(uVKey);
-	}
-
 	BOOL bHandle=FALSE;
 	//首先使用VK处理快捷键及重码翻页键
 	if(!bHandle && lpbKeyState[VK_CONTROL] & 0x80 )
@@ -388,6 +383,11 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 			}
 		}
 		if(!bHandle) bHandle=KeyIn_All_TurnCandPage(lpCntxtPriv,uVKey,lpbKeyState);
+	}
+
+	if(isprint(uVKey))
+	{
+		uVKey = tolower(uVKey);
 	}
 
 	//处理拼音的音节移动
