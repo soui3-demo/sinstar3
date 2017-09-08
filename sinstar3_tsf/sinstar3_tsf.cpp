@@ -101,6 +101,7 @@ CSinstar3Tsf::CSinstar3Tsf()
 	
 	_bUseCursorPos = FALSE;
 	_bUseMSMethod = FALSE;
+	_ec = 0;
 
 	TCHAR szFileName[MAX_PATH] = _T("");
 	GetModuleFileName( NULL, szFileName, ARRAYSIZE( szFileName));
@@ -582,12 +583,12 @@ BOOL CSinstar3Tsf::SetOpenStatus(LPVOID lpImeContext,BOOL bOpen)
 	return _SetKeyboardOpen(bOpen);
 }
 
-BOOL CSinstar3Tsf::GetOpenStatus(LPVOID lpImeContext)
+BOOL CSinstar3Tsf::GetOpenStatus(LPVOID lpImeContext) const
 {
 	return _IsKeyboardOpen();
 }
 
-void CSinstar3Tsf::OnStartComposition(ITfComposition *pComposition)
+void CSinstar3Tsf::OnStartComposition(TfEditCookie ec,ITfComposition *pComposition)
 {
 	_pComposition = pComposition;
 	if(m_pSinstar3) m_pSinstar3->OnCompositionStarted();

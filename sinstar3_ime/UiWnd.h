@@ -42,7 +42,7 @@ public:
 	BOOL  RegisterIMEHotKey(REFGUID guidHotKey,LPCWSTR pszName,const PRESERVEDKEY *pKey);
 	BOOL  UnregisterIMEHotKey(REFGUID guidHotKey,const PRESERVEDKEY *pKey);
 	BOOL SetOpenStatus(LPVOID lpImeContext,BOOL bOpen);
-	BOOL GetOpenStatus(LPVOID lpImeContext);
+	BOOL GetOpenStatus(LPVOID lpImeContext) const;
 #ifdef ENABLE_LANGUAGEBAR
 	BOOL GetLanguageBarItemMgr(ITfLangBarItemMgr **ppLangBarMgr,GUID *pGuidTIP);
 #endif//ENABLE_LANGUAGEBAR

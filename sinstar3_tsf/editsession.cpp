@@ -18,6 +18,7 @@ CEsStartComposition::CEsStartComposition(CSinstar3Tsf *pTextService, ITfContext 
 
 STDMETHODIMP CEsStartComposition::DoEditSession(TfEditCookie ec)
 {
+	SLOG_INFO("TfEditCookie:"<<ec);
 	CComPtr<ITfInsertAtSelection> pInsertAtSelection;
 	CComPtr<ITfRange> pRangeInsert;
 	CComPtr<ITfContextComposition> pContextComposition;
@@ -57,7 +58,7 @@ STDMETHODIMP CEsStartComposition::DoEditSession(TfEditCookie ec)
 	// Store the pointer of this new composition object in the instance 
 	// of the CTextService class. So this instance of the CTextService 
 	// class can know now it is in the composition stage.
-	_pTextService->OnStartComposition(pComposition);
+	_pTextService->OnStartComposition(ec,pComposition);
 
 	return S_OK;
 }
@@ -71,7 +72,7 @@ CEsEndComposition::CEsEndComposition(CSinstar3Tsf *pTextService, ITfContext *pCo
 
 STDMETHODIMP CEsEndComposition::DoEditSession(TfEditCookie ec)
 {
-	SLOG_INFO("DoEditSession:TfEditCookie:"<<ec);
+	SLOG_INFO("TfEditCookie:"<<ec);
 	ITfComposition * pComposition = _pTextService->GetITfComposition();
 	if(!pComposition)
 	{
@@ -104,6 +105,8 @@ CEsGetTextExtent::CEsGetTextExtent(CSinstar3Tsf *pTextService, ITfContext *pCont
 
 STDMETHODIMP CEsGetTextExtent::DoEditSession(TfEditCookie ec)
 {
+	SLOG_INFO("TfEditCookie:"<<ec);
+
 	ULONG uFatched=0;
 	CComPtr<ITfRange> pRange;
 	HRESULT hr;
@@ -225,6 +228,8 @@ CEsChangeComposition::~CEsChangeComposition()
 
 STDMETHODIMP CEsChangeComposition::DoEditSession(TfEditCookie ec)
 {
+	SLOG_INFO("TfEditCookie:"<<ec);
+
 	if(!_pTextService->IsCompositing()) 
 		_pTextService->_StartComposition(_pContext);
 	CComPtr<ITfRange> pRangeComposition;
@@ -299,6 +304,8 @@ CEsMoveCaret::CEsMoveCaret(CSinstar3Tsf *pTextService,
 
 STDMETHODIMP CEsMoveCaret::DoEditSession(TfEditCookie ec)
 {
+	SLOG_INFO("TfEditCookie:"<<ec);
+
 	CComPtr<ITfRange> pRangeComposition;
 	TF_SELECTION tfSelection;
 	ULONG cFetched;
@@ -377,6 +384,8 @@ CEsUpdateResultAndComp::~CEsUpdateResultAndComp()
 
 STDMETHODIMP CEsUpdateResultAndComp::DoEditSession(TfEditCookie ec)
 {
+	SLOG_INFO("TfEditCookie:"<<ec);
+
 	CComPtr<ITfRange> pRangeComposition;
 	CComPtr<ITfProperty> pDisplayAttributeProperty;
 
@@ -437,7 +446,6 @@ STDMETHODIMP CEsUpdateResultAndComp::DoEditSession(TfEditCookie ec)
 	}else
 	{
 		_pContext->SetSelection(ec,1,&tfSelection);
-		//_pTextService->_EndComposition(_pContext);
 	}
 	return S_OK;
 }

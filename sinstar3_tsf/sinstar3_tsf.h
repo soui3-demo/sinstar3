@@ -93,7 +93,7 @@ public:
 	BOOL RegisterIMEHotKey(REFGUID guidHotKey,LPCWSTR pszName,const PRESERVEDKEY *pKey);
 	BOOL UnregisterIMEHotKey(REFGUID guidHotKey,const PRESERVEDKEY *pKey);
 	BOOL SetOpenStatus(LPVOID lpImeContext,BOOL bOpen);
-	BOOL GetOpenStatus(LPVOID lpImeContext);
+	BOOL GetOpenStatus(LPVOID lpImeContext) const;
 	BOOL GetLanguageBarItemMgr(ITfLangBarItemMgr **ppLangBarMgr,GUID *pGuidTIP);
 	LRESULT DoWildRequest(WPARAM wParam,LPARAM lParam){return E_NOTIMPL;}
 
@@ -103,12 +103,12 @@ public:
 
     // utility function for compartment
     BOOL _IsKeyboardDisabled();
-    BOOL _IsKeyboardOpen();
+    BOOL _IsKeyboardOpen() const;
     HRESULT _SetKeyboardOpen(BOOL fOpen);
 
 
     // functions for the composition object.
-	void OnStartComposition(ITfComposition *pComposition);
+	void OnStartComposition(TfEditCookie ec,ITfComposition *pComposition);
 	void OnCompositionEnd();
 	ITfComposition* GetITfComposition(){return _pComposition;}
 
@@ -181,6 +181,7 @@ public:
 
     // the current composition object.
     CComPtr<ITfComposition> _pComposition;
+	TfEditCookie _ec;
 
 	// guidatom for the display attibute.
 	TfGuidAtom _gaDisplayAttributeInput;

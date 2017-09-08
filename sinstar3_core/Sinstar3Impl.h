@@ -45,13 +45,18 @@ public:
 protected:
 	virtual HWND GetHwnd() const;
 	virtual void OnInputStart();
-	virtual void OnInputEnd(const SStringT & strInput,int nDelay);
+	virtual void OnInputChange(const SStringT & strResult,const SStringT & strComp=SStringT() );
+	virtual void OnInputEnd(int nDelayMS);
+
 	virtual BOOL GoNextCandidatePage();
 	virtual BOOL GoPrevCandidatePage();
 	virtual short SelectCandidate(short iCand);
+	virtual void OpenInputWnd();
 	virtual void CloseInputWnd(int nDelayMS);
 	virtual BOOL SetOpenStatus(BOOL bOpen);
-	virtual BOOL GetOpenStatus();
+	virtual BOOL GetOpenStatus() const;
+
+
 
 public:
 	LRESULT OnSvrNotify(UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -60,8 +65,6 @@ public:
 		MESSAGE_HANDLER_EX(ISComm_GetCommMsgID(),OnSvrNotify)
 		CHAIN_MSG_MAP(SOUI::CSimpleWnd)
 	END_MSG_MAP()
-
-
 
 
 private:

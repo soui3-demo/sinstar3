@@ -246,7 +246,7 @@ BOOL CUiWnd::SetOpenStatus(LPVOID lpImeContext,BOOL bOpen)
 	return ImmSetOpenStatus(((CImeContext *)lpImeContext)->_hIMC,bOpen);
 }
 
-BOOL CUiWnd::GetOpenStatus(LPVOID lpImeContext)
+BOOL CUiWnd::GetOpenStatus(LPVOID lpImeContext) const
 {
 	if(!lpImeContext) return FALSE;
 	return ImmGetOpenStatus(((CImeContext *)lpImeContext)->_hIMC);

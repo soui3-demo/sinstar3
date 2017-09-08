@@ -96,6 +96,7 @@ void CSinstar3Impl::OnSetFocusSegmentPosition(POINT pt,int nHei)
 
 void CSinstar3Impl::OnCompositionStarted()
 {
+	SLOG_INFO("");
 	m_pInputWnd->Show(TRUE);
 }
 
@@ -105,6 +106,7 @@ void CSinstar3Impl::OnCompositionChanged()
 
 void CSinstar3Impl::OnCompositionTerminated()
 {
+	SLOG_INFO("");
  	m_pInputWnd->Show(FALSE);
 }
 
@@ -217,13 +219,12 @@ void CSinstar3Impl::OnInputStart()
 	m_pTxtSvr->StartComposition(m_pCurImeContext);
 }
 
-void CSinstar3Impl::OnInputEnd(const SStringT & strInput,int nDelay)
+
+void CSinstar3Impl::OnInputEnd(int nDelayMS)
 {
 	if(!m_pCurImeContext) return;
-	SStringW strResult = S_CT2W(strInput);
-	m_pTxtSvr->UpdateResultAndCompositionStringW(m_pCurImeContext,strResult,strResult.GetLength(),NULL,0);
 	m_pTxtSvr->EndComposition(m_pCurImeContext);
-	m_pInputWnd->Hide(nDelay);
+	m_pInputWnd->Hide(nDelayMS);
 }
 
 BOOL CSinstar3Impl::GoNextCandidatePage()
@@ -252,10 +253,24 @@ BOOL CSinstar3Impl::SetOpenStatus(BOOL bOpen)
 	return m_pTxtSvr->SetOpenStatus(m_pCurImeContext,bOpen);
 }
 
-BOOL CSinstar3Impl::GetOpenStatus()
+BOOL CSinstar3Impl::GetOpenStatus() const
 {
 	SASSERT(m_pCurImeContext);
 	return m_pTxtSvr->GetOpenStatus(m_pCurImeContext);
+}
+
+
+void CSinstar3Impl::OnInputChange(const SStringT & strResult,const SStringT & strComp/*=SStringT() */)
+{
+	if(!m_pCurImeContext) return;
+	SStringW strResultW = S_CT2W(strResult);
+	SStringW strCompW = S_CT2W(strComp);
+	m_pTxtSvr->UpdateResultAndCompositionStringW(m_pCurImeContext,strResult,strResult.GetLength(),strCompW,strCompW.GetLength());
+}
+
+void CSinstar3Impl::OpenInputWnd()
+{
+	m_pInputWnd->Show(TRUE);
 }
 
 

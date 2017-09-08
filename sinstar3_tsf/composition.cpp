@@ -77,13 +77,13 @@ BOOL CSinstar3Tsf::_GetSegRange(TfEditCookie ec,ITfRange **pRange,int nLeft,int 
 
 STDAPI CSinstar3Tsf::OnCompositionTerminated(TfEditCookie ecWrite, ITfComposition *pComposition)
 {
-	SLOG_INFO("OnCompositionTerminated, pComposition:"<<pComposition);
-	SASSERT(pComposition && pComposition == _pComposition);
-	ITfContext *pCtx=(ITfContext *)GetImeContext();
-	_TerminateComposition(ecWrite,pCtx);
-	ReleaseImeContext(pCtx);
-
-
+	SLOG_INFO("OnCompositionTerminated,TfEditCookie:"<<ecWrite<< " pComposition:"<<pComposition);
+	{
+		SASSERT(pComposition && pComposition == _pComposition);
+		ITfContext *pCtx=(ITfContext *)GetImeContext();
+		_TerminateComposition(ecWrite,pCtx);
+		ReleaseImeContext(pCtx);
+	}
 	return S_OK;
 }
 

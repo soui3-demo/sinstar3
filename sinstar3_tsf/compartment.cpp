@@ -95,7 +95,7 @@ Exit:
 //
 //----------------------------------------------------------------------------
 
-BOOL CSinstar3Tsf::_IsKeyboardOpen()
+BOOL CSinstar3Tsf::_IsKeyboardOpen() const
 {
     ITfCompartmentMgr *pCompMgr = NULL;
     BOOL fOpen = FALSE;

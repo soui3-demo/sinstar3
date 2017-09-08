@@ -63,7 +63,7 @@ interface ITextService
 	virtual BOOL  RegisterIMEHotKey(REFGUID guidHotKey,LPCWSTR pszName,const PRESERVEDKEY *pKey)=NULL;
 	virtual BOOL  UnregisterIMEHotKey(REFGUID guidHotKey,const PRESERVEDKEY *pKey)=NULL;
 	virtual BOOL SetOpenStatus(LPVOID lpImeContext,BOOL bOpen)=NULL;
-	virtual BOOL GetOpenStatus(LPVOID lpImeContext)=NULL;
+	virtual BOOL GetOpenStatus(LPVOID lpImeContext) const =NULL;
 	virtual LRESULT DoWildRequest(WPARAM wParam,LPARAM lParam)=NULL;
 #ifdef ENABLE_LANGUAGEBAR
 	virtual BOOL GetLanguageBarItemMgr(ITfLangBarItemMgr **ppLangBarMgr,GUID *pGuidTIP)=NULL;
