@@ -14,6 +14,7 @@ namespace SOUI
 		,m_iCandFirst(0)
 		,m_iCandEnd(-1)
 		,m_cPageSize(0)
+		,m_bShow(FALSE)
 	{
 	}
 
