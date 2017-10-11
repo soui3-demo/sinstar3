@@ -35,11 +35,16 @@
         </window>
       </window>
       <window size="-2,0" weight="1" name="status_extend" display="0"  padding="6,0,6,0">
-        <window size="-2,-2" layout="hbox">
+        <window size="-2,-2" layout="hbox" gravity="center">
+          <window size="0,0" weight="1" visible="0"/>
           <toggle2 size="-1,-1" skin1="charmode_half" skin2="charmode_full" name="btn_charmode" tip="change mode"/>
+          <window size="0,0" weight="2" visible="0"/>
           <imgbtn size="-1,-1" skin="btn_makeword" name="btn_makeword"/>
+          <window size="0,0" weight="2" visible="0"/>
           <toggle2 size="-1,-1" skin1="btn_record_enable" skin2="btn_record_disable" name="btn_record"/>
+          <window size="0,0" weight="2" visible="0"/>
           <toggle2 size="-1,-1" skin1="btn_sound_enable" skin2="btn_sound_disable" name="btn_sound"/>
+          <window size="0,0" weight="1" visible="0"/>
         </window>
       </window>
     </status_bg>
