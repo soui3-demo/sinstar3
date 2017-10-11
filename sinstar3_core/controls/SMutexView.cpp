@@ -16,7 +16,7 @@ namespace SOUI
 	{
 		BOOL isVisible = IsVisible(FALSE);
 		SWindow::OnShowWindow(bShow,nStatus);
-		if(bShow!=isVisible && nStatus == NormalShow)
+		if(bShow && !isVisible && nStatus == NormalShow)
 		{//hide other show sibling
 			SWindow *pParent = GetParent();
 			if(!pParent) return;

@@ -13,9 +13,6 @@ namespace SOUI
 		CInputWnd(const InputContext * pCtx);
 		~CInputWnd(void);
 
-		void SetCompStr(const SStringT &strComp);
-		SStringT GetCompStr() const;
-
 		void MoveTo(CPoint pt,int nCaretHeight);
 		void Show(BOOL bShow);
 		void Hide(int nDelay);
