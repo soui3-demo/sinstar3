@@ -54,6 +54,7 @@ STDAPI DllUnregisterServer(void)
 	TCHAR *p=_tcsrchr(szPath,_T('\\'));
 	
 	//todo:hjx
+	
 	return FALSE;
 }
 

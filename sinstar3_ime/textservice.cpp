@@ -20,16 +20,19 @@ BOOL CUiWnd::IsCompositing()
 
 void CUiWnd::StartComposition(LPVOID lpImeContext)
 {
-	_ASSERT(lpImeContext && !IsCompositing());
-	CImeContext *pCtx=(CImeContext *)lpImeContext;
-	CCompStrEx *pCompStr=(CCompStrEx *)ImmLockIMCC(pCtx->_lpContext->hCompStr);
-	_ASSERT(pCompStr);
-	pCompStr->Init();
-	pCompStr->bComposing=TRUE;
-	ImmUnlockIMCC(pCtx->_lpContext->hCompStr);
-	pCtx->GenerateMessage(WM_IME_STARTCOMPOSITION,0,0);
-	pCtx->GenerateMessage(WM_IME_NOTIFY,IMN_SETCOMPOSITIONWINDOW,0);
-	if(m_pSinstar3) m_pSinstar3->OnCompositionStarted();
+	_ASSERT(lpImeContext);
+	if(!IsCompositing())
+	{
+		CImeContext *pCtx=(CImeContext *)lpImeContext;
+		CCompStrEx *pCompStr=(CCompStrEx *)ImmLockIMCC(pCtx->_lpContext->hCompStr);
+		_ASSERT(pCompStr);
+		pCompStr->Init();
+		pCompStr->bComposing=TRUE;
+		ImmUnlockIMCC(pCtx->_lpContext->hCompStr);
+		pCtx->GenerateMessage(WM_IME_STARTCOMPOSITION,0,0);
+		pCtx->GenerateMessage(WM_IME_NOTIFY,IMN_SETCOMPOSITIONWINDOW,0);
+		if(m_pSinstar3) m_pSinstar3->OnCompositionStarted();
+	}
 }
 
 //使用指定数据替换当前编码串

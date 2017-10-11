@@ -35,6 +35,7 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr)
 
 	m_inputState.SetInputListener(this);
 
+	SLOG_INFO("status:"<<m_pStatusWnd->m_hWnd<<", input:"<<m_pInputWnd->m_hWnd);
 	SOUI::CSimpleWnd::Create(_T("sinstar3_msg_recv"),WS_DISABLED|WS_POPUP,WS_EX_TOOLWINDOW,0,0,0,0,HWND_MESSAGE,NULL);
 	ISComm_Login(m_hWnd);
 }
@@ -107,7 +108,9 @@ void CSinstar3Impl::OnCompositionChanged()
 void CSinstar3Impl::OnCompositionTerminated()
 {
 	SLOG_INFO("");
- 	m_pInputWnd->Show(FALSE);
+	m_inputState.ClearContext(CPC_ALL);
+	
+	m_pInputWnd->Show(FALSE);
 }
 
 void CSinstar3Impl::OnSetFocus(BOOL bFocus)
@@ -115,7 +118,7 @@ void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 	SLOG_INFO("GetThreadID="<<GetCurrentThreadId()<<" focus="<<bFocus);
 	if(bFocus) m_pTxtSvr->SetConversionMode(FullNative);
 	m_pStatusWnd->Show(bFocus);
-	m_pInputWnd->Show(bFocus);
+	//m_pInputWnd->Show(bFocus);
 }
 
 int  CSinstar3Impl::GetCompositionSegments()

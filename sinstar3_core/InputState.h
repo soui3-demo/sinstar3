@@ -67,7 +67,6 @@ private:
 	BOOL KeyIn_UserDef_ChangeComp(InputContext * lpCntxtPriv,UINT byInput, CONST BYTE* lpbKeyState);
 	BOOL KeyIn_Line_ChangeComp(InputContext * lpCntxtPriv,UINT byInput, CONST BYTE * lpbKeyState);
 	InputContext m_ctx;
-	BOOL		 m_bCoding;
 	IInputListener * m_pListener;
 	byte * m_pbyMsgBuf;
 
