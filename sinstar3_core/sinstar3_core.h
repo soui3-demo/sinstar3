@@ -36,7 +36,7 @@ protected:
 
 	ILogStateListener * m_pLogStateListener;
 	SOUI::SStringT m_strDataPath;
-
+	SOUI::SStringT m_strConfig;
 	
 };
 

@@ -5,8 +5,6 @@
 class CSettingsGlobal
 {
 public:
-
-
 	/*GBK重码显示上屏模式*/
 	enum GbkMode
 	{
@@ -15,14 +13,10 @@ public:
 		GBK_SHOW_NORMAL,//显示正常上屏
 	};
 
-	CSettingsGlobal(void);
-	~CSettingsGlobal(void);
-
 	void Load(LPCTSTR pszIniFile);
 	void Save(LPCTSTR pszIniFile);
 
 	COMPMODE	compMode;		//当前输入类型
-	int		nRefCount;			// ref count
 	BOOL	b23CandKey;			// ;+'选23重码
 	BYTE	by2CandVK;			// 2 Cand key
 	BYTE	by3CandVK;			// 3 Cand Key
@@ -75,8 +69,13 @@ public:
 	TCHAR	szPlugin[100];		// plugin name
 };
 
-struct SETTINGSL
+class CSettingsLocal
 {
+public:
+
+	void Load(LPCTSTR pszIniFile);
+	void Save(LPCTSTR pszIniFile);
+
 	BOOL	bHideStatus;		// 当前状态栏隐藏状态
 	BOOL	bMouseFollow;		// 鼠标跟随开关
 	BOOL	bEnglish;			// 英文单词输入开关
@@ -88,4 +87,5 @@ struct SETTINGSL
 };
 
 extern CSettingsGlobal	g_SettingsG;
-extern SETTINGSL		g_SettingsL;
+extern CSettingsLocal	g_SettingsL;
+extern int				g_nRefCount;

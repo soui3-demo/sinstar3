@@ -3,10 +3,11 @@
 
 //使用共享内存方式使设置信息在所有输入法进程中共享
 #pragma data_seg(".sinstar3")
+int				g_nRefCount = 0;	//ref count
 CSettingsGlobal	g_SettingsG;		//输入法全局设置
 #pragma data_seg()
 
-SETTINGSL		g_SettingsL;
+CSettingsLocal		g_SettingsL;
 
 BOOL WritePrivateProfileInt(
 							LPCTSTR lpAppName,  // pointer to section name
@@ -18,13 +19,6 @@ BOOL WritePrivateProfileInt(
 	return WritePrivateProfileString(lpAppName,lpKeyName,SStringT().Format(_T("%d"),nKeyValue),lpFileName);
 }
 
-CSettingsGlobal::CSettingsGlobal(void):nRefCount(0)
-{
-}
-
-CSettingsGlobal::~CSettingsGlobal(void)
-{
-}
 
 const TCHAR * KSession = _T("IME");
 
@@ -169,4 +163,31 @@ void CSettingsGlobal::Load(LPCTSTR pszIniFile)
 
 	GetPrivateProfileString(KSession,_T("Plugin"),_T(""),szPlugin,100,pszIniFile);
 	bOnlySimpleCode=GetPrivateProfileInt(KSession,_T("OnlySimpleCode"),0,pszIniFile);
+}
+
+
+//////////////////////////////////////////////////////////////////////////
+
+void CSettingsLocal::Load(LPCTSTR pszIniFile)
+{
+	bCharMode=GetPrivateProfileInt(KSession,_T("CharMode"),TRUE,pszIniFile);
+	bFullStatus=GetPrivateProfileInt(KSession,_T("FullStatus"),TRUE,pszIniFile);
+	bSound=GetPrivateProfileInt(KSession,_T("Sound"),TRUE,pszIniFile);
+	bRecord=GetPrivateProfileInt(KSession,_T("Record"),TRUE,pszIniFile);
+	bEnglish=GetPrivateProfileInt(KSession,_T("English"),FALSE,pszIniFile);
+	bMouseFollow=GetPrivateProfileInt(KSession,_T("MouseFollow"),TRUE,pszIniFile);
+	bHideStatus=GetPrivateProfileInt(KSession,_T("HideStatus"),0,pszIniFile);
+	bInputBig5=GetPrivateProfileInt(KSession,_T("InputBig5"),0,pszIniFile);
+}
+
+void CSettingsLocal::Save(LPCTSTR pszIniFile)
+{
+	WritePrivateProfileInt(KSession,_T("CharMode"),bCharMode,pszIniFile);
+	WritePrivateProfileInt(KSession,_T("FullStatus"),bFullStatus,pszIniFile);
+	WritePrivateProfileInt(KSession,_T("Sound"),bSound,pszIniFile);
+	WritePrivateProfileInt(KSession,_T("Record"),bRecord,pszIniFile);
+	WritePrivateProfileInt(KSession,_T("English"),bEnglish,pszIniFile);
+	WritePrivateProfileInt(KSession,_T("MouseFollow"),bMouseFollow,pszIniFile);
+	WritePrivateProfileInt(KSession,_T("HideStatus"),bHideStatus,pszIniFile);
+	WritePrivateProfileInt(KSession,_T("InputBig5"),bInputBig5,pszIniFile);
 }

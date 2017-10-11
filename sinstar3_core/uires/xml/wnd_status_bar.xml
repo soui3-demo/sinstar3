@@ -36,7 +36,7 @@
       </window>
       <window size="-2,0" weight="1" name="status_extend" display="0"  padding="6,0,6,0">
         <window size="-2,-2" layout="hbox">
-          <toggle2 size="-1,-1" skin1="charmode_full" skin2="charmode_half" name="btn_charmode" tip="change mode"/>
+          <toggle2 size="-1,-1" skin1="charmode_half" skin2="charmode_full" name="btn_charmode" tip="change mode"/>
           <imgbtn size="-1,-1" skin="btn_makeword" name="btn_makeword"/>
           <toggle2 size="-1,-1" skin1="btn_record_enable" skin2="btn_record_disable" name="btn_record"/>
           <toggle2 size="-1,-1" skin1="btn_sound_enable" skin2="btn_sound_disable" name="btn_sound"/>

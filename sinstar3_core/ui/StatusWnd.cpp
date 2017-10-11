@@ -31,6 +31,20 @@ namespace SOUI
 
 		FindChildByID(R.id.txt_comp)->SetWindowText(CDataCenter::GetAutoLockerInstance()->GetData().m_compInfo.strCompName);
 
+		{
+			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_charmode);
+			if(toggle) toggle->SetToggle(g_SettingsL.bCharMode);
+		}
+		{
+			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_sound);
+			if(toggle) toggle->SetToggle(g_SettingsL.bSound);
+		}
+		{
+			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_record);
+			if(toggle) toggle->SetToggle(g_SettingsL.bSound);
+		}
+
+
 		SetWindowPos(HWND_TOPMOST,pt.x,pt.y,0,0,SWP_NOSIZE|SWP_NOZORDER|SWP_NOACTIVATE);
 		return 0;
 	}
@@ -123,6 +137,35 @@ namespace SOUI
 		{
 			FindChildByID(R.id.txt_comp)->SetWindowText(CDataCenter::GetAutoLockerInstance()->GetData().m_compInfo.strCompName);
 		}
+	}
+
+	void CStatusWnd::OnSwitchCharMode(EventArgs *e)
+	{
+		SToggle * toggle = sobj_cast<SToggle>(e->sender);
+		if(toggle)
+		{
+			g_SettingsL.bCharMode = toggle->GetToggle();
+		}
+	}
+
+	void CStatusWnd::OnSwitchRecord(EventArgs *e)
+	{
+		SToggle * toggle = sobj_cast<SToggle>(e->sender);
+		if(toggle)
+		{
+			g_SettingsL.bRecord = toggle->GetToggle();
+		}
+
+	}
+
+	void CStatusWnd::OnSwitchSound(EventArgs *e)
+	{
+		SToggle * toggle = sobj_cast<SToggle>(e->sender);
+		if(toggle)
+		{
+			g_SettingsL.bSound = toggle->GetToggle();
+		}
+
 	}
 
 }

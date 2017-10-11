@@ -50,13 +50,14 @@ CSinstar3Core::CSinstar3Core(HINSTANCE hInst):CModuleRef(hInst),m_pLogStateListe
 		reg.Close();
 	}
 	m_strDataPath = szPath;
-
-	if(g_SettingsG.nRefCount == 0)
+	m_strConfig = m_strDataPath + _T("\\") + KSettingINI;
+	if(0 == g_nRefCount++)
 	{//the first time
-		g_SettingsG.Load(m_strDataPath + _T("\\") + KSettingINI);
-	}
+		g_SettingsG.Load(m_strConfig);
 
-	g_SettingsG.nRefCount ++;
+	}
+	g_SettingsL.Load(m_strConfig);
+
 
 	new CDataCenter();
 }
@@ -64,7 +65,9 @@ CSinstar3Core::CSinstar3Core(HINSTANCE hInst):CModuleRef(hInst),m_pLogStateListe
 CSinstar3Core::~CSinstar3Core()
 {
 	delete CDataCenter::getSingletonPtr();
-	g_SettingsG.nRefCount --;
+	g_SettingsG.Save(m_strConfig);
+	g_SettingsL.Save(m_strConfig);
+	g_nRefCount --;
 }
 
 void CSinstar3Core::OnInit()
