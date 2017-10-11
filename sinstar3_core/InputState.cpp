@@ -398,7 +398,8 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 		if(!bHandle) bHandle=KeyIn_All_TurnCandPage(lpCntxtPriv,uVKey,lpbKeyState);
 	}
 
-	uVKey = MapVirtualKey(uVKey,MAPVK_VK_TO_CHAR);
+	UINT uKey = MapVirtualKey(uVKey,MAPVK_VK_TO_CHAR);
+	if(uKey != 0) uVKey = uKey;
 	if(isprint(uVKey))
 	{
 		uVKey = tolower(uVKey);
