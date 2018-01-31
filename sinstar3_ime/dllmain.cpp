@@ -74,7 +74,7 @@ STDAPI DllRegisterServer(void)
 	TCHAR szSysDir[MAX_PATH];
 	GetSystemDir(szSysDir);
 	//确保当前IME位于系统目录
-	int nLen = _tcslen(szSysDir);
+	int nLen = (int)_tcslen(szSysDir);
 	if(_tcsnicmp(szSysDir,szPath,nLen)!=0) 
 	{
 		return E_FAIL;

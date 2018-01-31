@@ -127,9 +127,9 @@ LRESULT CUiWnd::WindowProc(UINT uMsg,WPARAM wParam,LPARAM lParam)
 	case WM_IME_CONTROL:
 		return OnImeControl(wParam,lParam);
 	case WM_IME_SELECT:
-		return OnImeSelect(wParam,lParam);
+		return OnImeSelect((BOOL)wParam,lParam);
 	case WM_IME_SETCONTEXT:
-		return OnSetContext(wParam,lParam);
+		return OnSetContext((BOOL)wParam,lParam);
 	case WM_IME_STARTCOMPOSITION:
 		if(m_pSinstar3 && m_pSinstar3->ShowCompWnd())
 		{

@@ -35,6 +35,7 @@ ISinstar *CCoreLoader::Sinstar3_Create(ITextService *pTxtSvr)
 	}
 	if(!hCoreModule) 
 	{
+		DWORD dwErr=GetLastError();
 		return NULL;
 	}
 	FUN_Sinstar3_Create funCreate=(FUN_Sinstar3_Create)GetProcAddress(hCoreModule,"Sinstar3_Create");
