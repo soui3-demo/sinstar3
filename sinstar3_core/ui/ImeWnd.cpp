@@ -43,7 +43,7 @@ void CImeWnd::Show(BOOL bShow)
 	if(!IsWindow()) return;
 	if(bShow)
 		SetWindowPos(HWND_TOPMOST,0,0,0,0,SWP_NOSIZE|SWP_NOMOVE|SWP_NOACTIVATE|SWP_SHOWWINDOW);
-	else
+	else if(CSimpleWnd::IsWindowVisible())
 		ShowWindow(SW_HIDE);
 }
 

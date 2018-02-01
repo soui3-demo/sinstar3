@@ -45,8 +45,9 @@ public:
 protected:
 	virtual HWND GetHwnd() const;
 	virtual void OnInputStart();
-	virtual void OnInputChange(const SStringT & strResult,const SStringT & strComp=SStringT() );
+	virtual void OnInputResult(const SStringT & strResult,const SStringT & strComp=SStringT() );
 	virtual void OnInputEnd(int nDelayMS);
+	virtual void OnInputUpdate();
 
 	virtual BOOL GoNextCandidatePage();
 	virtual BOOL GoPrevCandidatePage();

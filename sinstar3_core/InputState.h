@@ -5,8 +5,9 @@
 interface IInputListener{
 	virtual HWND GetHwnd() const = 0;
 	virtual void OnInputStart() = 0;
-	virtual void OnInputChange(const SStringT & strResult,const SStringT & strComp=SStringT())=0;
+	virtual void OnInputResult(const SStringT & strResult,const SStringT & strComp=SStringT())=0;
 	virtual void OnInputEnd(int nDelayMS) = 0;
+	virtual void OnInputUpdate() = 0;
 	virtual BOOL GoNextCandidatePage() = 0;
 	virtual BOOL GoPrevCandidatePage() = 0;
 	virtual short SelectCandidate(short iCand)=0;
@@ -30,10 +31,11 @@ public:
 	BOOL HandleKeyDown(UINT vKey,UINT uScanCode,const BYTE * lpbKeyState);
 
 protected:
-	void OnInputStart();
-	void OnInputChange(const SStringA &strResult,byte byAstMask=0);
-	void OnInputChange(const SStringT &strResult,byte byAstMask=0);
-	void OnInputEnd(BOOL delay=FALSE);
+	void InputStart();
+	void InputResult(const SStringA &strResult,BYTE byAstMask);
+	void InputResult(const SStringT &strResult,BYTE byAstMask);
+	void InputEnd(BOOL delay=FALSE);
+	void InputUpdate();
 private:
 	BOOL IsTempSpell() const;
 

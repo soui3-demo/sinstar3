@@ -263,7 +263,7 @@ BOOL CSinstar3Impl::GetOpenStatus() const
 }
 
 
-void CSinstar3Impl::OnInputChange(const SStringT & strResult,const SStringT & strComp/*=SStringT() */)
+void CSinstar3Impl::OnInputResult(const SStringT & strResult,const SStringT & strComp/*=SStringT() */)
 {
 	if(!m_pCurImeContext) return;
 	SStringW strResultW = S_CT2W(strResult);
@@ -275,5 +275,11 @@ void CSinstar3Impl::OpenInputWnd()
 {
 	m_pInputWnd->Show(TRUE);
 }
+
+void CSinstar3Impl::OnInputUpdate()
+{
+	m_pInputWnd->UpdateUI();
+}
+
 
 

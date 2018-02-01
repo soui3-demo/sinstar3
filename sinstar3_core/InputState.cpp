@@ -316,18 +316,18 @@ void CInputState::ClearContext(UINT dwMask)
 }
 
 
-void CInputState::OnInputStart()
+void CInputState::InputStart()
 {
 	SASSERT(m_pListener);
 	m_pListener->OnInputStart();
 }
 
-void CInputState::OnInputChange(const SStringT &strResult,byte byAstMask/*=0*/)
+void CInputState::InputResult(const SStringT &strResult,BYTE byAstMask)
 {
 	SLOG_INFO("result:"<<strResult<<" astMask:"<<byAstMask);
 
 	SASSERT(m_pListener);
-	m_pListener->OnInputChange(strResult);
+	m_pListener->OnInputResult(strResult);
 	if(byAstMask!=0)
 	{
 		SStringA strResultA = S_CT2A(strResult);
@@ -336,16 +336,22 @@ void CInputState::OnInputChange(const SStringT &strResult,byte byAstMask/*=0*/)
 	CDataCenter::GetAutoLockerInstance()->GetData().m_cInputCount+=strResult.GetLength();
 }
 
-void CInputState::OnInputChange(const SStringA &strResult,byte byAstMask/*=0*/)
+void CInputState::InputResult(const SStringA &strResult,BYTE byAstMask)
 {
-	OnInputChange(S_CA2T(strResult),byAstMask);
+	InputResult(S_CA2T(strResult),byAstMask);
 }
 
-void CInputState::OnInputEnd(BOOL bDelay)
+void CInputState::InputEnd(BOOL bDelay)
 {
+	SLOG_INFO("onInputEnd,delay:"<<bDelay);
 	SASSERT(m_pListener);
-	m_pListener->OnInputEnd(bDelay?0:5000);
+	m_pListener->OnInputEnd(bDelay?5000:0);
 	ClearContext(CPC_ALL);
+}
+
+void CInputState::InputUpdate()
+{
+	m_pListener->OnInputUpdate();
 }
 
 BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeyState)
@@ -392,7 +398,7 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 				)
 			{
 				bHandle=KeyIn_All_SelectCand(lpCntxtPriv,byCandIndex,0,lpbKeyState);
-				if(bHandle) OnInputEnd(FALSE);
+				if(bHandle) InputEnd(FALSE);
 			}
 		}
 		if(!bHandle) bHandle=KeyIn_All_TurnCandPage(lpCntxtPriv,uVKey,lpbKeyState);
@@ -458,7 +464,7 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 					lpCntxtPriv->inState=INST_ENGLISH;
 					//					Plugin_StateChange(g_CompMode,lpCntxtPriv->inState,lpCntxtPriv->sbState,g_bTempSpell);
 					//确保打开输入窗口
-					OnInputStart();
+					InputStart();
 				}
 			}else if(bReadyDgt && uVKey>='0' && uVKey<='9')
 			{//数字输入，进入数字输入状态
@@ -870,7 +876,7 @@ BOOL CInputState::KeyIn_Spell_ChangeComp(InputContext* lpCntxtPriv,UINT byInput,
 		}
 		if(lpCntxtPriv->bySyllables==1 && lpCntxtPriv->spellData[0].bySpellLen==0)
 		{//开始编码输入,生成开始编码消息以获取光标跟随时输入窗口的坐标
-			OnInputStart();
+			InputStart();
 		}
 		pSpInfo->szSpell[pSpInfo->bySpellLen++]=byInput;
 		if(ISComm_Spell2ID(pSpInfo->szSpell,pSpInfo->bySpellLen)==ISACK_SUCCESS)
@@ -998,11 +1004,11 @@ BOOL CInputState::KeyIn_Spell_ChangeComp(InputContext* lpCntxtPriv,UINT byInput,
 		}
 		if(lpCntxtPriv->bySyllables==1 && lpCntxtPriv->spellData[0].bySpellLen==0)
 		{
-			OnInputEnd(TRUE);
+			InputEnd(TRUE);
 		}
 	}else if(byInput==VK_ESCAPE)
 	{
-		OnInputEnd(TRUE);
+		InputEnd(TRUE);
 		if(g_SettingsG.compMode != IM_SPELL)
 		{//restore shape code input mode
 			m_ctx.compMode=IM_SHAPECODE;
@@ -1082,8 +1088,8 @@ BOOL CInputState::KeyIn_Spell_InputText(InputContext* lpCntxtPriv,UINT byInput,
 		{
 			strResult = SStringA(lpCntxtPriv->szInput,lpCntxtPriv->cInput);
 		}
-		OnInputChange(strResult);
-		OnInputEnd(FALSE);
+		InputResult(strResult,0);
+		InputEnd(FALSE);
 
 		//Plugin_TextInput(lpCntxtPriv->szInput,lpCntxtPriv->nInputLen,NULL,0,FALSE);
 
@@ -1116,9 +1122,8 @@ BOOL CInputState::KeyIn_Spell_InputText(InputContext* lpCntxtPriv,UINT byInput,
 			}
 		}
 		//通知应用程序接收数据
-		OnInputChange(strResultA);
-		OnInputEnd(TRUE);
-		ISComm_KeyIn(strResultA,(short)strResultA.GetLength(),GetKeyinMask(FALSE,MKI_RECORD|MKI_TTSINPUT),m_pListener->GetHwnd());
+		InputResult(strResultA,GetKeyinMask(FALSE,MKI_RECORD|MKI_TTSINPUT));
+		InputEnd(TRUE);
 		bRet=TRUE;
 	}
 	return bRet;
@@ -1164,9 +1169,9 @@ BOOL CInputState::KeyIn_Spell_Symbol(InputContext* lpCntxtPriv,UINT byInput,
 			strResultA = SStringA(lpCntxtPriv->szInput,lpCntxtPriv->cInput);
 		}
 		//lpCompStr->dwResultStrLen+=Symbol_Convert(byInput,pResult+lpCompStr->dwResultStrLen,lpbKeyState);
-		OnInputStart();
-		OnInputChange(strResultA,0);
-		OnInputEnd(FALSE);
+		InputStart();
+		InputResult(strResultA,0);
+		InputEnd(FALSE);
 		bRet=TRUE;
 	}
 	return bRet;
@@ -1210,7 +1215,7 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 		BYTE byMask=GetKeyinMask(cCompLen==0,MKI_ALL);
 		LPBYTE pData=lpCntxtPriv->ppbyCandInfo[iCand];
 		bRet=TRUE;
-
+		SStringA strResultA;
 		if(lpCntxtPriv->inState==INST_CODING)
 		{//普通编码输入
 			if(lpCntxtPriv->sbState==::SBST_NORMAL)
@@ -1242,8 +1247,9 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 					{//不完整输入长词重码
 						SStringA strResultA((char*)pData+2,pData[1]);
 						BOOL isTempSpell = IsTempSpell();
-						OnInputChange(strResultA,GetKeyinMask(!isTempSpell,MKI_ALL));
-						OnInputEnd(TRUE);
+						InputResult(strResultA,GetKeyinMask(!isTempSpell,MKI_ALL));
+						InputEnd(TRUE);
+			
 						if(isTempSpell) 
 						{//临时拼音模式获得输入字的编码
 							lpCntxtPriv->bShowTip=TRUE;
@@ -1257,7 +1263,7 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 						if(isTempSpell)
 						{//退出临时拼音
 							lpCntxtPriv->compMode=IM_SHAPECODE;
-							//Plugin_StateChange(g_CompMode,lpCntxtPriv->inState,lpCntxtPriv->sbState,g_bTempSpell);
+							InputUpdate();
 						}
 					}else
 					{
@@ -1266,6 +1272,7 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 						{
 							lpCntxtPriv->byCaret+=byPhraseLen;
 							KeyIn_Spell_UpdateCandList(lpCntxtPriv,lpCntxtPriv->byCaret);
+							InputUpdate();
 						}else
 						{
 							KeyIn_Spell_InputText(lpCntxtPriv,VK_SPACE,lpbKeyState);
@@ -1291,6 +1298,7 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 								{//删除重码成功,更新显示
 									memcpy(lpCntxtPriv->ppbyCandInfo+iCand,lpCntxtPriv->ppbyCandInfo+iCand+1,(lpCntxtPriv->sCandCount-iCand-1)*sizeof(LPBYTE));
 									lpCntxtPriv->sCandCount--;
+									InputUpdate();
 									goto end;
 								}else
 								{
@@ -1314,15 +1322,11 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 						{//自定义编码
 							if(pComp[0]!=0)	pData=pComp;
 							else pData++;
-							SStringA strResultA((char*)pData+1,pData[0]);
-							OnInputChange(strResultA);
-							//OnInputEnd(FALSE); todo
+							strResultA = SStringA((char*)pData+1,pData[0]);
 							byMask=0;
 						}else
 						{//不是自定义编码
-							SStringA strResultA((char*)pData+2,pData[1]);
-							OnInputChange(strResultA);
-							//OnInputEnd(FALSE); todo
+							strResultA = SStringA((char*)pData+2,pData[1]);
 							//								Plugin_TextInput(pResult,lpCompStr->dwResultStrLen,pData+1+pData[1]+1,pData[1+pData[1]],pData[0]==RATE_WILD);
 							if(pData[0]!=RATE_FORECAST)
 							{//不是预测词，词频调整
@@ -1344,26 +1348,19 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 			{
 				if(g_SettingsG.byAstMode==AST_CAND)
 				{//当前是词组联想
-					OnInputStart();
-					SStringA strResultA((char*)pData+3+pData[0],pData[2]-pData[0]);
-					OnInputChange(strResultA);
-					OnInputEnd(FALSE);
+					InputStart();
+					strResultA= SStringA((char*)pData+3+pData[0],pData[2]-pData[0]);
 				}else if(g_SettingsG.byAstMode==AST_ENGLISH)
 				{//当前是英文联想
-					OnInputStart();
-					SStringA strResultA((char*)pData+1,pData[0]);
-					OnInputChange(strResultA,byMask);
-					OnInputEnd(TRUE);
+					InputStart();
+					strResultA =SStringA((char*)pData+1,pData[0]);
 					cCompLen=0;//不进行继续联想
 				}
 			}			
 		}else if(lpCntxtPriv->inState==INST_ENGLISH)
 		{//英文单词输入
-			SStringA strResultA((char*)pData+1,pData[0]);
+			strResultA = SStringA((char*)pData+1,pData[0]);
 			byMask&=~MKI_ASTENGLISH;
-			OnInputChange(strResultA,byMask);
-			//OnInputEnd(TRUE);
-			lpCntxtPriv->inState=INST_CODING;
 			//				Plugin_StateChange(g_CompMode,lpCntxtPriv->inState,lpCntxtPriv->sbState,g_bTempSpell);
 		}else if(lpCntxtPriv->inState==INST_USERDEF)
 		{//用户自定义输入
@@ -1378,23 +1375,19 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 					pData=pComp;
 				else
 					pData++;
-				SStringA strResultA((char*)pData+1,pData[0]);
-				OnInputChange(strResultA);
-				OnInputEnd(FALSE);
-				lpCntxtPriv->inState=INST_CODING;
+				strResultA = SStringA((char*)pData+1,pData[0]);
 				//					Plugin_StateChange(g_CompMode,lpCntxtPriv->inState,lpCntxtPriv->sbState,g_bTempSpell);
 				byMask=GetKeyinMask(FALSE,MKI_RECORD|MKI_TTSINPUT);//不联想
 			}
 		}else if(lpCntxtPriv->inState==INST_LINEIME)
 		{//笔画输入状态
-			SStringA strResultA((char*)pData+2,pData[1]);
-			OnInputChange(strResultA,byMask);
-			OnInputEnd(TRUE);
-
-			lpCntxtPriv->inState=INST_CODING;
+			strResultA=SStringA((char*)pData+2,pData[1]);
 			//				Plugin_StateChange(g_CompMode,lpCntxtPriv->inState,lpCntxtPriv->sbState,g_bTempSpell);
 		}
-		ClearContext(CPC_ALL);
+		ClearContext(CPC_ALL&~CPC_COMP);
+		InputResult(strResultA,byMask);
+		InputEnd(byMask!=0);
+		InputUpdate();
 	}
 end:
 	if(bRet && lpCntxtPriv->bWebMode) lpCntxtPriv->bWebMode=FALSE;
@@ -1578,7 +1571,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 				Tips_Rand(FALSE,lpCntxtPriv->szTip);
 			}
 			//开始编码输入,生成开始编码消息以获取光标跟随时输入窗口的坐标
-			OnInputStart();
+			InputStart();
 			if(byInput==g_cHotKeyUD && g_SettingsG.bFastUMode)
 			{//切换到用户自定义输入状态
 				ClearContext(CPC_ALL);
@@ -1629,9 +1622,8 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 					byMask|=MKI_RECORD;
 				if(g_SettingsG.bTTSInput)
 					byMask|=MKI_TTSINPUT;
-				ISComm_KeyIn(strResultA,(short)strResultA.GetLength(),byMask,m_pListener->GetHwnd());
-				OnInputChange(strResultA);
-				OnInputEnd(FALSE);
+				InputResult(strResultA,byMask);
+				InputEnd(FALSE);
 			}
 			ClearContext(CPC_ALL);
 			return TRUE;
@@ -1643,7 +1635,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 			ClearContext(CPC_ALL);
 			lpCntxtPriv->inState=INST_USERDEF;
 			//Plugin_StateChange(g_CompMode,lpCntxtPriv->inState,lpCntxtPriv->sbState,g_bTempSpell);
-			OnInputStart();
+			InputStart();
 			return TRUE;
 		}
 	}else if(lpCntxtPriv->cInput < MAX_COMP)
@@ -1684,7 +1676,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 
 		if(lpCntxtPriv->cInput==0)
 		{
-			OnInputEnd(TRUE);
+			InputEnd(TRUE);
 		}else
 		{
 			lpCntxtPriv->sbState=::SBST_NORMAL;	//退出联想状态
@@ -1771,9 +1763,9 @@ BOOL CInputState::KeyIn_Code_Symbol(InputContext * lpCntxtPriv,UINT byInput,
 	if(g_SettingsG.bTTSInput)
 		byMask|=MKI_TTSINPUT;
 
-	OnInputStart();
-	OnInputChange(strResultA,byMask);
-	OnInputEnd(FALSE);
+	InputStart();
+	InputResult(strResultA,byMask);
+	InputEnd(FALSE);
 	return TRUE;
 }
 
@@ -1789,7 +1781,7 @@ BOOL CInputState::KeyIn_All_Associate(InputContext * lpCntxtPriv,UINT byInput,
 		{//切换到语句输入状态
 			lpCntxtPriv->sbState=SBST_SENTENCE;
 			lpCntxtPriv->sSentCaret=0;
-			OnInputStart();
+			InputStart();
 			bRet=TRUE;
 		}
 	}
@@ -1830,7 +1822,7 @@ BOOL CInputState::KeyIn_All_Sentence(InputContext * lpCntxtPriv,UINT byInput,
 		KeyIn_Sent_Input(lpCntxtPriv);
 	}else if(byInput==VK_ESCAPE)
 	{
-		OnInputEnd(FALSE);
+		InputEnd(FALSE);
 	}
 
 	if(byInput>='0' && byInput<='9')
@@ -1852,9 +1844,9 @@ void  CInputState::KeyIn_Sent_Input(InputContext* lpCntxtPriv)
 			(int)(lpCntxtPriv->pbySentWord[lpCntxtPriv->sSentCaret]-lpCntxtPriv->pbySentWord[0]));
 
 		ClearContext(CPC_ALL);
-		OnInputStart();
-		OnInputChange(strResultA,byMask);
-		OnInputEnd(FALSE);
+		InputStart();
+		InputResult(strResultA,byMask);
+		InputEnd(FALSE);
 	}
 }
 
@@ -1873,7 +1865,7 @@ BOOL CInputState::KeyIn_Code_English(InputContext * lpCntxtPriv,UINT byInput,
 				lpCntxtPriv->cInput--;
 				if(lpCntxtPriv->cInput==0)
 				{
-					OnInputEnd(FALSE);
+					InputEnd(FALSE);
 					lpCntxtPriv->inState=INST_CODING;
 					//					Plugin_StateChange(g_CompMode,lpCntxtPriv->inState,lpCntxtPriv->sbState,g_bTempSpell);
 				}
@@ -1926,14 +1918,14 @@ BOOL CInputState::KeyIn_Code_English(InputContext * lpCntxtPriv,UINT byInput,
 			//PutEnAdd2Clip(lpCntxtPriv->pbyEnPhontic);
 		}
 		//输入单词
-		OnInputChange(strResult);
-		OnInputEnd(TRUE);
+		InputResult(strResult,0);
+		InputEnd(TRUE);
 
 		//Plugin_StateChange(g_CompMode,lpCntxtPriv->inState,lpCntxtPriv->sbState,g_bTempSpell);
 	}else if(byInput==VK_ESCAPE)
 	{//清除输入
 		//		Plugin_StateChange(g_CompMode,lpCntxtPriv->inState,lpCntxtPriv->sbState,g_bTempSpell);
-		OnInputEnd(TRUE);
+		InputEnd(TRUE);
 	}
 	return TRUE;
 }
@@ -1946,9 +1938,9 @@ BOOL CInputState::KeyIn_Digital_ChangeComp(InputContext * lpCntxtPriv,UINT byInp
 	if((byInput>='0' && byInput<='9') || ((byInput=='.' ||byInput==',') && g_SettingsG.bAutoDot) )
 	{
 		SStringA strResultA((char)byInput);
-		OnInputStart();
-		OnInputChange(strResultA,g_SettingsL.bRecord?MKI_RECORD:0);
-		OnInputEnd(FALSE);
+		InputStart();
+		InputResult(strResultA,g_SettingsL.bRecord?MKI_RECORD:0);
+		InputEnd(FALSE);
 		bRet=TRUE;
 	}else
 	{
@@ -1973,15 +1965,15 @@ BOOL CInputState::KeyIn_UserDef_ChangeComp(InputContext * lpCntxtPriv,UINT byInp
 	{
 		ClearContext(CPC_ALL);
 		//		Plugin_StateChange(g_CompMode,lpCntxtPriv->inState,lpCntxtPriv->sbState,g_bTempSpell);
-		OnInputEnd(FALSE);
+		InputEnd(FALSE);
 	}else if(byInput==VK_RETURN)
 	{
 		if(lpCntxtPriv->cInput)
 		{//输入编码
 			//切换回正常状态
 			SStringA strResultA(lpCntxtPriv->szInput,lpCntxtPriv->cInput);
-			OnInputChange(strResultA);
-			OnInputEnd(FALSE);
+			InputResult(strResultA,0);
+			InputEnd(FALSE);
 			//			Plugin_StateChange(g_CompMode,lpCntxtPriv->inState,lpCntxtPriv->sbState,g_bTempSpell);
 			return TRUE;
 		}
@@ -2032,7 +2024,7 @@ BOOL CInputState::KeyIn_Line_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 		lpCntxtPriv->sbState=::SBST_NORMAL;
 		lpCntxtPriv->cInput=0;
 		//Plugin_StateChange(g_CompMode,lpCntxtPriv->inState,lpCntxtPriv->sbState,g_bTempSpell);
-		OnInputEnd(FALSE);
+		InputEnd(FALSE);
 		bRet=TRUE;
 	}else if(byInput>=VK_NUMPAD1 && byInput<=VK_NUMPAD6)
 	{//编辑
@@ -2177,14 +2169,14 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 						{//进入语句联想状态
 							m_ctx.sbState=SBST_SENTENCE;
 							m_ctx.sSentCaret=0;
-							OnInputStart();
+							InputStart();
 							bRet=TRUE;
 						}else
 						{//进入用户自定义输入状态
 							ClearContext(CPC_ALL);
 							m_ctx.inState=INST_USERDEF;
 							//Plugin_StateChange(g_CompMode,lpCntxtPriv->inState,lpCntxtPriv->sbState,g_bTempSpell);
-							OnInputStart();
+							InputStart();
 							bRet=TRUE;
 						}
 					}else
@@ -2194,13 +2186,13 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 							)
 						{//语句联想状态
 							m_ctx.sbState=SBST_ASSOCIATE;
-							OnInputEnd(TRUE);
+							InputEnd(TRUE);
 							bRet=TRUE;
 						}else if(m_ctx.inState==INST_USERDEF)
 						{//状态还原
 							m_ctx.inState=INST_CODING;
 							//Plugin_StateChange(g_CompMode,m_ctx.inState,m_ctx.sbState,g_bTempSpell);
-							OnInputEnd(FALSE);
+							InputEnd(FALSE);
 							bRet=TRUE;
 						}
 					}

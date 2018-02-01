@@ -128,8 +128,6 @@ void CUiWnd::EndComposition(LPVOID lpImeContext)
 	ImmUnlockIMCC(pCtx->_lpContext->hCompStr);
 	pCtx->GenerateMessage(WM_IME_NOTIFY,IMN_CLOSECANDIDATE,0);
 	pCtx->GenerateMessage(WM_IME_ENDCOMPOSITION,0,0);
-	if(m_pSinstar3) m_pSinstar3->OnCompositionTerminated();
-
 }
 
 int  CUiWnd::MoveCaretPos(LPVOID lpImeContext,int nPos,BOOL bSet)
