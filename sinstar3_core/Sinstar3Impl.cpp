@@ -84,6 +84,7 @@ void CSinstar3Impl:: TranslateKey(LPVOID lpImeContext,UINT vkCode,UINT uScanCode
 
 void CSinstar3Impl::OnIMESelect(BOOL bSelect)
 {
+	m_inputState.OnImeSelect(bSelect);
 }
 
 void CSinstar3Impl::OnSetCaretPosition(POINT pt,int nHei)
@@ -190,11 +191,7 @@ HRESULT CSinstar3Impl::OnQueryInterface(REFIID riid, void **ppvObject)
 LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 {
 	PMSGDATA pMsg=ISComm_OnSeverNotify(m_hWnd,wp,lp);
-	if(wp == NT_KEYIN)
-	{
-
-	}
-	else if(wp==NT_COMPINFO)
+	if(wp==NT_COMPINFO)
 	{
 		CDataCenter::getSingleton().Lock();
 		CMyData &myData = CDataCenter::getSingleton().GetData();
@@ -206,9 +203,11 @@ LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 		evt->lp = lp;
 		SNotifyCenter::getSingleton().FireEventAsync(evt);
 		evt->Release();
+		return 1;
+	}else
+	{
+		return m_inputState.OnSvrNotify((UINT)wp,pMsg)?1:0;
 	}
-
-	return 0;
 }
 
 HWND CSinstar3Impl::GetHwnd() const
@@ -223,11 +222,10 @@ void CSinstar3Impl::OnInputStart()
 }
 
 
-void CSinstar3Impl::OnInputEnd(int nDelayMS)
+void CSinstar3Impl::OnInputEnd()
 {
 	if(!m_pCurImeContext) return;
 	m_pTxtSvr->EndComposition(m_pCurImeContext);
-	m_pInputWnd->Hide(nDelayMS);
 }
 
 BOOL CSinstar3Impl::GoNextCandidatePage()
@@ -245,9 +243,9 @@ short CSinstar3Impl::SelectCandidate(short iCand)
 	return m_pInputWnd->SelectCandidate(iCand);
 }
 
-void CSinstar3Impl::CloseInputWnd(int nDelayMS)
+void CSinstar3Impl::CloseInputWnd(BOOL bDelay)
 {
-	m_pInputWnd->Hide(nDelayMS);
+	m_pInputWnd->Hide(bDelay?5000:0);
 }
 
 BOOL CSinstar3Impl::SetOpenStatus(BOOL bOpen)
@@ -276,7 +274,7 @@ void CSinstar3Impl::OpenInputWnd()
 	m_pInputWnd->Show(TRUE);
 }
 
-void CSinstar3Impl::OnInputUpdate()
+void CSinstar3Impl::UpdateInputWnd()
 {
 	m_pInputWnd->UpdateUI();
 }

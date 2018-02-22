@@ -46,14 +46,14 @@ protected:
 	virtual HWND GetHwnd() const;
 	virtual void OnInputStart();
 	virtual void OnInputResult(const SStringT & strResult,const SStringT & strComp=SStringT() );
-	virtual void OnInputEnd(int nDelayMS);
-	virtual void OnInputUpdate();
+	virtual void OnInputEnd();
+	virtual void UpdateInputWnd();
 
 	virtual BOOL GoNextCandidatePage();
 	virtual BOOL GoPrevCandidatePage();
 	virtual short SelectCandidate(short iCand);
 	virtual void OpenInputWnd();
-	virtual void CloseInputWnd(int nDelayMS);
+	virtual void CloseInputWnd(BOOL bDelay);
 	virtual BOOL SetOpenStatus(BOOL bOpen);
 	virtual BOOL GetOpenStatus() const;
 

@@ -6,11 +6,13 @@ interface IInputListener{
 	virtual HWND GetHwnd() const = 0;
 	virtual void OnInputStart() = 0;
 	virtual void OnInputResult(const SStringT & strResult,const SStringT & strComp=SStringT())=0;
-	virtual void OnInputEnd(int nDelayMS) = 0;
-	virtual void OnInputUpdate() = 0;
+	virtual void OnInputEnd() = 0;
+	virtual void UpdateInputWnd() = 0;
+
 	virtual BOOL GoNextCandidatePage() = 0;
 	virtual BOOL GoPrevCandidatePage() = 0;
 	virtual short SelectCandidate(short iCand)=0;
+
 	virtual void OpenInputWnd() = 0;
 	virtual void CloseInputWnd(int nDelayMS) = 0;
 	virtual BOOL SetOpenStatus(BOOL bOpen)=0;
@@ -30,12 +32,17 @@ public:
 	BOOL TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState);
 	BOOL HandleKeyDown(UINT vKey,UINT uScanCode,const BYTE * lpbKeyState);
 
+	void OnImeSelect(BOOL bSelect);
+	BOOL IsImeSelected() const;
+
+	BOOL OnSvrNotify(UINT wp, PMSGDATA pMsgData);
 protected:
 	void InputStart();
 	void InputResult(const SStringA &strResult,BYTE byAstMask);
 	void InputResult(const SStringT &strResult,BYTE byAstMask);
-	void InputEnd(BOOL delay=FALSE);
+	void InputEnd();
 	void InputUpdate();
+	void InputHide(BOOL bDelay = FALSE);
 private:
 	BOOL IsTempSpell() const;
 
@@ -68,8 +75,10 @@ private:
 	BOOL KeyIn_Digital_ChangeComp(InputContext * lpCntxtPriv,UINT byInput, CONST BYTE* lpbKeyState);
 	BOOL KeyIn_UserDef_ChangeComp(InputContext * lpCntxtPriv,UINT byInput, CONST BYTE* lpbKeyState);
 	BOOL KeyIn_Line_ChangeComp(InputContext * lpCntxtPriv,UINT byInput, CONST BYTE * lpbKeyState);
+
 	InputContext m_ctx;
 	IInputListener * m_pListener;
-	byte * m_pbyMsgBuf;
+	BYTE * m_pbyMsgBuf;
+	BOOL		 m_fOpen;
 
 };
