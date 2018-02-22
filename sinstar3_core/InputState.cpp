@@ -1422,10 +1422,11 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 		{//±Ê»­ÊäÈë×´Ì¬
 			strResultA=SStringA((char*)pData+2,pData[1]);
 		}
+		ClearContext(CPC_ALL);
 		InputResult(strResultA,byMask);
 		InputEnd();
 		InputUpdate();
-		ClearContext(CPC_ALL&~CPC_COMP);
+		InputHide(TRUE);
 	}
 end:
 	if(bRet && lpCntxtPriv->bWebMode) lpCntxtPriv->bWebMode=FALSE;
@@ -2348,8 +2349,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 						{//±à¼­Æ÷ÒÆ¶¯¹â±ê
 							bRet=FALSE;
 							ClearContext(CPC_ALL);
-							//Plugin_StateChange(g_CompMode,m_ctx.inState,m_ctx.sbState,g_bTempSpell);
-							//MyGenerateMessage(hIMC,WM_IME_NOTIFY,IMN_PRIVATE,IMN_PRIV_CLOSEINPUTWND);
+							InputHide(FALSE);
 							if(uKey==VK_ESCAPE)
 							{
 								// 								DWORD dwStyle=GetWindowLongPtr(g_hWndMsg,GWL_STYLE);
@@ -2365,7 +2365,8 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 						}
 					}
 				}
-				//				if(!bRet && !bCoding)	MyGenerateMessage(hIMC,WM_IME_NOTIFY,IMN_PRIVATE,IMN_PRIV_CLOSEINPUTWND);
+				if(!bRet && !bCoding)
+					InputHide(FALSE);
 			}
 		}
 	}
