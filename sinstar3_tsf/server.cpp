@@ -55,8 +55,6 @@ STDAPI DllUnregisterServer(void)
 //
 //----------------------------------------------------------------------------
 /**
-regsvr32 bdime.dll
-regsvr32加载bdime.dll，然后调用其导出函数DllRegisterServer
 DllRegisterServer分三步注册
 
 1. 注册自己为COM组件

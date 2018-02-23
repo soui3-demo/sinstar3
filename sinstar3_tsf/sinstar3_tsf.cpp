@@ -308,7 +308,7 @@ STDMETHODIMP CSinstar3Tsf::Show(	HWND hwndParent,LANGID langid,REFGUID rguidProf
 
 STDMETHODIMP CSinstar3Tsf::GetDisplayName(BSTR* pbstrName)
 {
-	*pbstrName=SysAllocString(L"BAIDUTYPE");
+	*pbstrName=SysAllocString(L"Sinstar3");
 	return S_OK;
 }
 

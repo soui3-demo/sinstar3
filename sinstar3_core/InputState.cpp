@@ -409,12 +409,6 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 		if(!bHandle) bHandle=KeyIn_All_TurnCandPage(lpCntxtPriv,uVKey,lpbKeyState);
 	}
 
-	UINT uKey = MapVirtualKey(uVKey,MAPVK_VK_TO_CHAR);
-	if(uKey != 0) uVKey = uKey;
-	if(isprint(uVKey))
-	{
-		uVKey = tolower(uVKey);
-	}
 
 	//处理拼音的音节移动
 	if(!bHandle && lpCntxtPriv->compMode==IM_SPELL && lpCntxtPriv->inState==INST_CODING)
@@ -423,9 +417,12 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 		if(!bHandle && uVKey==VK_DELETE) bHandle=KeyIn_Spell_SyFix(lpCntxtPriv,uVKey,lpbKeyState);//处理VK_DELETE
 	}
 
+	WCHAR wChar = 0;
+	int test = ToUnicode(uVKey,uScanCode,lpbKeyState,&wChar,1,0);
 
-	if(!bHandle && uVKey)
+	if(!bHandle && uVKey && test!=0)
 	{
+		uVKey = wChar;
 		if(lpCntxtPriv->inState==INST_CODING)
 		{//先做状态转换前处理
 			BOOL bReadyEn=FALSE;
@@ -2379,10 +2376,6 @@ void CInputState::OnImeSelect(BOOL bSelect)
 	m_fOpen = bSelect;
 }
 
-BOOL CInputState::IsImeSelected() const
-{
-	return m_fOpen;
-}
 
 BOOL CInputState::OnSvrNotify(UINT wp, PMSGDATA pMsg)
 {
