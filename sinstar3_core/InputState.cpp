@@ -215,7 +215,7 @@ BOOL KeyIn_IsCoding(InputContext * lpCntxtPriv)
 	return bOpen;
 }
 
-CInputState::CInputState(void):m_pListener(NULL),m_fOpen(FALSE)
+CInputState::CInputState(void):m_pListener(NULL),m_fOpen(FALSE),m_bTypeing(FALSE)
 {
 	memset(&m_ctx,0,sizeof(InputContext));
 	ClearContext(CPC_ALL);
@@ -265,6 +265,7 @@ BYTE CInputState::GetKeyinMask(BOOL bAssociate,BYTE byMask)
 
 void CInputState::ClearContext(UINT dwMask)
 {
+	SLOG_INFO("dwMask:"<<dwMask);
 	if(dwMask&CPC_COMP)
 	{
 		m_ctx.szInput[0]=0;
@@ -320,6 +321,7 @@ void CInputState::InputStart()
 {
 	SLOG_INFO("");
 	m_pListener->OnInputStart();
+	m_bTypeing = TRUE;
 }
 
 void CInputState::InputResult(const SStringT &strResult,BYTE byAstMask)
@@ -345,6 +347,7 @@ void CInputState::InputEnd()
 {
 	SLOG_INFO("");
 	m_pListener->OnInputEnd();
+	m_bTypeing = FALSE;
 }
 
 void CInputState::InputUpdate()
@@ -357,6 +360,7 @@ void CInputState::InputUpdate()
 void CInputState::InputHide(BOOL bDelay)
 {
 	SLOG_INFO("delay:"<<bDelay);
+	if(m_bTypeing) m_pListener->OnInputEnd();
 	m_pListener->CloseInputWnd(bDelay);
 }
 
@@ -384,7 +388,7 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 				&& !KeyIn_IsNumCode(lpCntxtPriv) //数字不是编码状态
 				&& (!g_SettingsG.bCandSelNoNum || g_SettingsG.compMode==IM_SPELL) //未禁止数字选择重码
 				)//允许数字选择重码
-				)
+			)
 			{//获得输入数字的ASCII码
 				if((uVKey>=VK_NUMPAD0 && uVKey<=VK_NUMPAD9))
 					byCandIndex=uVKey-VK_NUMPAD0+'0';
@@ -2163,14 +2167,13 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 						ClearContext(CPC_ALL);
 						m_ctx.bShowTip=TRUE;
 						strcpy(m_ctx.szTip,"临时拼音:上屏编码提示");
-						//MyGenerateMessage(hIMC,WM_IME_NOTIFY,IMN_PRIVATE,IMN_PRIV_UPDATESTATUS|IMN_PRIV_OPENINPUTWND|IMN_PRIV_UPDATEINPUTWND);
+						InputUpdate();
 					}else if(g_SettingsG.compMode==IM_SPELL)
 					{//拼音输入状态
 						if(IsTempSpell() && m_ctx.bySyllables==1 && m_ctx.spellData[0].bySpellLen==0)
 						{//退出临时拼音状态
 							m_ctx.compMode = IM_SHAPECODE;
-							//							Plugin_StateChange(g_CompMode,lpCntxtPriv->inState,lpCntxtPriv->sbState,g_bTempSpell);
-							//							MyGenerateMessage(hIMC,WM_IME_NOTIFY,IMN_PRIVATE,IMN_PRIV_UPDATESTATUS|IMN_PRIV_CLOSEINPUTWND);
+							InputHide(FALSE);
 							ClearContext(CPC_ALL);
 						}else if(m_ctx.sCandCount)
 						{
@@ -2194,7 +2197,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 								}
 								m_ctx.sCandCount=sCands;
 							}
-							//							MyGenerateMessage(hIMC,WM_IME_NOTIFY,IMN_PRIVATE,IMN_PRIV_UPDATEINPUTWND);
+							InputUpdate();
 						}
 					}
 				}else if(!g_SettingsG.bDisableFnKey && ((g_SettingsG.byTempSpellKey==0 && byKey==0xC1)||g_SettingsG.byTempSpellKey!=0))
@@ -2213,7 +2216,6 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 						{//进入用户自定义输入状态
 							ClearContext(CPC_ALL);
 							m_ctx.inState=INST_USERDEF;
-							//Plugin_StateChange(g_CompMode,lpCntxtPriv->inState,lpCntxtPriv->sbState,g_bTempSpell);
 							InputStart();
 							bRet=TRUE;
 						}

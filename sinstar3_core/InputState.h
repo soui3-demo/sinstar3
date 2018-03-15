@@ -35,6 +35,8 @@ public:
 	void OnImeSelect(BOOL bSelect);
 
 	BOOL OnSvrNotify(UINT wp, PMSGDATA pMsgData);
+
+	BOOL IsTypeing() const {return m_bTypeing;}
 protected:
 	void InputStart();
 	void InputResult(const SStringA &strResult,BYTE byAstMask);
@@ -76,6 +78,7 @@ private:
 	BOOL KeyIn_Line_ChangeComp(InputContext * lpCntxtPriv,UINT byInput, CONST BYTE * lpbKeyState);
 
 	InputContext m_ctx;
+	BOOL		 m_bTypeing;
 	IInputListener * m_pListener;
 	BYTE * m_pbyMsgBuf;
 	BOOL		 m_fOpen;

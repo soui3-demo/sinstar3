@@ -119,7 +119,8 @@ void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 	SLOG_INFO("GetThreadID="<<GetCurrentThreadId()<<" focus="<<bFocus);
 	if(bFocus) m_pTxtSvr->SetConversionMode(FullNative);
 	m_pStatusWnd->Show(bFocus);
-	//m_pInputWnd->Show(bFocus);
+	
+	if(m_inputState.IsTypeing()) m_pInputWnd->Show(bFocus);
 }
 
 int  CSinstar3Impl::GetCompositionSegments()
