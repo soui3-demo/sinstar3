@@ -2381,7 +2381,7 @@ void CInputState::OnImeSelect(BOOL bSelect)
 
 BOOL CInputState::OnSvrNotify(UINT wp, PMSGDATA pMsg)
 {
-	SLOG_INFO("code="<<wp);
+	SLOG_INFO("code="<<wp<<",m_fOpen:"<<m_fOpen);
 	if(wp == NT_KEYIN)
 	{//输入时返回的联想数据
 		if(m_fOpen)
@@ -2407,6 +2407,7 @@ BOOL CInputState::OnSvrNotify(UINT wp, PMSGDATA pMsg)
 							pbyData+=pbyData[2]+3;
 						}
 						ctx->sCandCount=sCount;
+						SLOG_INFO("词组联想:"<<ctx->sCandCount);
 					}
 					if(pbyData-pMsg->byData<pMsg->sSize && pbyData[0]==MKI_ASTENGLISH)
 					{//英文联想
@@ -2426,6 +2427,7 @@ BOOL CInputState::OnSvrNotify(UINT wp, PMSGDATA pMsg)
 						{
 							ISComm_TTS((LPCSTR)ctx->ppbyCandInfo[0]+1,ctx->ppbyCandInfo[0][0],MTTS_EN);
 						}
+						SLOG_INFO("英文联想:"<<ctx->sCandCount);
 					}
 					if(pbyData-pMsg->byData<pMsg->sSize && pbyData[0]==MKI_PHRASEREMIND)
 					{//已有词组提示
@@ -2434,6 +2436,7 @@ BOOL CInputState::OnSvrNotify(UINT wp, PMSGDATA pMsg)
 						memcpy(ctx->szTip+9,pbyData+2,pbyData[1]);
 						ctx->szTip[9+pbyData[1]]=0;
 						pbyData+=2+pbyData[1];
+						SLOG_INFO("已有词组提示:"<<ctx->szTip);
 					}
 					if(pbyData-pMsg->byData<pMsg->sSize && pbyData[0]==MKI_ASTSENT)
 					{//句子联想
@@ -2451,6 +2454,7 @@ BOOL CInputState::OnSvrNotify(UINT wp, PMSGDATA pMsg)
 						ctx->sSentWords=iWord;
 						ctx->sSentCaret=0;
 						ctx->sSentLen=sLen;
+						SLOG_INFO("句子联想:"<<(char*)ctx->pbySentWord[0]);
 					}
 				}
 				if(ctx->bShowTip || ctx->sCandCount || ctx->sSentLen)
