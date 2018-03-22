@@ -104,8 +104,27 @@ namespace SOUI
 			{
 				SWindow * compNormal = FindChildByID(R.id.comp_normal);
 				compNormal->SetVisible(TRUE,TRUE);
-				compNormal->FindChildByID(R.id.txt_comps)->SetWindowText(S_CA2T(SStringA(m_pInputContext->szInput,m_pInputContext->cInput)));
+				compNormal->FindChildByID(R.id.txt_comps)->SetWindowText(S_CA2T(SStringA(m_pInputContext->szComp,m_pInputContext->cComp)));
 			}
+			//update sentence input state
+			{
+				SWindow * compSent = FindChildByID(R.id.comp_sent);
+				compSent->SetVisible(m_pInputContext->sbState != SBST_NORMAL,TRUE);
+				if(m_pInputContext->sbState != SBST_NORMAL)
+				{//
+					SWindow *pSentInput = compSent->FindChildByID(R.id.sent_input);
+					SWindow *pSentLeft = compSent->FindChildByID(R.id.sent_left);
+					SWindow *pSentRight = compSent->FindChildByID(R.id.sent_right);
+					SStringT strInput(m_pInputContext->szInput,m_pInputContext->cInput);
+					pSentInput->SetWindowText(strInput);
+					int nSelLen = m_pInputContext->pbySentWord[m_pInputContext->sSentCaret]-m_pInputContext->pbySentWord[0];
+					SStringA strLeft((char*)m_pInputContext->pbySentWord[0],nSelLen);
+					pSentLeft->SetWindowText(S_CA2T(strLeft));
+					SStringA strRight((char*)m_pInputContext->pbySentWord[m_pInputContext->sSentCaret],m_pInputContext->sSentLen-nSelLen);
+					pSentRight->SetWindowText(S_CA2T(strRight));
+				}
+			}
+			
 			//update candidate
 			{
 				SWindow * pCandNormal = FindChildByID(R.id.cand_normal);
@@ -130,7 +149,7 @@ namespace SOUI
 					{
 						SCandView *pCand2 = (SCandView*)pCand;
 						pCand2->SetVisible(TRUE,TRUE);
-						pCand2->SetCandData(cWild,S_CA2T(SStringA(m_pInputContext->szInput,m_pInputContext->cInput)),m_pInputContext->ppbyCandInfo[iCand]);
+						pCand2->SetCandData(cWild,S_CA2T(SStringA(m_pInputContext->szComp,m_pInputContext->cComp)),m_pInputContext->ppbyCandInfo[iCand]);
 						iCand ++;
 					}
 					pCand = pCand->GetWindow(GSW_NEXTSIBLING);
@@ -152,7 +171,7 @@ namespace SOUI
 			{
 				SWindow * compUmode = FindChildByID(R.id.comp_umode);
 				compUmode->SetVisible(TRUE,TRUE);
-				compUmode->FindChildByID(R.id.txt_comps)->SetWindowText(S_CA2T(SStringA(m_pInputContext->szInput,m_pInputContext->cInput)));
+				compUmode->FindChildByID(R.id.txt_comps)->SetWindowText(S_CA2T(SStringA(m_pInputContext->szComp,m_pInputContext->cComp)));
 			}
 			break;
 		}

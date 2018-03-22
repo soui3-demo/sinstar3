@@ -143,24 +143,24 @@ BOOL IsDigitEx(char c)
 BOOL KeyIn_IsNumCode(InputContext * lpCntxtPriv)
 {
 	return (lpCntxtPriv->inState==INST_USERDEF
-		&& ((lpCntxtPriv->cInput>0 && IsDigitEx(lpCntxtPriv->szInput[0])))
+		&& ((lpCntxtPriv->cComp>0 && IsDigitEx(lpCntxtPriv->szComp[0])))
 		);
 }
 
 BOOL KeyIn_Code_IsMaxCode(InputContext * lpCntxtPriv,BYTE byType)
 {
-	if(lpCntxtPriv->cInput==0) return FALSE;
-	return (lpCntxtPriv->cInput>=ISComm_GetCompInfo()->cCodeMax &&  byType==MCR_NORMAL);
+	if(lpCntxtPriv->cComp==0) return FALSE;
+	return (lpCntxtPriv->cComp>=ISComm_GetCompInfo()->cCodeMax &&  byType==MCR_NORMAL);
 }
 
 BOOL KeyIn_Code_IsValidComp(InputContext * lpCntxtPriv,char cInput)
 {
 	BYTE byMask=0;
-	if(lpCntxtPriv->cInput==MAX_COMP-1) return FALSE;
+	if(lpCntxtPriv->cComp==MAX_COMP-1) return FALSE;
 	if(g_SettingsG.bBlendUD) byMask|=MQC_USERDEF;
 	if(g_SettingsG.bBlendSpWord) byMask|=MQC_SPCAND;
-	lpCntxtPriv->szInput[lpCntxtPriv->cInput]=cInput;
-	return ISComm_CheckComp(lpCntxtPriv->szInput,lpCntxtPriv->cInput+1,byMask);
+	lpCntxtPriv->szComp[lpCntxtPriv->cComp]=cInput;
+	return ISComm_CheckComp(lpCntxtPriv->szComp,lpCntxtPriv->cComp+1,byMask);
 }
 
 //检查一个编码是否为定义的网址开头
@@ -197,7 +197,7 @@ BOOL KeyIn_IsCoding(InputContext * lpCntxtPriv)
 		{
 			if(lpCntxtPriv->compMode==IM_SHAPECODE)
 			{//形码
-				bOpen=lpCntxtPriv->cInput!=0;
+				bOpen=lpCntxtPriv->cComp!=0;
 			}else//if(lpCntxtPriv->compMode==IM_SPELL)
 			{//拼音
 				bOpen=(lpCntxtPriv->bySyllables>1 || lpCntxtPriv->spellData[0].bySpellLen>0);
@@ -207,7 +207,7 @@ BOOL KeyIn_IsCoding(InputContext * lpCntxtPriv)
 			bOpen=TRUE;
 	}else if(lpCntxtPriv->inState==INST_ENGLISH)
 	{//英文输入
-		bOpen=lpCntxtPriv->cInput!=0;
+		bOpen=lpCntxtPriv->cComp!=0;
 	}else if(lpCntxtPriv->inState==INST_USERDEF || lpCntxtPriv->inState==INST_LINEIME)
 	{
 		bOpen=TRUE;
@@ -268,8 +268,8 @@ void CInputState::ClearContext(UINT dwMask)
 	SLOG_INFO("dwMask:"<<dwMask);
 	if(dwMask&CPC_COMP)
 	{
-		m_ctx.szInput[0]=0;
-		m_ctx.cInput = 0;
+		m_ctx.szComp[0]=0;
+		m_ctx.cComp = 0;
 	}
 	if(dwMask&CPC_ENGLISH)
 	{
@@ -330,6 +330,9 @@ void CInputState::InputResult(const SStringT &strResult,BYTE byAstMask)
 
 	SASSERT(m_pListener);
 	m_pListener->OnInputResult(strResult);
+	_tcscpy(m_ctx.szInput,strResult);
+	m_ctx.cInput = strResult.GetLength();
+
 	if(byAstMask!=0)
 	{
 		SStringA strResultA = S_CT2A(strResult);
@@ -442,7 +445,7 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 					}
 				}else
 				{
-					if(lpCntxtPriv->cInput==0)
+					if(lpCntxtPriv->cComp==0)
 					{
 						bReadyEn=TRUE;
 						bReadyDgt=TRUE;
@@ -1103,10 +1106,10 @@ BOOL CInputState::KeyIn_Spell_GetSpellInput(InputContext * lpCntxtPriv,BYTE bySp
 			if(bFind) break;
 		}
 		if(!bFind) bRet=FALSE;
-		memcpy(lpCntxtPriv->szInput+iWord*2,lpCntxtPriv->szWord[i],2);
+		memcpy(lpCntxtPriv->szComp+iWord*2,lpCntxtPriv->szWord[i],2);
 		iWord++;
 	}
-	lpCntxtPriv->cInput=iWord*2;
+	lpCntxtPriv->cComp=iWord*2;
 	return bRet;
 }
 
@@ -1123,17 +1126,17 @@ BOOL CInputState::KeyIn_Spell_InputText(InputContext* lpCntxtPriv,UINT byInput,
 		BYTE bySpellID[MAX_SYLLABLES][2];//用户输入的汉字的拼音的真正ID
 		SStringA strResult;
 		BOOL bGetSpID=KeyIn_Spell_GetSpellInput(lpCntxtPriv,bySpellID);
-		if(lpCntxtPriv->cInput)
+		if(lpCntxtPriv->cComp)
 		{
-			strResult = SStringA(lpCntxtPriv->szInput,lpCntxtPriv->cInput);
+			strResult = SStringA(lpCntxtPriv->szComp,lpCntxtPriv->cComp);
 		}
+		ClearContext(CPC_ALL);
 		InputResult(strResult,0);
 		InputEnd();
 
-		ClearContext(CPC_ALL&(~CPC_COMP));
 		//将用户输入提交给服务器保存
 		if(bGetSpID) ISComm_SpellMemoryEx(strResult,strResult.GetLength(),bySpellID);
-		KeyIn_InputAndAssociate(lpCntxtPriv,lpCntxtPriv->szInput,lpCntxtPriv->cInput,GetKeyinMask(!IsTempSpell(),MKI_ALL));
+		KeyIn_InputAndAssociate(lpCntxtPriv,lpCntxtPriv->szComp,lpCntxtPriv->cComp,GetKeyinMask(!IsTempSpell(),MKI_ALL));
 		if(lpCntxtPriv->bPYBiHua)
 		{//退出笔画选择重码状态
 			lpCntxtPriv->bPYBiHua=FALSE;
@@ -1142,7 +1145,7 @@ BOOL CInputState::KeyIn_Spell_InputText(InputContext* lpCntxtPriv,UINT byInput,
 		if(g_SettingsG.compMode != IM_SPELL) 
 		{//临时拼音模式自动获得输入拼音的编码
 			lpCntxtPriv->bShowTip=TRUE;
-			GetShapeComp(lpCntxtPriv->szInput,lpCntxtPriv->cInput);
+			GetShapeComp(lpCntxtPriv->szComp,lpCntxtPriv->cComp);
 			lpCntxtPriv->compMode = IM_SHAPECODE;
 		}
 		bRet=TRUE;
@@ -1202,10 +1205,10 @@ BOOL CInputState::KeyIn_Spell_Symbol(InputContext* lpCntxtPriv,UINT byInput,
 		BYTE bySpellID[MAX_SYLLABLES][2];
 		BOOL bGetSpID=KeyIn_Spell_GetSpellInput(lpCntxtPriv,bySpellID);
 		SStringA strResultA;
-		if(lpCntxtPriv->cInput)
+		if(lpCntxtPriv->cComp)
 		{
-			if(bGetSpID) ISComm_SpellMemoryEx(lpCntxtPriv->szInput,lpCntxtPriv->cInput,bySpellID);
-			strResultA = SStringA(lpCntxtPriv->szInput,lpCntxtPriv->cInput);
+			if(bGetSpID) ISComm_SpellMemoryEx(lpCntxtPriv->szComp,lpCntxtPriv->cComp,bySpellID);
+			strResultA = SStringA(lpCntxtPriv->szComp,lpCntxtPriv->cComp);
 		}
 		//lpCompStr->dwResultStrLen+=Symbol_Convert(byInput,pResult+lpCompStr->dwResultStrLen,lpbKeyState);
 		InputStart();
@@ -1288,9 +1291,10 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 					{//不完整输入长词重码
 						SStringA strResultA((char*)pData+2,pData[1]);
 						BOOL isTempSpell = IsTempSpell();
+
+						ClearContext(CPC_ALL);
 						InputResult(strResultA,GetKeyinMask(!isTempSpell,MKI_ALL));
 						InputEnd();
-						ClearContext(CPC_ALL&(~CPC_COMP));
 			
 						if(isTempSpell) 
 						{//临时拼音模式获得输入字的编码
@@ -1331,7 +1335,7 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 							char *pComp=(char *)pPhrase+pPhrase[0]+1;
 							char cCompLen=pComp[0];
 							if(cCompLen==0)
-								pComp=lpCntxtPriv->szInput,cCompLen=lpCntxtPriv->cInput;
+								pComp=lpCntxtPriv->szComp,cCompLen=lpCntxtPriv->cComp;
 							else
 								pComp++;
 							if(pPhrase[0]>2 || !g_SettingsG.bDisableDelWordCand)
@@ -1426,6 +1430,7 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 		ClearContext(CPC_ALL);
 		InputResult(strResultA,byMask);
 		InputEnd();
+
 		InputUpdate();
 		InputHide(TRUE);
 	}
@@ -1596,10 +1601,10 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 					bRet=TRUE;
 				}
 			}
-			lpCntxtPriv->cInput=0;
+			lpCntxtPriv->cComp=0;
 		}
 
-		if(lpCntxtPriv->cInput==0 && !bRet)
+		if(lpCntxtPriv->cComp==0 && !bRet)
 		{
 			if((byInput<'a' || byInput>'z') && (byInput!=g_cHotKeyUD || !g_SettingsG.bFastUMode) )
 			{//标点：要么不是自定义模式快捷键，或者不支持快捷自定义模式切换
@@ -1620,19 +1625,19 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 				return TRUE;
 			}
 		}
-		if(lpCntxtPriv->cInput<MAX_COMP)
+		if(lpCntxtPriv->cComp<MAX_COMP)
 		{
-			lpCntxtPriv->szInput[lpCntxtPriv->cInput++]=byInput;
+			lpCntxtPriv->szComp[lpCntxtPriv->cComp++]=byInput;
 			bRet=TRUE;
 		}
 	}else if(byInput==VK_BACK)
 	{
-		if(lpCntxtPriv->cInput>0) lpCntxtPriv->cInput--;
-		if(lpCntxtPriv->bWebMode && lpCntxtPriv->cInput<=2) lpCntxtPriv->bWebMode=FALSE;
+		if(lpCntxtPriv->cComp>0) lpCntxtPriv->cComp--;
+		if(lpCntxtPriv->bWebMode && lpCntxtPriv->cComp<=2) lpCntxtPriv->bWebMode=FALSE;
 		bRet=TRUE;
 	}else if(byInput==VK_ESCAPE)
 	{
-		lpCntxtPriv->cInput=0;
+		lpCntxtPriv->cComp=0;
 		lpCntxtPriv->sbState=::SBST_NORMAL;
 		lpCntxtPriv->bWebMode=FALSE;
 		lpCntxtPriv->bShowTip=FALSE;
@@ -1643,19 +1648,19 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 			&& ((g_SettingsG.bEnterClear && !(lpbKeyState[VK_SHIFT]&0x80))||(!g_SettingsG.bEnterClear && lpbKeyState[VK_SHIFT]&0x80 ));
 		if(bClearComp)
 		{//清空编码
-			lpCntxtPriv->cInput=0;
+			lpCntxtPriv->cComp=0;
 			lpCntxtPriv->sbState=::SBST_NORMAL;
 			bRet=TRUE;
 		}else 
 		{//编码上屏
 			if(lpCntxtPriv->bWebMode && lpbKeyState[VK_SHIFT]&0x80)
 			{//网址模式下打开浏览器
-				lpCntxtPriv->szInput[lpCntxtPriv->cInput]=0;
-				ShellExecuteA(NULL,"open",lpCntxtPriv->szInput,NULL,NULL,SW_SHOWDEFAULT);
+				lpCntxtPriv->szComp[lpCntxtPriv->cComp]=0;
+				ShellExecuteA(NULL,"open",lpCntxtPriv->szComp,NULL,NULL,SW_SHOWDEFAULT);
 			}else
 			{
 				BYTE byMask=0;
-				SStringA strResultA(lpCntxtPriv->szInput,lpCntxtPriv->cInput);
+				SStringA strResultA(lpCntxtPriv->szComp,lpCntxtPriv->cComp);
 
 				if(g_SettingsL.bRecord)
 					byMask|=MKI_RECORD;
@@ -1670,7 +1675,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 		}
 	}else if(byInput==g_cHotKeyUD)
 	{//用户定义的自定义状态切换键
-		if(lpCntxtPriv->cInput==0 && g_SettingsG.bFastUMode)
+		if(lpCntxtPriv->cComp==0 && g_SettingsG.bFastUMode)
 		{//切换到用户自定义输入状态
 			ClearContext(CPC_ALL);
 			lpCntxtPriv->inState=INST_USERDEF;
@@ -1678,26 +1683,26 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 			InputUpdate();
 			return TRUE;
 		}
-	}else if(lpCntxtPriv->cInput < MAX_COMP)
+	}else if(lpCntxtPriv->cComp < MAX_COMP)
 	{
-		lpCntxtPriv->szInput[lpCntxtPriv->cInput++]=byInput;
+		lpCntxtPriv->szComp[lpCntxtPriv->cComp++]=byInput;
 		if(lpCntxtPriv->bWebMode || (!g_SettingsG.bAutoInput && byInput>='a' && byInput<='z')) bRet=TRUE;
 	}
 	if(!lpCntxtPriv->bWebMode)
 	{//处理网址模式转换
 		if(!bCompChar)
 		{
-			if(KeyIn_IsWebHeader(lpCntxtPriv->szInput,lpCntxtPriv->cInput))
+			if(KeyIn_IsWebHeader(lpCntxtPriv->szComp,lpCntxtPriv->cComp))
 			{
 				lpCntxtPriv->bWebMode=TRUE;
 				bRet=TRUE;
 			}else if(byInput!=VK_BACK && byInput!=VK_ESCAPE && byInput!=VK_RETURN && byInput!=g_cHotKeyUD)
 			{
-				lpCntxtPriv->cInput--;
+				lpCntxtPriv->cComp--;
 			}
 		}else
 		{
-			lpCntxtPriv->bWebMode=KeyIn_IsWebHeader(lpCntxtPriv->szInput,lpCntxtPriv->cInput);
+			lpCntxtPriv->bWebMode=KeyIn_IsWebHeader(lpCntxtPriv->szComp,lpCntxtPriv->cComp);
 		}
 	}
 
@@ -1714,14 +1719,14 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 
 		ClearContext(CPC_CAND);
 
-		if(lpCntxtPriv->cInput==0)
+		if(lpCntxtPriv->cComp==0)
 		{
 			InputEnd();
 			InputHide(TRUE);
 		}else
 		{
 			lpCntxtPriv->sbState=::SBST_NORMAL;	//退出联想状态
-			if(ISComm_QueryCand(lpCntxtPriv->szInput,lpCntxtPriv->cInput,byMask,m_pListener->GetHwnd())==ISACK_SUCCESS)
+			if(ISComm_QueryCand(lpCntxtPriv->szComp,lpCntxtPriv->cComp,byMask,m_pListener->GetHwnd())==ISACK_SUCCESS)
 			{
 				PMSGDATA pMsgData=ISComm_GetData();
 				LPBYTE pbyData,pCandData;
@@ -1905,10 +1910,10 @@ BOOL CInputState::KeyIn_Code_English(InputContext * lpCntxtPriv,UINT byInput,
 	{
 		if(byInput==VK_BACK)
 		{
-			if(lpCntxtPriv->cInput) 
+			if(lpCntxtPriv->cComp) 
 			{
-				lpCntxtPriv->cInput--;
-				if(lpCntxtPriv->cInput==0)
+				lpCntxtPriv->cComp--;
+				if(lpCntxtPriv->cComp==0)
 				{
 					InputEnd();
 					InputHide(FALSE);
@@ -1917,12 +1922,12 @@ BOOL CInputState::KeyIn_Code_English(InputContext * lpCntxtPriv,UINT byInput,
 			}
 		}else
 		{
-			lpCntxtPriv->szInput[lpCntxtPriv->cInput++]=byInput;
+			lpCntxtPriv->szComp[lpCntxtPriv->cComp++]=byInput;
 		}
 		ClearContext(CPC_CAND);
-		if(lpCntxtPriv->cInput)
+		if(lpCntxtPriv->cComp)
 		{//编码已经修改
-			if(ISComm_EnQueryCand(lpCntxtPriv->szInput,lpCntxtPriv->cInput)==ISACK_SUCCESS)
+			if(ISComm_EnQueryCand(lpCntxtPriv->szComp,lpCntxtPriv->cComp)==ISACK_SUCCESS)
 			{
 				PMSGDATA pData=ISComm_GetData();
 				LPBYTE  pBuf=m_pbyMsgBuf;
@@ -1955,7 +1960,7 @@ BOOL CInputState::KeyIn_Code_English(InputContext * lpCntxtPriv,UINT byInput,
 			strResult = SStringA((char*)lpCntxtPriv->pbyEnSpell+1,lpCntxtPriv->pbyEnSpell[0]);
 		}else
 		{
-			strResult = SStringA((char*)lpCntxtPriv->szInput,lpCntxtPriv->cInput);
+			strResult = SStringA((char*)lpCntxtPriv->szComp,lpCntxtPriv->cComp);
 		}
 		if(g_SettingsL.bSound) ISComm_TTS(strResult,(char)strResult.GetLength(),MTTS_EN);
 		//输入单词
@@ -2001,7 +2006,7 @@ BOOL CInputState::KeyIn_UserDef_ChangeComp(InputContext * lpCntxtPriv,UINT byInp
 {
 	if(byInput==VK_BACK)
 	{
-		if(lpCntxtPriv->cInput>0)	lpCntxtPriv->cInput--;
+		if(lpCntxtPriv->cComp>0)	lpCntxtPriv->cComp--;
 	}else if(byInput==VK_ESCAPE)
 	{
 		ClearContext(CPC_ALL);
@@ -2009,10 +2014,10 @@ BOOL CInputState::KeyIn_UserDef_ChangeComp(InputContext * lpCntxtPriv,UINT byInp
 		InputHide(FALSE);
 	}else if(byInput==VK_RETURN)
 	{
-		if(lpCntxtPriv->cInput)
+		if(lpCntxtPriv->cComp)
 		{//输入编码
 			//切换回正常状态
-			SStringA strResultA(lpCntxtPriv->szInput,lpCntxtPriv->cInput);
+			SStringA strResultA(lpCntxtPriv->szComp,lpCntxtPriv->cComp);
 			InputResult(strResultA,0);
 			InputEnd();
 			InputHide(FALSE);
@@ -2021,11 +2026,11 @@ BOOL CInputState::KeyIn_UserDef_ChangeComp(InputContext * lpCntxtPriv,UINT byInp
 		}
 	}else
 	{
-		lpCntxtPriv->szInput[lpCntxtPriv->cInput++]=byInput;
-		lpCntxtPriv->szInput[lpCntxtPriv->cInput]=0;
+		lpCntxtPriv->szComp[lpCntxtPriv->cComp++]=byInput;
+		lpCntxtPriv->szComp[lpCntxtPriv->cComp]=0;
 	}
 	ClearContext(CPC_CAND);
-	if(lpCntxtPriv->cInput && ISACK_SUCCESS==ISComm_UDQueryCand(lpCntxtPriv->szInput,lpCntxtPriv->cInput))
+	if(lpCntxtPriv->cComp && ISACK_SUCCESS==ISComm_UDQueryCand(lpCntxtPriv->szComp,lpCntxtPriv->cComp))
 	{//获取自定义词组,支持多个重码
 		PMSGDATA pMsgData=ISComm_GetData();
 		LPBYTE pbyData;
@@ -2055,9 +2060,9 @@ BOOL CInputState::KeyIn_Line_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 	BOOL bCompChar=FALSE;
 	if(byInput==VK_BACK)
 	{//回退
-		if(lpCntxtPriv->cInput>0)
+		if(lpCntxtPriv->cComp>0)
 		{
-			lpCntxtPriv->cInput--;
+			lpCntxtPriv->cComp--;
 			bCompChar=TRUE;
 		}
 		bRet=TRUE;
@@ -2065,20 +2070,20 @@ BOOL CInputState::KeyIn_Line_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 	{//退出状态
 		lpCntxtPriv->inState=INST_CODING;
 		lpCntxtPriv->sbState=::SBST_NORMAL;
-		lpCntxtPriv->cInput=0;
+		lpCntxtPriv->cComp=0;
 		InputEnd();
 		bRet=TRUE;
 	}else if(byInput>=VK_NUMPAD1 && byInput<=VK_NUMPAD6)
 	{//编辑
-		lpCntxtPriv->szInput[lpCntxtPriv->cInput++]=byInput-VK_NUMPAD1+'1';
-		lpCntxtPriv->szInput[lpCntxtPriv->cInput]=0;
+		lpCntxtPriv->szComp[lpCntxtPriv->cComp++]=byInput-VK_NUMPAD1+'1';
+		lpCntxtPriv->szComp[lpCntxtPriv->cComp]=0;
 		bCompChar=TRUE;
 		bRet=TRUE;
 	}
 	if(bCompChar)
 	{
 		ClearContext(CPC_CAND);
-		if(lpCntxtPriv->cInput && ISComm_LineQueryCand(lpCntxtPriv->szInput,lpCntxtPriv->cInput)==ISACK_SUCCESS)
+		if(lpCntxtPriv->cComp && ISComm_LineQueryCand(lpCntxtPriv->szComp,lpCntxtPriv->cComp)==ISACK_SUCCESS)
 		{//查询重码
 			PMSGDATA pMsgData=ISComm_GetData();
 			short i,sCount=0;

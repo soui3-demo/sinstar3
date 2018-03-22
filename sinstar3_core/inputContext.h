@@ -54,8 +54,8 @@ struct SPELLINFO
 
 struct InputContext
 {
-	char  szInput[MAX_INPUT];		//当前输入数据
-	int   cInput;
+	char  szComp[MAX_INPUT];		//当前输入数据
+	int   cComp;
 
 	COMPMODE compMode;				//当前的输入类型：形码输入还是拼音输入。
 	INSTATE	inState;				//当前输入状态
@@ -91,4 +91,7 @@ struct InputContext
 
 	BOOL    bShowTip;				//show tip in comp
 	char	szTip[200];
+
+	TCHAR   szInput[MAX_INPUT];
+	int		cInput;
 };
