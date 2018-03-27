@@ -86,6 +86,16 @@ public:
 	BOOL	bInputBig5;			// 繁体输出标志
 };
 
+
+class CSettingsCompSpec
+{
+public:
+	TCHAR	hkUserDefSwitch;	//切换到用户定义的与编码相关快捷键
+	TCHAR	hkSentSwitch;		//切换到语句输入的与编码相关快捷键
+};
+
 extern CSettingsGlobal	g_SettingsG;
 extern CSettingsLocal	g_SettingsL;
+extern CSettingsCompSpec	g_SettingsCompSpec;
+
 extern int				g_nRefCount;

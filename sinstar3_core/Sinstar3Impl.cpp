@@ -197,6 +197,37 @@ LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 		CDataCenter::getSingleton().Lock();
 		CMyData &myData = CDataCenter::getSingleton().GetData();
 		myData.m_compInfo.SetSvrCompInfo(ISComm_GetCompInfo());
+
+		TCHAR szBuf[10]={0};
+		int i=0;
+
+		SStringT strHotKeyFile = SStringT().Format(_T("%s\\hotkey_%s.txt"),theModule->GetDataPath(),myData.m_compInfo.strCompName);
+		//加载特定的自定义状态及语句输入状态开关
+		GetPrivateProfileString(_T("hotkey"),_T("umode"),_T(""),szBuf,2,strHotKeyFile);
+		g_SettingsCompSpec.hkUserDefSwitch=szBuf[0];
+		if(g_SettingsCompSpec.hkUserDefSwitch==0)
+		{
+			g_SettingsCompSpec.hkUserDefSwitch=myData.m_compInfo.cWild;
+		}
+
+		g_SettingsG.bFastUMode=1;
+		if(GetPrivateProfileString(_T("settings"),_T("FastUMode"),NULL,szBuf,10,strHotKeyFile))
+			g_SettingsG.bFastUMode=_ttoi(szBuf);
+		else if(g_SettingsCompSpec.hkUserDefSwitch<'a' || g_SettingsCompSpec.hkUserDefSwitch>'z') //不是字母，默认关闭
+			g_SettingsG.bFastUMode=0;
+
+		szBuf[0]=0;
+		if(GetPrivateProfileString(_T("hotkey"),_T("sentence"),_T(""),szBuf,2,strHotKeyFile))
+		{
+			g_SettingsCompSpec.hkSentSwitch=szBuf[0];
+		}else
+		{//默认设置为“；”，如果是编码则取消
+			if(!myData.m_compInfo.IsCompChar(';'))
+				g_SettingsCompSpec.hkSentSwitch=';';
+			else
+				g_SettingsCompSpec.hkSentSwitch=0;
+		}
+
 		CDataCenter::getSingleton().Unlock();
 
 		EventSvrNotify *evt= new EventSvrNotify(this);

@@ -8,6 +8,7 @@ CSettingsGlobal	g_SettingsG;		//输入法全局设置
 #pragma data_seg()
 
 CSettingsLocal		g_SettingsL;
+CSettingsCompSpec   g_SettingsCompSpec;
 
 BOOL WritePrivateProfileInt(
 							LPCTSTR lpAppName,  // pointer to section name
