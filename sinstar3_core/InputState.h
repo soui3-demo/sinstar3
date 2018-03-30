@@ -43,6 +43,7 @@ protected:
 	void InputResult(const SStringT &strResult,BYTE byAstMask);
 	void InputEnd();
 	void InputUpdate();
+	void InputOpen();
 	void InputHide(BOOL bDelay = FALSE);
 private:
 	BOOL IsTempSpell() const;

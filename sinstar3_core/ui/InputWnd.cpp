@@ -44,9 +44,6 @@ namespace SOUI
 		m_bShow = bShow;
 		if(!bShow)
 		{
-// 			m_cPageSize = 0;
-// 			m_iCandFirst = 0;
-// 			m_iCandEnd = -1;
 			m_bLocated = FALSE;
 		}else
 		{

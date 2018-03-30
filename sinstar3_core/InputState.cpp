@@ -360,6 +360,13 @@ void CInputState::InputUpdate()
 }
 
 
+void CInputState::InputOpen()
+{
+	SLOG_INFO("");
+	m_pListener->OpenInputWnd();
+
+}
+
 void CInputState::InputHide(BOOL bDelay)
 {
 	SLOG_INFO("delay:"<<bDelay);
@@ -473,6 +480,7 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 					lpCntxtPriv->inState=INST_ENGLISH;
 					//确保打开输入窗口
 					InputStart();
+					InputOpen();
 				}
 			}else if(bReadyDgt && uVKey>='0' && uVKey<='9')
 			{//数字输入，进入数字输入状态
@@ -1295,7 +1303,7 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 						ClearContext(CPC_ALL);
 						InputResult(strResultA,GetKeyinMask(!isTempSpell,MKI_ALL));
 						InputEnd();
-			
+
 						if(isTempSpell) 
 						{//临时拼音模式获得输入字的编码
 							lpCntxtPriv->bShowTip=TRUE;
@@ -1559,21 +1567,12 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 {
 	BOOL bRet=FALSE;
 	BOOL bCompChar=FALSE;
-	if(byInput==ISComm_GetCompInfo()->cWildChar)
+	if(byInput==CDataCenter::GetAutoLockerInstance()->GetData().m_compInfo.cWild)
 	{
 		bCompChar=TRUE;
 	}else
 	{
-		char i=0;
-		while(ISComm_GetCompInfo()->szCode[i])
-		{
-			if(ISComm_GetCompInfo()->szCode[i]==byInput)
-			{
-				bCompChar=TRUE;
-				break;
-			}
-			i++;
-		}
+		bCompChar = CDataCenter::GetAutoLockerInstance()->GetData().m_compInfo.IsCompChar(byInput);
 	}
 	if(bCompChar)
 	{
@@ -1614,6 +1613,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 			}
 			//开始编码输入,生成开始编码消息以获取光标跟随时输入窗口的坐标
 			InputStart();
+			InputOpen();
 			if(byInput==g_SettingsCompSpec.hkUserDefSwitch && g_SettingsG.bFastUMode)
 			{//切换到用户自定义输入状态
 				ClearContext(CPC_ALL);
@@ -1828,6 +1828,7 @@ BOOL CInputState::KeyIn_All_Associate(InputContext * lpCntxtPriv,UINT byInput,
 			lpCntxtPriv->sbState=SBST_SENTENCE;
 			lpCntxtPriv->sSentCaret=0;
 			InputStart();
+			InputOpen();
 			bRet=TRUE;
 		}
 	}
