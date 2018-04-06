@@ -18,7 +18,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF|_CRTDBG_LEAK_CHECK_DF);
 #endif
 		{
-			TCHAR szPath[MAX_PATH];
+			TCHAR szPath[MAX_PATH] = { 0 };
 			CRegKey reg;
 			LONG ret = reg.Open(HKEY_LOCAL_MACHINE,_T("SOFTWARE\\SetoutSoft\\sinstar3"),KEY_READ|KEY_WOW64_64KEY);
 			if(ret == ERROR_SUCCESS)

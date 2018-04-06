@@ -1,13 +1,15 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sinstar3_ime", "sinstar3_ime\sinstar3_ime.vcproj", "{9CD9D0D2-9A72-4EBB-A459-8229E224B02C}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sinstar3_ime", "sinstar3_ime\sinstar3_ime.vcxproj", "{9CD9D0D2-9A72-4EBB-A459-8229E224B02C}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sinstar3_tsf", "sinstar3_tsf\sinstar3_tsf.vcproj", "{4893E464-3664-442B-8BFB-6D13679EAB23}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sinstar3_tsf", "sinstar3_tsf\sinstar3_tsf.vcxproj", "{4893E464-3664-442B-8BFB-6D13679EAB23}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sinstar3_core", "sinstar3_core\sinstar3_core.vcproj", "{BDAF647A-8421-43D7-B43E-7618BE211BFA}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sinstar3_core", "sinstar3_core\sinstar3_core.vcxproj", "{BDAF647A-8421-43D7-B43E-7618BE211BFA}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "soui64", "..\soui.git\SOUI\soui64.vcproj", "{7F395486-F91C-3A0C-8960-D4D0275E6AD3}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "soui64", "..\soui\SOUI\soui64.vcxproj", "{030306B7-AD44-34A2-86C5-2C312C255E4E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,16 +57,16 @@ Global
 		{BDAF647A-8421-43D7-B43E-7618BE211BFA}.Release|Win32.Build.0 = Release|Win32
 		{BDAF647A-8421-43D7-B43E-7618BE211BFA}.Release|x64.ActiveCfg = Release|x64
 		{BDAF647A-8421-43D7-B43E-7618BE211BFA}.Release|x64.Build.0 = Release|x64
-		{7F395486-F91C-3A0C-8960-D4D0275E6AD3}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
-		{7F395486-F91C-3A0C-8960-D4D0275E6AD3}.Debug|Mixed Platforms.Build.0 = Debug|x64
-		{7F395486-F91C-3A0C-8960-D4D0275E6AD3}.Debug|Win32.ActiveCfg = Debug|x64
-		{7F395486-F91C-3A0C-8960-D4D0275E6AD3}.Debug|x64.ActiveCfg = Debug|x64
-		{7F395486-F91C-3A0C-8960-D4D0275E6AD3}.Debug|x64.Build.0 = Debug|x64
-		{7F395486-F91C-3A0C-8960-D4D0275E6AD3}.Release|Mixed Platforms.ActiveCfg = Release|x64
-		{7F395486-F91C-3A0C-8960-D4D0275E6AD3}.Release|Mixed Platforms.Build.0 = Release|x64
-		{7F395486-F91C-3A0C-8960-D4D0275E6AD3}.Release|Win32.ActiveCfg = Release|x64
-		{7F395486-F91C-3A0C-8960-D4D0275E6AD3}.Release|x64.ActiveCfg = Release|x64
-		{7F395486-F91C-3A0C-8960-D4D0275E6AD3}.Release|x64.Build.0 = Release|x64
+		{030306B7-AD44-34A2-86C5-2C312C255E4E}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
+		{030306B7-AD44-34A2-86C5-2C312C255E4E}.Debug|Mixed Platforms.Build.0 = Debug|x64
+		{030306B7-AD44-34A2-86C5-2C312C255E4E}.Debug|Win32.ActiveCfg = Debug|x64
+		{030306B7-AD44-34A2-86C5-2C312C255E4E}.Debug|x64.ActiveCfg = Debug|x64
+		{030306B7-AD44-34A2-86C5-2C312C255E4E}.Debug|x64.Build.0 = Debug|x64
+		{030306B7-AD44-34A2-86C5-2C312C255E4E}.Release|Mixed Platforms.ActiveCfg = Release|x64
+		{030306B7-AD44-34A2-86C5-2C312C255E4E}.Release|Mixed Platforms.Build.0 = Release|x64
+		{030306B7-AD44-34A2-86C5-2C312C255E4E}.Release|Win32.ActiveCfg = Release|x64
+		{030306B7-AD44-34A2-86C5-2C312C255E4E}.Release|x64.ActiveCfg = Release|x64
+		{030306B7-AD44-34A2-86C5-2C312C255E4E}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -114,7 +114,7 @@ namespace SOUI
 					SWindow *pSentRight = compSent->FindChildByID(R.id.sent_right);
 					SStringT strInput(m_pInputContext->szInput,m_pInputContext->cInput);
 					pSentInput->SetWindowText(strInput);
-					int nSelLen = m_pInputContext->pbySentWord[m_pInputContext->sSentCaret]-m_pInputContext->pbySentWord[0];
+					int nSelLen = int(m_pInputContext->pbySentWord[m_pInputContext->sSentCaret]-m_pInputContext->pbySentWord[0]);
 					SStringA strLeft((char*)m_pInputContext->pbySentWord[0],nSelLen);
 					pSentLeft->SetWindowText(S_CA2T(strLeft));
 					SStringA strRight((char*)m_pInputContext->pbySentWord[m_pInputContext->sSentCaret],m_pInputContext->sSentLen-nSelLen);

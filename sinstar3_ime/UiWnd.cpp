@@ -161,7 +161,7 @@ LRESULT CUiWnd::OnTimer(WPARAM nEventID)
 
 LRESULT CUiWnd::OnImeSelect(BOOL bSelect,LPARAM lParam)
 {
-	SLOGFMTF("OnImeSelect,bSelect:%d,lParam:%08x(%d)",bSelect,lParam,lParam);
+	SLOGFMTF("OnImeSelect,bSelect:%d,lParam:%d",bSelect,lParam);
 	AttachToIMC(bSelect);
 	OnImeNotify(IMN_SETOPENSTATUS,0);
 	OnImeNotify(IMN_SETCONVERSIONMODE,0);
@@ -185,7 +185,7 @@ POINT CUiWnd::GetAbsPos(HWND hWnd,DWORD dwStyle,POINT ptCur,RECT rc)
 
 LRESULT CUiWnd::OnImeControl(WPARAM wParam,LPARAM lParam)
 {
-	SLOGFMTF("OnImeControl, wParam:%08X(%d),lParam:%08X(%d)",wParam,wParam,lParam,lParam);
+	SLOGFMTF("OnImeControl, wParam:%d,lParam:%d",wParam,lParam);
 	LPINPUTCONTEXT lpIMC;
 	HIMC hIMC=(HIMC)GetWindowLongPtr(m_hWnd,IMMGWLP_IMC);
 	_ASSERT(hIMC);
@@ -227,7 +227,8 @@ LRESULT CUiWnd::OnImeNotify(WPARAM wParam,LPARAM lParam)
 		SLOGFMTF("IMN_CLOSESTATUSWINDOW");
 		break;
 	case IMN_OPENCANDIDATE:
-		OnImeNotify(IMN_SETCOMPOSITIONFONT,0);		break;
+		OnImeNotify(IMN_SETCOMPOSITIONFONT,0);
+		break;
 	case IMN_CHANGECANDIDATE:
 		break;
 	case IMN_CLOSECANDIDATE:
