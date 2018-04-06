@@ -329,6 +329,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\ui\ConfigDlg.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\dataCenter\DataCenter.cpp"
 				>
 			</File>
@@ -511,6 +515,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ui\ConfigDlg.h"
+				>
+			</File>
+			<File
 				RelativePath=".\dataCenter\DataCenter.h"
 				>
 			</File>
@@ -631,6 +639,10 @@
 		</Filter>
 		<File
 			RelativePath=".\uires\smenu\context.xml"
+			>
+		</File>
+		<File
+			RelativePath=".\uires\xml\dlg_config.xml"
 			>
 		</File>
 		<File

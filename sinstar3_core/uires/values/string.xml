@@ -1,5 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
   <string>
-    <title value=""/>
-    <ver value="1.0"/>
+    <txt_config value="系统设置"/>
+    <btn_close value="关闭"/>
+    <cfg_habit value="使用习惯"/>
+    <cfg_hotkey value="快捷键"/>
+    <cfg_associate value="联想"/>
+    <cfg_candidate value="重码"/>
+    <cfg_about value="关于"/>
   </string>

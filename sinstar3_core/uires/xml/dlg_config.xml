@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SOUI
+  name="wnd_composition"
+  width="500"
+  height="400"
+  resizable="0"
+  wndType="normal"
+  translucent="1"
+>
+  <style>
+    <class name="cls_radio" padding="5,5,5,5" extend_top="5" extend_bottom="5"/>
+  </style>
+    
+  <root colorBkgnd="#cccccc" layout="vbox">
+    <caption size="-2,-1" layout="hbox">
+      <text size="-1,-1" text="@string/txt_config"/>
+      <window size="0,0" weight="1" visible="0"/>
+      <imgbtn size="-1,-1" skin="_skin.sys.btn.close" name="btn_close" id="1" animate="1" tip="@string/btn_close"/>
+    </caption>
+    <window size="-2,0" weight="1" layout="hbox">
+      <window size="100,-2" layout="vbox">
+        <radio name="cfg_habit" id="2000" class="cls_radio" text="@string/cfg_habit"/>
+        <radio name="cfg_hotkey" id="2001" class="cls_radio" text="@string/cfg_hotkey"/>
+        <radio name="cfg_associate" id="2002" class="cls_radio" text="@string/cfg_associate"/>
+        <radio name="cfg_candidate" id="2003" class="cls_radio" text="@string/cfg_candidate"/>
+        <radio name="cfg_about" id="2004" class="cls_radio" text="@string/cfg_about"/>
+      </window>
+      <scrollview size="0,-2" weight="1" viewSize="-2,-1" layout="vbox" name="sv_setting">
+        <text name="title_habit" id="1000" text="@string/cfg_habit" size="-1,300" valign="top"/>
+        <text name="title_hotkey" id="1001" text="@string/cfg_hotkey" size="-1,300" valign="top"/>
+        <text name="title_associate" id="1002" text="@string/cfg_associate" size="-1,300" valign="top"/>
+        <text name="title_candidate" id="1003" text="@string/cfg_candidate" size="-1,300" valign="top"/>
+        <text name="title_about" id="1004" text="@string/cfg_about" size="-1,300" valign="top"/>
+      </scrollview>
+    </window>
+    
+  </root>
+</SOUI>

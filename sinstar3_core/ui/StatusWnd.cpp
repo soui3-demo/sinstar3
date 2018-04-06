@@ -1,6 +1,7 @@
 #include "StdAfx.h"
 #include "StatusWnd.h"
 #include <helper/SMenu.h>
+#include "ConfigDlg.h"
 
 #define SIZE_MAGNETIC	 5
 namespace SOUI
@@ -54,13 +55,17 @@ namespace SOUI
 		SMenu menu;
 		menu.LoadMenu(UIRES.smenu.context);
 		ClientToScreen(&pt);
-		m_pSkinManager.ClearMap();
+		m_skinManager.ClearMap();
 		int nRet = menu.TrackPopupMenu(TPM_LEFTALIGN|TPM_BOTTOMALIGN|TPM_RETURNCMD,pt.x,pt.y,m_hWnd);
-		if(nRet>=CMD_MENU_DEF && nRet <=CMD_MENU_DEF+1000)
+		if(nRet>=CMD_MENU_DEF && nRet <=CMD_MENU_DEF+100)
 		{//select menu
-			m_pSkinManager.SetSkin(nRet);
+			m_skinManager.SetSkin(nRet);
+		}else if(nRet == 100)
+		{//system config
+			CConfigDlg configDlg;
+			configDlg.DoModal();
 		}
-		m_pSkinManager.ClearMap();
+		m_skinManager.ClearMap();
 	}
 
 	void CStatusWnd::OnInitMenuPopup(HMENU menuPopup, UINT nIndex, BOOL bSysMenu)
@@ -72,7 +77,7 @@ namespace SOUI
 			{
 				CheckMenuItem(menuPopup,CMD_MENU_DEF,MF_CHECKED|MF_BYCOMMAND);
 			}
-			m_pSkinManager.InitSkinMenu(menuPopup,theModule->GetDataPath()+_T("\\skins"),CMD_MENU_DEF,strCurSkin);
+			m_skinManager.InitSkinMenu(menuPopup,theModule->GetDataPath()+_T("\\skins"),CMD_MENU_DEF,strCurSkin);
 		}
 	}
 

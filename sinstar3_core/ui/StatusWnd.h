@@ -50,7 +50,7 @@ namespace SOUI
 		EVENT_MAP_END()
 	protected:
 		SStatusBackground * m_pBackGround;
-		CSkinMananger  m_pSkinManager;
+		CSkinMananger  m_skinManager;
 	};
 
 }
