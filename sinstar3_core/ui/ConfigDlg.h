@@ -14,8 +14,10 @@ namespace SOUI
 
 		void OnGotoPage(int nID);
 		void OnSettingRangeChanged(EventArgs *e);
+		void OnSettingViewPortChanged(EventArgs *e);
 		EVENT_MAP_BEGIN()
 			EVENT_ID_HANDLER(R.id.sv_setting,EventScrollViewSizeChanged::EventID,OnSettingRangeChanged)
+			EVENT_ID_HANDLER(R.id.sv_setting,EventScrollViewOriginChanged::EventID,OnSettingViewPortChanged)
 			EVENT_ID_COMMAND_RANGE(R.id.cfg_habit,R.id.cfg_about,OnGotoPage)
 		EVENT_MAP_END()
 

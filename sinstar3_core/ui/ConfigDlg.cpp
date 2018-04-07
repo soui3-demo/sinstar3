@@ -36,4 +36,19 @@ namespace SOUI
 		m_yTitles[R.id.title_about-R.id.title_habit] = FindChildByID(R.id.title_about)->GetWindowRect().top+delta;
 	}
 
+	void CConfigDlg::OnSettingViewPortChanged(EventArgs * e)
+	{
+		EventScrollViewOriginChanged *e2 = sobj_cast<EventScrollViewOriginChanged>(e);
+		for (int i = 1; i < ARRAYSIZE(m_yTitles); i++)
+		{
+			if (e2->ptNewOrigin.y < m_yTitles[i])
+			{
+				FindChildByID(R.id.cfg_habit + i - 1)->SetCheck(TRUE);
+				return;
+			}
+		}
+		FindChildByID(R.id.cfg_habit + ARRAYSIZE(m_yTitles) - 1)->SetCheck(TRUE);
+
+	}
+
 }
