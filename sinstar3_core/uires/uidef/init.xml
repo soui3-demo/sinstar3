@@ -15,6 +15,8 @@
   </style>
 
   <objattr>
+    <edit margin="2,2,2,2" ncSkin="_skin.sys.border"/>
+    <group  padding="10,10,10,15"/>
     <candidate colorIndex="@color/cand_index" colorCand="@color/cand_text" colorComp="@color/cand_comp" colorWild="@color/cand_wild"/>
   </objattr>
 </UIDEF>
