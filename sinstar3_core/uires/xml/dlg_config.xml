@@ -10,12 +10,12 @@
   <style>
     <class name="cls_radio" padding="5,5,5,5" extend_top="5" extend_bottom="5"/>
   </style>
-    
+
   <root colorBkgnd="#cccccc" layout="vbox">
     <caption size="-2,-1" layout="hbox">
       <text size="-1,-1" text="@string/txt_config"/>
       <window size="0,0" weight="1" visible="0"/>
-      <imgbtn size="-1,-1" skin="_skin.sys.btn.close" name="btn_close" id="1" animate="1" tip="@string/btn_close"/>
+      <imgbtn size="-1,-1" skin="_skin.sys.btn.close" name="btn_close" id="2" animate="1" tip="@string/btn_close"/>
     </caption>
     <window size="-2,0" weight="1" layout="hbox">
       <window size="100,-2" layout="vbox">
@@ -51,12 +51,82 @@
           <check text="重码自动上屏" name="cand_auto_input" extend_top="20dp"/>
           <check text="拼音重码词组优先" name="cand_py_phrase_first" extend_top="20dp"/>
         </window>
-        <text name="title_hotkey" id="1001" text="@string/cfg_hotkey" size="-1,300" valign="top" extend_top="20dp"/>
-        <text name="title_associate" id="1002" text="@string/cfg_associate" size="-1,300" valign="top" extend_top="20dp"/>
-        <text name="title_candidate" id="1003" text="@string/cfg_candidate" size="-1,300" valign="top" extend_top="20dp"/>
-        <text name="title_about" id="1004" text="@string/cfg_about" size="-1,300" valign="top" extend_top="20dp"/>
+        <text name="title_hotkey" id="1001" text="@string/cfg_hotkey" size="-2,-1" valign="top" extend_top="20dp"/>
+        <window size="-2,-1" layout="gridLayout" columnCount="2" xInterval="5dp" yInterval="10dp" extend_top="10dp">
+          <text text="音形码切换"/>
+          <hotkey name="hk_switch_py" weight="1" width="100dp"/>
+          <text text="造词"/>
+          <hotkey name="hk_make_phrase" width="100dp"/>
+          <text text="字根表显示"/>
+          <hotkey name="hk_show_table" width="100dp"/>
+          <text text="编码查询"/>
+          <hotkey name="hk_show_comp" width="100dp"/>
+        </window>
+        <text name="title_associate" id="1002" text="@string/cfg_associate" size="-1,-1" valign="top" extend_top="20dp"/>
+        <window size="-2,-1" layout="vbox">
+          <group text="联想类型" layout ="hbox">
+            <radio name="ass_mode_none" id="400" text="禁用"/>
+            <radio name="ass_mode_phrase" id="401" text="词组联想"/>
+            <radio name="ass_mode_phrase_prompt" id="402" text="词组提示"/>
+            <radio name="ass_mode_english_prompt" id="403" text="单词提示"/>
+          </group>
+          <group text="词频调整" layout="hbox">
+            <radio name="rate_adjust_disable" id="500" text="禁用"/>
+            <radio name="rate_adjust_auto" id="501" text="智能"/>
+            <radio name="rate_adjust_fast" id="502" text="快速"/>
+          </group>
+          <group text="全码词组预测" layout="hbox">
+            <radio name="forcast_disable" id="600" text="禁用"/>
+            <radio name="forcast_always" id="601" text="总是启用"/>
+            <radio name="forcast_no_cand" id="602" text="无重码时启用"/>
+          </group>
+          <check name="chk_auto_dot" text="智能小数点"/>
+          <check name="chk_auto_select_cand" text="智能选词"/>
+          <check name="chk_auto_comp_promp" text="智能编码提示"/>
+          <check name="chk_sent_input" text="语句联想"/>
+        </window>
+        <text name="title_candidate" id="1003" text="@string/cfg_candidate" size="-1,-1" valign="top" extend_top="20dp"/>
+        <window size="-2,-1" layout="vbox">
+          <group text="快捷2,3重码" layout="vbox">
+            <check name="chk_enable_23cand_hotkey" text="启用"/>
+            <window layout="gridlayout" xInterval="10dp" yInterval="10dp" columnCount="2">
+              <text text="第2重码"/>
+              <hotkey name="hk_2_cand" width="100dp"/>
+              <text text="第3重码"/>
+              <hotkey name="hk_3_cand" width="100dp"/>
+            </window>
+          </group>
+          <check name="chk_disable_number_to_select_cand" text="禁止数字键选择重码"/>
+
+          <group text="重码翻页" layout="gridlayout" xInterval="10dp" yInterval="10dp" columnCount="2">
+            <text text="前翻页"/>
+            <hotkey name="hk_turn_prev" width="100dp"/>
+            <text text="后翻页"/>
+            <hotkey name="hk_turn_next" width="100dp"/>
+          </group>
+
+          <group text="GBK重码" layout="vbox">
+            <radio name="gbk_show_only" id="700" text="显示唯一重码"/>
+            <radio name="gbk_show_manual" id="701" text="显示手动上屏"/>
+            <radio name="gbk_show_as_gb" id="702" text="显示自动上屏"/>
+          </group>
+
+          <window layout="hbox">
+            <text text="一屏重码数:"/>
+            <edit name="edit_cand_number" text="5" width="100dp">
+              <spin pos="-0,0" size="16,22" offset="-1,0" buddy="edit_cand_number" min="1" max="10" />
+            </edit>
+          </window>
+          <check name="chk_full_skip_simple" text="出简不出全"/>
+        </window>
+
+        <text name="title_about" id="1004" text="@string/cfg_about" size="-1,-1" valign="top" extend_top="20dp"/>
+        <window layout="vbox">
+          <text text="启程输入法 version:3.0, All right is reserved."/>
+        
+        </window>
       </scrollview>
     </window>
-    
+
   </root>
 </SOUI>
