@@ -57,11 +57,6 @@ CSinstar3Impl::~CSinstar3Impl(void)
 
 void CSinstar3Impl:: ProcessKeyStoke(LPVOID lpImeContext,UINT vkCode,LPARAM lParam,BOOL bKeyDown,BOOL *pbEaten)
 {
-	if(!bKeyDown)
-	{
-		*pbEaten = FALSE;
-		return;
-	}
 	CAutoContext autoCtx(&m_pCurImeContext,lpImeContext);
 	BYTE byKeyState[256];
 	GetKeyboardState(byKeyState);
@@ -70,6 +65,12 @@ void CSinstar3Impl:: ProcessKeyStoke(LPVOID lpImeContext,UINT vkCode,LPARAM lPar
 
 void CSinstar3Impl:: TranslateKey(LPVOID lpImeContext,UINT vkCode,UINT uScanCode,BOOL bKeyDown,BOOL *pbEaten)
 {
+	if(!bKeyDown)
+	{
+		*pbEaten = FALSE;
+		return;
+	}
+
 	CAutoContext autoCtx(&m_pCurImeContext,lpImeContext);
 
 	*pbEaten = TRUE;
