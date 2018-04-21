@@ -124,6 +124,7 @@ namespace SOUI
 			}
 			
 			//update candidate
+			if(m_pInputContext->sCandCount>0)
 			{
 				SWindow * pCandNormal = FindChildByID(R.id.cand_normal);
 				pCandNormal->SetVisible(TRUE,TRUE);
@@ -163,6 +164,12 @@ namespace SOUI
 					}
 					pCand = pCand->GetWindow(GSW_NEXTSIBLING);
 				}
+			}else
+			{
+				SMutexView * pCandTip = FindChildByID2<SMutexView>(R.id.cand_tip);
+				pCandTip->SetVisible(TRUE,TRUE);
+				SWindow *pTip = pCandTip->FindChildByID(R.id.txt_tip);
+				pTip->SetWindowText(S_CA2T(m_pInputContext->szTip));
 			}
 			break;
 		case INST_USERDEF:

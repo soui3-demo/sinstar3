@@ -58,7 +58,7 @@
         <imgbtn size="-1,-1" display="0" skin="btn_nextpage" name="btn_nextpage"/>
       </mutexView>
       <mutexView size="-1,-1" layout="hbox" name="cand_tip" visible="0">
-        <text size="-1,-1" text="show tip in candidate view"/>
+        <text size="-1,-1" name="txt_tip" text="show tip in candidate view"/>
       </mutexView>
     </window>
   </root>

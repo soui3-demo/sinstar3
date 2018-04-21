@@ -314,6 +314,10 @@ void CInputState::ClearContext(UINT dwMask)
 		m_ctx.byCaret=0;
 		m_ctx.bPYBiHua=FALSE;
 	}
+	if(dwMask & CPC_TIP)
+	{
+		m_ctx.szTip[0]=0;
+	}
 }
 
 
