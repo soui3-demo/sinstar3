@@ -2170,7 +2170,8 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 						m_ctx.compMode=IM_SPELL;
 						ClearContext(CPC_ALL);
 						m_ctx.bShowTip=TRUE;
-						strcpy(m_ctx.szTip,"临时拼音:上屏编码提示");
+						strcpy(m_ctx.szTip,"临时拼音:上屏后自动提示编码");
+						InputOpen();
 						InputUpdate();
 					}else if(g_SettingsG.compMode==IM_SPELL)
 					{//拼音输入状态
