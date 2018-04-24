@@ -418,7 +418,7 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 		if(byCandIndex )
 		{
 			if(!((lpCntxtPriv->sbState==SBST_ASSOCIATE && g_SettingsG.byAstMode==AST_ENGLISH && !(lpbKeyState[VK_CONTROL]&0x80))//英文联想状态只有按下Ctrl才进入编码选择
-				|| (g_SettingsG.compMode==IM_SPELL && lpCntxtPriv->inState==INST_CODING && (uVKey==VK_SPACE || uVKey=='\'') ) )	//拼音输入状态下的输入键及手动音节  0xde=VkKeyScan('\'')
+				|| (m_ctx.compMode==IM_SPELL && lpCntxtPriv->inState==INST_CODING && (uVKey==VK_SPACE || uVKey=='\'') ) )	//拼音输入状态下的输入键及手动音节  0xde=VkKeyScan('\'')
 				)
 			{
 				bHandle=KeyIn_All_SelectCand(lpCntxtPriv,byCandIndex,0,lpbKeyState);
@@ -1143,21 +1143,20 @@ BOOL CInputState::KeyIn_Spell_InputText(InputContext* lpCntxtPriv,UINT byInput,
 			strResult = SStringA(lpCntxtPriv->szComp,lpCntxtPriv->cComp);
 		}
 		ClearContext(CPC_ALL);
-		InputResult(strResult,0);
+		InputResult(strResult,GetKeyinMask(!IsTempSpell(),MKI_ALL));
 		InputEnd();
 
 		//将用户输入提交给服务器保存
 		if(bGetSpID) ISComm_SpellMemoryEx(strResult,strResult.GetLength(),bySpellID);
-		KeyIn_InputAndAssociate(lpCntxtPriv,lpCntxtPriv->szComp,lpCntxtPriv->cComp,GetKeyinMask(!IsTempSpell(),MKI_ALL));
 		if(lpCntxtPriv->bPYBiHua)
 		{//退出笔画选择重码状态
 			lpCntxtPriv->bPYBiHua=FALSE;
 			lpCntxtPriv->szBiHua[0]=0;
 		}		
-		if(g_SettingsG.compMode != IM_SPELL) 
+		if(IsTempSpell()) 
 		{//临时拼音模式自动获得输入拼音的编码
 			lpCntxtPriv->bShowTip=TRUE;
-			GetShapeComp(lpCntxtPriv->szComp,lpCntxtPriv->cComp);
+			GetShapeComp(strResult,strResult.GetLength());
 			lpCntxtPriv->compMode = IM_SHAPECODE;
 		}
 		bRet=TRUE;
