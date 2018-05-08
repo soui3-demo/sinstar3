@@ -21,14 +21,17 @@ namespace SOUI
 
 		m_pBackGround = FindChildByID2<SStatusBackground>(R.id.status_bg);
 
+		CRect rcWnd = GetWindowRect();
+		CRect rcWorkArea;
+		SystemParametersInfo(SPI_GETWORKAREA,0,&rcWorkArea,0);
+
 		CPoint pt =CDataCenter::GetAutoLockerInstance()->GetData().m_ptStatus;
-		if(pt.x<0 || pt.y<0)
-		{
-			CRect rcWorkArea;
-			SystemParametersInfo(SPI_GETWORKAREA,0,&rcWorkArea,0);
-			pt.x = rcWorkArea.right-GetWindowRect().Width();
-			pt.y = rcWorkArea.bottom-GetWindowRect().Height();
-		}
+		if(pt.x<0) pt.x = 0;
+		if(pt.y<0) pt.y = 0;
+		if(pt.x + rcWnd.Width() > rcWorkArea.right)
+			pt.x = rcWorkArea.right - rcWnd.Width();
+		if(pt.y + rcWnd.Height()> rcWorkArea.bottom)
+			pt.y = rcWorkArea.bottom - rcWnd.Height();
 
 		FindChildByID(R.id.txt_comp)->SetWindowText(CDataCenter::GetAutoLockerInstance()->GetData().m_compInfo.strCompName);
 

@@ -1145,6 +1145,7 @@ BOOL CInputState::KeyIn_Spell_InputText(InputContext* lpCntxtPriv,UINT byInput,
 		ClearContext(CPC_ALL);
 		InputResult(strResult,GetKeyinMask(!IsTempSpell(),MKI_ALL));
 		InputEnd();
+		InputHide(TRUE);
 
 		//将用户输入提交给服务器保存
 		if(bGetSpID) ISComm_SpellMemoryEx(strResult,strResult.GetLength(),bySpellID);
@@ -2174,6 +2175,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 						ClearContext(CPC_ALL);
 						m_ctx.bShowTip=TRUE;
 						strcpy(m_ctx.szTip,"临时拼音:上屏后自动提示编码");
+						//todo: get cursor position
 						InputOpen();
 						InputUpdate();
 					}else if(g_SettingsG.compMode==IM_SPELL)
@@ -2462,7 +2464,7 @@ BOOL CInputState::OnSvrNotify(UINT wp, PMSGDATA pMsg)
 						ctx->sSentWords=iWord;
 						ctx->sSentCaret=0;
 						ctx->sSentLen=sLen;
-						SLOG_INFO("句子联想:"<<(char*)ctx->pbySentWord[0]);
+						SLOG_INFO("句子联想:"<<SStringA((char*)ctx->pbySentWord[0],sLen));
 					}
 				}
 				if(ctx->bShowTip || ctx->sCandCount || ctx->sSentLen)

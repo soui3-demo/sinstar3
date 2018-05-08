@@ -37,7 +37,7 @@ namespace SOUI
 
 	void CInputWnd::Show(BOOL bShow)
 	{
-		SLOG_INFO("bShow:"<<bShow);
+		SLOG_INFO("bShow:"<<bShow<<" located:"<<m_bLocated);
 		if(m_bLocated)
 		{
 			CImeWnd::Show(bShow);	
