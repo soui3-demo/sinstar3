@@ -9,7 +9,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sinstar3_tsf", "sinstar3_ts
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sinstar3_core", "sinstar3_core\sinstar3_core.vcxproj", "{BDAF647A-8421-43D7-B43E-7618BE211BFA}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "soui64", "..\soui\SOUI\soui64.vcxproj", "{030306B7-AD44-34A2-86C5-2C312C255E4E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "soui64", "..\soui.git\SOUI\soui64.vcxproj", "{835019FE-2886-39EB-BE73-38CC5FA19CBF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,16 +57,16 @@ Global
 		{BDAF647A-8421-43D7-B43E-7618BE211BFA}.Release|Win32.Build.0 = Release|Win32
 		{BDAF647A-8421-43D7-B43E-7618BE211BFA}.Release|x64.ActiveCfg = Release|x64
 		{BDAF647A-8421-43D7-B43E-7618BE211BFA}.Release|x64.Build.0 = Release|x64
-		{030306B7-AD44-34A2-86C5-2C312C255E4E}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
-		{030306B7-AD44-34A2-86C5-2C312C255E4E}.Debug|Mixed Platforms.Build.0 = Debug|x64
-		{030306B7-AD44-34A2-86C5-2C312C255E4E}.Debug|Win32.ActiveCfg = Debug|x64
-		{030306B7-AD44-34A2-86C5-2C312C255E4E}.Debug|x64.ActiveCfg = Debug|x64
-		{030306B7-AD44-34A2-86C5-2C312C255E4E}.Debug|x64.Build.0 = Debug|x64
-		{030306B7-AD44-34A2-86C5-2C312C255E4E}.Release|Mixed Platforms.ActiveCfg = Release|x64
-		{030306B7-AD44-34A2-86C5-2C312C255E4E}.Release|Mixed Platforms.Build.0 = Release|x64
-		{030306B7-AD44-34A2-86C5-2C312C255E4E}.Release|Win32.ActiveCfg = Release|x64
-		{030306B7-AD44-34A2-86C5-2C312C255E4E}.Release|x64.ActiveCfg = Release|x64
-		{030306B7-AD44-34A2-86C5-2C312C255E4E}.Release|x64.Build.0 = Release|x64
+		{835019FE-2886-39EB-BE73-38CC5FA19CBF}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
+		{835019FE-2886-39EB-BE73-38CC5FA19CBF}.Debug|Mixed Platforms.Build.0 = Debug|x64
+		{835019FE-2886-39EB-BE73-38CC5FA19CBF}.Debug|Win32.ActiveCfg = Debug|x64
+		{835019FE-2886-39EB-BE73-38CC5FA19CBF}.Debug|x64.ActiveCfg = Debug|x64
+		{835019FE-2886-39EB-BE73-38CC5FA19CBF}.Debug|x64.Build.0 = Debug|x64
+		{835019FE-2886-39EB-BE73-38CC5FA19CBF}.Release|Mixed Platforms.ActiveCfg = Release|x64
+		{835019FE-2886-39EB-BE73-38CC5FA19CBF}.Release|Mixed Platforms.Build.0 = Release|x64
+		{835019FE-2886-39EB-BE73-38CC5FA19CBF}.Release|Win32.ActiveCfg = Release|x64
+		{835019FE-2886-39EB-BE73-38CC5FA19CBF}.Release|x64.ActiveCfg = Release|x64
+		{835019FE-2886-39EB-BE73-38CC5FA19CBF}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
