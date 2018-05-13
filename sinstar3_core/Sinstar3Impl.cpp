@@ -30,8 +30,8 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr)
 
  	m_pInputWnd = new CInputWnd(m_inputState.GetInputContext());
 	m_pStatusWnd = new CStatusWnd();
-	m_pStatusWnd->Create();
-	m_pInputWnd->Create();
+	m_pStatusWnd->Create(_T("Sinstar3_Status"));
+	m_pInputWnd->Create(_T("Sinstar3_Input"));
 
 	m_inputState.SetInputListener(this);
 

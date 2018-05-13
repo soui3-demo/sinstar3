@@ -25,6 +25,8 @@ namespace SOUI
 
 	void CInputWnd::MoveTo(CPoint pt,int nCaretHeight)
 	{
+		SLOG_INFO("pt:" << pt.x <<","<<pt.y<<" caretHeight:"<<nCaretHeight);
+
 		m_bLocated = TRUE;
 		m_ptCaret = pt;
 		m_nCaretHeight = nCaretHeight;

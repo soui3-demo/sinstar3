@@ -33,9 +33,9 @@ void CImeWnd::OnMouseMove(UINT nFlags, CPoint point)
 	}
 }
 
-HWND CImeWnd::Create()
+HWND CImeWnd::Create(LPCTSTR pszTitle)
 {
-	return CSimpleWnd::Create(_T("SinstarWindow"),WS_DISABLED|WS_POPUP,WS_EX_TOOLWINDOW,0,0,0,0,NULL,NULL);
+	return CSimpleWnd::Create(pszTitle,WS_DISABLED|WS_POPUP,WS_EX_TOOLWINDOW,0,0,0,0,NULL,NULL);
 }
 
 void CImeWnd::Show(BOOL bShow)

@@ -341,9 +341,11 @@ LRESULT CUiWnd::OnImeNotify(WPARAM wParam,LPARAM lParam)
 				m_wndComp.SendMessage(WM_SETFONT,(WPARAM)m_fntComp,0);
 				
 				IMECHARPOSITION charPos={sizeof(charPos),0,0};
-				if(ImmRequestMessage(hIMC,IMR_QUERYCHARPOSITION,(LPARAM)&charPos))
+				if(ImmRequestMessage(hIMC,IMR_QUERYCHARPOSITION,(LPARAM)&charPos) 
+					&& charPos.cLineHeight<100 //在word2007中可能获得一个非常大的值
+					)
 				{
-					m_nFontHei=charPos.cLineHeight+HEI_LINEMARGIN*2;
+					m_nFontHei= charPos.cLineHeight+HEI_LINEMARGIN*2;
 				}
 				else
 				{
