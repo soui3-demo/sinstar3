@@ -121,7 +121,14 @@ void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 	if(bFocus) m_pTxtSvr->SetConversionMode(FullNative);
 	m_pStatusWnd->Show(bFocus);
 	
-	if(m_inputState.IsTypeing()) m_pInputWnd->Show(bFocus);
+	if (bFocus)
+	{
+		if (m_inputState.IsTypeing()) m_pInputWnd->Show(TRUE);
+	}
+	else
+	{
+		m_pInputWnd->Show(FALSE);
+	}
 }
 
 int  CSinstar3Impl::GetCompositionSegments()
@@ -172,11 +179,6 @@ BOOL CSinstar3Impl::ShowCompWnd()
 LRESULT CSinstar3Impl::OnWildMessage(WPARAM wParam,LPARAM lParam)
 {
 	return E_NOTIMPL;
-}
-
-void CSinstar3Impl::CheckDefIME()
-{
-
 }
 
 

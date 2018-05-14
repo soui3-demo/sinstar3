@@ -31,7 +31,6 @@ public:
 	virtual BOOL OnHotkey(LPVOID lpImeContext,REFGUID guidHotKey);
 	virtual void OnOpenStatusChanged(BOOL bOpen);
 	virtual void OnConversionModeChanged(EInputMethod uMode);
-	virtual void CheckDefIME();
 	virtual void ShowHelp();
 	virtual EInputMethod GetDefInputMode();
 	virtual BOOL ShowCompWnd();

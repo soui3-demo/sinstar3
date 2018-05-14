@@ -20,7 +20,6 @@ interface ISinstar : public IUnknown
 	virtual BOOL OnHotkey(LPVOID lpImeContext,REFGUID guidHotKey)=NULL;
 	virtual void OnOpenStatusChanged(BOOL bOpen)=NULL;
 	virtual void OnConversionModeChanged(EInputMethod uMode)=NULL;
-	virtual void CheckDefIME()=NULL;
 	virtual void ShowHelp()=NULL;
 	virtual EInputMethod GetDefInputMode() = NULL;
 	virtual BOOL ShowCompWnd() = NULL;
