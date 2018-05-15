@@ -4,6 +4,10 @@
 #include <ShlObj.h>
 #include "ImeModule.h"
 
+#ifdef ENABLE_VLD
+#include <vld.h>
+#endif //ENABLE_VLD
+
 CImeModule * theModule=NULL;
 
 BOOL APIENTRY DllMain( HMODULE hModule,

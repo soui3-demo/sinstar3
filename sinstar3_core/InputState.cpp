@@ -3,7 +3,7 @@
 #include <MMSystem.h>
 #include <ShellAPI.h>
 #pragma comment(lib,"Winmm.lib")
-
+#pragma warning(disable:4311 4302)
 const BYTE KCompKey[] ={0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,        // 00-0F
 						0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,        // 10-1F
 						1,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,        // 20-2F
@@ -2175,9 +2175,13 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 						ClearContext(CPC_ALL);
 						m_ctx.bShowTip=TRUE;
 						strcpy(m_ctx.szTip,"临时拼音:上屏后自动提示编码");
-						//todo: get cursor position
 						InputOpen();
 						InputUpdate();
+						if (!m_bTypeing)
+						{//query cursor position
+							InputStart();
+							InputEnd();
+						}
 					}else if(g_SettingsG.compMode==IM_SPELL)
 					{//拼音输入状态
 						if(IsTempSpell() && m_ctx.bySyllables==1 && m_ctx.spellData[0].bySpellLen==0)

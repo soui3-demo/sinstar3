@@ -105,6 +105,10 @@ LRESULT CUiWnd::OnPaint()
 
 LRESULT CUiWnd::WindowProc(UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
+	if (uMsg == WM_DESTROY)
+	{
+		SLOG_INFO("CUiWnd::WindowProc");
+	}
 	HIMC hIMC=(HIMC)GetWindowLongPtr(m_hWnd,IMMGWLP_IMC);
 	if(!hIMC && IsIMEMessage(uMsg)) return 0;
 	switch(uMsg)
