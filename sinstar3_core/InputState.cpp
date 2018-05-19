@@ -2142,6 +2142,25 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 				{ //check the scan code
 					BOOL bOpen = !m_pListener->GetOpenStatus();
 					m_pListener->SetOpenStatus(bOpen);
+					if (bOpen)
+					{//激活输入
+						if (KeyIn_IsCoding(&m_ctx))
+						{
+							//请求打开输入窗口
+							InputOpen();
+						}
+					}
+					else
+					{//关闭输入，如果当前有输入内容,则将当前的输入内容输出到编辑器中
+						if (m_ctx.cComp != 0)
+						{
+							SStringA result(m_ctx.szComp, m_ctx.cComp);
+							InputResult(result,0);
+							ClearContext(CPC_ALL);
+						}
+						InputHide(FALSE);
+					}
+
 				}
 			}else//还原状态
 			{
