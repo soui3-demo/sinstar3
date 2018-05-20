@@ -127,7 +127,7 @@ void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 	}
 	else
 	{
-		m_pInputWnd->Show(FALSE);
+		m_pInputWnd->Show(FALSE,FALSE);
 	}
 }
 

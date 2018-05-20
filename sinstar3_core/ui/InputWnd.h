@@ -14,7 +14,7 @@ namespace SOUI
 		~CInputWnd(void);
 
 		void MoveTo(CPoint pt,int nCaretHeight);
-		void Show(BOOL bShow);
+		void Show(BOOL bShow, BOOL bClearLocateInfo=TRUE);
 		void Hide(int nDelay);
 		void UpdateUI();
 		

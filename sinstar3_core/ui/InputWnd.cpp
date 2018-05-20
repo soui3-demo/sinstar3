@@ -37,7 +37,7 @@ namespace SOUI
 		}
 	}
 
-	void CInputWnd::Show(BOOL bShow)
+	void CInputWnd::Show(BOOL bShow, BOOL bClearLocateInfo)
 	{
 		SLOG_INFO("bShow:"<<bShow<<" located:"<<m_bLocated);
 		if(m_bLocated)
@@ -47,7 +47,7 @@ namespace SOUI
 		m_bShow = bShow;
 		if(!bShow)
 		{
-			m_bLocated = FALSE;
+			if(bClearLocateInfo) m_bLocated = FALSE;
 		}else
 		{
 			KillTimer(TIMERID_DELAY);
