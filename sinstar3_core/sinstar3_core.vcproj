@@ -197,6 +197,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				AdditionalIncludeDirectories="&quot;$(SOUIPATH)\config&quot;;&quot;$(SOUIPATH)\components&quot;;&quot;$(SOUIPATH)\SOUI\include&quot;;&quot;$(SOUIPATH)\utilities\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;SINSTAR3_CORE_EXPORTS"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
@@ -215,7 +216,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="utilities.lib soui.lib"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="&quot;$(SOUIPATH)\bin&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -272,6 +275,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				AdditionalIncludeDirectories="&quot;$(SOUIPATH)\config&quot;;&quot;$(SOUIPATH)\components&quot;;&quot;$(SOUIPATH)\SOUI\include&quot;;&quot;$(SOUIPATH)\utilities\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;SINSTAR3_CORE_EXPORTS"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
@@ -290,7 +294,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="utilities.lib soui.lib"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="&quot;$(SOUIPATH)\bin64&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -401,6 +407,14 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
