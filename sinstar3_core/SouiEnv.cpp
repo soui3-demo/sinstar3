@@ -2,7 +2,12 @@
 #include "SouiEnv.h"
 
 //从PE文件加载，注意从文件加载路径位置
+#ifdef _DEBUG
 #define RES_TYPE 0
+#else
+#define RES_TYPE 1
+#endif
+
 // #define RES_TYPE 0   //从文件中加载资源，加载失败再从PE加载
 // #define RES_TYPE 1   //从PE资源中加载UI资源
 // #define RES_TYPE 2   //从zip包中加载资源
