@@ -6,13 +6,11 @@
 
 namespace SOUI
 {
-	CInputWnd::CInputWnd(const InputContext *pCtx)
+	CInputWnd::CInputWnd(InputContext *pCtx)
 		:CImeWnd(UIRES.LAYOUT.wnd_composition)
 		,m_bLocated(FALSE)
 		,m_nCaretHeight(30)
 		,m_pInputContext(pCtx)
-		,m_iCandFirst(0)
-		,m_iCandEnd(-1)
 		,m_cPageSize(0)
 		,m_bShow(FALSE)
 	{
@@ -133,9 +131,9 @@ namespace SOUI
 				SWindow * pCandContainer = pCandNormal->FindChildByID(R.id.cand_container);
 
 				int nPageSize = GetCandMax(pCandContainer);
-				int iBegin = m_iCandFirst;
+				int iBegin = m_pInputContext->iCandBegin;
 				int iEnd   = smin(iBegin + nPageSize,m_pInputContext->sCandCount);
-				m_iCandEnd = iEnd;
+				m_pInputContext->iCandLast = iEnd;
 				m_cPageSize = nPageSize;
 				
 				pCandNormal->FindChildByID(R.id.btn_prevpage)->SetVisible(iBegin>0,TRUE);
@@ -202,8 +200,8 @@ namespace SOUI
 	short CInputWnd::SelectCandidate(short iCand)
 	{
 		if(m_pInputContext->sCandCount == 0) return -1;
-		short idx = iCand + m_iCandFirst;
-		if(idx >= m_iCandEnd) return -1;
+		short idx = iCand + m_pInputContext->iCandBegin;
+		if(idx >= m_pInputContext->iCandLast) return -1;
 		return idx;
 	}
 
@@ -211,16 +209,17 @@ namespace SOUI
 	BOOL CInputWnd::GoPrevCandidatePage()
 	{
 		if(m_cPageSize==0) return FALSE;
-		if(m_iCandFirst< m_cPageSize) return FALSE;
-		m_iCandFirst -= m_cPageSize;
+		if(m_pInputContext->iCandBegin< m_cPageSize) return FALSE;
+		m_pInputContext->iCandBegin -= m_cPageSize;
 		return TRUE;
 	}
 
+
 	BOOL CInputWnd::GoNextCandidatePage()
 	{
-		if(m_iCandEnd==-1) return FALSE;
-		if(m_iCandEnd>=m_pInputContext->sCandCount) return FALSE;
-		m_iCandFirst = m_iCandEnd;
+		if(m_pInputContext->iCandLast ==-1) return FALSE;
+		if(m_pInputContext->iCandLast >=m_pInputContext->sCandCount) return FALSE;
+		m_pInputContext->iCandBegin = m_pInputContext->iCandLast;
 		return TRUE;
 	}
 

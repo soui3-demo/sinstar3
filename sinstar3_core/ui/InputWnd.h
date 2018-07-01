@@ -10,7 +10,7 @@ namespace SOUI
 		public CImeWnd
 	{
 	public:
-		CInputWnd(const InputContext * pCtx);
+		CInputWnd(InputContext * pCtx);
 		~CInputWnd(void);
 
 		void MoveTo(CPoint pt,int nCaretHeight);
@@ -46,10 +46,8 @@ namespace SOUI
 		BOOL			 m_bLocated;
 		BOOL			 m_bShow;
 
-		short			 m_iCandFirst;
-		short			 m_iCandEnd;
 		short			 m_cPageSize;
-		const InputContext	* m_pInputContext;
+		InputContext	* m_pInputContext;
 	};
 
 }

@@ -26,7 +26,7 @@ public:
 	CInputState(void);
 	~CInputState(void);
 
-	const InputContext * GetInputContext() const {return &m_ctx;}
+	InputContext * GetInputContext() {return &m_ctx;}
 	void SetInputListener(IInputListener * pListener){m_pListener=pListener;}
 
 	BOOL TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState);

@@ -290,6 +290,8 @@ void CInputState::ClearContext(UINT dwMask)
 			m_ctx.ppbyCandInfo=NULL;
 		}
 		m_ctx.sCandCount=0;
+		m_ctx.iCandBegin = 0;
+		m_ctx.iCandLast = -1;
 		m_ctx.pbyEnAstPhrase=NULL;
 	}
 	if(dwMask&CPC_SENTENCE)

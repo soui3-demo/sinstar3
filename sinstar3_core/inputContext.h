@@ -66,6 +66,8 @@ struct InputContext
 	//重码数据
 	short   sCandCount;				//重码数
 	LPBYTE  *ppbyCandInfo;			//重码数据表
+	int     iCandBegin;		        //first visible candidate index
+	int     iCandLast;	            //last visible candidate index + 1
 
 	//拼音数据
 	BYTE	bySyllables;			//拼音音节数
