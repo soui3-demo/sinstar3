@@ -55,11 +55,16 @@ namespace SOUI
 
 	void CStatusWnd::OnRButtonUp(UINT nFlags,CPoint pt)
 	{
+		const MSG * pMsg = GetCurrentMessage();
+		SHostWnd::OnMouseEvent(pMsg->message,pMsg->wParam,pMsg->lParam);
+
 		SMenu menu;
 		menu.LoadMenu(UIRES.smenu.context);
 		ClientToScreen(&pt);
 		m_skinManager.ClearMap();
+		SLOG_INFO("before trackpopupmenu");
 		int nRet = menu.TrackPopupMenu(TPM_LEFTALIGN|TPM_BOTTOMALIGN|TPM_RETURNCMD,pt.x,pt.y,m_hWnd);
+		SLOG_INFO("after trackpopupmenu"<<" nRet:"<<nRet);
 		if(nRet>=CMD_MENU_DEF && nRet <=CMD_MENU_DEF+100)
 		{//select menu
 			m_skinManager.SetSkin(nRet);
@@ -67,6 +72,7 @@ namespace SOUI
 		{//system config
 			CConfigDlg configDlg;
 			configDlg.DoModal();
+			//SMessageBox(NULL,_T("test"), _T("Message box"), MB_OK | MB_ICONSTOP);
 		}
 		m_skinManager.ClearMap();
 	}

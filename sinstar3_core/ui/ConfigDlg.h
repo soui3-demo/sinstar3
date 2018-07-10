@@ -26,7 +26,7 @@ namespace SOUI
 			CHAIN_MSG_MAP(SHostDialog)
 		END_MSG_MAP()
 
-		int	m_yTitles[R.id.cfg_about-R.id.cfg_habit];
+		int	m_yTitles[R.id.cfg_about-R.id.cfg_habit+1];
 	};
 
 }
