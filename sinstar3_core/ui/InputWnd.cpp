@@ -108,11 +108,11 @@ namespace SOUI
 			{
 				SWindow * compSent = FindChildByID(R.id.comp_sent);
 				compSent->SetVisible(m_pInputContext->sbState != SBST_NORMAL,TRUE);
+				SWindow *pSentInput = compSent->FindChildByID(R.id.sent_input);
+				SWindow *pSentLeft = compSent->FindChildByID(R.id.sent_left);
+				SWindow *pSentRight = compSent->FindChildByID(R.id.sent_right);
 				if(m_pInputContext->sbState != SBST_NORMAL)
 				{//
-					SWindow *pSentInput = compSent->FindChildByID(R.id.sent_input);
-					SWindow *pSentLeft = compSent->FindChildByID(R.id.sent_left);
-					SWindow *pSentRight = compSent->FindChildByID(R.id.sent_right);
 					SStringT strInput(m_pInputContext->szInput,m_pInputContext->cInput);
 					pSentInput->SetWindowText(strInput);
 					int nSelLen = int(m_pInputContext->pbySentWord[m_pInputContext->sSentCaret]-m_pInputContext->pbySentWord[0]);
@@ -120,6 +120,12 @@ namespace SOUI
 					pSentLeft->SetWindowText(S_CA2T(strLeft));
 					SStringA strRight((char*)m_pInputContext->pbySentWord[m_pInputContext->sSentCaret],m_pInputContext->sSentLen-nSelLen);
 					pSentRight->SetWindowText(S_CA2T(strRight));
+				}
+				else
+				{
+					pSentInput->SetWindowText(NULL);
+					pSentLeft->SetWindowText(NULL);
+					pSentRight->SetWindowText(NULL);
 				}
 			}
 			
