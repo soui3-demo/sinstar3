@@ -107,6 +107,9 @@
     <PostBuildEvent>
       <Command>copy $(TargetPath) $(SolutionDir)\data\$(TargetFileName)</Command>
     </PostBuildEvent>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(SOUIPATH)/soui-sys-resource</AdditionalIncludeDirectories>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Midl>
@@ -133,6 +136,9 @@
     <PostBuildEvent>
       <Command>copy $(TargetPath) $(SolutionDir)\data\x64\$(TargetFileName)</Command>
     </PostBuildEvent>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(SOUIPATH)/soui-sys-resource</AdditionalIncludeDirectories>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -155,6 +161,9 @@
       <AdditionalDependencies>utilities.lib;soui.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SOUIPATH)\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(SOUIPATH)/soui-sys-resource</AdditionalIncludeDirectories>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Midl>
@@ -180,6 +189,9 @@
       <AdditionalDependencies>utilities.lib;soui.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SOUIPATH)\bin64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(SOUIPATH)/soui-sys-resource</AdditionalIncludeDirectories>
+    </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\iscomm\iscomm.c">
@@ -277,13 +289,71 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="theme_sys_res\sys_xml_editmenu.xml" />
+    <Xml Include="theme_sys_res\sys_xml_msgbox.xml" />
+    <Xml Include="theme_sys_res\sys_xml_skin.xml" />
     <Xml Include="uires\smenu\context.xml" />
+    <Xml Include="uires\uidef\init.xml" />
+    <Xml Include="uires\values\color.xml" />
+    <Xml Include="uires\values\string.xml" />
     <Xml Include="uires\xml\dlg_config.xml" />
     <Xml Include="uires\xml\wnd_composition.xml" />
     <Xml Include="uires\xml\wnd_status_bar.xml" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="theme_sys_res\sys_border.png" />
+    <Image Include="theme_sys_res\sys_btn_close.png" />
+    <Image Include="theme_sys_res\sys_btn_maximize.png" />
+    <Image Include="theme_sys_res\sys_btn_minimize.png" />
+    <Image Include="theme_sys_res\sys_btn_next.png" />
+    <Image Include="theme_sys_res\sys_btn_prev.png" />
+    <Image Include="theme_sys_res\sys_btn_restore.png" />
+    <Image Include="theme_sys_res\sys_btn_spin.png" />
+    <Image Include="theme_sys_res\sys_checkbox.png" />
+    <Image Include="theme_sys_res\sys_dropbtn.png" />
+    <Image Include="theme_sys_res\sys_focus_checkbox.png" />
+    <Image Include="theme_sys_res\sys_focus_radio.png" />
+    <Image Include="theme_sys_res\sys_header.png" />
+    <Image Include="theme_sys_res\sys_icons.png" />
+    <Image Include="theme_sys_res\sys_menu_arrow.png" />
+    <Image Include="theme_sys_res\sys_menu_border.png" />
+    <Image Include="theme_sys_res\sys_menu_check.png" />
+    <Image Include="theme_sys_res\sys_menu_sep.png" />
+    <Image Include="theme_sys_res\sys_menu_skin.png" />
+    <Image Include="theme_sys_res\sys_prog_bar.png" />
+    <Image Include="theme_sys_res\sys_prog_bkgnd.png" />
+    <Image Include="theme_sys_res\sys_radio.png" />
+    <Image Include="theme_sys_res\sys_scrollbar.png" />
+    <Image Include="theme_sys_res\sys_slider_thumb.png" />
+    <Image Include="theme_sys_res\sys_split_horz.png" />
+    <Image Include="theme_sys_res\sys_split_vert.png" />
+    <Image Include="theme_sys_res\sys_tab_page.png" />
+    <Image Include="theme_sys_res\sys_tree_checkbox.png" />
+    <Image Include="theme_sys_res\sys_tree_toggle.png" />
+    <Image Include="theme_sys_res\sys_vert_prog_bar.png" />
+    <Image Include="theme_sys_res\sys_vert_prog_bkgnd.png" />
+    <Image Include="theme_sys_res\sys_wnd_bkgnd.png" />
+    <Image Include="uires\image\btn_extend.png" />
+    <Image Include="uires\image\btn_makeword.png" />
+    <Image Include="uires\image\btn_nextpage.png" />
+    <Image Include="uires\image\btn_prevpage.png" />
+    <Image Include="uires\image\btn_query.png" />
+    <Image Include="uires\image\btn_record_disable.png" />
+    <Image Include="uires\image\btn_record_enable.png" />
+    <Image Include="uires\image\btn_shrink.png" />
+    <Image Include="uires\image\btn_sound_disable.png" />
+    <Image Include="uires\image\btn_sound_enable.png" />
+    <Image Include="uires\image\charmode.png" />
+    <Image Include="uires\image\charmode_full.png" />
+    <Image Include="uires\image\charmode_half.png" />
+    <Image Include="uires\image\composition.png" />
+    <Image Include="uires\image\logo_32.png" />
+    <Image Include="uires\image\sinstar3.ico" />
+    <Image Include="uires\image\status_close.png" />
+    <Image Include="uires\image\status_open.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
