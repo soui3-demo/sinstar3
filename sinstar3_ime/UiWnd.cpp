@@ -176,14 +176,17 @@ LRESULT CUiWnd::OnImeSelect(BOOL bSelect,LPARAM lParam)
 POINT CUiWnd::GetAbsPos(HWND hWnd,DWORD dwStyle,POINT ptCur,RECT rc)
 {
 	POINT pt;
-	if(dwStyle==CFS_DEFAULT)
+	if (dwStyle == CFS_DEFAULT)
 		GetCaretPos(&pt);
-	else if(dwStyle==CFS_EXCLUDE)
-		pt.x=ptCur.x,
-		pt.y=rc.bottom-m_nFontHei+HEI_LINEMARGIN;
+	else if (dwStyle == CFS_EXCLUDE)
+		pt.x = ptCur.x,
+		pt.y = rc.bottom - m_nFontHei + HEI_LINEMARGIN;
+	else if (dwStyle == CFS_RECT)
+		pt.x = rc.left,
+		pt.y = rc.bottom;
 	else
 		pt=ptCur;
-	ClientToScreen(hWnd,&pt);
+	MapWindowPoints(hWnd,NULL,&pt,1);
 	return pt;
 }
 
@@ -257,30 +260,13 @@ LRESULT CUiWnd::OnImeNotify(WPARAM wParam,LPARAM lParam)
 				CCompStrEx *pCompStr=(CCompStrEx*)ImmLockIMCC(lpIMC->hCompStr);
 				if(pCompStr)
 				{
-					POINT pt=GetAbsPos(lpIMC->hWnd,lpIMC->cfCompForm.dwStyle,lpIMC->cfCompForm.ptCurrentPos,lpIMC->cfCompForm.rcArea);
-					if(m_wndComp.m_bValid)
+					if (lpIMC->cfCompForm.ptCurrentPos.x != 0 || lpIMC->cfCompForm.ptCurrentPos.y != 0)
 					{
-						ScreenToClient(lpIMC->hWnd,&pt);
-						m_wndComp.MoveCompWindow(hIMC,pt);
-						RECT rc;
-						m_wndComp.GetLastLineRect(&rc);
-						pt.x=rc.left,pt.y=rc.top;
-					}else
-					{		
-						IMECHARPOSITION charPos={sizeof(charPos),pCompStr->GetTargetPos(),0};
-						COMPOSITIONFORM compForm={0};
-						if(charPos.dwCharPos==-1) charPos.dwCharPos=0;
-						if(ImmRequestMessage(hIMC,IMR_COMPOSITIONWINDOW,(LPARAM)&compForm))
-						{
-							pt=GetAbsPos(lpIMC->hWnd,compForm.dwStyle,compForm.ptCurrentPos,compForm.rcArea);
-						}else if(ImmRequestMessage(hIMC,IMR_QUERYCHARPOSITION,(LPARAM)&charPos))
-						{
-							pt=charPos.pt;
-						} 
+						POINT pt = GetAbsPos(lpIMC->hWnd, lpIMC->cfCompForm.dwStyle&0x0f, lpIMC->cfCompForm.ptCurrentPos, lpIMC->cfCompForm.rcArea);
+						pt.y -= HEI_LINEMARGIN;
+						m_pSinstar3->OnSetCaretPosition(pt,m_nFontHei);
+						SLOGFMTF("IMN_SETCOMPOSITIONWINDOW,pt=(%d,%d),hCompStr=%08x", pt.x, pt.y, lpIMC->hCompStr);
 					}
-					pt.y-=HEI_LINEMARGIN;
-					m_pSinstar3->OnSetCaretPosition(pt,m_nFontHei);
-					SLOGFMTF("IMN_SETCOMPOSITIONWINDOW,pt=(%d,%d)",pt.x,pt.y);
 					ImmUnlockIMCC(lpIMC->hCompStr);
 				}
 				ImmUnlockIMC(hIMC);
@@ -313,7 +299,7 @@ LRESULT CUiWnd::OnImeNotify(WPARAM wParam,LPARAM lParam)
 								pt=charPos.pt;
 							}else
 							{
-								pt=GetAbsPos(lpIMC->hWnd,lpIMC->cfCandForm[0].dwStyle,lpIMC->cfCandForm[0].ptCurrentPos,lpIMC->cfCandForm[0].rcArea);
+								pt=GetAbsPos(lpIMC->hWnd,lpIMC->cfCandForm[0].dwStyle&0x0f,lpIMC->cfCandForm[0].ptCurrentPos,lpIMC->cfCandForm[0].rcArea);
 							}
 						}
 						pt.y-=HEI_LINEMARGIN;
