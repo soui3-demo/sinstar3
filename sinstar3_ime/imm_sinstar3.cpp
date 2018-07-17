@@ -133,14 +133,14 @@ BOOL WINAPI ImeSelect(HIMC hIMC, BOOL fSelect)
 
 BOOL WINAPI ImeSetActiveContext(HIMC hIMC,BOOL fFlag)
 {
-	SLOGFMTF("\nImeSetActiveContext,hIMC=%08X,fFlag=%d!!!!!!!!!!!!!!!!!!!!",hIMC,fFlag);
+	SLOGFMTF("ImeSetActiveContext,hIMC=%08X,fFlag=%d!!!!!!!!!!!!!!!!!!!!",hIMC,fFlag);
  	if(hIMC)
  	{
   		LPINPUTCONTEXT lpIMC=ImmLockIMC(hIMC);
   		if(!lpIMC) return FALSE;
   		
  		CUiWnd **ppUiWnd=(CUiWnd**)ImmLockIMCC(lpIMC->hPrivate);
- 		if(ppUiWnd && ppUiWnd[0] && !IsBadWritePtr(ppUiWnd[0],sizeof(CUiWnd)))
+ 		if(ppUiWnd && ppUiWnd[0] && !IsBadWritePtr(ppUiWnd[0],sizeof(CUiWnd*)))
  		{
  			if(ppUiWnd[0]->m_pSinstar3) ppUiWnd[0]->m_pSinstar3->OnSetFocus(fFlag);
  		}
