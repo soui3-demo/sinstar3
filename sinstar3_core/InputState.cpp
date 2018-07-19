@@ -1875,6 +1875,7 @@ BOOL CInputState::KeyIn_All_Sentence(InputContext * lpCntxtPriv,UINT byInput,
 		KeyIn_Sent_Input(lpCntxtPriv);
 	}else if(byInput==VK_ESCAPE)
 	{
+		ClearContext(CPC_ALL);
 		InputEnd();
 		InputHide(FALSE);
 	}

@@ -27,7 +27,7 @@
         <text size="-1,-2" text="u:" colorText="#ff0000" padding_right="5"/>
         <text size="-1,-2" name="txt_comps" text="umode"/>
       </mutexView>
-      <window size="-1,-2" name="comp_sent" visible="1" layout="hbox" gravity="center">
+      <window size="-1,-2" name="comp_sent" visible="1" layout="hbox" gravity="center" display="0">
         <text size="-1,-1" name="sent_input" colorText="@color/sent_input" />
         <text size="-1,-1" name="sent_left" colorText="@color/sent_left" />
         <text size="-1,-1" name="sent_right" colorText="@color/sent_right" />
@@ -45,7 +45,7 @@
         </window>
         <imgbtn size="-1,-1" display="0" skin="btn_nextpage" name="btn_nextpage"/>
       </mutexView>
-      <mutexView size="-1,-1" layout="hbox" name="cand_english" visible="0">
+      <mutexView size="-1,-1" layout="hbox" name="cand_english" visible="0" >
         <text size="-1,-1" text="ch:" colorText="#ff0000" name="txt_en_header"/>
         <imgbtn size="-1,-1" display="0" skin="btn_prevpage" name="btn_prevpage"/>
         <window size="-1,-1" layout="hbox" name="cand_container">

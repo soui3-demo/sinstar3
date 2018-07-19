@@ -433,6 +433,7 @@ LRESULT CUiWnd::OnDestroy()
 
 BOOL CUiWnd::AttachToIMC(BOOL bAttach)
 {
+	SLOG_INFO("bAttach="<<bAttach);
 	BOOL bRet=FALSE;
 	HIMC hIMC=(HIMC)GetWindowLongPtr(m_hWnd,IMMGWLP_IMC);
 	LPINPUTCONTEXT lpIMC=(LPINPUTCONTEXT)ImmLockIMC(hIMC);
