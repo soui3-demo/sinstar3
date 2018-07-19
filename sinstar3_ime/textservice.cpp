@@ -67,7 +67,7 @@ void CUiWnd::ReplaceSelCompositionW(LPVOID lpImeContext,int nLeft,int nRight,con
 
 	}else
 	{
-		SLOGFMTF("ReplaceSelCompositionW: lock compstr failed");
+		SLOGFMTI("ReplaceSelCompositionW: lock compstr failed");
 	}
 	ImmUnlockIMCC(pCtx->_lpContext->hCompStr);
 #else
@@ -102,10 +102,10 @@ void CUiWnd::UpdateResultAndCompositionStringW(LPVOID lpImeContext,const WCHAR *
 		ImmUnlockIMCC(pCtx->_lpContext->hCompStr);
 	}else
 	{
-		SLOGFMTF("ReplaceSelCompositionW: lock compstr failed");
+		SLOGFMTI("ReplaceSelCompositionW: lock compstr failed");
 	}
 #else
-	SLOGFMTF("not implemented ReplaceSelCompositionA");
+	SLOGFMTI("not implemented ReplaceSelCompositionA");
 #endif//_UNICODE
 }
 

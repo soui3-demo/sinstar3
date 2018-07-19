@@ -126,6 +126,10 @@ CSouiEnv::~CSouiEnv(void)
 {
 	CDataCenter::GetAutoLockerInstance()->GetData().m_defUiDefine=NULL;
 
+	CAutoRefPtr<ILog4zManager> pLogMgr = m_theApp->GetLogManager();
+	if (pLogMgr)
+		pLogMgr->stop();
+
 	delete SNotifyCenter::getSingletonPtr();
 
  	delete m_theApp;

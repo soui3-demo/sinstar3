@@ -165,7 +165,7 @@ LRESULT CUiWnd::OnTimer(WPARAM nEventID)
 
 LRESULT CUiWnd::OnImeSelect(BOOL bSelect,LPARAM lParam)
 {
-	SLOGFMTF("OnImeSelect,bSelect:%d,lParam:%d",bSelect,lParam);
+	SLOGFMTI("OnImeSelect,bSelect:%d,lParam:%d",bSelect,lParam);
 	AttachToIMC(bSelect);
 	OnImeNotify(IMN_SETOPENSTATUS,0);
 	OnImeNotify(IMN_SETCONVERSIONMODE,0);
@@ -189,7 +189,7 @@ POINT CUiWnd::GetAbsPos(HWND hWnd,DWORD dwStyle,POINT ptCur,RECT rc)
 
 LRESULT CUiWnd::OnImeControl(WPARAM wParam,LPARAM lParam)
 {
-	SLOGFMTF("OnImeControl, wParam:%d,lParam:%d",wParam,lParam);
+	SLOGFMTI("OnImeControl, wParam:%d,lParam:%d",wParam,lParam);
 	LPINPUTCONTEXT lpIMC;
 	HIMC hIMC=(HIMC)GetWindowLongPtr(m_hWnd,IMMGWLP_IMC);
 	_ASSERT(hIMC);
@@ -223,12 +223,12 @@ LRESULT CUiWnd::OnImeNotify(WPARAM wParam,LPARAM lParam)
 	case IMN_OPENSTATUSWINDOW:
 		if(m_pSinstar3) m_pSinstar3->OnSetFocus(TRUE);
 		m_wndComp.ShowWindow(m_wndComp.m_bValid ? SW_SHOWNOACTIVATE : SW_HIDE);
-		SLOGFMTF("IMN_OPENSTATUSWINDOW");
+		SLOGFMTI("IMN_OPENSTATUSWINDOW");
 		break;
 	case IMN_CLOSESTATUSWINDOW:
 		if(m_pSinstar3) m_pSinstar3->OnSetFocus(FALSE);
 		if(m_wndComp.m_bValid) m_wndComp.ShowWindow(SW_HIDE);
-		SLOGFMTF("IMN_CLOSESTATUSWINDOW");
+		SLOGFMTI("IMN_CLOSESTATUSWINDOW");
 		break;
 	case IMN_OPENCANDIDATE:
 		OnImeNotify(IMN_SETCOMPOSITIONFONT,0);
@@ -280,7 +280,7 @@ LRESULT CUiWnd::OnImeNotify(WPARAM wParam,LPARAM lParam)
 					}
 					pt.y-=HEI_LINEMARGIN;
 					m_pSinstar3->OnSetCaretPosition(pt,m_nFontHei);
-					SLOGFMTF("IMN_SETCOMPOSITIONWINDOW,pt=(%d,%d)",pt.x,pt.y);
+					SLOGFMTI("IMN_SETCOMPOSITIONWINDOW,pt=(%d,%d)",pt.x,pt.y);
 					ImmUnlockIMCC(lpIMC->hCompStr);
 				}
 				ImmUnlockIMC(hIMC);
@@ -317,7 +317,7 @@ LRESULT CUiWnd::OnImeNotify(WPARAM wParam,LPARAM lParam)
 							}
 						}
 						pt.y-=HEI_LINEMARGIN;
-						SLOGFMTF("IMN_SETCANDIDATEPOS,pt=(%d,%d)",pt.x,pt.y);
+						SLOGFMTI("IMN_SETCANDIDATEPOS,pt=(%d,%d)",pt.x,pt.y);
 						m_pSinstar3->OnSetFocusSegmentPosition(pt,m_nFontHei);
 					}
 					ImmUnlockIMCC(lpIMC->hCompStr);
@@ -373,7 +373,7 @@ LRESULT CUiWnd::OnImeNotify(WPARAM wParam,LPARAM lParam)
 
 LRESULT CUiWnd::OnSetContext(BOOL bActivate,LPARAM lParam)
 {
-	SLOGFMTF("OnSetContext,bActivate:%d",bActivate);
+	SLOGFMTI("OnSetContext,bActivate:%d",bActivate);
 	m_bActivate=bActivate;
 	if(bActivate)
 	{
@@ -382,6 +382,7 @@ LRESULT CUiWnd::OnSetContext(BOOL bActivate,LPARAM lParam)
 	}else
 	{
 		OnImeNotify(IMN_CLOSESTATUSWINDOW,0);
+		AttachToIMC(FALSE);
 	}
 	return 0;
 }
@@ -416,7 +417,7 @@ LRESULT CUiWnd::OnCreate()
 {
 	if(theModule->GetSysInfoFlags() & IME_SYSINFO_WINLOGON) return -1;
 
-	SLOGFMTF("CUiWnd::OnCreate,hWnd:%08x",m_hWnd);
+	SLOGFMTI("CUiWnd::OnCreate,hWnd:%08x",m_hWnd);
 	_InitSinstar3();
 	m_wndComp.Create(WS_EX_TOOLWINDOW|WS_EX_LAYERED|WS_EX_NOACTIVATE,WS_POPUP|WS_DISABLED,m_hWnd,0,theModule->GetModule());
 	PostMessage(WM_IME_NOTIFY,IMN_SETCONVERSIONMODE,0);
@@ -425,9 +426,10 @@ LRESULT CUiWnd::OnCreate()
 
 LRESULT CUiWnd::OnDestroy()
 {
+	SLOGFMTI("CUiWnd::OnDestroy");
+	AttachToIMC(FALSE);
 	_UninitSinstar3();
 	m_wndComp.Destroy();
-	SLOGFMTF("CUiWnd::OnDestroy");
 	return 0;
 }
 

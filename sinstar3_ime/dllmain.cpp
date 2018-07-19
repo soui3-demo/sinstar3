@@ -3,6 +3,7 @@
 #include "uiwnd.h"
 #include <ShlObj.h>
 #include "ImeModule.h"
+#include "ImeMgr.h"
 
 #ifdef ENABLE_VLD
 #include <vld.h>
@@ -57,9 +58,7 @@ STDAPI DllUnregisterServer(void)
 	GetModuleFileName(theModule->GetModule(),szPath,MAX_PATH);
 	TCHAR *p=_tcsrchr(szPath,_T('\\'));
 	
-	//todo:hjx
-	
-	return FALSE;
+	return ImeMgr::RemoveIME(p+1)?S_OK:E_UNEXPECTED;
 }
 
 void GetSystemDir(LPTSTR szPath)
@@ -77,12 +76,6 @@ STDAPI DllRegisterServer(void)
 	GetModuleFileName(theModule->GetModule(),szPath,MAX_PATH);
 	TCHAR szSysDir[MAX_PATH];
 	GetSystemDir(szSysDir);
-	//确保当前IME位于系统目录
-	int nLen = (int)_tcslen(szSysDir);
-	if(_tcsnicmp(szSysDir,szPath,nLen)!=0) 
-	{
-		return E_FAIL;
-	}
 	// register this service's profile with the tsf
 	if (!ImmInstallIME(szPath, PRODUCT_NAME))
 	{

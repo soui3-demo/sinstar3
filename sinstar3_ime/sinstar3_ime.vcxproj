@@ -22,6 +22,7 @@
     <ProjectGuid>{9CD9D0D2-9A72-4EBB-A459-8229E224B02C}</ProjectGuid>
     <RootNamespace>sinstar3_ime</RootNamespace>
     <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -74,6 +75,7 @@
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
+    <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
@@ -135,6 +137,7 @@
       <AssemblyDebug />
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX64</TargetMachine>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Link>
     <PostBuildEvent>
       <Command>copy $(TargetPath) $(SolutionDir)\data\x64\$(TargetFileName)</Command>
@@ -195,6 +198,7 @@
     <ClCompile Include="CompWndInline.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="HotKeyMgr.cpp" />
+    <ClCompile Include="ImeMgr.cpp" />
     <ClCompile Include="ImeModule.cpp" />
     <ClCompile Include="imm_sinstar3.cpp" />
     <ClCompile Include="imm_unimp.cpp" />
@@ -221,6 +225,7 @@
     <ClInclude Include="CompWndInline.h" />
     <ClInclude Include="HotKeyMgr.h" />
     <ClInclude Include="imeContext.h" />
+    <ClInclude Include="ImeMgr.h" />
     <ClInclude Include="ImeModule.h" />
     <ClInclude Include="Imm.h" />
     <ClInclude Include="mem_dc.h" />

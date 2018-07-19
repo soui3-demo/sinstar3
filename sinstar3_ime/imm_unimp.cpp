@@ -10,13 +10,13 @@ DWORD WINAPI ImeConversionList(HIMC hIMC,LPCTSTR lpSource,LPCANDIDATELIST lpCand
 
 BOOL WINAPI ImeDestroy(UINT uForce)
 {	
-	SLOGFMTF("ImeDestroy");
+	SLOGFMTI("ImeDestroy");
 	return FALSE;
 }
 
 LRESULT WINAPI ImeEscape(HIMC hIMC,UINT uSubFunc,LPVOID lpData)
 {
-	SLOGFMTF("ImeEscape");
+	SLOGFMTI("ImeEscape");
 	return 0;
 }
 
