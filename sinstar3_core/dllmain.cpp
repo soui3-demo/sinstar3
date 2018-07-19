@@ -1,6 +1,7 @@
 // dllmain.cpp : 定义 DLL 应用程序的入口点。
 #include "stdafx.h"
 #include "sinstar3_core.h"
+#undef ENABLE_VLD
 #ifdef ENABLE_VLD
 #include <vld.h>
 #endif

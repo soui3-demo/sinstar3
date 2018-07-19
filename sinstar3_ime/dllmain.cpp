@@ -4,6 +4,7 @@
 #include <ShlObj.h>
 #include "ImeModule.h"
 
+#undef ENABLE_VLD
 #ifdef ENABLE_VLD
 #include <vld.h>
 #endif //ENABLE_VLD
