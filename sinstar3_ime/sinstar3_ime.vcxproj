@@ -196,6 +196,7 @@
     <ClCompile Include="CompWndInline.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="HotKeyMgr.cpp" />
+    <ClCompile Include="ImeMgr.cpp" />
     <ClCompile Include="ImeModule.cpp" />
     <ClCompile Include="imm_sinstar3.cpp" />
     <ClCompile Include="imm_unimp.cpp" />
