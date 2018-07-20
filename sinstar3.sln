@@ -1,13 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sinstar3_ime", "sinstar3_ime\sinstar3_ime.vcxproj", "{9CD9D0D2-9A72-4EBB-A459-8229E224B02C}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sinstar3_tsf", "sinstar3_tsf\sinstar3_tsf.vcxproj", "{4893E464-3664-442B-8BFB-6D13679EAB23}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sinstar3_core", "sinstar3_core\sinstar3_core.vcxproj", "{BDAF647A-8421-43D7-B43E-7618BE211BFA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4893E464-3664-442B-8BFB-6D13679EAB23} = {4893E464-3664-442B-8BFB-6D13679EAB23}
+		{9CD9D0D2-9A72-4EBB-A459-8229E224B02C} = {9CD9D0D2-9A72-4EBB-A459-8229E224B02C}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "soui64", "..\soui.git\SOUI\soui64.vcxproj", "{835019FE-2886-39EB-BE73-38CC5FA19CBF}"
 EndProject
@@ -82,5 +86,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {85729839-574D-46E5-B786-0D3D6EA213C5}
 	EndGlobalSection
 EndGlobal

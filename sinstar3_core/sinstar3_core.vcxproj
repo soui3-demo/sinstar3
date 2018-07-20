@@ -89,7 +89,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SOUIPATH)\config;$(SOUIPATH)\components;$(SOUIPATH)\SOUI\include;$(SOUIPATH)\utilities\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;$(SOUIPATH)\config;$(SOUIPATH)\components;$(SOUIPATH)\SOUI\include;$(SOUIPATH)\utilities\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SINSTAR3_CORE_EXPORTS;_CRT_SECURE_NO_WARNINGS;_CRT_NON_CONFORMING_SWPRINTFS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -152,7 +152,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(SOUIPATH)\config;$(SOUIPATH)\components;$(SOUIPATH)\SOUI\include;$(SOUIPATH)\utilities\include;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;$(SOUIPATH)\config;$(SOUIPATH)\components;$(SOUIPATH)\SOUI\include;$(SOUIPATH)\utilities\include;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -180,7 +180,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(SOUIPATH)\config;$(SOUIPATH)\components;$(SOUIPATH)\SOUI\include;$(SOUIPATH)\utilities\include;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;$(SOUIPATH)\config;$(SOUIPATH)\components;$(SOUIPATH)\SOUI\include;$(SOUIPATH)\utilities\include;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -229,6 +229,7 @@
     </ClCompile>
     <ClCompile Include="InputState.cpp" />
     <ClCompile Include="Minidump.cpp" />
+    <ClCompile Include="controls\SFlagView.cpp" />
     <ClCompile Include="Sinstar3Impl.cpp" />
     <ClCompile Include="sinstar3_core.cpp" />
     <ClCompile Include="SouiEnv.cpp" />
@@ -263,6 +264,7 @@
     <ClInclude Include="InputState.h" />
     <ClInclude Include="Minidump.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="controls\SFlagView.h" />
     <ClInclude Include="Sinstar3Impl.h" />
     <ClInclude Include="sinstar3_core.h" />
     <ClInclude Include="SouiEnv.h" />

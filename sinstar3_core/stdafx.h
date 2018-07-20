@@ -57,7 +57,7 @@ using namespace SOUI;
 #include "controls/SStatusBackground.h"
 #include "controls/SMutexView.h"
 #include "controls/SSpellView.h"
-
+#include "controls/SFlagView.h"
 #include "dataCenter/datacenter.h"
 #include "dataCenter/Settings.h"
 
