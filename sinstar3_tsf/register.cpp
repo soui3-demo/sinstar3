@@ -13,8 +13,8 @@
 //
 //////////////////////////////////////////////////////////////////////
 #include "stdafx.h"
-#include "IMEMan.h"
-
+#include <imm.h>
+#pragma comment(lib,"imm32.lib")
 #define CLSID_STRLEN 38  // strlen("{xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx}")
 
 static const TCHAR KInfoKeyPrefix[] = TEXT("CLSID\\");
@@ -26,6 +26,26 @@ static const TCHAR KTextServiceModel[] = TEXT("Apartment");
 #define	SINSTAR3_IME_FILE_NAME	_T("sinstar3_ime.ime")
 
 
+static HKL GetKeyboardLayoutFromFileName(LPCTSTR pszImeName)
+{
+	HKL hRet = 0;
+	int nKL = GetKeyboardLayoutList(0, NULL);
+	HKL *pKLList = new HKL[nKL];
+	TCHAR szName[MAX_PATH];
+	GetKeyboardLayoutList(nKL, pKLList);
+	for (int i = 0; i<nKL; i++)
+	{
+		_tcscpy_s(szName, _T(""));
+		ImmGetIMEFileName(pKLList[i], szName, MAX_PATH);
+		if (_tcsicmp(szName, pszImeName) == 0)
+		{
+			hRet = pKLList[i];
+			break;
+		}
+	}
+	delete[]pKLList;
+	return hRet;
+}
 //+---------------------------------------------------------------------------
 //
 //  RegisterProfiles
@@ -69,7 +89,7 @@ BOOL RegisterProfiles()
 	// 另一方面， 如果系统开启了高级文字服务，用户打开word进行文字编辑，在选择日文输入法时，为了避免系统同时显示我们的ime, tsf两种模式的输入法，
 	// 可以使用SubstituteKeyboardLayout函数来设置，这样就只显示tsf输入法给用户选择了。
 	//
-	HKL hKLBaiduJP=CIMEMan::GetKeyboardLayoutFromFileName( SINSTAR3_IME_FILE_NAME);
+	HKL hKLBaiduJP=GetKeyboardLayoutFromFileName( SINSTAR3_IME_FILE_NAME);
 	if ( hKLBaiduJP)
 	{
 		hr = pInputProcessProfiles->SubstituteKeyboardLayout( c_clsidSinstar3TSF, TEXTSERVICE_LANGID, c_guidProfile, hKLBaiduJP);
