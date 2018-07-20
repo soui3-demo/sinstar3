@@ -24,7 +24,13 @@ typedef struct tagMSGDATA{
 	BYTE	byData[1];	//返回数据起始地址
 }MSGDATA,*PMSGDATA;
 
-	
+typedef struct tagIMEFLAGDATA
+{
+	char * rgba;
+	int    wid;
+	int    hei;
+}IMEFLAGDATA;
+
 typedef struct tagCOMPINFO
 {
 	char szName[50];	//名称
@@ -37,8 +43,7 @@ typedef struct tagCOMPINFO
 	DWORD dwUnused:4;	//服务器使用的标志，对输入法外壳没有意义
 	DWORD dwReserved:28;	//保留,初始化为0
 
-	COLORREF crIconKey;	//编码图标的透明色
-	HBITMAP	hIcon;		//编码图标
+	IMEFLAGDATA * pImeFlagData;
 }COMPINFO,*PCOMPINFO;
 
 typedef struct tagFLMINFO
@@ -113,6 +118,8 @@ typedef struct tagFLMINFO
 #ifdef __cplusplus
 extern "C"{
 #endif//__cplusplus
+
+	void ISComm_FreeImeFlagData(IMEFLAGDATA *pData);
 
 const UINT ISComm_GetCommMsgID();
 BOOL ISComm_GetConfig(LPSTR pszConfig);

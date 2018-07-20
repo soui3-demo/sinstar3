@@ -21,6 +21,12 @@ static UINT		s_uCount=0;			//访问计数
 
 static TCHAR	s_szSvrPath[MAX_PATH]={0};	//服务器路径
 
+void ISComm_FreeImeFlagData(IMEFLAGDATA * pData)
+{
+	if (pData->rgba) free(pData->rgba);
+	free(pData);
+}
+
 const UINT ISComm_GetCommMsgID(){
 	if(s_uMsgID==0) s_uMsgID=RegisterWindowMessage(MSG_NAME_SINSTAR2);
 	return s_uMsgID;
@@ -51,14 +57,15 @@ void ClearComm()
 		s_pDataAck=NULL;
 		s_hMapDataAck=0;
 
-		if(s_CompInfo.hIcon) DeleteObject(s_CompInfo.hIcon);
-		s_CompInfo.hIcon=NULL;
+		if(s_CompInfo.pImeFlagData) ISComm_FreeImeFlagData(s_CompInfo.pImeFlagData);
+		s_CompInfo.pImeFlagData =NULL;
 	}
 }
 
 //从缓冲区中创建一个位图句柄
-HBITMAP Helper_CreateBitmapFromBuffer(LPBYTE pBuffer, DWORD cbSize)
+IMEFLAGDATA * Helper_CreateImeFlagDataFromBuffer(LPBYTE pBuffer, DWORD cbSize,COLORREF crKey)
 {
+	IMEFLAGDATA * pRet = NULL;
 	HBITMAP hBmp=NULL;
 	HDC hdc=NULL;
 	HPALETTE hPal=NULL,hOldPal=NULL;
@@ -116,8 +123,30 @@ HBITMAP Helper_CreateBitmapFromBuffer(LPBYTE pBuffer, DWORD cbSize)
 		SelectObject(hdc,hOldPal);
 		DeleteObject(hPal);
 	}
+	if(hBmp){
+		HDC hmemdc = CreateCompatibleDC(hdc);
+		HGDIOBJ hOldBmp = SelectObject(hmemdc, hBmp);
+		char *p;
+		pRet = (IMEFLAGDATA*)malloc(sizeof(IMEFLAGDATA));
+		pRet->wid = pbmInfo->bmiHeader.biWidth;
+		pRet->hei = pbmInfo->bmiHeader.biHeight;
+		pRet->rgba = p = (char*)malloc(4 * pRet->wid*pRet->hei);
+		for (int i = 0; i < pRet->hei; i++)
+		{
+			for (int j = 0; j < pRet->wid; j++)
+			{
+				COLORREF cr = GetPixel(hmemdc, j, i);
+				memcpy(p, &cr, 3);
+				p[3] = (cr == crKey) ? 0 : 255; //p[3] is alpha, if cr is key color then set it to 0.
+				p += 4;
+			}
+		}
+		SelectObject(hmemdc, hOldBmp);
+		DeleteDC(hmemdc);
+		DeleteObject(hBmp);
+	}
 	ReleaseDC(NULL,hdc);
-	return hBmp;
+	return pRet;
 }
 
 PMSGDATA ISComm_OnSeverNotify(HWND hWnd,WPARAM wParam,LPARAM lParam)
@@ -130,14 +159,15 @@ PMSGDATA ISComm_OnSeverNotify(HWND hWnd,WPARAM wParam,LPARAM lParam)
 	{//广播编码消息
 		LPBYTE pData=s_pDataAck->byData;
 		memcpy(&s_CompInfo,pData,CISIZE_BASE);
-		if(s_CompInfo.hIcon) DeleteObject(s_CompInfo.hIcon);
-		s_CompInfo.hIcon=NULL;
+		if (s_CompInfo.pImeFlagData) ISComm_FreeImeFlagData(s_CompInfo.pImeFlagData);
+		s_CompInfo.pImeFlagData =NULL;
 		if(s_pDataAck->sSize>CISIZE_BASE)
 		{
 			pData+=CISIZE_BASE;
-			memcpy(&s_CompInfo.crIconKey,pData,sizeof(COLORREF));
+			COLORREF crKey = 0;
+			memcpy(&crKey,pData,sizeof(COLORREF));
 			pData+=sizeof(COLORREF);
-			s_CompInfo.hIcon=Helper_CreateBitmapFromBuffer(pData,s_pDataAck->sSize-CISIZE_BASE-sizeof(COLORREF));
+			s_CompInfo.pImeFlagData = Helper_CreateImeFlagDataFromBuffer(pData,s_pDataAck->sSize-CISIZE_BASE-sizeof(COLORREF),crKey);
 		}
 	}else if(wParam==NT_FLMINFO)
 	{//广播的英文库信息

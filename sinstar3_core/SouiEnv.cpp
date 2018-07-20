@@ -54,6 +54,7 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 	m_theApp->RegisterWindowClass<SCaption2>();
 	m_theApp->RegisterWindowClass<SStatusBackground>();
 	m_theApp->RegisterWindowClass<SMutexView>();
+	m_theApp->RegisterWindowClass<SFlagView>();
 
 	CAutoRefPtr<ILog4zManager> pLogMgr;
 	bLoaded = m_pComMgr->CreateLog4z((IObjRef**)&pLogMgr);

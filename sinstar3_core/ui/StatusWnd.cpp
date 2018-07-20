@@ -33,8 +33,7 @@ namespace SOUI
 		if(pt.y + rcWnd.Height()> rcWorkArea.bottom)
 			pt.y = rcWorkArea.bottom - rcWnd.Height();
 
-		FindChildByID(R.id.txt_comp)->SetWindowText(CDataCenter::GetAutoLockerInstance()->GetData().m_compInfo.strCompName);
-
+		UpdateCompInfo();
 		{
 			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_charmode);
 			if(toggle) toggle->SetToggle(g_SettingsL.bCharMode);
@@ -72,7 +71,6 @@ namespace SOUI
 		{//system config
 			CConfigDlg configDlg;
 			configDlg.DoModal();
-			//SMessageBox(NULL,_T("test"), _T("Message box"), MB_OK | MB_ICONSTOP);
 		}
 		m_skinManager.ClearMap();
 	}
@@ -141,6 +139,16 @@ namespace SOUI
 
 	}
 
+	void CStatusWnd::UpdateCompInfo()
+	{
+		FindChildByID(R.id.txt_comp)->SetWindowText(CDataCenter::GetAutoLockerInstance()->GetData().m_compInfo.strCompName);
+		SFlagView * pFlagView = FindChildByID2<SFlagView>(R.id.img_logo);
+		if (pFlagView)
+		{
+			pFlagView->SetImeFlagData(ISComm_GetCompInfo()->pImeFlagData);
+		}
+	}
+
 	void CStatusWnd::OnCompInfo(EventArgs *e)
 	{
 		if(!IsWindow())
@@ -149,7 +157,7 @@ namespace SOUI
 		EventSvrNotify *e2 = sobj_cast<EventSvrNotify>(e);
 		if(e2->wp == NT_COMPINFO)
 		{
-			FindChildByID(R.id.txt_comp)->SetWindowText(CDataCenter::GetAutoLockerInstance()->GetData().m_compInfo.strCompName);
+			UpdateCompInfo();
 		}
 	}
 
