@@ -91,7 +91,7 @@ BOOL InitIMCC(HIMCC & hIMCC,DWORD dwSize)
 
 BOOL WINAPI ImeSelect(HIMC hIMC, BOOL fSelect)
 {
-	SLOGFMTF("\nImeSelect,hIMC=%08X,fSelect=%d",hIMC,fSelect);
+	SLOGFMTI("\nImeSelect,hIMC=%08X,fSelect=%d",hIMC,fSelect);
 	if(fSelect)
 	{
 		LPINPUTCONTEXT lpIMC=ImmLockIMC(hIMC);
@@ -133,7 +133,7 @@ BOOL WINAPI ImeSelect(HIMC hIMC, BOOL fSelect)
 
 BOOL WINAPI ImeSetActiveContext(HIMC hIMC,BOOL fFlag)
 {
-	SLOGFMTF("ImeSetActiveContext,hIMC=%08X,fFlag=%d!!!!!!!!!!!!!!!!!!!!",hIMC,fFlag);
+	SLOGFMTI("ImeSetActiveContext,hIMC=%08X,fFlag=%d!!!!!!!!!!!!!!!!!!!!",hIMC,fFlag);
  	if(hIMC)
  	{
   		LPINPUTCONTEXT lpIMC=ImmLockIMC(hIMC);

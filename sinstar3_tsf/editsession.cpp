@@ -125,7 +125,7 @@ STDMETHODIMP CEsGetTextExtent::DoEditSession(TfEditCookie ec)
 
 		GetLastLineRect( ec, range, nLen, rcLast, TRUE);			
 		_pTextService->m_pSinstar3->OnSetCaretPosition( *(POINT*)&rcLast, rcLast.bottom - rcLast.top);			
-		SLOGFMTF("SetCaret Pos 1:%d,%d, height: %d",rcLast.left,rcLast.top, rcLast.bottom - rcLast.top);
+		SLOGFMTI("SetCaret Pos 1:%d,%d, height: %d",rcLast.left,rcLast.top, rcLast.bottom - rcLast.top);
 	}
 
 	int nSeg=_pTextService->m_pSinstar3->GetCompositionSegments();
@@ -147,11 +147,11 @@ STDMETHODIMP CEsGetTextExtent::DoEditSession(TfEditCookie ec)
 	}
 	if(rc.bottom-rc.top>=1)
 	{//获得有效的候选位置
-		SLOGFMTF("SetCaret Pos 2:%d,%d, height: %d",rc.left, rc.top, rc.bottom - rc.top);
+		SLOGFMTI("SetCaret Pos 2:%d,%d, height: %d",rc.left, rc.top, rc.bottom - rc.top);
 		_pTextService->m_pSinstar3->OnSetFocusSegmentPosition(*(POINT*)&rc,rc.bottom-rc.top);
 	}else if(rc.left==-1 && rc.top==-1)
 	{
-		SLOGFMTF("SetCaret Pos 3:%d,%d, height: %d",rc.left, rc.top, 0);
+		SLOGFMTI("SetCaret Pos 3:%d,%d, height: %d",rc.left, rc.top, 0);
 		_pTextService->m_pSinstar3->OnSetFocusSegmentPosition(*(POINT*)&rc,0);
 	}		
 
@@ -171,7 +171,7 @@ BOOL CEsGetTextExtent::GetLastLineRect(TfEditCookie ec, ITfRange* range, int nLe
 		HRESULT hr = _pContextView->GetTextExt( ec, range, &rc, &fClipped);
 		if ( hr == S_OK)
 		{
-			SLOGFMTF("GetTextExt, 0, %d, %d, %d, %d", rc.left, rc.top, rc.right, rc.bottom);
+			SLOGFMTI("GetTextExt, 0, %d, %d, %d, %d", rc.left, rc.top, rc.right, rc.bottom);
 			rcLast = rc;
 		}
 
@@ -182,7 +182,7 @@ BOOL CEsGetTextExtent::GetLastLineRect(TfEditCookie ec, ITfRange* range, int nLe
 			{
 				if ( _pContextView->GetTextExt( ec, range, &rc, &fClipped) == S_OK)
 				{
-					SLOGFMTF("GetTextExt, %d, %d, %d, %d, %d", i, rc.left, rc.top, rc.right, rc.bottom);
+					SLOGFMTI("GetTextExt, %d, %d, %d, %d, %d", i, rc.left, rc.top, rc.right, rc.bottom);
 
 					if ( rc.bottom > rcLast.bottom)
 					{

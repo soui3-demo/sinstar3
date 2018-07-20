@@ -38,7 +38,7 @@ STDAPI CSinstar3Tsf::OnEndEdit(ITfContext *pContext, TfEditCookie ecReadOnly, IT
 {
     BOOL fSelectionChanged;
     IEnumTfRanges *pEnumTextChanges;
-	SLOGFMTF("ITfTextEditSink::OnEndEdit cookie:%u", ecReadOnly);
+	SLOGFMTI("ITfTextEditSink::OnEndEdit cookie:%u", ecReadOnly);
 
     //
     // did the selection change?

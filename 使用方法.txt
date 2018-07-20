@@ -1,20 +1,5 @@
-1 使用管理员权限打开命令行工具（cmd)
-2 在解压目录下运行install.bat, 这个命令会注册新输入法。
-3 修改svr.reg，默认内容如下：
-
-Windows Registry Editor Version 5.00
-
-[HKEY_LOCAL_MACHINE\SOFTWARE\SetoutSoft\sinstar3]
-"path_client"="d:\\work\\sinstar3.git\\data"
-"path_svr"="d:\\greenSoft\\sinstar2\\server\\isserver.exe"
-"path_svr_data"="d:\\greenSoft\\sinstar2\\server"
-
-path_client指向解压后的data目录。
-path_svr指向启程输入法2.8的server.exe路径。
-path_svr_data指向启程输入法2.8的server目录。
-
-注意路径中的"\"要使用"\\"。
+使用register.exe来安装输入法.
 
 目前这个版本还只是完成了输入法的基本功能，状态栏上的功能都还没有实现。切换皮肤应该是可以的，不过估计也还没有人能搞这个新皮肤。
 
-启程软件 5.23 
+启程软件 7.18

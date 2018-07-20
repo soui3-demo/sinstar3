@@ -18,7 +18,7 @@ STDAPI CSinstar3Tsf::OnTestKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM l
 
 	m_pSinstar3->ProcessKeyStoke(pContext,(UINT)wParam,lParam, TRUE, pfEaten);
 
-	SLOGFMTF("OnTestKeyDown: wParam:%08x,lparam:%08x",wParam,lParam);
+	SLOGFMTI("OnTestKeyDown: wParam:%08x,lparam:%08x",wParam,lParam);
     return S_OK;
 }
 
@@ -39,7 +39,7 @@ STDAPI CSinstar3Tsf::OnTestKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lPa
 STDAPI CSinstar3Tsf::OnKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {
 	HRESULT hr = E_FAIL;
-	SLOGFMTF("OnKeyDown: %x %x", wParam, lParam);
+	SLOGFMTI("OnKeyDown: %x %x", wParam, lParam);
 	_bInKeyProc=TRUE;
 
 	OnTestKeyDown(pContext,wParam,lParam,pfEaten);
@@ -53,7 +53,7 @@ STDAPI CSinstar3Tsf::OnKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM lPara
 
 STDAPI CSinstar3Tsf::OnKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {
-	SLOGFMTF("OnKeyUp: %x %x", wParam, lParam);
+	SLOGFMTI("OnKeyUp: %x %x", wParam, lParam);
 	_bInKeyProc=TRUE;
 	OnTestKeyUp(pContext,wParam,lParam,pfEaten);
 	if(*pfEaten)
@@ -67,7 +67,7 @@ STDAPI CSinstar3Tsf::OnKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lParam,
 
 STDAPI CSinstar3Tsf::OnPreservedKey(ITfContext *pic, REFGUID rguid, BOOL *pfEaten)
 {
-	SLOGFMTF("OnPreservedKey");
+	SLOGFMTI("OnPreservedKey");
 	*pfEaten=m_pSinstar3->OnHotkey(pic,rguid);
 	return S_OK;
 }
