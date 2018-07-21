@@ -145,7 +145,7 @@ CSinstar3Tsf::~CSinstar3Tsf()
 
 STDAPI CSinstar3Tsf::Activate(ITfThreadMgr *pThreadMgr, TfClientId tfClientId)
 {
-	SLOGFMTI("Activate %x %x", pThreadMgr, tfClientId);
+	SLOGFMTI("Activate %p %d", pThreadMgr, (int)tfClientId);
 
 	SHORT sSt=GetKeyState(VK_KANA);
 	if(GetKeyState(VK_KANA)&0x01)

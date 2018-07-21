@@ -354,7 +354,7 @@ CEsUpdateResultAndComp::CEsUpdateResultAndComp(CSinstar3Tsf *pTextService,
 {
 	if(pszResultStr)
 	{
-		if(nResStrLen==-1) nResStrLen=wcslen(pszResultStr);
+		if(nResStrLen==-1) nResStrLen= (int)wcslen(pszResultStr);
 		m_nResStrLen=nResStrLen;
 		m_pszResultStr=new WCHAR[m_nResStrLen];
 		wcsncpy(m_pszResultStr,pszResultStr,m_nResStrLen);
@@ -365,7 +365,7 @@ CEsUpdateResultAndComp::CEsUpdateResultAndComp(CSinstar3Tsf *pTextService,
 	}
 	if(pszCompStr)
 	{
-		if(nCompStrLen==-1) nCompStrLen=wcslen(pszCompStr);
+		if(nCompStrLen==-1) nCompStrLen=(int)wcslen(pszCompStr);
 		m_nCompStrLen=nCompStrLen;
 		m_pszCompStr=new WCHAR[m_nCompStrLen];
 		wcsncpy(m_pszCompStr,pszCompStr,m_nCompStrLen);

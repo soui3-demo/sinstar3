@@ -289,7 +289,7 @@ BOOL RegisterServer()
     if (fRet = RegCreateKeyEx(HKEY_CLASSES_ROOT, achIMEKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey, &dw)
             == ERROR_SUCCESS)
     {
-        fRet &= RegSetValueEx(hKey, NULL, 0, REG_SZ, (BYTE *)PRODUCT_NAME, (_tcslen(PRODUCT_NAME)+1)*sizeof(TCHAR))
+        fRet &= RegSetValueEx(hKey, NULL, 0, REG_SZ, (BYTE *)PRODUCT_NAME, (int)(_tcslen(PRODUCT_NAME)+1)*sizeof(TCHAR))
             == ERROR_SUCCESS;
 
         if (fRet &= RegCreateKeyEx(hKey, KInProcSvr32, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hSubKey, &dw)
@@ -298,7 +298,7 @@ BOOL RegisterServer()
             dw = GetModuleFileName(theModule->GetModule(), achFileName, ARRAYSIZE(achFileName));
 
             fRet &= RegSetValueEx(hSubKey, NULL, 0, REG_SZ, (BYTE *)achFileName, (lstrlen(achFileName)+1)*sizeof(TCHAR)) == ERROR_SUCCESS;
-            fRet &= RegSetValueEx(hSubKey, KModelName, 0, REG_SZ, (BYTE *)KTextServiceModel, (_tcslen(KTextServiceModel)+1)*sizeof(TCHAR)) == ERROR_SUCCESS;
+            fRet &= RegSetValueEx(hSubKey, KModelName, 0, REG_SZ, (BYTE *)KTextServiceModel, (int)(_tcslen(KTextServiceModel)+1)*sizeof(TCHAR)) == ERROR_SUCCESS;
             RegCloseKey(hSubKey);
         }
         RegCloseKey(hKey);

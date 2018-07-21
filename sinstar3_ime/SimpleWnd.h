@@ -7,7 +7,7 @@ public:
 	CSimpleWnd(void);
 	virtual ~CSimpleWnd(void);
 
-	HWND Create(DWORD dwExStyle,DWORD dwStyle,HWND hParent,UINT uID,HINSTANCE hInst);
+	HWND Create(DWORD dwExStyle,DWORD dwStyle,HWND hParent,UINT_PTR uID,HINSTANCE hInst);
 	BOOL Destroy();
 	LRESULT SendMessage(UINT uMsg,WPARAM wp,LPARAM lp){return ::SendMessage(m_hWnd,uMsg,wp,lp);}
 	BOOL PostMessage(UINT uMsg,WPARAM wp,LPARAM lp){return ::PostMessage(m_hWnd,uMsg,wp,lp);}

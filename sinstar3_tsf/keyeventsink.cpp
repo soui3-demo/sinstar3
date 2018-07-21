@@ -18,7 +18,7 @@ STDAPI CSinstar3Tsf::OnTestKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM l
 
 	m_pSinstar3->ProcessKeyStoke(pContext,(UINT)wParam,lParam, TRUE, pfEaten);
 
-	SLOGFMTI("OnTestKeyDown: wParam:%08x,lparam:%08x",wParam,lParam);
+	SLOGFMTI("OnTestKeyDown: wParam:%08x,lparam:%08x",(DWORD)wParam, (DWORD)lParam);
     return S_OK;
 }
 
@@ -39,7 +39,7 @@ STDAPI CSinstar3Tsf::OnTestKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lPa
 STDAPI CSinstar3Tsf::OnKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {
 	HRESULT hr = E_FAIL;
-	SLOGFMTI("OnKeyDown: %x %x", wParam, lParam);
+	SLOGFMTI("OnKeyDown: %08x %08x", (DWORD)wParam, (DWORD)lParam);
 	_bInKeyProc=TRUE;
 
 	OnTestKeyDown(pContext,wParam,lParam,pfEaten);
@@ -53,7 +53,7 @@ STDAPI CSinstar3Tsf::OnKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM lPara
 
 STDAPI CSinstar3Tsf::OnKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {
-	SLOGFMTI("OnKeyUp: %x %x", wParam, lParam);
+	SLOGFMTI("OnKeyUp: %08x %08x", (DWORD)wParam, (DWORD)lParam);
 	_bInKeyProc=TRUE;
 	OnTestKeyUp(pContext,wParam,lParam,pfEaten);
 	if(*pfEaten)
