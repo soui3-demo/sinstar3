@@ -62,6 +62,9 @@ namespace SOUI
 		ClientToScreen(&pt);
 		m_skinManager.ClearMap();
 		SLOG_INFO("before trackpopupmenu");
+		SMenuEx *subMenu = menu.GetSubMenu(200);
+		SASSERT(subMenu);
+		OnInitMenuPopup(subMenu, CMD_MENU_DEF);
 		int nRet = menu.TrackPopupMenu(TPM_LEFTALIGN|TPM_BOTTOMALIGN|TPM_RETURNCMD,pt.x,pt.y,GetActiveWindow());
 		SLOG_INFO("after trackpopupmenu"<<" nRet:"<<nRet);
 		if(nRet>=CMD_MENU_DEF && nRet <=CMD_MENU_DEF+100)
@@ -73,6 +76,18 @@ namespace SOUI
 			configDlg.DoModal();
 		}
 		m_skinManager.ClearMap();
+	}
+
+	void CStatusWnd::OnInitMenuPopup(SMenuEx* menuPopup, UINT nIndex)
+	{
+		SMenuExItem *pdefSkin=menuPopup->GetMenuItem(CMD_MENU_DEF);
+		SStringT strCurSkin = CDataCenter::getSingletonPtr()->GetData().m_strSkin;
+		if (strCurSkin.IsEmpty())
+		{				
+			pdefSkin->SetCheck(TRUE);
+		}
+		m_skinManager.InitSkinMenu(menuPopup, theModule->GetDataPath() + _T("\\skins"), CMD_MENU_DEF, strCurSkin);
+		
 	}
 
 	void CStatusWnd::OnInitMenuPopup(HMENU menuPopup, UINT nIndex, BOOL bSysMenu)

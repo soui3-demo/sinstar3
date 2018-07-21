@@ -55,6 +55,48 @@ int CSkinMananger::InitSkinMenu(HMENU hMenu, const SStringT &strSkinPath,int nSt
 }
 
 
+int CSkinMananger::InitSkinMenu(SMenuEx *hMenu, const SStringT &strSkinPath, int nStartId, const SStringT &strCurSkin)
+{
+	WIN32_FIND_DATA findData;
+	HANDLE hFind = FindFirstFile(strSkinPath + _T("\\*.*"), &findData);
+	if (hFind != INVALID_HANDLE_VALUE)
+	{		
+		do {
+			if (findData.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY)
+			{
+				if (_tcscmp(findData.cFileName, _T(".")) != 0 && _tcscmp(findData.cFileName, _T("..")) != 0)
+				{					
+					if (hMenu->InsertMenu(CMD_MENU_DEF, MF_POPUP| MF_BYCOMMAND, ++nStartId, findData.cFileName))
+					{
+						nStartId = InitSkinMenu(hMenu->GetSubMenu(nStartId), strSkinPath + _T("\\") + findData.cFileName, nStartId, strCurSkin);
+					}
+				}
+			}
+			else
+			{
+				TCHAR szExt[100];
+				_tsplitpath(findData.cFileName, NULL, NULL, NULL, szExt);
+				if (_tcsicmp(szExt, _T(".sskn")) == 0)
+				{
+					nStartId++;
+					SStringT strFullPath = strSkinPath + _T("\\") + findData.cFileName;
+					m_mapSkin[nStartId] = strFullPath;
+					SStringT strDesc = ExtractSkinInfo(strFullPath);
+
+					BOOL bInsertSucess=hMenu->InsertMenu(0, MF_BYPOSITION, nStartId, strDesc);
+					
+					if (bInsertSucess&&(strFullPath == strCurSkin))
+					{
+						hMenu->GetMenuItem(nStartId)->SetCheck(TRUE);
+					}
+				}
+			}
+		} while (FindNextFile(hFind, &findData));
+		FindClose(hFind);
+	}
+	return nStartId;
+}
+
 BOOL CSkinMananger::SetSkin(int nSkinId)
 {
 	SStringT strSkinPath;

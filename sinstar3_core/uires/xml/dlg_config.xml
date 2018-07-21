@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <SOUI
   name="wnd_composition"
   width="500"
@@ -10,6 +10,10 @@
   <style>
     <class name="cls_radio" padding="5,5,5,5" extend_top="5" extend_bottom="5"/>
   </style>
+  <skin>
+    <lineskin name="nav_config_tab" line_wid="0,0,2,1" right_pushdown="#568c8f" right_hover="#ebebeb" bottom_normal="#f5f6f6" bottom_hover="#f5f6f6" bottom_pushdown="#f5f6f6"/>
+    <scrollbar name="skin.scrollbar"  src="IMG:SYS_SCROLLBAR" margin="5" hasgripper="0"/>    
+  </skin>
   <root colorBkgnd="#cccccc">
     <window pos="1,1,-1,-1" colorBkgnd="@color/configborder">
     <caption size="-2,-1" layout="hbox">
