@@ -2,12 +2,11 @@
 <UIDEF>
   <desc author="setoutsoft" name="haha" version="1.0"/>
   
-  <font face="宋体" size="15"/>
+  <font face="微软雅黑" size="15"/>
 
   <string src="values:string" />
   <skin src="values:skin"/>
   <color src="values:color"/>
-
 
   <style>
     <class name="normalbtn" font="" colorText="#385e8b" colorTextDisable="#91a7c0" textMode="0x25" cursor="hand" margin-x="0"/>

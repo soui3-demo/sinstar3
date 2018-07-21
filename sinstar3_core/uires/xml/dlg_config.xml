@@ -6,12 +6,10 @@
   resizable="0"
   wndType="normal"
   translucent="1"
-  sendWheel2Hover="1"
->
+  sendWheel2Hover="1">
   <style>
     <class name="cls_radio" padding="5,5,5,5" extend_top="5" extend_bottom="5"/>
   </style>
-
   <root colorBkgnd="#cccccc">
     <window pos="1,1,-1,-1" colorBkgnd="@color/configborder">
     <caption size="-2,-1" layout="hbox">
@@ -19,7 +17,7 @@
       <window size="0,0" weight="1" visible="0"/>
       <imgbtn size="-1,-1" skin="_skin.sys.btn.close" name="btn_close" id="2" animate="1" tip="@string/btn_close"/>
     </caption>
-    <tabctrlex pos="0,30"  size="-2, -2"  tabInterSize="0" tabWidth="88" tabskin="nav_config_tab"  colorBkgnd="@color/white" tabHeight="30" drawFocusRect="0" show="1" curSel="0">
+    <tabctrlex pos="0,30" text-x="22" align="left" size="-2, -2"  tabInterSize="0" tabWidth="100" tabskin="nav_config_tab"  colorBkgnd="@color/white" tabHeight="30" drawFocusRect="0" show="1" curSel="0">
       <socrollviewStyle sbArrowSize="0" sbSkin="skin.scrollbar" updateInterval="0"/>
       <pages>
         <pageex title="@string/cfg_habit" tip="@string/cfg_habit">
@@ -45,9 +43,9 @@
             </window>
             <text extend_top="10">临时拼音开关:</text>
             <window extend_top="10" layout="hbox">
-              <radio text="左Ctrl" id="100" name="py_switch_left_ctrl"/>
-              <radio text="右Ctrl" id="101" name="py_switch_right_ctrl"/>
-              <radio text="禁用" id="102" name="py_switch_disabled"/>
+              <radio text="左Ctrl" id="120" name="py_switch_left_ctrl"/>
+              <radio text="右Ctrl" id="121" name="py_switch_right_ctrl"/>
+              <radio text="禁用" id="122" name="py_switch_disabled"/>
             </window>
             <check extend_top="10" text="重码自动上屏" pos="58,[5" name="cand_auto_input"/>
             <check extend_top="10" text="拼音重码词组优先" pos="58,[5" name="cand_py_phrase_first"/>
@@ -66,6 +64,10 @@
               <hotkey name="hk_show_table" width="100dp"/>
               <text text="编码查询"/>
               <hotkey name="hk_show_comp" width="100dp"/>
+              <text text="隐藏状态栏"/>
+              <hotkey name="hk_show_statusbar" width="100dp"/>
+              <text text="输入英文"/>
+              <hotkey name="hk_input_en" width="100dp"/>
             </window>
           </window>
         </pageex>
@@ -121,16 +123,10 @@
             </window>
             <text extend_top="10">GBK重码</text>
             <window extend_top="10" layout="vbox">
-              <radio name="gbk_show_only" id="700" extend_top="10" text="显示唯一重码"/>
-              <radio name="gbk_show_manual" id="701" extend_top="10" text="显示手动上屏"/>
-              <radio name="gbk_show_as_gb" id="702" extend_top="10" text="显示自动上屏"/>
-            </window>
-            <window extend_top="10" layout="hbox">
-              <text text="一屏重码数:"/>
-              <edit name="edit_cand_number" text="5" width="100dp">
-                <spin pos="-0,0" size="16,22" offset="-1,0" buddy="edit_cand_number" min="1" max="10" />
-              </edit>
-            </window>
+              <radio name="gbk_show_only" id="700" text="显示唯一重码"/>
+              <radio name="gbk_show_manual" id="701" text="显示手动上屏"/>
+              <radio name="gbk_show_as_gb" id="702" text="显示自动上屏"/>
+            </window>            
             <check extend_top="10" name="chk_full_skip_simple" text="出简不出全"/>
           </window>
         </pageex>
