@@ -25,7 +25,7 @@ namespace SOUI
 		CRect rcWorkArea;
 		SystemParametersInfo(SPI_GETWORKAREA,0,&rcWorkArea,0);
 
-		CPoint pt =CDataCenter::GetAutoLockerInstance()->GetData().m_ptStatus;
+		CPoint pt =CDataCenter::getSingletonPtr()->GetData().m_ptStatus;
 		if(pt.x<0) pt.x = 0;
 		if(pt.y<0) pt.y = 0;
 		if(pt.x + rcWnd.Width() > rcWorkArea.right)
@@ -79,7 +79,7 @@ namespace SOUI
 	{
 		if(GetMenuContextHelpId(menuPopup)==2)
 		{
-			SStringT strCurSkin = CDataCenter::GetAutoLockerInstance()->GetData().m_strSkin;
+			SStringT strCurSkin = CDataCenter::getSingletonPtr()->GetData().m_strSkin;
 			if(strCurSkin.IsEmpty())
 			{
 				CheckMenuItem(menuPopup,CMD_MENU_DEF,MF_CHECKED|MF_BYCOMMAND);
@@ -105,7 +105,7 @@ namespace SOUI
 		if(rcWorkArea.bottom-pt.y-rcWnd.Height()<SIZE_MAGNETIC) pt.y=rcWorkArea.bottom-rcWnd.Height();
 		SetWindowPos(NULL,pt.x,pt.y,0,0,SWP_NOSIZE|SWP_NOZORDER|SWP_NOACTIVATE);
 
-		CDataCenter::GetAutoLockerInstance()->GetData().m_ptStatus = pt;
+		CDataCenter::getSingletonPtr()->GetData().m_ptStatus = pt;
 	}
 
 	void CStatusWnd::OnSetSkin(EventArgs *e)
@@ -141,7 +141,7 @@ namespace SOUI
 
 	void CStatusWnd::UpdateCompInfo()
 	{
-		FindChildByID(R.id.txt_comp)->SetWindowText(CDataCenter::GetAutoLockerInstance()->GetData().m_compInfo.strCompName);
+		FindChildByID(R.id.txt_comp)->SetWindowText(CDataCenter::getSingletonPtr()->GetData().m_compInfo.strCompName);
 		SFlagView * pFlagView = FindChildByID2<SFlagView>(R.id.img_logo);
 		if (pFlagView)
 		{
@@ -190,4 +190,43 @@ namespace SOUI
 
 	}
 
+	void CStatusWnd::OnBtnMakeWord()
+	{
+		MakeWordFromClipboard();
+	}
+
+	void CStatusWnd::MakeWordFromClipboard()
+	{
+		if (OpenClipboard(m_hWnd))
+		{
+			HGLOBAL hglb = GetClipboardData(CF_TEXT);
+			if (hglb)
+			{
+				LPSTR lpstr = (char *)GlobalLock(hglb);
+				if (lpstr)
+				{
+					char szBuf[200];
+					int len = strlen(lpstr);
+					if (len < 127 && ISComm_MakePhrase(lpstr, (char)len) == ISACK_SUCCESS)
+					{
+						PMSGDATA pMsg = ISComm_GetData();
+						if (pMsg->byData[0] == 1)
+							sprintf(szBuf, "词\"%s\"已经存在", lpstr);
+						else
+							sprintf(szBuf, "词\"%s\"加入词库", lpstr);
+					}
+					else
+					{
+						sprintf(szBuf, "造词\"%s\"失败", lpstr);
+					}
+					SStringT msg = S_CA2T(szBuf);
+					//SendMessage(g_hWndMsg, TTM_SETTOOLINFO, 0, (LPARAM)(LPCTSTR)msg);
+				}
+				GlobalUnlock(hglb);
+			}
+			CloseClipboard();
+		}
+	}
+
 }
+

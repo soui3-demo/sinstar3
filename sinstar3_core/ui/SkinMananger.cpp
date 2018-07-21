@@ -62,7 +62,7 @@ BOOL CSkinMananger::SetSkin(int nSkinId)
 	{
 		strSkinPath = p->m_value;
 	}
-	if(strSkinPath == CDataCenter::GetAutoLockerInstance()->GetData().m_strSkin)
+	if(strSkinPath == CDataCenter::getSingletonPtr()->GetData().m_strSkin)
 	{
 		return TRUE;
 	}
@@ -83,7 +83,7 @@ BOOL CSkinMananger::SetSkin(int nSkinId)
 			return FALSE;
 		}
 
-		if(!CDataCenter::GetAutoLockerInstance()->GetData().m_strSkin.IsEmpty())
+		if(!CDataCenter::getSingletonPtr()->GetData().m_strSkin.IsEmpty())
 		{//清除正在使用的外置皮肤。
 			IResProvider *pLastRes = SApplication::getSingleton().GetTailResProvider();
 			SApplication::getSingleton().RemoveResProvider(pLastRes);
@@ -96,7 +96,7 @@ BOOL CSkinMananger::SetSkin(int nSkinId)
 		SUiDef::getSingleton().SetUiDef(pUiDef);
 		pUiDef->Release();
 
-	}else if(!CDataCenter::GetAutoLockerInstance()->GetData().m_strSkin.IsEmpty())
+	}else if(!CDataCenter::getSingletonPtr()->GetData().m_strSkin.IsEmpty())
 	{//清除正在使用的外置皮肤。
 		IResProvider *pLastRes = SApplication::getSingleton().GetTailResProvider();
 		SApplication::getSingleton().RemoveResProvider(pLastRes);
@@ -105,7 +105,7 @@ BOOL CSkinMananger::SetSkin(int nSkinId)
 		SStylePoolMgr::getSingleton().PopStylePool(pUiDefInfo->GetStylePool());
 	}
 
-	CDataCenter::GetAutoLockerInstance()->GetData().m_strSkin = strSkinPath;
+	CDataCenter::getSingletonPtr()->GetData().m_strSkin = strSkinPath;
 
 	//notify skin changed
 	EventSetSkin *pEvt = new EventSetSkin(this);

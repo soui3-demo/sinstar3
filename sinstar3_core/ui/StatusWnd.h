@@ -34,7 +34,7 @@ namespace SOUI
 
 		void OnBtnExtend();
 		void OnBtnShrink();
-
+		void OnBtnMakeWord();
 		void OnSwitchCharMode(EventArgs *e);
 		void OnSwitchRecord(EventArgs *e);
 		void OnSwitchSound(EventArgs *e);
@@ -44,12 +44,14 @@ namespace SOUI
 			EVENT_HANDLER(EventSvrNotify::EventID, OnCompInfo)
 			EVENT_ID_COMMAND(R.id.btn_status_shrink, OnBtnShrink)
 			EVENT_ID_COMMAND(R.id.btn_status_extend, OnBtnExtend)
+			EVENT_ID_COMMAND(R.id.btn_makeword, OnBtnMakeWord)
 			EVENT_ID_HANDLER(R.id.btn_charmode, EventCmd::EventID, OnSwitchCharMode)
 			EVENT_ID_HANDLER(R.id.btn_record, EventCmd::EventID, OnSwitchRecord)
 			EVENT_ID_HANDLER(R.id.btn_sound, EventCmd::EventID, OnSwitchSound)
-			EVENT_MAP_END()
+		EVENT_MAP_END()
 
-			void UpdateCompInfo();
+		void UpdateCompInfo();
+		void MakeWordFromClipboard();
 	protected:
 		SStatusBackground * m_pBackGround;
 		CSkinMananger  m_skinManager;

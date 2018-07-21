@@ -147,7 +147,7 @@ namespace SOUI
 
 				SWindow * pCand = pCandContainer->GetWindow(GSW_FIRSTCHILD);
 				int iCand = iBegin;
-				TCHAR cWild = m_pInputContext->compMode == IM_SHAPECODE ? (CDataCenter::GetAutoLockerInstance()->GetData().m_compInfo.cWild):0;
+				TCHAR cWild = m_pInputContext->compMode == IM_SHAPECODE ? (CDataCenter::getSingletonPtr()->GetData().m_compInfo.cWild):0;
 				while(pCand && iCand<iEnd)
 				{
 					if(pCand->IsClass(SCandView::GetClassName()))

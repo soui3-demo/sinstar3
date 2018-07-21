@@ -344,7 +344,7 @@ void CInputState::InputResult(const SStringT &strResult,BYTE byAstMask)
 		SStringA strResultA = S_CT2A(strResult);
 		KeyIn_InputAndAssociate(&m_ctx,strResultA,(short)strResultA.GetLength(),byAstMask);
 	}
-	CDataCenter::GetAutoLockerInstance()->GetData().m_cInputCount+=strResult.GetLength();
+	CDataCenter::getSingletonPtr()->GetData().m_cInputCount+=strResult.GetLength();
 }
 
 void CInputState::InputResult(const SStringA &strResult,BYTE byAstMask)
@@ -1573,12 +1573,12 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 {
 	BOOL bRet=FALSE;
 	BOOL bCompChar=FALSE;
-	if(byInput==CDataCenter::GetAutoLockerInstance()->GetData().m_compInfo.cWild)
+	if(byInput==CDataCenter::getSingletonPtr()->GetData().m_compInfo.cWild)
 	{
 		bCompChar=TRUE;
 	}else
 	{
-		bCompChar = CDataCenter::GetAutoLockerInstance()->GetData().m_compInfo.IsCompChar(byInput);
+		bCompChar = CDataCenter::getSingletonPtr()->GetData().m_compInfo.IsCompChar(byInput);
 	}
 	if(bCompChar)
 	{
