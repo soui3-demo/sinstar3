@@ -1,6 +1,6 @@
 #include "StdAfx.h"
 #include "ConfigDlg.h"
-
+#pragma warning(disable:4244)
 namespace SOUI
 {
 	CConfigDlg::CConfigDlg(void) :SHostDialog(UIRES.LAYOUT.dlg_config)
