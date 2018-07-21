@@ -26,11 +26,6 @@ namespace SOUI
 		LeaveCriticalSection(&m_cs);
 	}
 
-	CDataCenter::AutoLocker CDataCenter::GetAutoLockerInstance()
-	{
-		return AutoLocker(getSingletonPtr());
-	}
-
 	CMyData::CMyData()
 	{
 		m_reg.Create(HKEY_CURRENT_USER,L"Software\\Setoutsoft\\sinstar3",NULL,REG_OPTION_NON_VOLATILE,KEY_WRITE|KEY_READ|KEY_WOW64_64KEY,0,NULL);
