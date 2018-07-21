@@ -3,13 +3,15 @@
 #include "ImeWnd.h"
 #include "SkinMananger.h"
 
+interface ICmdListener;
+
 namespace SOUI
 {
 	class CStatusWnd :
 		public CImeWnd
 	{
 	public:
-		CStatusWnd(void);
+		CStatusWnd(ICmdListener *pListener);
 		~CStatusWnd(void);
 
 	protected:
@@ -51,10 +53,10 @@ namespace SOUI
 		EVENT_MAP_END()
 
 		void UpdateCompInfo();
-		void MakeWordFromClipboard();
 	protected:
 		SStatusBackground * m_pBackGround;
-		CSkinMananger  m_skinManager;
+		CSkinMananger       m_skinManager;
+		ICmdListener     *  m_pCmdListener;
 	};
 
 }

@@ -239,6 +239,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="ui\STipWnd.cpp" />
     <ClCompile Include="ui\ConfigDlg.cpp" />
     <ClCompile Include="ui\ImeWnd.cpp" />
     <ClCompile Include="ui\InputWnd.cpp" />
@@ -272,6 +273,7 @@
     <ClInclude Include="sinstar3_core.h" />
     <ClInclude Include="SouiEnv.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="ui\STipWnd.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="ui\ConfigDlg.h" />
     <ClInclude Include="ui\ImeWnd.h" />
@@ -318,6 +320,7 @@
     <Xml Include="uires\xml\wnd_status_bar.xml">
       <SubType>Designer</SubType>
     </Xml>
+    <Xml Include="uires\xml\wnd_tip.xml" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

@@ -24,19 +24,23 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr)
 :m_pTxtSvr(pTxtSvr)
 ,m_pInputWnd(NULL)
 ,m_pStatusWnd(NULL)
+,m_pTipWnd(NULL)
 ,m_pCurImeContext(NULL)
 {
 	theModule->AddRef();
 
  	m_pInputWnd = new CInputWnd(m_inputState.GetInputContext());
-	m_pStatusWnd = new CStatusWnd();
+	m_pStatusWnd = new CStatusWnd(this);
+	m_pTipWnd = new STipWnd();
 	m_pStatusWnd->Create(_T("Sinstar3_Status"));
 	m_pInputWnd->Create(_T("Sinstar3_Input"));
-
+	m_pTipWnd->Create(_T("sinstar3_tip"));
+	m_cmdHandler.SetTipWnd(m_pTipWnd);
 	m_inputState.SetInputListener(this);
 
 	SLOG_INFO("status:"<<m_pStatusWnd->m_hWnd<<", input:"<<m_pInputWnd->m_hWnd);
 	SOUI::CSimpleWnd::Create(_T("sinstar3_msg_recv"),WS_DISABLED|WS_POPUP,WS_EX_TOOLWINDOW,0,0,0,0,HWND_MESSAGE,NULL);
+
 	ISComm_Login(m_hWnd);
 }
 
@@ -47,9 +51,10 @@ CSinstar3Impl::~CSinstar3Impl(void)
 
 	m_pInputWnd->DestroyWindow();
 	m_pStatusWnd->DestroyWindow();
+	m_pTipWnd->DestroyWindow();
 	delete m_pStatusWnd;
 	delete m_pInputWnd;
-
+	delete m_pTipWnd;
 
 	theModule->Release();
 }
@@ -294,6 +299,11 @@ BOOL CSinstar3Impl::GetOpenStatus() const
 {
 	SASSERT(m_pCurImeContext);
 	return m_pTxtSvr->GetOpenStatus(m_pCurImeContext);
+}
+
+void CSinstar3Impl::OnCommand(WORD cmd, LPARAM lp)
+{
+	SendMessage(WM_COMMAND, MAKELONG(0,cmd), lp);
 }
 
 

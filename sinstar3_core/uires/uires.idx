@@ -6,6 +6,7 @@
     <file name="wnd_composition" path="xml\wnd_composition.xml"/>
     <file name="wnd_status_bar" path="xml\wnd_status_bar.xml"/>
     <file name="dlg_config" path="xml\dlg_config.xml"/>
+    <file name="wnd_tip" path="xml\wnd_tip.xml"/>
   </LAYOUT>
 
   <values>

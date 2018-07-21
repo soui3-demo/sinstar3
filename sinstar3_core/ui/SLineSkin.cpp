@@ -34,7 +34,7 @@ void SLineSkin::_Draw(IRenderTarget * pRT, LPCRECT prcDraw, DWORD dwState, BYTE 
 		pRT->CreatePen(PS_SOLID,cr.toCOLORREF(), m_szLine[i].toPixelSize(m_scale),&pen);
 		pRT->SelectObject(pen, (IRenderObj**)&oldpen);
 		POINT point[2];
-		int halflinewid = m_szLine[i].toPixelSize(m_scale) / 2 + 0.5;
+		int halflinewid = (int)(m_szLine[i].toPixelSize(m_scale) / 2 + 0.5);
 		switch (i)
 		{
 		case 0:

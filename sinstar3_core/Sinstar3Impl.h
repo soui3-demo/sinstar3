@@ -3,6 +3,7 @@
 
 #include "ui/InputWnd.h"
 #include "ui/StatusWnd.h"
+#include "ui/STipWnd.h"
 
 #include "InputState.h"
 #include "CmdHandler.h"
@@ -42,7 +43,7 @@ public:
 	virtual HRESULT OnQueryInterface(REFIID riid, void **ppvObject);
 
 	virtual int GetID() const {	return SENDER_SINSTSR3;}
-protected:
+protected://IInputListener
 	virtual HWND GetHwnd() const;
 	virtual void OnInputStart();
 	virtual void OnInputResult(const SStringT & strResult,const SStringT & strComp=SStringT() );
@@ -56,7 +57,8 @@ protected:
 	virtual void CloseInputWnd(BOOL bDelay);
 	virtual BOOL SetOpenStatus(BOOL bOpen);
 	virtual BOOL GetOpenStatus() const;
-
+protected://ICmdListener
+	virtual void OnCommand(WORD cmd, LPARAM lp);
 public:
 	LRESULT OnSvrNotify(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	BEGIN_MSG_MAP_EX(CSinstar3Impl)
@@ -70,7 +72,7 @@ private:
 	ITextService	*m_pTxtSvr;
 	CInputWnd		*m_pInputWnd;
 	CStatusWnd		*m_pStatusWnd;
-
+	STipWnd			*m_pTipWnd;
 	CInputState		m_inputState;
 
 	void			*m_pCurImeContext;

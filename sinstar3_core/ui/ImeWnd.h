@@ -8,7 +8,7 @@ class CImeWnd : public SHostWnd, public TAutoEventMapReg<CImeWnd>
 public:
 	CImeWnd(LPCTSTR pszLayout);
 
-	HWND Create(LPCTSTR pszTitle);
+	HWND Create(LPCTSTR pszTitle,HWND hParent=NULL);
 	void Show(BOOL bShow);
 
 protected:

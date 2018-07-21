@@ -50,6 +50,7 @@ using namespace SOUI;
 #include "global_def.h"
 
 #include "inputContext.h"
+#include "CmdHandler.h"
 
 #include "controls/SToggle2.h"
 #include "controls/SCandView.h"

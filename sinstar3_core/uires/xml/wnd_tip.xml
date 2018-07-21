@@ -1,0 +1,19 @@
+﻿<SOUI 
+  name="wnd_tip" 
+  width="-1" 
+  height="-1"   
+  resizable="0" 
+  wndType="normal"
+  translucent="1"
+  toolwindow="1"
+>
+  <skin>
+  </skin>
+
+  <root layout="vbox" colorBkgnd="#cccccc">
+    <caption2 size="-2,30dp" layout="vbox" gravity="center">
+      <text size="-1,-2" name="txt_tip_title" text="tip" font="bold:1"/>
+    </caption2>
+    <text size="-1,-1" maxWidth="300dp" multiLines="1" name="txt_tip_content"/>
+  </root>
+</SOUI>

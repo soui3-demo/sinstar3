@@ -2,7 +2,10 @@
 
 #include "inputContext.h"
 
-interface IInputListener{
+interface ICmdListener {
+	virtual void OnCommand(WORD cmd, LPARAM lp) = 0;
+};
+interface IInputListener: public ICmdListener {
 	virtual HWND GetHwnd() const = 0;
 	virtual void OnInputStart() = 0;
 	virtual void OnInputResult(const SStringT & strResult,const SStringT & strComp=SStringT())=0;

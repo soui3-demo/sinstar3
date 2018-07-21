@@ -2,11 +2,12 @@
 #include "StatusWnd.h"
 #include <helper/SMenuEx.h>
 #include "ConfigDlg.h"
+#include "../InputState.h"
 
 #define SIZE_MAGNETIC	 5
 namespace SOUI
 {
-	CStatusWnd::CStatusWnd(void):CImeWnd(UIRES.LAYOUT.wnd_status_bar)
+	CStatusWnd::CStatusWnd(ICmdListener *pListener):CImeWnd(UIRES.LAYOUT.wnd_status_bar), m_pCmdListener(pListener)
 	{
 	}
 
@@ -191,40 +192,7 @@ namespace SOUI
 
 	void CStatusWnd::OnBtnMakeWord()
 	{
-		MakeWordFromClipboard();
-	}
-
-	void CStatusWnd::MakeWordFromClipboard()
-	{
-		if (OpenClipboard(m_hWnd))
-		{
-			HGLOBAL hglb = GetClipboardData(CF_TEXT);
-			if (hglb)
-			{
-				LPSTR lpstr = (char *)GlobalLock(hglb);
-				if (lpstr)
-				{
-					char szBuf[200];
-					int len = strlen(lpstr);
-					if (len < 127 && ISComm_MakePhrase(lpstr, (char)len) == ISACK_SUCCESS)
-					{
-						PMSGDATA pMsg = ISComm_GetData();
-						if (pMsg->byData[0] == 1)
-							sprintf(szBuf, "词\"%s\"已经存在", lpstr);
-						else
-							sprintf(szBuf, "词\"%s\"加入词库", lpstr);
-					}
-					else
-					{
-						sprintf(szBuf, "造词\"%s\"失败", lpstr);
-					}
-					SStringT msg = S_CA2T(szBuf);
-					//SendMessage(g_hWndMsg, TTM_SETTOOLINFO, 0, (LPARAM)(LPCTSTR)msg);
-				}
-				GlobalUnlock(hglb);
-			}
-			CloseClipboard();
-		}
+		m_pCmdListener->OnCommand(CMD_MAKEWORD,0);
 	}
 
 }
