@@ -2,12 +2,11 @@
 <UIDEF>
   <desc author="setoutsoft" name="haha" version="1.0"/>
   
-  <font face="宋体" size="15"/>
+  <font face="微软雅黑" size="15"/>
 
   <string src="values:string" />
   <skin src="values:skin"/>
   <color src="values:color"/>
-
 
   <style>
     <class name="normalbtn" font="" colorText="#385e8b" colorTextDisable="#91a7c0" textMode="0x25" cursor="hand" margin-x="0"/>
@@ -17,6 +16,6 @@
   <objattr>
     <edit margin="2,2,2,2" ncSkin="_skin.sys.border"/>
     <group  padding="10,10,10,15"/>
-    <candidate colorIndex="@color/cand_index" colorCand="@color/cand_text" colorComp="@color/cand_comp" colorWild="@color/cand_wild"/>
+    <candidate colorIndex="@color/cand_index" colorCand="@color/cand_text" colorComp="@color/cand_comp" colorWild="@color/cand_wild"/>    
   </objattr>
 </UIDEF>

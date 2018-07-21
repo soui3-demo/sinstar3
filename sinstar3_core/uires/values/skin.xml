@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<skin>
+  <lineskin name="nav_config_tab" line_wid="0,0,2,1" right_pushdown="#568c8f" right_hover="#ebebeb" bottom_normal="#f5f6f6" bottom_hover="#f5f6f6" bottom_pushdown="#f5f6f6"/>
+  <scrollbar name="skin.scrollbar"  src="IMG:SYS_SCROLLBAR" margin="5" hasgripper="0"/>
+  <colorrect name="TrayMenu_menu_bkgnd" hover="#cccccc" alpha="188"/>
+  <colorrect name="TrayMenu_menu_sep" normal="#cccccc" alpha="188"/>
+</skin>
