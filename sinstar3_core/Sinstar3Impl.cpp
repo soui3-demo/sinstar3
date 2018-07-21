@@ -245,6 +245,7 @@ LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 	}
 }
 
+
 HWND CSinstar3Impl::GetHwnd() const
 {
 	return m_hWnd;

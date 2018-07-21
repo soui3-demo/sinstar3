@@ -5,6 +5,7 @@
 #include "ui/StatusWnd.h"
 
 #include "InputState.h"
+#include "CmdHandler.h"
 
 class CSinstar3Impl:
 	public ISinstar,
@@ -56,13 +57,11 @@ protected:
 	virtual BOOL SetOpenStatus(BOOL bOpen);
 	virtual BOOL GetOpenStatus() const;
 
-
-
 public:
 	LRESULT OnSvrNotify(UINT uMsg, WPARAM wParam, LPARAM lParam);
-
 	BEGIN_MSG_MAP_EX(CSinstar3Impl)
 		MESSAGE_HANDLER_EX(ISComm_GetCommMsgID(),OnSvrNotify)
+		CHAIN_MSG_MAP_MEMBER(m_cmdHandler)
 		CHAIN_MSG_MAP(SOUI::CSimpleWnd)
 	END_MSG_MAP()
 
@@ -76,6 +75,7 @@ private:
 
 	void			*m_pCurImeContext;
 
+	CCmdHandler	    m_cmdHandler;
 };
 
 

@@ -205,6 +205,7 @@
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="CmdHandler.cpp" />
     <ClCompile Include="controls\SCandView.cpp" />
     <ClCompile Include="controls\SCaption2.cpp" />
     <ClCompile Include="controls\SMutexView.cpp" />
@@ -249,6 +250,7 @@
     <ClInclude Include="..\include\autolock.h" />
     <ClInclude Include="..\include\iscomm.h" />
     <ClInclude Include="..\include\isProtocol.h" />
+    <ClInclude Include="CmdHandler.h" />
     <ClInclude Include="controls\SCandView.h" />
     <ClInclude Include="controls\SCaption2.h" />
     <ClInclude Include="controls\SMutexView.h" />
