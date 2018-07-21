@@ -10,6 +10,7 @@ public:
 	~CSkinMananger(void);
 
 	void ClearMap(){m_mapSkin.RemoveAll();}
+	int InitSkinMenu(SMenuEx * hMenu, const SStringT & strSkinPath, int nStartId, const SStringT & strCurSkin);
 	BOOL SetSkin(int nSkinId);
 	int InitSkinMenu(HMENU hMenu, const SStringT &strSkinPath,int nStartId,const SStringT &strCurSkin);
 	SStringT ExtractSkinInfo(SStringT strSkinPath);

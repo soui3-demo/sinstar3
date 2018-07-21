@@ -9,7 +9,7 @@
   <menuItem text="光标跟随" id="102"/>
   <menuItem text="输出繁体" id="103"/>
   <sep/>
-  <menuItem text="皮    肤" contextHelpId="2">
+  <menuItem text="皮    肤" id="200" contextHelpId="2">
     <menuItem text="皮肤管理" id="201"/>
     <menuItem text="网上皮肤" id="202"/>
     <sep/>

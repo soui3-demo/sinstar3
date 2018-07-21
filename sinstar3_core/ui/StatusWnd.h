@@ -18,6 +18,8 @@ namespace SOUI
 		int OnCreate(LPCREATESTRUCT lpCreateStruct);
 
 		void OnRButtonUp(UINT nFlags,CPoint pt);
+
+		void OnInitMenuPopup(SMenuEx * menuPopup, UINT nIndex);
 		
 		void OnInitMenuPopup(HMENU menuPopup, UINT nIndex, BOOL bSysMenu);
 
