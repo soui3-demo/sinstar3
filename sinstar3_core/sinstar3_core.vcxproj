@@ -243,6 +243,8 @@
     <ClCompile Include="ui\ImeWnd.cpp" />
     <ClCompile Include="ui\InputWnd.cpp" />
     <ClCompile Include="ui\SkinMananger.cpp" />
+    <ClCompile Include="ui\SLineSkin.cpp" />
+    <ClCompile Include="ui\STabCtrlEx.cpp" />
     <ClCompile Include="ui\StatusWnd.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -274,6 +276,8 @@
     <ClInclude Include="ui\ImeWnd.h" />
     <ClInclude Include="ui\InputWnd.h" />
     <ClInclude Include="ui\SkinMananger.h" />
+    <ClInclude Include="ui\SLineSkin.h" />
+    <ClInclude Include="ui\STabCtrlEx.h" />
     <ClInclude Include="ui\StatusWnd.h" />
   </ItemGroup>
   <ItemGroup>
@@ -298,9 +302,15 @@
     <Xml Include="theme_sys_res\sys_xml_skin.xml" />
     <Xml Include="uires\smenu\context.xml" />
     <Xml Include="uires\uidef\init.xml" />
-    <Xml Include="uires\values\color.xml" />
-    <Xml Include="uires\values\string.xml" />
-    <Xml Include="uires\xml\dlg_config.xml" />
+    <Xml Include="uires\values\color.xml">
+      <SubType>Designer</SubType>
+    </Xml>
+    <Xml Include="uires\values\string.xml">
+      <SubType>Designer</SubType>
+    </Xml>
+    <Xml Include="uires\xml\dlg_config.xml">
+      <SubType>Designer</SubType>
+    </Xml>
     <Xml Include="uires\xml\wnd_composition.xml" />
     <Xml Include="uires\xml\wnd_status_bar.xml" />
   </ItemGroup>

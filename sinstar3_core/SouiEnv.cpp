@@ -1,6 +1,7 @@
 #include "StdAfx.h"
 #include "SouiEnv.h"
-
+#include "ui/STabCtrlEx.h"
+#include "ui/SLineSkin.h"
 //从PE文件加载，注意从文件加载路径位置
 #ifdef _DEBUG
 #define RES_TYPE 0
@@ -55,6 +56,9 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 	m_theApp->RegisterWindowClass<SStatusBackground>();
 	m_theApp->RegisterWindowClass<SMutexView>();
 	m_theApp->RegisterWindowClass<SFlagView>();
+	m_theApp->RegisterWindowClass<STabPageEx>();
+	m_theApp->RegisterWindowClass<STabCtrlEx>();
+	m_theApp->RegisterSkinClass<SLineSkin>();
 
 	CAutoRefPtr<ILog4zManager> pLogMgr;
 	bLoaded = m_pComMgr->CreateLog4z((IObjRef**)&pLogMgr);

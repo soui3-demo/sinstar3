@@ -1,39 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu itemHeight="26" iconMargin="4" textMargin="8" maxWidth="190" contextHelpId="100">
-  <item text="系统设置" id="100"/>
-  <item text="快捷设置" contextHelpId="1" popup="1"/>
-  <item text="隐藏状态" id="101"/>
-  <item text="光标跟随" id="102"/>
-  <item text="输出繁体" id="103"/>
+<menuRoot itemHeight="28" contextHelpId="100"
+          sepSkin="TrayMenu_menu_sep"  itemSkin="TrayMenu_menu_bkgnd"
+          font="face:微软雅黑,size:14" margin="1,1,1,1" colorBorder="#cccccc"
+          maxWidth="166" minWidth="166" >
+  <menuItem text="系统设置" id="100" />
+  <menuItem text="快捷设置" />
+  <menuItem text="隐藏状态" id="101"/>
+  <menuItem text="光标跟随" id="102"/>
+  <menuItem text="输出繁体" id="103"/>
   <sep/>
-  <item text="皮    肤" contextHelpId="2">
-    <item text="皮肤管理" id="201"/>
-    <item text="网上皮肤" id="202"/>
+  <menuItem text="皮    肤" contextHelpId="2">
+    <menuItem text="皮肤管理" id="201"/>
+    <menuItem text="网上皮肤" id="202"/>
     <sep/>
-    <item text="内置皮肤" id="220"/>
-  </item>
-  <item text="启程词典" contextHelpId="3">
-    <item text="词典输入" id="301"/>
+    <menuItem text="内置皮肤" id="220"/>
+  </menuItem>
+  <menuItem text="启程词典" contextHelpId="3">
+    <menuItem text="词典输入" id="301"/>
     <sep/>
-    <item text="关闭" id="302"/>
+    <menuItem text="关闭" id="302"/>
     <sep/>
-  </item>
-  <item text="编码方案" contextHelpId="4" popup="1"/>
-  <item text="形码混输" contextHelpId="5">
-    <item text="拼音:单字" id="501"/>
+  </menuItem>
+  <menuItem text="编码方案" contextHelpId="4" popup="1"/>
+  <menuItem text="形码混输" contextHelpId="5">
+    <menuItem text="拼音:单字" id="501"/>
     <sep/>
-    <item text="拼音:二字词" id="502"/>
-    <item text="拼音:三字词" id="503"/>
-    <item text="拼音:多字词" id="504"/>
+    <menuItem text="拼音:二字词" id="502"/>
+    <menuItem text="拼音:三字词" id="503"/>
+    <menuItem text="拼音:多字词" id="504"/>
     <sep/>
-    <item text="自定义短语" id="505"/>
-  </item>
-  <item text="数据管理" contextHelpId="6">
-    <item text="后台运行指示" id="601"/>
+    <menuItem text="自定义短语" id="505"/>
+  </menuItem>
+  <menuItem text="数据管理" contextHelpId="6">
+    <menuItem text="后台运行指示" id="601"/>
     <sep/>
-  </item>
-  <item text="字 根 表" id="110"/>
-  <item text="打字速度" id="111"/>
+  </menuItem>
+  <menuItem text="字 根 表" id="110"/>
+  <menuItem text="打字速度" id="111"/>
   <sep/>
-  <item text="查看帮助" id="112"/>
-</menu>
+  <menuItem text="查看帮助" id="112"/>
+</menuRoot>

@@ -11,44 +11,17 @@ namespace SOUI
 	{
 	}
 
+	//CSettingsLocal		g_SettingsL;
+	//CSettingsCompSpec   g_SettingsCompSpec;
+	
+	void CConfigDlg::UpdataCtrl()
+	{
+
+	}
+
 	BOOL CConfigDlg::OnInitDialog( HWND wnd, LPARAM lParam )
 	{
-		
+		UpdataCtrl();
 		return FALSE;
 	}
-
-	void CConfigDlg::OnGotoPage( int nID )
-	{
-		SScrollView *pScrollView = FindChildByID2<SScrollView>(R.id.sv_setting);
-		pScrollView->SetViewOrigin(CPoint(0,m_yTitles[nID-R.id.cfg_habit]));
-	}
-
-	void CConfigDlg::OnSettingRangeChanged( EventArgs *e )
-	{
-		SScrollView *pScrollView = sobj_cast<SScrollView>(e->sender);
-		CPoint ptOrigin = pScrollView->GetViewOrigin();
-		CPoint ptView = pScrollView->GetWindowRect().TopLeft();
-		int delta = ptOrigin.y-ptView.y;
-		m_yTitles[R.id.title_habit-R.id.title_habit] = FindChildByID(R.id.title_habit)->GetWindowRect().top+delta;
-		m_yTitles[R.id.title_hotkey-R.id.title_habit] = FindChildByID(R.id.title_hotkey)->GetWindowRect().top+delta;
-		m_yTitles[R.id.title_associate-R.id.title_habit] = FindChildByID(R.id.title_associate)->GetWindowRect().top+delta;
-		m_yTitles[R.id.title_candidate-R.id.title_habit] = FindChildByID(R.id.title_candidate)->GetWindowRect().top+delta;
-		m_yTitles[R.id.title_about-R.id.title_habit] = FindChildByID(R.id.title_about)->GetWindowRect().top+delta;
-	}
-
-	void CConfigDlg::OnSettingViewPortChanged(EventArgs * e)
-	{
-		EventScrollViewOriginChanged *e2 = sobj_cast<EventScrollViewOriginChanged>(e);
-		for (int i = 1; i < ARRAYSIZE(m_yTitles); i++)
-		{
-			if (e2->ptNewOrigin.y < m_yTitles[i])
-			{
-				FindChildByID(R.id.cfg_habit + i - 1)->SetCheck(TRUE);
-				return;
-			}
-		}
-		FindChildByID(R.id.cfg_habit + ARRAYSIZE(m_yTitles) - 1)->SetCheck(TRUE);
-
-	}
-
 }

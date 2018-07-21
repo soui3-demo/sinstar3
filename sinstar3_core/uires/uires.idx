@@ -11,6 +11,7 @@
   <values>
     <file name="string" path="values\string.xml"/>
     <file name="color" path="values\color.xml"/>
+    <file name="skin" path="values\skin.xml"/>
   </values>
 
   <IMG>
@@ -31,6 +32,7 @@
     <file name="btn_record_disable" path="image\btn_record_disable.png"/>
     <file name="btn_sound_enable" path="image\btn_sound_enable.png"/>
     <file name="btn_sound_disable" path="image\btn_sound_disable.png"/>
+    <file name="SYS_SCROLLBAR" path="image\scrollbar.png"/>
   </IMG>
   <ICON>
     <file name="ICON_LOGO"  path="image\sinstar3.ico"/>
