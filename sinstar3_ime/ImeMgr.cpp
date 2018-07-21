@@ -163,7 +163,7 @@ BOOL ImeMgr::AddToPreloadList(PCTSTR pwszKLID)
 			for (unsigned int i = 0; i < vectorOrder.size(); i++)
 			{
 				_stprintf_s(szEntry, _T("%d"), i + 1);
-				RegSetValueEx(hKPreload, szEntry, 0, REG_SZ, (LPBYTE)(vectorOrder[i].c_str()), (vectorOrder[i].length() + 1) * sizeof(TCHAR));
+				RegSetValueEx(hKPreload, szEntry, 0, REG_SZ, (LPBYTE)(vectorOrder[i].c_str()), (int)(vectorOrder[i].length() + 1) * sizeof(TCHAR));
 			}
 		}
 
@@ -213,10 +213,10 @@ BOOL ImeMgr::RemoveFromPreloadList(PCTSTR pwszKLID)
 				for (unsigned int i = 0; i < vectorOrder.size(); i++)
 				{
 					_stprintf_s(szEntry, _T("%d"), i + 1);
-					RegSetValueEx(hKPreload, szEntry, 0, REG_SZ, (LPBYTE)(vectorOrder[i].c_str()), (vectorOrder[i].length() + 1) * sizeof(TCHAR));
+					RegSetValueEx(hKPreload, szEntry, 0, REG_SZ, (LPBYTE)(vectorOrder[i].c_str()), (int)(vectorOrder[i].length() + 1) * sizeof(TCHAR));
 				}
 
-				_stprintf_s(szEntry, _T("%d"), vectorOrder.size() + 1);
+				_stprintf_s(szEntry, _T("%d"), (int)vectorOrder.size() + 1);
 				RegDeleteValue(hKPreload, szEntry);
 			}
 			else
@@ -225,7 +225,7 @@ BOOL ImeMgr::RemoveFromPreloadList(PCTSTR pwszKLID)
 				// 如果只有我们一个输入法了，删除我们的，把英文美式键盘加进来。
 				//
 				TCHAR szValue[32] = _T("00000409");
-				RegSetValueEx(hKPreload, _T("1"), 0, REG_SZ, (LPBYTE)(szValue), (_tcslen(szValue) + 1) * sizeof(TCHAR));
+				RegSetValueEx(hKPreload, _T("1"), 0, REG_SZ, (LPBYTE)(szValue), (int)(_tcslen(szValue) + 1) * sizeof(TCHAR));
 			}
 		}
 

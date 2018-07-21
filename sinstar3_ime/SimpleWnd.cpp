@@ -10,7 +10,7 @@ CSimpleWnd::~CSimpleWnd(void)
 {
 }
 
-HWND CSimpleWnd::Create(DWORD dwExStyle,DWORD dwStyle,HWND hParent,UINT uID,HINSTANCE hInst)
+HWND CSimpleWnd::Create(DWORD dwExStyle,DWORD dwStyle,HWND hParent,UINT_PTR uID,HINSTANCE hInst)
 {
 	HWND hWnd=::CreateWindowEx(dwExStyle,CLS_SIMPLEWND,NULL,dwStyle,0,0,0,0,hParent,(HMENU)uID,hInst,this);
 	if(hWnd && (dwExStyle&WS_EX_LAYERED))

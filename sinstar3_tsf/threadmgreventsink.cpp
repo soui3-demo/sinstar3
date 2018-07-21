@@ -41,7 +41,7 @@ STDAPI CSinstar3Tsf::OnUninitDocumentMgr(ITfDocumentMgr *pDocMgr)
 
 STDAPI CSinstar3Tsf::OnSetFocus(ITfDocumentMgr *pDocMgrFocus, ITfDocumentMgr *pDocMgrPrevFocus)
 {
-	SLOGFMTI("ITfThreadMgrEventSink::OnSetFocus, pDocMgrFocus is %x, pDocMgrPrevFocus is %x", pDocMgrFocus, pDocMgrPrevFocus);
+	SLOGFMTI("ITfThreadMgrEventSink::OnSetFocus, pDocMgrFocus is %p, pDocMgrPrevFocus is %p", pDocMgrFocus, pDocMgrPrevFocus);
     //
     // Whenever focus is changed, initialize the TextEditSink.
     //
@@ -88,7 +88,7 @@ STDAPI CSinstar3Tsf::OnKillThreadFocus()
 
 STDAPI CSinstar3Tsf::OnPushContext(ITfContext *pContext)
 {
-	SLOGFMTI("###PushContext =%08x",pContext);
+	SLOGFMTI("###PushContext =%p",pContext);
     return S_OK;
 }
 
@@ -101,7 +101,7 @@ STDAPI CSinstar3Tsf::OnPushContext(ITfContext *pContext)
 
 STDAPI CSinstar3Tsf::OnPopContext(ITfContext *pContext)
 {
-	SLOGFMTI("PopContext =%08x",pContext);
+	SLOGFMTI("PopContext =%p",pContext);
     return S_OK;
 }
 

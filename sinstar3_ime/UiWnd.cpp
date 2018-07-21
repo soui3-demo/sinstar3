@@ -165,7 +165,7 @@ LRESULT CUiWnd::OnTimer(WPARAM nEventID)
 
 LRESULT CUiWnd::OnImeSelect(BOOL bSelect,LPARAM lParam)
 {
-	SLOGFMTI("OnImeSelect,bSelect:%d,lParam:%d",bSelect,lParam);
+	SLOGFMTI("OnImeSelect,bSelect:%d,lParam:%d",bSelect,(int)lParam);
 	AttachToIMC(bSelect);
 	OnImeNotify(IMN_SETOPENSTATUS,0);
 	OnImeNotify(IMN_SETCONVERSIONMODE,0);
@@ -189,7 +189,7 @@ POINT CUiWnd::GetAbsPos(HWND hWnd,DWORD dwStyle,POINT ptCur,RECT rc)
 
 LRESULT CUiWnd::OnImeControl(WPARAM wParam,LPARAM lParam)
 {
-	SLOGFMTI("OnImeControl, wParam:%d,lParam:%d",wParam,lParam);
+	SLOGFMTI("OnImeControl, wParam:%d,lParam:%d",(int)wParam,(int)lParam);
 	LPINPUTCONTEXT lpIMC;
 	HIMC hIMC=(HIMC)GetWindowLongPtr(m_hWnd,IMMGWLP_IMC);
 	_ASSERT(hIMC);
@@ -417,7 +417,7 @@ LRESULT CUiWnd::OnCreate()
 {
 	if(theModule->GetSysInfoFlags() & IME_SYSINFO_WINLOGON) return -1;
 
-	SLOGFMTI("CUiWnd::OnCreate,hWnd:%08x",m_hWnd);
+	SLOGFMTI("CUiWnd::OnCreate,hWnd:%p",m_hWnd);
 	_InitSinstar3();
 	m_wndComp.Create(WS_EX_TOOLWINDOW|WS_EX_LAYERED|WS_EX_NOACTIVATE,WS_POPUP|WS_DISABLED,m_hWnd,0,theModule->GetModule());
 	PostMessage(WM_IME_NOTIFY,IMN_SETCONVERSIONMODE,0);
