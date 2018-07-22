@@ -20,11 +20,9 @@ namespace SOUI
 		void OnRButtonUp(UINT nFlags,CPoint pt);
 
 		void OnInitMenuPopup(SMenuEx * menuPopup, UINT nIndex);
-		
-		void OnInitMenuPopup(HMENU menuPopup, UINT nIndex, BOOL bSysMenu);
 
 		BEGIN_MSG_MAP_EX(CStatusWnd)
-			MSG_WM_INITMENUPOPUP(OnInitMenuPopup)
+			MSG_WM_INITMENUPOPUP_EX(OnInitMenuPopup)
 			MSG_WM_CREATE(OnCreate)
 			MSG_WM_RBUTTONUP(OnRButtonUp)
 			CHAIN_MSG_MAP(CImeWnd)

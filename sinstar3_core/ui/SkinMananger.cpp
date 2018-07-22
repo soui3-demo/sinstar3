@@ -12,49 +12,6 @@ CSkinMananger::~CSkinMananger(void)
 {
 }
 
-int CSkinMananger::InitSkinMenu(HMENU hMenu, const SStringT &strSkinPath,int nStartId,const SStringT &strCurSkin)
-{
-	SMenu menu(hMenu);
-
-	WIN32_FIND_DATA findData;
-	HANDLE hFind = FindFirstFile(strSkinPath+_T("\\*.*"),&findData);
-	if(hFind != INVALID_HANDLE_VALUE)
-	{
-		do{
-			if(findData.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY)
-			{
-				if(_tcscmp(findData.cFileName,_T("."))!=0 && _tcscmp(findData.cFileName,_T(".."))!=0)
-				{
-					HMENU hSubMenu = CreatePopupMenu();
-					menu.AppendMenu(MF_POPUP,(UINT_PTR)hSubMenu,findData.cFileName,0);
-					nStartId=InitSkinMenu(hSubMenu,strSkinPath+_T("\\")+findData.cFileName,nStartId,strCurSkin);
-				}
-			}else
-			{
-				TCHAR szExt[100];
-				_tsplitpath(findData.cFileName,NULL,NULL,NULL,szExt);
-				if(_tcsicmp(szExt,_T(".sskn"))==0)
-				{
-					nStartId++;
-					SStringT strFullPath = strSkinPath+_T("\\")+findData.cFileName;
-					m_mapSkin[nStartId] = strFullPath;
-					SStringT strDesc = ExtractSkinInfo(strFullPath);
-					menu.AppendMenu(0,nStartId,strDesc,0);
-					if(strFullPath == strCurSkin)
-					{
-						CheckMenuItem(menu.m_hMenu,nStartId,MF_CHECKED|MF_BYCOMMAND);
-					}
-				}
-			}
-		}while(FindNextFile(hFind,&findData));
-		FindClose(hFind);
-	}
-	menu.Detach();
-
-	return nStartId;
-}
-
-
 int CSkinMananger::InitSkinMenu(SMenuEx *hMenu, const SStringT &strSkinPath, int nStartId, const SStringT &strCurSkin)
 {
 	WIN32_FIND_DATA findData;
@@ -83,11 +40,11 @@ int CSkinMananger::InitSkinMenu(SMenuEx *hMenu, const SStringT &strSkinPath, int
 					m_mapSkin[nStartId] = strFullPath;
 					SStringT strDesc = ExtractSkinInfo(strFullPath);
 
-					BOOL bInsertSucess=hMenu->InsertMenu(0, MF_BYPOSITION, nStartId, strDesc);
+					BOOL bInsertSucess=hMenu->InsertMenu(-1, MF_BYPOSITION, nStartId, strDesc);
 					
 					if (bInsertSucess&&(strFullPath == strCurSkin))
 					{
-						hMenu->GetMenuItem(nStartId)->SetCheck(TRUE);
+						hMenu->GetMenuItem(nStartId)->SetAttribute(L"check",L"1");
 					}
 				}
 			}

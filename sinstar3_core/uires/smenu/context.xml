@@ -3,40 +3,40 @@
           sepSkin="TrayMenu_menu_sep"  itemSkin="TrayMenu_menu_bkgnd"
           font="face:微软雅黑,size:14" margin="1,1,1,1" colorBorder="#cccccc"
           maxWidth="166" minWidth="166" >
-  <menuItem text="系统设置" id="100" />
+  <menuItem text="系统设置" name="config" id="100" />
   <menuItem text="快捷设置" />
-  <menuItem text="隐藏状态" id="101"/>
-  <menuItem text="光标跟随" id="102"/>
-  <menuItem text="输出繁体" id="103"/>
+  <menuItem text="隐藏状态" name="hide_statusbar" id="101"/>
+  <menuItem text="光标跟随" name="follow_caret" id="102"/>
+  <menuItem text="输出繁体" name="out_big5" id="103"/>
   <sep/>
-  <menuItem text="皮    肤" id="200" contextHelpId="2">
-    <menuItem text="皮肤管理" id="201"/>
-    <menuItem text="网上皮肤" id="202"/>
+  <menuItem text="皮    肤" name="menu_skin" id="200" contextHelpId="2">
+    <menuItem text="皮肤管理" name="skin_mgr" id="201"/>
+    <menuItem text="网上皮肤" name="skin_cloud" id="202"/>
     <sep/>
-    <menuItem text="内置皮肤" id="220"/>
+    <menuItem text="内置皮肤" name="skin_def" id="220"/>
   </menuItem>
-  <menuItem text="启程词典" contextHelpId="3">
-    <menuItem text="词典输入" id="301"/>
+  <menuItem text="启程词典" name="menu_dict" contextHelpId="3">
+    <menuItem text="词典输入" name="dict_query" id="301"/>
     <sep/>
-    <menuItem text="关闭" id="302"/>
+    <menuItem text="关闭" name="dict_close" id="302"/>
     <sep/>
   </menuItem>
-  <menuItem text="编码方案" contextHelpId="4" popup="1"/>
-  <menuItem text="形码混输" contextHelpId="5">
-    <menuItem text="拼音:单字" id="501"/>
+  <menuItem text="编码方案" name="menu_comp" contextHelpId="4" popup="1"/>
+  <menuItem text="形码混输" name="menu_blend" ontextHelpId="5">
+    <menuItem text="拼音:单字" name="spell_one" id="501"/>
     <sep/>
-    <menuItem text="拼音:二字词" id="502"/>
-    <menuItem text="拼音:三字词" id="503"/>
-    <menuItem text="拼音:多字词" id="504"/>
+    <menuItem text="拼音:二字词" name="spell_two" id="502"/>
+    <menuItem text="拼音:三字词" name="spell_three" id="503"/>
+    <menuItem text="拼音:多字词" name="spell_all" id="504"/>
     <sep/>
-    <menuItem text="自定义短语" id="505"/>
+    <menuItem text="自定义短语" name="userdef" id="505"/>
   </menuItem>
-  <menuItem text="数据管理" contextHelpId="6">
+  <menuItem text="数据管理" name="menu_server" contextHelpId="6">
     <menuItem text="后台运行指示" id="601"/>
     <sep/>
   </menuItem>
-  <menuItem text="字 根 表" id="110"/>
-  <menuItem text="打字速度" id="111"/>
+  <menuItem text="字 根 表" name="key_map" id="110"/>
+  <menuItem text="打字速度" name="key_speed" id="111"/>
   <sep/>
-  <menuItem text="查看帮助" id="112"/>
+  <menuItem text="查看帮助" name="help" id="112"/>
 </menuRoot>

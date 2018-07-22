@@ -63,10 +63,7 @@ namespace SOUI
 		ClientToScreen(&pt);
 		m_skinManager.ClearMap();
 		SLOG_INFO("before trackpopupmenu");
-		SMenuEx *subMenu = menu.GetSubMenu(200);
-		SASSERT(subMenu);
-		OnInitMenuPopup(subMenu, CMD_MENU_DEF);
-		int nRet = menu.TrackPopupMenu(TPM_LEFTALIGN|TPM_BOTTOMALIGN|TPM_RETURNCMD,pt.x,pt.y,GetActiveWindow());
+		int nRet = menu.TrackPopupMenu(TPM_LEFTALIGN|TPM_BOTTOMALIGN|TPM_RETURNCMD,pt.x,pt.y, m_hWnd);
 		SLOG_INFO("after trackpopupmenu"<<" nRet:"<<nRet);
 		if(nRet>=CMD_MENU_DEF && nRet <=CMD_MENU_DEF+100)
 		{//select menu
@@ -85,23 +82,10 @@ namespace SOUI
 		SStringT strCurSkin = CDataCenter::getSingletonPtr()->GetData().m_strSkin;
 		if (strCurSkin.IsEmpty())
 		{				
-			pdefSkin->SetCheck(TRUE);
+			pdefSkin->SetAttribute(L"check",L"1");
 		}
 		m_skinManager.InitSkinMenu(menuPopup, theModule->GetDataPath() + _T("\\skins"), CMD_MENU_DEF, strCurSkin);
 		
-	}
-
-	void CStatusWnd::OnInitMenuPopup(HMENU menuPopup, UINT nIndex, BOOL bSysMenu)
-	{
-		if(GetMenuContextHelpId(menuPopup)==2)
-		{
-			SStringT strCurSkin = CDataCenter::getSingletonPtr()->GetData().m_strSkin;
-			if(strCurSkin.IsEmpty())
-			{
-				CheckMenuItem(menuPopup,CMD_MENU_DEF,MF_CHECKED|MF_BYCOMMAND);
-			}
-			m_skinManager.InitSkinMenu(menuPopup,theModule->GetDataPath()+_T("\\skins"),CMD_MENU_DEF,strCurSkin);
-		}
 	}
 
 	void CStatusWnd::OnDragStatus(EventArgs *e)
