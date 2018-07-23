@@ -34,7 +34,6 @@ namespace SOUI
 			PMSGDATA pData = ISComm_GetData();
 			BYTE i, byCount = pData->byData[0];
 			char *pBuf = (char*)pData->byData + 1;
-			char szItem[100];
 			int idStart = R.id.dict_close + 1;
 			for (i = 0; i<byCount; i++)
 			{
@@ -65,7 +64,6 @@ namespace SOUI
 			PMSGDATA pData = ISComm_GetData();
 			BYTE i, byCount = pData->byData[0];
 			char *pBuf = (char*)pData->byData + 1;
-			char szItem[100];
 			for (i = 0; i<byCount; i++)
 			{
 				CNameTypePair pair;
