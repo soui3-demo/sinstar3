@@ -26,6 +26,71 @@ namespace SOUI
 		LeaveCriticalSection(&m_cs);
 	}
 
+	const SArray<CNameTypePair> & CDataCenter::UpdateUserDict()
+	{
+		m_userDicts.RemoveAll();
+		if (ISComm_UserDict_List() == ISACK_SUCCESS)
+		{
+			PMSGDATA pData = ISComm_GetData();
+			BYTE i, byCount = pData->byData[0];
+			char *pBuf = (char*)pData->byData + 1;
+			char szItem[100];
+			int idStart = R.id.dict_close + 1;
+			for (i = 0; i<byCount; i++)
+			{
+				CNameTypePair pair;
+				char *pName = pBuf + 1;
+				pair.strName = pName;
+				char *pType = pName + pair.strName.GetLength() + 1;
+				pair.strType = pType;
+				pBuf = pType + pair.strType.GetLength() + 1;
+				m_userDicts.Add(pair);
+			}
+			return m_userDicts;
+		}
+
+	}
+
+	const SArray<CNameTypePair>& CDataCenter::GetUserDict() const
+	{
+		return m_userDicts;
+	}
+
+	const SArray<CNameTypePair>& CDataCenter::UpdateCompList()
+	{
+		m_compList.RemoveAll();
+		m_iSelComp = -1;
+		if (ISComm_Comp_List() == ISACK_SUCCESS)
+		{
+			PMSGDATA pData = ISComm_GetData();
+			BYTE i, byCount = pData->byData[0];
+			char *pBuf = (char*)pData->byData + 1;
+			char szItem[100];
+			for (i = 0; i<byCount; i++)
+			{
+				CNameTypePair pair;
+				char *pName = pBuf + 1;
+				pair.strName = pName;
+				char *pType = pName + pair.strName.GetLength() + 1;
+				pair.strType = pType;
+				if (pBuf[0]) m_iSelComp = i;
+				pBuf = pType + pair.strType.GetLength() + 1;
+				m_compList.Add(pair);
+			}
+		}
+		return m_compList;
+	}
+
+	const SArray<CNameTypePair>& CDataCenter::GetCompList() const
+	{
+		return m_compList;
+	}
+
+	int CDataCenter::GetSelectCompIndex() const
+	{
+		return m_iSelComp;
+	}
+
 	CMyData::CMyData()
 	{
 		m_reg.Create(HKEY_CURRENT_USER,L"Software\\Setoutsoft\\sinstar3",NULL,REG_OPTION_NON_VOLATILE,KEY_WRITE|KEY_READ|KEY_WOW64_64KEY,0,NULL);

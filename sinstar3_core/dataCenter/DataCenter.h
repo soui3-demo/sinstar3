@@ -30,6 +30,13 @@ namespace SOUI
 		CRegKey		m_reg;
 	};
 
+	class CNameTypePair
+	{
+	public:
+		SStringA strType;
+		SStringA strName;
+	};
+
 class CDataCenter : public SSingleton<CDataCenter>
 {
 public:
@@ -41,9 +48,19 @@ public:
 	void Unlock();
 
 	CMyData & GetData(){return m_data;}
+
+	const SArray<CNameTypePair> & UpdateUserDict();
+	const SArray<CNameTypePair> & GetUserDict() const;
+	const SArray<CNameTypePair> & UpdateCompList();
+	const SArray<CNameTypePair> & GetCompList() const;
+	int GetSelectCompIndex() const;
 private:
 	CMyData	m_data;
 	
+	SArray<CNameTypePair> m_userDicts;
+
+	SArray<CNameTypePair> m_compList;
+	int					  m_iSelComp;
 	CRITICAL_SECTION m_cs;
 };
 

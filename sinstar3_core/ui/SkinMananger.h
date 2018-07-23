@@ -1,8 +1,6 @@
 #pragma once
 
-#define CMD_MENU_DEF	 220
-
-
+#define MAX_SKINS	80
 class CSkinMananger : public SObject
 {
 public:

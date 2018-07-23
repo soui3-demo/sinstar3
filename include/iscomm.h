@@ -195,7 +195,7 @@ DWORD ISComm_Bldsp_Set(BYTE byMask,BOOL bCe2,BOOL bCe3,BOOL bCa4);
 BOOL  ISComm_SvrTray_Get();
 void  ISComm_SvrTray_Set(BOOL bTray);
 
-LPCTSTR ISComm_Svr_Pages();
+LPCSTR ISComm_Svr_Pages();
 
 #ifdef __cplusplus
 }

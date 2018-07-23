@@ -5,6 +5,7 @@
 #include "../InputState.h"
 
 #define SIZE_MAGNETIC	 5
+#define MAX_SKINS	 80
 namespace SOUI
 {
 	CStatusWnd::CStatusWnd(ICmdListener *pListener):CImeWnd(UIRES.LAYOUT.wnd_status_bar), m_pCmdListener(pListener)
@@ -65,27 +66,113 @@ namespace SOUI
 		SLOG_INFO("before trackpopupmenu");
 		int nRet = menu.TrackPopupMenu(TPM_LEFTALIGN|TPM_BOTTOMALIGN|TPM_RETURNCMD,pt.x,pt.y, m_hWnd);
 		SLOG_INFO("after trackpopupmenu"<<" nRet:"<<nRet);
-		if(nRet>=CMD_MENU_DEF && nRet <=CMD_MENU_DEF+100)
-		{//select menu
-			m_skinManager.SetSkin(nRet);
-		}else if(nRet == 100)
+		if (nRet == R.id.config)
 		{//system config
 			CConfigDlg configDlg;
 			configDlg.DoModal();
+		}else if(nRet>=R.id.skin_def && nRet <= R.id.skin_def + MAX_SKINS)
+		{//select menu
+			m_skinManager.SetSkin(nRet);
+		}
+		else if (nRet >= R.id.comp_start && nRet < R.id.comp_start + 50)
+		{//comps
+			int iComp = nRet - R.id.comp_start;
+			const SArray<CNameTypePair> & compList = CDataCenter::getSingleton().GetCompList();
+			if (iComp < compList.GetCount())
+			{
+				ISComm_Comp_Open(compList[iComp].strName);
+			}
+		}
+		else if (nRet > R.id.svr_showicon && nRet < R.id.svr_showicon + 50)
+		{//svr page
+			LPCSTR pszPages = ISComm_Svr_Pages();
+			int uID = R.id.svr_showicon+1;
+			while (uID<=nRet)
+			{
+				pszPages += strlen(pszPages) + 1;
+				uID++;
+			}
+			ISComm_ShowServer(pszPages, strlen(pszPages));
+		}
+		else if (nRet == R.id.svr_showicon)
+		{//show icon
+			BOOL bTray = !ISComm_SvrTray_Get();
+			ISComm_SvrTray_Set(bTray);
 		}
 		m_skinManager.ClearMap();
 	}
 
 	void CStatusWnd::OnInitMenuPopup(SMenuEx* menuPopup, UINT nIndex)
 	{
-		SMenuExItem *pdefSkin=menuPopup->GetMenuItem(CMD_MENU_DEF);
-		SStringT strCurSkin = CDataCenter::getSingletonPtr()->GetData().m_strSkin;
-		if (strCurSkin.IsEmpty())
-		{				
-			pdefSkin->SetAttribute(L"check",L"1");
+		switch (menuPopup->GetContextHelpId())
+		{
+		case 2:
+		{
+			SMenuExItem *pdefSkin = menuPopup->GetMenuItem(R.id.skin_def);
+			SStringT strCurSkin = CDataCenter::getSingletonPtr()->GetData().m_strSkin;
+			if (strCurSkin.IsEmpty())
+			{
+				pdefSkin->SetAttribute(L"check", L"1");
+			}
+			m_skinManager.InitSkinMenu(menuPopup, theModule->GetDataPath() + _T("\\skins"), R.id.skin_def, strCurSkin);
+			break;
 		}
-		m_skinManager.InitSkinMenu(menuPopup, theModule->GetDataPath() + _T("\\skins"), CMD_MENU_DEF, strCurSkin);
-		
+		case 3://dict
+		{
+			const SArray<CNameTypePair> & dis = CDataCenter::getSingleton().UpdateUserDict();
+			int idStart = R.id.dict_close + 1;
+			for (size_t i = 0; i < dis.GetCount(); i++)
+			{
+				SStringA strText = SStringA().Format("%s[%s]", dis[i].strName, dis[i].strType);
+				menuPopup->InsertMenu(-1, MF_BYPOSITION, idStart + i, S_CA2T(strText));
+			}
+			//todo: select current item.
+			break;
+		}
+		case 4://comp select
+		{
+			const SArray<CNameTypePair> &comps = CDataCenter::getSingleton().UpdateCompList();
+			int idStart = R.id.comp_start;
+			menuPopup->DeleteMenu(R.id.comp_start,MF_BYCOMMAND);
+			int iSelComp = CDataCenter::getSingleton().GetSelectCompIndex();
+			for (size_t i = 0; i < comps.GetCount(); i++)
+			{
+				SStringA strText = SStringA().Format("%s[%s]", comps[i].strName, comps[i].strType);
+				UINT flag = MF_BYPOSITION;
+				if (iSelComp == i) flag |= MF_CHECKED;
+				menuPopup->InsertMenu(-1, flag, idStart + i, S_CA2T(strText));
+			}
+			//select comp
+			break;
+		}
+		case 6://svr data manager
+		{
+			LPCSTR pszPages = ISComm_Svr_Pages();
+			if (pszPages)
+			{
+				int nPos = 1;
+				UINT uID = R.id.svr_showicon;
+				while (*pszPages)
+				{
+					SStringA strName = pszPages;
+					if (*pszPages == '\n')
+						menuPopup->InsertMenu(nPos++, MF_BYPOSITION | MF_SEPARATOR, 0 , _T(""));
+					else
+						menuPopup->InsertMenu(nPos++, MF_BYPOSITION | MF_STRING, uID, S_CA2T(strName));
+					uID++;
+					pszPages += strName.GetLength() + 1;
+				}
+			}
+			SMenuExItem *pItem = menuPopup->GetMenuItem(R.id.svr_showicon);
+			if (pItem)
+			{
+				pItem->SetAttribute(L"check", L"1");
+			}
+
+			break;
+		}
+		}
+
 	}
 
 	void CStatusWnd::OnDragStatus(EventArgs *e)
