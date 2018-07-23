@@ -29,6 +29,39 @@ void CreateDumpFile(LPCWSTR lpstrDumpFilePathName, EXCEPTION_POINTERS *pExceptio
     CloseHandle(hDumpFile);
 }
 
+HMODULE GetCurrentModule(BOOL bRef = FALSE)
+{
+	HMODULE hModule = NULL;
+	if (GetModuleHandleEx(bRef ? GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS : (GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS
+		| GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT), (LPCWSTR)GetCurrentModule, &hModule))
+	{
+		return hModule;
+	}
+	return NULL;
+}
+
+template<size_t _size>
+bool CreateDumpFileName(wchar_t (&dumpfilename)[_size])
+{
+	HMODULE hModule = GetCurrentModule();
+	if (hModule)
+	{
+		wchar_t szCurrentDir[MAX_PATH];
+		int bRet=GetModuleFileNameW(hModule, szCurrentDir, sizeof(szCurrentDir));
+		if (bRet > 0)
+		{
+			SYSTEMTIME sys;
+			GetLocalTime(&sys);
+			
+			LPWSTR lpInsertPos = wcsrchr(szCurrentDir, _T('\\'));
+			wcscpy(lpInsertPos + 1, _T("\0"));
+			wsprintf(dumpfilename, _T("%ssinstar%4d%02d%02d%02d%02d%02d%03d.dmp"), szCurrentDir, sys.wYear, sys.wMonth, sys.wDay, sys.wHour, sys.wMinute, sys.wSecond, sys.wMilliseconds);
+			return true;
+		}
+	}
+	return false;
+}
+
 // 处理Unhandled Exception的回调函数  
 //  
 LONG ApplicationCrashHandler(EXCEPTION_POINTERS *pException)
@@ -36,7 +69,15 @@ LONG ApplicationCrashHandler(EXCEPTION_POINTERS *pException)
     // 这里弹出一个错误对话框并退出程序  
     //  
     //FatalAppExit(-1, _T("*** Unhandled Exception! ***"));
-	CreateDumpFile(s_dumpFile, pException);
+	wchar_t dmpfilename[MAX_PATH];
+	if (CreateDumpFileName(dmpfilename))
+	{
+		CreateDumpFile(dmpfilename, pException);
+	}
+	else
+	{
+		CreateDumpFile(s_dumpFile, pException);
+	}
     return EXCEPTION_EXECUTE_HANDLER;
 }
 
