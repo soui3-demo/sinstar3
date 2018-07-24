@@ -247,6 +247,7 @@
     <ClCompile Include="ui\SLineSkin.cpp" />
     <ClCompile Include="ui\STabCtrlEx.cpp" />
     <ClCompile Include="ui\StatusWnd.cpp" />
+    <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\autolock.h" />
@@ -282,6 +283,7 @@
     <ClInclude Include="ui\SLineSkin.h" />
     <ClInclude Include="ui\STabCtrlEx.h" />
     <ClInclude Include="ui\StatusWnd.h" />
+    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="sinstar3_core.rc" />

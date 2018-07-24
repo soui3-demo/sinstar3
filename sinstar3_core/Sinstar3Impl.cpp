@@ -26,6 +26,7 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr)
 ,m_pStatusWnd(NULL)
 ,m_pTipWnd(NULL)
 ,m_pCurImeContext(NULL)
+, m_cmdHandler(this)
 {
 	theModule->AddRef();
 
@@ -116,15 +117,13 @@ void CSinstar3Impl::OnCompositionTerminated()
 {
 	SLOG_INFO("");
 	m_inputState.ClearContext(CPC_ALL);
-	
-	//m_pInputWnd->Show(FALSE);
 }
 
 void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 {
 	SLOG_INFO("GetThreadID="<<GetCurrentThreadId()<<" focus="<<bFocus);
 	if(bFocus) m_pTxtSvr->SetConversionMode(FullNative);
-	m_pStatusWnd->Show(bFocus);
+	m_pStatusWnd->Show(bFocus && !g_SettingsL.bHideStatus);
 	
 	if (bFocus)
 	{
@@ -159,7 +158,7 @@ BOOL CSinstar3Impl::OnHotkey(LPVOID lpImeContext,REFGUID guidHotKey)
 
 void CSinstar3Impl::OnOpenStatusChanged(BOOL bOpen)
 {
-	m_pStatusWnd->Show(bOpen);
+	m_pStatusWnd->Show(bOpen && !g_SettingsL.bHideStatus);
 }
 
 void CSinstar3Impl::OnConversionModeChanged(EInputMethod nMode)

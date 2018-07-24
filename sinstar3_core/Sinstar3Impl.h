@@ -14,6 +14,7 @@ class CSinstar3Impl:
 	public SOUI::SObject,
 	public SOUI::CSimpleWnd
 {
+	friend class CCmdHandler;// CCmdHandler need access this private members.
 public:
 	CSinstar3Impl(ITextService *pTxtSvr);
 	virtual ~CSinstar3Impl(void);
