@@ -23,7 +23,7 @@ int CSkinMananger::InitSkinMenu(SMenuEx *hMenu, const SStringT &strSkinPath, int
 			{
 				if (_tcscmp(findData.cFileName, _T(".")) != 0 && _tcscmp(findData.cFileName, _T("..")) != 0)
 				{					
-					if (hMenu->InsertMenu(CMD_MENU_DEF, MF_POPUP| MF_BYCOMMAND, ++nStartId, findData.cFileName))
+					if (hMenu->InsertMenu(R.id.skin_def, MF_POPUP| MF_BYCOMMAND, ++nStartId, findData.cFileName))
 					{
 						nStartId = InitSkinMenu(hMenu->GetSubMenu(nStartId), strSkinPath + _T("\\") + findData.cFileName, nStartId, strCurSkin);
 					}
@@ -44,7 +44,7 @@ int CSkinMananger::InitSkinMenu(SMenuEx *hMenu, const SStringT &strSkinPath, int
 					
 					if (bInsertSucess&&(strFullPath == strCurSkin))
 					{
-						hMenu->GetMenuItem(nStartId)->SetAttribute(L"check",L"1");
+						hMenu->CheckMenuItem(nStartId, MF_BYCOMMAND | MF_CHECKED);
 					}
 				}
 			}

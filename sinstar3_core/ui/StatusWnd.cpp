@@ -5,6 +5,7 @@
 #include "../InputState.h"
 
 #define SIZE_MAGNETIC	 5
+#define MAX_SKINS	 80
 namespace SOUI
 {
 	CStatusWnd::CStatusWnd(ICmdListener *pListener):CImeWnd(UIRES.LAYOUT.wnd_status_bar), m_pCmdListener(pListener)
@@ -65,27 +66,160 @@ namespace SOUI
 		SLOG_INFO("before trackpopupmenu");
 		int nRet = menu.TrackPopupMenu(TPM_LEFTALIGN|TPM_BOTTOMALIGN|TPM_RETURNCMD,pt.x,pt.y, m_hWnd);
 		SLOG_INFO("after trackpopupmenu"<<" nRet:"<<nRet);
-		if(nRet>=CMD_MENU_DEF && nRet <=CMD_MENU_DEF+100)
-		{//select menu
-			m_skinManager.SetSkin(nRet);
-		}else if(nRet == 100)
+		if (nRet == R.id.config)
 		{//system config
 			CConfigDlg configDlg;
 			configDlg.DoModal();
+		}else if(nRet>=R.id.skin_def && nRet <= R.id.skin_def + MAX_SKINS)
+		{//select menu
+			m_skinManager.SetSkin(nRet);
 		}
+		else if (nRet >= R.id.comp_start && nRet < R.id.comp_start + 50)
+		{//comps
+			int iComp = nRet - R.id.comp_start;
+			const SArray<CNameTypePair> & compList = CDataCenter::getSingleton().GetCompList();
+			if (iComp < compList.GetCount())
+			{
+				ISComm_Comp_Open(compList[iComp].strName);
+			}
+		}
+		else if (nRet > R.id.svr_showicon && nRet < R.id.svr_showicon + 50)
+		{//svr page
+			LPCSTR pszPages = ISComm_Svr_Pages();
+			int uID = R.id.svr_showicon+1;
+			while (uID<=nRet)
+			{
+				pszPages += strlen(pszPages) + 1;
+				uID++;
+			}
+			ISComm_ShowServer(pszPages, strlen(pszPages));
+		}
+		else if (nRet == R.id.svr_showicon)
+		{//show icon
+			BOOL bTray = !ISComm_SvrTray_Get();
+			ISComm_SvrTray_Set(bTray);
+		}
+		else if (nRet == R.id.spell_one)
+		{
+			g_SettingsG.bBlendSpWord = !g_SettingsG.bBlendSpWord;
+		}
+		else if (nRet == R.id.spell_two)
+		{
+			BOOL bValid = 0;
+			ISComm_Bldsp_Get(&bValid, NULL, NULL);
+			bValid = !bValid;
+			ISComm_Bldsp_Set(BLDSP_CE2, bValid, 0, 0);
+		}
+		else if (nRet == R.id.spell_three)
+		{
+			BOOL bValid = 0;
+			ISComm_Bldsp_Get(NULL,&bValid, NULL);
+			bValid = !bValid;
+			ISComm_Bldsp_Set(BLDSP_CE3, 0, bValid, 0);
+		}
+		else if (nRet == R.id.spell_all)
+		{
+			BOOL bValid = 0;
+			ISComm_Bldsp_Get(NULL, NULL, &bValid);
+			bValid = !bValid;
+			ISComm_Bldsp_Set(BLDSP_CA4,0,0, bValid);
+		}
+		else if (nRet == R.id.userdef)
+		{
+			g_SettingsG.bBlendUD = !g_SettingsG.bBlendUD;
+		}
+		else if (nRet == R.id.key_map)
+		{
+			ISComm_SendMsg(CT_SHOWKEYMAP, 0, 0, 0);
+		}
+		else if (nRet == R.id.follow_caret)
+		{
+			g_SettingsL.bMouseFollow = !g_SettingsL.bMouseFollow;
+		}
+		else if (nRet == R.id.hide_statusbar)
+		{
+			g_SettingsL.bHideStatus = !g_SettingsL.bHideStatus;
+		}
+		else if (nRet == R.id.input_big5)
+		{
+			g_SettingsL.bInputBig5 = !g_SettingsL.bInputBig5;
+		}
+
 		m_skinManager.ClearMap();
 	}
 
 	void CStatusWnd::OnInitMenuPopup(SMenuEx* menuPopup, UINT nIndex)
 	{
-		SMenuExItem *pdefSkin=menuPopup->GetMenuItem(CMD_MENU_DEF);
-		SStringT strCurSkin = CDataCenter::getSingletonPtr()->GetData().m_strSkin;
-		if (strCurSkin.IsEmpty())
-		{				
-			pdefSkin->SetAttribute(L"check",L"1");
+		switch (menuPopup->GetContextHelpId())
+		{
+		case 100:
+		{//main menu
+			menuPopup->CheckMenuItem(R.id.follow_caret, MF_BYCOMMAND | g_SettingsL.bMouseFollow ? MF_CHECKED : 0);
+			menuPopup->CheckMenuItem(R.id.hide_statusbar, MF_BYCOMMAND | g_SettingsL.bHideStatus ? MF_CHECKED : 0);
+			menuPopup->CheckMenuItem(R.id.input_big5, MF_BYCOMMAND | g_SettingsL.bInputBig5 ? MF_CHECKED : 0);
+			break;
 		}
-		m_skinManager.InitSkinMenu(menuPopup, theModule->GetDataPath() + _T("\\skins"), CMD_MENU_DEF, strCurSkin);
-		
+		case 2:
+		{
+			SStringT strCurSkin = CDataCenter::getSingletonPtr()->GetData().m_strSkin;
+			if (strCurSkin.IsEmpty())
+			{
+				menuPopup->CheckMenuItem(R.id.skin_def, MF_BYCOMMAND|MF_CHECKED);
+			}
+			m_skinManager.InitSkinMenu(menuPopup, theModule->GetDataPath() + _T("\\skins"), R.id.skin_def, strCurSkin);
+			break;
+		}
+		case 4://comp select
+		{
+			const SArray<CNameTypePair> &comps = CDataCenter::getSingleton().UpdateCompList();
+			int idStart = R.id.comp_start;
+			menuPopup->DeleteMenu(R.id.comp_start,MF_BYCOMMAND);
+			int iSelComp = CDataCenter::getSingleton().GetSelectCompIndex();
+			for (size_t i = 0; i < comps.GetCount(); i++)
+			{
+				SStringA strText = SStringA().Format("%s[%s]", comps[i].strName, comps[i].strType);
+				UINT flag = MF_BYPOSITION;
+				if (iSelComp == i) flag |= MF_CHECKED;
+				menuPopup->InsertMenu(-1, flag, idStart + i, S_CA2T(strText));
+			}
+			break;
+		}
+		case 5://blend input
+		{
+			BOOL bCe2 = 0, bCe3 = 0, bCa4 = 0;
+			ISComm_Bldsp_Get(&bCe2, &bCe3, &bCa4);
+			menuPopup->CheckMenuItem(R.id.spell_one,MF_BYCOMMAND | (g_SettingsG.bBlendSpWord ? MF_CHECKED : 0));
+			menuPopup->CheckMenuItem(R.id.spell_two, MF_BYCOMMAND | (bCe2 ? MF_CHECKED : 0));
+			menuPopup->CheckMenuItem(R.id.spell_three, MF_BYCOMMAND | (bCe3 ? MF_CHECKED : 0));
+			menuPopup->CheckMenuItem(R.id.spell_all, MF_BYCOMMAND | (bCa4 ? MF_CHECKED : 0));
+			menuPopup->CheckMenuItem(R.id.userdef, MF_BYCOMMAND | (g_SettingsG.bBlendUD ? MF_CHECKED : 0));
+
+			break;
+		}
+		case 6://svr data manager
+		{
+			LPCSTR pszPages = ISComm_Svr_Pages();
+			if (pszPages)
+			{
+				int nPos = 1;
+				UINT uID = R.id.svr_showicon;
+				while (*pszPages)
+				{
+					SStringA strName = pszPages;
+					if (*pszPages == '\n')
+						menuPopup->InsertMenu(nPos++, MF_BYPOSITION | MF_SEPARATOR, 0 , _T(""));
+					else
+						menuPopup->InsertMenu(nPos++, MF_BYPOSITION | MF_STRING, uID, S_CA2T(strName));
+					uID++;
+					pszPages += strName.GetLength() + 1;
+				}
+			}
+			menuPopup->CheckMenuItem(R.id.svr_showicon, MF_BYCOMMAND | ISComm_SvrTray_Get() ? MF_CHECKED : 0);
+
+			break;
+		}
+		}
+
 	}
 
 	void CStatusWnd::OnDragStatus(EventArgs *e)

@@ -676,13 +676,13 @@ void  ISComm_SvrTray_Set(BOOL bTray)
 	ISComm_SendMsg(CT_SVRTRAY_SET,&byTray,1,0);
 }
 
-LPCTSTR ISComm_Svr_Pages()
+LPCSTR ISComm_Svr_Pages()
 {
-	LPCTSTR pszPages=NULL;
+	LPCSTR pszPages=NULL;
 	if(ISACK_SUCCESS==ISComm_SendMsg(CT_SVR_PAGES,NULL,0,0))
 	{
 		PMSGDATA pMsg=ISComm_GetData();
-		pszPages=(LPCTSTR)pMsg->byData;
+		pszPages=(LPCSTR)pMsg->byData;
 	}
 	return pszPages;
 }
