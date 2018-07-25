@@ -386,8 +386,32 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 	BOOL bHandle=FALSE;
 	//首先使用VK处理快捷键及重码翻页键
 	if(!bHandle && lpbKeyState[VK_CONTROL] & 0x80 )
-	{//todo:处理快捷键
-
+	{//处理快捷键
+		bHandle = TRUE;
+		if (uVKey == g_SettingsG.byHotKeyMakeWord)
+		{
+			m_pListener->OnCommand(CMD_MAKEWORD, 0);
+		}
+		else if (uVKey == g_SettingsG.byHotKeyQuery)
+		{
+			m_pListener->OnCommand(CMD_QUERYINFO, 0);
+		}
+		else if (uVKey == g_SettingsG.byHotKeyMode)
+		{
+			m_pListener->OnCommand(CMD_INPUTMODE, 0);
+		}
+		else if (uVKey == g_SettingsG.byHotKeyShowRoot)
+		{
+			m_pListener->OnCommand(CMD_KEYMAP, 0);
+		}
+		else if (uVKey == g_SettingsG.byHotKeyHideStatus)
+		{
+			m_pListener->OnCommand(CMD_HIDESTATUSBAR, 0);
+		}
+		else
+		{
+			bHandle = FALSE;
+		}
 	}
 
 	InputContext * lpCntxtPriv = &m_ctx;

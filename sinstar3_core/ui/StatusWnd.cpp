@@ -92,7 +92,7 @@ namespace SOUI
 				pszPages += strlen(pszPages) + 1;
 				uID++;
 			}
-			ISComm_ShowServer(pszPages, strlen(pszPages));
+			ISComm_ShowServer(pszPages, (char)strlen(pszPages));
 		}
 		else if (nRet == R.id.svr_showicon)
 		{//show icon
@@ -130,7 +130,7 @@ namespace SOUI
 		}
 		else if (nRet == R.id.key_map)
 		{
-			ISComm_SendMsg(CT_SHOWKEYMAP, 0, 0, 0);
+			m_pCmdListener->OnCommand(CMD_KEYMAP, 0);
 		}
 		else if (nRet == R.id.follow_caret)
 		{
@@ -138,7 +138,7 @@ namespace SOUI
 		}
 		else if (nRet == R.id.hide_statusbar)
 		{
-			g_SettingsL.bHideStatus = !g_SettingsL.bHideStatus;
+			m_pCmdListener->OnCommand(CMD_HIDESTATUSBAR, 0);
 		}
 		else if (nRet == R.id.input_big5)
 		{

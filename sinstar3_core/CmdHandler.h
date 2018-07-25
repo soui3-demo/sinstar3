@@ -10,27 +10,41 @@
             return TRUE; \
     }
 
-#define CMD_MAKEWORD	100
+enum {
+	CMD_MAKEWORD = 100,
+	CMD_QUERYINFO,
+	CMD_KEYMAP,
+	CMD_HIDESTATUSBAR,
+	CMD_INPUTMODE,
+};
 
 namespace SOUI {
 	class STipWnd;
 }
 
+class CSinstar3Impl;
 class CCmdHandler 
 {
 public:
-	CCmdHandler();
+	CCmdHandler(CSinstar3Impl * pSinstar3);
 	~CCmdHandler();
 
 	void SetTipWnd(STipWnd * pTipWnd);
 protected:
 	void OnMakeWord(LPARAM lp);
+	void OnKeyMap(LPARAM lp);
+	void OnHideStatusBar(LPARAM lp);
+	void OnQueryInfo(LPARAM lp);
 
 	BEGIN_MSG_MAP_EX(CCmdHandler)
 		MSG_WM_COMMAND_EX(CMD_MAKEWORD,OnMakeWord)
+		MSG_WM_COMMAND_EX(CMD_KEYMAP,OnKeyMap)
+		MSG_WM_COMMAND_EX(CMD_HIDESTATUSBAR,OnHideStatusBar)
+		MSG_WM_COMMAND_EX(CMD_QUERYINFO,OnQueryInfo)
 	END_MSG_MAP()
 
 private:
 	STipWnd * m_pTipWnd;
+	CSinstar3Impl * m_pSinstar3;
 };
 
