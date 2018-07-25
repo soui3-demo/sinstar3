@@ -10,7 +10,7 @@
   <skin>
     <imglist name="bg_status_open" src="img:png_status_open"/>
     <imglist name="bg_status_close" src="img:png_status_close"/>
-    <imglist name="logo"	src="img:logo_32"/>
+    <imglist name="logo"	src="img:logo_32" states="2"/>
     <imglist name="charmode" src="img:png_charmode" states="2"/>
     <imglist name="charmode_full" src="img:png_charmode_full" states="3"/>
     <imglist name="charmode_half" src="img:png_charmode_half" states="3"/>

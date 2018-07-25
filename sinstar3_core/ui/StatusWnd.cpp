@@ -275,11 +275,28 @@ namespace SOUI
 
 	void CStatusWnd::UpdateCompInfo()
 	{
-		FindChildByID(R.id.txt_comp)->SetWindowText(CDataCenter::getSingletonPtr()->GetData().m_compInfo.strCompName);
+		SWindow *pText = FindChildByID(R.id.txt_comp);
 		SFlagView * pFlagView = FindChildByID2<SFlagView>(R.id.img_logo);
-		if (pFlagView)
+		if (m_pCmdListener->GetInputContext()->compMode == IM_SHAPECODE)
 		{
-			pFlagView->SetImeFlagData(ISComm_GetCompInfo()->pImeFlagData);
+			if (pText) pText->SetWindowText(CDataCenter::getSingletonPtr()->GetData().m_compInfo.strCompName);
+			if (pFlagView)
+			{
+				pFlagView->ShowSpellFlag(FALSE);
+				pFlagView->SetImeFlagData(ISComm_GetCompInfo()->pImeFlagData);
+			}
+		}
+		else
+		{
+			if (pFlagView) pFlagView->ShowSpellFlag(TRUE);
+			if (pText)
+			{
+				if (g_SettingsG.compMode == IM_SHAPECODE)
+					pText->SetWindowText(_T("ÁÙÊ±Æ´Òô"));
+				else
+					pText->SetWindowText(_T("Æô³ÌÆ´Òô"));
+			}
+
 		}
 	}
 
@@ -328,5 +345,9 @@ namespace SOUI
 		m_pCmdListener->OnCommand(CMD_MAKEWORD,0);
 	}
 
+	void CStatusWnd::OnLogoClick()
+	{
+		m_pCmdListener->OnCommand(CMD_INPUTMODE, 0);
+	}
 }
 

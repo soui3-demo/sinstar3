@@ -2,8 +2,9 @@
 #include "SFlagView.h"
 
 namespace SOUI {
-	SFlagView::SFlagView()
+	SFlagView::SFlagView():m_bSpellFlag(FALSE)
 	{
+		m_bMsgTransparent = FALSE;
 	}
 
 
@@ -22,10 +23,23 @@ namespace SOUI {
 		Invalidate();
 	}
 
+	void SFlagView::ShowSpellFlag(BOOL bSpell)
+	{
+		m_bSpellFlag = bSpell;
+		Invalidate();
+	}
+
 	void SFlagView::OnPaint(IRenderTarget *pRT)
 	{
 		CRect rcClient = GetClientRect();
-		if (m_imeFlag)
+		if (m_bSpellFlag)
+		{//拼音状态
+			if (m_defFlag)
+			{
+				m_defFlag->Draw(pRT, rcClient, 1);	//绘制默认图中的第二个子图.
+			}
+		}
+		else if (m_imeFlag)
 		{
 			CRect rcImg(0, 0, m_imeFlag->Width(), m_imeFlag->Height());
 			UINT mode = MAKELONG(EM_STRETCH, kMedium_FilterLevel);
@@ -33,7 +47,7 @@ namespace SOUI {
 		}
 		else if (m_defFlag)
 		{
-			m_defFlag->Draw(pRT, rcClient, 0);
+			m_defFlag->Draw(pRT, rcClient, 0);//绘制默认图中的第一个子图.
 		}
 	}
 }

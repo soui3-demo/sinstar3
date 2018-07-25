@@ -37,13 +37,14 @@ protected:
 	void OnHideStatusBar(LPARAM lp);
 	void OnQueryInfo(LPARAM lp);
 	void OnFollowCaret(LPARAM lp);
-
+	void OnInputMode(LPARAM lp);
 	BEGIN_MSG_MAP_EX(CCmdHandler)
 		MSG_WM_COMMAND_EX(CMD_MAKEWORD,OnMakeWord)
 		MSG_WM_COMMAND_EX(CMD_KEYMAP,OnKeyMap)
 		MSG_WM_COMMAND_EX(CMD_HIDESTATUSBAR,OnHideStatusBar)
 		MSG_WM_COMMAND_EX(CMD_QUERYINFO,OnQueryInfo)
 		MSG_WM_COMMAND_EX(CMD_FOLLOWCARET,OnFollowCaret)
+		MSG_WM_COMMAND_EX(CMD_INPUTMODE,OnInputMode)
 	END_MSG_MAP()
 
 private:

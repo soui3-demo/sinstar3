@@ -380,6 +380,11 @@ void CInputState::InputHide(BOOL bDelay)
 	m_pListener->CloseInputWnd(bDelay);
 }
 
+void CInputState::StatusbarUpdate()
+{
+	m_pListener->UpdateStatusbar();
+}
+
 BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeyState)
 {
 	SLOG_INFO("uVKey:"<<uVKey<<" uScanCode:"<<uScanCode);
@@ -1090,9 +1095,10 @@ BOOL CInputState::KeyIn_Spell_ChangeComp(InputContext* lpCntxtPriv,UINT byInput,
 	{
 		InputEnd();
 		ClearContext(CPC_ALL);
-		if(g_SettingsG.compMode != IM_SPELL)
+		if(IsTempSpell())
 		{//restore shape code input mode
 			m_ctx.compMode=IM_SHAPECODE;
+			StatusbarUpdate();
 		}	
 		bRet=TRUE;
 	}
@@ -2223,6 +2229,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 						strcpy(m_ctx.szTip,"临时拼音:上屏后自动提示编码");
 						InputOpen();
 						InputUpdate();
+						StatusbarUpdate();
 						if (!m_bTypeing)
 						{//query cursor position
 							InputStart();
@@ -2234,6 +2241,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 						{//退出临时拼音状态
 							m_ctx.compMode = IM_SHAPECODE;
 							InputHide(FALSE);
+							StatusbarUpdate();
 							ClearContext(CPC_ALL);
 						}else if(m_ctx.sCandCount)
 						{
@@ -2315,7 +2323,6 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 			if(lpbKeyState[VK_CONTROL]&0x80 && lpbKeyState[VK_SHIFT]&0x80)
 			{//Ctrl + Shift
 				bRet=(uKey==g_SettingsG.byHotKeyQuery || (uKey>='0' && uKey<='9'));
-				//if(!bRet) bRet=Plugin_HotkeyInquire(uKey);
 				return bRet;
 			}else if(lpbKeyState[VK_CONTROL]&0x80) 
 			{//Ctrl组合键
@@ -2332,7 +2339,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 				else
 					return FALSE;
 			}else if(lpbKeyState[VK_SHIFT]&0x80 && uKey==VK_SPACE)
-			{//Shift + VK_SPACE:中英文标点切换
+			{//todo: Shift + VK_SPACE:中英文标点切换
 				//				MyGenerateMessage(hIMC,WM_IME_NOTIFY,IMN_PRIVATE,MAKELONG(IMN_PRIV_COMMAND,g_SettingsL.bCharMode?IDC_CHARMODE1:IDC_CHARMODE2));
 				return TRUE;
 			}else
