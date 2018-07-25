@@ -78,7 +78,7 @@ namespace SOUI
 		{//comps
 			int iComp = nRet - R.id.comp_start;
 			const SArray<CNameTypePair> & compList = CDataCenter::getSingleton().GetCompList();
-			if (iComp < compList.GetCount())
+			if (iComp < (int)compList.GetCount())
 			{
 				ISComm_Comp_Open(compList[iComp].strName);
 			}
@@ -180,7 +180,7 @@ namespace SOUI
 				SStringA strText = SStringA().Format("%s[%s]", comps[i].strName, comps[i].strType);
 				UINT flag = MF_BYPOSITION;
 				if (iSelComp == i) flag |= MF_CHECKED;
-				menuPopup->InsertMenu(-1, flag, idStart + i, S_CA2T(strText));
+				menuPopup->InsertMenu(-1, flag, idStart + (int)i, S_CA2T(strText));
 			}
 			break;
 		}

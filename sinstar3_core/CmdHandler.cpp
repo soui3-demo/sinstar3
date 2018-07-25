@@ -153,7 +153,7 @@ void CCmdHandler::OnQueryInfo(LPARAM lp)
 				p += sprintf(p, "\r\n\t%s", pbuf);
 				if (OpenClipboard(m_pSinstar3->m_hWnd))
 				{//将用户词典内容保存到剪贴板
-					int nLen = strlen(pbuf);
+					int nLen = (int)strlen(pbuf);
 					HGLOBAL hMem = GlobalAlloc(GMEM_DDESHARE | GMEM_MOVEABLE, nLen + 1);
 					LPSTR pMem = (LPSTR)GlobalLock(hMem);
 					strcpy(pMem, pbuf);

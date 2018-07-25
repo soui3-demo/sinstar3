@@ -1,0 +1,39 @@
+要编译这份代码首先要clone soui的最新master, 目前还在功能开发阶段,soui随时可能更新,如果发现编译问题请先同步soui.
+soui git: https://github.com/soui2/soui.git
+目前sinstar3只测试了vs2015编译,在编译soui前,先使用soui的build.bat生成32+64位版本,并分别编译完成. 另外还必须安装soui的向导.这样sinstar3编译时才能找到soui代码.
+编译soui前, 还需要为soui工程生成增加一个预编译宏:IME_SOUI. 该宏的作用参考下面SOUI代码:
+ATOM CSimpleWnd::RegisterSimpleWnd( HINSTANCE hInst,LPCTSTR pszSimpleWndName )
+{
+    WNDCLASSEX wcex = {sizeof(WNDCLASSEX),0};
+    wcex.cbSize           = sizeof(WNDCLASSEX);
+    wcex.style            = CS_HREDRAW | CS_VREDRAW |CS_DBLCLKS ;
+#ifdef IME_SOUI
+    wcex.style           |= CS_IME;
+#endif//IME_SOUI
+    wcex.lpfnWndProc      = StartWindowProc; // 第一个处理函数
+    wcex.hInstance        = hInst;
+    wcex.hCursor          = ::LoadCursor(NULL, IDC_ARROW);
+    wcex.hbrBackground    = (HBRUSH)(COLOR_WINDOW+1);
+    wcex.lpszClassName    = pszSimpleWndName;
+    return ::RegisterClassEx(&wcex);
+}
+
+做完这些准备就可以开始编译sinstar3了.
+sinstar3有4个工程:
+register: 生成安装工具,前期可以不管.
+sinstar3_core: 输入法逻辑实现核心模块.
+sinstar3_ime: 输入法IME接口模块.
+sinstar3_tsf: 输入法TSF接口模块.(TSF模块暂时还没有调试)
+
+调试先编译Debug版本,包含32位,和64位版本.
+
+要正常启动程序, 还需要先安装 启程输入法2.x.
+
+编译完成后,第一次需要用管理员运行在代码目录运行刚生成的register.exe来安装.(写几个注册表)
+注册完成以后在输入法列表里应该就有启程输入法3.0了.
+注: 后面更新文件就可以用copyime.bat来复制文件不安装了.
+
+关于输入法调试:
+输入法实质就是一个dll, 打开任意一个exe,例如notepad, 再notepad里打开输入法就可以了. 如果不是用vs调试方式打开notepad,你可以使用附加到进程来加载调试符号.
+
+启程软件  2018.7.25
