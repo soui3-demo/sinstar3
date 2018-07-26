@@ -51,6 +51,7 @@ struct SPELLINFO
 #define CPC_SPELL		(1<<4)
 #define CPC_SENTENCE	(1<<5)
 #define CPC_TIP			(1<<6)
+#define CPC_UDCOMP		(1<<7)
 #define CPC_ALL			0xFFFFFFFF
 
 struct InputContext
