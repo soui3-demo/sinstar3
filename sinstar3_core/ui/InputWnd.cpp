@@ -13,6 +13,8 @@ namespace SOUI
 		,m_pInputContext(pCtx)
 		,m_cPageSize(0)
 		,m_bShow(FALSE)
+		, m_bDraging(FALSE)
+		, m_bFollowCaret(TRUE)
 	{
 	}
 
@@ -20,15 +22,35 @@ namespace SOUI
 	{
 	}
 
+	void CInputWnd::SetFollowCaret(BOOL bFollowCaret)
+	{
+		m_bFollowCaret = bFollowCaret;
+		if (CSimpleWnd::IsWindowVisible() && !bFollowCaret)
+		{
+			UpdateAnchorPosition();
+			SetWindowPos(HWND_TOPMOST, m_ptAnchor.x, m_ptAnchor.y, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
+		}
+	}
+
+	void CInputWnd::SetAnchorPosition(CPoint ptAnchor)
+	{
+		m_ptAnchor = ptAnchor;
+	}
+
 
 	void CInputWnd::MoveTo(CPoint pt,int nCaretHeight)
 	{
-		SLOG_INFO("pt:" << pt.x <<","<<pt.y<<" caretHeight:"<<nCaretHeight);
+		SLOG_INFO("pt:" << pt.x <<","<<pt.y<<" caretHeight:"<<nCaretHeight<<" followCaret:"<< m_bFollowCaret);
+
+		if (!m_bFollowCaret)
+		{
+			return;
+		}
 
 		m_bLocated = TRUE;
 		m_ptCaret = pt;
 		m_nCaretHeight = nCaretHeight;
-		SetWindowPos(0,m_ptCaret.x,m_ptCaret.y + m_nCaretHeight + SIZE_BELOW,0,0,SWP_NOSIZE|SWP_NOZORDER|SWP_NOACTIVATE);
+		SetWindowPos(HWND_TOPMOST,m_ptCaret.x,m_ptCaret.y + m_nCaretHeight + SIZE_BELOW,0,0,SWP_NOSIZE|SWP_NOACTIVATE);
 		if(m_bShow && !IsWindowVisible())
 		{
 			CImeWnd::Show(TRUE);
@@ -38,8 +60,12 @@ namespace SOUI
 	void CInputWnd::Show(BOOL bShow, BOOL bClearLocateInfo)
 	{
 		SLOG_INFO("bShow:"<<bShow<<" located:"<<m_bLocated);
-		if(m_bLocated)
+		if(m_bLocated || !m_bFollowCaret)
 		{
+			if (!m_bFollowCaret && bShow)
+			{
+				UpdateAnchorPosition();
+			}
 			CImeWnd::Show(bShow);	
 		}
 		m_bShow = bShow;
@@ -183,8 +209,36 @@ namespace SOUI
 				SWindow * compUmode = FindChildByID(R.id.comp_umode);
 				compUmode->SetVisible(TRUE,TRUE);
 				compUmode->FindChildByID(R.id.txt_comps)->SetWindowText(S_CA2T(SStringA(m_pInputContext->szComp,m_pInputContext->cComp)));
+				SWindow *pCompAutoComplete = compUmode->FindChildByID(R.id.txt_auto_complete);
+				if (pCompAutoComplete)
+				{
+					SStringA strCompAutoComplete;
+					if (m_pInputContext->cCompACLen > m_pInputContext->cComp)
+					{
+						strCompAutoComplete = SStringA(m_pInputContext->szCompAutoComplete + m_pInputContext->cComp,
+							m_pInputContext->cCompACLen - m_pInputContext->cComp);
+					}
+					pCompAutoComplete->SetWindowText(S_CA2T(strCompAutoComplete));
+				}
 			}
 			break;
+		}
+	}
+
+	void CInputWnd::UpdateAnchorPosition()
+	{
+		if (m_ptAnchor.x == -1)
+		{
+			CRect rcWnd;
+			CSimpleWnd::GetWindowRect(&rcWnd);
+
+			CRect rcWorkArea;
+			SystemParametersInfo(SPI_GETWORKAREA, 0, &rcWorkArea, 0);
+
+			m_ptAnchor.x = rcWorkArea.left + (rcWorkArea.Width() - rcWnd.Width()) / 2;
+			m_ptAnchor.y = rcWorkArea.bottom - rcWnd.Height();
+
+			SetWindowPos(NULL, m_ptAnchor.x, m_ptAnchor.y, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
 		}
 	}
 
@@ -250,6 +304,54 @@ namespace SOUI
 		{
 			SetMsgHandled(FALSE);
 		}
+	}
+
+	void CInputWnd::OnLButtonDown(UINT nFlags, CPoint point)
+	{
+		if (m_bFollowCaret)
+		{
+			SetMsgHandled(FALSE);
+			return;
+		}
+		SWindow::SetCapture();
+		m_ptClick = point;
+		m_bDraging = TRUE;
+	}
+
+	void CInputWnd::OnLButtonUp(UINT nFlags, CPoint point)
+	{
+		if (m_bFollowCaret)
+		{
+			SetMsgHandled(FALSE);
+			return;
+		}
+		m_bDraging = FALSE;
+		SWindow::ReleaseCapture();
+
+		CRect rcWnd;
+		CSimpleWnd::GetWindowRect(&rcWnd);
+		m_ptAnchor = rcWnd.TopLeft();
+		//save anchor
+		CDataCenter::getSingleton().GetData().m_ptInput = m_ptAnchor;
+	}
+
+	void CInputWnd::OnMouseMove(UINT nFlags, CPoint point)
+	{
+		if (m_bFollowCaret)
+		{
+			SetMsgHandled(FALSE);
+			return;
+		}
+		__super::OnMouseMove(nFlags, point);
+		::SetCursor(GETRESPROVIDER->LoadCursor(_T("sizeall")));
+		if (m_bDraging)
+		{
+			CRect rcWnd;
+			CSimpleWnd::GetWindowRect(&rcWnd);
+			rcWnd.OffsetRect(point - m_ptClick);
+			SetWindowPos(HWND_TOPMOST, rcWnd.left, rcWnd.top, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
+		}
+
 	}
 
 }

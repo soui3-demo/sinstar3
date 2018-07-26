@@ -38,6 +38,8 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr)
 	m_pTipWnd->Create(_T("sinstar3_tip"));
 	m_cmdHandler.SetTipWnd(m_pTipWnd);
 	m_inputState.SetInputListener(this);
+	m_pInputWnd->SetAnchorPosition(CDataCenter::getSingleton().GetData().m_ptInput);
+	m_pInputWnd->SetFollowCaret(g_SettingsL.bMouseFollow);
 
 	SLOG_INFO("status:"<<m_pStatusWnd->m_hWnd<<", input:"<<m_pInputWnd->m_hWnd);
 	SOUI::CSimpleWnd::Create(_T("sinstar3_msg_recv"),WS_DISABLED|WS_POPUP,WS_EX_TOOLWINDOW,0,0,0,0,HWND_MESSAGE,NULL);
@@ -300,9 +302,19 @@ BOOL CSinstar3Impl::GetOpenStatus() const
 	return m_pTxtSvr->GetOpenStatus(m_pCurImeContext);
 }
 
+void CSinstar3Impl::UpdateStatusbar()
+{
+	m_pStatusWnd->UpdateCompInfo();
+}
+
 void CSinstar3Impl::OnCommand(WORD cmd, LPARAM lp)
 {
 	SendMessage(WM_COMMAND, MAKELONG(0,cmd), lp);
+}
+
+InputContext * CSinstar3Impl::GetInputContext()
+{
+	return m_inputState.GetInputContext();
 }
 
 

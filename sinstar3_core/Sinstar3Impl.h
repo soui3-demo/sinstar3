@@ -58,8 +58,10 @@ protected://IInputListener
 	virtual void CloseInputWnd(BOOL bDelay);
 	virtual BOOL SetOpenStatus(BOOL bOpen);
 	virtual BOOL GetOpenStatus() const;
+	virtual void UpdateStatusbar();
 protected://ICmdListener
 	virtual void OnCommand(WORD cmd, LPARAM lp);
+	virtual InputContext * GetInputContext();
 public:
 	LRESULT OnSvrNotify(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	BEGIN_MSG_MAP_EX(CSinstar3Impl)

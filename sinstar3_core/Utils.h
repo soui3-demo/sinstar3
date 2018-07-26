@@ -9,5 +9,6 @@ public:
 	static int GB2GIB5(TCHAR * szBuf, int nStrLen);
 	static int GetClipboardText(HWND hWnd, WCHAR *pszBuf, int nBufSize);
 	static BOOL ChangeWindowMessageFilter(UINT message, DWORD dwFlag);
+	static BOOL CmdExecute(BYTE * pszBuf);
 };
 

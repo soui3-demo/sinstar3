@@ -1,8 +1,8 @@
 #include "StdAfx.h"
 #include "InputState.h"
-#include <MMSystem.h>
+#include "Utils.h"
 #include <ShellAPI.h>
-#pragma comment(lib,"Winmm.lib")
+
 #pragma warning(disable:4311 4302)
 const BYTE KCompKey[] ={0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,        // 00-0F
 						0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,        // 10-1F
@@ -52,38 +52,6 @@ BOOL Tips_Rand(BOOL bSpell,char *pszBuf)
 	return TRUE;
 }
 
-
-void SoundPlay(LPCTSTR pszSound)
-{
-	if(g_SettingsG.nSoundAlert==1)
-	{
-		SStringT strPath = SStringT().Format(_T("%s\\sound\\%s.wav"),theModule->GetDataPath(),pszSound);
-		PlaySound(strPath,NULL,SND_ASYNC|SND_FILENAME);
-	}else if(g_SettingsG.nSoundAlert==2)
-	{
-		MessageBeep(1000);
-	}
-}
-
-
-BOOL CmdExecute(BYTE * pszBuf)
-{
-	UINT uRet=FALSE;
-	char *pParam=NULL;
-	char *pCmd=(char*)pszBuf+pszBuf[1]+2+1;
-	if(pCmd[0]=='\"')
-	{
-		pParam=strstr(pCmd,"\" ");
-		if(pParam) {pParam[1]=0;pParam+=2;}
-	}else
-	{
-		pParam=strstr(pCmd," ");
-		if(pParam) pParam[0]=0,pParam++;
-	}
-	uRet=(UINT)ShellExecuteA(NULL,"open",pCmd,pParam,NULL,SW_SHOWDEFAULT);
-	if(uRet<=32) uRet=(UINT)ShellExecuteA(NULL,"explorer",pCmd,NULL,NULL,SW_SHOWDEFAULT);
-	return uRet>32;
-}
 
 
 //符号处理
@@ -380,6 +348,11 @@ void CInputState::InputHide(BOOL bDelay)
 	m_pListener->CloseInputWnd(bDelay);
 }
 
+void CInputState::StatusbarUpdate()
+{
+	m_pListener->UpdateStatusbar();
+}
+
 BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeyState)
 {
 	SLOG_INFO("uVKey:"<<uVKey<<" uScanCode:"<<uScanCode);
@@ -497,7 +470,7 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 			}
 			if(IsTempSpell() && (bReadyEn || bReadyDgt) && (isdigit(uVKey) || isupper(uVKey)))
 			{//temp spell mode
-				SoundPlay(_T("error"));
+				CUtils::SoundPlay(_T("error"));
 				return FALSE;
 			}
 			if((bReadyEn || bReadyDgt) && lpCntxtPriv->bShowTip) //关闭tip
@@ -594,7 +567,7 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 			}
 			if(bInputKey) bHandle=KeyIn_Line_ChangeComp(lpCntxtPriv,uVKey,lpbKeyState);
 		}
-		if(!bHandle) SoundPlay(_T("error"));
+		if(!bHandle) CUtils::SoundPlay(_T("error"));
 	}
 	return bHandle;
 }
@@ -915,8 +888,9 @@ BOOL CInputState::KeyIn_Spell_ChangeComp(InputContext* lpCntxtPriv,UINT byInput,
 				{//切换到用户自定义模式
 					ClearContext(CPC_ALL);
 					lpCntxtPriv->inState=INST_USERDEF;
-					InputStart();
+					InputOpen();
 					InputUpdate();
+					InputStart();
 				}
 				bCompChar=FALSE;
 			}else if(byInput=='i')
@@ -925,8 +899,9 @@ BOOL CInputState::KeyIn_Spell_ChangeComp(InputContext* lpCntxtPriv,UINT byInput,
 				{//切换到笔画输入状态
 					ClearContext(CPC_ALL);
 					lpCntxtPriv->inState=INST_LINEIME;
-					InputStart();
+					InputOpen();
 					InputUpdate();
+					InputStart();
 				}
 				bCompChar=FALSE;
 			}else
@@ -954,6 +929,7 @@ BOOL CInputState::KeyIn_Spell_ChangeComp(InputContext* lpCntxtPriv,UINT byInput,
 		}
 		if(lpCntxtPriv->bySyllables==1 && lpCntxtPriv->spellData[0].bySpellLen==0)
 		{//开始编码输入,生成开始编码消息以获取光标跟随时输入窗口的坐标
+			InputOpen();
 			InputStart();
 		}
 		pSpInfo->szSpell[pSpInfo->bySpellLen++]=byInput;
@@ -1090,9 +1066,10 @@ BOOL CInputState::KeyIn_Spell_ChangeComp(InputContext* lpCntxtPriv,UINT byInput,
 	{
 		InputEnd();
 		ClearContext(CPC_ALL);
-		if(g_SettingsG.compMode != IM_SPELL)
+		if(IsTempSpell())
 		{//restore shape code input mode
 			m_ctx.compMode=IM_SHAPECODE;
+			StatusbarUpdate();
 		}	
 		bRet=TRUE;
 	}
@@ -1248,7 +1225,7 @@ BOOL CInputState::KeyIn_Spell_Symbol(InputContext* lpCntxtPriv,UINT byInput,
 			if(bGetSpID) ISComm_SpellMemoryEx(lpCntxtPriv->szComp,lpCntxtPriv->cComp,bySpellID);
 			strResultA = SStringA(lpCntxtPriv->szComp,lpCntxtPriv->cComp);
 		}
-		//lpCompStr->dwResultStrLen+=Symbol_Convert(byInput,pResult+lpCompStr->dwResultStrLen,lpbKeyState);
+		strResultA += Symbol_Convert(byInput,lpbKeyState);
 		InputStart();
 		InputResult(strResultA,0);
 		InputEnd();
@@ -1386,18 +1363,18 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 									goto end;
 								}else
 								{
-									SoundPlay(_T("error"));
+									CUtils::SoundPlay(_T("error"));
 								}
 							}else
 							{
-								SoundPlay(_T("error"));
+								CUtils::SoundPlay(_T("error"));
 							}
 						}
-						SoundPlay(_T("error"));
+						CUtils::SoundPlay(_T("error"));
 						goto end;
 					}else if(pData[0]==RATE_USERCMD)
 					{//命令直通车数据
-						CmdExecute(pData);
+						CUtils::CmdExecute(pData);
 						byMask=0;
 					}else
 					{//普通的选择重码
@@ -1449,7 +1426,7 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 		{//用户自定义输入
 			if(pData[0]==RATE_USERCMD)
 			{//命令直通车数据
-				CmdExecute(pData);
+				CUtils::CmdExecute(pData);
 				byMask=0;
 			}else
 			{//一般的自定义
@@ -1576,7 +1553,7 @@ BOOL CInputState::KeyIn_PYBiHua_ChangComp(InputContext * lpCntxtPriv,UINT byInpu
 			lpCntxtPriv->bySelect[lpCntxtPriv->byCaret]=1;					//设定为自动选择，不允许自动修改
 		}else
 		{
-			SoundPlay(_T("error"));
+			CUtils::SoundPlay(_T("error"));
 		}
 		free(pszWordList);
 	}
@@ -1800,11 +1777,11 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 			else
 			{
 				if(lpCntxtPriv->sCandCount>1)
-					SoundPlay(_T("ChongMa"));
+					CUtils::SoundPlay(_T("ChongMa"));
 				else if(lpCntxtPriv->sCandCount==0)
-					SoundPlay(_T("KongMa"));
+					CUtils::SoundPlay(_T("KongMa"));
 				else
-					SoundPlay(_T("LianXiang"));
+					CUtils::SoundPlay(_T("LianXiang"));
 			}
 		}
 	}
@@ -2067,7 +2044,10 @@ BOOL CInputState::KeyIn_UserDef_ChangeComp(InputContext * lpCntxtPriv,UINT byInp
 		short i;
 		memcpy(m_pbyMsgBuf,pMsgData->byData,pMsgData->sSize);
 		pbyData=m_pbyMsgBuf;
-		pbyData+=pbyData[0]+1;//跨过服务器传会来的自定义短语的编码数据
+		//save auto complete composition string
+		lpCntxtPriv->cCompACLen = pbyData[0];
+		memcpy(lpCntxtPriv->szCompAutoComplete, pbyData + 1, pbyData[0]);
+		pbyData+=pbyData[0]+1;
 		memcpy(&lpCntxtPriv->sCandCount,pbyData,2);
 		pbyData+=2;
 		lpCntxtPriv->ppbyCandInfo=(LPBYTE *)malloc(sizeof(LPBYTE)*lpCntxtPriv->sCandCount);
@@ -2223,6 +2203,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 						strcpy(m_ctx.szTip,"临时拼音:上屏后自动提示编码");
 						InputOpen();
 						InputUpdate();
+						StatusbarUpdate();
 						if (!m_bTypeing)
 						{//query cursor position
 							InputStart();
@@ -2234,6 +2215,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 						{//退出临时拼音状态
 							m_ctx.compMode = IM_SHAPECODE;
 							InputHide(FALSE);
+							StatusbarUpdate();
 							ClearContext(CPC_ALL);
 						}else if(m_ctx.sCandCount)
 						{
@@ -2315,7 +2297,6 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 			if(lpbKeyState[VK_CONTROL]&0x80 && lpbKeyState[VK_SHIFT]&0x80)
 			{//Ctrl + Shift
 				bRet=(uKey==g_SettingsG.byHotKeyQuery || (uKey>='0' && uKey<='9'));
-				//if(!bRet) bRet=Plugin_HotkeyInquire(uKey);
 				return bRet;
 			}else if(lpbKeyState[VK_CONTROL]&0x80) 
 			{//Ctrl组合键
@@ -2332,7 +2313,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 				else
 					return FALSE;
 			}else if(lpbKeyState[VK_SHIFT]&0x80 && uKey==VK_SPACE)
-			{//Shift + VK_SPACE:中英文标点切换
+			{//todo: Shift + VK_SPACE:中英文标点切换
 				//				MyGenerateMessage(hIMC,WM_IME_NOTIFY,IMN_PRIVATE,MAKELONG(IMN_PRIV_COMMAND,g_SettingsL.bCharMode?IDC_CHARMODE1:IDC_CHARMODE2));
 				return TRUE;
 			}else

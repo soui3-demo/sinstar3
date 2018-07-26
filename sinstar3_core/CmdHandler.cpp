@@ -172,3 +172,29 @@ void CCmdHandler::OnQueryInfo(LPARAM lp)
 		CUtils::SoundPlay(_T("error"));
 	}
 }
+
+void CCmdHandler::OnFollowCaret(LPARAM lp)
+{
+	g_SettingsL.bMouseFollow = !g_SettingsL.bMouseFollow;
+	m_pSinstar3->m_pInputWnd->SetFollowCaret(g_SettingsL.bMouseFollow);
+}
+
+void CCmdHandler::OnInputMode(LPARAM lp)
+{
+	InputContext * pCtx = m_pSinstar3->m_inputState.GetInputContext();
+	if (g_SettingsG.compMode != pCtx->compMode)
+	{
+		m_pTipWnd->SetTip(_T("提示"), _T("临时拼音模式不能切换！请先退出临时拼音"));
+	}else
+	{
+		m_pSinstar3->m_inputState.ClearContext(CPC_ALL);
+		if (g_SettingsG.compMode == IM_SHAPECODE)
+			g_SettingsG.compMode = IM_SPELL;
+		else
+			g_SettingsG.compMode = IM_SHAPECODE;
+		pCtx->compMode = g_SettingsG.compMode;
+		pCtx->bShowTip = FALSE;
+		m_pSinstar3->m_pInputWnd->UpdateUI();
+		m_pSinstar3->m_pStatusWnd->UpdateCompInfo();
+	}
+}

@@ -4,7 +4,9 @@
 
 interface ICmdListener {
 	virtual void OnCommand(WORD cmd, LPARAM lp) = 0;
+	virtual InputContext * GetInputContext() = 0;
 };
+
 interface IInputListener: public ICmdListener {
 	virtual HWND GetHwnd() const = 0;
 	virtual void OnInputStart() = 0;
@@ -20,6 +22,7 @@ interface IInputListener: public ICmdListener {
 	virtual void CloseInputWnd(int nDelayMS) = 0;
 	virtual BOOL SetOpenStatus(BOOL bOpen)=0;
 	virtual BOOL GetOpenStatus() const =0;
+	virtual void UpdateStatusbar() = 0;
 };
 
 class CInputState
@@ -40,6 +43,10 @@ public:
 	BOOL OnSvrNotify(UINT wp, PMSGDATA pMsgData);
 
 	BOOL IsTypeing() const {return m_bTypeing;}
+
+	BOOL IsTempSpell() const;
+
+	void ClearContext(UINT ccMask);
 protected:
 	void InputStart();
 	void InputResult(const SStringA &strResult,BYTE byAstMask);
@@ -48,11 +55,10 @@ protected:
 	void InputUpdate();
 	void InputOpen();
 	void InputHide(BOOL bDelay = FALSE);
+	void StatusbarUpdate();
 private:
-	BOOL IsTempSpell() const;
 
 	BYTE GetKeyinMask(BOOL bAssociate,BYTE byMask);
-	void ClearContext(UINT ccMask);
 
 	void KeyIn_Spell_UpdateCandList(InputContext * lpCntxtPriv,BYTE byCaret);
 	void KeyIn_Spell_Forecast(InputContext * lpCntxtPriv,BYTE byStartPos);

@@ -10,6 +10,7 @@ namespace SOUI
 		~SFlagView();
 
 		void SetImeFlagData(const IMEFLAGDATA *pData);
+		void ShowSpellFlag(BOOL bSpell);
 
 		SOUI_ATTRS_BEGIN()
 			ATTR_SKIN(L"defaultFlag",m_defFlag,TRUE)
@@ -24,5 +25,6 @@ namespace SOUI
 	private:
 		CAutoRefPtr<ISkinObj> m_defFlag;
 		CAutoRefPtr<IBitmap>  m_imeFlag;
+		BOOL				  m_bSpellFlag;
 	};
 }
