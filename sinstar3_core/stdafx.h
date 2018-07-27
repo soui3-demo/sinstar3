@@ -54,6 +54,8 @@ using namespace SOUI;
 
 #include "controls/SToggle2.h"
 #include "controls/SCandView.h"
+#include "controls/SEnglishCand.h"
+#include "controls/SPhraseCand.h"
 #include "controls/SCaption2.h"
 #include "controls/SStatusBackground.h"
 #include "controls/SMutexView.h"

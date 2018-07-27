@@ -80,9 +80,9 @@ namespace SOUI
 	{
 		int CtrlId;
 		//БЄПл
-		CtrlId = 400+g_SettingsG.byAstMode;
+		CtrlId = R.id.ass_mode_none +g_SettingsG.byAstMode;
 		FindAndSetCheck(CtrlId, TRUE);
-		CtrlId=500+g_SettingsG.byRateAdjust;
+		CtrlId= R.id.rate_adjust_disable +g_SettingsG.byRateAdjust;
 		FindAndSetCheck(CtrlId, TRUE);
 		CtrlId = 600;
 		if (g_SettingsG.byForecast == MQC_FORECAST)

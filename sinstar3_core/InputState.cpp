@@ -222,8 +222,8 @@ BYTE CInputState::GetKeyinMask(BOOL bAssociate,BYTE byMask)
 		if(g_SettingsG.bAstSent) byRet|=MKI_ASTSENT;
 		switch(g_SettingsG.byAstMode)
 		{
+		case AST_CAND:byRet |= MKI_ASTCAND; break;
 		case AST_ENGLISH:byRet|=MKI_ASTENGLISH;break;
-		case AST_CAND:byRet|=MKI_ASTCAND;break;
 		case AST_PHRASEREMIND:byRet|=MKI_PHRASEREMIND;break;
 		default:break;
 		}

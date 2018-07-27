@@ -49,6 +49,8 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 
 	m_theApp->RegisterWindowClass<SToggle2>();
 	m_theApp->RegisterWindowClass<SCandView>();
+	m_theApp->RegisterWindowClass<SEnglishCand>();
+	m_theApp->RegisterWindowClass<SPhraseCand>();
 	m_theApp->RegisterWindowClass<SSpellView>();
 	m_theApp->RegisterWindowClass<SCaption2>();
 	m_theApp->RegisterWindowClass<SStatusBackground>();

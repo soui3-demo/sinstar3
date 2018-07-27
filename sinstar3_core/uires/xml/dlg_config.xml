@@ -83,8 +83,8 @@
             <window extend_top="10" layout="hbox">
               <radio name="ass_mode_none" id="400" text="禁用"/>
               <radio name="ass_mode_phrase" id="401" text="词组联想"/>
-              <radio name="ass_mode_phrase_prompt" id="402" text="词组提示"/>
-              <radio name="ass_mode_english_prompt" id="403" text="单词提示"/>
+              <radio name="ass_mode_english_prompt" id="402" text="单词提示"/>
+              <radio name="ass_mode_phrase_prompt" id="403" text="词组提示"/>
             </window>
             <text extend_top="10">词频调整:</text>
             <window extend_top="10" layout="hbox">

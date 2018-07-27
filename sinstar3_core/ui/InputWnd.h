@@ -26,7 +26,7 @@ namespace SOUI
 		short SelectCandidate(short iCand);
 	protected:
 		void UpdateAnchorPosition();
-		int GetCandMax(SWindow *pWnd) const;
+		int GetCandMax(SWindow *pWnd, LPCWSTR pszCandClass) const;
 	protected:
 		void OnBtnPrevPage();
 		void OnBtnNextPage();
