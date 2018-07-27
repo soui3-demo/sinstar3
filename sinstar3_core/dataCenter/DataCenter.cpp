@@ -45,9 +45,8 @@ namespace SOUI
 				pBuf = pType + pair.strType.GetLength() + 1;
 				m_userDicts.Add(pair);
 			}
-			return m_userDicts;
 		}
-
+		return m_userDicts;
 	}
 
 	const SArray<CNameTypePair>& CDataCenter::GetUserDict() const

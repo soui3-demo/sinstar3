@@ -559,7 +559,7 @@ BOOL CSinstar3Tsf::RegisterIMEHotKey(REFGUID guidHotKey,LPCWSTR pszName,const PR
 		guidHotKey,
 		pKeyTF,
 		pszName,
-		pszName?wcslen(pszName):0);
+		pszName?(ULONG)wcslen(pszName):0);
 	pKeystrokeMgr->Release();
 
 	return (hr == S_OK);

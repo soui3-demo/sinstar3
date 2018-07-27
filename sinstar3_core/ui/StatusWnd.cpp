@@ -99,6 +99,35 @@ namespace SOUI
 			BOOL bTray = !ISComm_SvrTray_Get();
 			ISComm_SvrTray_Set(bTray);
 		}
+		else if (nRet == R.id.spell_one)
+		{
+			g_SettingsG.bBlendSpWord = !g_SettingsG.bBlendSpWord;
+		}
+		else if (nRet == R.id.spell_two)
+		{
+			BOOL bValid = 0;
+			ISComm_Bldsp_Get(&bValid, NULL, NULL);
+			bValid = !bValid;
+			ISComm_Bldsp_Set(BLDSP_CE2, bValid, 0, 0);
+		}
+		else if (nRet == R.id.spell_three)
+		{
+			BOOL bValid = 0;
+			ISComm_Bldsp_Get(NULL,&bValid, NULL);
+			bValid = !bValid;
+			ISComm_Bldsp_Set(BLDSP_CE3, 0, bValid, 0);
+		}
+		else if (nRet == R.id.spell_all)
+		{
+			BOOL bValid = 0;
+			ISComm_Bldsp_Get(NULL, NULL, &bValid);
+			bValid = !bValid;
+			ISComm_Bldsp_Set(BLDSP_CA4,0,0, bValid);
+		}
+		else if (nRet == R.id.userdef)
+		{
+			g_SettingsG.bBlendUD = !g_SettingsG.bBlendUD;
+		}
 		m_skinManager.ClearMap();
 	}
 
@@ -108,11 +137,10 @@ namespace SOUI
 		{
 		case 2:
 		{
-			SMenuExItem *pdefSkin = menuPopup->GetMenuItem(R.id.skin_def);
 			SStringT strCurSkin = CDataCenter::getSingletonPtr()->GetData().m_strSkin;
 			if (strCurSkin.IsEmpty())
 			{
-				pdefSkin->SetAttribute(L"check", L"1");
+				menuPopup->CheckMenuItem(R.id.skin_def, MF_BYCOMMAND|MF_CHECKED);
 			}
 			m_skinManager.InitSkinMenu(menuPopup, theModule->GetDataPath() + _T("\\skins"), R.id.skin_def, strCurSkin);
 			break;
@@ -142,7 +170,18 @@ namespace SOUI
 				if (iSelComp == i) flag |= MF_CHECKED;
 				menuPopup->InsertMenu(-1, flag, idStart + i, S_CA2T(strText));
 			}
-			//select comp
+			break;
+		}
+		case 5://blend input
+		{
+			BOOL bCe2 = 0, bCe3 = 0, bCa4 = 0;
+			ISComm_Bldsp_Get(&bCe2, &bCe3, &bCa4);
+			menuPopup->CheckMenuItem(R.id.spell_one,MF_BYCOMMAND | (g_SettingsG.bBlendSpWord ? MF_CHECKED : 0));
+			menuPopup->CheckMenuItem(R.id.spell_two, MF_BYCOMMAND | (bCe2 ? MF_CHECKED : 0));
+			menuPopup->CheckMenuItem(R.id.spell_three, MF_BYCOMMAND | (bCe3 ? MF_CHECKED : 0));
+			menuPopup->CheckMenuItem(R.id.spell_all, MF_BYCOMMAND | (bCa4 ? MF_CHECKED : 0));
+			menuPopup->CheckMenuItem(R.id.userdef, MF_BYCOMMAND | (g_SettingsG.bBlendUD ? MF_CHECKED : 0));
+
 			break;
 		}
 		case 6://svr data manager
@@ -163,11 +202,7 @@ namespace SOUI
 					pszPages += strName.GetLength() + 1;
 				}
 			}
-			SMenuExItem *pItem = menuPopup->GetMenuItem(R.id.svr_showicon);
-			if (pItem)
-			{
-				pItem->SetAttribute(L"check", L"1");
-			}
+			menuPopup->CheckMenuItem(R.id.svr_showicon, MF_BYCOMMAND | ISComm_SvrTray_Get() ? MF_CHECKED : 0);
 
 			break;
 		}

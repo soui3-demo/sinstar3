@@ -44,7 +44,7 @@ int CSkinMananger::InitSkinMenu(SMenuEx *hMenu, const SStringT &strSkinPath, int
 					
 					if (bInsertSucess&&(strFullPath == strCurSkin))
 					{
-						hMenu->GetMenuItem(nStartId)->SetAttribute(L"check",L"1");
+						hMenu->CheckMenuItem(nStartId, MF_BYCOMMAND | MF_CHECKED);
 					}
 				}
 			}
