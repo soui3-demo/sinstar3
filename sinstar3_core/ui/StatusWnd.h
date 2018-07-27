@@ -14,6 +14,7 @@ namespace SOUI
 		CStatusWnd(ICmdListener *pListener);
 		~CStatusWnd(void);
 
+		void UpdateCompInfo();
 	protected:
 		int OnCreate(LPCREATESTRUCT lpCreateStruct);
 
@@ -31,7 +32,6 @@ namespace SOUI
 	protected:
 
 		void OnDragStatus(EventArgs *e);
-		void OnSetSkin(EventArgs *e);
 		void OnCompInfo(EventArgs *e);
 
 		void OnBtnExtend();
@@ -44,7 +44,6 @@ namespace SOUI
 
 		EVENT_MAP_BEGIN()
 			EVENT_HANDLER(EventDragMove::EventID, OnDragStatus)
-			EVENT_HANDLER(EventSetSkin::EventID, OnSetSkin)
 			EVENT_HANDLER(EventSvrNotify::EventID, OnCompInfo)
 			EVENT_ID_COMMAND(R.id.btn_status_shrink, OnBtnShrink)
 			EVENT_ID_COMMAND(R.id.btn_status_extend, OnBtnExtend)
@@ -55,7 +54,8 @@ namespace SOUI
 			EVENT_ID_COMMAND(R.id.img_logo, OnLogoClick)
 		EVENT_MAP_END()
 
-		void UpdateCompInfo();
+	protected:
+		void UpdateUI();
 	protected:
 		SStatusBackground * m_pBackGround;
 		CSkinMananger       m_skinManager;

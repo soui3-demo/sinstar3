@@ -28,11 +28,9 @@ namespace SOUI
 		void UpdateAnchorPosition();
 		int GetCandMax(SWindow *pWnd) const;
 	protected:
-		void OnSetSkin(EventArgs *e);
 		void OnBtnPrevPage();
 		void OnBtnNextPage();
 		EVENT_MAP_BEGIN()
-			EVENT_HANDLER(EventSetSkin::EventID,OnSetSkin)
 			EVENT_ID_COMMAND(R.id.btn_prevpage,OnBtnPrevPage)
 			EVENT_ID_COMMAND(R.id.btn_nextpage,OnBtnNextPage)
 		EVENT_MAP_END()

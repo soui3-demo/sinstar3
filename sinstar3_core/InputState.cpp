@@ -288,6 +288,10 @@ void CInputState::ClearContext(UINT dwMask)
 	{
 		m_ctx.szTip[0]=0;
 	}
+	if (dwMask & CPC_UDCOMP)
+	{
+		m_ctx.cCompACLen = 0;
+	}
 }
 
 
