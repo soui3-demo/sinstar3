@@ -28,30 +28,36 @@ namespace SOUI
 		SystemParametersInfo(SPI_GETWORKAREA,0,&rcWorkArea,0);
 
 		CPoint pt =CDataCenter::getSingletonPtr()->GetData().m_ptStatus;
-		if(pt.x<0) pt.x = 0;
-		if(pt.y<0) pt.y = 0;
+		if (pt.x < 0 || pt.y<0)
+		{
+			CSize szWnd = GetDesiredSize(-1, -1);
+			pt.x = rcWorkArea.right - rcWnd.Width();
+			pt.y = rcWorkArea.bottom - rcWnd.Height();
+		}
 		if(pt.x + rcWnd.Width() > rcWorkArea.right)
 			pt.x = rcWorkArea.right - rcWnd.Width();
 		if(pt.y + rcWnd.Height()> rcWorkArea.bottom)
 			pt.y = rcWorkArea.bottom - rcWnd.Height();
+		SetWindowPos(HWND_TOPMOST,pt.x,pt.y,0,0,SWP_NOSIZE|SWP_NOZORDER|SWP_NOACTIVATE);
+		UpdateUI();
+		return 0;
+	}
 
-		UpdateCompInfo();
+	void CStatusWnd::UpdateUI()
+	{
 		{
 			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_charmode);
-			if(toggle) toggle->SetToggle(g_SettingsL.bCharMode);
+			if (toggle) toggle->SetToggle(g_SettingsL.bCharMode);
 		}
 		{
 			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_sound);
-			if(toggle) toggle->SetToggle(g_SettingsL.bSound);
+			if (toggle) toggle->SetToggle(g_SettingsL.bSound);
 		}
 		{
 			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_record);
-			if(toggle) toggle->SetToggle(g_SettingsL.bSound);
+			if (toggle) toggle->SetToggle(g_SettingsL.bSound);
 		}
-
-
-		SetWindowPos(HWND_TOPMOST,pt.x,pt.y,0,0,SWP_NOSIZE|SWP_NOZORDER|SWP_NOACTIVATE);
-		return 0;
+		UpdateCompInfo();
 	}
 
 	void CStatusWnd::OnRButtonUp(UINT nFlags,CPoint pt)
@@ -241,16 +247,6 @@ namespace SOUI
 
 		CDataCenter::getSingletonPtr()->GetData().m_ptStatus = pt;
 	}
-
-	void CStatusWnd::OnSetSkin(EventArgs *e)
-	{
-		OnDestroy();
-		CREATESTRUCT cs;
-		cs.cx=0;
-		cs.cy=0;
-		OnCreate(&cs);
-	}
-
 
 	void CStatusWnd::OnBtnExtend()
 	{

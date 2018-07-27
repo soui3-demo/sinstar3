@@ -8,6 +8,7 @@ class CImeWnd : public SHostWnd, public TAutoEventMapReg<CImeWnd>
 public:
 	CImeWnd(LPCTSTR pszLayout);
 
+
 	HWND Create(LPCTSTR pszTitle,HWND hParent=NULL);
 	void Show(BOOL bShow);
 
@@ -16,6 +17,13 @@ protected:
 	virtual BOOL OnReleaseSwndCapture();
 
 	BOOL m_canReleaseCapture;
+
+protected:
+	void OnSetSkin(EventArgs * e);
+	EVENT_MAP_BEGIN()
+		EVENT_HANDLER(EventSetSkin::EventID, OnSetSkin)
+	EVENT_MAP_END()
+
 protected:
 
 	BOOL OnSetCursor(HWND wnd, UINT nHitTest, UINT message);

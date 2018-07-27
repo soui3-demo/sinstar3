@@ -82,20 +82,10 @@ namespace SOUI
 	{
 		int nRet = __super::OnCreate(lpCreateStruct);
 		if(nRet != 0) return nRet;
-
+		UpdateUI();
 		return 0;
 	}
 
-
-	void CInputWnd::OnSetSkin(EventArgs *e)
-	{
-		OnDestroy();
-		CREATESTRUCT cs;
-		cs.cx=0;
-		cs.cy=0;
-		OnCreate(&cs);
-		UpdateUI();
-	}
 
 	void CInputWnd::OnBtnNextPage()
 	{

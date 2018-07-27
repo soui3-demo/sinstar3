@@ -10,6 +10,16 @@ CImeWnd::CImeWnd(LPCTSTR pszLayout):SHostWnd(pszLayout)
 
 }
 
+void CImeWnd::OnSetSkin(EventArgs *e)
+{
+	SendMessage(WM_DESTROY,0,0);
+	SetWindowPos(0, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
+	CREATESTRUCT cs;
+	cs.cx = 0;
+	cs.cy = 0;
+	SendMessage(WM_CREATE, 0, (LPARAM)&cs);
+}
+
 BOOL CImeWnd::OnSetCursor(HWND wnd, UINT nHitTest, UINT message)
 {
 	if(::GetCapture()!=m_hWnd)
