@@ -57,7 +57,7 @@ void CUtils::SoundPlay(LPCTSTR pszSound)
 int  CUtils::GB2GIB5(TCHAR *szBuf, int nStrLen)
 {
 	int nRet = 0;
-	if (nStrLen == -1) nStrLen = _tcslen(szBuf);
+	if (nStrLen == -1) nStrLen = (int)_tcslen(szBuf);
 	if (nStrLen>0)
 	{
 		DWORD wLCID = MAKELCID(MAKELANGID(LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED), SORT_CHINESE_PRC);
