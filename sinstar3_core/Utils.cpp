@@ -77,3 +77,21 @@ int  CUtils::GB2GIB5(TCHAR *szBuf, int nStrLen)
 	}
 	return nRet;
 }
+
+typedef BOOL(WINAPI *FunChangeMsgFilter)(UINT, DWORD);
+
+BOOL CUtils::ChangeWindowMessageFilter(UINT message, DWORD dwFlag)
+{
+	HMODULE hUser32 = GetModuleHandle(_T("user32.dll"));
+	if (hUser32)
+	{
+		FunChangeMsgFilter fMsgFilter = (FunChangeMsgFilter)GetProcAddress(hUser32, "ChangeWindowMessageFilter");
+		if (!fMsgFilter) return FALSE;
+		return fMsgFilter(message, dwFlag);
+	}
+	else
+	{
+		return FALSE;
+	}
+}
+

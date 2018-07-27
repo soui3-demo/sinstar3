@@ -1,6 +1,6 @@
 #include "StdAfx.h"
 #include "Sinstar3Impl.h"
-
+#include "Utils.h"
 #include <initguid.h>
 
 class CAutoContext
@@ -41,7 +41,7 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr)
 
 	SLOG_INFO("status:"<<m_pStatusWnd->m_hWnd<<", input:"<<m_pInputWnd->m_hWnd);
 	SOUI::CSimpleWnd::Create(_T("sinstar3_msg_recv"),WS_DISABLED|WS_POPUP,WS_EX_TOOLWINDOW,0,0,0,0,HWND_MESSAGE,NULL);
-
+	CUtils::ChangeWindowMessageFilter(WM_COPYDATA, MSGFLT_ADD);
 	ISComm_Login(m_hWnd);
 }
 
