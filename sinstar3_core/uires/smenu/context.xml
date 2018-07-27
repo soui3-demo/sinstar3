@@ -7,19 +7,13 @@
   <menuItem text="快捷设置" />
   <menuItem text="隐藏状态" name="hide_statusbar" id="101"/>
   <menuItem text="光标跟随" name="follow_caret" id="102"/>
-  <menuItem text="输出繁体" name="out_big5" id="103"/>
+  <menuItem text="输出繁体" name="input_big5" id="103"/>
   <sep/>
   <menuItem text="皮    肤" name="menu_skin" id="200" contextHelpId="2">
     <menuItem text="皮肤管理" name="skin_mgr" id="201"/>
     <menuItem text="网上皮肤" name="skin_cloud" id="202"/>
     <sep/>
     <menuItem text="内置皮肤" name="skin_def" id="220"/>
-  </menuItem>
-  <menuItem text="启程词典" name="menu_dict" contextHelpId="3">
-    <menuItem text="词典输入" name="dict_query" id="301"/>
-    <sep/>
-    <menuItem text="关闭" name="dict_close" id="302"/>
-    <sep/>
   </menuItem>
   <menuItem text="编码方案" name="menu_comp" contextHelpId="4">
     <menuItem text="[empty]" name="comp_start" id="400"/>

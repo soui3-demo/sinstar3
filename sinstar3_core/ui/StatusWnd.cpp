@@ -128,6 +128,23 @@ namespace SOUI
 		{
 			g_SettingsG.bBlendUD = !g_SettingsG.bBlendUD;
 		}
+		else if (nRet == R.id.key_map)
+		{
+			ISComm_SendMsg(CT_SHOWKEYMAP, 0, 0, 0);
+		}
+		else if (nRet == R.id.follow_caret)
+		{
+			g_SettingsL.bMouseFollow = !g_SettingsL.bMouseFollow;
+		}
+		else if (nRet == R.id.hide_statusbar)
+		{
+			g_SettingsL.bHideStatus = !g_SettingsL.bHideStatus;
+		}
+		else if (nRet == R.id.input_big5)
+		{
+			g_SettingsL.bInputBig5 = !g_SettingsL.bInputBig5;
+		}
+
 		m_skinManager.ClearMap();
 	}
 
@@ -135,6 +152,13 @@ namespace SOUI
 	{
 		switch (menuPopup->GetContextHelpId())
 		{
+		case 100:
+		{//main menu
+			menuPopup->CheckMenuItem(R.id.follow_caret, MF_BYCOMMAND | g_SettingsL.bMouseFollow ? MF_CHECKED : 0);
+			menuPopup->CheckMenuItem(R.id.hide_statusbar, MF_BYCOMMAND | g_SettingsL.bHideStatus ? MF_CHECKED : 0);
+			menuPopup->CheckMenuItem(R.id.input_big5, MF_BYCOMMAND | g_SettingsL.bInputBig5 ? MF_CHECKED : 0);
+			break;
+		}
 		case 2:
 		{
 			SStringT strCurSkin = CDataCenter::getSingletonPtr()->GetData().m_strSkin;
@@ -143,18 +167,6 @@ namespace SOUI
 				menuPopup->CheckMenuItem(R.id.skin_def, MF_BYCOMMAND|MF_CHECKED);
 			}
 			m_skinManager.InitSkinMenu(menuPopup, theModule->GetDataPath() + _T("\\skins"), R.id.skin_def, strCurSkin);
-			break;
-		}
-		case 3://dict
-		{
-			const SArray<CNameTypePair> & dis = CDataCenter::getSingleton().UpdateUserDict();
-			int idStart = R.id.dict_close + 1;
-			for (size_t i = 0; i < dis.GetCount(); i++)
-			{
-				SStringA strText = SStringA().Format("%s[%s]", dis[i].strName, dis[i].strType);
-				menuPopup->InsertMenu(-1, MF_BYPOSITION, idStart + i, S_CA2T(strText));
-			}
-			//todo: select current item.
 			break;
 		}
 		case 4://comp select

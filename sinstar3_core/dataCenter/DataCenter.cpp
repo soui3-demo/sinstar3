@@ -26,33 +26,6 @@ namespace SOUI
 		LeaveCriticalSection(&m_cs);
 	}
 
-	const SArray<CNameTypePair> & CDataCenter::UpdateUserDict()
-	{
-		m_userDicts.RemoveAll();
-		if (ISComm_UserDict_List() == ISACK_SUCCESS)
-		{
-			PMSGDATA pData = ISComm_GetData();
-			BYTE i, byCount = pData->byData[0];
-			char *pBuf = (char*)pData->byData + 1;
-			int idStart = R.id.dict_close + 1;
-			for (i = 0; i<byCount; i++)
-			{
-				CNameTypePair pair;
-				char *pName = pBuf + 1;
-				pair.strName = pName;
-				char *pType = pName + pair.strName.GetLength() + 1;
-				pair.strType = pType;
-				pBuf = pType + pair.strType.GetLength() + 1;
-				m_userDicts.Add(pair);
-			}
-		}
-		return m_userDicts;
-	}
-
-	const SArray<CNameTypePair>& CDataCenter::GetUserDict() const
-	{
-		return m_userDicts;
-	}
 
 	const SArray<CNameTypePair>& CDataCenter::UpdateCompList()
 	{
