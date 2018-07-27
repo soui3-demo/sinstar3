@@ -59,6 +59,10 @@ using namespace SOUI;
 #include "controls/SMutexView.h"
 #include "controls/SSpellView.h"
 #include "controls/SFlagView.h"
+#include "controls/SLineComp.h"
+#include "controls/STabCtrlEx.h"
+#include "controls/SLineSkin.h"
+
 #include "dataCenter/datacenter.h"
 #include "dataCenter/Settings.h"
 

@@ -232,6 +232,7 @@
     <ClCompile Include="controls\SFlagView.cpp" />
     <ClCompile Include="Sinstar3Impl.cpp" />
     <ClCompile Include="sinstar3_core.cpp" />
+    <ClCompile Include="controls\SLineComp.cpp" />
     <ClCompile Include="SouiEnv.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -244,8 +245,8 @@
     <ClCompile Include="ui\ImeWnd.cpp" />
     <ClCompile Include="ui\InputWnd.cpp" />
     <ClCompile Include="ui\SkinMananger.cpp" />
-    <ClCompile Include="ui\SLineSkin.cpp" />
-    <ClCompile Include="ui\STabCtrlEx.cpp" />
+    <ClCompile Include="controls\SLineSkin.cpp" />
+    <ClCompile Include="controls\STabCtrlEx.cpp" />
     <ClCompile Include="ui\StatusWnd.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
@@ -272,6 +273,7 @@
     <ClInclude Include="controls\SFlagView.h" />
     <ClInclude Include="Sinstar3Impl.h" />
     <ClInclude Include="sinstar3_core.h" />
+    <ClInclude Include="controls\SLineComp.h" />
     <ClInclude Include="SouiEnv.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="ui\STipWnd.h" />
@@ -280,8 +282,8 @@
     <ClInclude Include="ui\ImeWnd.h" />
     <ClInclude Include="ui\InputWnd.h" />
     <ClInclude Include="ui\SkinMananger.h" />
-    <ClInclude Include="ui\SLineSkin.h" />
-    <ClInclude Include="ui\STabCtrlEx.h" />
+    <ClInclude Include="controls\SLineSkin.h" />
+    <ClInclude Include="controls\STabCtrlEx.h" />
     <ClInclude Include="ui\StatusWnd.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>

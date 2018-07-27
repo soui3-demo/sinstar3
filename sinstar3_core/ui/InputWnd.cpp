@@ -170,6 +170,13 @@ namespace SOUI
 				}
 			}
 			break;
+		case INST_LINEIME:
+			{
+				SWindow * compLineIme = FindChildByID(R.id.comp_lineime);
+				compLineIme->SetVisible(TRUE, TRUE);
+				compLineIme->FindChildByID(R.id.txt_comps)->SetWindowText(S_CA2T(SStringA(m_pInputContext->szComp, m_pInputContext->cComp)));
+			}
+			break;
 		}
 		//update candidate
 		if (m_pInputContext->sCandCount>0)

@@ -11,10 +11,11 @@
     <imgframe name="bg_composition" src="img:png_composition" margin="70,0,200,0"/>
     <imglist name="btn_prevpage" src="img:btn_prevpage" states="3"/>
     <imglist name="btn_nextpage" src="img:btn_nextpage" states="3"/>
+    <imglist name="lines" src="img:png_lines" states="6"/>
   </skin>
 
   <root skin="bg_composition" cache="1" layout="vbox" padding="50,80,130,12">
-    <window size="50,0" visible="0"/>
+    <window size="100,0" visible="0"/>
     <window size="-1,0" weight="1" layout="hbox" tip="composition window">
       <mutexView size="-1,-2" name="comp_normal" layout="hbox">
         <text size="-1,-2" name="txt_comps"/>
@@ -27,6 +28,10 @@
         <text size="-1,-2" text="u:" colorText="@color/comp_umode_prefix" padding_right="5"/>
         <text size="-1,-2" name="txt_comps" text="umode"/>
         <text size="-1,-2" name="txt_auto_complete" colorText="@color/comp_auto_complete"/>
+      </mutexView>
+      <mutexView size="-1,-2" name="comp_lineime" visible="0" layut="hbox">
+        <text size="-1,-2" text="i:" colorText="@color/comp_umode_prefix" padding_right="5"/>
+        <lineComp size="-1,-2" name="txt_comps" lineSkin="lines"/>
       </mutexView>
       <window size="-1,-2" name="comp_sent" visible="1" layout="hbox" gravity="center" display="0">
         <text size="-1,-1" name="sent_input" colorText="@color/sent_input" />

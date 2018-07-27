@@ -336,6 +336,38 @@ namespace SOUI
 
 	}
 
+	void CStatusWnd::OnUpdateBtnTooltip(EventArgs *e)
+	{
+		EventSwndUpdateTooltip *e2 = sobj_cast<EventSwndUpdateTooltip>(e);
+		SASSERT(e2);
+		switch (e2->idFrom)
+		{
+		case R.id.btn_charmode:
+			e2->bUpdated = TRUE;
+			e2->strToolTip = SStringT().Format(_T("标点模式:%s"), g_SettingsL.bCharMode?_T("英文"):_T("中文"));
+			break;
+		case R.id.btn_makeword:
+			e2->bUpdated = TRUE;
+			e2->strToolTip = _T("剪贴板造词");
+			break;
+		case R.id.btn_record:
+			e2->bUpdated = TRUE;
+			e2->strToolTip = SStringT().Format(_T("记录输入状态:%s"), g_SettingsL.bRecord ? _T("启用") : _T("禁用"));
+			break;
+		case R.id.btn_sound:
+			e2->bUpdated = TRUE;
+			e2->strToolTip = SStringT().Format(_T("提示单:%s"), g_SettingsL.bRecord ? _T("启用") : _T("禁用"));
+			break;
+		case R.id.btn_status_extend:
+			e2->bUpdated = TRUE;
+			e2->strToolTip = _T("展开状态栏");
+			break;
+		case R.id.btn_status_shrink:
+			e2->bUpdated = TRUE;
+			e2->strToolTip = _T("收缩状态栏");
+			break;
+		}
+	}
 	void CStatusWnd::OnBtnMakeWord()
 	{
 		m_pCmdListener->OnCommand(CMD_MAKEWORD,0);
