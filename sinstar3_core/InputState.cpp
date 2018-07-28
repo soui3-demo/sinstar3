@@ -22,37 +22,6 @@ const BYTE KCompKey[] ={0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,        // 00-0F
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};       // F0-FF
 
 
-BOOL Tips_Rand(BOOL bSpell,char *pszBuf)
-{
-// 	if(g_bOpLoaded)
-// 	{
-// 		if(bSpell)
-// 		{
-// 			if(g_nOpTipSpell||g_nOpTipAll)
-// 			{
-// 				nIndex=rand()%(g_nOpTipSpell+g_nOpTipAll);
-// 				if(nIndex<g_nOpTipAll)
-// 					pszOpTip=g_ppszOpTipAll[nIndex];
-// 				else
-// 					pszOpTip=g_ppszOpTipSpell[nIndex-g_nOpTipAll];
-// 			}
-// 		}else
-// 		{
-// 			if(g_nOpTipShape||g_nOpTipAll)
-// 			{
-// 				nIndex=rand()%(g_nOpTipShape+g_nOpTipAll);
-// 				if(nIndex<g_nOpTipAll)
-// 					pszOpTip=g_ppszOpTipAll[nIndex];
-// 				else
-// 					pszOpTip=g_ppszOpTipShape[nIndex-g_nOpTipAll];
-// 			}
-// 		}
-// 	}
-	strcpy(pszBuf,"test");
-	return TRUE;
-}
-
-
 
 //·ûºÅ´¦Àí
 //BYTE byInput:¼üÅÌÊäÈë
@@ -183,7 +152,7 @@ BOOL KeyIn_IsCoding(InputContext * lpCntxtPriv)
 	return bOpen;
 }
 
-CInputState::CInputState(void):m_pListener(NULL),m_fOpen(FALSE),m_bTypeing(FALSE)
+CInputState::CInputState(void):m_pListener(NULL),m_fOpen(FALSE),m_bTypeing(FALSE), m_bUpdateTips(TRUE)
 {
 	memset(&m_ctx,0,sizeof(InputContext));
 	ClearContext(CPC_ALL);
@@ -195,6 +164,55 @@ CInputState::CInputState(void):m_pListener(NULL),m_fOpen(FALSE),m_bTypeing(FALSE
 CInputState::~CInputState(void)
 {
 	free(m_pbyMsgBuf);
+}
+
+BOOL CInputState::Tips_Rand(BOOL bSpell, char *pszBuf)
+{
+	if (m_bUpdateTips)
+	{
+		for (int i = 0; i < TT_COUNT; i++)
+		{
+			m_tips[i].RemoveAll();
+		}
+		pugi::xml_document xmlTips;
+		const wchar_t * groups[] = {
+			L"all",L"spell",L"shape"
+		};
+		if (xmlTips.load_file(theModule->GetDataPath()+_T("\\tips.xml")))
+		{
+			pugi::xml_node tips = xmlTips.child(L"tips");
+			for (int i = 0; i < 3; i++)
+			{
+				pugi::xml_node tip = tips.child(groups[i]).child(L"tip");
+				while (tip)
+				{
+					m_tips[i].Add(S_CW2A(tip.attribute(L"value").as_string()));
+					tip = tip.next_sibling(L"tip");
+				}
+
+			}
+		}
+		m_bUpdateTips = FALSE;
+	}
+	if (bSpell)
+	{
+		int total = (int) (m_tips[TT_SPELL].GetCount() + m_tips[TT_BOTH].GetCount());
+		int idx = rand() % total;
+		if (idx < m_tips[TT_SPELL].GetCount())
+			strcpy(pszBuf, m_tips[TT_SPELL][idx]);
+		else
+			strcpy(pszBuf, m_tips[TT_BOTH][idx - m_tips[TT_SPELL].GetCount()]);
+	}
+	else
+	{
+		int total = (int) (m_tips[TT_SHAPE].GetCount() + m_tips[TT_BOTH].GetCount());
+		int idx = rand() % total;
+		if (idx < m_tips[TT_SHAPE].GetCount())
+			strcpy(pszBuf, m_tips[TT_SHAPE][idx]);
+		else
+			strcpy(pszBuf, m_tips[TT_BOTH][idx - m_tips[TT_SHAPE].GetCount()]);
+	}
+	return TRUE;
 }
 
 void CInputState::GetShapeComp(const char *pInput,char cLen)

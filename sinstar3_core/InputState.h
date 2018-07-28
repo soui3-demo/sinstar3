@@ -57,6 +57,7 @@ protected:
 	void InputHide(BOOL bDelay = FALSE);
 	void StatusbarUpdate();
 private:
+	BOOL Tips_Rand(BOOL bSpell, char * pszBuf);
 
 	BYTE GetKeyinMask(BOOL bAssociate,BYTE byMask);
 
@@ -93,4 +94,13 @@ private:
 	BYTE * m_pbyMsgBuf;
 	BOOL		 m_fOpen;
 
+	enum TipType {
+		TT_SHAPE=0,
+		TT_SPELL,
+		TT_BOTH,
+		TT_COUNT,
+	};
+
+	SArray<SStringA>  m_tips[TT_COUNT];
+	BOOL			 m_bUpdateTips;
 };

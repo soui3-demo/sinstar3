@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tips>
+	<all>
+	    <tip  text="Shift+首字母进入英文输入"/>
+	    <tip  text="Ctrl+Q切换形码与拼音"/>
+	    <tip  text="Ctrl+E:开关英文单词输入模式"/>
+	    <tip  text="Shift+空格:切换中英文标点"/>
+	    <tip  text="自定义下date输入日期"/>
+	    <tip  text="自定义下time输入时间"/>
+	    <tip  text="Shift+回车:重复输入"/>
+	    <tip  text="Ctrl+/:查询编码/拼音"/>
+	    <tip  text="右Shift暂时开关输入法"/>
+	    <tip  text="更多功能在服务器中"/>
+	    <tip  text="-/+重码翻页"/>
+	    <tip  text="回车:清除编码"/>
+	    <tip  text="启程网站:http://www.ui520.cn"/>
+	    <tip  text="系统设置中关闭操作提示"/>
+	    <tip  text="；语句联想开关"/>
+	</all>
+	<spell>
+		<tip text="上下箭头翻重码页"/>
+		<tip text="左右箭头移动音节"/>
+		<tip text="词组可以只输入声母"/>
+		<tip text="输入过的短语可以只输入声母"/>
+		<tip text="首码i进入笔画输入"/>
+		<tip text="首码u进入自定义模式"/>
+		<tip text="右Ctrl打开拼音笔画辅助"/>
+	</spell>
+	<shape>
+		<tip text="Ctrl+Shift+数字:在线删词"/>
+		<tip text="Ctrl+K显示字根表"/>
+		<tip text="Ctrl+M:剪贴版造词"/>
+		<tip text="右Ctrl打开临时拼音"/>
+		<tip text="首码万能键进入自定义模式"/>
+		<tip text="系统支持智能造词"/>
+		<tip text="Ctrl+数字:手动调频"/>
+	</shape>
+</tips>
