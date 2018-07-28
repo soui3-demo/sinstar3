@@ -51,11 +51,11 @@ namespace SOUI
 		}
 		{
 			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_sound);
-			if (toggle) toggle->SetToggle(g_SettingsL.bSound);
+			if (toggle) toggle->SetToggle(!g_SettingsL.bSound);
 		}
 		{
 			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_record);
-			if (toggle) toggle->SetToggle(g_SettingsL.bSound);
+			if (toggle) toggle->SetToggle(!g_SettingsL.bRecord);
 		}
 		UpdateCompInfo();
 	}
@@ -356,7 +356,7 @@ namespace SOUI
 			break;
 		case R.id.btn_sound:
 			e2->bUpdated = TRUE;
-			e2->strToolTip = SStringT().Format(_T("提示单:%s"), g_SettingsL.bRecord ? _T("启用") : _T("禁用"));
+			e2->strToolTip = SStringT().Format(_T("提示音:%s"), g_SettingsL.bSound ? _T("启用") : _T("禁用"));
 			break;
 		case R.id.btn_status_extend:
 			e2->bUpdated = TRUE;
