@@ -75,8 +75,15 @@ namespace SOUI
 		m_strSkin = szSkin;
 
 		DWORD dwPos=-1;
-		m_reg.QueryDWORDValue(_T("status_pos"),dwPos);
-		m_ptStatus = CPoint(GET_X_LPARAM(dwPos),GET_Y_LPARAM(dwPos));
+		if (ERROR_SUCCESS == m_reg.QueryDWORDValue(_T("status_pos"), dwPos))
+			m_ptStatus = CPoint(GET_X_LPARAM(dwPos), GET_Y_LPARAM(dwPos));
+		else
+			m_ptStatus = CPoint(-1, -1);
+
+		if (ERROR_SUCCESS == m_reg.QueryDWORDValue(_T("input_pos"), dwPos))
+			m_ptInput = CPoint(GET_X_LPARAM(dwPos), GET_Y_LPARAM(dwPos));
+		else
+			m_ptInput = CPoint(-1, -1);
 
 		CRegKey keySvr;
 		if(ERROR_SUCCESS == keySvr.Open(HKEY_LOCAL_MACHINE,L"Software\\Setoutsoft\\sinstar3",KEY_READ|KEY_WOW64_64KEY))
@@ -92,6 +99,7 @@ namespace SOUI
 	CMyData::~CMyData()
 	{
 		m_reg.SetDWORDValue(_T("status_pos"),MAKELPARAM(m_ptStatus.x,m_ptStatus.y));
+		m_reg.SetDWORDValue(_T("input_pos"), MAKELPARAM(m_ptInput.x, m_ptInput.y));
 		m_reg.SetStringValue(_T("skin"),m_strSkin);
 		m_reg.Close();
 	}

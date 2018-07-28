@@ -13,6 +13,9 @@ namespace SOUI
 		CInputWnd(InputContext * pCtx);
 		~CInputWnd(void);
 
+		void SetFollowCaret(BOOL bFollowCaret);
+		void SetAnchorPosition(CPoint ptAnchor);
+
 		void MoveTo(CPoint pt,int nCaretHeight);
 		void Show(BOOL bShow, BOOL bClearLocateInfo=TRUE);
 		void Hide(int nDelay);
@@ -22,6 +25,7 @@ namespace SOUI
 		BOOL GoPrevCandidatePage();
 		short SelectCandidate(short iCand);
 	protected:
+		void UpdateAnchorPosition();
 		int GetCandMax(SWindow *pWnd) const;
 	protected:
 		void OnSetSkin(EventArgs *e);
@@ -36,11 +40,21 @@ namespace SOUI
 	protected:
 		int OnCreate(LPCREATESTRUCT lpCreateStruct);
 		void OnTimer(UINT_PTR idEvent);
+		
+		void OnLButtonDown(UINT nFlags, CPoint point);
+		void OnLButtonUp(UINT nFlags, CPoint point);
+		void OnMouseMove(UINT nFlags, CPoint point);
+
 		BEGIN_MSG_MAP_EX(CInputWnd)
+			MSG_WM_LBUTTONDOWN(OnLButtonDown)
+			MSG_WM_LBUTTONUP(OnLButtonUp)
+			MSG_WM_MOUSEMOVE(OnMouseMove)
 			MSG_WM_TIMER(OnTimer)
 			MSG_WM_CREATE(OnCreate)
 			CHAIN_MSG_MAP(__super)
 		END_MSG_MAP()
+
+	private:
 		CPoint			 m_ptCaret;
 		int				 m_nCaretHeight;
 		BOOL			 m_bLocated;
@@ -48,6 +62,12 @@ namespace SOUI
 
 		short			 m_cPageSize;
 		InputContext	* m_pInputContext;
+
+		CPoint			m_ptClick;
+		BOOL			m_bDraging;
+
+		BOOL			m_bFollowCaret;
+		CPoint			m_ptAnchor;
 	};
 
 }

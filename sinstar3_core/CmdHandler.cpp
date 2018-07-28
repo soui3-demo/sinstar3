@@ -172,3 +172,9 @@ void CCmdHandler::OnQueryInfo(LPARAM lp)
 		CUtils::SoundPlay(_T("error"));
 	}
 }
+
+void CCmdHandler::OnFollowCaret(LPARAM lp)
+{
+	g_SettingsL.bMouseFollow = !g_SettingsL.bMouseFollow;
+	m_pSinstar3->m_pInputWnd->SetFollowCaret(g_SettingsL.bMouseFollow);
+}

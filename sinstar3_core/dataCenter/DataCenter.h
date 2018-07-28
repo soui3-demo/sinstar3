@@ -25,7 +25,8 @@ namespace SOUI
 
 		SStringT	m_strSkin;
 		CPoint		m_ptStatus;
-		
+		CPoint		m_ptInput;
+
 		int			m_cInputCount;
 		CRegKey		m_reg;
 	};

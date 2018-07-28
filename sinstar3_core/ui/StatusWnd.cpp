@@ -134,7 +134,7 @@ namespace SOUI
 		}
 		else if (nRet == R.id.follow_caret)
 		{
-			g_SettingsL.bMouseFollow = !g_SettingsL.bMouseFollow;
+			m_pCmdListener->OnCommand(CMD_FOLLOWCARET,0);
 		}
 		else if (nRet == R.id.hide_statusbar)
 		{
