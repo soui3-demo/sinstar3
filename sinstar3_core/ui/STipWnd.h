@@ -23,9 +23,9 @@ namespace SOUI {
 		END_MSG_MAP()
 
 	protected:
-		void OnSetSkin(EventArgs *e);
+		void OnClose();
 		EVENT_MAP_BEGIN()
-			EVENT_HANDLER(EventSetSkin::EventID, OnSetSkin)
+			EVENT_ID_COMMAND(R.id.btn_close, OnClose)
 		EVENT_MAP_END()
 
 	};

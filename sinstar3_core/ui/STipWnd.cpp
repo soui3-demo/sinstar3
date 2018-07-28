@@ -24,7 +24,7 @@ namespace SOUI {
 	{
 		if (idEvent == TIMER_DELAY_HIDE)
 		{
-			ShowWindow(SW_HIDE);
+			OnClose();
 			CSimpleWnd::KillTimer(idEvent);
 		}
 		else
@@ -45,12 +45,8 @@ namespace SOUI {
 		}
 	}
 
-	void STipWnd::OnSetSkin(EventArgs *e)
+	void STipWnd::OnClose()
 	{
-		OnDestroy();
-		CREATESTRUCT cs;
-		cs.cx = 0;
-		cs.cy = 0;
-		OnCreate(&cs);
+		ShowWindow(SW_HIDE);
 	}
 }
