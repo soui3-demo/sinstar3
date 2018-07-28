@@ -26,7 +26,7 @@ namespace SOUI
 		pRT->MeasureText(m_strIndex,m_strIndex.GetLength(),&szBlock);
 		pt.x += szBlock.cx;
 
-		pRT->SetTextColor(m_crComp);
+		pRT->SetTextColor(m_crCand);
 		pRT->TextOut(pt.x,pt.y,m_strCand,m_strCand.GetLength());
 		pRT->MeasureText(m_strCand,m_strCand.GetLength(),&szBlock);
 		pt.x += szBlock.cx;

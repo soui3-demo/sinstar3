@@ -41,10 +41,11 @@ namespace SOUI
 		void OnSwitchRecord(EventArgs *e);
 		void OnSwitchSound(EventArgs *e);
 		void OnLogoClick();
-
+		void OnUpdateBtnTooltip(EventArgs *e);
 		EVENT_MAP_BEGIN()
 			EVENT_HANDLER(EventDragMove::EventID, OnDragStatus)
 			EVENT_HANDLER(EventSvrNotify::EventID, OnCompInfo)
+			EVENT_HANDLER(EventSwndUpdateTooltip::EventID, OnUpdateBtnTooltip)
 			EVENT_ID_COMMAND(R.id.btn_status_shrink, OnBtnShrink)
 			EVENT_ID_COMMAND(R.id.btn_status_extend, OnBtnExtend)
 			EVENT_ID_COMMAND(R.id.btn_makeword, OnBtnMakeWord)

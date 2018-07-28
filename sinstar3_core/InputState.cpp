@@ -222,8 +222,8 @@ BYTE CInputState::GetKeyinMask(BOOL bAssociate,BYTE byMask)
 		if(g_SettingsG.bAstSent) byRet|=MKI_ASTSENT;
 		switch(g_SettingsG.byAstMode)
 		{
+		case AST_CAND:byRet |= MKI_ASTCAND; break;
 		case AST_ENGLISH:byRet|=MKI_ASTENGLISH;break;
-		case AST_CAND:byRet|=MKI_ASTCAND;break;
 		case AST_PHRASEREMIND:byRet|=MKI_PHRASEREMIND;break;
 		default:break;
 		}
@@ -2082,10 +2082,8 @@ BOOL CInputState::KeyIn_Line_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 		bRet=TRUE;
 	}else if(byInput==VK_ESCAPE||byInput==VK_RETURN)
 	{//ÍË³ö×´Ì¬
-		lpCntxtPriv->inState=INST_CODING;
-		lpCntxtPriv->sbState=::SBST_NORMAL;
-		lpCntxtPriv->cComp=0;
-		InputEnd();
+		ClearContext(CPC_ALL);
+		InputUpdate();
 		bRet=TRUE;
 	}else if(byInput>=VK_NUMPAD1 && byInput<=VK_NUMPAD6)
 	{//±à¼­

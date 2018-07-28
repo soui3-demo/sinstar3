@@ -34,6 +34,7 @@
     <file name="btn_sound_enable" path="image\btn_sound_enable.png"/>
     <file name="btn_sound_disable" path="image\btn_sound_disable.png"/>
     <file name="SYS_SCROLLBAR" path="image\scrollbar.png"/>
+    <file name="png_lines" path="image\lines.png"/>
   </IMG>
   <ICON>
     <file name="ICON_LOGO"  path="image\sinstar3.ico"/>
