@@ -2521,6 +2521,10 @@ BOOL CInputState::OnSvrNotify(UINT wp, PMSGDATA pMsg)
 				if(ctx->bShowTip || ctx->sCandCount || ctx->sSentLen)
 				{//有联想词组或有联想句子
 					SLOG_INFO("Update Input Window");
+					if (ctx->sCandCount == 0 && g_SettingsG.bShowOpTip)
+					{//没有候选时,在侯选位置显示操作提示
+						Tips_Rand(ctx->compMode == IM_SPELL, ctx->szTip);
+					}
 					InputUpdate();
 				}else
 				{//关闭窗口

@@ -29,6 +29,10 @@ namespace SOUI
 		void OnAutoInput();
 		//拼音重码词组优先
 		void OnPyPhraseFirst();
+
+		//show op tip
+		void OnChkOpTip(EventArgs *e);
+
 		//联想类型
 		void OnClickAssMode(int id);
 		void OnClickForcast(int id);
@@ -52,6 +56,7 @@ namespace SOUI
 			EVENT_ID_COMMAND_RANGE(120, 122, OnClickPYTemp)
 			EVENT_ID_COMMAND(R.id.cand_auto_input, OnAutoInput)
 			EVENT_ID_COMMAND(R.id.cand_py_phrase_first, OnPyPhraseFirst)
+			EVENT_ID_HANDLER(R.id.chk_show_op_tip,EventCmd::EventID, OnChkOpTip)
 			EVENT_ID_COMMAND_RANGE(400, 403, OnClickAssMode)
 			EVENT_ID_COMMAND_RANGE(600, 602, OnClickForcast)
 			EVENT_ID_COMMAND_RANGE(700, 702, OnClickGBK)

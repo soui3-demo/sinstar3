@@ -53,6 +53,7 @@
             </window>
             <check extend_top="10" text="重码自动上屏" pos="58,[5" name="cand_auto_input"/>
             <check extend_top="10" text="拼音重码词组优先" pos="58,[5" name="cand_py_phrase_first"/>
+            <check extend_top="10" text="显示使用技巧" pos="58,[5" name="chk_show_op_tip"/>
           </window>
         </pageex>
 
