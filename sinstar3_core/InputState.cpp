@@ -1806,6 +1806,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 					pCandData+=pCandData[0]+1;	//Æ«ÒÆ±àÂëÐÅÏ¢
 				}
 			}
+			InputUpdate();
 		}
 		if(lpCntxtPriv->sCandCount)
 		{
