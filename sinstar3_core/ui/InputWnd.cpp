@@ -123,8 +123,16 @@ namespace SOUI
 				SWindow *pTip = compNormal->FindChildByID(R.id.txt_tip);
 				if (pTip)
 				{
-					pTip->SetVisible(m_pInputContext->sbState == SBST_NORMAL);
-					pTip->SetWindowText(S_CA2T(m_pInputContext->szTip));
+					if (m_pInputContext->sbState == SBST_NORMAL)
+					{
+						pTip->SetVisible(TRUE);
+						pTip->SetWindowText(S_CA2T(m_pInputContext->szTip));
+					}
+					else
+					{
+						pTip->SetVisible(FALSE);
+						pTip->SetWindowText(_T(""));
+					}
 				}
 			}
 			//update sentence input state
