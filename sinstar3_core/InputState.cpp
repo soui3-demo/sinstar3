@@ -1647,7 +1647,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 				if(!ISComm_GetCompInfo()->bSymbolFirst || byInput==g_SettingsCompSpec.hkUserDefSwitch) return FALSE;//符号顶字上屏
 			}
 			if(g_SettingsG.bShowOpTip)
-			{
+			{//有编码后面显示操作提示
 				lpCntxtPriv->bShowTip=TRUE;
 				Tips_Rand(FALSE,lpCntxtPriv->szTip);
 			}

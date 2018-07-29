@@ -106,50 +106,55 @@ namespace SOUI
 		switch(m_pInputContext->inState)
 		{
 		case INST_CODING:
-			if(m_pInputContext->compMode == IM_SPELL)
+		{
+			SWindow *pMutexView = NULL;
+			if (m_pInputContext->compMode == IM_SPELL)
 			{
-				SWindow * compSpell = FindChildByID(R.id.comp_spell);
-				compSpell->SetVisible(TRUE,TRUE);
-				SWindow * pTempFlag = compSpell->FindChildByID(R.id.txt_temp_spell_flag);
-				pTempFlag->SetVisible(g_SettingsG.compMode != IM_SPELL,TRUE);
-				SSpellView * spellView = compSpell->FindChildByID2<SSpellView>(R.id.txt_comps);
+				pMutexView = FindChildByID(R.id.comp_spell);
+				pMutexView->SetVisible(TRUE, TRUE);
+				SWindow * pTempFlag = pMutexView->FindChildByID(R.id.txt_temp_spell_flag);
+				pTempFlag->SetVisible(g_SettingsG.compMode != IM_SPELL, TRUE);
+				SSpellView * spellView = pMutexView->FindChildByID2<SSpellView>(R.id.txt_comps);
 				spellView->UpdateByContext(m_pInputContext);
 			}
 			else
 			{
-				SWindow * compNormal = FindChildByID(R.id.comp_normal);
-				compNormal->SetVisible(TRUE,TRUE);
-				compNormal->FindChildByID(R.id.txt_comps)->SetWindowText(S_CA2T(SStringA(m_pInputContext->szComp,m_pInputContext->cComp)));
-				SWindow *pTip = compNormal->FindChildByID(R.id.txt_tip);
-				if (pTip)
+				pMutexView = FindChildByID(R.id.comp_normal);
+				pMutexView->SetVisible(TRUE, TRUE);
+				pMutexView->FindChildByID(R.id.txt_comps)->SetWindowText(S_CA2T(SStringA(m_pInputContext->szComp, m_pInputContext->cComp)));
+			}
+			//update tips
+			SWindow *pTip = pMutexView->FindChildByID(R.id.txt_tip);
+			if (pTip)
+			{
+				if (m_pInputContext->sbState == SBST_NORMAL)
 				{
-					if (m_pInputContext->sbState == SBST_NORMAL)
-					{
-						pTip->SetVisible(TRUE);
-						pTip->SetWindowText(S_CA2T(m_pInputContext->szTip));
-					}
-					else
-					{
-						pTip->SetVisible(FALSE);
-						pTip->SetWindowText(_T(""));
-					}
+					pTip->SetVisible(TRUE);
+					pTip->SetWindowText(S_CA2T(m_pInputContext->szTip));
+				}
+				else
+				{
+					pTip->SetVisible(FALSE);
+					pTip->SetWindowText(NULL);
 				}
 			}
 			//update sentence input state
 			{
+				pMutexView->SetVisible(m_pInputContext->sbState == SBST_NORMAL, TRUE);
 				SWindow * compSent = FindChildByID(R.id.comp_sent);
-				compSent->SetVisible(m_pInputContext->sbState != SBST_NORMAL,TRUE);
+				compSent->SetVisible(m_pInputContext->sbState != SBST_NORMAL, TRUE);
+
 				SWindow *pSentInput = compSent->FindChildByID(R.id.sent_input);
 				SWindow *pSentLeft = compSent->FindChildByID(R.id.sent_left);
 				SWindow *pSentRight = compSent->FindChildByID(R.id.sent_right);
-				if(m_pInputContext->sbState != SBST_NORMAL)
+				if (m_pInputContext->sbState != SBST_NORMAL)
 				{//
-					SStringT strInput(m_pInputContext->szInput,m_pInputContext->cInput);
+					SStringT strInput(m_pInputContext->szInput, m_pInputContext->cInput);
 					pSentInput->SetWindowText(strInput);
-					int nSelLen = int(m_pInputContext->pbySentWord[m_pInputContext->sSentCaret]-m_pInputContext->pbySentWord[0]);
-					SStringA strLeft((char*)m_pInputContext->pbySentWord[0],nSelLen);
+					int nSelLen = int(m_pInputContext->pbySentWord[m_pInputContext->sSentCaret] - m_pInputContext->pbySentWord[0]);
+					SStringA strLeft((char*)m_pInputContext->pbySentWord[0], nSelLen);
 					pSentLeft->SetWindowText(S_CA2T(strLeft));
-					SStringA strRight((char*)m_pInputContext->pbySentWord[m_pInputContext->sSentCaret],m_pInputContext->sSentLen-nSelLen);
+					SStringA strRight((char*)m_pInputContext->pbySentWord[m_pInputContext->sSentCaret], m_pInputContext->sSentLen - nSelLen);
 					pSentRight->SetWindowText(S_CA2T(strRight));
 				}
 				else
@@ -160,6 +165,7 @@ namespace SOUI
 				}
 			}
 			break;
+		}
 		case INST_USERDEF:
 			{
 				SWindow * compUmode = FindChildByID(R.id.comp_umode);

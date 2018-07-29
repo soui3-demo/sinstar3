@@ -22,8 +22,9 @@
         <text size="-1,-2" name="txt_tip" colorText="@color/gray" extend_left="10dp"/>
       </mutexView>
       <mutexView size="-1,-2" name="comp_spell" visible="0" layout="hbox">
-        <text size="-1,-2" text="t:" name="txt_temp_spell_flag" colorText="#ff0000" padding_right="5" display="0"/>
+        <text size="-1,-2" text="t:" name="txt_temp_spell_flag" colorText="@color/red" padding_right="5" display="0"/>
         <spellView size="-1,-2" name="txt_comps"/>
+        <text size="-1,-2" name="txt_tip" colorText="@color/gray" extend_left="10dp"/>
       </mutexView>
       <mutexView size="-1,-2" name="comp_umode"  visible="0" layout="hbox">
         <text size="-1,-2" text="u:" colorText="@color/comp_umode_prefix" padding_right="5"/>
