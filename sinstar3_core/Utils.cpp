@@ -55,28 +55,11 @@ void CUtils::SoundPlay(LPCTSTR pszSound)
 //----------------------------------------------------------------------------
 // GB2312码转GBK码
 // 中华人民共和国 --> 中華人民共和國
-int  CUtils::GB2GIB5(TCHAR *szBuf, int nStrLen)
+int  CUtils::GB2GIB5(LPCTSTR szBuf, int nBufLen, TCHAR *szBig5, int nOutLen)
 {
-	int nRet = 0;
-	if (nStrLen == -1) nStrLen = (int)_tcslen(szBuf);
-	if (nStrLen>0)
-	{
-		DWORD wLCID = MAKELCID(MAKELANGID(LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED), SORT_CHINESE_PRC);
-		int nReturn = LCMapString(wLCID, LCMAP_TRADITIONAL_CHINESE, szBuf, nStrLen, NULL, 0);
-		if (nReturn)
-		{
-			TCHAR *pcBuf = (TCHAR*)malloc((nReturn + 1)*sizeof(TCHAR));
-			wLCID = MAKELCID(MAKELANGID(LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED), SORT_CHINESE_PRC);
-			LCMapString(wLCID, LCMAP_TRADITIONAL_CHINESE, szBuf, nReturn, pcBuf, nReturn + 1);
-			if (nReturn <= nStrLen)
-			{
-				_tcsncpy(szBuf, pcBuf, nReturn);
-				nRet = nReturn;
-			}
-			free(pcBuf);
-		}
-	}
-	return nRet;
+	if (nBufLen == -1) nBufLen = (int)_tcslen(szBuf);
+	DWORD wLCID = MAKELCID(MAKELANGID(LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED), SORT_CHINESE_PRC);
+	return LCMapString(wLCID, LCMAP_TRADITIONAL_CHINESE, szBuf, nBufLen*sizeof(TCHAR), szBig5, nOutLen * sizeof(TCHAR));
 }
 
 typedef BOOL(WINAPI *FunChangeMsgFilter)(UINT, DWORD);

@@ -325,16 +325,27 @@ void CInputState::InputResult(const SStringT &strResult,BYTE byAstMask)
 	SLOG_INFO("result:"<<strResult<<" astMask:"<<byAstMask);
 
 	SASSERT(m_pListener);
-	m_pListener->OnInputResult(strResult);
-	_tcscpy(m_ctx.szInput,strResult);
-	m_ctx.cInput = strResult.GetLength();
+	SStringT strTemp = strResult;
+	if (g_SettingsL.bInputBig5)
+	{
+		int nLen = CUtils::GB2GIB5(strResult, strResult.GetLength(), NULL, 0);
+		TCHAR *pBig5 = new TCHAR[nLen / sizeof(TCHAR)+1];
+		nLen = CUtils::GB2GIB5(strResult, strResult.GetLength(), pBig5, nLen);
+		strTemp = SStringW(pBig5,nLen/sizeof(TCHAR));
+		delete[]pBig5;
+	}
+	{
+		m_pListener->OnInputResult(strTemp);
+		_tcscpy(m_ctx.szInput, strTemp);
+		m_ctx.cInput = strTemp.GetLength();
+	}
 
 	if(byAstMask!=0)
 	{
-		SStringA strResultA = S_CT2A(strResult);
+		SStringA strResultA = S_CT2A(strTemp);
 		KeyIn_InputAndAssociate(&m_ctx,strResultA,(short)strResultA.GetLength(),byAstMask);
 	}
-	CDataCenter::getSingletonPtr()->GetData().m_cInputCount+=strResult.GetLength();
+	CDataCenter::getSingletonPtr()->GetData().m_cInputCount+= strTemp.GetLength();
 }
 
 void CInputState::InputResult(const SStringA &strResult,BYTE byAstMask)
