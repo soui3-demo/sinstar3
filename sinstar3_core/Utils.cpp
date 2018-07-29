@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Utils.h"
+#include <ShellAPI.h>
 #include <mmsystem.h>
 #pragma comment(lib,"winmm.lib")
 
@@ -93,5 +94,26 @@ BOOL CUtils::ChangeWindowMessageFilter(UINT message, DWORD dwFlag)
 	{
 		return FALSE;
 	}
+}
+
+
+BOOL CUtils::CmdExecute(BYTE * pszBuf)
+{
+	UINT_PTR uRet = FALSE;
+	char *pParam = NULL;
+	char *pCmd = (char*)pszBuf + pszBuf[1] + 2 + 1;
+	if (pCmd[0] == '\"')
+	{
+		pParam = strstr(pCmd, "\" ");
+		if (pParam) { pParam[1] = 0; pParam += 2; }
+	}
+	else
+	{
+		pParam = strstr(pCmd, " ");
+		if (pParam) pParam[0] = 0, pParam++;
+	}
+	uRet = (UINT_PTR)ShellExecuteA(NULL, "open", pCmd, pParam, NULL, SW_SHOWDEFAULT);
+	if (uRet <= 32) uRet = (UINT_PTR)ShellExecuteA(NULL, "explorer", pCmd, NULL, NULL, SW_SHOWDEFAULT);
+	return uRet>32;
 }
 
