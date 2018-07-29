@@ -106,36 +106,55 @@ namespace SOUI
 		switch(m_pInputContext->inState)
 		{
 		case INST_CODING:
-			if(m_pInputContext->compMode == IM_SPELL)
+		{
+			SWindow *pMutexView = NULL;
+			if (m_pInputContext->compMode == IM_SPELL)
 			{
-				SWindow * compSpell = FindChildByID(R.id.comp_spell);
-				compSpell->SetVisible(TRUE,TRUE);
-				SWindow * pTempFlag = compSpell->FindChildByID(R.id.txt_temp_spell_flag);
-				pTempFlag->SetVisible(g_SettingsG.compMode != IM_SPELL,TRUE);
-				SSpellView * spellView = compSpell->FindChildByID2<SSpellView>(R.id.txt_comps);
+				pMutexView = FindChildByID(R.id.comp_spell);
+				pMutexView->SetVisible(TRUE, TRUE);
+				SWindow * pTempFlag = pMutexView->FindChildByID(R.id.txt_temp_spell_flag);
+				pTempFlag->SetVisible(g_SettingsG.compMode != IM_SPELL, TRUE);
+				SSpellView * spellView = pMutexView->FindChildByID2<SSpellView>(R.id.txt_comps);
 				spellView->UpdateByContext(m_pInputContext);
 			}
 			else
 			{
-				SWindow * compNormal = FindChildByID(R.id.comp_normal);
-				compNormal->SetVisible(TRUE,TRUE);
-				compNormal->FindChildByID(R.id.txt_comps)->SetWindowText(S_CA2T(SStringA(m_pInputContext->szComp,m_pInputContext->cComp)));
+				pMutexView = FindChildByID(R.id.comp_normal);
+				pMutexView->SetVisible(TRUE, TRUE);
+				pMutexView->FindChildByID(R.id.txt_comps)->SetWindowText(S_CA2T(SStringA(m_pInputContext->szComp, m_pInputContext->cComp)));
+			}
+			//update tips
+			SWindow *pTip = pMutexView->FindChildByID(R.id.txt_tip);
+			if (pTip)
+			{
+				if (m_pInputContext->sbState == SBST_NORMAL)
+				{
+					pTip->SetVisible(TRUE);
+					pTip->SetWindowText(S_CA2T(m_pInputContext->szTip));
+				}
+				else
+				{
+					pTip->SetVisible(FALSE);
+					pTip->SetWindowText(NULL);
+				}
 			}
 			//update sentence input state
 			{
+				pMutexView->SetVisible(m_pInputContext->sbState == SBST_NORMAL, TRUE);
 				SWindow * compSent = FindChildByID(R.id.comp_sent);
-				compSent->SetVisible(m_pInputContext->sbState != SBST_NORMAL,TRUE);
+				compSent->SetVisible(m_pInputContext->sbState != SBST_NORMAL, TRUE);
+
 				SWindow *pSentInput = compSent->FindChildByID(R.id.sent_input);
 				SWindow *pSentLeft = compSent->FindChildByID(R.id.sent_left);
 				SWindow *pSentRight = compSent->FindChildByID(R.id.sent_right);
-				if(m_pInputContext->sbState != SBST_NORMAL)
+				if (m_pInputContext->sbState != SBST_NORMAL)
 				{//
-					SStringT strInput(m_pInputContext->szInput,m_pInputContext->cInput);
+					SStringT strInput(m_pInputContext->szInput, m_pInputContext->cInput);
 					pSentInput->SetWindowText(strInput);
-					int nSelLen = int(m_pInputContext->pbySentWord[m_pInputContext->sSentCaret]-m_pInputContext->pbySentWord[0]);
-					SStringA strLeft((char*)m_pInputContext->pbySentWord[0],nSelLen);
+					int nSelLen = int(m_pInputContext->pbySentWord[m_pInputContext->sSentCaret] - m_pInputContext->pbySentWord[0]);
+					SStringA strLeft((char*)m_pInputContext->pbySentWord[0], nSelLen);
 					pSentLeft->SetWindowText(S_CA2T(strLeft));
-					SStringA strRight((char*)m_pInputContext->pbySentWord[m_pInputContext->sSentCaret],m_pInputContext->sSentLen-nSelLen);
+					SStringA strRight((char*)m_pInputContext->pbySentWord[m_pInputContext->sSentCaret], m_pInputContext->sSentLen - nSelLen);
 					pSentRight->SetWindowText(S_CA2T(strRight));
 				}
 				else
@@ -146,6 +165,7 @@ namespace SOUI
 				}
 			}
 			break;
+		}
 		case INST_USERDEF:
 			{
 				SWindow * compUmode = FindChildByID(R.id.comp_umode);
@@ -180,33 +200,75 @@ namespace SOUI
 			break;
 		}
 		//update candidate
-		if (m_pInputContext->sCandCount>0)
-		{
-			if (m_pInputContext->sbState == SBST_NORMAL)
-			{//正在输入状态下的重码.
-				SWindow * pCandNormal = FindChildByID(R.id.cand_normal);
-				pCandNormal->SetVisible(TRUE, TRUE);
-				SWindow * pCandContainer = pCandNormal->FindChildByID(R.id.cand_container);
+		if (m_pInputContext->sbState == SBST_NORMAL)
+		{//正在输入状态下的重码.
+			SWindow * pCandNormal = FindChildByID(R.id.cand_normal);
+			pCandNormal->SetVisible(TRUE, TRUE);
+			SWindow * pCandContainer = pCandNormal->FindChildByID(R.id.cand_container);
 
-				int nPageSize = GetCandMax(pCandContainer,SCandView::GetClassName());
+			int nPageSize = GetCandMax(pCandContainer, SCandView::GetClassName());
+			int iBegin = m_pInputContext->iCandBegin;
+			int iEnd = smin(iBegin + nPageSize, m_pInputContext->sCandCount);
+			m_pInputContext->iCandLast = iEnd;
+			m_cPageSize = nPageSize;
+
+			pCandNormal->FindChildByID(R.id.btn_prevpage)->SetVisible(iBegin>0, TRUE);
+			pCandNormal->FindChildByID(R.id.btn_nextpage)->SetVisible(iEnd<m_pInputContext->sCandCount, TRUE);
+
+			SWindow * pCand = pCandContainer->GetWindow(GSW_FIRSTCHILD);
+			int iCand = iBegin;
+			TCHAR cWild = m_pInputContext->compMode == IM_SHAPECODE ? (CDataCenter::getSingletonPtr()->GetData().m_compInfo.cWild) : 0;
+			while (pCand && iCand<iEnd)
+			{
+				if (pCand->IsClass(SCandView::GetClassName()))
+				{
+					SCandView *pCand2 = (SCandView*)pCand;
+					pCand2->SetVisible(TRUE, TRUE);
+					pCand2->SetCandData(cWild, S_CA2T(SStringA(m_pInputContext->szComp, m_pInputContext->cComp)), m_pInputContext->ppbyCandInfo[iCand]);
+					iCand++;
+				}
+				pCand = pCand->GetWindow(GSW_NEXTSIBLING);
+			}
+
+			while (iCand < iBegin + nPageSize && pCand)
+			{
+				if (pCand->IsClass(SCandView::GetClassName()))
+				{
+					SCandView *pCand2 = (SCandView*)pCand;
+					pCand2->SetVisible(FALSE, TRUE);
+					iCand++;
+				}
+				pCand = pCand->GetWindow(GSW_NEXTSIBLING);
+			}
+		}
+		else
+		{//联想状态下的重码
+			if (g_SettingsG.byAstMode == AST_ENGLISH)
+			{//单词联想
+				SWindow * pCandEnglish = FindChildByID(R.id.cand_english);
+				pCandEnglish->SetVisible(TRUE, TRUE);
+				SWindow * pCandContainer = pCandEnglish->FindChildByID(R.id.cand_container);
+
+				pCandEnglish->FindChildByID(R.id.txt_en_header)->SetWindowText(SStringT(m_pInputContext->szInput, m_pInputContext->cInput));
+
+				int nPageSize = GetCandMax(pCandContainer, SEnglishCand::GetClassName());
 				int iBegin = m_pInputContext->iCandBegin;
 				int iEnd = smin(iBegin + nPageSize, m_pInputContext->sCandCount);
 				m_pInputContext->iCandLast = iEnd;
 				m_cPageSize = nPageSize;
 
-				pCandNormal->FindChildByID(R.id.btn_prevpage)->SetVisible(iBegin>0, TRUE);
-				pCandNormal->FindChildByID(R.id.btn_nextpage)->SetVisible(iEnd<m_pInputContext->sCandCount, TRUE);
+				pCandEnglish->FindChildByID(R.id.btn_prevpage)->SetVisible(iBegin>0, TRUE);
+				pCandEnglish->FindChildByID(R.id.btn_nextpage)->SetVisible(iEnd<m_pInputContext->sCandCount, TRUE);
 
 				SWindow * pCand = pCandContainer->GetWindow(GSW_FIRSTCHILD);
 				int iCand = iBegin;
-				TCHAR cWild = m_pInputContext->compMode == IM_SHAPECODE ? (CDataCenter::getSingletonPtr()->GetData().m_compInfo.cWild) : 0;
 				while (pCand && iCand<iEnd)
 				{
-					if (pCand->IsClass(SCandView::GetClassName()))
+					if (pCand->IsClass(SEnglishCand::GetClassName()))
 					{
-						SCandView *pCand2 = (SCandView*)pCand;
+						SEnglishCand *pCand2 = (SEnglishCand*)pCand;
 						pCand2->SetVisible(TRUE, TRUE);
-						pCand2->SetCandData(cWild, S_CA2T(SStringA(m_pInputContext->szComp, m_pInputContext->cComp)), m_pInputContext->ppbyCandInfo[iCand]);
+						pCand2->SetCandData(m_pInputContext->ppbyCandInfo[iCand]);
 						iCand++;
 					}
 					pCand = pCand->GetWindow(GSW_NEXTSIBLING);
@@ -214,9 +276,49 @@ namespace SOUI
 
 				while (iCand < iBegin + nPageSize && pCand)
 				{
-					if (pCand->IsClass(SCandView::GetClassName()))
+					if (pCand->IsClass(SEnglishCand::GetClassName()))
 					{
-						SCandView *pCand2 = (SCandView*)pCand;
+						SEnglishCand *pCand2 = (SEnglishCand*)pCand;
+						pCand2->SetVisible(FALSE, TRUE);
+						iCand++;
+					}
+					pCand = pCand->GetWindow(GSW_NEXTSIBLING);
+				}
+			}
+			else if (g_SettingsG.byAstMode == AST_CAND)
+			{//词组联想
+				SWindow * pCandEnglish = FindChildByID(R.id.cand_phrase);
+				pCandEnglish->SetVisible(TRUE, TRUE);
+				SWindow * pCandContainer = pCandEnglish->FindChildByID(R.id.cand_container);
+
+				int nPageSize = GetCandMax(pCandContainer, SPhraseCand::GetClassName());
+				int iBegin = m_pInputContext->iCandBegin;
+				int iEnd = smin(iBegin + nPageSize, m_pInputContext->sCandCount);
+				m_pInputContext->iCandLast = iEnd;
+				m_cPageSize = nPageSize;
+
+				pCandEnglish->FindChildByID(R.id.btn_prevpage)->SetVisible(iBegin>0, TRUE);
+				pCandEnglish->FindChildByID(R.id.btn_nextpage)->SetVisible(iEnd<m_pInputContext->sCandCount, TRUE);
+
+				SWindow * pCand = pCandContainer->GetWindow(GSW_FIRSTCHILD);
+				int iCand = iBegin;
+				while (pCand && iCand<iEnd)
+				{
+					if (pCand->IsClass(SPhraseCand::GetClassName()))
+					{
+						SPhraseCand *pCand2 = (SPhraseCand*)pCand;
+						pCand2->SetVisible(TRUE, TRUE);
+						pCand2->SetCandData(m_pInputContext->ppbyCandInfo[iCand]);
+						iCand++;
+					}
+					pCand = pCand->GetWindow(GSW_NEXTSIBLING);
+				}
+
+				while (iCand < iBegin + nPageSize && pCand)
+				{
+					if (pCand->IsClass(SPhraseCand::GetClassName()))
+					{
+						SPhraseCand *pCand2 = (SPhraseCand*)pCand;
 						pCand2->SetVisible(FALSE, TRUE);
 						iCand++;
 					}
@@ -224,98 +326,12 @@ namespace SOUI
 				}
 			}
 			else
-			{//联想状态下的重码
-				if (g_SettingsG.byAstMode == AST_ENGLISH)
-				{//单词联想
-					SWindow * pCandEnglish = FindChildByID(R.id.cand_english);
-					pCandEnglish->SetVisible(TRUE, TRUE);
-					SWindow * pCandContainer = pCandEnglish->FindChildByID(R.id.cand_container);
-
-					pCandEnglish->FindChildByID(R.id.txt_en_header)->SetWindowText(SStringT(m_pInputContext->szInput, m_pInputContext->cInput));
-
-					int nPageSize = GetCandMax(pCandContainer,SEnglishCand::GetClassName());
-					int iBegin = m_pInputContext->iCandBegin;
-					int iEnd = smin(iBegin + nPageSize, m_pInputContext->sCandCount);
-					m_pInputContext->iCandLast = iEnd;
-					m_cPageSize = nPageSize;
-
-					pCandEnglish->FindChildByID(R.id.btn_prevpage)->SetVisible(iBegin>0, TRUE);
-					pCandEnglish->FindChildByID(R.id.btn_nextpage)->SetVisible(iEnd<m_pInputContext->sCandCount, TRUE);
-
-					SWindow * pCand = pCandContainer->GetWindow(GSW_FIRSTCHILD);
-					int iCand = iBegin;
-					while (pCand && iCand<iEnd)
-					{
-						if (pCand->IsClass(SEnglishCand::GetClassName()))
-						{
-							SEnglishCand *pCand2 = (SEnglishCand*)pCand;
-							pCand2->SetVisible(TRUE, TRUE);
-							pCand2->SetCandData(m_pInputContext->ppbyCandInfo[iCand]);
-							iCand++;
-						}
-						pCand = pCand->GetWindow(GSW_NEXTSIBLING);
-					}
-
-					while (iCand < iBegin + nPageSize && pCand)
-					{
-						if (pCand->IsClass(SEnglishCand::GetClassName()))
-						{
-							SEnglishCand *pCand2 = (SEnglishCand*)pCand;
-							pCand2->SetVisible(FALSE, TRUE);
-							iCand++;
-						}
-						pCand = pCand->GetWindow(GSW_NEXTSIBLING);
-					}
-				}
-				else if(g_SettingsG.byAstMode == AST_CAND)
-				{//词组联想
-					SWindow * pCandEnglish = FindChildByID(R.id.cand_phrase);
-					pCandEnglish->SetVisible(TRUE, TRUE);
-					SWindow * pCandContainer = pCandEnglish->FindChildByID(R.id.cand_container);
-
-					int nPageSize = GetCandMax(pCandContainer, SPhraseCand::GetClassName());
-					int iBegin = m_pInputContext->iCandBegin;
-					int iEnd = smin(iBegin + nPageSize, m_pInputContext->sCandCount);
-					m_pInputContext->iCandLast = iEnd;
-					m_cPageSize = nPageSize;
-
-					pCandEnglish->FindChildByID(R.id.btn_prevpage)->SetVisible(iBegin>0, TRUE);
-					pCandEnglish->FindChildByID(R.id.btn_nextpage)->SetVisible(iEnd<m_pInputContext->sCandCount, TRUE);
-
-					SWindow * pCand = pCandContainer->GetWindow(GSW_FIRSTCHILD);
-					int iCand = iBegin;
-					while (pCand && iCand<iEnd)
-					{
-						if (pCand->IsClass(SPhraseCand::GetClassName()))
-						{
-							SPhraseCand *pCand2 = (SPhraseCand*)pCand;
-							pCand2->SetVisible(TRUE, TRUE);
-							pCand2->SetCandData(m_pInputContext->ppbyCandInfo[iCand]);
-							iCand++;
-						}
-						pCand = pCand->GetWindow(GSW_NEXTSIBLING);
-					}
-
-					while (iCand < iBegin + nPageSize && pCand)
-					{
-						if (pCand->IsClass(SPhraseCand::GetClassName()))
-						{
-							SPhraseCand *pCand2 = (SPhraseCand*)pCand;
-							pCand2->SetVisible(FALSE, TRUE);
-							iCand++;
-						}
-						pCand = pCand->GetWindow(GSW_NEXTSIBLING);
-					}
-				}
+			{
+				SMutexView * pCandTip = FindChildByID2<SMutexView>(R.id.cand_tip);
+				pCandTip->SetVisible(TRUE, TRUE);
+				SWindow *pTip = pCandTip->FindChildByID(R.id.txt_tip);
+				pTip->SetWindowText(S_CA2T(m_pInputContext->szTip));
 			}
-
-		}
-		else
-		{
-			SMutexView * pCandTip = FindChildByID2<SMutexView>(R.id.cand_tip);
-			pCandTip->SetVisible(TRUE, TRUE);
-			SWindow *pTip = pCandTip->FindChildByID(R.id.txt_tip);
-			pTip->SetWindowText(S_CA2T(m_pInputContext->szTip));
 		}
 	}
 

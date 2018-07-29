@@ -22,17 +22,10 @@ int CSkinMananger::InitSkinMenu(SMenuEx *hMenu, const SStringT &strSkinPath, int
 			if (findData.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY)
 			{
 				if (_tcscmp(findData.cFileName, _T(".")) != 0 && _tcscmp(findData.cFileName, _T("..")) != 0)
-				{
+				{					
 					if (hMenu->InsertMenu(R.id.skin_def, MF_POPUP| MF_BYCOMMAND, ++nStartId, findData.cFileName))
 					{
-						int oldStartId = nStartId;
 						nStartId = InitSkinMenu(hMenu->GetSubMenu(nStartId), strSkinPath + _T("\\") + findData.cFileName, nStartId, strCurSkin);
-						//Ã»ÓÐÆ¤·ô
-						if (oldStartId == nStartId)
-						{
-							if (hMenu->DeleteMenu(nStartId, MF_BYCOMMAND))
-								--nStartId;
-						}
 					}
 				}
 			}

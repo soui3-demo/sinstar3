@@ -64,6 +64,8 @@ namespace SOUI
 		FindAndSetCheck(R.id.cand_auto_input, g_SettingsG.bAutoInput);
 		//拼音重码词组优先
 		FindAndSetCheck(R.id.cand_py_phrase_first, g_SettingsG.bPYPhraseFirst);
+		//op tip
+		FindAndSetCheck(R.id.chk_show_op_tip, g_SettingsG.bShowOpTip);
 	}
 
 	void CConfigDlg::IniPageHotKey()
@@ -202,6 +204,13 @@ SWindow *pCtrl = FindChildByID(id);\
 	void CConfigDlg::OnPyPhraseFirst()
 	{
 		g_SettingsG.bPYPhraseFirst= FindChildByID(R.id.cand_py_phrase_first)->IsChecked();
+	}
+
+	void CConfigDlg::OnChkOpTip(EventArgs *e)
+	{
+		SCheckBox *pCheck = sobj_cast<SCheckBox>(e->sender);
+		SASSERT(pCheck);
+		g_SettingsG.bShowOpTip = pCheck->IsChecked();
 	}
 
 	void CConfigDlg::OnClickAssMode(int id)

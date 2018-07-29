@@ -22,37 +22,6 @@ const BYTE KCompKey[] ={0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,        // 00-0F
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};       // F0-FF
 
 
-BOOL Tips_Rand(BOOL bSpell,char *pszBuf)
-{
-// 	if(g_bOpLoaded)
-// 	{
-// 		if(bSpell)
-// 		{
-// 			if(g_nOpTipSpell||g_nOpTipAll)
-// 			{
-// 				nIndex=rand()%(g_nOpTipSpell+g_nOpTipAll);
-// 				if(nIndex<g_nOpTipAll)
-// 					pszOpTip=g_ppszOpTipAll[nIndex];
-// 				else
-// 					pszOpTip=g_ppszOpTipSpell[nIndex-g_nOpTipAll];
-// 			}
-// 		}else
-// 		{
-// 			if(g_nOpTipShape||g_nOpTipAll)
-// 			{
-// 				nIndex=rand()%(g_nOpTipShape+g_nOpTipAll);
-// 				if(nIndex<g_nOpTipAll)
-// 					pszOpTip=g_ppszOpTipAll[nIndex];
-// 				else
-// 					pszOpTip=g_ppszOpTipShape[nIndex-g_nOpTipAll];
-// 			}
-// 		}
-// 	}
-	strcpy(pszBuf,"test");
-	return TRUE;
-}
-
-
 
 //符号处理
 //BYTE byInput:键盘输入
@@ -183,7 +152,7 @@ BOOL KeyIn_IsCoding(InputContext * lpCntxtPriv)
 	return bOpen;
 }
 
-CInputState::CInputState(void):m_pListener(NULL),m_fOpen(FALSE),m_bTypeing(FALSE)
+CInputState::CInputState(void):m_pListener(NULL),m_fOpen(FALSE),m_bTypeing(FALSE), m_bUpdateTips(TRUE)
 {
 	memset(&m_ctx,0,sizeof(InputContext));
 	ClearContext(CPC_ALL);
@@ -195,6 +164,55 @@ CInputState::CInputState(void):m_pListener(NULL),m_fOpen(FALSE),m_bTypeing(FALSE
 CInputState::~CInputState(void)
 {
 	free(m_pbyMsgBuf);
+}
+
+BOOL CInputState::Tips_Rand(BOOL bSpell, char *pszBuf)
+{
+	if (m_bUpdateTips)
+	{
+		for (int i = 0; i < TT_COUNT; i++)
+		{
+			m_tips[i].RemoveAll();
+		}
+		pugi::xml_document xmlTips;
+		const wchar_t * groups[] = {
+			L"all",L"spell",L"shape"
+		};
+		if (xmlTips.load_file(theModule->GetDataPath()+_T("\\tips.xml")))
+		{
+			pugi::xml_node tips = xmlTips.child(L"tips");
+			for (int i = 0; i < 3; i++)
+			{
+				pugi::xml_node tip = tips.child(groups[i]).child(L"tip");
+				while (tip)
+				{
+					m_tips[i].Add(S_CW2A(tip.attribute(L"value").as_string()));
+					tip = tip.next_sibling(L"tip");
+				}
+
+			}
+		}
+		m_bUpdateTips = FALSE;
+	}
+	if (bSpell)
+	{
+		int total = (int) (m_tips[TT_SPELL].GetCount() + m_tips[TT_BOTH].GetCount());
+		int idx = rand() % total;
+		if (idx < m_tips[TT_SPELL].GetCount())
+			strcpy(pszBuf, m_tips[TT_SPELL][idx]);
+		else
+			strcpy(pszBuf, m_tips[TT_BOTH][idx - m_tips[TT_SPELL].GetCount()]);
+	}
+	else
+	{
+		int total = (int) (m_tips[TT_SHAPE].GetCount() + m_tips[TT_BOTH].GetCount());
+		int idx = rand() % total;
+		if (idx < m_tips[TT_SHAPE].GetCount())
+			strcpy(pszBuf, m_tips[TT_SHAPE][idx]);
+		else
+			strcpy(pszBuf, m_tips[TT_BOTH][idx - m_tips[TT_SHAPE].GetCount()]);
+	}
+	return TRUE;
 }
 
 void CInputState::GetShapeComp(const char *pInput,char cLen)
@@ -307,16 +325,27 @@ void CInputState::InputResult(const SStringT &strResult,BYTE byAstMask)
 	SLOG_INFO("result:"<<strResult<<" astMask:"<<byAstMask);
 
 	SASSERT(m_pListener);
-	m_pListener->OnInputResult(strResult);
-	_tcscpy(m_ctx.szInput,strResult);
-	m_ctx.cInput = strResult.GetLength();
+	SStringT strTemp = strResult;
+	if (g_SettingsL.bInputBig5)
+	{
+		int nLen = CUtils::GB2GIB5(strResult, strResult.GetLength(), NULL, 0);
+		TCHAR *pBig5 = new TCHAR[nLen / sizeof(TCHAR)+1];
+		nLen = CUtils::GB2GIB5(strResult, strResult.GetLength(), pBig5, nLen);
+		strTemp = SStringW(pBig5,nLen/sizeof(TCHAR));
+		delete[]pBig5;
+	}
+	{
+		m_pListener->OnInputResult(strTemp);
+		_tcscpy(m_ctx.szInput, strTemp);
+		m_ctx.cInput = strTemp.GetLength();
+	}
 
 	if(byAstMask!=0)
 	{
-		SStringA strResultA = S_CT2A(strResult);
+		SStringA strResultA = S_CT2A(strTemp);
 		KeyIn_InputAndAssociate(&m_ctx,strResultA,(short)strResultA.GetLength(),byAstMask);
 	}
-	CDataCenter::getSingletonPtr()->GetData().m_cInputCount+=strResult.GetLength();
+	CDataCenter::getSingletonPtr()->GetData().m_cInputCount+= strTemp.GetLength();
 }
 
 void CInputState::InputResult(const SStringA &strResult,BYTE byAstMask)
@@ -1618,7 +1647,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 				if(!ISComm_GetCompInfo()->bSymbolFirst || byInput==g_SettingsCompSpec.hkUserDefSwitch) return FALSE;//符号顶字上屏
 			}
 			if(g_SettingsG.bShowOpTip)
-			{
+			{//有编码后面显示操作提示
 				lpCntxtPriv->bShowTip=TRUE;
 				Tips_Rand(FALSE,lpCntxtPriv->szTip);
 			}
@@ -2503,6 +2532,10 @@ BOOL CInputState::OnSvrNotify(UINT wp, PMSGDATA pMsg)
 				if(ctx->bShowTip || ctx->sCandCount || ctx->sSentLen)
 				{//有联想词组或有联想句子
 					SLOG_INFO("Update Input Window");
+					if (ctx->sCandCount == 0 && g_SettingsG.bShowOpTip)
+					{//没有候选时,在侯选位置显示操作提示
+						Tips_Rand(ctx->compMode == IM_SPELL, ctx->szTip);
+					}
 					InputUpdate();
 				}else
 				{//关闭窗口
