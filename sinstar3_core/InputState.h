@@ -103,4 +103,7 @@ private:
 
 	SArray<SStringA>  m_tips[TT_COUNT];
 	BOOL			 m_bUpdateTips;
+
+	DWORD			 m_tmInputStart;
+	DWORD			 m_tmInputEnd;
 };

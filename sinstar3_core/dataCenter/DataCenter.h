@@ -28,6 +28,7 @@ namespace SOUI
 		CPoint		m_ptInput;
 
 		int			m_cInputCount;
+		DWORD		m_tmInputSpan;
 		CRegKey		m_reg;
 	};
 

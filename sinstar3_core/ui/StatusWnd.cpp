@@ -150,6 +150,10 @@ namespace SOUI
 		{
 			g_SettingsL.bInputBig5 = !g_SettingsL.bInputBig5;
 		}
+		else if (nRet == R.id.key_speed)
+		{
+			m_pCmdListener->OnCommand(CMD_KEYSPEED, 0);
+		}
 
 		m_skinManager.ClearMap();
 	}

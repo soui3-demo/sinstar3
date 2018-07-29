@@ -318,6 +318,16 @@ void CInputState::InputStart()
 	SLOG_INFO("");
 	m_pListener->OnInputStart();
 	m_bTypeing = TRUE;
+	
+	DWORD tmCur = GetTickCount();
+	if (tmCur - m_tmInputEnd > 10 * 1000)
+	{
+		m_tmInputStart = tmCur;
+	}
+	else
+	{
+		m_tmInputStart = m_tmInputEnd;
+	}
 }
 
 void CInputState::InputResult(const SStringT &strResult,BYTE byAstMask)
@@ -345,6 +355,9 @@ void CInputState::InputResult(const SStringT &strResult,BYTE byAstMask)
 		SStringA strResultA = S_CT2A(strTemp);
 		KeyIn_InputAndAssociate(&m_ctx,strResultA,(short)strResultA.GetLength(),byAstMask);
 	}
+
+	m_tmInputEnd = GetTickCount();
+	CDataCenter::getSingletonPtr()->GetData().m_tmInputSpan += m_tmInputEnd - m_tmInputStart;
 	CDataCenter::getSingletonPtr()->GetData().m_cInputCount+= strTemp.GetLength();
 }
 
