@@ -15,5 +15,7 @@
   <sent_input value="rgb(255,0,0)"/>
   <sent_left value="rgb(0,0,255)"/>
   <sent_right value="rgb(0,0,0)"/>
+  <comp_umode_prefix value="rgb(255,0,0)"/>
+  <comp_auto_complete value="rgb(88,88,88"/>
 </color> 
  

@@ -209,6 +209,17 @@ namespace SOUI
 				SWindow * compUmode = FindChildByID(R.id.comp_umode);
 				compUmode->SetVisible(TRUE,TRUE);
 				compUmode->FindChildByID(R.id.txt_comps)->SetWindowText(S_CA2T(SStringA(m_pInputContext->szComp,m_pInputContext->cComp)));
+				SWindow *pCompAutoComplete = compUmode->FindChildByID(R.id.txt_auto_complete);
+				if (pCompAutoComplete)
+				{
+					SStringA strCompAutoComplete;
+					if (m_pInputContext->cCompACLen > m_pInputContext->cComp)
+					{
+						strCompAutoComplete = SStringA(m_pInputContext->szCompAutoComplete + m_pInputContext->cComp,
+							m_pInputContext->cCompACLen - m_pInputContext->cComp);
+					}
+					pCompAutoComplete->SetWindowText(S_CA2T(strCompAutoComplete));
+				}
 			}
 			break;
 		}

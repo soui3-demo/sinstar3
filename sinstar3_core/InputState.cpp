@@ -2044,7 +2044,10 @@ BOOL CInputState::KeyIn_UserDef_ChangeComp(InputContext * lpCntxtPriv,UINT byInp
 		short i;
 		memcpy(m_pbyMsgBuf,pMsgData->byData,pMsgData->sSize);
 		pbyData=m_pbyMsgBuf;
-		pbyData+=pbyData[0]+1;//跨过服务器传会来的自定义短语的编码数据
+		//save auto complete composition string
+		lpCntxtPriv->cCompACLen = pbyData[0];
+		memcpy(lpCntxtPriv->szCompAutoComplete, pbyData + 1, pbyData[0]);
+		pbyData+=pbyData[0]+1;
 		memcpy(&lpCntxtPriv->sCandCount,pbyData,2);
 		pbyData+=2;
 		lpCntxtPriv->ppbyCandInfo=(LPBYTE *)malloc(sizeof(LPBYTE)*lpCntxtPriv->sCandCount);

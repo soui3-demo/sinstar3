@@ -97,4 +97,7 @@ struct InputContext
 
 	TCHAR   szInput[MAX_INPUT];
 	int		cInput;
+
+	char   szCompAutoComplete[MAX_COMP];	//auto complete composition string. valid for umode.
+	int    cCompACLen;						//auto complete composition string length
 };
