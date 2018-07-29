@@ -348,7 +348,7 @@ namespace SOUI
 		{
 		case R.id.btn_charmode:
 			e2->bUpdated = TRUE;
-			e2->strToolTip = SStringT().Format(_T("标点模式:%s"), g_SettingsL.bCharMode?_T("英文"):_T("中文"));
+			e2->strToolTip = SStringT().Format(_T("标点模式:%s"), g_SettingsL.bCharMode? _T("中文"):_T("英文"));
 			break;
 		case R.id.btn_makeword:
 			e2->bUpdated = TRUE;
