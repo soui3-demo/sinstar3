@@ -11,7 +11,7 @@
   <cand_text value="rgb(0,0,0)"/>
   <cand_comp value="rgb(0,0,128)"/>
   <cand_wild value="rgb(255,0,0)"/>
-  <cand_phontic value="rgb(0,0,255)"/>
+  <cand_phonetic value="rgb(0,0,255)"/>
 
   <sent_input value="rgb(255,0,0)"/>
   <sent_left value="rgb(0,0,255)"/>

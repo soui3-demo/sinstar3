@@ -22,19 +22,19 @@ namespace SOUI
 		SOUI_ATTRS_BEGIN()
 			ATTR_STRINGT(L"index",m_strIndex,TRUE)
 			ATTR_STRINGT(L"cand",m_strCand,TRUE)
-			ATTR_STRINGT(L"phontic", m_strPhontic,TRUE)
+			ATTR_STRINGT(L"phonetic", m_strPhonetic,TRUE)
 			ATTR_COLOR(L"colorIndex",m_crIndex,TRUE)
 			ATTR_COLOR(L"colorCand",m_crCand,TRUE)
-			ATTR_COLOR(L"colorPhontic", m_crPhontic,TRUE)
+			ATTR_COLOR(L"colorPhonetic", m_crPhonetic,TRUE)
 		SOUI_ATTRS_END()
 
 		SStringT m_strIndex;
 		SStringT m_strCand;
-		SStringT m_strPhontic;
+		SStringT m_strPhonetic;
 
 		COLORREF m_crIndex;
 		COLORREF m_crCand;
-		COLORREF m_crPhontic;
+		COLORREF m_crPhonetic;
 	};
 
 }

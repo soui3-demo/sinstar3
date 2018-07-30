@@ -31,10 +31,10 @@ namespace SOUI
 		pRT->MeasureText(m_strCand,m_strCand.GetLength(),&szBlock);
 		pt.x += szBlock.cx;
 
-		if(!m_strPhontic.IsEmpty())
+		if(!m_strPhonetic.IsEmpty())
 		{//todo:select phontic font
-			pRT->SetTextColor(m_crPhontic);
-			pRT->TextOut(pt.x,pt.y,(LPCTSTR)m_strPhontic, m_strPhontic.GetLength());
+			pRT->SetTextColor(m_crPhonetic);
+			pRT->TextOut(pt.x,pt.y,(LPCTSTR)m_strPhonetic, m_strPhonetic.GetLength());
 		}
 
 		pRT->SetTextColor(crDef);
@@ -48,9 +48,9 @@ namespace SOUI
 		m_strCand = S_CA2T(SStringA(p+1,p[0]));
 		p += p[0] + 1;
 		if (p[0] > 0)
-			m_strPhontic.Format(_T("[%s]"), S_CA2T(SStringA(p + 1, p[0])));
+			m_strPhonetic.Format(_T("[%s]"), S_CA2T(SStringA(p + 1, p[0])));
 		else
-			m_strPhontic.Empty();
+			m_strPhonetic.Empty();
 		RequestRelayout();
 	}
 
@@ -69,9 +69,9 @@ namespace SOUI
 		szRet.cx += sz.cx;
 		szRet.cy = smax(szRet.cy,sz.cy);
 
-		if(!m_strPhontic.IsEmpty())
+		if(!m_strPhonetic.IsEmpty())
 		{
-			pRT->MeasureText(m_strPhontic, m_strPhontic.GetLength(),&sz);
+			pRT->MeasureText(m_strPhonetic, m_strPhonetic.GetLength(),&sz);
 			szRet.cx += sz.cx;
 			szRet.cy = smax(szRet.cy,sz.cy);
 		}
