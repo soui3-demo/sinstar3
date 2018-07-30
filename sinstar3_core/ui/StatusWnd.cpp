@@ -45,18 +45,7 @@ namespace SOUI
 
 	void CStatusWnd::UpdateUI()
 	{
-		{
-			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_charmode);
-			if (toggle) toggle->SetToggle(g_SettingsL.bCharMode);
-		}
-		{
-			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_sound);
-			if (toggle) toggle->SetToggle(!g_SettingsL.bSound);
-		}
-		{
-			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_record);
-			if (toggle) toggle->SetToggle(!g_SettingsL.bRecord);
-		}
+		UpdateToggleStatus(BTN_ALL);
 		UpdateCompInfo();
 	}
 
@@ -298,6 +287,23 @@ namespace SOUI
 			}
 
 		}
+	}
+
+	void CStatusWnd::UpdateToggleStatus(DWORD flags)
+	{
+		if(flags & BTN_CHARMODE){
+			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_charmode);
+			if (toggle) toggle->SetToggle(g_SettingsL.bCharMode);
+		}
+		if(flags & BTN_SOUND){
+			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_sound);
+			if (toggle) toggle->SetToggle(!g_SettingsL.bSound);
+		}
+		if (flags & BTN_RECORD) {
+			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_record);
+			if (toggle) toggle->SetToggle(!g_SettingsL.bRecord);
+		}
+
 	}
 
 	void CStatusWnd::OnCompInfo(EventArgs *e)

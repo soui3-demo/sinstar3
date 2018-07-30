@@ -208,3 +208,9 @@ void CCmdHandler::OnKeySpeed(LPARAM lp)
 
 	m_pTipWnd->SetTip(_T("ÌבÊ¾"), msg);
 }
+
+void CCmdHandler::OnCharMode(LPARAM lp)
+{
+	g_SettingsL.bCharMode = !g_SettingsL.bCharMode;
+	m_pSinstar3->m_pStatusWnd->UpdateToggleStatus(CStatusWnd::BTN_CHARMODE);
+}

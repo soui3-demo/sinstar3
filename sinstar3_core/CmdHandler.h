@@ -18,6 +18,7 @@ enum {
 	CMD_INPUTMODE,
 	CMD_FOLLOWCARET,
 	CMD_KEYSPEED,
+	CMD_CHARMODE,
 };
 
 namespace SOUI {
@@ -40,6 +41,8 @@ protected:
 	void OnFollowCaret(LPARAM lp);
 	void OnInputMode(LPARAM lp);
 	void OnKeySpeed(LPARAM lp);
+	void OnCharMode(LPARAM lp);
+
 	BEGIN_MSG_MAP_EX(CCmdHandler)
 		MSG_WM_COMMAND_EX(CMD_MAKEWORD, OnMakeWord)
 		MSG_WM_COMMAND_EX(CMD_KEYMAP, OnKeyMap)
@@ -48,6 +51,7 @@ protected:
 		MSG_WM_COMMAND_EX(CMD_FOLLOWCARET, OnFollowCaret)
 		MSG_WM_COMMAND_EX(CMD_INPUTMODE, OnInputMode)
 		MSG_WM_COMMAND_EX(CMD_KEYSPEED, OnKeySpeed)
+		MSG_WM_COMMAND_EX(CMD_CHARMODE,OnCharMode)
 	END_MSG_MAP()
 
 private:

@@ -2359,7 +2359,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 					return FALSE;
 			}else if(lpbKeyState[VK_SHIFT]&0x80 && uKey==VK_SPACE)
 			{//todo: Shift + VK_SPACE:中英文标点切换
-				//				MyGenerateMessage(hIMC,WM_IME_NOTIFY,IMN_PRIVATE,MAKELONG(IMN_PRIV_COMMAND,g_SettingsL.bCharMode?IDC_CHARMODE1:IDC_CHARMODE2));
+				m_pListener->OnCommand(CMD_CHARMODE, 0);
 				return TRUE;
 			}else
 			{

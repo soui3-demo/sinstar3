@@ -11,10 +11,19 @@ namespace SOUI
 		public CImeWnd
 	{
 	public:
+		enum {
+			BTN_CHARMODE=1<<0,
+			BTN_RECORD=1<<1,
+			BTN_SOUND=1<<2,
+			BTN_ALL=0xffffffff,
+		};
+
 		CStatusWnd(ICmdListener *pListener);
 		~CStatusWnd(void);
 
 		void UpdateCompInfo();
+		void UpdateToggleStatus(DWORD flags);
+
 	protected:
 		int OnCreate(LPCREATESTRUCT lpCreateStruct);
 
