@@ -30,7 +30,6 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr)
 {
 	theModule->AddRef();
 
-	int nAdded = AddFontResource(theModule->GetDataPath() + L"\\Ksphonet.ttf");
  	m_pInputWnd = new CInputWnd(m_inputState.GetInputContext());
 	m_pStatusWnd = new CStatusWnd(this);
 	m_pTipWnd = new STipWnd();
@@ -60,7 +59,10 @@ CSinstar3Impl::~CSinstar3Impl(void)
 	delete m_pInputWnd;
 	delete m_pTipWnd;
 
-	int nRemoved = RemoveFontResource(theModule->GetDataPath() + L"\\Ksphonet.ttf");
+	if (!m_strLoadedFontFile.IsEmpty())
+	{
+		RemoveFontResourceEx(m_strLoadedFontFile, FR_PRIVATE , NULL);
+	}
 
 	theModule->Release();
 }
@@ -252,9 +254,21 @@ LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 	else if (wp == NT_FLMINFO)
 	{
 		LOGFONT lf = { 0 };
+		if (m_strLoadedFontFile)
+		{
+			RemoveFontResourceEx(m_strLoadedFontFile, FR_PRIVATE, NULL);
+			m_strLoadedFontFile.Empty();
+		}
 		if (ISComm_GetFlmInfo()->szAddFont[0])
 		{//需要特殊字体
 			SLOG_INFO("NT_FLMINFO,font:" << ISComm_GetFlmInfo()->szAddFont);
+
+			SStringW strFontFile = CDataCenter::getSingleton().GetData().getFontFile(S_CA2W(ISComm_GetFlmInfo()->szAddFont));
+			if (!strFontFile.IsEmpty())
+			{
+				m_strLoadedFontFile = theModule->GetDataPath() + _T("\\") + S_CW2T(strFontFile);
+				AddFontResourceEx(m_strLoadedFontFile, FR_PRIVATE , NULL);
+			}
 			m_pInputWnd->OnFlmInfo(ISComm_GetFlmInfo());
 		}
 		return 1;

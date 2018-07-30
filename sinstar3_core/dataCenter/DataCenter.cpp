@@ -6,7 +6,7 @@ namespace SOUI
 	template<>
 	CDataCenter * SSingleton<CDataCenter>::ms_Singleton = NULL;
 
-	CDataCenter::CDataCenter(void)
+	CDataCenter::CDataCenter(const SStringT & strDataPath):m_data(strDataPath)
 	{
 		InitializeCriticalSection(&m_cs);
 	}
@@ -61,7 +61,7 @@ namespace SOUI
 		return m_iSelComp;
 	}
 
-	CMyData::CMyData():m_tmInputSpan(0), m_cInputCount(0)
+	CMyData::CMyData(const SStringT & strDataPath):m_tmInputSpan(0), m_cInputCount(0)
 	{
 		m_reg.Create(HKEY_CURRENT_USER,L"Software\\Setoutsoft\\sinstar3",NULL,REG_OPTION_NON_VOLATILE,KEY_WRITE|KEY_READ|KEY_WOW64_64KEY,0,NULL);
 
@@ -92,7 +92,16 @@ namespace SOUI
 			keySvr.QueryStringValue(_T("path_svr"),szSvrPath,&nSize);
 			ISComm_SetSvrPath(szSvrPath);
 		}
-
+		pugi::xml_document fontMap;
+		if (fontMap.load_file(strDataPath + _T("\\fontmap.xml")))
+		{
+			pugi::xml_node font = fontMap.child(L"fontmap").child(L"font");
+			while (font)
+			{
+				m_fontMap[font.attribute(L"face").as_string()] = font.attribute(L"file").as_string();
+				font = font.next_sibling(L"font");
+			}
+		}
 	}
 
 	CMyData::~CMyData()
@@ -101,6 +110,15 @@ namespace SOUI
 		m_reg.SetDWORDValue(_T("input_pos"), MAKELPARAM(m_ptInput.x, m_ptInput.y));
 		m_reg.SetStringValue(_T("skin"),m_strSkin);
 		m_reg.Close();
+	}
+
+	SStringW CMyData::getFontFile(const SStringW & strFace) const
+	{
+		const SMap<SStringW,SStringW>::CPair *p= m_fontMap.Lookup(strFace);
+		if(!p)
+			return SStringW();
+		else
+			return p->m_value;
 	}
 
 
