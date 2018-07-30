@@ -1,5 +1,6 @@
 #include "StdAfx.h"
 #include "SouiEnv.h"
+#include "ui/SkinMananger.h"
 //从PE文件加载，注意从文件加载路径位置
 #ifdef _DEBUG
 #define RES_TYPE 0
@@ -96,7 +97,7 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 	m_theApp->InitXmlNamedID(namedXmlID,ARRAYSIZE(namedXmlID),TRUE);
 	m_theApp->AddResProvider(pResProvider);
 	CDataCenter::getSingletonPtr()->GetData().m_defUiDefine = SUiDef::getSingletonPtr()->GetUiDef();
-
+	CDataCenter::getSingletonPtr()->GetData().m_ptSkinOffset = CSkinMananger::ExtractSkinOffset(pResProvider);
 
 	if(!CDataCenter::getSingletonPtr()->GetData().m_strSkin.IsEmpty())
 	{

@@ -67,7 +67,7 @@ BOOL CSkinMananger::SetSkin(int nSkinId)
 	}
 
 	if(!strSkinPath.IsEmpty())
-	{
+	{//加载外部皮肤
 		CAutoRefPtr<IResProvider> pResProvider;
 		CSouiEnv::getSingleton().theComMgr()->CreateResProvider_ZIP((IObjRef**)&pResProvider);
 		ZIPRES_PARAM param;
@@ -91,17 +91,22 @@ BOOL CSkinMananger::SetSkin(int nSkinId)
 			SStylePoolMgr::getSingleton().PopStylePool(pUiDefInfo->GetStylePool());
 		}
 
+		CDataCenter::getSingleton().GetData().m_ptSkinOffset = ExtractSkinOffset(pResProvider);
+
 		SApplication::getSingleton().AddResProvider(pResProvider,NULL);
 		SUiDef::getSingleton().SetUiDef(pUiDef);
 		pUiDef->Release();
 
 	}else if(!CDataCenter::getSingletonPtr()->GetData().m_strSkin.IsEmpty())
-	{//清除正在使用的外置皮肤。
+	{//清除正在使用的外置皮肤,还原使用系统内置皮肤
 		IResProvider *pLastRes = SApplication::getSingleton().GetTailResProvider();
 		SApplication::getSingleton().RemoveResProvider(pLastRes);
 		IUiDefInfo *pUiDefInfo = SUiDef::getSingleton().GetUiDef();
 
 		SStylePoolMgr::getSingleton().PopStylePool(pUiDefInfo->GetStylePool());
+
+		IResProvider *pCurRes = SApplication::getSingleton().GetTailResProvider();
+		CDataCenter::getSingleton().GetData().m_ptSkinOffset = ExtractSkinOffset(pCurRes);
 	}
 
 	CDataCenter::getSingletonPtr()->GetData().m_strSkin = strSkinPath;
@@ -130,4 +135,20 @@ SOUI::SStringT CSkinMananger::ExtractSkinInfo(SStringT strSkinPath)
 	pugi::xml_node xmlDesc = xmlDoc.child(L"uidef").child(L"desc");
 	SStringW strDesc = SStringW(xmlDesc.attribute(L"name").value())+L"["+xmlDesc.attribute(L"author").value()+L"]";
 	return S_CW2T(strDesc);
+}
+
+CPoint CSkinMananger::ExtractSkinOffset(IResProvider * pResProvider)
+{
+	int nSize = (int)pResProvider->GetRawBufferSize(_T("uidef"), _T("xml_init"));
+
+	CMyBuffer<char> buffer(nSize);
+	pResProvider->GetRawBuffer(_T("uidef"), _T("xml_init"), buffer, nSize);
+
+	pugi::xml_document xmlDoc;
+	xmlDoc.load_buffer_inplace(buffer, nSize);
+	pugi::xml_node xmlOffset = xmlDoc.child(L"uidef").child(L"offset");
+	CPoint pt;
+	pt.x = xmlOffset.attribute(L"x").as_int();
+	pt.y = xmlOffset.attribute(L"y").as_int();
+	return pt;
 }

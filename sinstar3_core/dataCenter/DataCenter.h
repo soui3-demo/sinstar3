@@ -28,6 +28,7 @@ namespace SOUI
 		SStringT	m_strSkin;
 		CPoint		m_ptStatus;
 		CPoint		m_ptInput;
+		CPoint		m_ptSkinOffset;
 
 		int			m_cInputCount;
 		DWORD		m_tmInputSpan;

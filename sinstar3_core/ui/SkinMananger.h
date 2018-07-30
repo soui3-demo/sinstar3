@@ -11,6 +11,7 @@ public:
 	int InitSkinMenu(SMenuEx * hMenu, const SStringT & strSkinPath, int nStartId, const SStringT & strCurSkin);
 	BOOL SetSkin(int nSkinId);
 	SStringT ExtractSkinInfo(SStringT strSkinPath);
+	static CPoint ExtractSkinOffset(IResProvider *pResProvider);
 public:
 	virtual int GetID() const
 	{
