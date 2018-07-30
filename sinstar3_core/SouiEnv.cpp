@@ -113,6 +113,7 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 			{//不允许皮肤中存在全局的skin数据
 				m_theApp->AddResProvider(pResProvider,NULL);
 				SUiDef::getSingleton().SetUiDef(pUiDef);
+				CDataCenter::getSingletonPtr()->GetData().m_ptSkinOffset = CSkinMananger::ExtractSkinOffset(pResProvider);
 			}else
 			{//外置皮肤中禁止出现全局skin表。
 				//SLOG_WARN("previous skin is invalid");
