@@ -3,6 +3,9 @@
 
 namespace SOUI
 {
+	const TCHAR KPhoneticLeft[] = _T("[");
+	const TCHAR KPhoneticRight[] = _T("]");
+
 	SEnglishCand::SEnglishCand(void)
 	{
 		m_bDisplay=0;
@@ -34,11 +37,40 @@ namespace SOUI
 		if(!m_strPhonetic.IsEmpty())
 		{//todo:select phontic font
 			pRT->SetTextColor(m_crPhonetic);
-			pRT->TextOut(pt.x,pt.y,(LPCTSTR)m_strPhonetic, m_strPhonetic.GetLength());
+			pRT->TextOut(pt.x, pt.y, KPhoneticLeft, ARRAYSIZE(KPhoneticLeft) - 1);
+			pRT->MeasureText(KPhoneticLeft, ARRAYSIZE(KPhoneticLeft) - 1, &szBlock);
+			pt.x += szBlock.cx;
+
+			int hei = szBlock.cy;
+			IRenderObj *pOldFont;
+			if (m_ftPhonetic)
+			{
+				pRT->SelectObject(m_ftPhonetic, &pOldFont);
+			}
+			pRT->MeasureText(m_strPhonetic, m_strPhonetic.GetLength(), &szBlock);
+			int offset = (hei - szBlock.cy)/2;
+			pRT->TextOut(pt.x,pt.y+offset,(LPCTSTR)m_strPhonetic, m_strPhonetic.GetLength());
+			pt.x += szBlock.cx;
+			if (m_ftPhonetic)
+			{
+				pRT->SelectObject(pOldFont);
+			}
+			pRT->TextOut(pt.x, pt.y, KPhoneticRight, ARRAYSIZE(KPhoneticRight) - 1);
 		}
 
 		pRT->SetTextColor(crDef);
 		AfterPaint(pRT,painter);
+	}
+
+	LRESULT SEnglishCand::OnFlmInfo(UINT uMsg, WPARAM, LPARAM lp)
+	{
+		PFLMINFO pflmInfo = (PFLMINFO)lp;
+		SLOG_INFO("font:" << pflmInfo->szAddFont);
+		SStringA strFontInfo="face:";
+		strFontInfo += pflmInfo->szAddFont;
+
+		m_ftPhonetic = SFontPool::getSingleton().GetFont(S_CA2W(strFontInfo),GetScale());
+		return 1;
 	}
 
 
@@ -48,7 +80,7 @@ namespace SOUI
 		m_strCand = S_CA2T(SStringA(p+1,p[0]));
 		p += p[0] + 1;
 		if (p[0] > 0)
-			m_strPhonetic.Format(_T("[%s]"), S_CA2T(SStringA(p + 1, p[0])));
+			m_strPhonetic = S_CA2T(SStringA(p + 1, p[0]));
 		else
 			m_strPhonetic.Empty();
 		RequestRelayout();
@@ -71,9 +103,23 @@ namespace SOUI
 
 		if(!m_strPhonetic.IsEmpty())
 		{
-			pRT->MeasureText(m_strPhonetic, m_strPhonetic.GetLength(),&sz);
+			pRT->MeasureText(KPhoneticLeft, ARRAYSIZE(KPhoneticLeft)-1, &sz);
 			szRet.cx += sz.cx;
-			szRet.cy = smax(szRet.cy,sz.cy);
+			IRenderObj *pOldFont;
+			if (m_ftPhonetic)
+			{
+				pRT->SelectObject(m_ftPhonetic, &pOldFont);
+			}
+			pRT->MeasureText(m_strPhonetic, m_strPhonetic.GetLength(), &sz);
+			if (m_ftPhonetic)
+			{
+				pRT->SelectObject(pOldFont);
+			}
+			szRet.cx += sz.cx;
+			szRet.cy = smax(szRet.cy, sz.cy);
+
+			pRT->MeasureText(KPhoneticRight, ARRAYSIZE(KPhoneticRight) - 1, &sz);
+			szRet.cx += sz.cx;
 		}
 		pRT->Release();
 		return szRet;

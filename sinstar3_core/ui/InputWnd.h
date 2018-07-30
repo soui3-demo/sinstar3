@@ -24,6 +24,7 @@ namespace SOUI
 		BOOL GoNextCandidatePage();
 		BOOL GoPrevCandidatePage();
 		short SelectCandidate(short iCand);
+		void OnFlmInfo(PFLMINFO pFlmInfo);
 	protected:
 		void UpdateAnchorPosition();
 		int GetCandMax(SWindow *pWnd, LPCWSTR pszCandClass) const;

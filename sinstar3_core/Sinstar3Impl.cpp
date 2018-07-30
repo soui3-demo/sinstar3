@@ -30,6 +30,7 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr)
 {
 	theModule->AddRef();
 
+	int nAdded = AddFontResource(theModule->GetDataPath() + L"\\Ksphonet.ttf");
  	m_pInputWnd = new CInputWnd(m_inputState.GetInputContext());
 	m_pStatusWnd = new CStatusWnd(this);
 	m_pTipWnd = new STipWnd();
@@ -58,6 +59,8 @@ CSinstar3Impl::~CSinstar3Impl(void)
 	delete m_pStatusWnd;
 	delete m_pInputWnd;
 	delete m_pTipWnd;
+
+	int nRemoved = RemoveFontResource(theModule->GetDataPath() + L"\\Ksphonet.ttf");
 
 	theModule->Release();
 }
@@ -245,7 +248,18 @@ LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 		SNotifyCenter::getSingleton().FireEventAsync(evt);
 		evt->Release();
 		return 1;
-	}else
+	}
+	else if (wp == NT_FLMINFO)
+	{
+		LOGFONT lf = { 0 };
+		if (ISComm_GetFlmInfo()->szAddFont[0])
+		{//需要特殊字体
+			SLOG_INFO("NT_FLMINFO,font:" << ISComm_GetFlmInfo()->szAddFont);
+			m_pInputWnd->OnFlmInfo(ISComm_GetFlmInfo());
+		}
+		return 1;
+	}
+	else
 	{
 		return m_inputState.OnSvrNotify((UINT)wp,pMsg)?1:0;
 	}

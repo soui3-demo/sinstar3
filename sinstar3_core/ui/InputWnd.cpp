@@ -375,6 +375,11 @@ namespace SOUI
 		return idx;
 	}
 
+	void CInputWnd::OnFlmInfo(PFLMINFO pFlmInfo)
+	{
+		SDispatchMessage(UM_FLMINFO, 0, (LPARAM)pFlmInfo);
+	}
+
 
 	BOOL CInputWnd::GoPrevCandidatePage()
 	{

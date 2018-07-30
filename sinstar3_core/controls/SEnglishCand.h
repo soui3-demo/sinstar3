@@ -2,6 +2,7 @@
 
 namespace SOUI
 {
+#define UM_FLMINFO	(WM_APP+10000)
 	class SEnglishCand : public SWindow
 	{
 		SOUI_CLASS_NAME(SEnglishCand,L"EnCand")
@@ -14,8 +15,10 @@ namespace SOUI
 		virtual CSize GetDesiredSize(int nParentWid, int nParentHei);
 
 		void OnPaint(IRenderTarget *pRT);
+		LRESULT OnFlmInfo(UINT uMsg, WPARAM, LPARAM lp);
 
 		SOUI_MSG_MAP_BEGIN()
+			MESSAGE_HANDLER_EX(UM_FLMINFO,OnFlmInfo)
 			MSG_WM_PAINT_EX(OnPaint)
 		SOUI_MSG_MAP_END()
 	protected:
@@ -35,6 +38,8 @@ namespace SOUI
 		COLORREF m_crIndex;
 		COLORREF m_crCand;
 		COLORREF m_crPhonetic;
+
+		CAutoRefPtr<IFont> m_ftPhonetic;
 	};
 
 }
