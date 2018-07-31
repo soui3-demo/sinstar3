@@ -22,9 +22,6 @@ CSouiEnv* SSingleton<CSouiEnv>::ms_Singleton = NULL;
 
 CSouiEnv::CSouiEnv(HINSTANCE hInst)
 {
-	HRESULT hRes = OleInitialize(NULL);
-	SASSERT(SUCCEEDED(hRes));
-
 	int nRet = 0;
 
 	m_pComMgr = new SComMgr(_T("imgdecoder-png"));
@@ -143,5 +140,4 @@ CSouiEnv::~CSouiEnv(void)
 
  	delete m_theApp;
 	delete m_pComMgr;
-	OleUninitialize();
 }
