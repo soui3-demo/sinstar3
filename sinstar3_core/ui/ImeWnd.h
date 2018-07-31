@@ -3,11 +3,11 @@
 namespace SOUI
 {
 
-class CImeWnd : public SHostWnd, public TAutoEventMapReg<CImeWnd>
+class CImeWnd : public SHostWnd
 {
 public:
-	CImeWnd(LPCTSTR pszLayout);
-
+	CImeWnd(SEventSet *pEvtSets,LPCTSTR pszLayout);
+	virtual ~CImeWnd();
 
 	HWND Create(LPCTSTR pszTitle,HWND hParent=NULL);
 	void Show(BOOL bShow);
@@ -18,6 +18,9 @@ protected:
 
 	BOOL m_canReleaseCapture;
 
+protected:
+	bool OnEvent(EventArgs *e);
+	SEventSet * m_pEvtSet;
 protected:
 	void OnSetSkin(EventArgs * e);
 	EVENT_MAP_BEGIN()

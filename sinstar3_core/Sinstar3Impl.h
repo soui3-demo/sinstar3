@@ -12,7 +12,8 @@ class CSinstar3Impl:
 	public ISinstar,
 	public IInputListener,
 	public SOUI::SObject,
-	public SOUI::CSimpleWnd
+	public SOUI::CSimpleWnd,
+	public SOUI::SEventSet
 {
 	friend class CCmdHandler;// CCmdHandler need access this private members.
 public:

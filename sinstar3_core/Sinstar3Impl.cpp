@@ -30,14 +30,18 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr)
 {
 	theModule->AddRef();
 
- 	m_pInputWnd = new CInputWnd(m_inputState.GetInputContext());
-	m_pStatusWnd = new CStatusWnd(this);
-	m_pTipWnd = new STipWnd();
+	addEvent(EVENTID(EventSvrNotify));
+	addEvent(EVENTID(EventSetSkin));
+
+ 	m_pInputWnd = new CInputWnd(this,m_inputState.GetInputContext());
+	m_pStatusWnd = new CStatusWnd(this,this);
+	m_pTipWnd = new STipWnd(this);
 	m_pStatusWnd->Create(_T("Sinstar3_Status"));
 	m_pInputWnd->Create(_T("Sinstar3_Input"));
 	m_pTipWnd->Create(_T("sinstar3_tip"));
 	m_cmdHandler.SetTipWnd(m_pTipWnd);
 	m_inputState.SetInputListener(this);
+
 	m_pInputWnd->SetAnchorPosition(CDataCenter::getSingleton().GetData().m_ptInput);
 	m_pInputWnd->SetFollowCaret(g_SettingsL.bMouseFollow);
 
@@ -45,6 +49,7 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr)
 	SOUI::CSimpleWnd::Create(_T("sinstar3_msg_recv"),WS_DISABLED|WS_POPUP,WS_EX_TOOLWINDOW,0,0,0,0,HWND_MESSAGE,NULL);
 	CUtils::ChangeWindowMessageFilter(WM_COPYDATA, MSGFLT_ADD);
 	ISComm_Login(m_hWnd);
+
 }
 
 CSinstar3Impl::~CSinstar3Impl(void)
@@ -244,11 +249,10 @@ LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 
 		CDataCenter::getSingleton().Unlock();
 
-		EventSvrNotify *evt= new EventSvrNotify(this);
-		evt->wp = wp;
-		evt->lp = lp;
-		SNotifyCenter::getSingleton().FireEventAsync(evt);
-		evt->Release();
+		EventSvrNotify evt(this);
+		evt.wp = wp;
+		evt.lp = lp;
+		FireEvent(evt);
 		return 1;
 	}
 	else if (wp == NT_FLMINFO)

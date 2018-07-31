@@ -8,7 +8,10 @@
 #define MAX_SKINS	 80
 namespace SOUI
 {
-	CStatusWnd::CStatusWnd(ICmdListener *pListener):CImeWnd(UIRES.LAYOUT.wnd_status_bar), m_pCmdListener(pListener)
+	CStatusWnd::CStatusWnd(SEventSet *pEvtSets, ICmdListener *pListener)
+		:CImeWnd(pEvtSets,UIRES.LAYOUT.wnd_status_bar)
+		, m_pCmdListener(pListener)
+		, m_skinManager(pEvtSets)
 	{
 	}
 

@@ -122,10 +122,6 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 			CDataCenter::getSingletonPtr()->GetData().m_strSkin.Empty();
 		}
 	}
-	new SNotifyCenter;
-
-	SNotifyCenter::getSingletonPtr()->addEvent(EVENTID(EventSvrNotify));
-	SNotifyCenter::getSingletonPtr()->addEvent(EVENTID(EventSetSkin));
 }
 
 CSouiEnv::~CSouiEnv(void)
@@ -136,7 +132,6 @@ CSouiEnv::~CSouiEnv(void)
 	if (pLogMgr)
 		pLogMgr->stop();
 
-	delete SNotifyCenter::getSingletonPtr();
 
  	delete m_theApp;
 	delete m_pComMgr;

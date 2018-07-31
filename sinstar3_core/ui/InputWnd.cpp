@@ -6,8 +6,8 @@
 
 namespace SOUI
 {
-	CInputWnd::CInputWnd(InputContext *pCtx)
-		:CImeWnd(UIRES.LAYOUT.wnd_composition)
+	CInputWnd::CInputWnd(SEventSet *pEvtSets, InputContext *pCtx)
+		:CImeWnd(pEvtSets,UIRES.LAYOUT.wnd_composition)
 		,m_bLocated(FALSE)
 		,m_nCaretHeight(30)
 		,m_pInputContext(pCtx)

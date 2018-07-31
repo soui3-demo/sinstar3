@@ -4,7 +4,7 @@
 #include <helper/mybuffer.h>
 #include "../SouiEnv.h"
 
-CSkinMananger::CSkinMananger(void)
+CSkinMananger::CSkinMananger(SEventSet *pEvtSets):m_pEvtSets(pEvtSets)
 {
 }
 
@@ -112,9 +112,8 @@ BOOL CSkinMananger::SetSkin(int nSkinId)
 	CDataCenter::getSingletonPtr()->GetData().m_strSkin = strSkinPath;
 
 	//notify skin changed
-	EventSetSkin *pEvt = new EventSetSkin(this);
-	SNotifyCenter::getSingletonPtr()->FireEventAsync(pEvt);
-	pEvt->Release();
+	EventSetSkin evt(this);
+	m_pEvtSets->FireEvent(evt);
 	return TRUE;
 }
 

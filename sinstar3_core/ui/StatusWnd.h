@@ -18,7 +18,7 @@ namespace SOUI
 			BTN_ALL=0xffffffff,
 		};
 
-		CStatusWnd(ICmdListener *pListener);
+		CStatusWnd(SEventSet *pEvtSets, ICmdListener *pListener);
 		~CStatusWnd(void);
 
 		void UpdateCompInfo();

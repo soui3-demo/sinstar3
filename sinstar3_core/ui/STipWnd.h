@@ -8,7 +8,7 @@ namespace SOUI {
 	class STipWnd : public CImeWnd
 	{
 	public:
-		STipWnd();
+		STipWnd(SEventSet *pEvtSets);
 		~STipWnd();
 
 		void SetTip(const SStringT & strTitle, const SStringT & strTip);

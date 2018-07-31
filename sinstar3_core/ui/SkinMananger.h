@@ -4,7 +4,7 @@
 class CSkinMananger : public SObject
 {
 public:
-	CSkinMananger(void);
+	CSkinMananger(SEventSet *pEvtSets);
 	~CSkinMananger(void);
 
 	void ClearMap(){m_mapSkin.RemoveAll();}
@@ -19,4 +19,5 @@ public:
 	}
 protected:
 	SMap<int,SStringT> m_mapSkin;	//map of ID->skin path
+	SEventSet *m_pEvtSets;
 };
