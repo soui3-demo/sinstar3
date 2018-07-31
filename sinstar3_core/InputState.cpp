@@ -310,6 +310,10 @@ void CInputState::ClearContext(UINT dwMask)
 	{
 		m_ctx.cCompACLen = 0;
 	}
+	if (dwMask & CPC_INPUT)
+	{
+		m_ctx.cInput = 0;
+	}
 }
 
 

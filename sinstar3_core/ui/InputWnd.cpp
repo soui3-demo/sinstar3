@@ -416,6 +416,8 @@ namespace SOUI
 	{
 		if(idEvent == TIMERID_DELAY)
 		{
+			if (m_pInputContext->sbState == SBST_ASSOCIATE)
+				m_pInputContext->sbState = ::SBST_NORMAL;
 			Show(FALSE);
 			KillTimer(idEvent);
 		}else
