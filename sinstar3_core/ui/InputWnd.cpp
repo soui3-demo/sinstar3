@@ -42,15 +42,17 @@ namespace SOUI
 	{
 		SLOG_INFO("pt:" << pt.x <<","<<pt.y<<" caretHeight:"<<nCaretHeight<<" followCaret:"<< m_bFollowCaret);
 
+		m_ptCaret = pt;
+		m_nCaretHeight = nCaretHeight;
+
 		if (!m_bFollowCaret)
 		{
 			return;
 		}
 
-		m_bLocated = TRUE;
-		m_ptCaret = pt - CDataCenter::getSingleton().GetData().m_ptSkinOffset;
-		m_nCaretHeight = nCaretHeight;
-		SetWindowPos(HWND_TOPMOST,m_ptCaret.x,m_ptCaret.y + m_nCaretHeight + SIZE_BELOW,0,0,SWP_NOSIZE|SWP_NOACTIVATE);
+		m_bLocated = TRUE;		
+		CPoint pos = pt - CDataCenter::getSingleton().GetData().m_ptSkinOffset;
+		SetWindowPos(HWND_TOPMOST,pos.x,pos.y + m_nCaretHeight + SIZE_BELOW,0,0,SWP_NOSIZE|SWP_NOACTIVATE);
 		if(m_bShow && !IsWindowVisible())
 		{
 			CImeWnd::Show(TRUE);
@@ -83,6 +85,7 @@ namespace SOUI
 		int nRet = __super::OnCreate(lpCreateStruct);
 		if(nRet != 0) return nRet;
 		UpdateUI();
+		MoveTo(m_ptCaret, m_nCaretHeight);
 		return 0;
 	}
 
