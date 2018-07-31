@@ -19,7 +19,7 @@ CImeWnd::~CImeWnd()
 
 bool CImeWnd::OnEvent(EventArgs * e)
 {
-	return _HandleEvent(e);
+	return !!_HandleEvent(e);
 }
 
 void CImeWnd::OnSetSkin(EventArgs *e)

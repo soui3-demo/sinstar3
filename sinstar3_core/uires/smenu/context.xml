@@ -4,7 +4,6 @@
           font="face:微软雅黑,size:14" margin="1,1,1,1" colorBorder="#cccccc"
           maxWidth="300" minWidth="150" iconPos="4">
   <menuItem text="系统设置" name="config" id="100" />
-  <menuItem text="快捷设置" />
   <menuItem text="隐藏状态" name="hide_statusbar" id="101"/>
   <menuItem text="光标跟随" name="follow_caret" id="102"/>
   <menuItem text="输出繁体" name="input_big5" id="103"/>

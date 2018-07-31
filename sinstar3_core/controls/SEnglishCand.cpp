@@ -6,7 +6,7 @@ namespace SOUI
 	const TCHAR KPhoneticLeft[] = _T("[");
 	const TCHAR KPhoneticRight[] = _T("]");
 
-	SEnglishCand::SEnglishCand(void)
+	SEnglishCand::SEnglishCand(void):m_bShowPhonetic(TRUE)
 	{
 		m_bDisplay=0;
 	}
@@ -34,7 +34,7 @@ namespace SOUI
 		pRT->MeasureText(m_strCand,m_strCand.GetLength(),&szBlock);
 		pt.x += szBlock.cx;
 
-		if(!m_strPhonetic.IsEmpty())
+		if(!m_strPhonetic.IsEmpty() && m_bShowPhonetic)
 		{//todo:select phontic font
 			pRT->SetTextColor(m_crPhonetic);
 			pRT->TextOut(pt.x, pt.y, KPhoneticLeft, ARRAYSIZE(KPhoneticLeft) - 1);
@@ -101,7 +101,7 @@ namespace SOUI
 		szRet.cx += sz.cx;
 		szRet.cy = smax(szRet.cy,sz.cy);
 
-		if(!m_strPhonetic.IsEmpty())
+		if(!m_strPhonetic.IsEmpty() && m_bShowPhonetic)
 		{
 			pRT->MeasureText(KPhoneticLeft, ARRAYSIZE(KPhoneticLeft)-1, &sz);
 			szRet.cx += sz.cx;

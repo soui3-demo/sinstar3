@@ -431,6 +431,10 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 		{
 			m_pListener->OnCommand(CMD_HIDESTATUSBAR, 0);
 		}
+		else if (uVKey == g_SettingsG.byHotKeyEn)
+		{
+			m_pListener->OnCommand(CMD_ENGLISHMODE, 0);
+		}
 		else
 		{
 			bHandle = FALSE;
@@ -525,7 +529,7 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 			}
 			if((bReadyEn || bReadyDgt) && lpCntxtPriv->bShowTip) //关闭tip
 				lpCntxtPriv->bShowTip=FALSE;
-			if(bReadyEn && uVKey>='a' && uVKey<='z')
+			if(bReadyEn && uVKey>='A' && uVKey<='Z')
 			{//大写输入，则切换到英文状态
 				ClearContext(CPC_ALL);
 				if(g_SettingsL.bEnglish)

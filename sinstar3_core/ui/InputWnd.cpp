@@ -201,9 +201,69 @@ namespace SOUI
 				compLineIme->FindChildByID(R.id.txt_comps)->SetWindowText(S_CA2T(SStringA(m_pInputContext->szComp, m_pInputContext->cComp)));
 			}
 			break;
+		case INST_ENGLISH:
+			{
+				SWindow * compEnglish = FindChildByID(R.id.comp_english);
+				compEnglish->SetVisible(TRUE, TRUE);
+
+				SStringA strComp(m_pInputContext->szComp, m_pInputContext->cComp);
+				compEnglish->FindChildByID(R.id.txt_comps)->SetWindowText(S_CA2T(strComp));
+				SWindow * autoComp = compEnglish->FindChildByID(R.id.txt_auto_complete);
+				if (m_pInputContext->pbyEnSpell)
+				{//有英文单词
+					SStringA strWord((char *)m_pInputContext->pbyEnSpell + 1 + m_pInputContext->cComp, m_pInputContext->pbyEnSpell[0] - m_pInputContext->cComp);
+					autoComp->SetWindowText(S_CA2T(strWord));
+				}
+				else
+				{
+					autoComp->SetWindowText(NULL);
+				}
+			}
+			break;
+
 		}
 		//update candidate
-		if (m_pInputContext->sbState == SBST_NORMAL)
+		if(m_pInputContext->inState == INST_ENGLISH)
+		{
+			SWindow * pCandEnglish = FindChildByID(R.id.cand_english_input);
+			pCandEnglish->SetVisible(TRUE, TRUE);
+			SWindow * pCandContainer = pCandEnglish->FindChildByID(R.id.cand_container);
+
+			int nPageSize = GetCandMax(pCandContainer, SEnglishCand::GetClassName());
+			int iBegin = m_pInputContext->iCandBegin;
+			int iEnd = smin(iBegin + nPageSize, m_pInputContext->sCandCount);
+			m_pInputContext->iCandLast = iEnd;
+			m_cPageSize = nPageSize;
+
+			pCandEnglish->FindChildByID(R.id.btn_prevpage)->SetVisible(iBegin>0, TRUE);
+			pCandEnglish->FindChildByID(R.id.btn_nextpage)->SetVisible(iEnd<m_pInputContext->sCandCount, TRUE);
+
+			SWindow * pCand = pCandContainer->GetWindow(GSW_FIRSTCHILD);
+			int iCand = iBegin;
+			while (pCand && iCand<iEnd)
+			{
+				if (pCand->IsClass(SEnglishCand::GetClassName()))
+				{
+					SEnglishCand *pCand2 = (SEnglishCand*)pCand;
+					pCand2->SetVisible(TRUE, TRUE);
+					pCand2->SetCandData(m_pInputContext->ppbyCandInfo[iCand]);
+					iCand++;
+				}
+				pCand = pCand->GetWindow(GSW_NEXTSIBLING);
+			}
+
+			while (iCand < iBegin + nPageSize && pCand)
+			{
+				if (pCand->IsClass(SEnglishCand::GetClassName()))
+				{
+					SEnglishCand *pCand2 = (SEnglishCand*)pCand;
+					pCand2->SetVisible(FALSE, TRUE);
+					iCand++;
+				}
+				pCand = pCand->GetWindow(GSW_NEXTSIBLING);
+			}
+		}
+		else if (m_pInputContext->sbState == SBST_NORMAL)
 		{//正在输入状态下的重码.
 			SWindow * pCandNormal = FindChildByID(R.id.cand_normal);
 			pCandNormal->SetVisible(TRUE, TRUE);

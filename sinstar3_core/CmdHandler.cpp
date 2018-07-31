@@ -214,3 +214,9 @@ void CCmdHandler::OnCharMode(LPARAM lp)
 	g_SettingsL.bCharMode = !g_SettingsL.bCharMode;
 	m_pSinstar3->m_pStatusWnd->UpdateToggleStatus(CStatusWnd::BTN_CHARMODE);
 }
+
+void CCmdHandler::OnEnglishMode(LPARAM lp)
+{
+	g_SettingsL.bEnglish = !g_SettingsL.bEnglish;
+	m_pSinstar3->m_pStatusWnd->UpdateToggleStatus(CStatusWnd::BTN_ENGLISHMODE);
+}

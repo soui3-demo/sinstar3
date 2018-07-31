@@ -29,6 +29,7 @@ namespace SOUI
 			ATTR_COLOR(L"colorIndex",m_crIndex,TRUE)
 			ATTR_COLOR(L"colorCand",m_crCand,TRUE)
 			ATTR_COLOR(L"colorPhonetic", m_crPhonetic,TRUE)
+			ATTR_BOOL(L"showPhonetic",m_bShowPhonetic,TRUE)
 		SOUI_ATTRS_END()
 
 		SStringT m_strIndex;
@@ -38,6 +39,7 @@ namespace SOUI
 		COLORREF m_crIndex;
 		COLORREF m_crCand;
 		COLORREF m_crPhonetic;
+		BOOL	 m_bShowPhonetic;
 
 		CAutoRefPtr<IFont> m_ftPhonetic;
 	};
