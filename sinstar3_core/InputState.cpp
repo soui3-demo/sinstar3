@@ -198,7 +198,7 @@ BOOL CInputState::Tips_Rand(BOOL bSpell, char *pszBuf)
 	{
 		int total = (int) (m_tips[TT_SPELL].GetCount() + m_tips[TT_BOTH].GetCount());
 		int idx = rand() % total;
-		if (idx < m_tips[TT_SPELL].GetCount())
+		if (idx < (int)m_tips[TT_SPELL].GetCount())
 			strcpy(pszBuf, m_tips[TT_SPELL][idx]);
 		else
 			strcpy(pszBuf, m_tips[TT_BOTH][idx - m_tips[TT_SPELL].GetCount()]);
@@ -207,7 +207,7 @@ BOOL CInputState::Tips_Rand(BOOL bSpell, char *pszBuf)
 	{
 		int total = (int) (m_tips[TT_SHAPE].GetCount() + m_tips[TT_BOTH].GetCount());
 		int idx = rand() % total;
-		if (idx < m_tips[TT_SHAPE].GetCount())
+		if (idx < (int)m_tips[TT_SHAPE].GetCount())
 			strcpy(pszBuf, m_tips[TT_SHAPE][idx]);
 		else
 			strcpy(pszBuf, m_tips[TT_BOTH][idx - m_tips[TT_SHAPE].GetCount()]);
@@ -234,7 +234,7 @@ BYTE CInputState::GetKeyinMask(BOOL bAssociate,BYTE byMask)
 	BYTE byRet=0;
 	if(g_SettingsG.bAutoMatch) byRet|=(MKI_AUTOPICK&byMask);
 	if(g_SettingsL.bRecord) byRet|=(MKI_RECORD&byMask);
-	if(g_SettingsG.bTTSInput) byRet|=(MKI_TTSINPUT&byMask);
+	if(g_SettingsL.bSound) byRet|=(MKI_TTSINPUT&byMask);
 	if(bAssociate)
 	{
 		if(g_SettingsG.bAstSent) byRet|=MKI_ASTSENT;
@@ -1714,7 +1714,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 
 				if(g_SettingsL.bRecord)
 					byMask|=MKI_RECORD;
-				if(g_SettingsG.bTTSInput)
+				if(g_SettingsL.bSound)
 					byMask|=MKI_TTSINPUT;
 				InputResult(strResultA,byMask);
 			}
@@ -1857,7 +1857,7 @@ BOOL CInputState::KeyIn_Code_Symbol(InputContext * lpCntxtPriv,UINT byInput,
 
 	if(g_SettingsL.bRecord)
 		byMask|=MKI_RECORD;
-	if(g_SettingsG.bTTSInput)
+	if(g_SettingsL.bSound)
 		byMask|=MKI_TTSINPUT;
 
 	ClearContext(CPC_ALL);
@@ -1940,7 +1940,7 @@ void  CInputState::KeyIn_Sent_Input(InputContext* lpCntxtPriv)
 		BYTE byMask=0;
 		if(g_SettingsL.bRecord)
 			byMask|=MKI_RECORD;
-		if(g_SettingsG.bTTSInput)
+		if(g_SettingsL.bSound)
 			byMask|=MKI_TTSINPUT;
 
 		SStringA strResultA((char*)lpCntxtPriv->pbySentWord[0],
@@ -2508,10 +2508,6 @@ BOOL CInputState::OnSvrNotify(UINT wp, PMSGDATA pMsg)
 							ctx->ppbyCandInfo[i]=pbyData;
 							pbyData+=pbyData[0]+1;
 							pbyData+=pbyData[0]+1;						
-						}
-						if(!g_SettingsG.bTTSInput && g_SettingsL.bSound && ctx->sCandCount)
-						{
-							ISComm_TTS((LPCSTR)ctx->ppbyCandInfo[0]+1,ctx->ppbyCandInfo[0][0],MTTS_EN);
 						}
 						SLOG_INFO("Ó¢ÎÄÁªÏë:"<<ctx->sCandCount);
 					}

@@ -13,11 +13,12 @@ namespace SOUI
 		void FindAndSetCheck(int id, BOOL bcheck);
 		void FindAndSetText(int id, LPCTSTR text);
 		void FindAndSetHotKey(int id, WORD vk_key, WORD modif);
-		void IniPageHabit();
-		void IniPageHotKey();
-		void IniPageAssociate();
-		void IniPageCandidate();
-		void IniCtrl();
+		void InitPageHabit();
+		void InitPageHotKey();
+		void InitPageAssociate();
+		void InitPageCandidate();
+		void InitPageMisc();
+		void InitPages();
 		BOOL OnInitDialog(HWND wnd, LPARAM lParam);
 		//输入法开关radio
 		void OnClickInputSwitch(int id);
@@ -25,6 +26,9 @@ namespace SOUI
 		void OnClickEnter(int id);
 		//临时拼音
 		void OnClickPYTemp(int id);
+
+		void OnClickAlertMode(int id);
+
 		//重码自动上屏
 		void OnAutoInput();
 		//拼音重码词组优先
@@ -62,6 +66,7 @@ namespace SOUI
 			EVENT_ID_COMMAND_RANGE(700, 702, OnClickGBK)
 			EVENT_ID_COMMAND(R.id.chk_full_skip_simple, OnChkFullSkipSimple)
 			EVENT_ID_COMMAND_RANGE(500, 502, OnClickRateAdjust)
+			EVENT_ID_COMMAND_RANGE(R.id.sound_disable,R.id.sound_beep,OnClickAlertMode)
 			EVENT_ID_COMMAND(R.id.chk_auto_comp_promp, OnClickAutoCompPromp)
 			EVENT_ID_COMMAND(R.id.chk_auto_dot, OnClickAutoDot)
 			EVENT_ID_COMMAND(R.id.chk_auto_select_cand, OnClickAutoSelectCand)

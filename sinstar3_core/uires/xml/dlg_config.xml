@@ -135,6 +135,13 @@
             <check extend_top="10" name="chk_full_skip_simple" text="出简不出全"/>
           </window>
         </pageex>
+        <pageex title="@string/cfg_misc" tip="@string/cfg_misc" layout="vbox" gravity="center">
+          <group size="-1,-1" layout="vbox" text="提示音">
+            <radio name="sound_disable" text="禁用" id="800"/>
+            <radio name="sound_wave" text="WAV提示" id="801"/>
+            <radio name="sound_beep" text="蜂鸣器" id="802"/>
+          </group>
+        </pageex>
         <pageex title="@string/cfg_about" tip="@string/cfg_about" layout="vbox" gravity="center">
           <text extend_top="30" text="启程五笔输入法"/>
           <text text="version:3.0"/>

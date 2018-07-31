@@ -24,22 +24,14 @@ public:
 	BYTE	byTempSpellKey;		// 临时拼音开关
 	BYTE	byForecast;			// forecast mask
 	TCHAR	byLineKey[6];		// 笔画输入法转换键值
-	BYTE	byPntcRed;			// 音标颜色 Red
-	BYTE	byPntcGreen;		// 音标颜色 Green
-	BYTE	byPntcBlue;			// 音标颜色 Blue
-	BYTE	byTransStatus;		// 状态窗口透明度 50~255
-	BYTE    byTransInput;		// 输入窗口透明度50~255
 	BOOL	bFastUMode;			// 快捷自定义模式切换
 	BOOL	bShowOpTip;			// 显示操作提示开关
-	TCHAR   szPhonticLeft[50];	// 音标左数据
-	TCHAR   szPhonticRight[50];	// 音标右数据
 	GbkMode		nGbkMode;			// GBK Show Mode
 
 	BYTE	byRateAdjust;		// 词频调整类型 0-不使用，１－智能调频，２－快速调频
 	BYTE	byAstMode;			// 联想类型 (ASTMODE)
 	BOOL	bAstSent;			// 语句联想
 	BOOL	bAutoMatch;			// 智能选词
-	BOOL	bTTSInput;			// 语音较对
 
 	BOOL	bBlendUD;			// 混合检索自定义编码表
 	BOOL	bBlendSpWord;		// 混合输入拼音单字
@@ -66,7 +58,6 @@ public:
 
 	BOOL	bCandSelNoNum;		// 禁用数字选择重码
 	BOOL	bOnlySimpleCode;	// 出简不出全
-	TCHAR	szPlugin[100];		// plugin name
 };
 
 class CSettingsLocal
@@ -81,7 +72,7 @@ public:
 	BOOL	bEnglish;			// 英文单词输入开关
 	BOOL	bFullStatus;		// 状态栏展开标志
 	BOOL	bCharMode;			// 标点模式
-	BOOL	bSound;				// 发音标志
+	BOOL	bSound;				// 语音较对
 	BOOL	bRecord;			// 记录输入语句
 	BOOL	bInputBig5;			// 繁体输出标志
 };
