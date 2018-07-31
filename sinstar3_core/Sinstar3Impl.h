@@ -81,6 +81,8 @@ private:
 	void			*m_pCurImeContext;
 
 	CCmdHandler	    m_cmdHandler;
+
+	SStringT		m_strLoadedFontFile;
 };
 
 

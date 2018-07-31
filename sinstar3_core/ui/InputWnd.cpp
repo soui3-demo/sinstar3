@@ -48,7 +48,7 @@ namespace SOUI
 		}
 
 		m_bLocated = TRUE;
-		m_ptCaret = pt;
+		m_ptCaret = pt - CDataCenter::getSingleton().GetData().m_ptSkinOffset;
 		m_nCaretHeight = nCaretHeight;
 		SetWindowPos(HWND_TOPMOST,m_ptCaret.x,m_ptCaret.y + m_nCaretHeight + SIZE_BELOW,0,0,SWP_NOSIZE|SWP_NOACTIVATE);
 		if(m_bShow && !IsWindowVisible())
@@ -373,6 +373,11 @@ namespace SOUI
 		short idx = iCand + m_pInputContext->iCandBegin;
 		if(idx >= m_pInputContext->iCandLast) return -1;
 		return idx;
+	}
+
+	void CInputWnd::OnFlmInfo(PFLMINFO pFlmInfo)
+	{
+		SDispatchMessage(UM_FLMINFO, 0, (LPARAM)pFlmInfo);
 	}
 
 

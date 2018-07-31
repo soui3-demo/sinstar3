@@ -198,3 +198,19 @@ void CCmdHandler::OnInputMode(LPARAM lp)
 		m_pSinstar3->m_pStatusWnd->UpdateCompInfo();
 	}
 }
+
+void CCmdHandler::OnKeySpeed(LPARAM lp)
+{
+	SStringT msg = _T("还没有输入数据");
+	CMyData &data = CDataCenter::getSingleton().GetData();
+	if (data.m_cInputCount>0)
+		msg.Format(_T("输入汉字: %d 个\n打字速度:%d 字/分钟"), data.m_cInputCount, data.m_cInputCount * 60000 / data.m_tmInputSpan);
+
+	m_pTipWnd->SetTip(_T("提示"), msg);
+}
+
+void CCmdHandler::OnCharMode(LPARAM lp)
+{
+	g_SettingsL.bCharMode = !g_SettingsL.bCharMode;
+	m_pSinstar3->m_pStatusWnd->UpdateToggleStatus(CStatusWnd::BTN_CHARMODE);
+}

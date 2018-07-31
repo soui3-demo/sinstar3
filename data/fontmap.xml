@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<fontmap>
+  <!--外文字体-文件名映射表-->
+  <font face="Kingsoft Phonetic Plain" file="Ksphonet.ttf"/>
+</fontmap>

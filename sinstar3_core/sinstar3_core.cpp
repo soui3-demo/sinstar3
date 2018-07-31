@@ -59,7 +59,7 @@ CSinstar3Core::CSinstar3Core(HINSTANCE hInst):CModuleRef(hInst),m_pLogStateListe
 	g_SettingsL.Load(m_strConfig);
 
 
-	new CDataCenter();
+	new CDataCenter(m_strDataPath);
 }
 
 CSinstar3Core::~CSinstar3Core()

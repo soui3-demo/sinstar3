@@ -17,18 +17,24 @@ namespace SOUI
 
 	class CMyData{
 	public:
-		CMyData();
+		CMyData(const SStringT & strDataPath);
 		~CMyData();
 		CompInfo	m_compInfo;
+
+		SStringW getFontFile(const SStringW &strFace) const;
 
 		CAutoRefPtr<IUiDefInfo> m_defUiDefine;
 
 		SStringT	m_strSkin;
 		CPoint		m_ptStatus;
 		CPoint		m_ptInput;
+		CPoint		m_ptSkinOffset;
 
 		int			m_cInputCount;
+		DWORD		m_tmInputSpan;
 		CRegKey		m_reg;
+	private:
+		SMap<SStringW, SStringW> m_fontMap;
 	};
 
 	class CNameTypePair
@@ -41,7 +47,7 @@ namespace SOUI
 class CDataCenter : public SSingleton<CDataCenter>
 {
 public:
-	CDataCenter(void);
+	CDataCenter(const SStringT & strDataPath );
 	~CDataCenter(void);
 
 public:

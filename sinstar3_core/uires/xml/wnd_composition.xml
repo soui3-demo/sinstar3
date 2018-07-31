@@ -57,11 +57,11 @@
         <text size="-1,-1" text="ch:" colorText="@color/gray" name="txt_en_header" extend_right="3dp"/>
         <imgbtn size="-1,-1" display="0" skin="btn_prevpage" name="btn_prevpage"/>
         <window size="-1,-1" layout="hbox" name="cand_container">
-          <EnCand size="-1,-1" index="1:" colorCand="@color/cand_text" colorPhontic="@color/cand_phontic"/>
-          <EnCand size="-1,-1" extend_left="5" index="2:" colorCand="@color/cand_text" colorPhontic="@color/cand_phontic"/>
-          <EnCand size="-1,-1" extend_left="5" index="3:" colorCand="@color/cand_text" colorPhontic="@color/cand_phontic"/>
-          <EnCand size="-1,-1" extend_left="5" index="4:" colorCand="@color/cand_text" colorPhontic="@color/cand_phontic"/>
-          <EnCand size="-1,-1" extend_left="5" index="5:" colorCand="@color/cand_text" colorPhontic="@color/cand_phontic"/>
+          <EnCand size="-1,-1" index="1:" colorCand="@color/cand_text" colorPhonetic="@color/cand_phonetic"/>
+          <EnCand size="-1,-1" extend_left="5" index="2:" colorCand="@color/cand_text" colorPhonetic="@color/cand_phonetic"/>
+          <EnCand size="-1,-1" extend_left="5" index="3:" colorCand="@color/cand_text" colorPhonetic="@color/cand_phonetic"/>
+          <EnCand size="-1,-1" extend_left="5" index="4:" colorCand="@color/cand_text" colorPhonetic="@color/cand_phonetic"/>
+          <EnCand size="-1,-1" extend_left="5" index="5:" colorCand="@color/cand_text" colorPhonetic="@color/cand_phonetic"/>
         </window>
         <imgbtn size="-1,-1" display="0" skin="btn_nextpage" name="btn_nextpage"/>
       </mutexView>

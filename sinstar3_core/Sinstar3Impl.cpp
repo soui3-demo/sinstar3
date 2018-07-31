@@ -59,6 +59,11 @@ CSinstar3Impl::~CSinstar3Impl(void)
 	delete m_pInputWnd;
 	delete m_pTipWnd;
 
+	if (!m_strLoadedFontFile.IsEmpty())
+	{
+		RemoveFontResourceEx(m_strLoadedFontFile, FR_PRIVATE , NULL);
+	}
+
 	theModule->Release();
 }
 
@@ -245,7 +250,30 @@ LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 		SNotifyCenter::getSingleton().FireEventAsync(evt);
 		evt->Release();
 		return 1;
-	}else
+	}
+	else if (wp == NT_FLMINFO)
+	{
+		LOGFONT lf = { 0 };
+		if (m_strLoadedFontFile)
+		{
+			RemoveFontResourceEx(m_strLoadedFontFile, FR_PRIVATE, NULL);
+			m_strLoadedFontFile.Empty();
+		}
+		if (ISComm_GetFlmInfo()->szAddFont[0])
+		{//需要特殊字体
+			SLOG_INFO("NT_FLMINFO,font:" << ISComm_GetFlmInfo()->szAddFont);
+
+			SStringW strFontFile = CDataCenter::getSingleton().GetData().getFontFile(S_CA2W(ISComm_GetFlmInfo()->szAddFont));
+			if (!strFontFile.IsEmpty())
+			{
+				m_strLoadedFontFile = theModule->GetDataPath() + _T("\\") + S_CW2T(strFontFile);
+				AddFontResourceEx(m_strLoadedFontFile, FR_PRIVATE , NULL);
+			}
+			m_pInputWnd->OnFlmInfo(ISComm_GetFlmInfo());
+		}
+		return 1;
+	}
+	else
 	{
 		return m_inputState.OnSvrNotify((UINT)wp,pMsg)?1:0;
 	}

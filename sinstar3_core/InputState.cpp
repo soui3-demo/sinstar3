@@ -318,6 +318,16 @@ void CInputState::InputStart()
 	SLOG_INFO("");
 	m_pListener->OnInputStart();
 	m_bTypeing = TRUE;
+	
+	DWORD tmCur = GetTickCount();
+	if (tmCur - m_tmInputEnd > 10 * 1000)
+	{
+		m_tmInputStart = tmCur;
+	}
+	else
+	{
+		m_tmInputStart = m_tmInputEnd;
+	}
 }
 
 void CInputState::InputResult(const SStringT &strResult,BYTE byAstMask)
@@ -345,6 +355,9 @@ void CInputState::InputResult(const SStringT &strResult,BYTE byAstMask)
 		SStringA strResultA = S_CT2A(strTemp);
 		KeyIn_InputAndAssociate(&m_ctx,strResultA,(short)strResultA.GetLength(),byAstMask);
 	}
+
+	m_tmInputEnd = GetTickCount();
+	CDataCenter::getSingletonPtr()->GetData().m_tmInputSpan += m_tmInputEnd - m_tmInputStart;
 	CDataCenter::getSingletonPtr()->GetData().m_cInputCount+= strTemp.GetLength();
 }
 
@@ -1793,6 +1806,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 					pCandData+=pCandData[0]+1;	//偏移编码信息
 				}
 			}
+			InputUpdate();
 		}
 		if(lpCntxtPriv->sCandCount)
 		{
@@ -2345,7 +2359,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 					return FALSE;
 			}else if(lpbKeyState[VK_SHIFT]&0x80 && uKey==VK_SPACE)
 			{//todo: Shift + VK_SPACE:中英文标点切换
-				//				MyGenerateMessage(hIMC,WM_IME_NOTIFY,IMN_PRIVATE,MAKELONG(IMN_PRIV_COMMAND,g_SettingsL.bCharMode?IDC_CHARMODE1:IDC_CHARMODE2));
+				m_pListener->OnCommand(CMD_CHARMODE, 0);
 				return TRUE;
 			}else
 			{

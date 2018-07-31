@@ -45,18 +45,7 @@ namespace SOUI
 
 	void CStatusWnd::UpdateUI()
 	{
-		{
-			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_charmode);
-			if (toggle) toggle->SetToggle(g_SettingsL.bCharMode);
-		}
-		{
-			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_sound);
-			if (toggle) toggle->SetToggle(!g_SettingsL.bSound);
-		}
-		{
-			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_record);
-			if (toggle) toggle->SetToggle(!g_SettingsL.bRecord);
-		}
+		UpdateToggleStatus(BTN_ALL);
 		UpdateCompInfo();
 	}
 
@@ -149,6 +138,10 @@ namespace SOUI
 		else if (nRet == R.id.input_big5)
 		{
 			g_SettingsL.bInputBig5 = !g_SettingsL.bInputBig5;
+		}
+		else if (nRet == R.id.key_speed)
+		{
+			m_pCmdListener->OnCommand(CMD_KEYSPEED, 0);
 		}
 
 		m_skinManager.ClearMap();
@@ -296,6 +289,23 @@ namespace SOUI
 		}
 	}
 
+	void CStatusWnd::UpdateToggleStatus(DWORD flags)
+	{
+		if(flags & BTN_CHARMODE){
+			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_charmode);
+			if (toggle) toggle->SetToggle(g_SettingsL.bCharMode);
+		}
+		if(flags & BTN_SOUND){
+			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_sound);
+			if (toggle) toggle->SetToggle(!g_SettingsL.bSound);
+		}
+		if (flags & BTN_RECORD) {
+			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_record);
+			if (toggle) toggle->SetToggle(!g_SettingsL.bRecord);
+		}
+
+	}
+
 	void CStatusWnd::OnCompInfo(EventArgs *e)
 	{
 		if(!IsWindow())
@@ -344,7 +354,7 @@ namespace SOUI
 		{
 		case R.id.btn_charmode:
 			e2->bUpdated = TRUE;
-			e2->strToolTip = SStringT().Format(_T("标点模式:%s"), g_SettingsL.bCharMode?_T("英文"):_T("中文"));
+			e2->strToolTip = SStringT().Format(_T("标点模式:%s"), g_SettingsL.bCharMode? _T("中文"):_T("英文"));
 			break;
 		case R.id.btn_makeword:
 			e2->bUpdated = TRUE;
