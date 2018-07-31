@@ -2214,6 +2214,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 							InputResult(result,0);
 							ClearContext(CPC_ALL);
 						}
+						InputEnd();
 						InputHide(FALSE);
 					}
 
