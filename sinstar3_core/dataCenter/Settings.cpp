@@ -27,8 +27,6 @@ void CSettingsGlobal::Save(LPCTSTR pszIniFile)
 {
 	TCHAR szBuf[100]={0};
 	WritePrivateProfileInt(KSession,_T("CompMode"),compMode,pszIniFile);
-	WritePrivateProfileString(KSession,_T("PhonticLeft"),szPhonticLeft,pszIniFile);
-	WritePrivateProfileString(KSession,_T("PhonticRight"),szPhonticRight,pszIniFile);
 	WritePrivateProfileInt(KSession,_T("RateAdjust"),byRateAdjust,pszIniFile);
 	WritePrivateProfileInt(KSession,_T("23CandKey"),b23CandKey,pszIniFile);
 
@@ -65,13 +63,7 @@ void CSettingsGlobal::Save(LPCTSTR pszIniFile)
 	szBuf[0]=byLineKey[5];
 	WritePrivateProfileString(KSession,_T("LineKey6"),szBuf,pszIniFile);
 
-	WritePrivateProfileInt(KSession,_T("ColorPhontic_Red"),byPntcRed,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("ColorPhontic_Green"),byPntcGreen,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("ColorPhontic_Blue"),byPntcBlue,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("TransStatusP"),byTransStatus,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("TransInputP"),byTransInput,pszIniFile);
 	WritePrivateProfileInt(KSession,_T("GBKMODE"),nGbkMode,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("TTSInput"),bTTSInput,pszIniFile);
 	WritePrivateProfileInt(KSession,_T("AutoInput"),bAutoInput,pszIniFile);
 	WritePrivateProfileInt(KSession,_T("PYPhraseFirst"),bPYPhraseFirst,pszIniFile);
 	WritePrivateProfileInt(KSession,_T("EnterClear"),bEnterClear,pszIniFile);
@@ -82,7 +74,6 @@ void CSettingsGlobal::Save(LPCTSTR pszIniFile)
 	WritePrivateProfileInt(KSession,_T("DisableDelWordCand"),bDisableDelWordCand,pszIniFile);
 	WritePrivateProfileInt(KSession,_T("CandSelNoNum"),bCandSelNoNum,pszIniFile);
 	WritePrivateProfileString(KSession,_T("WebHeader"),S_CA2T(szWebHeader),pszIniFile);
-	WritePrivateProfileString(KSession,_T("Plugin"),szPlugin,pszIniFile);
 	WritePrivateProfileInt(KSession,_T("OnlySimpleCode"),bOnlySimpleCode,pszIniFile);
 
 }
@@ -92,8 +83,6 @@ void CSettingsGlobal::Load(LPCTSTR pszIniFile)
 	TCHAR szBuf[100];
 	compMode = (COMPMODE)GetPrivateProfileInt(KSession,_T("CompMode"),IM_SHAPECODE,pszIniFile);
 
-	GetPrivateProfileString(KSession,_T("PhonticLeft"),_T("["),szPhonticLeft,50,pszIniFile);
-	GetPrivateProfileString(KSession,_T("PhonticRight"),_T("]"),szPhonticRight,50,pszIniFile);
 	byRateAdjust=GetPrivateProfileInt(KSession,_T("RateAdjust"),1,pszIniFile);
 	b23CandKey=GetPrivateProfileInt(KSession,_T("23CandKey"),FALSE,pszIniFile);
 
@@ -126,21 +115,11 @@ void CSettingsGlobal::Load(LPCTSTR pszIniFile)
 	byLineKey[4]=szBuf[0];
 	GetPrivateProfileString(KSession,_T("LineKey6"),_T("z"),szBuf,2,pszIniFile);
 	byLineKey[5]=szBuf[0];
-	byPntcRed=GetPrivateProfileInt(KSession,_T("ColorPhontic_Red"),0,pszIniFile);
-	byPntcGreen=GetPrivateProfileInt(KSession,_T("ColorPhontic_Green"),0,pszIniFile);
-	byPntcBlue=GetPrivateProfileInt(KSession,_T("ColorPhontic_Blue"),0,pszIniFile);
 	byForecast=GetPrivateProfileInt(KSession,_T("Forecast"),MQC_FORECAST,pszIniFile);
-	byTransStatus=GetPrivateProfileInt(KSession,_T("TransStatusP"),80,pszIniFile);
-	if(byTransStatus<50) byTransStatus=50;
-	if(byTransStatus>100) byTransStatus=100;
-	byTransInput=GetPrivateProfileInt(KSession,_T("TransInputP"),80,pszIniFile);
-	if(byTransInput<50) byTransInput=50;
-	if(byTransInput>100) byTransInput=100;
 
 	bShowOpTip=GetPrivateProfileInt(KSession,_T("ShowTip"),1,pszIniFile);
 	bAutoMatch=GetPrivateProfileInt(KSession,_T("AutoMatch"),1,pszIniFile);
 	nGbkMode=(GbkMode)GetPrivateProfileInt(KSession,_T("GBKMODE"),1,pszIniFile);
-	bTTSInput=GetPrivateProfileInt(KSession,_T("TTSInput"),0,pszIniFile);
 	bBlendUD=GetPrivateProfileInt(KSession,_T("BlendUD"),1,pszIniFile);
 	bBlendSpWord=GetPrivateProfileInt(KSession,_T("BlendSpWord"),0,pszIniFile);
 	bAutoInput=GetPrivateProfileInt(KSession,_T("AutoInput"),1,pszIniFile);
@@ -161,7 +140,6 @@ void CSettingsGlobal::Load(LPCTSTR pszIniFile)
 	SStringA strHeader = S_CT2A(szTmp);
 	strcpy(szWebHeader,strHeader);
 
-	GetPrivateProfileString(KSession,_T("Plugin"),_T(""),szPlugin,100,pszIniFile);
 	bOnlySimpleCode=GetPrivateProfileInt(KSession,_T("OnlySimpleCode"),0,pszIniFile);
 }
 

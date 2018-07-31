@@ -35,7 +35,7 @@ namespace SOUI
 				pCtrl->SetHotKey(vk_key, modif);
 	}
 
-	void CConfigDlg::IniPageHabit()
+	void CConfigDlg::InitPageHabit()
 	{
 		int CtrlId;
 		CtrlId = 102;
@@ -68,7 +68,7 @@ namespace SOUI
 		FindAndSetCheck(R.id.chk_show_op_tip, g_SettingsG.bShowOpTip);
 	}
 
-	void CConfigDlg::IniPageHotKey()
+	void CConfigDlg::InitPageHotKey()
 	{
 		FindAndSetHotKey(R.id.hk_switch_py, g_SettingsG.byHotKeyMode, MOD_CONTROL);
 		FindAndSetHotKey(R.id.hk_make_phrase, g_SettingsG.byHotKeyMakeWord, MOD_CONTROL);
@@ -78,7 +78,7 @@ namespace SOUI
 		FindAndSetHotKey(R.id.hk_input_en, g_SettingsG.byHotKeyEn, MOD_CONTROL);
 	}
 
-	void CConfigDlg::IniPageAssociate()
+	void CConfigDlg::InitPageAssociate()
 	{
 		int CtrlId;
 		//БЄПл
@@ -99,16 +99,8 @@ namespace SOUI
 		FindAndSetCheck(R.id.chk_sent_input, g_SettingsG.bAstSent);
 	}
 
-	//win+
-	/*SStringT MakeHotKeyString(BYTE vk_value)
-	{
-		TCHAR KeyName[66];
-		GetKeyNameText(MapVirtualKey(vk_value, 0) << 16,KeyName,66);
-		if (vk_value >= 0x30) return KeyName;
-		else return SStringT(_T("win+")) + KeyName;
-	}*/
 
-	void CConfigDlg::IniPageCandidate()
+	void CConfigDlg::InitPageCandidate()
 	{
 		FindAndSetCheck(R.id.chk_enable_23cand_hotkey, g_SettingsG.b23CandKey);
 
@@ -121,22 +113,28 @@ namespace SOUI
 		FindAndSetCheck(R.id.chk_disable_number_to_select_cand, g_SettingsG.bCandSelNoNum);
 		FindAndSetCheck(R.id.chk_full_skip_simple, g_SettingsG.bOnlySimpleCode);
 
-		FindAndSetCheck(700 + g_SettingsG.nGbkMode, TRUE);
+		FindAndSetCheck(R.id.gbk_show_only + g_SettingsG.nGbkMode, TRUE);
 	}
 	
-	void CConfigDlg::IniCtrl()
+	void CConfigDlg::InitPageMisc()
+	{
+		FindAndSetCheck(R.id.sound_disable + g_SettingsG.nSoundAlert, TRUE);
+	}
+
+	void CConfigDlg::InitPages()
 	{		
-		IniPageHabit();
-		IniPageHotKey();
-		IniPageAssociate();	
-		IniPageCandidate();
+		InitPageHabit();
+		InitPageHotKey();
+		InitPageAssociate();	
+		InitPageCandidate();
+		InitPageMisc();
 	}
 
 	BOOL CConfigDlg::OnInitDialog(HWND wnd, LPARAM lParam)
 	{
 		ImmAssociateContext(m_hWnd, (HIMC)NULL);
 
-		IniCtrl();
+		InitPages();
 		return FALSE;
 	}
 
@@ -192,6 +190,24 @@ SWindow *pCtrl = FindChildByID(id);\
 			break;
 		default:
 			g_SettingsG.byTempSpellKey = FALSE;
+			break;
+		}
+	}
+
+	void CConfigDlg::OnClickAlertMode(int id)
+	{
+		GetGroupCheck(id);
+		switch (CheckId)
+		{
+		case R.id.sound_disable:
+			g_SettingsG.nSoundAlert = 0;
+			break;
+		case R.id.sound_wave:
+			g_SettingsG.nSoundAlert = 1;
+			break;
+		case R.id.sound_beep:
+		default:
+			g_SettingsG.nSoundAlert = 2;
 			break;
 		}
 	}

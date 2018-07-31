@@ -6,5 +6,6 @@
     <cfg_hotkey value="快捷键"/>
     <cfg_associate value="联想"/>
     <cfg_candidate value="重码"/>
+    <cfg_misc value="其它"/>
     <cfg_about value="关于"/>
   </string>

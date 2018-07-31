@@ -366,7 +366,7 @@ namespace SOUI
 			break;
 		case R.id.btn_sound:
 			e2->bUpdated = TRUE;
-			e2->strToolTip = SStringT().Format(_T("提示音:%s"), g_SettingsL.bSound ? _T("启用") : _T("禁用"));
+			e2->strToolTip = SStringT().Format(_T("语音较对:%s"), g_SettingsL.bSound ? _T("启用") : _T("禁用"));
 			break;
 		case R.id.btn_status_extend:
 			e2->bUpdated = TRUE;
