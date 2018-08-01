@@ -8,6 +8,8 @@
 #include "InputState.h"
 #include "CmdHandler.h"
 
+#define UM_ASYNC_COPYDATA (WM_USER+2000)
+
 class CSinstar3Impl:
 	public ISinstar,
 	public IInputListener,
@@ -68,9 +70,11 @@ public:
 	void Broadcast(UINT uCmd, LPVOID pData, DWORD nLen);
 
 	LRESULT OnSvrNotify(UINT uMsg, WPARAM wParam, LPARAM lParam);
+	LRESULT OnAsyncCopyData(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	BOOL OnCopyData(HWND wnd, PCOPYDATASTRUCT pCopyDataStruct);
 
 	BEGIN_MSG_MAP_EX(CSinstar3Impl)
+		MESSAGE_HANDLER_EX(UM_ASYNC_COPYDATA,OnAsyncCopyData)
 		MSG_WM_COPYDATA(OnCopyData)
 		MESSAGE_HANDLER_EX(ISComm_GetCommMsgID(),OnSvrNotify)
 		CHAIN_MSG_MAP_MEMBER(m_cmdHandler)

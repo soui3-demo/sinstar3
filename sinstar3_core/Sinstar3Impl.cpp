@@ -290,14 +290,38 @@ LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 	}
 }
 
-BOOL CSinstar3Impl::OnCopyData(HWND wnd, PCOPYDATASTRUCT pCopyDataStruct)
+LRESULT CSinstar3Impl::OnAsyncCopyData(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	if (pCopyDataStruct->dwData == CMD_CHANGESKIN)
+	PCOPYDATASTRUCT pCds = (PCOPYDATASTRUCT)lParam;
+	HWND hSender = (HWND)wParam;
+	if (pCds->dwData == CMD_CHANGESKIN)
 	{//change skin
-		SStringA strUtf8((const char *)pCopyDataStruct->lpData, pCopyDataStruct->cbData);
+		SStringA strUtf8((const char *)pCds->lpData, pCds->cbData);
 		SStringT strPath = S_CA2T(strUtf8, CP_UTF8);
 		ChangeSkin(strPath);
 	}
+
+	if (pCds->lpData) free(pCds->lpData);
+	free(pCds);
+
+	return LRESULT();
+}
+
+BOOL CSinstar3Impl::OnCopyData(HWND wnd, PCOPYDATASTRUCT pCopyDataStruct)
+{
+	PCOPYDATASTRUCT pCds = (PCOPYDATASTRUCT)malloc(sizeof(COPYDATASTRUCT));
+	pCds->dwData = pCopyDataStruct->dwData;
+	pCds->cbData = pCopyDataStruct->cbData;
+	if (pCds->cbData)
+	{
+		pCds->lpData = malloc(pCds->cbData);
+		memcpy(pCds->lpData, pCopyDataStruct->lpData, pCds->cbData);
+	}
+	else
+	{
+		pCds->lpData = NULL;
+	}
+	PostMessage(UM_ASYNC_COPYDATA, (WPARAM)wnd, (LPARAM)pCds);
 	return TRUE;
 }
 
@@ -364,55 +388,63 @@ InputContext * CSinstar3Impl::GetInputContext()
 
 BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 {
-	if (!strSkin.IsEmpty())
-	{//加载外部皮肤
-		CAutoRefPtr<IResProvider> pResProvider;
-		CSouiEnv::getSingleton().theComMgr()->CreateResProvider_ZIP((IObjRef**)&pResProvider);
-		ZIPRES_PARAM param;
-		param.ZipFile(GETRENDERFACTORY, strSkin);
-		if (!pResProvider->Init((WPARAM)&param, 0))
-			return FALSE;
+	CDataCenter::getSingletonPtr()->Lock(); //注意处理多个输入法UI线程之间的同步.
 
-		IUiDefInfo * pUiDef = SUiDef::getSingleton().CreateUiDefInfo(pResProvider, _T("uidef:xml_init"));
-		if (pUiDef->GetSkinPool())
-		{//不允许皮肤中存在全局的skin数据
+	if (CDataCenter::getSingletonPtr()->GetData().m_strSkin != strSkin)
+	{
+		if (!strSkin.IsEmpty())
+		{//加载外部皮肤
+			CAutoRefPtr<IResProvider> pResProvider;
+			CSouiEnv::getSingleton().theComMgr()->CreateResProvider_ZIP((IObjRef**)&pResProvider);
+			ZIPRES_PARAM param;
+			param.ZipFile(GETRENDERFACTORY, strSkin);
+			if (!pResProvider->Init((WPARAM)&param, 0))
+				return FALSE;
+
+			IUiDefInfo * pUiDef = SUiDef::getSingleton().CreateUiDefInfo(pResProvider, _T("uidef:xml_init"));
+			if (pUiDef->GetSkinPool())
+			{//不允许皮肤中存在全局的skin数据
+				pUiDef->Release();
+				return FALSE;
+			}
+
+			if (!CDataCenter::getSingletonPtr()->GetData().m_strSkin.IsEmpty())
+			{//清除正在使用的外置皮肤。
+				IResProvider *pLastRes = SApplication::getSingleton().GetTailResProvider();
+				SApplication::getSingleton().RemoveResProvider(pLastRes);
+				IUiDefInfo *pUiDefInfo = SUiDef::getSingleton().GetUiDef();
+
+				SStylePoolMgr::getSingleton().PopStylePool(pUiDefInfo->GetStylePool());
+			}
+
+			CDataCenter::getSingleton().GetData().m_ptSkinOffset = CSkinMananger::ExtractSkinOffset(pResProvider);
+
+			SApplication::getSingleton().AddResProvider(pResProvider, NULL);
+			SUiDef::getSingleton().SetUiDef(pUiDef);
 			pUiDef->Release();
-			return FALSE;
-		}
 
-		if (!CDataCenter::getSingletonPtr()->GetData().m_strSkin.IsEmpty())
-		{//清除正在使用的外置皮肤。
+		}
+		else if (!CDataCenter::getSingletonPtr()->GetData().m_strSkin.IsEmpty())
+		{//清除正在使用的外置皮肤,还原使用系统内置皮肤
 			IResProvider *pLastRes = SApplication::getSingleton().GetTailResProvider();
 			SApplication::getSingleton().RemoveResProvider(pLastRes);
 			IUiDefInfo *pUiDefInfo = SUiDef::getSingleton().GetUiDef();
 
 			SStylePoolMgr::getSingleton().PopStylePool(pUiDefInfo->GetStylePool());
+
+			IResProvider *pCurRes = SApplication::getSingleton().GetTailResProvider();
+			CDataCenter::getSingleton().GetData().m_ptSkinOffset = CSkinMananger::ExtractSkinOffset(pCurRes);
 		}
 
-		CDataCenter::getSingleton().GetData().m_ptSkinOffset = CSkinMananger::ExtractSkinOffset(pResProvider);
-
-		SApplication::getSingleton().AddResProvider(pResProvider, NULL);
-		SUiDef::getSingleton().SetUiDef(pUiDef);
-		pUiDef->Release();
-
+		CDataCenter::getSingletonPtr()->GetData().m_strSkin = strSkin;
 	}
-	else if (!CDataCenter::getSingletonPtr()->GetData().m_strSkin.IsEmpty())
-	{//清除正在使用的外置皮肤,还原使用系统内置皮肤
-		IResProvider *pLastRes = SApplication::getSingleton().GetTailResProvider();
-		SApplication::getSingleton().RemoveResProvider(pLastRes);
-		IUiDefInfo *pUiDefInfo = SUiDef::getSingleton().GetUiDef();
-
-		SStylePoolMgr::getSingleton().PopStylePool(pUiDefInfo->GetStylePool());
-
-		IResProvider *pCurRes = SApplication::getSingleton().GetTailResProvider();
-		CDataCenter::getSingleton().GetData().m_ptSkinOffset = CSkinMananger::ExtractSkinOffset(pCurRes);
-	}
-
-	CDataCenter::getSingletonPtr()->GetData().m_strSkin = strSkin;
 
 	//notify skin changed
 	EventSetSkin evt(this);
 	FireEvent(evt);
+
+	CDataCenter::getSingletonPtr()->Unlock();
+
 	return TRUE;
 }
 
