@@ -252,7 +252,7 @@ namespace SOUI
 		SToggle * toggle = sobj_cast<SToggle>(e->sender);
 		if(toggle)
 		{
-			g_SettingsL.bRecord = toggle->GetToggle();
+			g_SettingsL.bRecord = !toggle->GetToggle();
 		}
 	}
 
@@ -261,7 +261,7 @@ namespace SOUI
 		SToggle * toggle = sobj_cast<SToggle>(e->sender);
 		if(toggle)
 		{
-			g_SettingsL.bSound = toggle->GetToggle();
+			g_SettingsL.bSound = !toggle->GetToggle();
 		}
 
 	}
@@ -271,7 +271,7 @@ namespace SOUI
 		SToggle * toggle = sobj_cast<SToggle>(e->sender);
 		if (toggle)
 		{
-			g_SettingsL.bEnglish = toggle->GetToggle();
+			g_SettingsL.bEnglish = !toggle->GetToggle();
 		}
 	}
 
