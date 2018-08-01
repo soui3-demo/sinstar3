@@ -20,6 +20,7 @@ enum {
 	CMD_KEYSPEED,
 	CMD_CHARMODE,
 	CMD_ENGLISHMODE,
+	CMD_UPDATEMODE,
 };
 
 namespace SOUI {
@@ -44,6 +45,7 @@ protected:
 	void OnKeySpeed(LPARAM lp);
 	void OnCharMode(LPARAM lp);
 	void OnEnglishMode(LPARAM lp);
+	void OnUpdateMode(LPARAM lp);
 
 	BEGIN_MSG_MAP_EX(CCmdHandler)
 		MSG_WM_COMMAND_EX(CMD_MAKEWORD, OnMakeWord)
@@ -55,6 +57,7 @@ protected:
 		MSG_WM_COMMAND_EX(CMD_KEYSPEED, OnKeySpeed)
 		MSG_WM_COMMAND_EX(CMD_CHARMODE,OnCharMode)
 		MSG_WM_COMMAND_EX(CMD_ENGLISHMODE,OnEnglishMode)
+		MSG_WM_COMMAND_EX(CMD_UPDATEMODE,OnUpdateMode)
 	END_MSG_MAP()
 
 private:

@@ -220,3 +220,8 @@ void CCmdHandler::OnEnglishMode(LPARAM lp)
 	g_SettingsL.bEnglish = !g_SettingsL.bEnglish;
 	m_pSinstar3->m_pStatusWnd->UpdateToggleStatus(CStatusWnd::BTN_ENGLISHMODE);
 }
+
+void CCmdHandler::OnUpdateMode(LPARAM lp)
+{
+	m_pSinstar3->m_pStatusWnd->UpdateCompInfo();
+}

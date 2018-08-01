@@ -400,7 +400,7 @@ void CInputState::InputHide(BOOL bDelay)
 
 void CInputState::StatusbarUpdate()
 {
-	m_pListener->UpdateStatusbar();
+	m_pListener->OnCommand(CMD_UPDATEMODE,0);
 }
 
 BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeyState)
@@ -1216,6 +1216,7 @@ BOOL CInputState::KeyIn_Spell_InputText(InputContext* lpCntxtPriv,UINT byInput,
 			lpCntxtPriv->bShowTip=TRUE;
 			GetShapeComp(strResult,strResult.GetLength());
 			lpCntxtPriv->compMode = IM_SHAPECODE;
+			StatusbarUpdate();
 		}
 		bRet=TRUE;
 	}else if ( byInput == VK_RETURN && g_SettingsG.compMode == IM_SPELL && !lpCntxtPriv->bPYBiHua)

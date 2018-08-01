@@ -130,7 +130,7 @@ namespace SOUI
 			SWindow *pTip = pMutexView->FindChildByID(R.id.txt_tip);
 			if (pTip)
 			{
-				if (m_pInputContext->sbState == SBST_NORMAL)
+				if (m_pInputContext->sbState == SBST_NORMAL && m_pInputContext->bShowTip)
 				{
 					pTip->SetVisible(TRUE);
 					pTip->SetWindowText(S_CA2T(m_pInputContext->szTip));
@@ -306,7 +306,17 @@ namespace SOUI
 		}
 		else
 		{//联想状态下的重码
-			if (g_SettingsG.byAstMode == AST_ENGLISH)
+			if (m_pInputContext->sCandCount == 0)
+			{
+				if(m_pInputContext->bShowTip)
+				{
+					SMutexView * pCandTip = FindChildByID2<SMutexView>(R.id.cand_tip);
+					pCandTip->SetVisible(TRUE, TRUE);
+					SWindow *pTip = pCandTip->FindChildByID(R.id.txt_tip);
+					pTip->SetWindowText(S_CA2T(m_pInputContext->szTip));
+				}
+			}
+			else if (g_SettingsG.byAstMode == AST_ENGLISH)
 			{//单词联想
 				SWindow * pCandEnglish = FindChildByID(R.id.cand_english);
 				pCandEnglish->SetVisible(TRUE, TRUE);
@@ -388,13 +398,7 @@ namespace SOUI
 					pCand = pCand->GetWindow(GSW_NEXTSIBLING);
 				}
 			}
-			else
-			{
-				SMutexView * pCandTip = FindChildByID2<SMutexView>(R.id.cand_tip);
-				pCandTip->SetVisible(TRUE, TRUE);
-				SWindow *pTip = pCandTip->FindChildByID(R.id.txt_tip);
-				pTip->SetWindowText(S_CA2T(m_pInputContext->szTip));
-			}
+			
 		}
 	}
 
