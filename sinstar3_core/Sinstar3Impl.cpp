@@ -334,11 +334,6 @@ BOOL CSinstar3Impl::GetOpenStatus() const
 	return m_pTxtSvr->GetOpenStatus(m_pCurImeContext);
 }
 
-void CSinstar3Impl::UpdateStatusbar()
-{
-	m_pStatusWnd->UpdateCompInfo();
-}
-
 void CSinstar3Impl::OnCommand(WORD cmd, LPARAM lp)
 {
 	SendMessage(WM_COMMAND, MAKELONG(0,cmd), lp);
