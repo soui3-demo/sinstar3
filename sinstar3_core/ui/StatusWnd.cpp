@@ -65,13 +65,14 @@ namespace SOUI
 
 	void CStatusWnd::OnInitMenuPopup(SMenuEx* menuPopup, UINT nIndex)
 	{
+		CSettingsLocal & settings = m_pCmdListener->GetInputContext()->settings;
 		switch (menuPopup->GetContextHelpId())
 		{
 		case 100:
 		{//main menu
-			menuPopup->CheckMenuItem(R.id.follow_caret, MF_BYCOMMAND | g_SettingsL.bMouseFollow ? MF_CHECKED : 0);
-			menuPopup->CheckMenuItem(R.id.hide_statusbar, MF_BYCOMMAND | g_SettingsL.bHideStatus ? MF_CHECKED : 0);
-			menuPopup->CheckMenuItem(R.id.input_big5, MF_BYCOMMAND | g_SettingsL.bInputBig5 ? MF_CHECKED : 0);
+			menuPopup->CheckMenuItem(R.id.follow_caret, MF_BYCOMMAND | settings.bMouseFollow ? MF_CHECKED : 0);
+			menuPopup->CheckMenuItem(R.id.hide_statusbar, MF_BYCOMMAND | settings.bHideStatus ? MF_CHECKED : 0);
+			menuPopup->CheckMenuItem(R.id.input_big5, MF_BYCOMMAND | settings.bInputBig5 ? MF_CHECKED : 0);
 			break;
 		}
 		case 2:
@@ -207,22 +208,24 @@ namespace SOUI
 
 	void CStatusWnd::UpdateToggleStatus(DWORD flags)
 	{
+		CSettingsLocal & settings = m_pCmdListener->GetInputContext()->settings;
+
 		if(flags & BTN_CHARMODE){
 			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_charmode);
-			if (toggle) toggle->SetToggle(g_SettingsL.bCharMode);
+			if (toggle) toggle->SetToggle(settings.bCharMode);
 		}
 		if(flags & BTN_SOUND){
 			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_sound);
-			if (toggle) toggle->SetToggle(!g_SettingsL.bSound);
+			if (toggle) toggle->SetToggle(!settings.bSound);
 		}
 		if (flags & BTN_RECORD) {
 			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_record);
-			if (toggle) toggle->SetToggle(!g_SettingsL.bRecord);
+			if (toggle) toggle->SetToggle(!settings.bRecord);
 		}
 		if (flags & BTN_ENGLISHMODE)
 		{
 			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_english);
-			if (toggle) toggle->SetToggle(!g_SettingsL.bEnglish);
+			if (toggle) toggle->SetToggle(!settings.bEnglish);
 		}
 	}
 
@@ -243,7 +246,8 @@ namespace SOUI
 		SToggle * toggle = sobj_cast<SToggle>(e->sender);
 		if(toggle)
 		{
-			g_SettingsL.bCharMode = toggle->GetToggle();
+			CSettingsLocal & settings = m_pCmdListener->GetInputContext()->settings;
+			settings.bCharMode = toggle->GetToggle();
 		}
 	}
 
@@ -252,7 +256,8 @@ namespace SOUI
 		SToggle * toggle = sobj_cast<SToggle>(e->sender);
 		if(toggle)
 		{
-			g_SettingsL.bRecord = !toggle->GetToggle();
+			CSettingsLocal & settings = m_pCmdListener->GetInputContext()->settings;
+			settings.bRecord = !toggle->GetToggle();
 		}
 	}
 
@@ -261,7 +266,8 @@ namespace SOUI
 		SToggle * toggle = sobj_cast<SToggle>(e->sender);
 		if(toggle)
 		{
-			g_SettingsL.bSound = !toggle->GetToggle();
+			CSettingsLocal & settings = m_pCmdListener->GetInputContext()->settings;
+			settings.bSound = !toggle->GetToggle();
 		}
 
 	}
@@ -271,19 +277,21 @@ namespace SOUI
 		SToggle * toggle = sobj_cast<SToggle>(e->sender);
 		if (toggle)
 		{
-			g_SettingsL.bEnglish = !toggle->GetToggle();
+			CSettingsLocal & settings = m_pCmdListener->GetInputContext()->settings;
+			settings.bEnglish = !toggle->GetToggle();
 		}
 	}
 
 	void CStatusWnd::OnUpdateBtnTooltip(EventArgs *e)
 	{
+		CSettingsLocal & settings = m_pCmdListener->GetInputContext()->settings;
 		EventSwndUpdateTooltip *e2 = sobj_cast<EventSwndUpdateTooltip>(e);
 		SASSERT(e2);
 		switch (e2->idFrom)
 		{
 		case R.id.btn_charmode:
 			e2->bUpdated = TRUE;
-			e2->strToolTip = SStringT().Format(_T("标点模式:%s"), g_SettingsL.bCharMode? _T("中文"):_T("英文"));
+			e2->strToolTip = SStringT().Format(_T("标点模式:%s"), settings.bCharMode? _T("中文"):_T("英文"));
 			break;
 		case R.id.btn_makeword:
 			e2->bUpdated = TRUE;
@@ -291,15 +299,15 @@ namespace SOUI
 			break;
 		case R.id.btn_record:
 			e2->bUpdated = TRUE;
-			e2->strToolTip = SStringT().Format(_T("记录输入状态:%s"), g_SettingsL.bRecord ? _T("启用") : _T("禁用"));
+			e2->strToolTip = SStringT().Format(_T("记录输入状态:%s"), settings.bRecord ? _T("启用") : _T("禁用"));
 			break;
 		case R.id.btn_sound:
 			e2->bUpdated = TRUE;
-			e2->strToolTip = SStringT().Format(_T("语音较对:%s"), g_SettingsL.bSound ? _T("启用") : _T("禁用"));
+			e2->strToolTip = SStringT().Format(_T("语音较对:%s"), settings.bSound ? _T("启用") : _T("禁用"));
 			break;
 		case R.id.btn_english:
 			e2->bUpdated = TRUE;
-			e2->strToolTip = SStringT().Format(_T("单词输入:%s"), g_SettingsL.bEnglish ? _T("启用") : _T("禁用"));
+			e2->strToolTip = SStringT().Format(_T("单词输入:%s"), settings.bEnglish ? _T("启用") : _T("禁用"));
 			break;
 		case R.id.btn_status_extend:
 			e2->bUpdated = TRUE;
@@ -408,7 +416,8 @@ namespace SOUI
 		}
 		else if (nRet == R.id.input_big5)
 		{
-			g_SettingsL.bInputBig5 = !g_SettingsL.bInputBig5;
+			CSettingsLocal & settings = m_pCmdListener->GetInputContext()->settings;
+			settings.bInputBig5 = !settings.bInputBig5;
 		}
 		else if (nRet == R.id.key_speed)
 		{

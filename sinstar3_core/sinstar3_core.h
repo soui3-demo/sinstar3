@@ -28,7 +28,7 @@ public:
 	void SetLogStateListener(ILogStateListener *pListener);
 
 	SOUI::SStringT GetDataPath() const {return m_strDataPath;}
-
+	SOUI::SStringT GetCfgIni() const { return m_strConfig; }
 protected:
 	virtual void OnInit();
 

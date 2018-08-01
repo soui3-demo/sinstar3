@@ -56,8 +56,8 @@ void CCmdHandler::OnKeyMap(LPARAM lp)
 
 void CCmdHandler::OnHideStatusBar(LPARAM lp)
 {
-	g_SettingsL.bHideStatus = !g_SettingsL.bHideStatus;
-	m_pSinstar3->m_pStatusWnd->Show(!g_SettingsL.bHideStatus);
+	m_pSinstar3->GetInputContext()->settings.bHideStatus = !m_pSinstar3->GetInputContext()->settings.bHideStatus;
+	m_pSinstar3->m_pStatusWnd->Show(!m_pSinstar3->GetInputContext()->settings.bHideStatus);
 }
 
 void CCmdHandler::OnQueryInfo(LPARAM lp)
@@ -175,8 +175,8 @@ void CCmdHandler::OnQueryInfo(LPARAM lp)
 
 void CCmdHandler::OnFollowCaret(LPARAM lp)
 {
-	g_SettingsL.bMouseFollow = !g_SettingsL.bMouseFollow;
-	m_pSinstar3->m_pInputWnd->SetFollowCaret(g_SettingsL.bMouseFollow);
+	m_pSinstar3->GetInputContext()->settings.bMouseFollow = !m_pSinstar3->GetInputContext()->settings.bMouseFollow;
+	m_pSinstar3->m_pInputWnd->SetFollowCaret(m_pSinstar3->GetInputContext()->settings.bMouseFollow);
 }
 
 void CCmdHandler::OnInputMode(LPARAM lp)
@@ -211,13 +211,13 @@ void CCmdHandler::OnKeySpeed(LPARAM lp)
 
 void CCmdHandler::OnCharMode(LPARAM lp)
 {
-	g_SettingsL.bCharMode = !g_SettingsL.bCharMode;
+	m_pSinstar3->GetInputContext()->settings.bCharMode = !m_pSinstar3->GetInputContext()->settings.bCharMode;
 	m_pSinstar3->m_pStatusWnd->UpdateToggleStatus(CStatusWnd::BTN_CHARMODE);
 }
 
 void CCmdHandler::OnEnglishMode(LPARAM lp)
 {
-	g_SettingsL.bEnglish = !g_SettingsL.bEnglish;
+	m_pSinstar3->GetInputContext()->settings.bEnglish = !m_pSinstar3->GetInputContext()->settings.bEnglish;
 	m_pSinstar3->m_pStatusWnd->UpdateToggleStatus(CStatusWnd::BTN_ENGLISHMODE);
 }
 

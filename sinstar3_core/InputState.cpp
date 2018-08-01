@@ -25,11 +25,11 @@ const BYTE KCompKey[] ={0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,        // 00-0F
 
 //符号处理
 //BYTE byInput:键盘输入
-SStringA Symbol_Convert(UINT byInput,const BYTE * lpbKeyState)
+SStringA Symbol_Convert(InputContext * lpCntxtPriv,UINT byInput,const BYTE * lpbKeyState)
 {
 	char pBuf[100];
 	int nRet=0;
-	if(g_SettingsL.bCharMode)
+	if(lpCntxtPriv->settings.bCharMode)
 	{
 		char cType=3;
 		if(byInput=='\'')
@@ -233,8 +233,8 @@ BYTE CInputState::GetKeyinMask(BOOL bAssociate,BYTE byMask)
 {
 	BYTE byRet=0;
 	if(g_SettingsG.bAutoMatch) byRet|=(MKI_AUTOPICK&byMask);
-	if(g_SettingsL.bRecord) byRet|=(MKI_RECORD&byMask);
-	if(g_SettingsL.bSound) byRet|=(MKI_TTSINPUT&byMask);
+	if(m_ctx.settings.bRecord) byRet|=(MKI_RECORD&byMask);
+	if(m_ctx.settings.bSound) byRet|=(MKI_TTSINPUT&byMask);
 	if(bAssociate)
 	{
 		if(g_SettingsG.bAstSent) byRet|=MKI_ASTSENT;
@@ -340,7 +340,7 @@ void CInputState::InputResult(const SStringT &strResult,BYTE byAstMask)
 
 	SASSERT(m_pListener);
 	SStringT strTemp = strResult;
-	if (g_SettingsL.bInputBig5)
+	if (m_ctx.settings.bInputBig5)
 	{
 		int nLen = CUtils::GB2GIB5(strResult, strResult.GetLength(), NULL, 0);
 		TCHAR *pBig5 = new TCHAR[nLen / sizeof(TCHAR)+1];
@@ -532,7 +532,7 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 			if(bReadyEn && uVKey>='A' && uVKey<='Z')
 			{//大写输入，则切换到英文状态
 				ClearContext(CPC_ALL);
-				if(g_SettingsL.bEnglish)
+				if(m_ctx.settings.bEnglish)
 				{
 					lpCntxtPriv->inState=INST_ENGLISH;
 					//确保打开输入窗口
@@ -1280,7 +1280,7 @@ BOOL CInputState::KeyIn_Spell_Symbol(InputContext* lpCntxtPriv,UINT byInput,
 			if(bGetSpID) ISComm_SpellMemoryEx(lpCntxtPriv->szComp,lpCntxtPriv->cComp,bySpellID);
 			strResultA = SStringA(lpCntxtPriv->szComp,lpCntxtPriv->cComp);
 		}
-		strResultA += Symbol_Convert(byInput,lpbKeyState);
+		strResultA += Symbol_Convert(&m_ctx,byInput,lpbKeyState);
 		InputStart();
 		InputResult(strResultA,0);
 		InputEnd();
@@ -1721,9 +1721,9 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 				BYTE byMask=0;
 				SStringA strResultA(lpCntxtPriv->szComp,lpCntxtPriv->cComp);
 
-				if(g_SettingsL.bRecord)
+				if(m_ctx.settings.bRecord)
 					byMask|=MKI_RECORD;
-				if(g_SettingsL.bSound)
+				if(m_ctx.settings.bSound)
 					byMask|=MKI_TTSINPUT;
 				InputResult(strResultA,byMask);
 			}
@@ -1862,11 +1862,11 @@ BOOL CInputState::KeyIn_Code_Symbol(InputContext * lpCntxtPriv,UINT byInput,
 		}
 	}
 
-	strResultA += Symbol_Convert(byInput,lpbKeyState);
+	strResultA += Symbol_Convert(&m_ctx,byInput,lpbKeyState);
 
-	if(g_SettingsL.bRecord)
+	if(m_ctx.settings.bRecord)
 		byMask|=MKI_RECORD;
-	if(g_SettingsL.bSound)
+	if(m_ctx.settings.bSound)
 		byMask|=MKI_TTSINPUT;
 
 	ClearContext(CPC_ALL);
@@ -1947,9 +1947,9 @@ void  CInputState::KeyIn_Sent_Input(InputContext* lpCntxtPriv)
 	if(lpCntxtPriv->sSentLen && lpCntxtPriv->sSentCaret)
 	{
 		BYTE byMask=0;
-		if(g_SettingsL.bRecord)
+		if(m_ctx.settings.bRecord)
 			byMask|=MKI_RECORD;
-		if(g_SettingsL.bSound)
+		if(m_ctx.settings.bSound)
 			byMask|=MKI_TTSINPUT;
 
 		SStringA strResultA((char*)lpCntxtPriv->pbySentWord[0],
@@ -2025,7 +2025,7 @@ BOOL CInputState::KeyIn_Code_English(InputContext * lpCntxtPriv,UINT byInput,
 		{
 			strResult = SStringA((char*)lpCntxtPriv->szComp,lpCntxtPriv->cComp);
 		}
-		if(g_SettingsL.bSound) ISComm_TTS(strResult,(char)strResult.GetLength(),MTTS_EN);
+		if(m_ctx.settings.bSound) ISComm_TTS(strResult,(char)strResult.GetLength(),MTTS_EN);
 		//输入单词
 		InputResult(strResult,0);
 		InputEnd();
@@ -2049,7 +2049,7 @@ BOOL CInputState::KeyIn_Digital_ChangeComp(InputContext * lpCntxtPriv,UINT byInp
 	{
 		SStringA strResultA((char)byInput);
 		InputStart();
-		InputResult(strResultA,g_SettingsL.bRecord?MKI_RECORD:0);
+		InputResult(strResultA,m_ctx.settings.bRecord?MKI_RECORD:0);
 		InputEnd();
 		bRet=TRUE;
 	}else
@@ -2456,7 +2456,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 							}else if(uKey==VK_BACK) 
 								ISComm_KeyIn("\b",1,0,m_pListener->GetHwnd());
 							else
-								ISComm_KeyIn(".",1,g_SettingsL.bRecord?MKI_RECORD:0,m_pListener->GetHwnd());
+								ISComm_KeyIn(".",1,m_ctx.settings.bRecord?MKI_RECORD:0,m_pListener->GetHwnd());
 						}
 					}
 				}

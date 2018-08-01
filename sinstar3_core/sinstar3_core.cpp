@@ -56,9 +56,6 @@ CSinstar3Core::CSinstar3Core(HINSTANCE hInst):CModuleRef(hInst),m_pLogStateListe
 		g_SettingsG.Load(m_strConfig);
 
 	}
-	g_SettingsL.Load(m_strConfig);
-
-
 	new CDataCenter(m_strDataPath);
 }
 
@@ -66,7 +63,6 @@ CSinstar3Core::~CSinstar3Core()
 {
 	delete CDataCenter::getSingletonPtr();
 	g_SettingsG.Save(m_strConfig);
-	g_SettingsL.Save(m_strConfig);
 	g_nRefCount --;
 }
 

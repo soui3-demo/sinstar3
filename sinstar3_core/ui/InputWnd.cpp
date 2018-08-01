@@ -308,12 +308,17 @@ namespace SOUI
 		{//联想状态下的重码
 			if (m_pInputContext->sCandCount == 0)
 			{
+				SMutexView * pCandTip = FindChildByID2<SMutexView>(R.id.cand_tip);
+				pCandTip->SetVisible(TRUE, TRUE);
+				SWindow *pTip = pCandTip->FindChildByID(R.id.txt_tip);
+
 				if(m_pInputContext->bShowTip)
 				{
-					SMutexView * pCandTip = FindChildByID2<SMutexView>(R.id.cand_tip);
-					pCandTip->SetVisible(TRUE, TRUE);
-					SWindow *pTip = pCandTip->FindChildByID(R.id.txt_tip);
 					pTip->SetWindowText(S_CA2T(m_pInputContext->szTip));
+				}
+				else
+				{
+					pTip->SetWindowText(NULL);
 				}
 			}
 			else if (g_SettingsG.byAstMode == AST_ENGLISH)

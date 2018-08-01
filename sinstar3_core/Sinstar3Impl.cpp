@@ -33,6 +33,8 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr)
 	addEvent(EVENTID(EventSvrNotify));
 	addEvent(EVENTID(EventSetSkin));
 
+	m_inputState.GetInputContext()->settings.Load(theModule->GetCfgIni());
+
  	m_pInputWnd = new CInputWnd(this,m_inputState.GetInputContext());
 	m_pStatusWnd = new CStatusWnd(this,this);
 	m_pTipWnd = new STipWnd(this);
@@ -41,9 +43,9 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr)
 	m_pTipWnd->Create(_T("sinstar3_tip"));
 	m_cmdHandler.SetTipWnd(m_pTipWnd);
 	m_inputState.SetInputListener(this);
-
+	
 	m_pInputWnd->SetAnchorPosition(CDataCenter::getSingleton().GetData().m_ptInput);
-	m_pInputWnd->SetFollowCaret(g_SettingsL.bMouseFollow);
+	m_pInputWnd->SetFollowCaret(m_inputState.GetInputContext()->settings.bMouseFollow);
 
 	SLOG_INFO("status:"<<m_pStatusWnd->m_hWnd<<", input:"<<m_pInputWnd->m_hWnd);
 	SOUI::CSimpleWnd::Create(_T("sinstar3_msg_recv"),WS_DISABLED|WS_POPUP,WS_EX_TOOLWINDOW,0,0,0,0,HWND_MESSAGE,NULL);
@@ -63,6 +65,8 @@ CSinstar3Impl::~CSinstar3Impl(void)
 	delete m_pStatusWnd;
 	delete m_pInputWnd;
 	delete m_pTipWnd;
+
+	m_inputState.GetInputContext()->settings.Save(theModule->GetCfgIni());
 
 	if (!m_strLoadedFontFile.IsEmpty())
 	{
@@ -118,7 +122,6 @@ void CSinstar3Impl::OnSetFocusSegmentPosition(POINT pt,int nHei)
 void CSinstar3Impl::OnCompositionStarted()
 {
 	SLOG_INFO("");
-	//m_pInputWnd->Show(TRUE);
 }
 
 void CSinstar3Impl::OnCompositionChanged()
@@ -135,7 +138,7 @@ void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 {
 	SLOG_INFO("GetThreadID="<<GetCurrentThreadId()<<" focus="<<bFocus);
 	if(bFocus) m_pTxtSvr->SetConversionMode(FullNative);
-	m_pStatusWnd->Show(bFocus && !g_SettingsL.bHideStatus);
+	m_pStatusWnd->Show(bFocus && !m_inputState.GetInputContext()->settings.bHideStatus);
 	
 	if (bFocus)
 	{
@@ -170,7 +173,7 @@ BOOL CSinstar3Impl::OnHotkey(LPVOID lpImeContext,REFGUID guidHotKey)
 
 void CSinstar3Impl::OnOpenStatusChanged(BOOL bOpen)
 {
-	m_pStatusWnd->Show(bOpen && !g_SettingsL.bHideStatus);
+	m_pStatusWnd->Show(bOpen && !m_inputState.GetInputContext()->settings.bHideStatus);
 }
 
 void CSinstar3Impl::OnConversionModeChanged(EInputMethod nMode)
