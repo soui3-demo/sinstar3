@@ -42,7 +42,7 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 
 	pRenderFactory->SetImgDecoderFactory(pImgDecoderFactory);
 	
-	m_theApp = new SApplication(pRenderFactory, hInst,_T("Sinstar3_Wnd"));
+	m_theApp = new SApplication(pRenderFactory, hInst, SINSTART3_WNDCLASS);
 	m_theApp->SetAppDir(szCurrentDir);
 
 	m_theApp->RegisterWindowClass<SToggle2>();

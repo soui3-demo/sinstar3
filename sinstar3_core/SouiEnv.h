@@ -1,5 +1,7 @@
 #pragma once
 
+#define SINSTART3_WNDCLASS _T("sinstar3_wndclass")
+
 class CSouiEnv : public SSingleton<CSouiEnv>
 {
 public:

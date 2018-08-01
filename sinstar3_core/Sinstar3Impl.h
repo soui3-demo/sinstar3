@@ -66,7 +66,6 @@ public:
 	BOOL ChangeSkin(const SStringT & strSkin);
 
 	void Broadcast(UINT uCmd, LPVOID pData, DWORD nLen);
-	static BOOL CALLBACK SendCopyDataCmdEnumWndProc(HWND hwnd, LPARAM lp);
 
 	LRESULT OnSvrNotify(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	BOOL OnCopyData(HWND wnd, PCOPYDATASTRUCT pCopyDataStruct);

@@ -423,26 +423,23 @@ struct EnumParam {
 
 void CSinstar3Impl::Broadcast(UINT uCmd, LPVOID pData, DWORD nLen)
 {
-	EnumParam enumParam = { 0 };
-	enumParam.hSender = m_hWnd;
-	enumParam.cds.dwData = uCmd;
-	enumParam.cds.cbData = nLen;
-	enumParam.cds.lpData = pData;
-	EnumWindows(SendCopyDataCmdEnumWndProc, (LPARAM)&enumParam);
-}
+	COPYDATASTRUCT cds = { 0 };
+	cds.dwData = uCmd;
+	cds.cbData = nLen;
+	cds.lpData = pData;
 
-BOOL CSinstar3Impl::SendCopyDataCmdEnumWndProc(HWND hwnd, LPARAM lp)
-{
-	TCHAR szTitle[201] = { 0 };
-	::GetWindowText(hwnd, szTitle, 200);
-	if (_tcscmp(szTitle, KSinstar3WndName) == 0)
+	SendMessage(WM_COPYDATA, (WPARAM)m_hWnd, (LPARAM)&cds);
+
+	HWND hFind = FindWindowEx(HWND_MESSAGE, NULL, SINSTART3_WNDCLASS, KSinstar3WndName);
+	while (hFind)
 	{
-		EnumParam *enumParam = (EnumParam *)lp;
-		::SendMessage(hwnd, WM_COPYDATA, (WPARAM)enumParam->hSender, (LPARAM)&enumParam->cds);
+		if (hFind != m_hWnd)
+		{
+			::SendMessage(hFind, WM_COPYDATA, (WPARAM)m_hWnd, (LPARAM)&cds);
+		}
+		hFind = FindWindowEx(HWND_MESSAGE, hFind, SINSTART3_WNDCLASS, KSinstar3WndName);
 	}
-	return TRUE;
 }
-
 
 void CSinstar3Impl::OnInputResult(const SStringT & strResult,const SStringT & strComp/*=SStringT() */)
 {
