@@ -416,11 +416,6 @@ BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 	return TRUE;
 }
 
-struct EnumParam {
-	HWND hSender;
-	COPYDATASTRUCT cds;
-};
-
 void CSinstar3Impl::Broadcast(UINT uCmd, LPVOID pData, DWORD nLen)
 {
 	COPYDATASTRUCT cds = { 0 };
