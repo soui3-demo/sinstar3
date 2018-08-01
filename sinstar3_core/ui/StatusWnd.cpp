@@ -45,6 +45,11 @@ namespace SOUI
 		if(pt.y + rcWnd.Height()> rcWorkArea.bottom)
 			pt.y = rcWorkArea.bottom - rcWnd.Height();
 		SetWindowPos(HWND_TOPMOST,pt.x,pt.y,0,0,SWP_NOSIZE|SWP_NOZORDER|SWP_NOACTIVATE);
+
+		if (m_pCmdListener->GetInputContext()->settings.bFullStatus)
+			OnBtnExtend();
+		else
+			OnBtnShrink();
 		UpdateUI();
 		return 0;
 	}
@@ -162,7 +167,6 @@ namespace SOUI
 	{
 		m_pBackGround->SetMode(SStatusBackground::MODE_EXTEND);
 
-		FindChildByID(R.id.btn_status_extend)->SetVisible(TRUE,TRUE);
 		FindChildByID(R.id.btn_status_shrink)->SetVisible(TRUE,TRUE);
 		FindChildByID(R.id.btn_status_extend)->SetVisible(FALSE,TRUE);
 		FindChildByID(R.id.status_extend)->SetVisible(TRUE,TRUE);
@@ -172,7 +176,6 @@ namespace SOUI
 	{
 		m_pBackGround->SetMode(SStatusBackground::MODE_SHRINK);
 
-		FindChildByID(R.id.btn_status_extend)->SetVisible(FALSE,TRUE);
 		FindChildByID(R.id.btn_status_shrink)->SetVisible(FALSE,TRUE);
 		FindChildByID(R.id.btn_status_extend)->SetVisible(TRUE,TRUE);
 		FindChildByID(R.id.status_extend)->SetVisible(FALSE,TRUE);

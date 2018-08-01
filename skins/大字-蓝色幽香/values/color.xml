@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<color>
+	<red value="rgb(255,0,0)" />
+	<green value="rgb(0,255,0)" />
+	<blue value="rgb(0,0,255)" />
+	<white value="rgb(255,255,255)" />
+	<gray value="#808080" />
+	<configborder value="#fecc01" />
+	<cand_index value="rgb(0,0,0)" />
+	<cand_text value="rgb(0,0,0)" />
+	<cand_comp value="rgb(0,0,0)" />
+	<cand_wild value="rgb(255,0,0)" />
+	<status_textcolor value="rgb(0,0,0)" />
+	<sent_input value="rgb(255,0,0)" />
+	<sent_left value="rgb(0,0,255)" />
+	<sent_right value="rgb(0,0,0)" />
+	
+	  <cand_phonetic value="rgb(0,0,255)"/>
+  <comp_umode_prefix value="rgb(255,0,0)"/>
+  <comp_auto_complete value="rgb(88,88,88"/>
+
+</color>
