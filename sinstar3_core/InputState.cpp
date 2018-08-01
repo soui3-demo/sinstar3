@@ -1664,9 +1664,9 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 
 		if(lpCntxtPriv->cComp==0 && !bRet)
 		{
-			if((byInput<'a' || byInput>'z') && (byInput!=g_SettingsCompSpec.hkUserDefSwitch || !g_SettingsG.bFastUMode) )
+			if((byInput<'a' || byInput>'z') && (byInput!=g_SettingsG.hkUserDefSwitch || !g_SettingsG.bFastUMode) )
 			{//标点：要么不是自定义模式快捷键，或者不支持快捷自定义模式切换
-				if(!ISComm_GetCompInfo()->bSymbolFirst || byInput==g_SettingsCompSpec.hkUserDefSwitch) return FALSE;//符号顶字上屏
+				if(!ISComm_GetCompInfo()->bSymbolFirst || byInput==g_SettingsG.hkUserDefSwitch) return FALSE;//符号顶字上屏
 			}
 			if(g_SettingsG.bShowOpTip)
 			{//有编码后面显示操作提示
@@ -1676,7 +1676,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 			//开始编码输入,生成开始编码消息以获取光标跟随时输入窗口的坐标
 			InputStart();
 			InputOpen();
-			if(byInput==g_SettingsCompSpec.hkUserDefSwitch && g_SettingsG.bFastUMode)
+			if(byInput==g_SettingsG.hkUserDefSwitch && g_SettingsG.bFastUMode)
 			{//切换到用户自定义输入状态
 				ClearContext(CPC_ALL);
 				lpCntxtPriv->inState=INST_USERDEF;
@@ -1732,7 +1732,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 			ClearContext(CPC_ALL);
 			return TRUE;
 		}
-	}else if(byInput==g_SettingsCompSpec.hkUserDefSwitch)
+	}else if(byInput==g_SettingsG.hkUserDefSwitch)
 	{//用户定义的自定义状态切换键
 		if(lpCntxtPriv->cComp==0 && g_SettingsG.bFastUMode)
 		{//切换到用户自定义输入状态
@@ -1755,7 +1755,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 			{
 				lpCntxtPriv->bWebMode=TRUE;
 				bRet=TRUE;
-			}else if(byInput!=VK_BACK && byInput!=VK_ESCAPE && byInput!=VK_RETURN && byInput!=g_SettingsCompSpec.hkUserDefSwitch)
+			}else if(byInput!=VK_BACK && byInput!=VK_ESCAPE && byInput!=VK_RETURN && byInput!=g_SettingsG.hkUserDefSwitch)
 			{
 				lpCntxtPriv->cComp--;
 			}
@@ -1884,7 +1884,7 @@ BOOL CInputState::KeyIn_All_Associate(InputContext * lpCntxtPriv,UINT byInput,
 	BOOL bRet=FALSE;
 	SASSERT(lpCntxtPriv->sbState==SBST_ASSOCIATE);
 
-	if((lpCntxtPriv->compMode==IM_SHAPECODE && byInput==g_SettingsCompSpec.hkSentSwitch) ||(lpCntxtPriv->compMode==IM_SPELL && byInput==';'))
+	if((lpCntxtPriv->compMode==IM_SHAPECODE && byInput==g_SettingsG.hkSentSwitch) ||(lpCntxtPriv->compMode==IM_SPELL && byInput==';'))
 	{
 		if(lpCntxtPriv->sSentLen)
 		{//切换到语句输入状态
@@ -1919,7 +1919,7 @@ BOOL CInputState::KeyIn_All_Sentence(InputContext * lpCntxtPriv,UINT byInput,
 	{
 		if(lpCntxtPriv->sSentCaret>0)
 			lpCntxtPriv->sSentCaret--;
-	}else if((lpCntxtPriv->compMode==IM_SHAPECODE && byInput==g_SettingsCompSpec.hkSentSwitch) ||(lpCntxtPriv->compMode==IM_SPELL && byInput==';'))
+	}else if((lpCntxtPriv->compMode==IM_SHAPECODE && byInput==g_SettingsG.hkSentSwitch) ||(lpCntxtPriv->compMode==IM_SPELL && byInput==';'))
 	{
 		if(lpCntxtPriv->sSentCaret==0) return FALSE;//返回FALSE,以便进入符号输入过程
 	}else if(byInput=='.')
