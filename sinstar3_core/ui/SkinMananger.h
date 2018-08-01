@@ -9,8 +9,9 @@ public:
 
 	void ClearMap(){m_mapSkin.RemoveAll();}
 	int InitSkinMenu(SMenuEx * hMenu, const SStringT & strSkinPath, int nStartId, const SStringT & strCurSkin);
-	BOOL SetSkin(int nSkinId);
 	SStringT ExtractSkinInfo(SStringT strSkinPath);
+	SStringT SkinPathFromID(int nSkinID) const;
+
 	static CPoint ExtractSkinOffset(IResProvider *pResProvider);
 public:
 	virtual int GetID() const

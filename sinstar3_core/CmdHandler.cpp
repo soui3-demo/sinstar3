@@ -225,3 +225,10 @@ void CCmdHandler::OnUpdateMode(LPARAM lp)
 {
 	m_pSinstar3->m_pStatusWnd->UpdateCompInfo();
 }
+
+void CCmdHandler::OnChangeSkin(LPARAM lp)
+{
+	SStringT *pSkin = (SStringT*)lp;
+	SStringA strUtf8 = S_CT2A((*pSkin), CP_UTF8);
+	m_pSinstar3->Broadcast(CMD_CHANGESKIN, (LPVOID)(LPCSTR)strUtf8,strUtf8.GetLength());
+}

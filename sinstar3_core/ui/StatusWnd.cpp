@@ -346,7 +346,9 @@ namespace SOUI
 		}
 		else if (nRet >= R.id.skin_def && nRet <= R.id.skin_def + MAX_SKINS)
 		{//select menu
-			m_skinManager.SetSkin(nRet);
+			SStringT strSkinPath = m_skinManager.SkinPathFromID(nRet);
+			m_pCmdListener->OnCommand(CMD_CHANGESKIN, (LPARAM)&strSkinPath);
+			//m_skinManager.SetSkin(nRet);
 		}
 		else if (nRet >= R.id.comp_start && nRet < R.id.comp_start + 50)
 		{//comps

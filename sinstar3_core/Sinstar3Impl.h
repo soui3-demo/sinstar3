@@ -63,8 +63,16 @@ protected://ICmdListener
 	virtual void OnCommand(WORD cmd, LPARAM lp);
 	virtual InputContext * GetInputContext();
 public:
+	BOOL ChangeSkin(const SStringT & strSkin);
+
+	void Broadcast(UINT uCmd, LPVOID pData, DWORD nLen);
+	static BOOL CALLBACK SendCopyDataCmdEnumWndProc(HWND hwnd, LPARAM lp);
+
 	LRESULT OnSvrNotify(UINT uMsg, WPARAM wParam, LPARAM lParam);
+	BOOL OnCopyData(HWND wnd, PCOPYDATASTRUCT pCopyDataStruct);
+
 	BEGIN_MSG_MAP_EX(CSinstar3Impl)
+		MSG_WM_COPYDATA(OnCopyData)
 		MESSAGE_HANDLER_EX(ISComm_GetCommMsgID(),OnSvrNotify)
 		CHAIN_MSG_MAP_MEMBER(m_cmdHandler)
 		CHAIN_MSG_MAP(SOUI::CSimpleWnd)

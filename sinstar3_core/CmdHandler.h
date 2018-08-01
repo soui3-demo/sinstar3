@@ -21,6 +21,7 @@ enum {
 	CMD_CHARMODE,
 	CMD_ENGLISHMODE,
 	CMD_UPDATEMODE,
+	CMD_CHANGESKIN,
 };
 
 namespace SOUI {
@@ -46,6 +47,7 @@ protected:
 	void OnCharMode(LPARAM lp);
 	void OnEnglishMode(LPARAM lp);
 	void OnUpdateMode(LPARAM lp);
+	void OnChangeSkin(LPARAM lp);
 
 	BEGIN_MSG_MAP_EX(CCmdHandler)
 		MSG_WM_COMMAND_EX(CMD_MAKEWORD, OnMakeWord)
@@ -58,6 +60,7 @@ protected:
 		MSG_WM_COMMAND_EX(CMD_CHARMODE,OnCharMode)
 		MSG_WM_COMMAND_EX(CMD_ENGLISHMODE,OnEnglishMode)
 		MSG_WM_COMMAND_EX(CMD_UPDATEMODE,OnUpdateMode)
+		MSG_WM_COMMAND_EX(CMD_CHANGESKIN,OnChangeSkin)
 	END_MSG_MAP()
 
 private:

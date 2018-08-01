@@ -2,6 +2,8 @@
 #include "Sinstar3Impl.h"
 #include "Utils.h"
 #include <initguid.h>
+#include "ui/SkinMananger.h"
+#include "SouiEnv.h"
 
 class CAutoContext
 {
@@ -19,6 +21,8 @@ public:
 
 	void ** m_ppCtx;
 };
+
+const TCHAR * KSinstar3WndName = _T("sinstar3_msg_recv_20180801");
 
 CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr)
 :m_pTxtSvr(pTxtSvr)
@@ -48,7 +52,7 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr)
 	m_pInputWnd->SetFollowCaret(m_inputState.GetInputContext()->settings.bMouseFollow);
 
 	SLOG_INFO("status:"<<m_pStatusWnd->m_hWnd<<", input:"<<m_pInputWnd->m_hWnd);
-	SOUI::CSimpleWnd::Create(_T("sinstar3_msg_recv"),WS_DISABLED|WS_POPUP,WS_EX_TOOLWINDOW,0,0,0,0,HWND_MESSAGE,NULL);
+	SOUI::CSimpleWnd::Create(KSinstar3WndName,WS_DISABLED|WS_POPUP,WS_EX_TOOLWINDOW,0,0,0,0,HWND_MESSAGE,NULL);
 	CUtils::ChangeWindowMessageFilter(WM_COPYDATA, MSGFLT_ADD);
 	ISComm_Login(m_hWnd);
 
@@ -286,6 +290,17 @@ LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 	}
 }
 
+BOOL CSinstar3Impl::OnCopyData(HWND wnd, PCOPYDATASTRUCT pCopyDataStruct)
+{
+	if (pCopyDataStruct->dwData == CMD_CHANGESKIN)
+	{//change skin
+		SStringA strUtf8((const char *)pCopyDataStruct->lpData, pCopyDataStruct->cbData);
+		SStringT strPath = S_CA2T(strUtf8, CP_UTF8);
+		ChangeSkin(strPath);
+	}
+	return TRUE;
+}
+
 
 HWND CSinstar3Impl::GetHwnd() const
 {
@@ -345,6 +360,87 @@ void CSinstar3Impl::OnCommand(WORD cmd, LPARAM lp)
 InputContext * CSinstar3Impl::GetInputContext()
 {
 	return m_inputState.GetInputContext();
+}
+
+BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
+{
+	if (!strSkin.IsEmpty())
+	{//加载外部皮肤
+		CAutoRefPtr<IResProvider> pResProvider;
+		CSouiEnv::getSingleton().theComMgr()->CreateResProvider_ZIP((IObjRef**)&pResProvider);
+		ZIPRES_PARAM param;
+		param.ZipFile(GETRENDERFACTORY, strSkin);
+		if (!pResProvider->Init((WPARAM)&param, 0))
+			return FALSE;
+
+		IUiDefInfo * pUiDef = SUiDef::getSingleton().CreateUiDefInfo(pResProvider, _T("uidef:xml_init"));
+		if (pUiDef->GetSkinPool())
+		{//不允许皮肤中存在全局的skin数据
+			pUiDef->Release();
+			return FALSE;
+		}
+
+		if (!CDataCenter::getSingletonPtr()->GetData().m_strSkin.IsEmpty())
+		{//清除正在使用的外置皮肤。
+			IResProvider *pLastRes = SApplication::getSingleton().GetTailResProvider();
+			SApplication::getSingleton().RemoveResProvider(pLastRes);
+			IUiDefInfo *pUiDefInfo = SUiDef::getSingleton().GetUiDef();
+
+			SStylePoolMgr::getSingleton().PopStylePool(pUiDefInfo->GetStylePool());
+		}
+
+		CDataCenter::getSingleton().GetData().m_ptSkinOffset = CSkinMananger::ExtractSkinOffset(pResProvider);
+
+		SApplication::getSingleton().AddResProvider(pResProvider, NULL);
+		SUiDef::getSingleton().SetUiDef(pUiDef);
+		pUiDef->Release();
+
+	}
+	else if (!CDataCenter::getSingletonPtr()->GetData().m_strSkin.IsEmpty())
+	{//清除正在使用的外置皮肤,还原使用系统内置皮肤
+		IResProvider *pLastRes = SApplication::getSingleton().GetTailResProvider();
+		SApplication::getSingleton().RemoveResProvider(pLastRes);
+		IUiDefInfo *pUiDefInfo = SUiDef::getSingleton().GetUiDef();
+
+		SStylePoolMgr::getSingleton().PopStylePool(pUiDefInfo->GetStylePool());
+
+		IResProvider *pCurRes = SApplication::getSingleton().GetTailResProvider();
+		CDataCenter::getSingleton().GetData().m_ptSkinOffset = CSkinMananger::ExtractSkinOffset(pCurRes);
+	}
+
+	CDataCenter::getSingletonPtr()->GetData().m_strSkin = strSkin;
+
+	//notify skin changed
+	EventSetSkin evt(this);
+	FireEvent(evt);
+	return TRUE;
+}
+
+struct EnumParam {
+	HWND hSender;
+	COPYDATASTRUCT cds;
+};
+
+void CSinstar3Impl::Broadcast(UINT uCmd, LPVOID pData, DWORD nLen)
+{
+	EnumParam enumParam = { 0 };
+	enumParam.hSender = m_hWnd;
+	enumParam.cds.dwData = uCmd;
+	enumParam.cds.cbData = nLen;
+	enumParam.cds.lpData = pData;
+	EnumWindows(SendCopyDataCmdEnumWndProc, (LPARAM)&enumParam);
+}
+
+BOOL CSinstar3Impl::SendCopyDataCmdEnumWndProc(HWND hwnd, LPARAM lp)
+{
+	TCHAR szTitle[201] = { 0 };
+	::GetWindowText(hwnd, szTitle, 200);
+	if (_tcscmp(szTitle, KSinstar3WndName) == 0)
+	{
+		EnumParam *enumParam = (EnumParam *)lp;
+		::SendMessage(hwnd, WM_COPYDATA, (WPARAM)enumParam->hSender, (LPARAM)&enumParam->cds);
+	}
+	return TRUE;
 }
 
 
