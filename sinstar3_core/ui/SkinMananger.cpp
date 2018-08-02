@@ -4,7 +4,7 @@
 #include <helper/mybuffer.h>
 #include "../SouiEnv.h"
 
-CSkinMananger::CSkinMananger(void)
+CSkinMananger::CSkinMananger(SEventSet *pEvtSets):m_pEvtSets(pEvtSets)
 {
 }
 
@@ -54,70 +54,6 @@ int CSkinMananger::InitSkinMenu(SMenuEx *hMenu, const SStringT &strSkinPath, int
 	return nStartId;
 }
 
-BOOL CSkinMananger::SetSkin(int nSkinId)
-{
-	SStringT strSkinPath;
-	if(SMap<int,SStringT>::CPair * p =m_mapSkin.Lookup(nSkinId))
-	{
-		strSkinPath = p->m_value;
-	}
-	if(strSkinPath == CDataCenter::getSingletonPtr()->GetData().m_strSkin)
-	{
-		return TRUE;
-	}
-
-	if(!strSkinPath.IsEmpty())
-	{//加载外部皮肤
-		CAutoRefPtr<IResProvider> pResProvider;
-		CSouiEnv::getSingleton().theComMgr()->CreateResProvider_ZIP((IObjRef**)&pResProvider);
-		ZIPRES_PARAM param;
-		param.ZipFile(GETRENDERFACTORY, strSkinPath);
-		if(!pResProvider->Init((WPARAM)&param,0))
-			return FALSE;
-
-		IUiDefInfo * pUiDef = SUiDef::getSingleton().CreateUiDefInfo(pResProvider,_T("uidef:xml_init"));
-		if(pUiDef->GetSkinPool())
-		{//不允许皮肤中存在全局的skin数据
-			pUiDef->Release();
-			return FALSE;
-		}
-
-		if(!CDataCenter::getSingletonPtr()->GetData().m_strSkin.IsEmpty())
-		{//清除正在使用的外置皮肤。
-			IResProvider *pLastRes = SApplication::getSingleton().GetTailResProvider();
-			SApplication::getSingleton().RemoveResProvider(pLastRes);
-			IUiDefInfo *pUiDefInfo = SUiDef::getSingleton().GetUiDef();
-
-			SStylePoolMgr::getSingleton().PopStylePool(pUiDefInfo->GetStylePool());
-		}
-
-		CDataCenter::getSingleton().GetData().m_ptSkinOffset = ExtractSkinOffset(pResProvider);
-
-		SApplication::getSingleton().AddResProvider(pResProvider,NULL);
-		SUiDef::getSingleton().SetUiDef(pUiDef);
-		pUiDef->Release();
-
-	}else if(!CDataCenter::getSingletonPtr()->GetData().m_strSkin.IsEmpty())
-	{//清除正在使用的外置皮肤,还原使用系统内置皮肤
-		IResProvider *pLastRes = SApplication::getSingleton().GetTailResProvider();
-		SApplication::getSingleton().RemoveResProvider(pLastRes);
-		IUiDefInfo *pUiDefInfo = SUiDef::getSingleton().GetUiDef();
-
-		SStylePoolMgr::getSingleton().PopStylePool(pUiDefInfo->GetStylePool());
-
-		IResProvider *pCurRes = SApplication::getSingleton().GetTailResProvider();
-		CDataCenter::getSingleton().GetData().m_ptSkinOffset = ExtractSkinOffset(pCurRes);
-	}
-
-	CDataCenter::getSingletonPtr()->GetData().m_strSkin = strSkinPath;
-
-	//notify skin changed
-	EventSetSkin *pEvt = new EventSetSkin(this);
-	SNotifyCenter::getSingletonPtr()->FireEventAsync(pEvt);
-	pEvt->Release();
-	return TRUE;
-}
-
 SOUI::SStringT CSkinMananger::ExtractSkinInfo(SStringT strSkinPath)
 {
 	IResProvider *pResProvider=NULL;
@@ -135,6 +71,16 @@ SOUI::SStringT CSkinMananger::ExtractSkinInfo(SStringT strSkinPath)
 	pugi::xml_node xmlDesc = xmlDoc.child(L"uidef").child(L"desc");
 	SStringW strDesc = SStringW(xmlDesc.attribute(L"name").value())+L"["+xmlDesc.attribute(L"author").value()+L"]";
 	return S_CW2T(strDesc);
+}
+
+SStringT CSkinMananger::SkinPathFromID(int nSkinID) const
+{
+	SStringT strSkinPath;
+	if (const SMap<int, SStringT>::CPair * p = m_mapSkin.Lookup(nSkinID))
+	{
+		strSkinPath = p->m_value;
+	}
+	return strSkinPath;
 }
 
 CPoint CSkinMananger::ExtractSkinOffset(IResProvider * pResProvider)

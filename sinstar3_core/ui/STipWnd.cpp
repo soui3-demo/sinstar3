@@ -3,7 +3,7 @@
 
 namespace SOUI {
 
-	STipWnd::STipWnd():CImeWnd(UIRES.LAYOUT.wnd_tip)
+	STipWnd::STipWnd(SEventSet *pEvtSets):CImeWnd(pEvtSets,UIRES.LAYOUT.wnd_tip)
 	{
 	}
 

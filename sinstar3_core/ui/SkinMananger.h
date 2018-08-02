@@ -4,13 +4,14 @@
 class CSkinMananger : public SObject
 {
 public:
-	CSkinMananger(void);
+	CSkinMananger(SEventSet *pEvtSets);
 	~CSkinMananger(void);
 
 	void ClearMap(){m_mapSkin.RemoveAll();}
 	int InitSkinMenu(SMenuEx * hMenu, const SStringT & strSkinPath, int nStartId, const SStringT & strCurSkin);
-	BOOL SetSkin(int nSkinId);
 	SStringT ExtractSkinInfo(SStringT strSkinPath);
+	SStringT SkinPathFromID(int nSkinID) const;
+
 	static CPoint ExtractSkinOffset(IResProvider *pResProvider);
 public:
 	virtual int GetID() const
@@ -19,4 +20,5 @@ public:
 	}
 protected:
 	SMap<int,SStringT> m_mapSkin;	//map of ID->skin path
+	SEventSet *m_pEvtSets;
 };

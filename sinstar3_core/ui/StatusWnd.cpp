@@ -1,14 +1,20 @@
 #include "StdAfx.h"
 #include "StatusWnd.h"
 #include <helper/SMenuEx.h>
+#include <HtmlHelp.h>
 #include "ConfigDlg.h"
 #include "../InputState.h"
+
+#pragma comment(lib,"htmlhelp.lib")
 
 #define SIZE_MAGNETIC	 5
 #define MAX_SKINS	 80
 namespace SOUI
 {
-	CStatusWnd::CStatusWnd(ICmdListener *pListener):CImeWnd(UIRES.LAYOUT.wnd_status_bar), m_pCmdListener(pListener)
+	CStatusWnd::CStatusWnd(SEventSet *pEvtSets, ICmdListener *pListener)
+		:CImeWnd(pEvtSets,UIRES.LAYOUT.wnd_status_bar)
+		, m_pCmdListener(pListener)
+		, m_skinManager(pEvtSets)
 	{
 	}
 
@@ -39,6 +45,11 @@ namespace SOUI
 		if(pt.y + rcWnd.Height()> rcWorkArea.bottom)
 			pt.y = rcWorkArea.bottom - rcWnd.Height();
 		SetWindowPos(HWND_TOPMOST,pt.x,pt.y,0,0,SWP_NOSIZE|SWP_NOZORDER|SWP_NOACTIVATE);
+
+		if (m_pCmdListener->GetInputContext()->settings.bFullStatus)
+			OnBtnExtend();
+		else
+			OnBtnShrink();
 		UpdateUI();
 		return 0;
 	}
@@ -54,108 +65,19 @@ namespace SOUI
 		const MSG * pMsg = GetCurrentMessage();
 		SHostWnd::OnMouseEvent(pMsg->message,pMsg->wParam,pMsg->lParam);
 
-		SMenuEx menu;
-		BOOL bLoad=menu.LoadMenu(UIRES.smenu.context);
-		ClientToScreen(&pt);
-		m_skinManager.ClearMap();
-		SLOG_INFO("before trackpopupmenu");
-		int nRet = menu.TrackPopupMenu(TPM_LEFTALIGN|TPM_BOTTOMALIGN|TPM_RETURNCMD,pt.x,pt.y, m_hWnd);
-		SLOG_INFO("after trackpopupmenu"<<" nRet:"<<nRet);
-		if (nRet == R.id.config)
-		{//system config
-			CConfigDlg configDlg;
-			configDlg.DoModal();
-		}else if(nRet>=R.id.skin_def && nRet <= R.id.skin_def + MAX_SKINS)
-		{//select menu
-			m_skinManager.SetSkin(nRet);
-		}
-		else if (nRet >= R.id.comp_start && nRet < R.id.comp_start + 50)
-		{//comps
-			int iComp = nRet - R.id.comp_start;
-			const SArray<CNameTypePair> & compList = CDataCenter::getSingleton().GetCompList();
-			if (iComp < (int)compList.GetCount())
-			{
-				ISComm_Comp_Open(compList[iComp].strName);
-			}
-		}
-		else if (nRet > R.id.svr_showicon && nRet < R.id.svr_showicon + 50)
-		{//svr page
-			LPCSTR pszPages = ISComm_Svr_Pages();
-			int uID = R.id.svr_showicon+1;
-			while (uID<=nRet)
-			{
-				pszPages += strlen(pszPages) + 1;
-				uID++;
-			}
-			ISComm_ShowServer(pszPages, (char)strlen(pszPages));
-		}
-		else if (nRet == R.id.svr_showicon)
-		{//show icon
-			BOOL bTray = !ISComm_SvrTray_Get();
-			ISComm_SvrTray_Set(bTray);
-		}
-		else if (nRet == R.id.spell_one)
-		{
-			g_SettingsG.bBlendSpWord = !g_SettingsG.bBlendSpWord;
-		}
-		else if (nRet == R.id.spell_two)
-		{
-			BOOL bValid = 0;
-			ISComm_Bldsp_Get(&bValid, NULL, NULL);
-			bValid = !bValid;
-			ISComm_Bldsp_Set(BLDSP_CE2, bValid, 0, 0);
-		}
-		else if (nRet == R.id.spell_three)
-		{
-			BOOL bValid = 0;
-			ISComm_Bldsp_Get(NULL,&bValid, NULL);
-			bValid = !bValid;
-			ISComm_Bldsp_Set(BLDSP_CE3, 0, bValid, 0);
-		}
-		else if (nRet == R.id.spell_all)
-		{
-			BOOL bValid = 0;
-			ISComm_Bldsp_Get(NULL, NULL, &bValid);
-			bValid = !bValid;
-			ISComm_Bldsp_Set(BLDSP_CA4,0,0, bValid);
-		}
-		else if (nRet == R.id.userdef)
-		{
-			g_SettingsG.bBlendUD = !g_SettingsG.bBlendUD;
-		}
-		else if (nRet == R.id.key_map)
-		{
-			m_pCmdListener->OnCommand(CMD_KEYMAP, 0);
-		}
-		else if (nRet == R.id.follow_caret)
-		{
-			m_pCmdListener->OnCommand(CMD_FOLLOWCARET,0);
-		}
-		else if (nRet == R.id.hide_statusbar)
-		{
-			m_pCmdListener->OnCommand(CMD_HIDESTATUSBAR, 0);
-		}
-		else if (nRet == R.id.input_big5)
-		{
-			g_SettingsL.bInputBig5 = !g_SettingsL.bInputBig5;
-		}
-		else if (nRet == R.id.key_speed)
-		{
-			m_pCmdListener->OnCommand(CMD_KEYSPEED, 0);
-		}
-
-		m_skinManager.ClearMap();
+		OnMenuClick();
 	}
 
 	void CStatusWnd::OnInitMenuPopup(SMenuEx* menuPopup, UINT nIndex)
 	{
+		CSettingsLocal & settings = m_pCmdListener->GetInputContext()->settings;
 		switch (menuPopup->GetContextHelpId())
 		{
 		case 100:
 		{//main menu
-			menuPopup->CheckMenuItem(R.id.follow_caret, MF_BYCOMMAND | g_SettingsL.bMouseFollow ? MF_CHECKED : 0);
-			menuPopup->CheckMenuItem(R.id.hide_statusbar, MF_BYCOMMAND | g_SettingsL.bHideStatus ? MF_CHECKED : 0);
-			menuPopup->CheckMenuItem(R.id.input_big5, MF_BYCOMMAND | g_SettingsL.bInputBig5 ? MF_CHECKED : 0);
+			menuPopup->CheckMenuItem(R.id.follow_caret, MF_BYCOMMAND | settings.bMouseFollow ? MF_CHECKED : 0);
+			menuPopup->CheckMenuItem(R.id.hide_statusbar, MF_BYCOMMAND | settings.bHideStatus ? MF_CHECKED : 0);
+			menuPopup->CheckMenuItem(R.id.input_big5, MF_BYCOMMAND | settings.bInputBig5 ? MF_CHECKED : 0);
 			break;
 		}
 		case 2:
@@ -245,7 +167,6 @@ namespace SOUI
 	{
 		m_pBackGround->SetMode(SStatusBackground::MODE_EXTEND);
 
-		FindChildByID(R.id.btn_status_extend)->SetVisible(TRUE,TRUE);
 		FindChildByID(R.id.btn_status_shrink)->SetVisible(TRUE,TRUE);
 		FindChildByID(R.id.btn_status_extend)->SetVisible(FALSE,TRUE);
 		FindChildByID(R.id.status_extend)->SetVisible(TRUE,TRUE);
@@ -255,7 +176,6 @@ namespace SOUI
 	{
 		m_pBackGround->SetMode(SStatusBackground::MODE_SHRINK);
 
-		FindChildByID(R.id.btn_status_extend)->SetVisible(FALSE,TRUE);
 		FindChildByID(R.id.btn_status_shrink)->SetVisible(FALSE,TRUE);
 		FindChildByID(R.id.btn_status_extend)->SetVisible(TRUE,TRUE);
 		FindChildByID(R.id.status_extend)->SetVisible(FALSE,TRUE);
@@ -291,19 +211,25 @@ namespace SOUI
 
 	void CStatusWnd::UpdateToggleStatus(DWORD flags)
 	{
+		CSettingsLocal & settings = m_pCmdListener->GetInputContext()->settings;
+
 		if(flags & BTN_CHARMODE){
 			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_charmode);
-			if (toggle) toggle->SetToggle(g_SettingsL.bCharMode);
+			if (toggle) toggle->SetToggle(settings.bCharMode);
 		}
 		if(flags & BTN_SOUND){
 			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_sound);
-			if (toggle) toggle->SetToggle(!g_SettingsL.bSound);
+			if (toggle) toggle->SetToggle(!settings.bSound);
 		}
 		if (flags & BTN_RECORD) {
 			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_record);
-			if (toggle) toggle->SetToggle(!g_SettingsL.bRecord);
+			if (toggle) toggle->SetToggle(!settings.bRecord);
 		}
-
+		if (flags & BTN_ENGLISHMODE)
+		{
+			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_english);
+			if (toggle) toggle->SetToggle(!settings.bEnglish);
+		}
 	}
 
 	void CStatusWnd::OnCompInfo(EventArgs *e)
@@ -323,7 +249,8 @@ namespace SOUI
 		SToggle * toggle = sobj_cast<SToggle>(e->sender);
 		if(toggle)
 		{
-			g_SettingsL.bCharMode = toggle->GetToggle();
+			CSettingsLocal & settings = m_pCmdListener->GetInputContext()->settings;
+			settings.bCharMode = toggle->GetToggle();
 		}
 	}
 
@@ -332,7 +259,8 @@ namespace SOUI
 		SToggle * toggle = sobj_cast<SToggle>(e->sender);
 		if(toggle)
 		{
-			g_SettingsL.bRecord = toggle->GetToggle();
+			CSettingsLocal & settings = m_pCmdListener->GetInputContext()->settings;
+			settings.bRecord = !toggle->GetToggle();
 		}
 	}
 
@@ -341,20 +269,32 @@ namespace SOUI
 		SToggle * toggle = sobj_cast<SToggle>(e->sender);
 		if(toggle)
 		{
-			g_SettingsL.bSound = toggle->GetToggle();
+			CSettingsLocal & settings = m_pCmdListener->GetInputContext()->settings;
+			settings.bSound = !toggle->GetToggle();
 		}
 
 	}
 
+	void CStatusWnd::OnSwitchEnglish(EventArgs * e)
+	{
+		SToggle * toggle = sobj_cast<SToggle>(e->sender);
+		if (toggle)
+		{
+			CSettingsLocal & settings = m_pCmdListener->GetInputContext()->settings;
+			settings.bEnglish = !toggle->GetToggle();
+		}
+	}
+
 	void CStatusWnd::OnUpdateBtnTooltip(EventArgs *e)
 	{
+		CSettingsLocal & settings = m_pCmdListener->GetInputContext()->settings;
 		EventSwndUpdateTooltip *e2 = sobj_cast<EventSwndUpdateTooltip>(e);
 		SASSERT(e2);
 		switch (e2->idFrom)
 		{
 		case R.id.btn_charmode:
 			e2->bUpdated = TRUE;
-			e2->strToolTip = SStringT().Format(_T("标点模式:%s"), g_SettingsL.bCharMode? _T("中文"):_T("英文"));
+			e2->strToolTip = SStringT().Format(_T("标点模式:%s"), settings.bCharMode? _T("中文"):_T("英文"));
 			break;
 		case R.id.btn_makeword:
 			e2->bUpdated = TRUE;
@@ -362,11 +302,15 @@ namespace SOUI
 			break;
 		case R.id.btn_record:
 			e2->bUpdated = TRUE;
-			e2->strToolTip = SStringT().Format(_T("记录输入状态:%s"), g_SettingsL.bRecord ? _T("启用") : _T("禁用"));
+			e2->strToolTip = SStringT().Format(_T("记录输入状态:%s"), settings.bRecord ? _T("启用") : _T("禁用"));
 			break;
 		case R.id.btn_sound:
 			e2->bUpdated = TRUE;
-			e2->strToolTip = SStringT().Format(_T("语音较对:%s"), g_SettingsL.bSound ? _T("启用") : _T("禁用"));
+			e2->strToolTip = SStringT().Format(_T("语音较对:%s"), settings.bSound ? _T("启用") : _T("禁用"));
+			break;
+		case R.id.btn_english:
+			e2->bUpdated = TRUE;
+			e2->strToolTip = SStringT().Format(_T("单词输入:%s"), settings.bEnglish ? _T("启用") : _T("禁用"));
 			break;
 		case R.id.btn_status_extend:
 			e2->bUpdated = TRUE;
@@ -387,5 +331,116 @@ namespace SOUI
 	{
 		m_pCmdListener->OnCommand(CMD_INPUTMODE, 0);
 	}
+
+	void CStatusWnd::OnMenuClick()
+	{
+		CPoint pt;
+		GetCursorPos(&pt);
+		SMenuEx menu;
+		BOOL bLoad = menu.LoadMenu(UIRES.smenu.context);
+		m_skinManager.ClearMap();
+		SLOG_INFO("before trackpopupmenu");
+		int nRet = menu.TrackPopupMenu(TPM_LEFTALIGN | TPM_BOTTOMALIGN | TPM_RETURNCMD, pt.x, pt.y, m_hWnd);
+		SLOG_INFO("after trackpopupmenu" << " nRet:" << nRet);
+		if (nRet == R.id.config)
+		{//system config
+			CConfigDlg configDlg;
+			configDlg.DoModal();
+		}
+		else if (nRet >= R.id.skin_def && nRet <= R.id.skin_def + MAX_SKINS)
+		{//select menu
+			SStringT strSkinPath = m_skinManager.SkinPathFromID(nRet);
+			m_pCmdListener->OnCommand(CMD_CHANGESKIN, (LPARAM)&strSkinPath);
+			//m_skinManager.SetSkin(nRet);
+		}
+		else if (nRet >= R.id.comp_start && nRet < R.id.comp_start + 50)
+		{//comps
+			int iComp = nRet - R.id.comp_start;
+			const SArray<CNameTypePair> & compList = CDataCenter::getSingleton().GetCompList();
+			if (iComp < (int)compList.GetCount())
+			{
+				ISComm_Comp_Open(compList[iComp].strName);
+			}
+		}
+		else if (nRet > R.id.svr_showicon && nRet < R.id.svr_showicon + 50)
+		{//svr page
+			LPCSTR pszPages = ISComm_Svr_Pages();
+			int uID = R.id.svr_showicon + 1;
+			while (uID <= nRet)
+			{
+				pszPages += strlen(pszPages) + 1;
+				uID++;
+			}
+			ISComm_ShowServer(pszPages, (char)strlen(pszPages));
+		}
+		else if (nRet == R.id.svr_showicon)
+		{//show icon
+			BOOL bTray = !ISComm_SvrTray_Get();
+			ISComm_SvrTray_Set(bTray);
+		}
+		else if (nRet == R.id.spell_one)
+		{
+			g_SettingsG.bBlendSpWord = !g_SettingsG.bBlendSpWord;
+		}
+		else if (nRet == R.id.spell_two)
+		{
+			BOOL bValid = 0;
+			ISComm_Bldsp_Get(&bValid, NULL, NULL);
+			bValid = !bValid;
+			ISComm_Bldsp_Set(BLDSP_CE2, bValid, 0, 0);
+		}
+		else if (nRet == R.id.spell_three)
+		{
+			BOOL bValid = 0;
+			ISComm_Bldsp_Get(NULL, &bValid, NULL);
+			bValid = !bValid;
+			ISComm_Bldsp_Set(BLDSP_CE3, 0, bValid, 0);
+		}
+		else if (nRet == R.id.spell_all)
+		{
+			BOOL bValid = 0;
+			ISComm_Bldsp_Get(NULL, NULL, &bValid);
+			bValid = !bValid;
+			ISComm_Bldsp_Set(BLDSP_CA4, 0, 0, bValid);
+		}
+		else if (nRet == R.id.userdef)
+		{
+			g_SettingsG.bBlendUD = !g_SettingsG.bBlendUD;
+		}
+		else if (nRet == R.id.key_map)
+		{
+			m_pCmdListener->OnCommand(CMD_KEYMAP, 0);
+		}
+		else if (nRet == R.id.follow_caret)
+		{
+			m_pCmdListener->OnCommand(CMD_FOLLOWCARET, 0);
+		}
+		else if (nRet == R.id.hide_statusbar)
+		{
+			m_pCmdListener->OnCommand(CMD_HIDESTATUSBAR, 0);
+		}
+		else if (nRet == R.id.input_big5)
+		{
+			CSettingsLocal & settings = m_pCmdListener->GetInputContext()->settings;
+			settings.bInputBig5 = !settings.bInputBig5;
+		}
+		else if (nRet == R.id.key_speed)
+		{
+			m_pCmdListener->OnCommand(CMD_KEYSPEED, 0);
+		}
+		else if (nRet == R.id.help)
+		{
+			OnHelpClick();
+		}
+
+		m_skinManager.ClearMap();
+	}
+
+	void CStatusWnd::OnHelpClick()
+	{
+		SStringT path= SStringT().Format(_T("%s\\sinstar3.chm>main"), theModule->GetDataPath());
+		HtmlHelp(NULL, path, HH_DISPLAY_TOPIC, 0);
+	}
+
 }
 

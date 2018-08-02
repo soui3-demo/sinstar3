@@ -21,6 +21,8 @@ namespace SOUI {
 
 	protected:
 		virtual CSize GetDesiredSize(int nParentWid, int nParentHei);
+
+		SStringT GetMappedComp();
 	private:
 		CAutoRefPtr<ISkinObj> m_lines;
 	};

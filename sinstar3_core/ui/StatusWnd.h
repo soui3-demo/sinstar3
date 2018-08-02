@@ -15,10 +15,11 @@ namespace SOUI
 			BTN_CHARMODE=1<<0,
 			BTN_RECORD=1<<1,
 			BTN_SOUND=1<<2,
+			BTN_ENGLISHMODE = 1<<3,
 			BTN_ALL=0xffffffff,
 		};
 
-		CStatusWnd(ICmdListener *pListener);
+		CStatusWnd(SEventSet *pEvtSets, ICmdListener *pListener);
 		~CStatusWnd(void);
 
 		void UpdateCompInfo();
@@ -49,8 +50,12 @@ namespace SOUI
 		void OnSwitchCharMode(EventArgs *e);
 		void OnSwitchRecord(EventArgs *e);
 		void OnSwitchSound(EventArgs *e);
+		void OnSwitchEnglish(EventArgs *e);
 		void OnLogoClick();
 		void OnUpdateBtnTooltip(EventArgs *e);
+		void OnMenuClick();
+		void OnHelpClick();
+
 		EVENT_MAP_BEGIN()
 			EVENT_HANDLER(EventDragMove::EventID, OnDragStatus)
 			EVENT_HANDLER(EventSvrNotify::EventID, OnCompInfo)
@@ -61,7 +66,10 @@ namespace SOUI
 			EVENT_ID_HANDLER(R.id.btn_charmode, EventCmd::EventID, OnSwitchCharMode)
 			EVENT_ID_HANDLER(R.id.btn_record, EventCmd::EventID, OnSwitchRecord)
 			EVENT_ID_HANDLER(R.id.btn_sound, EventCmd::EventID, OnSwitchSound)
+			EVENT_ID_HANDLER(R.id.btn_english,EventCmd::EventID,OnSwitchEnglish)
 			EVENT_ID_COMMAND(R.id.img_logo, OnLogoClick)
+			EVENT_ID_COMMAND(R.id.btn_menu,OnMenuClick)
+			EVENT_ID_COMMAND(R.id.btn_help,OnHelpClick)
 		EVENT_MAP_END()
 
 	protected:

@@ -58,35 +58,12 @@ public:
 
 	BOOL	bCandSelNoNum;		// 禁用数字选择重码
 	BOOL	bOnlySimpleCode;	// 出简不出全
-};
 
-class CSettingsLocal
-{
-public:
-
-	void Load(LPCTSTR pszIniFile);
-	void Save(LPCTSTR pszIniFile);
-
-	BOOL	bHideStatus;		// 当前状态栏隐藏状态
-	BOOL	bMouseFollow;		// 鼠标跟随开关
-	BOOL	bEnglish;			// 英文单词输入开关
-	BOOL	bFullStatus;		// 状态栏展开标志
-	BOOL	bCharMode;			// 标点模式
-	BOOL	bSound;				// 语音较对
-	BOOL	bRecord;			// 记录输入语句
-	BOOL	bInputBig5;			// 繁体输出标志
-};
-
-
-class CSettingsCompSpec
-{
-public:
 	TCHAR	hkUserDefSwitch;	//切换到用户定义的与编码相关快捷键
 	TCHAR	hkSentSwitch;		//切换到语句输入的与编码相关快捷键
+
 };
 
 extern CSettingsGlobal	g_SettingsG;
-extern CSettingsLocal	g_SettingsL;
-extern CSettingsCompSpec	g_SettingsCompSpec;
 
 extern int				g_nRefCount;

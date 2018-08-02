@@ -5,9 +5,21 @@ namespace SOUI
 {
 
 
-CImeWnd::CImeWnd(LPCTSTR pszLayout):SHostWnd(pszLayout)
+CImeWnd::CImeWnd(SEventSet *pEvtSets,LPCTSTR pszLayout):SHostWnd(pszLayout), m_pEvtSet(pEvtSets)
 {
+	m_pEvtSet->subscribeEvent(EventSvrNotify::EventID,Subscriber(&CImeWnd::OnEvent, this));
+	m_pEvtSet->subscribeEvent(EventSetSkin::EventID, Subscriber(&CImeWnd::OnEvent, this));
+}
 
+CImeWnd::~CImeWnd()
+{
+	m_pEvtSet->unsubscribeEvent(EventSvrNotify::EventID, Subscriber(&CImeWnd::OnEvent, this));
+	m_pEvtSet->unsubscribeEvent(EventSetSkin::EventID, Subscriber(&CImeWnd::OnEvent, this));
+}
+
+bool CImeWnd::OnEvent(EventArgs * e)
+{
+	return !!_HandleEvent(e);
 }
 
 void CImeWnd::OnSetSkin(EventArgs *e)

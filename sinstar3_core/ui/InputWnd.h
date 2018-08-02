@@ -10,7 +10,7 @@ namespace SOUI
 		public CImeWnd
 	{
 	public:
-		CInputWnd(InputContext * pCtx);
+		CInputWnd(SEventSet *pEvtSets, InputContext * pCtx);
 		~CInputWnd(void);
 
 		void SetFollowCaret(BOOL bFollowCaret);

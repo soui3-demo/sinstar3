@@ -42,7 +42,7 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 
 	pRenderFactory->SetImgDecoderFactory(pImgDecoderFactory);
 	
-	m_theApp = new SApplication(pRenderFactory, hInst,_T("Sinstar3_Wnd"));
+	m_theApp = new SApplication(pRenderFactory, hInst, SINSTART3_WNDCLASS);
 	m_theApp->SetAppDir(szCurrentDir);
 
 	m_theApp->RegisterWindowClass<SToggle2>();
@@ -122,10 +122,6 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 			CDataCenter::getSingletonPtr()->GetData().m_strSkin.Empty();
 		}
 	}
-	new SNotifyCenter;
-
-	SNotifyCenter::getSingletonPtr()->addEvent(EVENTID(EventSvrNotify));
-	SNotifyCenter::getSingletonPtr()->addEvent(EVENTID(EventSetSkin));
 }
 
 CSouiEnv::~CSouiEnv(void)
@@ -136,7 +132,6 @@ CSouiEnv::~CSouiEnv(void)
 	if (pLogMgr)
 		pLogMgr->stop();
 
-	delete SNotifyCenter::getSingletonPtr();
 
  	delete m_theApp;
 	delete m_pComMgr;
