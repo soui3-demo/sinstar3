@@ -165,6 +165,8 @@ namespace SOUI
 
 	void CStatusWnd::OnBtnExtend()
 	{
+		m_pCmdListener->GetInputContext()->settings.bFullStatus = TRUE;
+
 		m_pBackGround->SetMode(SStatusBackground::MODE_EXTEND);
 
 		FindChildByID(R.id.btn_status_shrink)->SetVisible(TRUE,TRUE);
@@ -174,6 +176,7 @@ namespace SOUI
 
 	void CStatusWnd::OnBtnShrink()
 	{
+		m_pCmdListener->GetInputContext()->settings.bFullStatus = FALSE;
 		m_pBackGround->SetMode(SStatusBackground::MODE_SHRINK);
 
 		FindChildByID(R.id.btn_status_shrink)->SetVisible(FALSE,TRUE);
