@@ -1,12 +1,16 @@
 #pragma once
+#include "ImeWnd.h"
 
 namespace SOUI
 {
+	interface IConfigDlgListener {
+		virtual void OnConfigDlgDestroy() = 0;
+	};
 
-	class CConfigDlg: public SHostDialog
+	class CConfigDlg: public SHostWnd
 	{
 	public:
-		CConfigDlg(void);
+		CConfigDlg(IConfigDlgListener * pListener);
 		~CConfigDlg(void);		
 	protected:
 		
@@ -19,8 +23,6 @@ namespace SOUI
 		void InitPageCandidate();
 		void InitPageMisc();
 		void InitPages();
-		BOOL OnInitDialog(HWND wnd, LPARAM lParam);
-		//输入法开关radio
 		void OnClickInputSwitch(int id);
 		//回车
 		void OnClickEnter(int id);
@@ -54,6 +56,8 @@ namespace SOUI
 		void OnDisableNumSelCand();
 		void OnEnable23Cand();
 		void OnHotKeyEvent(EventArgs *pEvt);
+		void OnClose();
+
 		EVENT_MAP_BEGIN()
 			EVENT_ID_COMMAND_RANGE(100, 102, OnClickInputSwitch)
 			EVENT_ID_COMMAND_RANGE(110, 111, OnClickInputSwitch)
@@ -73,13 +77,21 @@ namespace SOUI
 			EVENT_ID_COMMAND(R.id.chk_sent_input, OnClickSendInput)
 			EVENT_ID_COMMAND(R.id.chk_disable_number_to_select_cand, OnDisableNumSelCand)
 			EVENT_ID_COMMAND(R.id.chk_enable_23cand_hotkey, OnEnable23Cand)
+			EVENT_ID_COMMAND(R.id.btn_close,OnClose)
 			EVENT_HANDLER(EventSetHotKey::EventID, OnHotKeyEvent)
 		EVENT_MAP_END()
 
+
+	protected:
+		virtual void OnFinalMessage(HWND hWnd);
+		BOOL OnInitDialog(HWND wnd, LPARAM lParam);
+
 		BEGIN_MSG_MAP_EX(CConfigDlg)
 			MSG_WM_INITDIALOG(OnInitDialog)
-			CHAIN_MSG_MAP(SHostDialog)
+			CHAIN_MSG_MAP(SHostWnd)
 		END_MSG_MAP()
+
+		IConfigDlgListener *m_pListener;
 	};
 
 }

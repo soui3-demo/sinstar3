@@ -232,3 +232,8 @@ void CCmdHandler::OnChangeSkin(LPARAM lp)
 	SStringA strUtf8 = S_CT2A((*pSkin), CP_UTF8);
 	m_pSinstar3->Broadcast(CMD_CHANGESKIN, (LPVOID)(LPCSTR)strUtf8,strUtf8.GetLength());
 }
+
+void CCmdHandler::OnOpenConfig(LPARAM lp)
+{
+	m_pSinstar3->OpenConfig();
+}
