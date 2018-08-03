@@ -29,6 +29,7 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr)
 ,m_pInputWnd(NULL)
 ,m_pStatusWnd(NULL)
 ,m_pTipWnd(NULL)
+,m_pConfig(NULL)
 ,m_pCurImeContext(NULL)
 , m_cmdHandler(this)
 {
@@ -62,13 +63,18 @@ CSinstar3Impl::~CSinstar3Impl(void)
 {
 	ISComm_Logout(m_hWnd);
 	SOUI::CSimpleWnd::DestroyWindow();
-
 	m_pInputWnd->DestroyWindow();
 	m_pStatusWnd->DestroyWindow();
 	m_pTipWnd->DestroyWindow();
 	delete m_pStatusWnd;
 	delete m_pInputWnd;
 	delete m_pTipWnd;
+
+	if (m_pConfig)
+	{
+		m_pConfig->DestroyWindow();
+		m_pConfig = NULL;
+	}
 
 	m_inputState.GetInputContext()->settings.Save(theModule->GetCfgIni());
 
@@ -386,6 +392,11 @@ InputContext * CSinstar3Impl::GetInputContext()
 	return m_inputState.GetInputContext();
 }
 
+void CSinstar3Impl::OnConfigDlgDestroy()
+{
+	m_pConfig = NULL;
+}
+
 BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 {
 	CDataCenter::getSingletonPtr()->Lock(); //注意处理多个输入法UI线程之间的同步.
@@ -446,6 +457,22 @@ BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 	CDataCenter::getSingletonPtr()->Unlock();
 
 	return TRUE;
+}
+
+void CSinstar3Impl::OpenConfig()
+{
+	if (m_pConfig == NULL)
+	{
+		m_pConfig = new CConfigDlg(this);
+		m_pConfig->CSimpleWnd::Create(_T("Config"), WS_POPUP, 0, 0, 0, 0, 0, 0, NULL);
+		m_pConfig->SendMessage(WM_INITDIALOG);
+		m_pConfig->CenterWindow(GetActiveWindow());
+		m_pConfig->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
+	}
+	else
+	{
+		m_pConfig->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
+	}
 }
 
 void CSinstar3Impl::Broadcast(UINT uCmd, LPVOID pData, DWORD nLen)

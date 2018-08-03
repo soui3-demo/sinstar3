@@ -4,6 +4,7 @@
 #include "ui/InputWnd.h"
 #include "ui/StatusWnd.h"
 #include "ui/STipWnd.h"
+#include "ui/ConfigDlg.h"
 
 #include "InputState.h"
 #include "CmdHandler.h"
@@ -13,6 +14,7 @@
 class CSinstar3Impl:
 	public ISinstar,
 	public IInputListener,
+	public SOUI::IConfigDlgListener,
 	public SOUI::SObject,
 	public SOUI::CSimpleWnd,
 	public SOUI::SEventSet
@@ -45,7 +47,6 @@ public:
 public:
 	virtual void OnFinalRelease();
 	virtual HRESULT OnQueryInterface(REFIID riid, void **ppvObject);
-
 	virtual int GetID() const {	return SENDER_SINSTSR3;}
 protected://IInputListener
 	virtual HWND GetHwnd() const;
@@ -64,8 +65,11 @@ protected://IInputListener
 protected://ICmdListener
 	virtual void OnCommand(WORD cmd, LPARAM lp);
 	virtual InputContext * GetInputContext();
+protected://IConfigDlgListener
+	virtual void OnConfigDlgDestroy();
 public:
 	BOOL ChangeSkin(const SStringT & strSkin);
+	void OpenConfig();
 
 	void Broadcast(UINT uCmd, LPVOID pData, DWORD nLen);
 
@@ -87,6 +91,7 @@ private:
 	CInputWnd		*m_pInputWnd;
 	CStatusWnd		*m_pStatusWnd;
 	STipWnd			*m_pTipWnd;
+	CConfigDlg		*m_pConfig;
 	CInputState		m_inputState;
 
 	void			*m_pCurImeContext;

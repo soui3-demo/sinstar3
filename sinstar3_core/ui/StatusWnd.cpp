@@ -347,14 +347,12 @@ namespace SOUI
 		SLOG_INFO("after trackpopupmenu" << " nRet:" << nRet);
 		if (nRet == R.id.config)
 		{//system config
-			CConfigDlg configDlg;
-			configDlg.DoModal();
+			m_pCmdListener->OnCommand(CMD_OPENCONFIG, 0);
 		}
 		else if (nRet >= R.id.skin_def && nRet <= R.id.skin_def + MAX_SKINS)
 		{//select menu
 			SStringT strSkinPath = m_skinManager.SkinPathFromID(nRet);
 			m_pCmdListener->OnCommand(CMD_CHANGESKIN, (LPARAM)&strSkinPath);
-			//m_skinManager.SetSkin(nRet);
 		}
 		else if (nRet >= R.id.comp_start && nRet < R.id.comp_start + 50)
 		{//comps
