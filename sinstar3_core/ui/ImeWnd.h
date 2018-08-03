@@ -1,15 +1,16 @@
 #pragma once
+#include "skinawarewnd.h"
 
 namespace SOUI
 {
 
-class CImeWnd : public SHostWnd
+class CImeWnd : public CSkinAwareWnd
 {
 public:
 	CImeWnd(SEventSet *pEvtSets,LPCTSTR pszLayout);
 	virtual ~CImeWnd();
 
-	HWND Create(LPCTSTR pszTitle,HWND hParent=NULL,BOOL bDisable=TRUE);
+	HWND Create(LPCTSTR pszTitle,HWND hParent=NULL);
 	void Show(BOOL bShow);
 
 protected:
@@ -17,15 +18,6 @@ protected:
 	virtual BOOL OnReleaseSwndCapture();
 
 	BOOL m_canReleaseCapture;
-
-protected:
-	bool OnEvent(EventArgs *e);
-	SEventSet * m_pEvtSet;
-protected:
-	void OnSetSkin(EventArgs * e);
-	EVENT_MAP_BEGIN()
-		EVENT_HANDLER(EventSetSkin::EventID, OnSetSkin)
-	EVENT_MAP_END()
 
 protected:
 
@@ -39,7 +31,7 @@ protected:
 		MSG_WM_SETCURSOR(OnSetCursor)
 		MSG_WM_MOUSEMOVE(OnMouseMove)
 		MSG_WM_ACTIVATE(OnActivate)
-		CHAIN_MSG_MAP(SHostWnd)
+		CHAIN_MSG_MAP(CSkinAwareWnd)
 	END_MSG_MAP()
 };
 

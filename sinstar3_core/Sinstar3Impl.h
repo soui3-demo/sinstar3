@@ -14,7 +14,7 @@
 class CSinstar3Impl:
 	public ISinstar,
 	public IInputListener,
-	public SOUI::IConfigDlgListener,
+	public IDestroyListener,
 	public SOUI::SObject,
 	public SOUI::CSimpleWnd,
 	public SOUI::SEventSet
@@ -65,8 +65,8 @@ protected://IInputListener
 protected://ICmdListener
 	virtual void OnCommand(WORD cmd, LPARAM lp);
 	virtual InputContext * GetInputContext();
-protected://IConfigDlgListener
-	virtual void OnConfigDlgDestroy();
+protected://IDestroyListener
+	virtual void OnSkinAwareWndDestroy(CSkinAwareWnd * pWnd);
 public:
 	BOOL ChangeSkin(const SStringT & strSkin);
 	void OpenConfig();

@@ -6,9 +6,8 @@
 #pragma warning(disable:4244)
 namespace SOUI
 {
-	CConfigDlg::CConfigDlg(IConfigDlgListener * pListener)
-		:SHostWnd(UIRES.LAYOUT.dlg_config)
-		, m_pListener(pListener)
+	CConfigDlg::CConfigDlg(SEventSet *pEvtSet)
+		:CSkinAwareWnd(pEvtSet,UIRES.LAYOUT.dlg_config)
 	{
 	}
 
@@ -355,13 +354,6 @@ SWindow *pCtrl = FindChildByID(id);\
 		case R.id.hk_turn_next:
 			g_SettingsG.byTurnPageDownVK = pHotKeyEvt->vKey; break;
 		}
-	}
-
-	void CConfigDlg::OnFinalMessage(HWND hWnd)
-	{
-		__super::OnFinalMessage(hWnd);
-		m_pListener->OnConfigDlgDestroy();
-		delete this;
 	}
 
 	void CConfigDlg::OnClose()

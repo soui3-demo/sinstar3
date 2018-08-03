@@ -242,6 +242,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="ui\SkinAwareWnd.cpp" />
     <ClCompile Include="ui\STipWnd.cpp" />
     <ClCompile Include="ui\ConfigDlg.cpp" />
     <ClCompile Include="ui\ImeWnd.cpp" />
@@ -280,6 +281,7 @@
     <ClInclude Include="controls\SLineComp.h" />
     <ClInclude Include="SouiEnv.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="ui\SkinAwareWnd.h" />
     <ClInclude Include="ui\STipWnd.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="ui\ConfigDlg.h" />

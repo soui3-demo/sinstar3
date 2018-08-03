@@ -392,9 +392,13 @@ InputContext * CSinstar3Impl::GetInputContext()
 	return m_inputState.GetInputContext();
 }
 
-void CSinstar3Impl::OnConfigDlgDestroy()
+void CSinstar3Impl::OnSkinAwareWndDestroy(CSkinAwareWnd * pWnd)
 {
-	m_pConfig = NULL;
+	if (pWnd->GetWndType() == IME_CONFIG)
+	{
+		delete pWnd;
+		m_pConfig = NULL;
+	}
 }
 
 BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
@@ -464,7 +468,8 @@ void CSinstar3Impl::OpenConfig()
 	if (m_pConfig == NULL)
 	{
 		m_pConfig = new CConfigDlg(this);
-		m_pConfig->CSimpleWnd::Create(_T("Config"), WS_POPUP, 0, 0, 0, 0, 0, 0, NULL);
+		m_pConfig->SetDestroyListener(this, IME_CONFIG);
+		m_pConfig->Create(_T("Config"),NULL);
 		m_pConfig->SendMessage(WM_INITDIALOG);
 		m_pConfig->CenterWindow(GetActiveWindow());
 		m_pConfig->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);

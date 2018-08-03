@@ -5,31 +5,12 @@ namespace SOUI
 {
 
 
-CImeWnd::CImeWnd(SEventSet *pEvtSets,LPCTSTR pszLayout):SHostWnd(pszLayout), m_pEvtSet(pEvtSets)
+CImeWnd::CImeWnd(SEventSet *pEvtSets,LPCTSTR pszLayout):CSkinAwareWnd(pEvtSets,pszLayout)
 {
-	m_pEvtSet->subscribeEvent(EventSvrNotify::EventID,Subscriber(&CImeWnd::OnEvent, this));
-	m_pEvtSet->subscribeEvent(EventSetSkin::EventID, Subscriber(&CImeWnd::OnEvent, this));
 }
 
 CImeWnd::~CImeWnd()
 {
-	m_pEvtSet->unsubscribeEvent(EventSvrNotify::EventID, Subscriber(&CImeWnd::OnEvent, this));
-	m_pEvtSet->unsubscribeEvent(EventSetSkin::EventID, Subscriber(&CImeWnd::OnEvent, this));
-}
-
-bool CImeWnd::OnEvent(EventArgs * e)
-{
-	return !!_HandleEvent(e);
-}
-
-void CImeWnd::OnSetSkin(EventArgs *e)
-{
-	SendMessage(WM_DESTROY,0,0);
-	SetWindowPos(0, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
-	CREATESTRUCT cs;
-	cs.cx = 0;
-	cs.cy = 0;
-	SendMessage(WM_CREATE, 0, (LPARAM)&cs);
 }
 
 BOOL CImeWnd::OnSetCursor(HWND wnd, UINT nHitTest, UINT message)
@@ -55,9 +36,9 @@ void CImeWnd::OnMouseMove(UINT nFlags, CPoint point)
 	}
 }
 
-HWND CImeWnd::Create(LPCTSTR pszTitle,HWND hParent,BOOL bDisable)
+HWND CImeWnd::Create(LPCTSTR pszTitle,HWND hParent)
 {
-	return CSimpleWnd::Create(pszTitle,WS_POPUP|bDisable?WS_DISABLED:0,WS_EX_TOOLWINDOW,0,0,0,0, hParent,NULL);
+	return CSimpleWnd::Create(pszTitle,WS_POPUP|WS_DISABLED,WS_EX_TOOLWINDOW,0,0,0,0, hParent,NULL);
 }
 
 void CImeWnd::Show(BOOL bShow)
