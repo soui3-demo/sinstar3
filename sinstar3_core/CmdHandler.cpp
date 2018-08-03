@@ -229,8 +229,11 @@ void CCmdHandler::OnUpdateMode(LPARAM lp)
 void CCmdHandler::OnChangeSkin(LPARAM lp)
 {
 	SStringT *pSkin = (SStringT*)lp;
-	SStringA strUtf8 = S_CT2A((*pSkin), CP_UTF8);
-	m_pSinstar3->Broadcast(CMD_CHANGESKIN, (LPVOID)(LPCSTR)strUtf8,strUtf8.GetLength());
+	if (CDataCenter::getSingleton().GetData().m_strSkin != *pSkin)
+	{
+		SStringA strUtf8 = S_CT2A((*pSkin), CP_UTF8);
+		m_pSinstar3->Broadcast(CMD_CHANGESKIN, (LPVOID)(LPCSTR)strUtf8, strUtf8.GetLength());
+	}
 }
 
 void CCmdHandler::OnOpenConfig(LPARAM lp)

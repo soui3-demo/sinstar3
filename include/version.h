@@ -35,6 +35,7 @@
 
 #define VERSION_INT		sinstar3_ime_int_version( _sinstar3_ime_version_a, _sinstar3_ime_version_b, _sinstar3_ime_version_c, _sinstar3_ime_version_d)
 #define VERSION_STR		sinstar3_ime_str_version( _sinstar3_ime_version_a, _sinstar3_ime_version_b, _sinstar3_ime_version_c, _sinstar3_ime_version_d)
+#define VERSION_TSTR	sinstar3_ime_str_version2( _sinstar3_ime_version_a, _sinstar3_ime_version_b, _sinstar3_ime_version_c, _sinstar3_ime_version_d)
 #define PRODUCT_NAME	sinstar3_ime_tstring( _sinstar3_ime_name)
 #define PRODUCT_WNAME	sinstar3_ime_wstring( _sinstar3_ime_name)
 

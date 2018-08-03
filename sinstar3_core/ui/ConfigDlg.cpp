@@ -1,5 +1,7 @@
 #include "StdAfx.h"
 #include "ConfigDlg.h"
+#include "../../include/version.h"
+#include <helper/STime.h>
 
 #pragma warning(disable:4244)
 namespace SOUI
@@ -124,6 +126,24 @@ namespace SOUI
 		FindAndSetCheck(R.id.sound_disable + g_SettingsG.nSoundAlert, TRUE);
 	}
 
+	void CConfigDlg::InitPageAbout()
+	{
+		FindChildByID(R.id.txt_ver)->SetWindowText(VERSION_TSTR);
+		WIN32_FIND_DATA wfd;
+		TCHAR szPath[1000];
+		GetModuleFileName(theModule->GetModule(), szPath, 1000);
+		HANDLE h=FindFirstFile(szPath, &wfd);
+		FindClose(h);
+		FILETIME lft;
+		FileTimeToLocalFileTime(&wfd.ftLastWriteTime,&lft);
+		SYSTEMTIME tm;
+		FileTimeToSystemTime(&lft, &tm);
+		CTime time(tm.wYear,tm.wMonth,tm.wDay,tm.wHour,tm.wMinute,tm.wSecond);
+		SStringT strTm = time.Format(_T("%Y-%m-%d %H:%M:%S %A"));
+		FindChildByID(R.id.txt_build_time)->SetWindowText(strTm);
+		
+	}
+
 	void CConfigDlg::InitPages()
 	{		
 		InitPageHabit();
@@ -131,6 +151,7 @@ namespace SOUI
 		InitPageAssociate();	
 		InitPageCandidate();
 		InitPageMisc();
+		InitPageAbout();
 	}
 
 	BOOL CConfigDlg::OnInitDialog(HWND wnd, LPARAM lParam)

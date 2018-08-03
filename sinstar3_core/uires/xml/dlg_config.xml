@@ -143,8 +143,15 @@
           </group>
         </pageex>
         <pageex title="@string/cfg_about" tip="@string/cfg_about" layout="vbox" gravity="center">
-          <text extend_top="30" text="启程五笔输入法"/>
-          <text text="version:3.0"/>
+          <text extend_top="30" text="启程输入法"/>
+          <window size="-1,-1" layout="hbox">
+            <text text="版本:"/>
+            <text name="txt_ver"/>
+          </window>
+          <window size="-1,-1" layout="hbox">
+            <text text="编译时间:"/>
+            <text name="txt_build_time"/>
+          </window>
           <text text="警告：计算机软件受著作权和国际公约保护"/>
           <text text="未经授权擅自用于商业用途"/>
           <text text="将会受到所在地区的最大可能的民事或刑事诉讼"/>

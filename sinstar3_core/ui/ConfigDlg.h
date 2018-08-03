@@ -22,6 +22,7 @@ namespace SOUI
 		void InitPageAssociate();
 		void InitPageCandidate();
 		void InitPageMisc();
+		void InitPageAbout();
 		void InitPages();
 		void OnClickInputSwitch(int id);
 		//»Ø³µ
