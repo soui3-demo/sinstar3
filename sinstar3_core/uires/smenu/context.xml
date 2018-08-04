@@ -13,6 +13,7 @@
     <menuItem text="网上皮肤" name="skin_cloud" id="202"/>
     <sep/>
     <menuItem text="内置皮肤" name="skin_def" id="220"/>
+    <sep/>
   </menuItem>
   <menuItem text="编码方案" name="menu_comp" contextHelpId="4">
     <menuItem text="[empty]" name="comp_start" id="400"/>

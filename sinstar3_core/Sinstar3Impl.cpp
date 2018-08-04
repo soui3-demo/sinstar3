@@ -30,6 +30,7 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr)
 ,m_pStatusWnd(NULL)
 ,m_pTipWnd(NULL)
 ,m_pConfig(NULL)
+, m_pSkinMgrDlg(NULL)
 ,m_pCurImeContext(NULL)
 , m_cmdHandler(this)
 {
@@ -75,7 +76,11 @@ CSinstar3Impl::~CSinstar3Impl(void)
 		m_pConfig->DestroyWindow();
 		m_pConfig = NULL;
 	}
-
+	if (m_pSkinMgrDlg)
+	{
+		m_pSkinMgrDlg->DestroyWindow();
+		m_pSkinMgrDlg = NULL;
+	}
 	m_inputState.GetInputContext()->settings.Save(theModule->GetCfgIni());
 
 	if (!m_strLoadedFontFile.IsEmpty())
@@ -399,6 +404,11 @@ void CSinstar3Impl::OnSkinAwareWndDestroy(CSkinAwareWnd * pWnd)
 		delete pWnd;
 		m_pConfig = NULL;
 	}
+	else if (pWnd->GetWndType() == IME_SKINMGR)
+	{
+		delete pWnd;
+		m_pSkinMgrDlg = NULL;
+	}
 }
 
 BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
@@ -477,6 +487,23 @@ void CSinstar3Impl::OpenConfig()
 	else
 	{
 		m_pConfig->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
+	}
+}
+
+void CSinstar3Impl::OpenSkinMgr()
+{
+	if (m_pSkinMgrDlg == NULL)
+	{
+		m_pSkinMgrDlg = new CSkinMgrDlg(this);
+		m_pSkinMgrDlg->SetDestroyListener(this, IME_SKINMGR);
+		m_pSkinMgrDlg->Create(_T("Config"), NULL);
+		m_pSkinMgrDlg->SendMessage(WM_INITDIALOG);
+		m_pSkinMgrDlg->CenterWindow(GetActiveWindow());
+		m_pSkinMgrDlg->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
+	}
+	else
+	{
+		m_pSkinMgrDlg->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
 	}
 }
 

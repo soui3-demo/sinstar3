@@ -240,3 +240,8 @@ void CCmdHandler::OnOpenConfig(LPARAM lp)
 {
 	m_pSinstar3->OpenConfig();
 }
+
+void CCmdHandler::OnSkinMgr(LPARAM lp)
+{
+	m_pSinstar3->OpenSkinMgr();
+}

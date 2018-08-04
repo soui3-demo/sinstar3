@@ -5,6 +5,7 @@
 #include "ui/StatusWnd.h"
 #include "ui/STipWnd.h"
 #include "ui/ConfigDlg.h"
+#include "ui/SkinMgrDlg.h"
 
 #include "InputState.h"
 #include "CmdHandler.h"
@@ -70,6 +71,7 @@ protected://IDestroyListener
 public:
 	BOOL ChangeSkin(const SStringT & strSkin);
 	void OpenConfig();
+	void OpenSkinMgr();
 
 	void Broadcast(UINT uCmd, LPVOID pData, DWORD nLen);
 
@@ -92,6 +94,7 @@ private:
 	CStatusWnd		*m_pStatusWnd;
 	STipWnd			*m_pTipWnd;
 	CConfigDlg		*m_pConfig;
+	CSkinMgrDlg		*m_pSkinMgrDlg;
 	CInputState		m_inputState;
 
 	void			*m_pCurImeContext;

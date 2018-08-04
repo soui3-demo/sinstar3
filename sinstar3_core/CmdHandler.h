@@ -21,6 +21,7 @@ enum {
 	CMD_CHARMODE,
 	CMD_ENGLISHMODE,
 	CMD_UPDATEMODE,
+	CMD_SKINMGR,
 	CMD_CHANGESKIN,
 	CMD_OPENCONFIG,
 };
@@ -50,6 +51,7 @@ protected:
 	void OnUpdateMode(LPARAM lp);
 	void OnChangeSkin(LPARAM lp);
 	void OnOpenConfig(LPARAM lp);
+	void OnSkinMgr(LPARAM lp);
 
 	BEGIN_MSG_MAP_EX(CCmdHandler)
 		MSG_WM_COMMAND_EX(CMD_MAKEWORD, OnMakeWord)
@@ -63,6 +65,7 @@ protected:
 		MSG_WM_COMMAND_EX(CMD_ENGLISHMODE,OnEnglishMode)
 		MSG_WM_COMMAND_EX(CMD_UPDATEMODE,OnUpdateMode)
 		MSG_WM_COMMAND_EX(CMD_CHANGESKIN,OnChangeSkin)
+		MSG_WM_COMMAND_EX(CMD_SKINMGR,OnSkinMgr)
 		MSG_WM_COMMAND_EX(CMD_OPENCONFIG,OnOpenConfig)
 	END_MSG_MAP()
 
