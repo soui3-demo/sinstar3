@@ -29,6 +29,7 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr)
 ,m_pInputWnd(NULL)
 ,m_pStatusWnd(NULL)
 ,m_pTipWnd(NULL)
+, m_pSpcharWnd(NULL)
 ,m_pConfig(NULL)
 , m_pSkinMgrDlg(NULL)
 ,m_pCurImeContext(NULL)
@@ -80,6 +81,12 @@ CSinstar3Impl::~CSinstar3Impl(void)
 	{
 		m_pSkinMgrDlg->DestroyWindow();
 		m_pSkinMgrDlg = NULL;
+	}
+
+	if (m_pSpcharWnd)
+	{
+		m_pSpcharWnd->DestroyWindow();
+		m_pSpcharWnd = NULL;
 	}
 	m_inputState.GetInputContext()->settings.Save(theModule->GetCfgIni());
 
@@ -409,6 +416,11 @@ void CSinstar3Impl::OnSkinAwareWndDestroy(CSkinAwareWnd * pWnd)
 		delete pWnd;
 		m_pSkinMgrDlg = NULL;
 	}
+	else if (pWnd->GetWndType() == IME_SPCHAR)
+	{
+		delete pWnd;
+		m_pSpcharWnd = NULL;
+	}
 }
 
 BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
@@ -504,6 +516,23 @@ void CSinstar3Impl::OpenSkinMgr()
 	else
 	{
 		m_pSkinMgrDlg->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
+	}
+}
+
+void CSinstar3Impl::OpenSpchar()
+{
+	if (m_pSpcharWnd == NULL)
+	{
+		m_pSpcharWnd = new CSpCharWnd(this);
+		m_pSpcharWnd->SetDestroyListener(this, IME_SPCHAR);
+		m_pSpcharWnd->Create(_T("SpcharWnd"), NULL);
+		m_pSpcharWnd->SendMessage(WM_INITDIALOG);
+		m_pSpcharWnd->CenterWindow(GetActiveWindow());
+		m_pSpcharWnd->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW|SWP_NOACTIVATE);
+	}
+	else
+	{
+		m_pSpcharWnd->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW | SWP_NOACTIVATE);
 	}
 }
 

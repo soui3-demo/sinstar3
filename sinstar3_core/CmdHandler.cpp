@@ -245,3 +245,8 @@ void CCmdHandler::OnSkinMgr(LPARAM lp)
 {
 	m_pSinstar3->OpenSkinMgr();
 }
+
+void CCmdHandler::OnOpenSpchar(LPARAM lp)
+{
+	m_pSinstar3->OpenSpchar();
+}

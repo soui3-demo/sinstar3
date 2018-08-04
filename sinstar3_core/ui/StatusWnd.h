@@ -41,7 +41,6 @@ namespace SOUI
 
 	protected:
 
-		void OnDragStatus(EventArgs *e);
 		void OnCompInfo(EventArgs *e);
 
 		void OnBtnExtend();
@@ -57,7 +56,6 @@ namespace SOUI
 		void OnHelpClick();
 
 		EVENT_MAP_BEGIN()
-			EVENT_HANDLER(EventDragMove::EventID, OnDragStatus)
 			EVENT_HANDLER(EventSvrNotify::EventID, OnCompInfo)
 			EVENT_HANDLER(EventSwndUpdateTooltip::EventID, OnUpdateBtnTooltip)
 			EVENT_ID_COMMAND(R.id.btn_status_shrink, OnBtnShrink)

@@ -20,6 +20,12 @@ protected:
 	BOOL m_canReleaseCapture;
 
 protected:
+	void OnDragStatus(EventArgs *e);
+	EVENT_MAP_BEGIN()
+		EVENT_HANDLER(EventDragMove::EventID, OnDragStatus)
+	EVENT_MAP_END()
+
+protected:
 
 	BOOL OnSetCursor(HWND wnd, UINT nHitTest, UINT message);
 	void OnMouseMove(UINT nFlags, CPoint point);

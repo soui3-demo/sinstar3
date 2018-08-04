@@ -6,6 +6,7 @@
 #include "ui/STipWnd.h"
 #include "ui/ConfigDlg.h"
 #include "ui/SkinMgrDlg.h"
+#include "ui/SpCharWnd.h"
 
 #include "InputState.h"
 #include "CmdHandler.h"
@@ -72,7 +73,8 @@ public:
 	BOOL ChangeSkin(const SStringT & strSkin);
 	void OpenConfig();
 	void OpenSkinMgr();
-
+	void OpenSpchar();
+	
 	void Broadcast(UINT uCmd, LPVOID pData, DWORD nLen);
 
 	LRESULT OnSvrNotify(UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -93,6 +95,7 @@ private:
 	CInputWnd		*m_pInputWnd;
 	CStatusWnd		*m_pStatusWnd;
 	STipWnd			*m_pTipWnd;
+	CSpCharWnd      *m_pSpcharWnd;
 	CConfigDlg		*m_pConfig;
 	CSkinMgrDlg		*m_pSkinMgrDlg;
 	CInputState		m_inputState;
