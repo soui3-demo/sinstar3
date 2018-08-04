@@ -74,7 +74,8 @@ public:
 	void OpenConfig();
 	void OpenSkinMgr();
 	void OpenSpchar();
-	
+	void InputSpchar(LPCTSTR pszText);
+
 	void Broadcast(UINT uCmd, LPVOID pData, DWORD nLen);
 
 	LRESULT OnSvrNotify(UINT uMsg, WPARAM wParam, LPARAM lParam);

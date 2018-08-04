@@ -523,7 +523,7 @@ void CSinstar3Impl::OpenSpchar()
 {
 	if (m_pSpcharWnd == NULL)
 	{
-		m_pSpcharWnd = new CSpCharWnd(this);
+		m_pSpcharWnd = new CSpCharWnd(this,this);
 		m_pSpcharWnd->SetDestroyListener(this, IME_SPCHAR);
 		m_pSpcharWnd->Create(_T("SpcharWnd"), NULL);
 		m_pSpcharWnd->SendMessage(WM_INITDIALOG);
@@ -533,6 +533,21 @@ void CSinstar3Impl::OpenSpchar()
 	else
 	{
 		m_pSpcharWnd->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW | SWP_NOACTIVATE);
+	}
+}
+
+void CSinstar3Impl::InputSpchar(LPCTSTR pszText)
+{
+	LPVOID pImeCtx = m_pTxtSvr->GetImeContext();
+	if (!pImeCtx)
+	{
+		CUtils::SoundPlay(_T("error"));
+	}
+	else
+	{
+		SStringW strTxt = S_CT2W(pszText);
+		m_pTxtSvr->UpdateResultAndCompositionStringW(pImeCtx, strTxt, strTxt.GetLength(), NULL, 0);
+		m_pTxtSvr->ReleaseImeContext(pImeCtx);
 	}
 }
 

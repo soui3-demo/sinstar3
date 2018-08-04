@@ -250,3 +250,9 @@ void CCmdHandler::OnOpenSpchar(LPARAM lp)
 {
 	m_pSinstar3->OpenSpchar();
 }
+
+void CCmdHandler::OnInputSpchar(LPARAM lp)
+{
+	LPCTSTR pszInput = (LPCTSTR)lp;
+	m_pSinstar3->InputSpchar(pszInput);
+}

@@ -25,6 +25,7 @@ enum {
 	CMD_CHANGESKIN,
 	CMD_OPENCONFIG,
 	CMD_OPENSPCHAR,
+	CMD_INPUTSPCHAR,
 };
 
 namespace SOUI {
@@ -54,6 +55,7 @@ protected:
 	void OnOpenConfig(LPARAM lp);
 	void OnSkinMgr(LPARAM lp);
 	void OnOpenSpchar(LPARAM lp);
+	void OnInputSpchar(LPARAM lp);
 
 	BEGIN_MSG_MAP_EX(CCmdHandler)
 		MSG_WM_COMMAND_EX(CMD_MAKEWORD, OnMakeWord)
@@ -70,7 +72,8 @@ protected:
 		MSG_WM_COMMAND_EX(CMD_SKINMGR,OnSkinMgr)
 		MSG_WM_COMMAND_EX(CMD_OPENCONFIG,OnOpenConfig)
 		MSG_WM_COMMAND_EX(CMD_OPENSPCHAR, OnOpenSpchar)
-		END_MSG_MAP()
+		MSG_WM_COMMAND_EX(CMD_INPUTSPCHAR,OnInputSpchar)
+	END_MSG_MAP()
 
 private:
 	STipWnd * m_pTipWnd;
