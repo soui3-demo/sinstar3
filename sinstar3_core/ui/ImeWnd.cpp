@@ -4,32 +4,14 @@
 namespace SOUI
 {
 
+#define SIZE_MAGNETIC	 5
 
-CImeWnd::CImeWnd(SEventSet *pEvtSets,LPCTSTR pszLayout):SHostWnd(pszLayout), m_pEvtSet(pEvtSets)
+CImeWnd::CImeWnd(SEventSet *pEvtSets,LPCTSTR pszLayout):CSkinAwareWnd(pEvtSets,pszLayout)
 {
-	m_pEvtSet->subscribeEvent(EventSvrNotify::EventID,Subscriber(&CImeWnd::OnEvent, this));
-	m_pEvtSet->subscribeEvent(EventSetSkin::EventID, Subscriber(&CImeWnd::OnEvent, this));
 }
 
 CImeWnd::~CImeWnd()
 {
-	m_pEvtSet->unsubscribeEvent(EventSvrNotify::EventID, Subscriber(&CImeWnd::OnEvent, this));
-	m_pEvtSet->unsubscribeEvent(EventSetSkin::EventID, Subscriber(&CImeWnd::OnEvent, this));
-}
-
-bool CImeWnd::OnEvent(EventArgs * e)
-{
-	return !!_HandleEvent(e);
-}
-
-void CImeWnd::OnSetSkin(EventArgs *e)
-{
-	SendMessage(WM_DESTROY,0,0);
-	SetWindowPos(0, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
-	CREATESTRUCT cs;
-	cs.cx = 0;
-	cs.cy = 0;
-	SendMessage(WM_CREATE, 0, (LPARAM)&cs);
 }
 
 BOOL CImeWnd::OnSetCursor(HWND wnd, UINT nHitTest, UINT message)
@@ -55,9 +37,9 @@ void CImeWnd::OnMouseMove(UINT nFlags, CPoint point)
 	}
 }
 
-HWND CImeWnd::Create(LPCTSTR pszTitle,HWND hParent,BOOL bDisable)
+HWND CImeWnd::Create(LPCTSTR pszTitle,HWND hParent)
 {
-	return CSimpleWnd::Create(pszTitle,WS_POPUP|bDisable?WS_DISABLED:0,WS_EX_TOOLWINDOW,0,0,0,0, hParent,NULL);
+	return CSimpleWnd::Create(pszTitle,WS_POPUP|WS_DISABLED,WS_EX_TOOLWINDOW,0,0,0,0, hParent,NULL);
 }
 
 void CImeWnd::Show(BOOL bShow)
@@ -90,6 +72,27 @@ BOOL CImeWnd::OnReleaseSwndCapture()
 	PostMessage(WM_MOUSEMOVE,0,MAKELPARAM(pt.x,pt.y));
 	return TRUE;
 }
+
+void CImeWnd::OnDragStatus(EventArgs *e)
+{
+	EventDragMove *e2 = sobj_cast<EventDragMove>(e);
+	CRect rcWnd;
+	CSimpleWnd::GetWindowRect(&rcWnd);
+
+	CPoint pt = rcWnd.TopLeft() + e2->ptMove;
+
+	RECT rcWorkArea;
+	SystemParametersInfo(SPI_GETWORKAREA, 0, &rcWorkArea, 0);
+
+	if (pt.x - rcWorkArea.left <= SIZE_MAGNETIC) pt.x = rcWorkArea.left;
+	if (pt.y - rcWorkArea.top<SIZE_MAGNETIC) pt.y = rcWorkArea.top;
+	if (rcWorkArea.right - pt.x - rcWnd.Width()<SIZE_MAGNETIC) pt.x = rcWorkArea.right - rcWnd.Width();
+	if (rcWorkArea.bottom - pt.y - rcWnd.Height()<SIZE_MAGNETIC) pt.y = rcWorkArea.bottom - rcWnd.Height();
+	SetWindowPos(NULL, pt.x, pt.y, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+
+	//CDataCenter::getSingletonPtr()->GetData().m_ptStatus = pt;
+}
+
 
 SWND CImeWnd::OnSetSwndCapture(SWND swnd)
 {

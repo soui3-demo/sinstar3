@@ -242,6 +242,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="ui\SkinAwareWnd.cpp" />
+    <ClCompile Include="ui\SkinMgrDlg.cpp" />
+    <ClCompile Include="ui\SpCharWnd.cpp" />
     <ClCompile Include="ui\STipWnd.cpp" />
     <ClCompile Include="ui\ConfigDlg.cpp" />
     <ClCompile Include="ui\ImeWnd.cpp" />
@@ -280,6 +283,9 @@
     <ClInclude Include="controls\SLineComp.h" />
     <ClInclude Include="SouiEnv.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="ui\SkinAwareWnd.h" />
+    <ClInclude Include="ui\SkinMgrDlg.h" />
+    <ClInclude Include="ui\SpCharWnd.h" />
     <ClInclude Include="ui\STipWnd.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="ui\ConfigDlg.h" />
@@ -305,6 +311,7 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(SOUIPATH)\tools\uiresbuilder.exe" -i "%(FullPath)" -p uires -r .\res\soui_res.rc2 -h .\res\resource.h idtable
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\res\soui_res.rc2;%(Outputs)</Outputs>
+      <SubType>Designer</SubType>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -324,7 +331,9 @@
     <Xml Include="uires\xml\dlg_config.xml">
       <SubType>Designer</SubType>
     </Xml>
+    <Xml Include="uires\xml\dlg_skinmgr.xml" />
     <Xml Include="uires\xml\wnd_composition.xml" />
+    <Xml Include="uires\xml\wnd_spchar.xml" />
     <Xml Include="uires\xml\wnd_status_bar.xml">
       <SubType>Designer</SubType>
     </Xml>

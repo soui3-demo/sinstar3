@@ -7,7 +7,6 @@
 
 #pragma comment(lib,"htmlhelp.lib")
 
-#define SIZE_MAGNETIC	 5
 #define MAX_SKINS	 80
 namespace SOUI
 {
@@ -143,25 +142,6 @@ namespace SOUI
 
 	}
 
-	void CStatusWnd::OnDragStatus(EventArgs *e)
-	{
-		EventDragMove *e2 = sobj_cast<EventDragMove>(e);
-		CRect rcWnd;
-		CSimpleWnd::GetWindowRect(&rcWnd);
-
-		CPoint pt = rcWnd.TopLeft()+e2->ptMove;
-
-		RECT rcWorkArea;
-		SystemParametersInfo(SPI_GETWORKAREA,0,&rcWorkArea,0);
-
-		if(pt.x-rcWorkArea.left<=SIZE_MAGNETIC) pt.x=rcWorkArea.left;
-		if(pt.y-rcWorkArea.top<SIZE_MAGNETIC) pt.y=rcWorkArea.top;
-		if(rcWorkArea.right-pt.x-rcWnd.Width()<SIZE_MAGNETIC) pt.x=rcWorkArea.right-rcWnd.Width();
-		if(rcWorkArea.bottom-pt.y-rcWnd.Height()<SIZE_MAGNETIC) pt.y=rcWorkArea.bottom-rcWnd.Height();
-		SetWindowPos(NULL,pt.x,pt.y,0,0,SWP_NOSIZE|SWP_NOZORDER|SWP_NOACTIVATE);
-
-		CDataCenter::getSingletonPtr()->GetData().m_ptStatus = pt;
-	}
 
 	void CStatusWnd::OnBtnExtend()
 	{
@@ -353,6 +333,9 @@ namespace SOUI
 		{//select menu
 			SStringT strSkinPath = m_skinManager.SkinPathFromID(nRet);
 			m_pCmdListener->OnCommand(CMD_CHANGESKIN, (LPARAM)&strSkinPath);
+		}else if(nRet == R.id.skin_mgr)
+		{
+			m_pCmdListener->OnCommand(CMD_SKINMGR, 0);
 		}
 		else if (nRet >= R.id.comp_start && nRet < R.id.comp_start + 50)
 		{//comps
@@ -432,6 +415,10 @@ namespace SOUI
 		else if (nRet == R.id.help)
 		{
 			OnHelpClick();
+		}
+		else if (nRet = R.id.open_spchar)
+		{
+			m_pCmdListener->OnCommand(CMD_OPENSPCHAR, 0);
 		}
 
 		m_skinManager.ClearMap();

@@ -5,6 +5,8 @@
 #include "ui/StatusWnd.h"
 #include "ui/STipWnd.h"
 #include "ui/ConfigDlg.h"
+#include "ui/SkinMgrDlg.h"
+#include "ui/SpCharWnd.h"
 
 #include "InputState.h"
 #include "CmdHandler.h"
@@ -14,7 +16,7 @@
 class CSinstar3Impl:
 	public ISinstar,
 	public IInputListener,
-	public SOUI::IConfigDlgListener,
+	public IDestroyListener,
 	public SOUI::SObject,
 	public SOUI::CSimpleWnd,
 	public SOUI::SEventSet
@@ -65,11 +67,14 @@ protected://IInputListener
 protected://ICmdListener
 	virtual void OnCommand(WORD cmd, LPARAM lp);
 	virtual InputContext * GetInputContext();
-protected://IConfigDlgListener
-	virtual void OnConfigDlgDestroy();
+protected://IDestroyListener
+	virtual void OnSkinAwareWndDestroy(CSkinAwareWnd * pWnd);
 public:
 	BOOL ChangeSkin(const SStringT & strSkin);
 	void OpenConfig();
+	void OpenSkinMgr();
+	void OpenSpchar();
+	void InputSpchar(LPCTSTR pszText);
 
 	void Broadcast(UINT uCmd, LPVOID pData, DWORD nLen);
 
@@ -91,7 +96,9 @@ private:
 	CInputWnd		*m_pInputWnd;
 	CStatusWnd		*m_pStatusWnd;
 	STipWnd			*m_pTipWnd;
+	CSpCharWnd      *m_pSpcharWnd;
 	CConfigDlg		*m_pConfig;
+	CSkinMgrDlg		*m_pSkinMgrDlg;
 	CInputState		m_inputState;
 
 	void			*m_pCurImeContext;

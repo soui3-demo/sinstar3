@@ -1,16 +1,13 @@
 #pragma once
-#include "ImeWnd.h"
+#include "SkinAwareWnd.h"
 
 namespace SOUI
 {
-	interface IConfigDlgListener {
-		virtual void OnConfigDlgDestroy() = 0;
-	};
 
-	class CConfigDlg: public SHostWnd
+	class CConfigDlg: public CSkinAwareWnd
 	{
 	public:
-		CConfigDlg(IConfigDlgListener * pListener);
+		CConfigDlg(SEventSet *pEvtSet);
 		~CConfigDlg(void);		
 	protected:
 		
@@ -22,6 +19,7 @@ namespace SOUI
 		void InitPageAssociate();
 		void InitPageCandidate();
 		void InitPageMisc();
+		void InitPageAbout();
 		void InitPages();
 		void OnClickInputSwitch(int id);
 		//»Ø³µ
@@ -83,15 +81,13 @@ namespace SOUI
 
 
 	protected:
-		virtual void OnFinalMessage(HWND hWnd);
 		BOOL OnInitDialog(HWND wnd, LPARAM lParam);
 
 		BEGIN_MSG_MAP_EX(CConfigDlg)
 			MSG_WM_INITDIALOG(OnInitDialog)
-			CHAIN_MSG_MAP(SHostWnd)
+			CHAIN_MSG_MAP(CSkinAwareWnd)
 		END_MSG_MAP()
 
-		IConfigDlgListener *m_pListener;
 	};
 
 }

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <SOUI
-  name="wnd_composition"
+  name="dlg_config"
   width="500"
   height="400"
   resizable="0"
@@ -17,7 +17,7 @@
   <root colorBkgnd="#cccccc">
     <window pos="1,1,-1,-1" colorBkgnd="@color/configborder">
     <caption size="-2,-1" layout="hbox">
-      <text extend_left="6" extend_top="6" size="-1,-1" text="@string/txt_config"/>
+      <text extend_left="6" extend_top="6" size="-1,-1" text="@string/title_config"/>
       <window size="0,0" weight="1" visible="0"/>
       <imgbtn size="-1,-1" skin="_skin.sys.btn.close" name="btn_close" id="2" animate="1" tip="@string/btn_close"/>
     </caption>
@@ -143,8 +143,15 @@
           </group>
         </pageex>
         <pageex title="@string/cfg_about" tip="@string/cfg_about" layout="vbox" gravity="center">
-          <text extend_top="30" text="启程五笔输入法"/>
-          <text text="version:3.0"/>
+          <text extend_top="30" text="启程输入法"/>
+          <window size="-1,-1" layout="hbox">
+            <text text="版本:"/>
+            <text name="txt_ver"/>
+          </window>
+          <window size="-1,-1" layout="hbox">
+            <text text="编译时间:"/>
+            <text name="txt_build_time"/>
+          </window>
           <text text="警告：计算机软件受著作权和国际公约保护"/>
           <text text="未经授权擅自用于商业用途"/>
           <text text="将会受到所在地区的最大可能的民事或刑事诉讼"/>
