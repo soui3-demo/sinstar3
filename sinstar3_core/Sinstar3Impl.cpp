@@ -470,6 +470,10 @@ BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 			SStylePoolMgr::getSingleton().PopStylePool(pUiDefInfo->GetStylePool());
 
 			IResProvider *pCurRes = SApplication::getSingleton().GetTailResProvider();
+			IUiDefInfo * pUiDef = SUiDef::getSingleton().CreateUiDefInfo(pCurRes, _T("uidef:xml_init"));
+			SUiDef::getSingleton().SetUiDef(pUiDef);
+			pUiDef->Release();
+
 			CDataCenter::getSingleton().GetData().m_ptSkinOffset = CSkinMananger::ExtractSkinOffset(pCurRes);
 		}
 
@@ -538,6 +542,12 @@ void CSinstar3Impl::OpenSpchar()
 
 void CSinstar3Impl::InputSpchar(LPCTSTR pszText)
 {
+	if (m_inputState.IsTypeing())
+	{
+		m_inputState.ClearContext(CPC_ALL);
+		m_inputState.InputEnd();
+		m_inputState.InputHide();
+	}
 	LPVOID pImeCtx = m_pTxtSvr->GetImeContext();
 	if (!pImeCtx)
 	{
