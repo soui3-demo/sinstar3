@@ -169,6 +169,7 @@ void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 	else
 	{
 		m_pInputWnd->Show(FALSE,FALSE);
+		if (m_pSpcharWnd) m_pSpcharWnd->DestroyWindow();
 	}
 }
 

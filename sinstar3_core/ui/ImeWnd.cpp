@@ -90,7 +90,7 @@ void CImeWnd::OnDragStatus(EventArgs *e)
 	if (rcWorkArea.bottom - pt.y - rcWnd.Height()<SIZE_MAGNETIC) pt.y = rcWorkArea.bottom - rcWnd.Height();
 	SetWindowPos(NULL, pt.x, pt.y, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
 
-	//CDataCenter::getSingletonPtr()->GetData().m_ptStatus = pt;
+	OnReposition(pt);
 }
 
 

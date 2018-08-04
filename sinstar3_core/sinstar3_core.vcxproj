@@ -325,6 +325,7 @@
     <Xml Include="uires\values\color.xml">
       <SubType>Designer</SubType>
     </Xml>
+    <Xml Include="uires\values\skin.xml" />
     <Xml Include="uires\values\string.xml">
       <SubType>Designer</SubType>
     </Xml>

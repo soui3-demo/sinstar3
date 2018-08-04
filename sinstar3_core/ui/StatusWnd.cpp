@@ -215,6 +215,11 @@ namespace SOUI
 		}
 	}
 
+	void CStatusWnd::OnReposition(CPoint pt)
+	{
+		CDataCenter::getSingletonPtr()->GetData().m_ptStatus = pt;
+	}
+
 	void CStatusWnd::OnCompInfo(EventArgs *e)
 	{
 		if(!IsWindow())

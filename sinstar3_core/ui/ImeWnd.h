@@ -20,6 +20,7 @@ protected:
 	BOOL m_canReleaseCapture;
 
 protected:
+	virtual void OnReposition(CPoint pt) {}
 	void OnDragStatus(EventArgs *e);
 	EVENT_MAP_BEGIN()
 		EVENT_HANDLER(EventDragMove::EventID, OnDragStatus)
