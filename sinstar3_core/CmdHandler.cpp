@@ -3,6 +3,7 @@
 #include "Sinstar3Impl.h"
 #include "ui/STipWnd.h"
 #include "Utils.h"
+#include <shellapi.h>
 
 using namespace SOUI;
 #define MAX_UDICTKEY	40	//最大关键字长度
@@ -241,11 +242,6 @@ void CCmdHandler::OnOpenConfig(LPARAM lp)
 	m_pSinstar3->OpenConfig();
 }
 
-void CCmdHandler::OnSkinMgr(LPARAM lp)
-{
-	m_pSinstar3->OpenSkinMgr();
-}
-
 void CCmdHandler::OnOpenSpchar(LPARAM lp)
 {
 	m_pSinstar3->OpenSpchar();
@@ -255,4 +251,14 @@ void CCmdHandler::OnInputSpchar(LPARAM lp)
 {
 	LPCTSTR pszInput = (LPCTSTR)lp;
 	m_pSinstar3->InputSpchar(pszInput);
+}
+
+void CCmdHandler::OnOpenSkinDir(LPARAM lp)
+{
+	SStringT strPath = theModule->GetDataPath() + _T("\\skins\\");
+	WIN32_FIND_DATA wfd;
+	HANDLE h = FindFirstFile(strPath + _T("*.sskn"), &wfd);
+	FindClose(h);
+	strPath += wfd.cFileName;
+	ShellExecute(NULL, _T("open"), _T("explorer"), _T("/select,") + strPath, NULL, SW_SHOWDEFAULT);
 }

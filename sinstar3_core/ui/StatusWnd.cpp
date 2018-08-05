@@ -340,7 +340,7 @@ namespace SOUI
 			m_pCmdListener->OnCommand(CMD_CHANGESKIN, (LPARAM)&strSkinPath);
 		}else if(nRet == R.id.skin_mgr)
 		{
-			m_pCmdListener->OnCommand(CMD_SKINMGR, 0);
+			m_pCmdListener->OnCommand(CMD_OPENSKINDIR, 0);
 		}
 		else if (nRet >= R.id.comp_start && nRet < R.id.comp_start + 50)
 		{//comps
