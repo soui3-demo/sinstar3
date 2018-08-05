@@ -421,7 +421,7 @@ namespace SOUI
 		{
 			OnHelpClick();
 		}
-		else if (nRet = R.id.open_spchar)
+		else if (nRet == R.id.open_spchar)
 		{
 			m_pCmdListener->OnCommand(CMD_OPENSPCHAR, 0);
 		}
