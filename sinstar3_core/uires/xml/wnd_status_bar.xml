@@ -36,7 +36,7 @@
           <imgbtn pos="0,0" name="btn_status_shrink" skin="btn_shrink"/>
         </window>
       </window>
-      <window size="-2,0" weight="1" name="status_extend" display="0"  padding="@dim/status_line2_padding_left,@dim/status_line2_padding_top,@dim/status_line2_padding_right,@dim/status_line2_padding_bottom" layout="hbox" gravity="center">
+      <window size="-2,0" weight="1" name="status_extend" display="0" padding="@dim/status_line2_padding_left,@dim/status_line2_padding_top,@dim/status_line2_padding_right,@dim/status_line2_padding_bottom" layout="hbox" gravity="center">
         <window size="0,0" weight="1" visible="0"/>
         <toggle2 size="-1,-1" skin1="charmode_half" skin2="charmode_full" name="btn_charmode" tip="change mode"/>
         <window size="0,0" weight="2" visible="0"/>
