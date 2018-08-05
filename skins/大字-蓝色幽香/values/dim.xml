@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+  <dim>
+    <input_margin_left value="20"/>
+    <input_margin_top value="12"/>
+    <input_margin_right value="120"/>
+    <input_margin_bottom value="30"/>
+
+    <input_padding_left value="20"/>
+    <input_padding_top value="12"/>
+    <input_padding_right value="120"/>
+    <input_padding_bottom value="30"/>
+
+    <input_min_width value="100"/>
+
+    <interval_comp_prefix value="5"/>
+    <interval_cand_prefix value="3"/>
+    <interval_comp value="10"/>
+    <interval_cand value="5"/>
+
+    <status_logo_size value="16"/>
+    <status_line1_padding_left value="8"/>
+    <status_line1_padding_top value="0"/>
+    <status_line1_padding_right value="5"/>
+    <status_line1_padding_bottom value="0"/>
+
+    <status_line2_padding_left value="6"/>
+    <status_line2_padding_top value="0"/>
+    <status_line2_padding_right value="6"/>
+    <status_line2_padding_bottom value="0"/>
+  </dim>

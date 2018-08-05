@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
   <string>
     <title_config value="系统设置"/>
-    <title_skinmgr value="皮肤管理"/>
     <btn_close value="关闭"/>
     <cfg_habit value="使用习惯"/>
     <cfg_hotkey value="快捷键"/>
