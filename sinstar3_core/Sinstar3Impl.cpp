@@ -31,7 +31,6 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr)
 ,m_pTipWnd(NULL)
 , m_pSpcharWnd(NULL)
 ,m_pConfig(NULL)
-, m_pSkinMgrDlg(NULL)
 ,m_pCurImeContext(NULL)
 , m_cmdHandler(this)
 {
@@ -77,12 +76,6 @@ CSinstar3Impl::~CSinstar3Impl(void)
 		m_pConfig->DestroyWindow();
 		m_pConfig = NULL;
 	}
-	if (m_pSkinMgrDlg)
-	{
-		m_pSkinMgrDlg->DestroyWindow();
-		m_pSkinMgrDlg = NULL;
-	}
-
 	if (m_pSpcharWnd)
 	{
 		m_pSpcharWnd->DestroyWindow();
@@ -169,6 +162,7 @@ void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 	else
 	{
 		m_pInputWnd->Show(FALSE,FALSE);
+		if (m_pSpcharWnd) m_pSpcharWnd->DestroyWindow();
 	}
 }
 
@@ -411,11 +405,6 @@ void CSinstar3Impl::OnSkinAwareWndDestroy(CSkinAwareWnd * pWnd)
 		delete pWnd;
 		m_pConfig = NULL;
 	}
-	else if (pWnd->GetWndType() == IME_SKINMGR)
-	{
-		delete pWnd;
-		m_pSkinMgrDlg = NULL;
-	}
 	else if (pWnd->GetWndType() == IME_SPCHAR)
 	{
 		delete pWnd;
@@ -470,6 +459,10 @@ BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 			SStylePoolMgr::getSingleton().PopStylePool(pUiDefInfo->GetStylePool());
 
 			IResProvider *pCurRes = SApplication::getSingleton().GetTailResProvider();
+			IUiDefInfo * pUiDef = SUiDef::getSingleton().CreateUiDefInfo(pCurRes, _T("uidef:xml_init"));
+			SUiDef::getSingleton().SetUiDef(pUiDef);
+			pUiDef->Release();
+
 			CDataCenter::getSingleton().GetData().m_ptSkinOffset = CSkinMananger::ExtractSkinOffset(pCurRes);
 		}
 
@@ -492,31 +485,9 @@ void CSinstar3Impl::OpenConfig()
 		m_pConfig = new CConfigDlg(this);
 		m_pConfig->SetDestroyListener(this, IME_CONFIG);
 		m_pConfig->Create(_T("Config"),NULL);
-		m_pConfig->SendMessage(WM_INITDIALOG);
 		m_pConfig->CenterWindow(GetActiveWindow());
-		m_pConfig->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
 	}
-	else
-	{
-		m_pConfig->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
-	}
-}
-
-void CSinstar3Impl::OpenSkinMgr()
-{
-	if (m_pSkinMgrDlg == NULL)
-	{
-		m_pSkinMgrDlg = new CSkinMgrDlg(this);
-		m_pSkinMgrDlg->SetDestroyListener(this, IME_SKINMGR);
-		m_pSkinMgrDlg->Create(_T("Config"), NULL);
-		m_pSkinMgrDlg->SendMessage(WM_INITDIALOG);
-		m_pSkinMgrDlg->CenterWindow(GetActiveWindow());
-		m_pSkinMgrDlg->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
-	}
-	else
-	{
-		m_pSkinMgrDlg->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
-	}
+	m_pConfig->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
 }
 
 void CSinstar3Impl::OpenSpchar()
@@ -526,18 +497,18 @@ void CSinstar3Impl::OpenSpchar()
 		m_pSpcharWnd = new CSpCharWnd(this,this);
 		m_pSpcharWnd->SetDestroyListener(this, IME_SPCHAR);
 		m_pSpcharWnd->Create(_T("SpcharWnd"), NULL);
-		m_pSpcharWnd->SendMessage(WM_INITDIALOG);
-		m_pSpcharWnd->CenterWindow(GetActiveWindow());
-		m_pSpcharWnd->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW|SWP_NOACTIVATE);
 	}
-	else
-	{
-		m_pSpcharWnd->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW | SWP_NOACTIVATE);
-	}
+	m_pSpcharWnd->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW | SWP_NOACTIVATE);
 }
 
 void CSinstar3Impl::InputSpchar(LPCTSTR pszText)
 {
+	if (m_inputState.IsTypeing())
+	{
+		m_inputState.ClearContext(CPC_ALL);
+		m_inputState.InputEnd();
+		m_inputState.InputHide();
+	}
 	LPVOID pImeCtx = m_pTxtSvr->GetImeContext();
 	if (!pImeCtx)
 	{

@@ -4,7 +4,6 @@
   </UIDEF>
   <LAYOUT>
     <file name="dlg_config" path="xml\dlg_config.xml"/>
-    <file name="dlg_skinmgr" path="xml\dlg_skinmgr.xml"/>
     <file name="wnd_composition" path="xml\wnd_composition.xml"/>
     <file name="wnd_status_bar" path="xml\wnd_status_bar.xml"/>
     <file name="wnd_tip" path="xml\wnd_tip.xml"/>
@@ -15,6 +14,7 @@
     <file name="string" path="values\string.xml"/>
     <file name="color" path="values\color.xml"/>
     <file name="skin" path="values\skin.xml"/>
+    <file name="dim" path="values\dim.xml"/>
   </values>
 
   <IMG>

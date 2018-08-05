@@ -7,6 +7,7 @@
   <string src="values:string" />  
   <color src="values:color"/>
   <skin src="values:skin"/>
+  <dim src="values:dim"/>
   
   <style>
     <class name="normalbtn" font="" colorText="#385e8b" colorTextDisable="#91a7c0" textMode="0x25" cursor="hand" margin-x="0"/>

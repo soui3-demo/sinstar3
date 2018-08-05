@@ -84,6 +84,11 @@ namespace SOUI
 		else
 			m_ptInput = CPoint(-1, -1);
 
+		if (ERROR_SUCCESS == m_reg.QueryDWORDValue(_T("spchar_pos"), dwPos))
+			m_ptSpchar = CPoint(GET_X_LPARAM(dwPos), GET_Y_LPARAM(dwPos));
+		else
+			m_ptSpchar = CPoint(-1, -1);
+
 		CRegKey keySvr;
 		if(ERROR_SUCCESS == keySvr.Open(HKEY_LOCAL_MACHINE,L"Software\\Setoutsoft\\sinstar3",KEY_READ|KEY_WOW64_64KEY))
 		{
@@ -108,6 +113,7 @@ namespace SOUI
 	{
 		m_reg.SetDWORDValue(_T("status_pos"),MAKELPARAM(m_ptStatus.x,m_ptStatus.y));
 		m_reg.SetDWORDValue(_T("input_pos"), MAKELPARAM(m_ptInput.x, m_ptInput.y));
+		m_reg.SetDWORDValue(_T("spchar_pos"), MAKELPARAM(m_ptSpchar.x, m_ptSpchar.y));
 		m_reg.SetStringValue(_T("skin"),m_strSkin);
 		m_reg.Close();
 	}

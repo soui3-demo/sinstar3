@@ -24,6 +24,8 @@ namespace SOUI
 
 		void UpdateCompInfo();
 		void UpdateToggleStatus(DWORD flags);
+	protected:
+		virtual void OnReposition(CPoint pt);
 
 	protected:
 		int OnCreate(LPCREATESTRUCT lpCreateStruct);

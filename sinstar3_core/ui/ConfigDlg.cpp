@@ -153,14 +153,6 @@ namespace SOUI
 		InitPageAbout();
 	}
 
-	BOOL CConfigDlg::OnInitDialog(HWND wnd, LPARAM lParam)
-	{
-		ImmAssociateContext(m_hWnd, (HIMC)NULL);
-
-		InitPages();
-		return FALSE;
-	}
-
 #define GetGroupCheck(id) int CheckId=0;\
 SWindow *pCtrl = FindChildByID(id);\
 	SASSERT(pCtrl);\
@@ -359,5 +351,15 @@ SWindow *pCtrl = FindChildByID(id);\
 	void CConfigDlg::OnClose()
 	{
 		DestroyWindow();
+	}
+
+	int CConfigDlg::OnCreate(LPCREATESTRUCT lpCreateStruct)
+	{
+		int nRet = __super::OnCreate(lpCreateStruct);
+		if (nRet != 0) return nRet;
+
+		ImmAssociateContext(m_hWnd, (HIMC)NULL);
+		InitPages();
+		return 0;
 	}
 }

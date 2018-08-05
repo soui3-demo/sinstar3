@@ -10,7 +10,7 @@
   <menuItem text="特殊符号" name="open_spchar" id="104"/>
   <sep/>
   <menuItem text="皮    肤" name="menu_skin" id="200" contextHelpId="2">
-    <menuItem text="皮肤管理" name="skin_mgr" id="201"/>
+    <menuItem text="皮肤目录" name="skin_mgr" id="201"/>
     <menuItem text="网上皮肤" name="skin_cloud" id="202"/>
     <sep/>
     <menuItem text="内置皮肤" name="skin_def" id="220"/>
