@@ -12,6 +12,11 @@ namespace SOUI {
 	{
 	}
 
+	void CSpCharWnd::OnReposition(CPoint pt)
+	{
+		CDataCenter::getSingletonPtr()->GetData().m_ptSpchar = pt;
+	}
+
 	void CSpCharWnd::OnClose()
 	{
 		DestroyWindow();
@@ -78,6 +83,16 @@ namespace SOUI {
 			EventLBSelChanged evt(NULL);
 			evt.nNewSel = 0;
 			OnCatalogChanged(&evt);
+		}
+
+		if (CDataCenter::getSingletonPtr()->GetData().m_ptSpchar.x < 0)
+		{
+			CenterWindow(GetActiveWindow());
+		}
+		else
+		{
+			CPoint &pt = CDataCenter::getSingletonPtr()->GetData().m_ptSpchar;
+			SetWindowPos(NULL, pt.x, pt.y, 0, 0, SWP_NOZORDER | SWP_NOSIZE | SWP_NOACTIVATE);
 		}
 		return 0;
 	}

@@ -81,10 +81,9 @@ namespace SOUI
 
 
 	protected:
-		BOOL OnInitDialog(HWND wnd, LPARAM lParam);
-
+		int OnCreate(LPCREATESTRUCT lpCreateStruct);
 		BEGIN_MSG_MAP_EX(CConfigDlg)
-			MSG_WM_INITDIALOG(OnInitDialog)
+			MSG_WM_CREATE(OnCreate)
 			CHAIN_MSG_MAP(CSkinAwareWnd)
 		END_MSG_MAP()
 

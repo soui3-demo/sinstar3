@@ -11,6 +11,8 @@ namespace SOUI
 		~CSpCharWnd();
 
 	protected:
+		virtual void OnReposition(CPoint pt);
+	protected:
 		void OnClose();
 		void OnInsert(int nID);
 		void OnCatalogChanged(EventArgs *e);
