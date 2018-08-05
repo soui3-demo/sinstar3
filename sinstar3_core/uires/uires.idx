@@ -14,6 +14,7 @@
     <file name="string" path="values\string.xml"/>
     <file name="color" path="values\color.xml"/>
     <file name="skin" path="values\skin.xml"/>
+    <file name="dim" path="values\dim.xml"/>
   </values>
 
   <IMG>
