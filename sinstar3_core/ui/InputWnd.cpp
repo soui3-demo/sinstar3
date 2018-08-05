@@ -6,11 +6,12 @@
 
 namespace SOUI
 {
-	CInputWnd::CInputWnd(SEventSet *pEvtSets, InputContext *pCtx)
+	CInputWnd::CInputWnd(SEventSet *pEvtSets, InputContext *pCtx, IInputWndListener *pListener)
 		:CImeWnd(pEvtSets,UIRES.LAYOUT.wnd_composition)
 		,m_bLocated(FALSE)
 		,m_nCaretHeight(30)
 		,m_pInputContext(pCtx)
+		,m_pInputWndListener(pListener)
 		,m_cPageSize(0)
 		,m_bShow(FALSE)
 		, m_bDraging(FALSE)
@@ -485,8 +486,10 @@ namespace SOUI
 	{
 		if(idEvent == TIMERID_DELAY)
 		{
-			if (m_pInputContext->sbState == SBST_ASSOCIATE)
-				m_pInputContext->sbState = ::SBST_NORMAL;
+			if (m_pInputWndListener)
+			{
+				m_pInputWndListener->OnInputDelayHide();
+			}
 			Show(FALSE);
 			KillTimer(idEvent);
 		}else

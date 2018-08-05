@@ -1,16 +1,21 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <UIDEF>
-	<desc author="砚边独步" name="大字-蓝色幽香" version="1.0" />
-	<font face="微软雅黑" size="15" />
-	<string src="values:string" />
-	<color src="values:color" />
-	<style>
-		<class name="normalbtn" font="" colorText="#385e8b" colorTextDisable="#91a7c0" textMode="0x25" cursor="hand" margin-x="0" />
-		<class name="cls_btn_weblink" cursor="hand" colorText="#1e78d5" colorTextHover="#1e78d5" font="italic:1" fontHover="underline:1,italic:1" />
-	</style>
-	<objattr>
-		<edit margin="2,2,2,2" ncSkin="_skin.sys.border" />
-		<group padding="10,10,10,15" />
-		<candidate colorIndex="@color/cand_index" colorCand="@color/cand_text" colorComp="@color/cand_comp" colorWild="@color/cand_wild" />
-	</objattr>
+  <desc author="砚边独步" name="大字-蓝色幽香" version="1.0" />
+  <font face="微软雅黑" size="15"/>
+
+  <string src="values:string" />  
+  <color src="values:color"/>
+  <skin src="values:skin"/>
+  <dim src="values:dim"/>
+  
+  <style>
+    <class name="normalbtn" font="" colorText="#385e8b" colorTextDisable="#91a7c0" textMode="0x25" cursor="hand" margin-x="0"/>
+    <class name="cls_btn_weblink" cursor="hand" colorText="#1e78d5" colorTextHover="#1e78d5" font="italic:1" fontHover="underline:1,italic:1" />
+  </style>
+
+  <objattr>
+    <edit margin="2,2,2,2" ncSkin="_skin.sys.border"/>
+    <group  padding="10,10,10,15"/>
+    <candidate colorIndex="@color/cand_index" colorCand="@color/cand_text" colorComp="@color/cand_comp" colorWild="@color/cand_wild"/>    
+  </objattr>
 </UIDEF>

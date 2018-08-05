@@ -10,9 +10,10 @@
   <values>
     <file name="string" path="values\string.xml"/>
     <file name="color" path="values\color.xml"/>
+    <file name="dim" path="values\dim.xml"/>
   </values>
 
-  <IMG>    
+  <IMG>
     <file name="logo_32" path="image\logo_32.png"/>
     <file name="png_charmode" path="image\charmode.png"/>
     <file name="png_charmode_full" path="image\charmode_full.png"/>

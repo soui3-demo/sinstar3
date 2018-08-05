@@ -41,7 +41,7 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr)
 
 	m_inputState.GetInputContext()->settings.Load(theModule->GetCfgIni());
 
- 	m_pInputWnd = new CInputWnd(this,m_inputState.GetInputContext());
+ 	m_pInputWnd = new CInputWnd(this,m_inputState.GetInputContext(),this);
 	m_pStatusWnd = new CStatusWnd(this,this);
 	m_pTipWnd = new STipWnd(this);
 	m_pStatusWnd->Create(_T("Sinstar3_Status"));
@@ -410,6 +410,11 @@ void CSinstar3Impl::OnSkinAwareWndDestroy(CSkinAwareWnd * pWnd)
 		delete pWnd;
 		m_pSpcharWnd = NULL;
 	}
+}
+
+void CSinstar3Impl::OnInputDelayHide()
+{
+	m_inputState.ClearContext(CPC_ALL);
 }
 
 BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)

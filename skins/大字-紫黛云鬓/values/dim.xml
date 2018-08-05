@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
   <dim>
-    <input_height="126"/>
+    <input_height value="102"/>
     <input_min_width value="100"/>
 
-    <input_margin_left value="20"/>
-    <input_margin_top value="12"/>
-    <input_margin_right value="120"/>
-    <input_margin_bottom value="30"/>
+    <input_margin_left value="5"/>
+    <input_margin_top value="32"/>
+    <input_margin_right value="75"/>
+    <input_margin_bottom value="2"/>
 
-    <input_padding_left value="20"/>
-    <input_padding_top value="12"/>
-    <input_padding_right value="120"/>
-    <input_padding_bottom value="30"/>
+    <input_padding_left value="5"/>
+    <input_padding_top value="32"/>
+    <input_padding_right value="75"/>
+    <input_padding_bottom value="2"/>
 
     <interval_comp_prefix value="5"/>
     <interval_cand_prefix value="3"/>
