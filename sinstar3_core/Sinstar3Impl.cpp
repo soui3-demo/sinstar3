@@ -153,17 +153,31 @@ void CSinstar3Impl::OnCompositionTerminated()
 void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 {
 	SLOG_INFO("GetThreadID="<<GetCurrentThreadId()<<" focus="<<bFocus);
-	if(bFocus) m_pTxtSvr->SetConversionMode(FullNative);
-	m_pStatusWnd->Show(bFocus && !m_inputState.GetInputContext()->settings.bHideStatus);
-	
-	if (bFocus)
+
+	BOOL bOpen = FALSE;
+	LPVOID pImeCtx = m_pTxtSvr->GetImeContext();
+	if (pImeCtx)
 	{
-		if (m_inputState.IsTypeing()) m_pInputWnd->Show(TRUE);
+		bOpen = m_pTxtSvr->GetOpenStatus(pImeCtx);
+		m_pTxtSvr->ReleaseImeContext(pImeCtx);
 	}
-	else
+
+	if (bOpen)
 	{
-		m_pInputWnd->Show(FALSE,FALSE);
-		if (m_pSpcharWnd) m_pSpcharWnd->DestroyWindow();
+		if (bFocus)
+			m_pTxtSvr->SetConversionMode(FullNative);
+
+		m_pStatusWnd->Show(bFocus && !m_inputState.GetInputContext()->settings.bHideStatus);
+
+		if (bFocus)
+		{
+			if (m_inputState.IsTypeing()) m_pInputWnd->Show(TRUE);
+		}
+		else
+		{
+			m_pInputWnd->Show(FALSE, FALSE);
+			if (m_pSpcharWnd) m_pSpcharWnd->DestroyWindow();
+		}
 	}
 }
 
