@@ -3,7 +3,7 @@
 #define KSettingINI L"config.ini"
 
 enum HotKeyIndex{
-	HKI_CharMode = 0,	// 标点模式切换,固定使用shift+space
+	HKI_CharMode = 0,	// 标点模式切换
 	HKI_Query,			// 查询热键
 	HKI_Mode,			// 五笔拼音模式切换
 	HKI_EnSwitch,		// 英文输入开关
