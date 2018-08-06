@@ -2445,15 +2445,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 							bRet=FALSE;
 							ClearContext(CPC_ALL);
 							InputHide(FALSE);
-							if(uKey==VK_ESCAPE)
-							{
-								// 								DWORD dwStyle=GetWindowLongPtr(g_hWndMsg,GWL_STYLE);
-								// 								if(dwStyle&WS_VISIBLE)
-								// 								{
-								// 									ShowWindow(g_hWndMsg,SW_HIDE);
-								// 									bRet=TRUE;
-								// 								}
-							}else if(uKey==VK_BACK) 
+							if(uKey==VK_BACK) 
 								ISComm_KeyIn("\b",1,0,m_pListener->GetHwnd());
 							else
 								ISComm_KeyIn(".",1,m_ctx.settings.bRecord?MKI_RECORD:0,m_pListener->GetHwnd());
