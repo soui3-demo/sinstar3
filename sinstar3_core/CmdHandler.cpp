@@ -19,7 +19,7 @@ CCmdHandler::~CCmdHandler()
 {
 }
 
-void CCmdHandler::OnMakeWord(LPARAM lp)
+void CCmdHandler::OnMakePhrase(LPARAM lp)
 {
 	WCHAR szBuf[MAX_INPUT];
 	int nRet =CUtils::GetClipboardText(m_pSinstar3->m_hWnd, szBuf, MAX_INPUT);

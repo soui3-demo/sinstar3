@@ -2,6 +2,18 @@
 
 #define KSettingINI L"config.ini"
 
+enum HotKeyIndex{
+	HKI_CharMode = 0,	// 标点模式切换,固定使用shift+space
+	HKI_Query,			// 查询热键
+	HKI_Mode,			// 五笔拼音模式切换
+	HKI_EnSwitch,		// 英文输入开关
+	HKI_MakePhrase,		// 造词热键
+	HKI_ShowRoot,		// 字根表显示热键
+	HKI_HideStatus,		// 隐藏状态栏
+
+	HKI_COUNT,
+};
+
 class CSettingsGlobal
 {
 public:
@@ -40,12 +52,7 @@ public:
 	BYTE	byTurnPageUpVK;		// 重码上翻键
 	BYTE	byTurnPageDownVK;	// 重码下翻键
 
-	BYTE	byHotKeyQuery;		// 查询热键
-	BYTE	byHotKeyMode;		// 五笔拼音模式切换
-	BYTE	byHotKeyEn;			// 英文输入开关
-	BYTE	byHotKeyMakeWord;	// 造词热键
-	BYTE	byHotKeyShowRoot;	// 字根表显示热键
-	BYTE	byHotKeyHideStatus;	// 隐藏状态栏
+	DWORD   dwHotkeys[HKI_COUNT];
 
 	BOOL	bPYPhraseFirst;		// 拼音词组优先
 	BOOL	bEnterClear;		// 回车清空编码

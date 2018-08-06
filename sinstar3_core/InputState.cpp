@@ -166,6 +166,29 @@ CInputState::~CInputState(void)
 	free(m_pbyMsgBuf);
 }
 
+int CInputState::TestHotKey(UINT uVk, const BYTE * lpbKeyState) const
+{
+	if (uVk == VK_CONTROL || uVk == VK_SHIFT || uVk == VK_MENU)
+		return -1;
+	for (int i = 0; i < HKI_COUNT; i++)
+	{
+		DWORD dwHotkey = g_SettingsG.dwHotkeys[i];
+		WORD wModifier = HIWORD(dwHotkey);
+		WORD wVk = LOWORD(dwHotkey);
+		if (wVk == uVk)
+		{
+			if (((wModifier & MOD_ALT)!=0) ^ ((lpbKeyState[VK_MENU] & 0x80)!=0))
+				continue;
+			if (((wModifier & MOD_CONTROL) != 0) ^ ((lpbKeyState[VK_CONTROL] & 0x80) != 0))
+				continue;
+			if (((wModifier & MOD_SHIFT) != 0) ^ ((lpbKeyState[VK_SHIFT] & 0x80) != 0))
+				continue;
+			return i;
+		}
+	}
+	return -1;
+}
+
 BOOL CInputState::Tips_Rand(BOOL bSpell, char *pszBuf)
 {
 	if (m_bUpdateTips)
@@ -406,41 +429,14 @@ void CInputState::StatusbarUpdate()
 BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeyState)
 {
 	SLOG_INFO("uVKey:"<<uVKey<<" uScanCode:"<<uScanCode);
-	BOOL bHandle=FALSE;
 	//首先使用VK处理快捷键及重码翻页键
-	if(!bHandle && lpbKeyState[VK_CONTROL] & 0x80 )
-	{//处理快捷键
-		bHandle = TRUE;
-		if (uVKey == g_SettingsG.byHotKeyMakeWord)
-		{
-			m_pListener->OnCommand(CMD_MAKEWORD, 0);
-		}
-		else if (uVKey == g_SettingsG.byHotKeyQuery)
-		{
-			m_pListener->OnCommand(CMD_QUERYINFO, 0);
-		}
-		else if (uVKey == g_SettingsG.byHotKeyMode)
-		{
-			m_pListener->OnCommand(CMD_INPUTMODE, 0);
-		}
-		else if (uVKey == g_SettingsG.byHotKeyShowRoot)
-		{
-			m_pListener->OnCommand(CMD_KEYMAP, 0);
-		}
-		else if (uVKey == g_SettingsG.byHotKeyHideStatus)
-		{
-			m_pListener->OnCommand(CMD_HIDESTATUSBAR, 0);
-		}
-		else if (uVKey == g_SettingsG.byHotKeyEn)
-		{
-			m_pListener->OnCommand(CMD_ENGLISHMODE, 0);
-		}
-		else
-		{
-			bHandle = FALSE;
-		}
+	int iHotKey = TestHotKey(uVKey, lpbKeyState);
+	if (iHotKey != -1)
+	{
+		return TRUE;
 	}
 
+	BOOL bHandle=FALSE;
 	InputContext * lpCntxtPriv = &m_ctx;
 	if(!bHandle && lpCntxtPriv && lpCntxtPriv->sCandCount && lpCntxtPriv->sbState!=SBST_SENTENCE)
 	{//处理重码
@@ -2178,6 +2174,41 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 	if ((lKeyData & 0x80000000) && (uKey != VK_SHIFT && uKey !=VK_CONTROL))
 		return FALSE;
 
+	//检查快捷键
+	int iHotKey = TestHotKey(uKey, lpbKeyState);
+	if (iHotKey != -1)
+	{
+		if ( m_pListener)
+		{
+			switch (iHotKey)
+			{
+			case HKI_CharMode:
+				m_pListener->OnCommand(CMD_CHARMODE, 0);
+				break;
+			case HKI_MakePhrase:
+				m_pListener->OnCommand(CMD_MAKEPHRASE, 0);
+				break;
+			case HKI_EnSwitch:
+				m_pListener->OnCommand(CMD_ENGLISHMODE, 0);
+				break;
+			case HKI_Mode:
+				m_pListener->OnCommand(CMD_INPUTMODE, 0);
+				break;
+			case HKI_ShowRoot:
+				m_pListener->OnCommand(CMD_KEYMAP, 0);
+				break;
+			case HKI_HideStatus:
+				m_pListener->OnCommand(CMD_HIDESTATUSBAR, 0);
+				break;
+			case HKI_Query:
+				m_pListener->OnCommand(CMD_QUERYINFO, 0);
+				break;
+			}
+		}
+		bPressOther = TRUE;
+		return TRUE;
+	}
+
 	if(uKey==VK_CAPITAL)
 	{
 		if(lpbKeyState[VK_CAPITAL]&0x01)
@@ -2351,26 +2382,8 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 		{
 			if(lpbKeyState[VK_CONTROL]&0x80 && lpbKeyState[VK_SHIFT]&0x80)
 			{//Ctrl + Shift
-				bRet=(uKey==g_SettingsG.byHotKeyQuery || (uKey>='0' && uKey<='9'));
+				bRet=(uKey>='0' && uKey<='9');
 				return bRet;
-			}else if(lpbKeyState[VK_CONTROL]&0x80) 
-			{//Ctrl组合键
-				if(uKey==g_SettingsG.byHotKeyMode
-					||uKey==g_SettingsG.byHotKeyEn
-					||uKey==g_SettingsG.byHotKeyQuery
-					||uKey==g_SettingsG.byHotKeyMakeWord
-					||uKey==g_SettingsG.byHotKeyShowRoot
-					||uKey==g_SettingsG.byHotKeyHideStatus
-					||(uKey>='0' && uKey<='9') 
-					||(uKey>=VK_NUMPAD0 && uKey<=VK_NUMPAD9) 
-					) //热键及调频数字键
-					return TRUE;
-				else
-					return FALSE;
-			}else if(lpbKeyState[VK_SHIFT]&0x80 && uKey==VK_SPACE)
-			{//todo: Shift + VK_SPACE:中英文标点切换
-				m_pListener->OnCommand(CMD_CHARMODE, 0);
-				return TRUE;
 			}else
 			{
 				BOOL bCoding=KeyIn_IsCoding(&m_ctx);
@@ -2414,16 +2427,6 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 							|| uKey==g_SettingsG.by3CandVK 
 							|| uKey==g_SettingsG.byTurnPageDownVK 
 							|| uKey==g_SettingsG.byTurnPageUpVK
-							);
-					}
-					if(!bRet && bPressCtrl)
-					{//检查是否是用户定义的各种快捷键
-						bRet=( uKey==g_SettingsG.byHotKeyEn
-							|| uKey==g_SettingsG.byHotKeyMakeWord
-							|| uKey==g_SettingsG.byHotKeyMode
-							|| uKey==g_SettingsG.byHotKeyQuery
-							|| uKey==g_SettingsG.byHotKeyShowRoot
-							|| uKey==g_SettingsG.byHotKeyHideStatus
 							);
 					}
 					if(!bRet && m_ctx.bySyCaret!=0xFF)

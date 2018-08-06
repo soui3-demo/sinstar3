@@ -56,6 +56,7 @@ protected:
 	void InputHide(BOOL bDelay = FALSE);
 	void StatusbarUpdate();
 private:
+	int TestHotKey(UINT uVk, const BYTE * lpbKeyState) const;
 	BOOL Tips_Rand(BOOL bSpell, char * pszBuf);
 
 	BYTE GetKeyinMask(BOOL bAssociate,BYTE byMask);

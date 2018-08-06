@@ -31,12 +31,12 @@ namespace SOUI
 				pCtrl->SetWindowText(text);
 	}
 
-	void CConfigDlg::FindAndSetHotKey(int id,WORD vk_key, WORD modif)
+	void CConfigDlg::FindAndSetHotKey(int id,DWORD accel)
 	{
 		SHotKeyCtrl *pCtrl = FindChildByID2<SHotKeyCtrl>(id);
 			SASSERT(pCtrl);
 			if (pCtrl)
-				pCtrl->SetHotKey(vk_key, modif);
+				pCtrl->SetHotKey(LOWORD(accel), HIWORD(accel));
 	}
 
 	void CConfigDlg::InitPageHabit()
@@ -74,12 +74,12 @@ namespace SOUI
 
 	void CConfigDlg::InitPageHotKey()
 	{
-		FindAndSetHotKey(R.id.hk_switch_py, g_SettingsG.byHotKeyMode, MOD_CONTROL);
-		FindAndSetHotKey(R.id.hk_make_phrase, g_SettingsG.byHotKeyMakeWord, MOD_CONTROL);
-		FindAndSetHotKey(R.id.hk_show_table, g_SettingsG.byHotKeyShowRoot, MOD_CONTROL);
-		FindAndSetHotKey(R.id.hk_show_comp, g_SettingsG.byHotKeyQuery, MOD_CONTROL);
-		FindAndSetHotKey(R.id.hk_show_statusbar, g_SettingsG.byHotKeyHideStatus, MOD_CONTROL);
-		FindAndSetHotKey(R.id.hk_input_en, g_SettingsG.byHotKeyEn, MOD_CONTROL);
+		FindAndSetHotKey(R.id.hk_switch_py, g_SettingsG.dwHotkeys[HKI_Mode]);
+		FindAndSetHotKey(R.id.hk_make_phrase, g_SettingsG.dwHotkeys[HKI_MakePhrase]);
+		FindAndSetHotKey(R.id.hk_show_table, g_SettingsG.dwHotkeys[HKI_ShowRoot]);
+		FindAndSetHotKey(R.id.hk_show_comp, g_SettingsG.dwHotkeys[HKI_Query]);
+		FindAndSetHotKey(R.id.hk_show_statusbar, g_SettingsG.dwHotkeys[HKI_HideStatus]);
+		FindAndSetHotKey(R.id.hk_input_en, g_SettingsG.dwHotkeys[HKI_EnSwitch]);
 	}
 
 	void CConfigDlg::InitPageAssociate()
@@ -108,11 +108,11 @@ namespace SOUI
 	{
 		FindAndSetCheck(R.id.chk_enable_23cand_hotkey, g_SettingsG.b23CandKey);
 
-		FindAndSetHotKey(R.id.hk_2_cand, g_SettingsG.by2CandVK, g_SettingsG.by2CandVK >= 0x30 ? 0 : MOD_WIN);
-		FindAndSetHotKey(R.id.hk_3_cand, g_SettingsG.by3CandVK, g_SettingsG.by3CandVK >= 0x30 ? 0 : MOD_WIN);
+		FindAndSetHotKey(R.id.hk_2_cand, g_SettingsG.by2CandVK);
+		FindAndSetHotKey(R.id.hk_3_cand, g_SettingsG.by3CandVK);
 		
-		FindAndSetHotKey(R.id.hk_turn_prev, g_SettingsG.byTurnPageUpVK, g_SettingsG.byTurnPageUpVK >= 0x30 ? 0 : MOD_WIN);
-		FindAndSetHotKey(R.id.hk_turn_next, g_SettingsG.byTurnPageDownVK, g_SettingsG.byTurnPageDownVK >= 0x30 ? 0 : MOD_WIN);
+		FindAndSetHotKey(R.id.hk_turn_prev, g_SettingsG.byTurnPageUpVK);
+		FindAndSetHotKey(R.id.hk_turn_next, g_SettingsG.byTurnPageDownVK);
 		
 		FindAndSetCheck(R.id.chk_disable_number_to_select_cand, g_SettingsG.bCandSelNoNum);
 		FindAndSetCheck(R.id.chk_full_skip_simple, g_SettingsG.bOnlySimpleCode);
@@ -321,21 +321,25 @@ SWindow *pCtrl = FindChildByID(id);\
 	void CConfigDlg::OnHotKeyEvent(EventArgs * pEvt)
 	{
 		EventSetHotKey *pHotKeyEvt = sobj_cast<EventSetHotKey>(pEvt);
-		switch (pEvt->GetID())
+		SHotKeyCtrl * pHotKeyCtrl = sobj_cast<SHotKeyCtrl>(pEvt->sender);
+		SASSERT(pHotKeyCtrl);
+		DWORD dwAccel = MAKELONG(pHotKeyEvt->vKey, pHotKeyEvt->wModifiers);
+		SLOG_INFO("id:" << pHotKeyCtrl->GetID() << " accel:" << CAccelerator::FormatAccelKey(dwAccel));
+		switch (pHotKeyCtrl->GetID())
 		{
 			//hotpage
 		case R.id.hk_switch_py:
-			g_SettingsG.byHotKeyMode = pHotKeyEvt->vKey; break;
+			g_SettingsG.dwHotkeys[HKI_Mode] = dwAccel; break;
 		case R.id.hk_make_phrase:
-			g_SettingsG.byHotKeyMakeWord = pHotKeyEvt->vKey; break;
+			g_SettingsG.dwHotkeys[HKI_MakePhrase] = dwAccel; break;
 		case R.id.hk_show_table:
-			g_SettingsG.byHotKeyShowRoot = pHotKeyEvt->vKey; break;
+			g_SettingsG.dwHotkeys[HKI_ShowRoot] = dwAccel; break;
 		case R.id.hk_show_comp:
-			g_SettingsG.byHotKeyQuery = pHotKeyEvt->vKey; break;
+			g_SettingsG.dwHotkeys[HKI_Query] = dwAccel; break;
 		case R.id.hk_show_statusbar:
-			g_SettingsG.byHotKeyHideStatus = pHotKeyEvt->vKey; break;
+			g_SettingsG.dwHotkeys[HKI_HideStatus] = dwAccel; break;
 		case R.id.hk_input_en:
-			g_SettingsG.byHotKeyEn = pHotKeyEvt->vKey; break;	
+			g_SettingsG.dwHotkeys[HKI_EnSwitch] = dwAccel; break;	
 			//other
 		case R.id.hk_2_cand:
 			g_SettingsG.by2CandVK = pHotKeyEvt->vKey; break;

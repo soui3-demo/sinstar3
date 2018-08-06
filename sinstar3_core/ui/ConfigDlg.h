@@ -13,7 +13,7 @@ namespace SOUI
 		
 		void FindAndSetCheck(int id, BOOL bcheck);
 		void FindAndSetText(int id, LPCTSTR text);
-		void FindAndSetHotKey(int id, WORD vk_key, WORD modif);
+		void FindAndSetHotKey(int id, DWORD accel);
 		void InitPageHabit();
 		void InitPageHotKey();
 		void InitPageAssociate();

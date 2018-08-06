@@ -11,7 +11,7 @@
     }
 
 enum {
-	CMD_MAKEWORD = 100,
+	CMD_MAKEPHRASE = 100,
 	CMD_QUERYINFO,
 	CMD_KEYMAP,
 	CMD_HIDESTATUSBAR,
@@ -40,7 +40,7 @@ public:
 	~CCmdHandler();
 
 protected:
-	void OnMakeWord(LPARAM lp);
+	void OnMakePhrase(LPARAM lp);
 	void OnKeyMap(LPARAM lp);
 	void OnHideStatusBar(LPARAM lp);
 	void OnQueryInfo(LPARAM lp);
@@ -56,7 +56,7 @@ protected:
 	void OnInputSpchar(LPARAM lp);
 	void OnOpenSkinDir(LPARAM lp);
 	BEGIN_MSG_MAP_EX(CCmdHandler)
-		MSG_WM_COMMAND_EX(CMD_MAKEWORD, OnMakeWord)
+		MSG_WM_COMMAND_EX(CMD_MAKEPHRASE, OnMakePhrase)
 		MSG_WM_COMMAND_EX(CMD_KEYMAP, OnKeyMap)
 		MSG_WM_COMMAND_EX(CMD_HIDESTATUSBAR, OnHideStatusBar)
 		MSG_WM_COMMAND_EX(CMD_QUERYINFO, OnQueryInfo)

@@ -113,18 +113,18 @@
               <check name="chk_enable_23cand_hotkey" text="启用"/>
               <window extend_top="10" extend_left="5" layout="gridlayout" xInterval="10dp" yInterval="10dp" columnCount="2">
                 <text text="第2重码"/>
-                <hotkey name="hk_2_cand" width="100dp"/>
+                <hotkey name="hk_2_cand" width="100dp" invalidComb="7"/>
                 <text text="第3重码"/>
-                <hotkey name="hk_3_cand" width="100dp"/>
+                <hotkey name="hk_3_cand" width="100dp" invalidComb="7"/>
               </window>
             </window>
             <check extend_top="10" name="chk_disable_number_to_select_cand" text="禁止数字键选择重码"/>
             <text extend_top="10">重码翻页</text>
             <window extend_top="10" extend_left="5" layout="gridlayout" xInterval="10dp" yInterval="10dp" columnCount="2">
               <text text="前翻页"/>
-              <hotkey name="hk_turn_prev" width="100dp"/>
+              <hotkey name="hk_turn_prev" width="100dp" invalidComb="7"/>
               <text text="后翻页"/>
-              <hotkey name="hk_turn_next" width="100dp"/>
+              <hotkey name="hk_turn_next" width="100dp" invalidComb="7"/>
             </window>
             <text extend_top="10">GBK重码</text>
             <window extend_top="10" layout="vbox">

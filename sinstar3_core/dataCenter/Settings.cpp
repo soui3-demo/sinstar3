@@ -1,11 +1,29 @@
 #include "StdAfx.h"
 #include "Settings.h"
+#include <core/Accelerator.h>
 
 //使用共享内存方式使设置信息在所有输入法进程中共享
 #pragma data_seg(".sinstar3")
 int				g_nRefCount = 0;	//ref count
 CSettingsGlobal	g_SettingsG;		//输入法全局设置
 #pragma data_seg()
+
+struct HotKeyEntry {
+	int idx;
+	LPCTSTR szName;
+	LPCTSTR szDefault;
+};
+
+const static HotKeyEntry KHotKeyEntryMap[] = {
+	{ HKI_CharMode,_T("HotKey_CharMode"),_T("shift+space") },
+	{ HKI_Query,_T("HotKey_Query"),_T("ctrl+/") },
+	{ HKI_Mode,_T("HotKey_Mode") ,_T("ctrl+q") },
+	{ HKI_EnSwitch,_T("HotKey_EnSwitch") ,_T("ctrl+e") },
+	{ HKI_MakePhrase,_T("HotKey_MakePhrase"),_T("ctrl+m") },
+	{ HKI_ShowRoot,_T("HotKey_ShowRoot") ,_T("ctrl+k") },
+	{ HKI_HideStatus,_T("HotKey_HideStatus"),_T("ctrl+y") },
+};
+
 
 BOOL WritePrivateProfileInt(
 							LPCTSTR lpAppName,  // pointer to section name
@@ -32,12 +50,11 @@ void CSettingsGlobal::Save(LPCTSTR pszIniFile)
 	WritePrivateProfileInt(KSession,_T("TurnPageUpVK"),byTurnPageUpVK,pszIniFile);
 	WritePrivateProfileInt(KSession,_T("TurnPageDownVK"),byTurnPageDownVK,pszIniFile);
 
-	WritePrivateProfileInt(KSession,_T("HotKey_Query"),byHotKeyQuery,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("HotKey_Switch_Mode"),byHotKeyMode,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("HotKey_Switch_En"),byHotKeyEn,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("HotKey_MakeWord"),byHotKeyMakeWord,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("HotKey_ShowRoot"),byHotKeyShowRoot,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("HotKey_HideStatus"),byHotKeyHideStatus,pszIniFile);
+	for (int i = 0; i < ARRAYSIZE(KHotKeyEntryMap); i++)
+	{
+		SStringT strHotKey = CAccelerator::FormatAccelKey(dwHotkeys[KHotKeyEntryMap[i].idx]);
+		WritePrivateProfileString(KSession, KHotKeyEntryMap[i].szName, strHotKey, pszIniFile);
+	}
 
 	WritePrivateProfileInt(KSession,_T("Associate"),byAstMode,pszIniFile);
 	WritePrivateProfileInt(KSession,_T("SentAssociate"),bAstSent,pszIniFile);
@@ -88,13 +105,11 @@ void CSettingsGlobal::Load(LPCTSTR pszIniFile)
 	byTurnPageUpVK=GetPrivateProfileInt(KSession,_T("TurnPageUpVK"),VkKeyScan('-'),pszIniFile);
 	byTurnPageDownVK=GetPrivateProfileInt(KSession,_T("TurnPageDownVK"),VkKeyScan('='),pszIniFile);
 
-	byHotKeyQuery=GetPrivateProfileInt(KSession,_T("HotKey_Query"),VkKeyScan('/'),pszIniFile);
-	byHotKeyMode=GetPrivateProfileInt(KSession,_T("HotKey_Switch_Mode"),VkKeyScan('q'),pszIniFile);	
-	byHotKeyEn=GetPrivateProfileInt(KSession,_T("HotKey_Switch_En"),VkKeyScan('e'),pszIniFile);	
-	byHotKeyMakeWord=GetPrivateProfileInt(KSession,_T("HotKey_MakeWord"),VkKeyScan('m'),pszIniFile);
-	byHotKeyShowRoot=GetPrivateProfileInt(KSession,_T("HotKey_ShowRoot"),VkKeyScan('k'),pszIniFile);	
-	byHotKeyHideStatus=GetPrivateProfileInt(KSession,_T("HotKey_HideStatus"),VkKeyScan('y'),pszIniFile);	
-
+	for (int i = 0; i < ARRAYSIZE(KHotKeyEntryMap); i++)
+	{
+		GetPrivateProfileString(KSession, KHotKeyEntryMap[i].szName, KHotKeyEntryMap[i].szDefault, szBuf, 100, pszIniFile);
+		dwHotkeys[KHotKeyEntryMap[i].idx] = CAccelerator::TranslateAccelKey(szBuf);
+	}
 
 	byAstMode=GetPrivateProfileInt(KSession,_T("Associate"),AST_ENGLISH,pszIniFile);
 	bAstSent=GetPrivateProfileInt(KSession,_T("SentAssociate"),1,pszIniFile);

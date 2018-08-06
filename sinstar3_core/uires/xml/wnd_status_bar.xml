@@ -16,7 +16,7 @@
     <imglist name="charmode_half" src="img:png_charmode_half" states="3"/>
     <imglist name="btn_extend" src="img:btn_extend" states="3"/>
     <imglist name="btn_shrink" src="img:btn_shrink" states="3"/>
-    <imglist name="btn_makeword" src="img:btn_makeword" states="3"/>
+    <imglist name="btn_makephrase" src="img:btn_makeword" states="3"/>
     <imglist name="btn_query" src="img:btn_query" states="3"/>
     <imglist name="btn_record_enable" src="img:btn_record_enable" states="3"/>
     <imglist name="btn_record_disable" src="img:btn_record_disable" states="3"/>
@@ -42,7 +42,7 @@
         <window size="0,0" weight="1" visible="0"/>
         <toggle2 size="-1,-1" skin1="charmode_half" skin2="charmode_full" name="btn_charmode" tip="change mode"/>
         <window size="0,0" weight="2" visible="0"/>
-        <imgbtn size="-1,-1" skin="btn_makeword" name="btn_makeword"/>
+        <imgbtn size="-1,-1" skin="btn_makephrase" name="btn_make_phrase"/>
         <window size="0,0" weight="2" visible="0"/>
         <toggle2 size="-1,-1" skin1="btn_record_enable" skin2="btn_record_disable" name="btn_record"/>
         <window size="0,0" weight="2" visible="0"/>

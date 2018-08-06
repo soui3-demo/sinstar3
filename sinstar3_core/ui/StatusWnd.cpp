@@ -284,7 +284,7 @@ namespace SOUI
 			e2->bUpdated = TRUE;
 			e2->strToolTip = SStringT().Format(_T("标点模式:%s"), settings.bCharMode? _T("中文"):_T("英文"));
 			break;
-		case R.id.btn_makeword:
+		case R.id.btn_make_phrase:
 			e2->bUpdated = TRUE;
 			e2->strToolTip = _T("剪贴板造词");
 			break;
@@ -310,9 +310,9 @@ namespace SOUI
 			break;
 		}
 	}
-	void CStatusWnd::OnBtnMakeWord()
+	void CStatusWnd::OnBtnMakePhrase()
 	{
-		m_pCmdListener->OnCommand(CMD_MAKEWORD,0);
+		m_pCmdListener->OnCommand(CMD_MAKEPHRASE,0);
 	}
 
 	void CStatusWnd::OnLogoClick()
