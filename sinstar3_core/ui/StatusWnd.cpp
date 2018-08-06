@@ -26,8 +26,6 @@ namespace SOUI
 		int nRet = __super::OnCreate(lpCreateStruct);
 		if(nRet != 0) return nRet;
 
-		m_pBackGround = FindChildByID2<SStatusBackground>(R.id.status_bg);
-
 		CRect rcWnd = GetWindowRect();
 		CRect rcWorkArea;
 		SystemParametersInfo(SPI_GETWORKAREA,0,&rcWorkArea,0);
@@ -146,29 +144,19 @@ namespace SOUI
 	void CStatusWnd::OnBtnExtend()
 	{
 		m_pCmdListener->GetInputContext()->settings.bFullStatus = TRUE;
-
-		m_pBackGround->SetMode(SStatusBackground::MODE_EXTEND);
-
-		FindChildByID(R.id.btn_status_shrink)->SetVisible(TRUE,TRUE);
-		FindChildByID(R.id.btn_status_extend)->SetVisible(FALSE,TRUE);
-		FindChildByID(R.id.status_extend)->SetVisible(TRUE,TRUE);
+		FindChildByID(R.id.status_extend)->SetVisible(TRUE, TRUE);
 	}
 
 	void CStatusWnd::OnBtnShrink()
 	{
 		m_pCmdListener->GetInputContext()->settings.bFullStatus = FALSE;
-		m_pBackGround->SetMode(SStatusBackground::MODE_SHRINK);
-
-		FindChildByID(R.id.btn_status_shrink)->SetVisible(FALSE,TRUE);
-		FindChildByID(R.id.btn_status_extend)->SetVisible(TRUE,TRUE);
-		FindChildByID(R.id.status_extend)->SetVisible(FALSE,TRUE);
-
+		FindChildByID(R.id.status_shrink)->SetVisible(TRUE,TRUE);
 	}
 
-	void CStatusWnd::UpdateCompInfo()
+	void CStatusWnd::UpdateCompInfo2(SWindow *pParent)
 	{
-		SWindow *pText = FindChildByID(R.id.txt_comp);
-		SFlagView * pFlagView = FindChildByID2<SFlagView>(R.id.img_logo);
+		SWindow *pText = pParent->FindChildByID(R.id.txt_comp);
+		SFlagView * pFlagView = pParent->FindChildByID2<SFlagView>(R.id.img_logo);
 		if (m_pCmdListener->GetInputContext()->compMode == IM_SHAPECODE)
 		{
 			if (pText) pText->SetWindowText(CDataCenter::getSingletonPtr()->GetData().m_compInfo.strCompName);
@@ -188,7 +176,19 @@ namespace SOUI
 				else
 					pText->SetWindowText(_T("∆Ù≥Ã∆¥“Ù"));
 			}
-
+		}
+	}
+	void CStatusWnd::UpdateCompInfo()
+	{
+		{
+			SWindow *pStatus = FindChildByID(R.id.status_shrink);
+			SASSERT(pStatus);
+			UpdateCompInfo2(pStatus);
+		}
+		{
+			SWindow *pStatus = FindChildByID(R.id.status_extend);
+			SASSERT(pStatus);
+			UpdateCompInfo2(pStatus);
 		}
 	}
 

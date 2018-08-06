@@ -73,9 +73,9 @@ namespace SOUI
 		EVENT_MAP_END()
 
 	protected:
+		void UpdateCompInfo2(SWindow *pParent);
 		void UpdateUI();
 	protected:
-		SStatusBackground * m_pBackGround;
 		CSkinMananger       m_skinManager;
 		ICmdListener     *  m_pCmdListener;
 	};
