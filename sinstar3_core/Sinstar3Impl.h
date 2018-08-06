@@ -75,8 +75,9 @@ public:
 	BOOL ChangeSkin(const SStringT & strSkin);
 	void OpenConfig();
 	void OpenSpchar();
-	void InputSpchar(LPCTSTR pszText);
+	void ShowTip(LPCTSTR pszTitle, LPCTSTR pszContent);
 
+	void InputSpchar(LPCTSTR pszText);
 	void Broadcast(UINT uCmd, LPVOID pData, DWORD nLen);
 
 	LRESULT OnSvrNotify(UINT uMsg, WPARAM wParam, LPARAM lParam);

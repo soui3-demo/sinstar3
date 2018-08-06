@@ -30,18 +30,18 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 	TCHAR szCurrentDir[MAX_PATH] = { 0 };
 	GetModuleFileName(hInst, szCurrentDir, sizeof(szCurrentDir));
 	LPTSTR lpInsertPos = _tcsstr(szCurrentDir, _T("\\data"));
-	_tcscpy(lpInsertPos,_T("\\sinstar3_core"));
+	_tcscpy(lpInsertPos, _T("\\sinstar3_core"));
 
-	BOOL bLoaded=FALSE;
+	BOOL bLoaded = FALSE;
 	CAutoRefPtr<SOUI::IImgDecoderFactory> pImgDecoderFactory;
 	CAutoRefPtr<SOUI::IRenderFactory> pRenderFactory;
 	bLoaded = m_pComMgr->CreateRender_GDI((IObjRef**)&pRenderFactory);
-	SASSERT_FMT(bLoaded,_T("load interface [render] failed!"));
-	bLoaded=m_pComMgr->CreateImgDecoder((IObjRef**)&pImgDecoderFactory);
-	SASSERT_FMT(bLoaded,_T("load interface [%s] failed!"),_T("imgdecoder"));
+	SASSERT_FMT(bLoaded, _T("load interface [render] failed!"));
+	bLoaded = m_pComMgr->CreateImgDecoder((IObjRef**)&pImgDecoderFactory);
+	SASSERT_FMT(bLoaded, _T("load interface [%s] failed!"), _T("imgdecoder"));
 
 	pRenderFactory->SetImgDecoderFactory(pImgDecoderFactory);
-	
+
 	m_theApp = new SApplication(pRenderFactory, hInst, SINSTART3_WNDCLASS);
 	m_theApp->SetAppDir(szCurrentDir);
 
@@ -62,41 +62,57 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 
 	CAutoRefPtr<ILog4zManager> pLogMgr;
 	bLoaded = m_pComMgr->CreateLog4z((IObjRef**)&pLogMgr);
-	SASSERT_FMT(bLoaded,_T("load ILog4zManager failed!"),_T("log4z"));
+	SASSERT_FMT(bLoaded, _T("load ILog4zManager failed!"), _T("log4z"));
 
 	m_theApp->SetLogManager(pLogMgr);
 
-	_tcscpy(lpInsertPos,_T("\\data\\log"));
-	pLogMgr->setLoggerPath(0,S_CT2A(szCurrentDir));
+	_tcscpy(lpInsertPos, _T("\\data\\log"));
+	pLogMgr->setLoggerPath(0, S_CT2A(szCurrentDir));
 	pLogMgr->start();
 
 	//从DLL加载系统资源
 	CAutoRefPtr<IResProvider> sysResProvider;
 	CreateResProvider(RES_PE, (IObjRef**)&sysResProvider);
 	sysResProvider->Init((WPARAM)hInst, 0);
-	UINT uFlag=m_theApp->LoadSystemNamedResource(sysResProvider);
-	SASSERT_FMT(uFlag==0, L"load system resource failed");
+	UINT uFlag = m_theApp->LoadSystemNamedResource(sysResProvider);
+	SASSERT_FMT(uFlag == 0, L"load system resource failed");
 	CAutoRefPtr<IResProvider>   pResProvider;
-#if (RES_TYPE == 0)
-	CreateResProvider(RES_FILE, (IObjRef**)&pResProvider);
-	SStringT strPath = m_theApp->GetAppDir();
-	strPath+=_T("\\uires");
-	if (!pResProvider->Init((LPARAM)(LPCTSTR)strPath, 0))
+
+	BOOL bDebugSkinLoaded = FALSE;
+	if (!CDataCenter::getSingletonPtr()->GetData().m_strDebugSkin.IsEmpty())
 	{
-		SASSERT(0);
-		return ;
+		CreateResProvider(RES_FILE, (IObjRef**)&pResProvider);
+		SStringT strPath = CDataCenter::getSingletonPtr()->GetData().m_strDebugSkin;
+		bDebugSkinLoaded = pResProvider->Init((LPARAM)(LPCTSTR)strPath, 0);
+		if (!bDebugSkinLoaded)
+		{//release resprovider.
+			pResProvider = NULL;
+		}
 	}
+	
+	if(!bDebugSkinLoaded)
+	{
+#if (RES_TYPE == 0)
+		CreateResProvider(RES_FILE, (IObjRef**)&pResProvider);
+		SStringT strPath = m_theApp->GetAppDir();
+		strPath += _T("\\uires");
+		if (!pResProvider->Init((LPARAM)(LPCTSTR)strPath, 0))
+		{
+			SASSERT(0);
+			return;
+		}
 #else 
-	CreateResProvider(RES_PE, (IObjRef**)&pResProvider);
-	pResProvider->Init((WPARAM)hInst, 0);
+		CreateResProvider(RES_PE, (IObjRef**)&pResProvider);
+		pResProvider->Init((WPARAM)hInst, 0);
 #endif
+	}
 
 	m_theApp->InitXmlNamedID(namedXmlID,ARRAYSIZE(namedXmlID),TRUE);
 	m_theApp->AddResProvider(pResProvider);
 	CDataCenter::getSingletonPtr()->GetData().m_defUiDefine = SUiDef::getSingletonPtr()->GetUiDef();
 	CDataCenter::getSingletonPtr()->GetData().m_ptSkinOffset = CSkinMananger::ExtractSkinOffset(pResProvider);
 
-	if(!CDataCenter::getSingletonPtr()->GetData().m_strSkin.IsEmpty())
+	if(!bDebugSkinLoaded && !CDataCenter::getSingletonPtr()->GetData().m_strSkin.IsEmpty())
 	{
 		//SLOG_INFO("apply user skin:"<< CDataCenter::getSingletonPtr()->GetData().m_strSkin);
 		IResProvider *pResProvider=NULL;

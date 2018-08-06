@@ -69,9 +69,16 @@ namespace SOUI
 		m_compInfo.strCompName = _T("╪сть...");
 
 		TCHAR szSkin[MAX_PATH]={0};
-		ULONG nSize = MAX_PATH;
-		m_reg.QueryStringValue(_T("skin"),szSkin,&nSize);
-		m_strSkin = szSkin;
+		{
+			ULONG nSize = MAX_PATH;
+			if (ERROR_SUCCESS == m_reg.QueryStringValue(_T("skin"), szSkin, &nSize))
+				m_strSkin = szSkin;
+		}
+		{
+			ULONG nSize = MAX_PATH;
+			if (ERROR_SUCCESS == m_reg.QueryStringValue(_T("debugSkin"), szSkin, &nSize))
+				m_strDebugSkin = szSkin;
+		}
 
 		DWORD dwPos=-1;
 		if (ERROR_SUCCESS == m_reg.QueryDWORDValue(_T("status_pos"), dwPos))

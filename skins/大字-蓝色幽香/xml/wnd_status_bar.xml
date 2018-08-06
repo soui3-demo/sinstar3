@@ -26,17 +26,19 @@
     <imglist name="btn_english_disable" src="img:btn_english_disable" states="3"/>
   </skin>
 
-  <root size="-1,-1" layout="vbox">
-    <status_bg size="-1,-1" layout="vbox" name="status_bg" bg_extend="bg_status_open" bg_shrink="bg_status_close">
+  <root>
+    <status_bg size="-1,-1" name="status_shrink" visible="0" skin="bg_status_close" layout="hbox" gravity="center" padding="@dim/shrink_padding_left,@dim/shrink_padding_top,@dim/shrink_padding_right,@dim/shrink_padding_bottom">
+      <flagView size="@dim/status_logo_size,@dim/status_logo_size" name="img_logo" defaultFlag="logo" cursor="hand" margin="@dim/status_logo_margin_left,@dim/status_logo_margin_top,@dim/status_logo_margin_right,@dim/status_logo_margin_bottom"/>
+      <caption2 size="0,-2" weight="1" name="txt_comp" cursor="sizeall" dotted="1"/>
+      <imgbtn pos="-1,-1" name="btn_status_extend" skin="btn_extend"/>
+    </status_bg>
+    <status_bg size="-1,-1" name="status_extend" layout="vbox" skin="bg_status_open">
       <window size="-2,0" weight="1" name="status_base" layout="hbox" gravity="center" padding="@dim/status_line1_padding_left,@dim/status_line1_padding_top,@dim/status_line1_padding_right,@dim/status_line1_padding_bottom">
         <flagView size="@dim/status_logo_size,@dim/status_logo_size" name="img_logo" defaultFlag="logo" cursor="hand" margin="@dim/status_logo_margin_left,@dim/status_logo_margin_top,@dim/status_logo_margin_right,@dim/status_logo_margin_bottom"/>
         <caption2 size="0,-2" weight="1" name="txt_comp" cursor="sizeall" dotted="1"/>
-        <window size ="-1,-1">
-          <imgbtn pos="0,0" name="btn_status_extend" skin="btn_extend" visible="0"/>
-          <imgbtn pos="0,0" name="btn_status_shrink" skin="btn_shrink"/>
-        </window>
+        <imgbtn pos="-1,-1" name="btn_status_shrink" skin="btn_shrink"/>
       </window>
-      <window size="-2,0" weight="1" name="status_extend" display="0"  padding="@dim/status_line2_padding_left,@dim/status_line2_padding_top,@dim/status_line2_padding_right,@dim/status_line2_padding_bottom" layout="hbox" gravity="center">
+      <window size="-2,0" weight="1" name="status_extend" padding="@dim/status_line2_padding_left,@dim/status_line2_padding_top,@dim/status_line2_padding_right,@dim/status_line2_padding_bottom" layout="hbox" gravity="center">
         <window size="0,0" weight="1" visible="0"/>
         <toggle2 size="-1,-1" skin1="charmode_half" skin2="charmode_full" name="btn_charmode" tip="change mode"/>
         <window size="0,0" weight="2" visible="0"/>

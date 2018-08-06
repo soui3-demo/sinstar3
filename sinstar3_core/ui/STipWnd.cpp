@@ -25,7 +25,6 @@ namespace SOUI {
 		if (idEvent == TIMER_DELAY_HIDE)
 		{
 			OnClose();
-			CSimpleWnd::KillTimer(idEvent);
 		}
 		else
 		{
@@ -45,8 +44,14 @@ namespace SOUI {
 		}
 	}
 
+	void STipWnd::OnMouseMove(UINT nFlags, CPoint point)
+	{
+		CSimpleWnd::SetTimer(TIMER_DELAY_HIDE, 3000, NULL);
+		SetMsgHandled(FALSE);
+	}
+
 	void STipWnd::OnClose()
 	{
-		ShowWindow(SW_HIDE);
+		DestroyWindow();
 	}
 }

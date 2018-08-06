@@ -42,12 +42,10 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr)
 	m_inputState.GetInputContext()->settings.Load(theModule->GetCfgIni());
 
  	m_pInputWnd = new CInputWnd(this,m_inputState.GetInputContext(),this);
-	m_pStatusWnd = new CStatusWnd(this,this);
-	m_pTipWnd = new STipWnd(this);
-	m_pStatusWnd->Create(_T("Sinstar3_Status"));
 	m_pInputWnd->Create(_T("Sinstar3_Input"));
-	m_pTipWnd->Create(_T("sinstar3_tip"));
-	m_cmdHandler.SetTipWnd(m_pTipWnd);
+
+	m_pStatusWnd = new CStatusWnd(this,this);
+	m_pStatusWnd->Create(_T("Sinstar3_Status"));
 	m_inputState.SetInputListener(this);
 	
 	m_pInputWnd->SetAnchorPosition(CDataCenter::getSingleton().GetData().m_ptInput);
@@ -66,11 +64,14 @@ CSinstar3Impl::~CSinstar3Impl(void)
 	SOUI::CSimpleWnd::DestroyWindow();
 	m_pInputWnd->DestroyWindow();
 	m_pStatusWnd->DestroyWindow();
-	m_pTipWnd->DestroyWindow();
 	delete m_pStatusWnd;
 	delete m_pInputWnd;
-	delete m_pTipWnd;
 
+	if (m_pTipWnd)
+	{
+		m_pTipWnd->DestroyWindow();
+		m_pTipWnd = NULL;
+	}
 	if (m_pConfig)
 	{
 		m_pConfig->DestroyWindow();
@@ -410,6 +411,11 @@ void CSinstar3Impl::OnSkinAwareWndDestroy(CSkinAwareWnd * pWnd)
 		delete pWnd;
 		m_pSpcharWnd = NULL;
 	}
+	else if (pWnd->GetWndType() == IME_TIP)
+	{
+		delete pWnd;
+		m_pTipWnd = NULL;
+	}
 }
 
 void CSinstar3Impl::OnInputDelayHide()
@@ -504,6 +510,17 @@ void CSinstar3Impl::OpenSpchar()
 		m_pSpcharWnd->Create(_T("SpcharWnd"), NULL);
 	}
 	m_pSpcharWnd->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW | SWP_NOACTIVATE);
+}
+
+void CSinstar3Impl::ShowTip(LPCTSTR pszTitle, LPCTSTR pszContent)
+{
+	if (m_pTipWnd == NULL)
+	{
+		m_pTipWnd = new STipWnd(this);
+		m_pTipWnd->Create(_T("Sinstar3_Tip"));
+		m_pTipWnd->SetDestroyListener(this, IME_TIP);
+	}
+	m_pTipWnd->SetTip(pszTitle, pszContent);
 }
 
 void CSinstar3Impl::InputSpchar(LPCTSTR pszText)

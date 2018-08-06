@@ -26,6 +26,9 @@ namespace SOUI
 		CAutoRefPtr<IUiDefInfo> m_defUiDefine;
 
 		SStringT	m_strSkin;
+
+		SStringT	m_strDebugSkin;
+
 		CPoint		m_ptStatus;
 		CPoint		m_ptInput;
 		CPoint		m_ptSpchar;

@@ -19,7 +19,13 @@
     <interval_cand value="5"/>
 
     <status_logo_size value="16"/>
-    <status_line1_padding_left value="0"/>
+
+    <shrink_padding_left value="5"/>
+    <shrink_padding_top value="0"/>
+    <shrink_padding_right value="3"/>
+    <shrink_padding_bottom value="0"/>
+
+    <status_line1_padding_left value="5"/>
     <status_line1_padding_top value="0"/>
     <status_line1_padding_right value="20"/>
     <status_line1_padding_bottom value="0"/>

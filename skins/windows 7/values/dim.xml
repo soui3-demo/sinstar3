@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+  <dim>
+    <input_height value="65"/>
+    <input_min_width value="100"/>
+
+    <input_margin_left value="5"/>
+    <input_margin_top value="0"/>
+    <input_margin_right value="12"/>
+    <input_margin_bottom value="5"/>
+
+    <input_padding_left value="5"/>
+    <input_padding_top value="0"/>
+    <input_padding_right value="12"/>
+    <input_padding_bottom value="5"/>
+
+    <interval_comp_prefix value="5"/>
+    <interval_cand_prefix value="3"/>
+    <interval_comp value="10"/>
+    <interval_cand value="5"/>
+
+    <status_logo_size value="16"/>
+
+    <shrink_padding_left value="4"/>
+    <shrink_padding_top value="0"/>
+    <shrink_padding_right value="4"/>
+    <shrink_padding_bottom value="4"/>
+
+    <extend_padding_left value="4"/>
+    <extend_padding_top value="0"/>
+    <extend_padding_right value="4"/>
+    <extend_padding_bottom value="4"/>
+    
+    <status_logo_margin_left value="0"/>
+    <status_logo_margin_top value="8"/>
+    <status_logo_margin_right value="0"/>
+    <status_logo_margin_bottom value="0"/>
+
+  </dim>

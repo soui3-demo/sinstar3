@@ -14,7 +14,7 @@
     <imglist name="lines" src="img:png_lines" states="6"/>
   </skin>
 
-  <root  size="-1,@dim/input_height" skin="bg_composition" cache="1" layout="vbox" padding="@dim/input_padding_left,@dim/input_padding_top,@dim/input_padding_right,@dim/input_padding_bottom">
+  <root size="-1,@dim/input_height" skin="bg_composition" cache="1" layout="vbox" padding="@dim/input_padding_left,@dim/input_padding_top,@dim/input_padding_right,@dim/input_padding_bottom">
     <window size="@dim/input_min_width,0" visible="0"/>
     <window size="-1,0" weight="1" layout="hbox" tip="composition window">
       <mutexView size="-1,-2" name="comp_normal" layout="hbox">

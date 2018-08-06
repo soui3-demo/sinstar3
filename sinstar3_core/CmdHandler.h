@@ -39,7 +39,6 @@ public:
 	CCmdHandler(CSinstar3Impl * pSinstar3);
 	~CCmdHandler();
 
-	void SetTipWnd(STipWnd * pTipWnd);
 protected:
 	void OnMakeWord(LPARAM lp);
 	void OnKeyMap(LPARAM lp);
@@ -75,7 +74,6 @@ protected:
 	END_MSG_MAP()
 
 private:
-	STipWnd * m_pTipWnd;
 	CSinstar3Impl * m_pSinstar3;
 };
 

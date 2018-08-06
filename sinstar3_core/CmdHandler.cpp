@@ -11,18 +11,12 @@ using namespace SOUI;
 
 CCmdHandler::CCmdHandler(CSinstar3Impl * pSinstar3)
 	:m_pSinstar3(pSinstar3)
-	,m_pTipWnd(NULL)
 {
 }
 
 
 CCmdHandler::~CCmdHandler()
 {
-}
-
-void CCmdHandler::SetTipWnd(STipWnd * pTipWnd)
-{
-	m_pTipWnd = pTipWnd;
 }
 
 void CCmdHandler::OnMakeWord(LPARAM lp)
@@ -46,7 +40,7 @@ void CCmdHandler::OnMakeWord(LPARAM lp)
 			sprintf(szMsg, "造词\"%s\"失败", (LPCSTR)str);
 		}
 		SStringT msg = S_CA2T(szMsg);
-		m_pTipWnd->SetTip(_T("造词"), msg);
+		m_pSinstar3->ShowTip(_T("造词"), msg);
 	}
 }
 
@@ -166,7 +160,7 @@ void CCmdHandler::OnQueryInfo(LPARAM lp)
 			}
 		}
 		SStringT msg = S_CA2T(szRet);
-		m_pTipWnd->SetTip(_T("查询"), msg);
+		m_pSinstar3->ShowTip(_T("查询"), msg);
 	}
 	else
 	{
@@ -185,7 +179,7 @@ void CCmdHandler::OnInputMode(LPARAM lp)
 	InputContext * pCtx = m_pSinstar3->m_inputState.GetInputContext();
 	if (g_SettingsG.compMode != pCtx->compMode)
 	{
-		m_pTipWnd->SetTip(_T("提示"), _T("临时拼音模式不能切换！请先退出临时拼音"));
+		m_pSinstar3->ShowTip(_T("提示"), _T("临时拼音模式不能切换！请先退出临时拼音"));
 	}else
 	{
 		m_pSinstar3->m_inputState.ClearContext(CPC_ALL);
@@ -207,7 +201,7 @@ void CCmdHandler::OnKeySpeed(LPARAM lp)
 	if (data.m_cInputCount>0)
 		msg.Format(_T("输入汉字: %d 个\n打字速度:%d 字/分钟"), data.m_cInputCount, data.m_cInputCount * 60000 / data.m_tmInputSpan);
 
-	m_pTipWnd->SetTip(_T("提示"), msg);
+	m_pSinstar3->ShowTip(_T("提示"), msg);
 }
 
 void CCmdHandler::OnCharMode(LPARAM lp)
