@@ -53,7 +53,18 @@ namespace SOUI
 
 		m_bLocated = TRUE;		
 		CPoint pos = pt - CDataCenter::getSingleton().GetData().m_ptSkinOffset;
-		SetWindowPos(HWND_TOPMOST,pos.x,pos.y + m_nCaretHeight + SIZE_BELOW,0,0,SWP_NOSIZE|SWP_NOACTIVATE);
+		CRect rcWnd = GetClientRect();
+		
+		CRect rcWorkArea;
+		SystemParametersInfo(SPI_GETWORKAREA, 0, &rcWorkArea, 0);
+		if (pos.y + m_nCaretHeight + SIZE_BELOW + rcWnd.Height() > rcWorkArea.bottom)
+		{
+			SetWindowPos(HWND_TOPMOST, pos.x, pt.y - rcWnd.Height() - SIZE_BELOW, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
+		}
+		else
+		{
+			SetWindowPos(HWND_TOPMOST,pos.x,pos.y + m_nCaretHeight + SIZE_BELOW,0,0,SWP_NOSIZE|SWP_NOACTIVATE);
+		}
 		if(m_bShow && !IsWindowVisible())
 		{
 			CImeWnd::Show(TRUE);
