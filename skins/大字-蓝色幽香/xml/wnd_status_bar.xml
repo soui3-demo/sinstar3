@@ -42,7 +42,7 @@
         <window size="0,0" weight="1" visible="0"/>
         <toggle2 size="-1,-1" skin1="charmode_half" skin2="charmode_full" name="btn_charmode" tip="change mode"/>
         <window size="0,0" weight="2" visible="0"/>
-        <imgbtn size="-1,-1" skin="btn_makeword" name="btn_makeword"/>
+        <imgbtn size="-1,-1" skin="btn_makeword" name="btn_make_phrase"/>
         <window size="0,0" weight="2" visible="0"/>
         <toggle2 size="-1,-1" skin1="btn_record_enable" skin2="btn_record_disable" name="btn_record"/>
         <window size="0,0" weight="2" visible="0"/>
