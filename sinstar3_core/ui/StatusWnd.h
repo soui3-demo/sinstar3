@@ -42,8 +42,8 @@ namespace SOUI
 		END_MSG_MAP()
 
 	protected:
-
-		void OnCompInfo(EventArgs *e);
+		void ShowServerExit();
+		void OnSvrNotify(EventArgs *e);
 
 		void OnBtnExtend();
 		void OnBtnShrink();
@@ -58,7 +58,7 @@ namespace SOUI
 		void OnHelpClick();
 
 		EVENT_MAP_BEGIN()
-			EVENT_HANDLER(EventSvrNotify::EventID, OnCompInfo)
+			EVENT_HANDLER(EventSvrNotify::EventID, OnSvrNotify)
 			EVENT_HANDLER(EventSwndUpdateTooltip::EventID, OnUpdateBtnTooltip)
 			EVENT_ID_COMMAND(R.id.btn_status_shrink, OnBtnShrink)
 			EVENT_ID_COMMAND(R.id.btn_status_extend, OnBtnExtend)

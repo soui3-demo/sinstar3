@@ -311,6 +311,20 @@ LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 		}
 		return 1;
 	}
+	else if (wp == NT_SERVEREXIT)
+	{
+		LPVOID pImeCtx = m_pTxtSvr->GetImeContext();
+		if (pImeCtx)
+		{
+			m_pTxtSvr->SetOpenStatus(pImeCtx, FALSE);
+			m_pTxtSvr->ReleaseImeContext(pImeCtx);
+		}
+		EventSvrNotify evt(this);
+		evt.wp = wp;
+		evt.lp = lp;
+		FireEvent(evt);
+		return 1;
+	}
 	else
 	{
 		return m_inputState.OnSvrNotify((UINT)wp,pMsg)?1:0;
@@ -319,23 +333,27 @@ LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 
 LRESULT CSinstar3Impl::OnAsyncCopyData(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+	SLOG_INFO("begin");
+
 	PCOPYDATASTRUCT pCds = (PCOPYDATASTRUCT)lParam;
 	HWND hSender = (HWND)wParam;
 	if (pCds->dwData == CMD_CHANGESKIN)
 	{//change skin
 		SStringA strUtf8((const char *)pCds->lpData, pCds->cbData);
 		SStringT strPath = S_CA2T(strUtf8, CP_UTF8);
+		SLOG_INFO("skin:"<<strPath);
 		ChangeSkin(strPath);
 	}
 
 	if (pCds->lpData) free(pCds->lpData);
 	free(pCds);
-
-	return LRESULT();
+	SLOG_INFO("end");
+	return 1;
 }
 
 BOOL CSinstar3Impl::OnCopyData(HWND wnd, PCOPYDATASTRUCT pCopyDataStruct)
 {
+	SLOG_INFO("nLen:"<<pCopyDataStruct->cbData);
 	PCOPYDATASTRUCT pCds = (PCOPYDATASTRUCT)malloc(sizeof(COPYDATASTRUCT));
 	pCds->dwData = pCopyDataStruct->dwData;
 	pCds->cbData = pCopyDataStruct->cbData;
@@ -439,12 +457,15 @@ void CSinstar3Impl::OnInputDelayHide()
 
 BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 {
+	SLOG_INFO("skin:" << strSkin);
 	CDataCenter::getSingletonPtr()->Lock(); //注意处理多个输入法UI线程之间的同步.
+	SLOG_INFO("step1,lock ok");
 
 	if (CDataCenter::getSingletonPtr()->GetData().m_strSkin != strSkin)
 	{
 		if (!strSkin.IsEmpty())
 		{//加载外部皮肤
+			SLOG_INFO("step2, prepare for load skin");
 			CAutoRefPtr<IResProvider> pResProvider;
 			CSouiEnv::getSingleton().theComMgr()->CreateResProvider_ZIP((IObjRef**)&pResProvider);
 			ZIPRES_PARAM param;
@@ -459,46 +480,63 @@ BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 				return FALSE;
 			}
 
+			SLOG_INFO("step3, load external skin ok");
+
 			if (!CDataCenter::getSingletonPtr()->GetData().m_strSkin.IsEmpty())
 			{//清除正在使用的外置皮肤。
+				SLOG_INFO("step4, remove current in using external skin");
+
 				IResProvider *pLastRes = SApplication::getSingleton().GetTailResProvider();
 				SApplication::getSingleton().RemoveResProvider(pLastRes);
 				IUiDefInfo *pUiDefInfo = SUiDef::getSingleton().GetUiDef();
 
 				SStylePoolMgr::getSingleton().PopStylePool(pUiDefInfo->GetStylePool());
+				SLOG_INFO("step5, remove current in using external skin finish");
 			}
 
+			SLOG_INFO("step6, extract skin defined offset");
 			CDataCenter::getSingleton().GetData().m_ptSkinOffset = CSkinMananger::ExtractSkinOffset(pResProvider);
 
+			SLOG_INFO("step7, add new skin to sinstar3");
 			SApplication::getSingleton().AddResProvider(pResProvider, NULL);
+			SLOG_INFO("step8, set uidef");
 			SUiDef::getSingleton().SetUiDef(pUiDef);
 			pUiDef->Release();
-
+			SLOG_INFO("step9, set external skin ok");
 		}
 		else if (!CDataCenter::getSingletonPtr()->GetData().m_strSkin.IsEmpty())
 		{//清除正在使用的外置皮肤,还原使用系统内置皮肤
+			SLOG_INFO("step10, remove external skin");
 			IResProvider *pLastRes = SApplication::getSingleton().GetTailResProvider();
 			SApplication::getSingleton().RemoveResProvider(pLastRes);
 			IUiDefInfo *pUiDefInfo = SUiDef::getSingleton().GetUiDef();
 
+			SLOG_INFO("step11, pop style pool");
 			SStylePoolMgr::getSingleton().PopStylePool(pUiDefInfo->GetStylePool());
 
+			SLOG_INFO("step12, restore uidef");
 			IResProvider *pCurRes = SApplication::getSingleton().GetTailResProvider();
 			IUiDefInfo * pUiDef = SUiDef::getSingleton().CreateUiDefInfo(pCurRes, _T("uidef:xml_init"));
 			SUiDef::getSingleton().SetUiDef(pUiDef);
 			pUiDef->Release();
 
+			SLOG_INFO("step13, extract builtin skin defined offset");
 			CDataCenter::getSingleton().GetData().m_ptSkinOffset = CSkinMananger::ExtractSkinOffset(pCurRes);
 		}
 
+		SLOG_INFO("step14, save new skin name");
 		CDataCenter::getSingletonPtr()->GetData().m_strSkin = strSkin;
 	}
 
+	SLOG_INFO("step15, notify skin changed");
 	//notify skin changed
 	EventSetSkin evt(this);
 	FireEvent(evt);
 
+	SLOG_INFO("step16, notify skin changed finish");
+
 	CDataCenter::getSingletonPtr()->Unlock();
+	SLOG_INFO("step17, unlock");
 
 	return TRUE;
 }
@@ -567,6 +605,7 @@ void CSinstar3Impl::Broadcast(UINT uCmd, LPVOID pData, DWORD nLen)
 
 	SendMessage(WM_COPYDATA, (WPARAM)m_hWnd, (LPARAM)&cds);
 
+	SLOG_INFO("broadcast, nLen:" << nLen);
 	HWND hFind = FindWindowEx(HWND_MESSAGE, NULL, SINSTART3_WNDCLASS, KSinstar3WndName);
 	while (hFind)
 	{

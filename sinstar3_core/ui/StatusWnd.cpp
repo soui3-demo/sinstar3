@@ -178,6 +178,22 @@ namespace SOUI
 			}
 		}
 	}
+
+	void CStatusWnd::ShowServerExit()
+	{
+		{
+			SWindow *pStatus = FindChildByID(R.id.status_shrink);
+			SASSERT(pStatus);
+			SWindow *pText = pStatus->FindChildByID(R.id.txt_comp);
+			if (pText) pText->SetWindowText(_T("服务退出"));
+		}
+		{
+			SWindow *pStatus = FindChildByID(R.id.status_extend);
+			SASSERT(pStatus);
+			SWindow *pText = pStatus->FindChildByID(R.id.txt_comp);
+			if(pText) pText->SetWindowText(_T("服务退出"));
+		}
+	}
 	void CStatusWnd::UpdateCompInfo()
 	{
 		{
@@ -220,7 +236,7 @@ namespace SOUI
 		CDataCenter::getSingletonPtr()->GetData().m_ptStatus = pt;
 	}
 
-	void CStatusWnd::OnCompInfo(EventArgs *e)
+	void CStatusWnd::OnSvrNotify(EventArgs *e)
 	{
 		if(!IsWindow())
 			return;
@@ -229,6 +245,10 @@ namespace SOUI
 		if(e2->wp == NT_COMPINFO)
 		{
 			UpdateCompInfo();
+		}
+		else if (e2->wp == NT_SERVEREXIT)
+		{
+			ShowServerExit();
 		}
 	}
 
