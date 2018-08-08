@@ -56,6 +56,7 @@ namespace SOUI
 		void OnUpdateBtnTooltip(EventArgs *e);
 		void OnMenuClick();
 		void OnHelpClick();
+		void OnQueryClick();
 
 		EVENT_MAP_BEGIN()
 			EVENT_HANDLER(EventSvrNotify::EventID, OnSvrNotify)
@@ -70,6 +71,7 @@ namespace SOUI
 			EVENT_ID_COMMAND(R.id.img_logo, OnLogoClick)
 			EVENT_ID_COMMAND(R.id.btn_menu,OnMenuClick)
 			EVENT_ID_COMMAND(R.id.btn_help,OnHelpClick)
+			EVENT_ID_COMMAND(R.id.btn_query,OnQueryClick)
 		EVENT_MAP_END()
 
 	protected:

@@ -50,6 +50,7 @@
         <window size="0,0" weight="1" visible="0"/>
         <toggle2 size="-1,-1" skin1="btn_english_enable" skin2="btn_english_disable" name="btn_english"/>
         <window size="0,0" weight="1" visible="0"/>
+        <button size="0,0" visible="0" name="btn_query"/>
         <button size="0,0" visible="0" name="btn_menu"/>
         <button size="0,0" visible="0" name="btn_help"/>
       </window>

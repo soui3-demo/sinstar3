@@ -455,5 +455,10 @@ namespace SOUI
 		HtmlHelp(NULL, path, HH_DISPLAY_TOPIC, 0);
 	}
 
+	void CStatusWnd::OnQueryClick()
+	{
+		m_pCmdListener->OnCommand(CMD_QUERYINFO, 0);
+	}
+
 }
 
