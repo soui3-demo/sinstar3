@@ -1,0 +1,52 @@
+﻿<SOUI name="mainWindow" title="@string/title" bigIcon="ICON_LOGO:32" smallIcon="ICON_LOGO:16" width="600" height="400"  margin="5,5,5,5"  resizable="1" wndType="appMain"
+appWnd="1"
+translucent="1" 
+>
+  <root skin="_skin.sys.wnd.bkgnd" cache="1">
+    <caption pos="0,0,-0,30" show="1" font="adding:0">
+      <icon pos="10,8" src="ICON_LOGO:16"/>
+      <text pos="29,9">@string/title</text>
+      <imgbtn name="btn_close" skin="_skin.sys.btn.close"    pos="-45,0" tip="close" animate="1"/>
+      <imgbtn name="btn_max" skin="_skin.sys.btn.maximize"  pos="-83,0" animate="1" />
+      <imgbtn name="btn_restore" skin="_skin.sys.btn.restore"  pos="-83,0" show="0" animate="1" />
+      <imgbtn name="btn_min" skin="_skin.sys.btn.minimize" pos="-121,0" animate="1" />
+    </caption>
+    <window pos="5,[2,-5,-5" layout="vbox">
+      <window size="-2,-1" layout="hbox">
+        <text text="文件名:"/>
+        <edit size="0,30" weight="1" name="edit_dll"/>
+      </window>
+      <window size="-2,0" weight="1" layout="hbox">
+        <mclistview size="0,-2" weight="1" name="mclv_tasks" headerHeight="30">
+            <header align="center" itemSwapEnable="1" fixWidth="0" font="underline:0,adding:-3" sortHeader="1" colorBkgnd="#ffffff" >
+              <items>
+                <item width="50">type</item>
+                <item width="95">pid</item>
+                <item width="200">name</item>
+                <item width="200">path</item>
+              </items>
+            </header>
+            <template itemHeight="40" colorHover="#cccccc" colorSelected="#0000ff">
+              <window name="col_type" clipClient="1" layout="hbox" gravity="center">
+                <text name="txt_type">x64</text>
+              </window>
+              <window name="col_pid" clipClient="1" layout="hbox" gravity="center">
+                <text name="txt_pid">100</text>
+              </window>
+              <window name="col_name" clipClient="1" layout="hbox" gravity="center">
+                <text name="txt_name">haha</text>
+              </window>
+              <window name="col_path" clipClient="1" layout="hbox" gravity="center">
+                <text name="txt_path">haha</text>
+              </window>
+            </template>
+          </mclistview>
+        <window size="-1,-2" layout="vbox">
+          <button size="100,30" name="btn_refresh" text="refresh"/>
+          <button size="100,30" name="btn_activate" text="activate" extend_top="10"/>
+          <button size="100,30" name="btn_kill" text="kill" extend_top="10"/>
+        </window>
+      </window>
+    </window>
+  </root>
+</SOUI>
