@@ -34,9 +34,6 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 				reg.Close();
 			}
 			theModule = new CImeModule(hModule,szPath);
-#ifdef _WIN64
-			_tcscat(szPath,_T("\\x64"));
-#endif
 			CCoreLoader::GetInstance().SetCorePath(szPath);			
 		}
 		CUiWnd::RegisterClass(hModule);

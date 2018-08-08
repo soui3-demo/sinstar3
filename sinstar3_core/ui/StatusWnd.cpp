@@ -451,7 +451,7 @@ namespace SOUI
 
 	void CStatusWnd::OnHelpClick()
 	{
-		SStringT path= SStringT().Format(_T("%s\\sinstar3.chm>main"), theModule->GetDataPath());
+		SStringT path= SStringT().Format(_T("%s\\data\\sinstar3.chm>main"), theModule->GetDataPath());
 		HtmlHelp(NULL, path, HH_DISPLAY_TOPIC, 0);
 	}
 

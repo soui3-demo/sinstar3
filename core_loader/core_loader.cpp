@@ -24,6 +24,10 @@ CCoreLoader::~CCoreLoader(void)
 void CCoreLoader::SetCorePath(LPCTSTR pszPath)
 {
 	_tcscpy(m_szPath,pszPath);
+	_tcscat(m_szPath, _T("\\program"));
+#ifdef _WIN64
+	_tcscat(m_szPath, _T("\\x64"));
+#endif
 	_tcscat(m_szPath,_T("\\sinstar3_core.dll"));
 }
 

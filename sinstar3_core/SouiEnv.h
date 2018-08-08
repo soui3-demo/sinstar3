@@ -5,7 +5,7 @@
 class CSouiEnv : public SSingleton<CSouiEnv>
 {
 public:
-	CSouiEnv(HINSTANCE hInst);
+	CSouiEnv(HINSTANCE hInst, LPCTSTR pszWorkDir);
 	~CSouiEnv(void);
 
 	SApplication * theApp() {return m_theApp;}

@@ -25,11 +25,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
 				reg.Close();
 			}
 			theModule = new CTsfModule(hInstance,szPath);
-#ifdef _WIN64
-			_tcscat(szPath,_T("\\x64"));
-#endif
 			CCoreLoader::GetInstance().SetCorePath(szPath);			
-
 		}
 		break;
 

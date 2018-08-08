@@ -254,7 +254,7 @@ LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 		TCHAR szBuf[10]={0};
 		int i=0;
 
-		SStringT strHotKeyFile = SStringT().Format(_T("%s\\hotkey_%s.txt"),theModule->GetDataPath(),myData.m_compInfo.strCompName);
+		SStringT strHotKeyFile = SStringT().Format(_T("%s\\data\\hotkey_%s.txt"),theModule->GetDataPath(),myData.m_compInfo.strCompName);
 		//加载特定的自定义状态及语句输入状态开关
 		GetPrivateProfileString(_T("hotkey"),_T("umode"),_T(""),szBuf,2,strHotKeyFile);
 		g_SettingsG.hkUserDefSwitch=szBuf[0];
@@ -304,7 +304,7 @@ LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 			SStringW strFontFile = CDataCenter::getSingleton().GetData().getFontFile(S_CA2W(ISComm_GetFlmInfo()->szAddFont));
 			if (!strFontFile.IsEmpty())
 			{
-				m_strLoadedFontFile = theModule->GetDataPath() + _T("\\") + S_CW2T(strFontFile);
+				m_strLoadedFontFile = theModule->GetDataPath() + _T("\\data\\") + S_CW2T(strFontFile);
 				AddFontResourceEx(m_strLoadedFontFile, FR_PRIVATE , NULL);
 			}
 			m_pInputWnd->OnFlmInfo(ISComm_GetFlmInfo());

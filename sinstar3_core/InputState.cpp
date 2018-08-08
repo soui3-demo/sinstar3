@@ -201,7 +201,7 @@ BOOL CInputState::Tips_Rand(BOOL bSpell, char *pszBuf)
 		const wchar_t * groups[] = {
 			L"all",L"spell",L"shape"
 		};
-		if (xmlTips.load_file(theModule->GetDataPath()+_T("\\tips.xml")))
+		if (xmlTips.load_file(theModule->GetDataPath()+_T("\\data\\tips.xml")))
 		{
 			pugi::xml_node tips = xmlTips.child(L"tips");
 			for (int i = 0; i < 3; i++)

@@ -50,7 +50,7 @@ CSinstar3Core::CSinstar3Core(HINSTANCE hInst):CModuleRef(hInst),m_pLogStateListe
 		reg.Close();
 	}
 	m_strDataPath = szPath;
-	m_strConfig = m_strDataPath + _T("\\") + KSettingINI;
+	m_strConfig = m_strDataPath + _T("\\data\\") + KSettingINI;
 	if(0 == g_nRefCount++)
 	{//the first time
 		g_SettingsG.Load(m_strConfig);
@@ -69,7 +69,7 @@ CSinstar3Core::~CSinstar3Core()
 void CSinstar3Core::OnInit()
 {
 	CMinidump::Enable();
-	new CSouiEnv(GetModule());
+	new CSouiEnv(GetModule(),GetDataPath());
 	if(m_pLogStateListener)
 	{
 		m_pLogStateListener->OnLogMgrReady(CSouiEnv::getSingleton().theApp()->GetLogManager());

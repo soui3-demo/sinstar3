@@ -20,17 +20,11 @@ template<>
 CSouiEnv* SSingleton<CSouiEnv>::ms_Singleton = NULL;
 
 
-CSouiEnv::CSouiEnv(HINSTANCE hInst)
+CSouiEnv::CSouiEnv(HINSTANCE hInst,LPCTSTR pszWorkDir)
 {
 	int nRet = 0;
 
 	m_pComMgr = new SComMgr(_T("imgdecoder-png"));
-
-	//将程序的运行路径修改到项目所在目录所在的目录
-	TCHAR szCurrentDir[MAX_PATH] = { 0 };
-	GetModuleFileName(hInst, szCurrentDir, sizeof(szCurrentDir));
-	LPTSTR lpInsertPos = _tcsstr(szCurrentDir, _T("\\data"));
-	_tcscpy(lpInsertPos, _T("\\sinstar3_core"));
 
 	BOOL bLoaded = FALSE;
 	CAutoRefPtr<SOUI::IImgDecoderFactory> pImgDecoderFactory;
@@ -43,7 +37,7 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 	pRenderFactory->SetImgDecoderFactory(pImgDecoderFactory);
 
 	m_theApp = new SApplication(pRenderFactory, hInst, SINSTART3_WNDCLASS);
-	m_theApp->SetAppDir(szCurrentDir);
+	m_theApp->SetAppDir(pszWorkDir);
 
 	m_theApp->RegisterWindowClass<SToggle2>();
 	m_theApp->RegisterWindowClass<SCandView>();
@@ -66,8 +60,9 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 
 	m_theApp->SetLogManager(pLogMgr);
 
-	_tcscpy(lpInsertPos, _T("\\data\\log"));
-	pLogMgr->setLoggerPath(0, S_CT2A(szCurrentDir));
+	SStringT strLogDir = pszWorkDir;
+	strLogDir += _T("\\log");
+	pLogMgr->setLoggerPath(0, S_CT2A(strLogDir));
 	pLogMgr->start();
 
 	//从DLL加载系统资源
@@ -94,9 +89,14 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 	{
 #if (RES_TYPE == 0)
 		CreateResProvider(RES_FILE, (IObjRef**)&pResProvider);
-		SStringT strPath = m_theApp->GetAppDir();
-		strPath += _T("\\uires");
-		if (!pResProvider->Init((LPARAM)(LPCTSTR)strPath, 0))
+
+		//获取调试阶段的皮肤目录位置
+		TCHAR szCurrentDir[MAX_PATH] = { 0 };
+		GetModuleFileName(hInst, szCurrentDir, sizeof(szCurrentDir));
+		LPTSTR lpInsertPos = _tcsstr(szCurrentDir, _T("\\program"));
+		SASSERT(lpInsertPos);
+		_tcscpy(lpInsertPos, _T("\\..\\sinstar3_core\\uires"));
+		if (!pResProvider->Init((LPARAM)szCurrentDir, 0))
 		{
 			SASSERT(0);
 			return;
