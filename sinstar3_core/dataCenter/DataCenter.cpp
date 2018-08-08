@@ -105,7 +105,7 @@ namespace SOUI
 			ISComm_SetSvrPath(szSvrPath);
 		}
 		pugi::xml_document fontMap;
-		if (fontMap.load_file(strDataPath + _T("\\fontmap.xml")))
+		if (fontMap.load_file(strDataPath + _T("\\data\\fontmap.xml")))
 		{
 			pugi::xml_node font = fontMap.child(L"fontmap").child(L"font");
 			while (font)
