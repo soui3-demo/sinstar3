@@ -141,6 +141,15 @@ namespace SOUI
 		SStringT strTm = time.Format(_T("%Y-%m-%d %H:%M:%S %A"));
 		FindChildByID(R.id.txt_build_time)->SetWindowText(strTm);
 		
+		if (ISComm_ServerVersion() == ISACK_SUCCESS)
+		{
+			PMSGDATA pData = ISComm_GetData();
+			BYTE byVer[4];
+			memcpy(byVer, pData->byData, 4);
+			SStringT strVer =  SStringT().Format(_T("%u.%u.%u.%u"), UINT(byVer[3]), UINT(byVer[2]), UINT(byVer[1]), UINT(byVer[0]));
+			FindChildByID(R.id.txt_svr_ver)->SetWindowText(strVer);
+		}
+
 	}
 
 	void CConfigDlg::InitPages()

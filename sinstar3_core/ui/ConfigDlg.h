@@ -10,7 +10,6 @@ namespace SOUI
 		CConfigDlg(SEventSet *pEvtSet);
 		~CConfigDlg(void);		
 	protected:
-		
 		void FindAndSetCheck(int id, BOOL bcheck);
 		void FindAndSetText(int id, LPCTSTR text);
 		void FindAndSetHotKey(int id, DWORD accel);
