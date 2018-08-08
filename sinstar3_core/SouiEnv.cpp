@@ -121,15 +121,21 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst,LPCTSTR pszWorkDir)
 		param.ZipFile(GETRENDERFACTORY, CDataCenter::getSingletonPtr()->GetData().m_strSkin);
 		if(pResProvider->Init((WPARAM)&param,0))
 		{
-			IUiDefInfo * pUiDef = SUiDef::getSingleton().CreateUiDefInfo(pResProvider,_T("uidef:xml_init"));
-			if(!pUiDef->GetSkinPool())
-			{//不允许皮肤中存在全局的skin数据
+			IUiDefInfo * pUiDef = SUiDef::CreateUiDefInfo2(pResProvider,_T("uidef:xml_init"));
+			if(!pUiDef->GetSkinPool() && !pUiDef->GetStylePool() && !pUiDef->GetObjDefAttr())
+			{//不允许皮肤中存在全局的skin, style and defobjattr数据
 				m_theApp->AddResProvider(pResProvider,NULL);
+
+				IUiDefInfo * pBuiltinUidef = SUiDef::getSingleton().GetUiDef();
+				pUiDef->SetObjDefAttr(pBuiltinUidef->GetObjDefAttr());
+				pUiDef->SetStylePool(pBuiltinUidef->GetStylePool());
+				pUiDef->SetSkinPool(pBuiltinUidef->GetSkinPool());
+
 				SUiDef::getSingleton().SetUiDef(pUiDef);
 				CDataCenter::getSingletonPtr()->GetData().m_ptSkinOffset = CSkinMananger::ExtractSkinOffset(pResProvider);
 			}else
-			{//外置皮肤中禁止出现全局skin表。
-				//SLOG_WARN("previous skin is invalid");
+			{//外置皮肤中禁止出现全局skin, style and defobjattr表。
+				SLOG_WARN("previous skin is invalid");
 				CDataCenter::getSingletonPtr()->GetData().m_strSkin.Empty();
 			}
 			pUiDef->Release();

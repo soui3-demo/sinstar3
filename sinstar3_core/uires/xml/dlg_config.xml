@@ -62,17 +62,17 @@
           <window pos="88,{" layout="vbox">
             <window layout="gridLayout" xGravity="right" columnCount="2" xInterval="5dp" yInterval="10dp">
               <text text="音形码切换"/>
-              <hotkey name="hk_switch_py" weight="1" width="100dp"/>
+              <hotkey name="hk_switch_py" weight="1" width="120dp"/>
               <text text="造词"/>
-              <hotkey name="hk_make_phrase" width="100dp"/>
+              <hotkey name="hk_make_phrase" width="120dp"/>
               <text text="字根表显示"/>
-              <hotkey name="hk_show_table" width="100dp"/>
+              <hotkey name="hk_show_table" width="120dp"/>
               <text text="编码查询"/>
-              <hotkey name="hk_show_comp" width="100dp"/>
+              <hotkey name="hk_show_comp" width="120dp"/>
               <text text="隐藏状态栏"/>
-              <hotkey name="hk_show_statusbar" width="100dp"/>
+              <hotkey name="hk_show_statusbar" width="120dp"/>
               <text text="输入英文"/>
-              <hotkey name="hk_input_en" width="100dp"/>
+              <hotkey name="hk_input_en" width="120dp"/>
             </window>
           </window>
         </pageex>
@@ -149,12 +149,12 @@
             <text name="txt_ver"/>
           </window>
           <window size="-1,-1" layout="hbox">
-            <text text="编译时间:"/>
-            <text name="txt_build_time"/>
-          </window>
-          <window size="-1,-1" layout="hbox">
             <text text="服务器版本:"/>
             <text name="txt_svr_ver"/>
+          </window>
+          <window size="-1,-1" layout="hbox">
+            <text text="编译时间:"/>
+            <text name="txt_build_time"/>
           </window>
           <text text="警告：计算机软件受著作权和国际公约保护"/>
           <text text="未经授权擅自用于商业用途"/>
