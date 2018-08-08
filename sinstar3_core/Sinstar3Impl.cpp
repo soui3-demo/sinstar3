@@ -54,6 +54,7 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr)
 	SLOG_INFO("status:"<<m_pStatusWnd->m_hWnd<<", input:"<<m_pInputWnd->m_hWnd);
 	SOUI::CSimpleWnd::Create(KSinstar3WndName,WS_DISABLED|WS_POPUP,WS_EX_TOOLWINDOW,0,0,0,0,HWND_MESSAGE,NULL);
 	CUtils::ChangeWindowMessageFilter(WM_COPYDATA, MSGFLT_ADD);
+	CUtils::ChangeWindowMessageFilter(ISComm_GetCommMsgID(), MSGFLT_ADD);
 	ISComm_Login(m_hWnd);
 
 }

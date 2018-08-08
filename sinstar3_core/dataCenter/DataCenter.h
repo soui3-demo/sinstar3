@@ -12,6 +12,9 @@ namespace SOUI
 		void SetSvrCompInfo(const COMPINFO * compInfo);
 
 		BOOL IsCompChar(char cInput);
+
+		CompInfo() :nCodeNum(0) ,cWild(0)
+		{}
 	};
 
 
