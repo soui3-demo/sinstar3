@@ -390,14 +390,12 @@ namespace SOUI
 			e2->strToolTip = SStringT().Format(_T("过滤GBK重码:%s"), settings.bFilterGbk ? _T("启用") : _T("禁用"));
 			break;
 		case R.id.btn_menu:
-			if (e2->strToolTip.IsEmpty())
 			{
 				e2->bUpdated = TRUE;
 				e2->strToolTip = _T("输入法菜单");
 			}
 			break;
 		case R.id.btn_help:
-			if (e2->strToolTip.IsEmpty())
 			{
 				e2->bUpdated = TRUE;
 				e2->strToolTip = _T("打开帮助");
@@ -411,7 +409,6 @@ namespace SOUI
 			}
 			break;
 		case R.id.btn_status_shrink:
-			if (e2->strToolTip.IsEmpty())
 			{
 				e2->bUpdated = TRUE;
 				e2->strToolTip = _T("收缩状态栏");
