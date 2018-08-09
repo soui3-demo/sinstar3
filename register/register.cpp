@@ -406,7 +406,26 @@ BOOL Sinstar_Uninstall(LPCTSTR pszIme)
 	reg.RecurseDeleteKey(_T("sinstar3"));
 	reg.Close();
 
-	//todo:quit server
+	//ÍË³ö·þÎñÆ÷
+	HANDLE hMapData = OpenFileMapping(FILE_MAP_READ | FILE_MAP_WRITE, FALSE, NAME_MAPFILE);
+	if (hMapData)
+	{
+		HWND hWndSvr = 0;
+		LPVOID pData = MapViewOfFile(hMapData, FILE_MAP_READ | FILE_MAP_WRITE, 0, 0, 0);
+		memcpy(&hWndSvr, pData, sizeof(HWND));
+		UnmapViewOfFile(pData);
+		CloseHandle(hMapData);
+		if (IsWindow(hWndSvr))
+		{
+			DWORD dwProcID = 0;
+			GetWindowThreadProcessId(hWndSvr, &dwProcID);
+			PostMessage(hWndSvr, WM_QUIT, 0, 0);
+			if (dwProcID != 0)
+				WaitForSingleObject((HANDLE)dwProcID, INFINITE);
+			else
+				Sleep(500);
+		}
+	}
 	return TRUE;
 }
 
