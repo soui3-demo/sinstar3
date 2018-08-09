@@ -20,6 +20,8 @@
 #define MAX_STRLEN		100
 
 #define NAME_MAPFILE _T("_setoutsoft comm map file")
+#define SINSTAR3_CORE	_T("sinstar3_core.dll")
+#define SINSTARE_IME	_T("sinstar3_ime")
 
 TCHAR g_szPath[MAX_PATH]={0};	//程序启动位置
 
@@ -61,8 +63,9 @@ BOOL Helper_PEVersion(LPCTSTR pszFileName,DWORD *pdwVer,TCHAR *pszName ,TCHAR *p
 		TCHAR szLangCode[20]={0};
 		TCHAR szSection[256]; 
 		BOOL bOK;
-		_stprintf(szLangCode,_T("%04x"),*(WORD*)lszVer);
-		_stprintf(szLangCode+4,_T("%04x"),*(WORD*)(lszVer+2));
+		WORD * pwVer = (WORD*)lszVer;
+		_stprintf(szLangCode,_T("%04x"),pwVer[0]);
+		_stprintf(szLangCode+4,_T("%04x"), pwVer[1]);
 		if(pszName)
 		{
 			_stprintf(szSection,_T("\\StringFileInfo\\%s\\ProductName"),szLangCode);
@@ -200,7 +203,7 @@ BOOL Is64OS()
 //从输入文件中获取文件属性
 BOOL QueryImeProp(TCHAR *pszIme,TCHAR *pszImeProp)
 {
-	TCHAR szImeFile[MAX_PATH],szName[100];
+	TCHAR szImeFile[MAX_PATH] = { 0 }, szName[100] = { 0 };
 	_stprintf(szImeFile,_T("%s\\%s"),g_szPath,pszIme);
 	DWORD dwVer = 0;
 	if(!Helper_PEVersion(szImeFile,&dwVer,NULL,szName)) return FALSE;
@@ -232,31 +235,19 @@ BOOL CheckVersion(TCHAR *pszVerNew,TCHAR *pszVerCur)
 	return (dwVerCur<dwVerNew);
 }
 
-void ShowCaller(LPCTSTR pszSysPath,LPCTSTR pszIme)
+void ShowCaller(LPCTSTR pszImeCore)
 {
 	TCHAR szPath[MAX_PATH];
 	STARTUPINFO si={sizeof(STARTUPINFO),0};
 	PROCESS_INFORMATION pi={0};
-	_stprintf(szPath,_T("findcaller.exe %s\\%s.ime"),pszSysPath,pszIme);
-	if(CreateProcess(_T("findcaller.exe"),szPath,NULL,NULL,FALSE,0,NULL,NULL,&si,&pi))
+	_stprintf(szPath,_T("%s\\program\\findcallerUI.exe %s"), g_szPath, pszImeCore);
+	if(CreateProcess(NULL,szPath,NULL,NULL,FALSE,0,NULL,NULL,&si,&pi))
 	{
 		CloseHandle(pi.hThread);
 		CloseHandle(pi.hProcess);
 	}else
 	{
-		MessageBox(GetActiveWindow(),_T("启动程序失败"),_T("提示"),MB_OK|MB_ICONSTOP);
-	}
-	if(Is64OS())
-	{
-		_stprintf(szPath,_T("findcaller_x64.exe %s\\%s.ime"),pszSysPath,pszIme);
-		if(CreateProcess(_T("findcaller_x64.exe"),szPath,NULL,NULL,FALSE,0,NULL,NULL,&si,&pi))
-		{
-			CloseHandle(pi.hThread);
-			CloseHandle(pi.hProcess);
-		}else
-		{
-			MessageBox(GetActiveWindow(),_T("启动程序失败"),_T("提示"),MB_OK|MB_ICONSTOP);
-		}
+		MessageBox(GetActiveWindow(),_T("启动FindCallerUI失败"),_T("提示"),MB_OK|MB_ICONSTOP);
 	}
 }
 
@@ -321,7 +312,10 @@ BOOL Sinstar_Update(LPCTSTR pszIme)
 	if(GetLastError()==ERROR_ALREADY_EXISTS)
 	{
 		CloseHandle(hMutex);
-		ShowCaller(szSysPath, pszIme);
+		if (MessageBox(GetActiveWindow(), _T("输入法正在使用，不能更新，查看哪些程序在使用吗？"), _T("提示"), MB_OKCANCEL | MB_ICONQUESTION) == IDOK)
+		{
+			ShowCaller(SINSTAR3_CORE);
+		}
 		return 0;
 	}
 	CloseHandle(hMutex);
@@ -369,7 +363,10 @@ BOOL Sinstar_Uninstall(LPCTSTR pszIme)
 	if(GetLastError()==ERROR_ALREADY_EXISTS)
 	{
 		CloseHandle(hMutex);
-		ShowCaller(szSysPath, pszIme);
+		if (MessageBox(GetActiveWindow(), _T("输入法正在使用，不能卸载，查看哪些程序在使用吗？"), _T("提示"), MB_OKCANCEL | MB_ICONQUESTION) == IDOK)
+		{
+			ShowCaller(SINSTAR3_CORE);
+		}
 		return 0;
 	}
 	CloseHandle(hMutex);
@@ -466,7 +463,7 @@ BOOL Sinstar_Install(LPCTSTR pszImeName,LPCTSTR pszIme)
 		CloseHandle(hMutex);
 		if (MessageBox(GetActiveWindow(), _T("输入法正在使用，不能安装，查看哪些程序在使用吗？"), _T("提示"), MB_OKCANCEL | MB_ICONQUESTION) == IDOK)
 		{
-			ShowCaller(szSysPath, pszIme);
+			ShowCaller(SINSTAR3_CORE);
 		}
 		return 0;
 	}
@@ -631,12 +628,15 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*
 	}
 	FreeLibrary(hMod);
 
-	_tcscpy(dlgParam.szIme, _T("program\\sinstar3_core.dll"));
-	if(!QueryImeProp(dlgParam.szIme,dlgParam.szName))
+	TCHAR szImeCorePath[MAX_PATH];
+	_stprintf(szImeCorePath, _T("program\\%s"), SINSTAR3_CORE);
+	if(!QueryImeProp(szImeCorePath,dlgParam.szName))
 	{
-	MessageBox(GetActiveWindow(),_T("查询输入法文件信息失败"),_T("提示"),MB_OK|MB_ICONSTOP);
-	return 1;
+		MessageBox(GetActiveWindow(),_T("查询输入法文件信息失败"),_T("提示"),MB_OK|MB_ICONSTOP);
+		return 1;
 	}
+
+	_tcscpy(dlgParam.szIme, SINSTARE_IME);
 	if(__argc==1)
 	{
 		nRet=DialogBoxParam(hInstance,MAKEINTRESOURCE(IDD_OPTION),GetActiveWindow(),DlgProc_Option,(LPARAM)&dlgParam);

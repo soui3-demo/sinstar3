@@ -14,7 +14,7 @@ translucent="1"
     <window pos="5,[2,-5,-5" layout="vbox">
       <window size="-2,-1" layout="hbox">
         <text text="文件名:"/>
-        <edit size="0,30" weight="1" name="edit_dll"/>
+        <edit size="0,30" weight="1" name="edit_dll" readonly="1"/>
       </window>
       <window size="-2,0" weight="1" layout="hbox">
         <mclistview size="0,-2" weight="1" name="mclv_tasks" headerHeight="30">

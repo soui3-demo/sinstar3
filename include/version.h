@@ -41,4 +41,4 @@
 
 #define PRODUCT_IME	sinstar3_ime_tstring( _sinstar3_ime)
 #define PRODUCT_TSF	sinstar3_ime_wstring( _sinstar3_tsf)
-#define SINSTAR3_MUTEX sinstar3_ime_tstring( _sinstar3_mutex)
+#define SINSTAR3_MUTEX sinstar3_ime_tstring(_sinstar3_mutex)
