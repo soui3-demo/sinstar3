@@ -1,5 +1,6 @@
 #pragma once
 #include <WinReg.h>
+#include <assert.h>
 
 #ifndef ATLTRACE
 #define ATLTRACE            __noop
@@ -12,6 +13,10 @@
 
 #ifndef ATLTRACENOTIMPL
 #define ATLTRACENOTIMPL(funcname)   return E_NOTIMPL
+#endif
+
+#ifndef SASSERT
+#define SASSERT assert
 #endif
 
 #ifndef ATLASSERT

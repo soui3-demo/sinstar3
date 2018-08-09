@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "Sinstar3Impl.h"
 #include "../include/autolock.h"
+#include "../include/version.h"
 #include "SouiEnv.h"
 #include "Minidump.h"
 #include "dataCenter/DataCenter.h"
@@ -37,9 +38,9 @@ EXTERN_C SINSTAR3_API void Sinstar3_SetHostInfo(HostInfo *pHostInfo)
 }
 
 
-CSinstar3Core::CSinstar3Core(HINSTANCE hInst):CModuleRef(hInst),m_pLogStateListener(NULL)
+CSinstar3Core::CSinstar3Core(HINSTANCE hInst):CModuleRef(hInst),m_pLogStateListener(NULL), m_hMutex(0)
 {
-
+	m_hMutex = CreateMutex(NULL, FALSE, SINSTAR3_MUTEX);
 	TCHAR szPath[MAX_PATH];
 	CRegKey reg;
 	LONG ret = reg.Open(HKEY_LOCAL_MACHINE,_T("SOFTWARE\\SetoutSoft\\sinstar3"),KEY_READ|KEY_WOW64_64KEY);
@@ -64,6 +65,7 @@ CSinstar3Core::~CSinstar3Core()
 	delete CDataCenter::getSingletonPtr();
 	g_SettingsG.Save(m_strConfig);
 	g_nRefCount --;
+	CloseHandle(m_hMutex);
 }
 
 void CSinstar3Core::OnInit()
