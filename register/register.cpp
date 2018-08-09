@@ -510,13 +510,16 @@ BOOL Sinstar_Install(LPCTSTR pszImeName,LPCTSTR pszIme)
 
 	//step4:修改2.x的服务器路径
 	_stprintf(szPath1, _T("%s\\sinstar2.ini"), szSysPath);
-	WritePrivateProfileString(_T("server"), _T("exe"), szSvrExe, szPath1);
-	WritePrivateProfileString(_T("server"), _T("data"), szSvrData, szPath1);
-	if (Is64OS())
+	if (GetFileAttributes(szPath1) != INVALID_FILE_ATTRIBUTES)
 	{
-		_stprintf(szPath1, _T("%s\\sinstar2.ini"), szSysWow64);
 		WritePrivateProfileString(_T("server"), _T("exe"), szSvrExe, szPath1);
 		WritePrivateProfileString(_T("server"), _T("data"), szSvrData, szPath1);
+		if (Is64OS())
+		{
+			_stprintf(szPath1, _T("%s\\sinstar2.ini"), szSysWow64);
+			WritePrivateProfileString(_T("server"), _T("exe"), szSvrExe, szPath1);
+			WritePrivateProfileString(_T("server"), _T("data"), szSvrData, szPath1);
+		}
 	}
 
 	//step5: copy ime file
