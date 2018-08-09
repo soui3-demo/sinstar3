@@ -135,12 +135,29 @@
             <check extend_top="10" name="chk_full_skip_simple" text="出简不出全"/>
           </window>
         </pageex>
-        <pageex title="@string/cfg_misc" tip="@string/cfg_misc" layout="vbox" gravity="center">
-          <group size="-1,-1" layout="vbox" text="提示音">
-            <radio name="sound_disable" text="禁用" id="800"/>
-            <radio name="sound_wave" text="WAV提示" id="801"/>
-            <radio name="sound_beep" text="蜂鸣器" id="802"/>
-          </group>
+        <pageex title="@string/cfg_misc" tip="@string/cfg_misc">
+          <text pos="10,10">@string/cfg_misc</text>
+          <window pos="88,{" layout="vbox">
+            <group size="-1,-1" layout="vbox" text="提示音">
+              <radio name="sound_disable" text="禁用" id="800"/>
+              <radio name="sound_wave" text="WAV提示" id="801"/>
+              <radio name="sound_beep" text="蜂鸣器" id="802"/>
+            </group>
+            <group size="-1,-1" layout="gridlayout" text="笔画输入键" columnCount="2" xInterval="5" yInterval="5" xGravity="right">
+                <text text="横(小键盘1):"/>
+                <hotkey name="hk_bihua_heng" id="900" width="80dp" invalidComb="7"/>
+                <text text="竖(小键盘2):"/>
+                <hotkey name="hk_bihua_shu" id="901" width="80dp" invalidComb="7"/>
+                <text text="撇(小键盘3):"/>
+                <hotkey name="hk_bihua_pie" id="902" width="80dp" invalidComb="7"/>
+                <text text="捺(小键盘4):"/>
+                <hotkey name="hk_bihua_na" id="903" width="80dp" invalidComb="7"/>
+                <text text="折(小键盘5):"/>
+                <hotkey name="hk_bihua_zhe" id="904" width="80dp" invalidComb="7"/>
+                <text text="万能键(小键盘6):"/>
+                <hotkey name="hk_bihua_wild" id="905" width="80dp" invalidComb="7"/>
+            </group>
+          </window>
         </pageex>
         <pageex title="@string/cfg_about" tip="@string/cfg_about" layout="vbox" gravity="center">
           <text extend_top="30" text="启程输入法"/>

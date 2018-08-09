@@ -2384,7 +2384,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 			{//Ctrl + Shift
 				bRet=(uKey>='0' && uKey<='9');
 				return bRet;
-			}else
+			}else if(!(lpbKeyState[VK_CONTROL]&0x80 || lpbKeyState[VK_MENU]&0x80))
 			{
 				BOOL bCoding=KeyIn_IsCoding(&m_ctx);
 				if(uKey>='A' && uKey<='Z')
@@ -2395,22 +2395,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 					}else 
 					{
 						char cKey=uKey+0x20;	//将VK转换成字符
-						char i=0;
-						if(cKey==ISComm_GetCompInfo()->cWildChar)
-						{
-							bRet=TRUE;
-						}else
-						{
-							while(ISComm_GetCompInfo()->szCode[i])
-							{
-								if(ISComm_GetCompInfo()->szCode[i]==cKey)
-								{
-									bRet=TRUE;
-									break;
-								}
-								i++;
-							}
-						}
+						bRet = CDataCenter::getSingleton().GetData().m_compInfo.IsCompChar(cKey);
 					}
 				}else if(uKey>=VK_NUMPAD0 && uKey<=VK_NUMPAD9)
 				{//小键盘数字输入

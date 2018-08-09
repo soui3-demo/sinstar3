@@ -123,6 +123,13 @@ namespace SOUI
 	void CConfigDlg::InitPageMisc()
 	{
 		FindAndSetCheck(R.id.sound_disable + g_SettingsG.nSoundAlert, TRUE);
+
+		for (int i = 0; i < 6; i++)
+		{
+			BYTE byHotKey = g_SettingsG.byLineKey[i];
+			if (byHotKey >= 'a' && byHotKey <= 'z') byHotKey -= 0x20;//to upper letter
+			FindAndSetHotKey(R.id.hk_bihua_heng+i, byHotKey);
+		}
 	}
 
 	void CConfigDlg::InitPageAbout()
@@ -349,7 +356,6 @@ SWindow *pCtrl = FindChildByID(id);\
 			g_SettingsG.dwHotkeys[HKI_HideStatus] = dwAccel; break;
 		case R.id.hk_input_en:
 			g_SettingsG.dwHotkeys[HKI_EnSwitch] = dwAccel; break;	
-			//other
 		case R.id.hk_2_cand:
 			g_SettingsG.by2CandVK = pHotKeyEvt->vKey; break;
 		case R.id.hk_3_cand:
@@ -358,6 +364,19 @@ SWindow *pCtrl = FindChildByID(id);\
 			g_SettingsG.byTurnPageUpVK = pHotKeyEvt->vKey; break;
 		case R.id.hk_turn_next:
 			g_SettingsG.byTurnPageDownVK = pHotKeyEvt->vKey; break;
+		case R.id.hk_bihua_heng:
+		case R.id.hk_bihua_shu:
+		case R.id.hk_bihua_pie:
+		case R.id.hk_bihua_na:
+		case R.id.hk_bihua_zhe:
+		case R.id.hk_bihua_wild:
+			{
+				BYTE byHotKey = pHotKeyEvt->vKey;
+				if (byHotKey >= 'A' && byHotKey <= 'Z')
+					byHotKey += 0x20; //to lower letter. 
+				g_SettingsG.byLineKey[pHotKeyCtrl->GetID() - R.id.hk_bihua_heng] = byHotKey;
+			}
+			break;
 		}
 	}
 
