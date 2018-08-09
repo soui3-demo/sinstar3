@@ -16,6 +16,7 @@ namespace SOUI
 			BTN_RECORD=1<<1,
 			BTN_SOUND=1<<2,
 			BTN_ENGLISHMODE = 1<<3,
+			BTN_FILTERGBK = 1<<4,
 			BTN_ALL=0xffffffff,
 		};
 
@@ -23,7 +24,7 @@ namespace SOUI
 		~CStatusWnd(void);
 
 		void UpdateCompInfo();
-		void UpdateToggleStatus(DWORD flags);
+		void UpdateToggleStatus(DWORD flags,BOOL bInit=FALSE);
 	protected:
 		virtual void OnReposition(CPoint pt);
 
@@ -52,6 +53,7 @@ namespace SOUI
 		void OnSwitchRecord(EventArgs *e);
 		void OnSwitchSound(EventArgs *e);
 		void OnSwitchEnglish(EventArgs *e);
+		void OnSwitchFilterGbk(EventArgs *e);
 		void OnLogoClick();
 		void OnUpdateBtnTooltip(EventArgs *e);
 		void OnMenuClick();
@@ -68,6 +70,7 @@ namespace SOUI
 			EVENT_ID_HANDLER(R.id.btn_record, EventCmd::EventID, OnSwitchRecord)
 			EVENT_ID_HANDLER(R.id.btn_sound, EventCmd::EventID, OnSwitchSound)
 			EVENT_ID_HANDLER(R.id.btn_english,EventCmd::EventID,OnSwitchEnglish)
+			EVENT_ID_HANDLER(R.id.btn_filter_gbk, EventCmd::EventID, OnSwitchFilterGbk)
 			EVENT_ID_COMMAND(R.id.img_logo, OnLogoClick)
 			EVENT_ID_COMMAND(R.id.btn_menu,OnMenuClick)
 			EVENT_ID_COMMAND(R.id.btn_help,OnHelpClick)

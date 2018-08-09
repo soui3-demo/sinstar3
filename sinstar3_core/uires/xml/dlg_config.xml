@@ -73,6 +73,12 @@
               <hotkey name="hk_show_statusbar" width="120dp"/>
               <text text="输入英文"/>
               <hotkey name="hk_input_en" width="120dp"/>
+              <text text="过滤GBK"/>
+              <hotkey name="hk_filter_gbk" width="120dp"/>
+              <text text="语音较对(TTS)"/>
+              <hotkey name="hk_tts" width="120dp"/>
+              <text text="输入记忆"/>
+              <hotkey name="hk_record" width="120dp"/>
             </window>
           </window>
         </pageex>
@@ -126,7 +132,7 @@
               <text text="后翻页"/>
               <hotkey name="hk_turn_next" width="100dp" invalidComb="7"/>
             </window>
-            <text extend_top="10">GBK重码</text>
+            <text extend_top="10">GBK重码显示策略</text>
             <window extend_top="10" layout="vbox">
               <radio name="gbk_show_only" id="700" text="显示唯一重码"/>
               <radio name="gbk_show_manual" id="701" text="显示手动上屏"/>

@@ -10,7 +10,9 @@ enum HotKeyIndex{
 	HKI_MakePhrase,		// 造词热键
 	HKI_ShowRoot,		// 字根表显示热键
 	HKI_HideStatus,		// 隐藏状态栏
-
+	HKI_FilterGbk,		// filter gbk
+	HKI_Record,			// record input
+	HKI_TTS,			// tts
 	HKI_COUNT,
 };
 

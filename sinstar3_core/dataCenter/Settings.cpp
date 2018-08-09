@@ -22,6 +22,9 @@ const static HotKeyEntry KHotKeyEntryMap[] = {
 	{ HKI_MakePhrase,_T("HotKey_MakePhrase"),_T("ctrl+m") },
 	{ HKI_ShowRoot,_T("HotKey_ShowRoot") ,_T("ctrl+k") },
 	{ HKI_HideStatus,_T("HotKey_HideStatus"),_T("ctrl+y") },
+	{ HKI_FilterGbk,_T("HotKey_FilterGbk"),_T("ctrl+alt+g") },
+	{ HKI_Record,_T("HotKey_Record"),_T("ctrl+alt+r") },
+	{ HKI_TTS,_T("HotKey_TTS"),_T("ctrl+alt+t") },
 };
 
 
@@ -168,6 +171,7 @@ void CSettingsLocal::Load(LPCTSTR pszIniFile)
 	bMouseFollow=GetPrivateProfileInt(KSession,_T("MouseFollow"),TRUE,pszIniFile);
 	bHideStatus=GetPrivateProfileInt(KSession,_T("HideStatus"),0,pszIniFile);
 	bInputBig5=GetPrivateProfileInt(KSession,_T("InputBig5"),0,pszIniFile);
+	bFilterGbk = GetPrivateProfileInt(KSession, _T("FilterGbk"), 0, pszIniFile);
 }
 
 void CSettingsLocal::Save(LPCTSTR pszIniFile)
@@ -180,4 +184,5 @@ void CSettingsLocal::Save(LPCTSTR pszIniFile)
 	WritePrivateProfileInt(KSession,_T("MouseFollow"),bMouseFollow,pszIniFile);
 	WritePrivateProfileInt(KSession,_T("HideStatus"),bHideStatus,pszIniFile);
 	WritePrivateProfileInt(KSession,_T("InputBig5"),bInputBig5,pszIniFile);
+	WritePrivateProfileInt(KSession, _T("FilterGbk"), bFilterGbk, pszIniFile);
 }

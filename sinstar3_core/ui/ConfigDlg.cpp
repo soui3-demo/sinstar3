@@ -80,6 +80,9 @@ namespace SOUI
 		FindAndSetHotKey(R.id.hk_show_comp, g_SettingsG.dwHotkeys[HKI_Query]);
 		FindAndSetHotKey(R.id.hk_show_statusbar, g_SettingsG.dwHotkeys[HKI_HideStatus]);
 		FindAndSetHotKey(R.id.hk_input_en, g_SettingsG.dwHotkeys[HKI_EnSwitch]);
+		FindAndSetHotKey(R.id.hk_filter_gbk, g_SettingsG.dwHotkeys[HKI_FilterGbk]);
+		FindAndSetHotKey(R.id.hk_tts, g_SettingsG.dwHotkeys[HKI_TTS]);
+		FindAndSetHotKey(R.id.hk_record, g_SettingsG.dwHotkeys[HKI_Record]);
 	}
 
 	void CConfigDlg::InitPageAssociate()
@@ -356,6 +359,12 @@ SWindow *pCtrl = FindChildByID(id);\
 			g_SettingsG.dwHotkeys[HKI_HideStatus] = dwAccel; break;
 		case R.id.hk_input_en:
 			g_SettingsG.dwHotkeys[HKI_EnSwitch] = dwAccel; break;	
+		case R.id.hk_filter_gbk:
+			g_SettingsG.dwHotkeys[HKI_FilterGbk] = dwAccel; break;
+		case R.id.hk_tts:
+			g_SettingsG.dwHotkeys[HKI_TTS] = dwAccel; break;
+		case R.id.hk_record:
+			g_SettingsG.dwHotkeys[HKI_Record] = dwAccel; break;
 		case R.id.hk_2_cand:
 			g_SettingsG.by2CandVK = pHotKeyEvt->vKey; break;
 		case R.id.hk_3_cand:

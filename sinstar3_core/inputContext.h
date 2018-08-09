@@ -71,6 +71,7 @@ public:
 	BOOL	bSound;				// 语音较对
 	BOOL	bRecord;			// 记录输入语句
 	BOOL	bInputBig5;			// 繁体输出标志
+	BOOL    bFilterGbk;			// filter gbk
 };
 
 

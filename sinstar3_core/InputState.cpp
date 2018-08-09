@@ -1803,9 +1803,16 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 				pCandData=pbyData;
 				for(i=0;i<sCount;i++)
 				{
-					if(g_SettingsG.nGbkMode!=0 || pCandData[0]!=RATE_GBK || sSingleWords<2)
-					{//GBK显示或者不是GBK重码
-						lpCntxtPriv->ppbyCandInfo[lpCntxtPriv->sCandCount++]=pCandData;
+					if (pCandData[0] == RATE_GBK)
+					{
+						if (!lpCntxtPriv->settings.bFilterGbk && (g_SettingsG.nGbkMode != 0 ||  sSingleWords<2))
+						{//GBK显示或者不是GBK重码
+							lpCntxtPriv->ppbyCandInfo[lpCntxtPriv->sCandCount++] = pCandData;
+						}
+					}
+					else
+					{
+						lpCntxtPriv->ppbyCandInfo[lpCntxtPriv->sCandCount++] = pCandData;
 					}
 					pCandData+=pCandData[1]+2;	//偏移词组信息
 					pCandData+=pCandData[0]+1;	//偏移编码信息
@@ -2183,25 +2190,34 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 			switch (iHotKey)
 			{
 			case HKI_CharMode:
-				m_pListener->OnCommand(CMD_CHARMODE, 0);
+				m_pListener->OnCommand(CMD_HOTKEY_CHARMODE, 0);
 				break;
 			case HKI_MakePhrase:
-				m_pListener->OnCommand(CMD_MAKEPHRASE, 0);
+				m_pListener->OnCommand(CMD_HOTKEY_MAKEPHRASE, 0);
 				break;
 			case HKI_EnSwitch:
-				m_pListener->OnCommand(CMD_ENGLISHMODE, 0);
+				m_pListener->OnCommand(CMD_HOTKEY_ENGLISHMODE, 0);
 				break;
 			case HKI_Mode:
-				m_pListener->OnCommand(CMD_INPUTMODE, 0);
+				m_pListener->OnCommand(CMD_HOTKEY_INPUTMODE, 0);
 				break;
 			case HKI_ShowRoot:
-				m_pListener->OnCommand(CMD_KEYMAP, 0);
+				m_pListener->OnCommand(CMD_HOTKEY_KEYMAP, 0);
 				break;
 			case HKI_HideStatus:
-				m_pListener->OnCommand(CMD_HIDESTATUSBAR, 0);
+				m_pListener->OnCommand(CMD_HOTKEY_HIDESTATUSBAR, 0);
 				break;
 			case HKI_Query:
-				m_pListener->OnCommand(CMD_QUERYINFO, 0);
+				m_pListener->OnCommand(CMD_HOTKEY_QUERYINFO, 0);
+				break;
+			case HKI_FilterGbk:
+				m_pListener->OnCommand(CMD_HOTKEY_FILTERGBK, 0);
+				break;
+			case HKI_TTS:
+				m_pListener->OnCommand(CMD_HOTKEY_TTS, 0);
+				break;
+			case HKI_Record:
+				m_pListener->OnCommand(CMD_HOTKEY_RECORD, 0);
 				break;
 			}
 		}

@@ -19,7 +19,7 @@ CCmdHandler::~CCmdHandler()
 {
 }
 
-void CCmdHandler::OnMakePhrase(LPARAM lp)
+void CCmdHandler::OnHotkeyMakePhrase(LPARAM lp)
 {
 	WCHAR szBuf[MAX_INPUT];
 	int nRet =CUtils::GetClipboardText(m_pSinstar3->m_hWnd, szBuf, MAX_INPUT);
@@ -44,18 +44,18 @@ void CCmdHandler::OnMakePhrase(LPARAM lp)
 	}
 }
 
-void CCmdHandler::OnKeyMap(LPARAM lp)
+void CCmdHandler::OnHotKeyKeyMap(LPARAM lp)
 {
 	ISComm_SendMsg(CT_SHOWKEYMAP, 0, 0, 0);
 }
 
-void CCmdHandler::OnHideStatusBar(LPARAM lp)
+void CCmdHandler::OnHotKeyHideStatusBar(LPARAM lp)
 {
 	m_pSinstar3->GetInputContext()->settings.bHideStatus = !m_pSinstar3->GetInputContext()->settings.bHideStatus;
 	m_pSinstar3->m_pStatusWnd->Show(!m_pSinstar3->GetInputContext()->settings.bHideStatus);
 }
 
-void CCmdHandler::OnQueryInfo(LPARAM lp)
+void CCmdHandler::OnHotKeyQueryInfo(LPARAM lp)
 {
 	WCHAR szBuf[MAX_INPUT] = { 0 };
 	int  nGet = CUtils::GetClipboardText(m_pSinstar3->m_hWnd, szBuf, MAX_INPUT);
@@ -168,13 +168,8 @@ void CCmdHandler::OnQueryInfo(LPARAM lp)
 	}
 }
 
-void CCmdHandler::OnFollowCaret(LPARAM lp)
-{
-	m_pSinstar3->GetInputContext()->settings.bMouseFollow = !m_pSinstar3->GetInputContext()->settings.bMouseFollow;
-	m_pSinstar3->m_pInputWnd->SetFollowCaret(m_pSinstar3->GetInputContext()->settings.bMouseFollow);
-}
 
-void CCmdHandler::OnInputMode(LPARAM lp)
+void CCmdHandler::OnHotKeyInputMode(LPARAM lp)
 {
 	InputContext * pCtx = m_pSinstar3->m_inputState.GetInputContext();
 	if (g_SettingsG.compMode != pCtx->compMode)
@@ -204,16 +199,40 @@ void CCmdHandler::OnKeySpeed(LPARAM lp)
 	m_pSinstar3->ShowTip(_T("ÌבÊ¾"), msg);
 }
 
-void CCmdHandler::OnCharMode(LPARAM lp)
+void CCmdHandler::OnHotKeyCharMode(LPARAM lp)
 {
 	m_pSinstar3->GetInputContext()->settings.bCharMode = !m_pSinstar3->GetInputContext()->settings.bCharMode;
 	m_pSinstar3->m_pStatusWnd->UpdateToggleStatus(CStatusWnd::BTN_CHARMODE);
 }
 
-void CCmdHandler::OnEnglishMode(LPARAM lp)
+void CCmdHandler::OnHotKeyEnglishMode(LPARAM lp)
 {
 	m_pSinstar3->GetInputContext()->settings.bEnglish = !m_pSinstar3->GetInputContext()->settings.bEnglish;
 	m_pSinstar3->m_pStatusWnd->UpdateToggleStatus(CStatusWnd::BTN_ENGLISHMODE);
+}
+
+void CCmdHandler::OnHotKeyFilterGbk(LPARAM lp)
+{
+	m_pSinstar3->GetInputContext()->settings.bFilterGbk = !m_pSinstar3->GetInputContext()->settings.bFilterGbk;
+	m_pSinstar3->m_pStatusWnd->UpdateToggleStatus(CStatusWnd::BTN_FILTERGBK);
+}
+
+void CCmdHandler::OnHotkeyTTS(LPARAM lp)
+{
+	m_pSinstar3->GetInputContext()->settings.bSound = !m_pSinstar3->GetInputContext()->settings.bSound;
+	m_pSinstar3->m_pStatusWnd->UpdateToggleStatus(CStatusWnd::BTN_SOUND);
+}
+
+void CCmdHandler::OnHotkeyRecord(LPARAM lp)
+{
+	m_pSinstar3->GetInputContext()->settings.bRecord = !m_pSinstar3->GetInputContext()->settings.bRecord;
+	m_pSinstar3->m_pStatusWnd->UpdateToggleStatus(CStatusWnd::BTN_RECORD);
+}
+
+void CCmdHandler::OnFollowCaret(LPARAM lp)
+{
+	m_pSinstar3->GetInputContext()->settings.bMouseFollow = !m_pSinstar3->GetInputContext()->settings.bMouseFollow;
+	m_pSinstar3->m_pInputWnd->SetFollowCaret(m_pSinstar3->GetInputContext()->settings.bMouseFollow);
 }
 
 void CCmdHandler::OnUpdateMode(LPARAM lp)
@@ -255,4 +274,10 @@ void CCmdHandler::OnOpenSkinDir(LPARAM lp)
 	FindClose(h);
 	strPath += wfd.cFileName;
 	ShellExecute(NULL, _T("open"), _T("explorer"), _T("/select,") + strPath, NULL, SW_SHOWDEFAULT);
+}
+
+void CCmdHandler::OnShowTip(LPARAM lp)
+{
+	TIPINFO *pTi = (TIPINFO*)lp;
+	m_pSinstar3->ShowTip(pTi->strTitle, pTi->strTip);
 }
