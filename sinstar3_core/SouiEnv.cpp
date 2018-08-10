@@ -130,6 +130,9 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst,LPCTSTR pszWorkDir)
 				pUiDef->SetObjDefAttr(pBuiltinUidef->GetObjDefAttr());
 				pUiDef->SetStylePool(pBuiltinUidef->GetStylePool());
 				pUiDef->SetSkinPool(pBuiltinUidef->GetSkinPool());
+				pUiDef->GetNamedColor().Merge(pBuiltinUidef->GetNamedColor());
+				pUiDef->GetNamedString().Merge(pBuiltinUidef->GetNamedString());
+				pUiDef->GetNamedDimension().Merge(pBuiltinUidef->GetNamedDimension());
 
 				SUiDef::getSingleton().SetUiDef(pUiDef);
 				CDataCenter::getSingletonPtr()->GetData().m_ptSkinOffset = CSkinMananger::ExtractSkinOffset(pResProvider);

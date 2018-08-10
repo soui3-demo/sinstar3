@@ -3,7 +3,6 @@
   <desc author="硯边独步" name="大字-紫黛云鬓" version="1.0" />
   <font face="微软雅黑" size="15"/>
 
-  <string src="values:string" />  
   <color src="values:color"/>
   <dim src="values:dim"/>
   

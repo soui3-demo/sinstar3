@@ -2,7 +2,7 @@
 <UIDEF>
 	<desc author="与狼共舞" name="windows 7" version="1.0" />
 	<font face="微软雅黑" size="15" />
-	<string src="values:string" />
+
 	<color src="values:color" />
 	<dim src="values:dim"/>
 </UIDEF>

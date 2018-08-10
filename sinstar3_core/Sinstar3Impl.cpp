@@ -463,9 +463,7 @@ BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 	SLOG_INFO("step1,lock ok");
 
 	//将内置皮肤的skinpool,stylepool,SObjDefAttr保存起来.
-	CAutoRefPtr<SSkinPool> curSkinPool = SUiDef::getSingleton().GetUiDef()->GetSkinPool();
-	CAutoRefPtr<SStylePool> curStylePool = SUiDef::getSingleton().GetUiDef()->GetStylePool();
-	CAutoRefPtr<SObjDefAttr> curObjDefAttr = SUiDef::getSingleton().GetUiDef()->GetObjDefAttr();
+	IUiDefInfo *pBulitinUidef =  CDataCenter::getSingletonPtr()->GetData().m_defUiDefine;
 
 	if (CDataCenter::getSingletonPtr()->GetData().m_strSkin != strSkin)
 	{
@@ -480,7 +478,7 @@ BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 				return FALSE;
 
 			IUiDefInfo * pUiDef = SUiDef::CreateUiDefInfo2(pResProvider, _T("uidef:xml_init"));
-			if (pUiDef->GetSkinPool() || pUiDef->GetStylePool())
+			if (pUiDef->GetSkinPool() || pUiDef->GetStylePool() || pUiDef->GetObjDefAttr())
 			{//不允许皮肤中存在全局的skin and style data
 				pUiDef->Release();
 				return FALSE;
@@ -494,7 +492,6 @@ BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 
 				IResProvider *pLastRes = SApplication::getSingleton().GetTailResProvider();
 				SApplication::getSingleton().RemoveResProvider(pLastRes);
-				IUiDefInfo *pUiDefInfo = SUiDef::getSingleton().GetUiDef();
 			}
 
 			SLOG_INFO("step6, extract skin defined offset");
@@ -503,6 +500,9 @@ BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 			SLOG_INFO("step7, add new skin to sinstar3");
 			SApplication::getSingleton().AddResProvider(pResProvider, NULL);
 			SLOG_INFO("step8, set uidef");
+			pUiDef->GetNamedColor().Merge(pBulitinUidef->GetNamedColor());
+			pUiDef->GetNamedString().Merge(pBulitinUidef->GetNamedString());
+			pUiDef->GetNamedDimension().Merge(pBulitinUidef->GetNamedDimension());
 			SUiDef::getSingleton().SetUiDef(pUiDef);
 			pUiDef->Release();
 			SLOG_INFO("step9, set external skin ok");
@@ -512,15 +512,12 @@ BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 			SLOG_INFO("step10, remove external skin");
 			IResProvider *pLastRes = SApplication::getSingleton().GetTailResProvider();
 			SApplication::getSingleton().RemoveResProvider(pLastRes);
-			IUiDefInfo *pUiDefInfo = SUiDef::getSingleton().GetUiDef();
 
 			SLOG_INFO("step12, restore uidef");
-			IResProvider *pCurRes = SApplication::getSingleton().GetTailResProvider();
-			IUiDefInfo * pUiDef = SUiDef::getSingleton().CreateUiDefInfo(pCurRes, _T("uidef:xml_init"));
-			SUiDef::getSingleton().SetUiDef(pUiDef);
-			pUiDef->Release();
+			SUiDef::getSingleton().SetUiDef(pBulitinUidef);
 
 			SLOG_INFO("step13, extract builtin skin defined offset");
+			IResProvider *pCurRes = SApplication::getSingleton().GetHeadResProvider();
 			CDataCenter::getSingleton().GetData().m_ptSkinOffset = CSkinMananger::ExtractSkinOffset(pCurRes);
 		}
 
@@ -529,9 +526,9 @@ BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 	}
 
 	//还原skinpool and stylepool.
-	SUiDef::getSingleton().GetUiDef()->SetSkinPool(curSkinPool);
-	SUiDef::getSingleton().GetUiDef()->SetStylePool(curStylePool);
-	SUiDef::getSingleton().GetUiDef()->SetObjDefAttr(curObjDefAttr);
+	SUiDef::getSingleton().GetUiDef()->SetSkinPool(pBulitinUidef->GetSkinPool());
+	SUiDef::getSingleton().GetUiDef()->SetStylePool(pBulitinUidef->GetStylePool());
+	SUiDef::getSingleton().GetUiDef()->SetObjDefAttr(pBulitinUidef->GetObjDefAttr());
 
 	SLOG_INFO("step15, notify skin changed");
 	//notify skin changed

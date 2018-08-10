@@ -5,7 +5,5 @@
 
   <string src="values:string" />  
   <color src="values:color"/>
-  <skin src="values:skin"/>
-  <dim src="values:dim"/>
   
 </UIDEF>
