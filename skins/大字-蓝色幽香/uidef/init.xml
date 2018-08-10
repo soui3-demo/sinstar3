@@ -3,7 +3,7 @@
   <desc author="砚边独步" name="大字-蓝色幽香" version="1.0" />
   <font face="微软雅黑" size="15"/>
 
-  <string src="values:string" />  
   <color src="values:color"/>
+  <color dim="values:dim"/>
   
 </UIDEF>
