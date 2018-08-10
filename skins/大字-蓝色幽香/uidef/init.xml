@@ -4,6 +4,6 @@
   <font face="微软雅黑" size="15"/>
 
   <color src="values:color"/>
-  <color dim="values:dim"/>
+  <dim src="values:dim"/>
   
 </UIDEF>
