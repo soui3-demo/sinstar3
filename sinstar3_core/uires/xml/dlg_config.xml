@@ -62,17 +62,23 @@
           <window pos="88,{" layout="vbox">
             <window layout="gridLayout" xGravity="right" columnCount="2" xInterval="5dp" yInterval="10dp">
               <text text="音形码切换"/>
-              <hotkey name="hk_switch_py" weight="1" width="100dp"/>
+              <hotkey name="hk_switch_py" weight="1" width="120dp"/>
               <text text="造词"/>
-              <hotkey name="hk_make_phrase" width="100dp"/>
+              <hotkey name="hk_make_phrase" width="120dp"/>
               <text text="字根表显示"/>
-              <hotkey name="hk_show_table" width="100dp"/>
+              <hotkey name="hk_show_table" width="120dp"/>
               <text text="编码查询"/>
-              <hotkey name="hk_show_comp" width="100dp"/>
+              <hotkey name="hk_show_comp" width="120dp"/>
               <text text="隐藏状态栏"/>
-              <hotkey name="hk_show_statusbar" width="100dp"/>
+              <hotkey name="hk_show_statusbar" width="120dp"/>
               <text text="输入英文"/>
-              <hotkey name="hk_input_en" width="100dp"/>
+              <hotkey name="hk_input_en" width="120dp"/>
+              <text text="过滤GBK"/>
+              <hotkey name="hk_filter_gbk" width="120dp"/>
+              <text text="语音较对(TTS)"/>
+              <hotkey name="hk_tts" width="120dp"/>
+              <text text="输入记忆"/>
+              <hotkey name="hk_record" width="120dp"/>
             </window>
           </window>
         </pageex>
@@ -113,20 +119,20 @@
               <check name="chk_enable_23cand_hotkey" text="启用"/>
               <window extend_top="10" extend_left="5" layout="gridlayout" xInterval="10dp" yInterval="10dp" columnCount="2">
                 <text text="第2重码"/>
-                <hotkey name="hk_2_cand" width="100dp"/>
+                <hotkey name="hk_2_cand" width="100dp" invalidComb="7"/>
                 <text text="第3重码"/>
-                <hotkey name="hk_3_cand" width="100dp"/>
+                <hotkey name="hk_3_cand" width="100dp" invalidComb="7"/>
               </window>
             </window>
             <check extend_top="10" name="chk_disable_number_to_select_cand" text="禁止数字键选择重码"/>
             <text extend_top="10">重码翻页</text>
             <window extend_top="10" extend_left="5" layout="gridlayout" xInterval="10dp" yInterval="10dp" columnCount="2">
               <text text="前翻页"/>
-              <hotkey name="hk_turn_prev" width="100dp"/>
+              <hotkey name="hk_turn_prev" width="100dp" invalidComb="7"/>
               <text text="后翻页"/>
-              <hotkey name="hk_turn_next" width="100dp"/>
+              <hotkey name="hk_turn_next" width="100dp" invalidComb="7"/>
             </window>
-            <text extend_top="10">GBK重码</text>
+            <text extend_top="10">GBK重码显示策略</text>
             <window extend_top="10" layout="vbox">
               <radio name="gbk_show_only" id="700" text="显示唯一重码"/>
               <radio name="gbk_show_manual" id="701" text="显示手动上屏"/>
@@ -135,18 +141,39 @@
             <check extend_top="10" name="chk_full_skip_simple" text="出简不出全"/>
           </window>
         </pageex>
-        <pageex title="@string/cfg_misc" tip="@string/cfg_misc" layout="vbox" gravity="center">
-          <group size="-1,-1" layout="vbox" text="提示音">
-            <radio name="sound_disable" text="禁用" id="800"/>
-            <radio name="sound_wave" text="WAV提示" id="801"/>
-            <radio name="sound_beep" text="蜂鸣器" id="802"/>
-          </group>
+        <pageex title="@string/cfg_misc" tip="@string/cfg_misc">
+          <text pos="10,10">@string/cfg_misc</text>
+          <window pos="88,{" layout="vbox">
+            <group size="-1,-1" layout="vbox" text="提示音">
+              <radio name="sound_disable" text="禁用" id="800"/>
+              <radio name="sound_wave" text="WAV提示" id="801"/>
+              <radio name="sound_beep" text="蜂鸣器" id="802"/>
+            </group>
+            <group size="-1,-1" layout="gridlayout" text="笔画输入键" columnCount="2" xInterval="5" yInterval="5" xGravity="right">
+                <text text="横(小键盘1):"/>
+                <hotkey name="hk_bihua_heng" id="900" width="80dp" invalidComb="7"/>
+                <text text="竖(小键盘2):"/>
+                <hotkey name="hk_bihua_shu" id="901" width="80dp" invalidComb="7"/>
+                <text text="撇(小键盘3):"/>
+                <hotkey name="hk_bihua_pie" id="902" width="80dp" invalidComb="7"/>
+                <text text="捺(小键盘4):"/>
+                <hotkey name="hk_bihua_na" id="903" width="80dp" invalidComb="7"/>
+                <text text="折(小键盘5):"/>
+                <hotkey name="hk_bihua_zhe" id="904" width="80dp" invalidComb="7"/>
+                <text text="万能键(小键盘6):"/>
+                <hotkey name="hk_bihua_wild" id="905" width="80dp" invalidComb="7"/>
+            </group>
+          </window>
         </pageex>
         <pageex title="@string/cfg_about" tip="@string/cfg_about" layout="vbox" gravity="center">
           <text extend_top="30" text="启程输入法"/>
           <window size="-1,-1" layout="hbox">
-            <text text="版本:"/>
+            <text text="输入法版本:"/>
             <text name="txt_ver"/>
+          </window>
+          <window size="-1,-1" layout="hbox">
+            <text text="服务器版本:"/>
+            <text name="txt_svr_ver"/>
           </window>
           <window size="-1,-1" layout="hbox">
             <text text="编译时间:"/>

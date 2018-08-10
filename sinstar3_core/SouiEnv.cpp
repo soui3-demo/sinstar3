@@ -20,30 +20,24 @@ template<>
 CSouiEnv* SSingleton<CSouiEnv>::ms_Singleton = NULL;
 
 
-CSouiEnv::CSouiEnv(HINSTANCE hInst)
+CSouiEnv::CSouiEnv(HINSTANCE hInst,LPCTSTR pszWorkDir)
 {
 	int nRet = 0;
 
 	m_pComMgr = new SComMgr(_T("imgdecoder-png"));
 
-	//将程序的运行路径修改到项目所在目录所在的目录
-	TCHAR szCurrentDir[MAX_PATH] = { 0 };
-	GetModuleFileName(hInst, szCurrentDir, sizeof(szCurrentDir));
-	LPTSTR lpInsertPos = _tcsstr(szCurrentDir, _T("\\data"));
-	_tcscpy(lpInsertPos,_T("\\sinstar3_core"));
-
-	BOOL bLoaded=FALSE;
+	BOOL bLoaded = FALSE;
 	CAutoRefPtr<SOUI::IImgDecoderFactory> pImgDecoderFactory;
 	CAutoRefPtr<SOUI::IRenderFactory> pRenderFactory;
 	bLoaded = m_pComMgr->CreateRender_GDI((IObjRef**)&pRenderFactory);
-	SASSERT_FMT(bLoaded,_T("load interface [render] failed!"));
-	bLoaded=m_pComMgr->CreateImgDecoder((IObjRef**)&pImgDecoderFactory);
-	SASSERT_FMT(bLoaded,_T("load interface [%s] failed!"),_T("imgdecoder"));
+	SASSERT_FMT(bLoaded, _T("load interface [render] failed!"));
+	bLoaded = m_pComMgr->CreateImgDecoder((IObjRef**)&pImgDecoderFactory);
+	SASSERT_FMT(bLoaded, _T("load interface [%s] failed!"), _T("imgdecoder"));
 
 	pRenderFactory->SetImgDecoderFactory(pImgDecoderFactory);
-	
+
 	m_theApp = new SApplication(pRenderFactory, hInst, SINSTART3_WNDCLASS);
-	m_theApp->SetAppDir(szCurrentDir);
+	m_theApp->SetAppDir(pszWorkDir);
 
 	m_theApp->RegisterWindowClass<SToggle2>();
 	m_theApp->RegisterWindowClass<SCandView>();
@@ -62,41 +56,63 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 
 	CAutoRefPtr<ILog4zManager> pLogMgr;
 	bLoaded = m_pComMgr->CreateLog4z((IObjRef**)&pLogMgr);
-	SASSERT_FMT(bLoaded,_T("load ILog4zManager failed!"),_T("log4z"));
+	SASSERT_FMT(bLoaded, _T("load ILog4zManager failed!"), _T("log4z"));
 
 	m_theApp->SetLogManager(pLogMgr);
 
-	_tcscpy(lpInsertPos,_T("\\data\\log"));
-	pLogMgr->setLoggerPath(0,S_CT2A(szCurrentDir));
+	SStringT strLogDir = pszWorkDir;
+	strLogDir += _T("\\log");
+	pLogMgr->setLoggerPath(0, S_CT2A(strLogDir));
 	pLogMgr->start();
 
 	//从DLL加载系统资源
 	CAutoRefPtr<IResProvider> sysResProvider;
 	CreateResProvider(RES_PE, (IObjRef**)&sysResProvider);
 	sysResProvider->Init((WPARAM)hInst, 0);
-	UINT uFlag=m_theApp->LoadSystemNamedResource(sysResProvider);
-	SASSERT_FMT(uFlag==0, L"load system resource failed");
+	UINT uFlag = m_theApp->LoadSystemNamedResource(sysResProvider);
+	SASSERT_FMT(uFlag == 0, L"load system resource failed");
 	CAutoRefPtr<IResProvider>   pResProvider;
-#if (RES_TYPE == 0)
-	CreateResProvider(RES_FILE, (IObjRef**)&pResProvider);
-	SStringT strPath = m_theApp->GetAppDir();
-	strPath+=_T("\\uires");
-	if (!pResProvider->Init((LPARAM)(LPCTSTR)strPath, 0))
+
+	BOOL bDebugSkinLoaded = FALSE;
+	if (!CDataCenter::getSingletonPtr()->GetData().m_strDebugSkin.IsEmpty())
 	{
-		SASSERT(0);
-		return ;
+		CreateResProvider(RES_FILE, (IObjRef**)&pResProvider);
+		SStringT strPath = CDataCenter::getSingletonPtr()->GetData().m_strDebugSkin;
+		bDebugSkinLoaded = pResProvider->Init((LPARAM)(LPCTSTR)strPath, 0);
+		if (!bDebugSkinLoaded)
+		{//release resprovider.
+			pResProvider = NULL;
+		}
 	}
+	
+	if(!bDebugSkinLoaded)
+	{
+#if (RES_TYPE == 0)
+		CreateResProvider(RES_FILE, (IObjRef**)&pResProvider);
+
+		//获取调试阶段的皮肤目录位置
+		TCHAR szCurrentDir[MAX_PATH] = { 0 };
+		GetModuleFileName(hInst, szCurrentDir, sizeof(szCurrentDir));
+		LPTSTR lpInsertPos = _tcsstr(szCurrentDir, _T("\\program"));
+		SASSERT(lpInsertPos);
+		_tcscpy(lpInsertPos, _T("\\..\\sinstar3_core\\uires"));
+		if (!pResProvider->Init((LPARAM)szCurrentDir, 0))
+		{
+			SASSERT(0);
+			return;
+		}
 #else 
-	CreateResProvider(RES_PE, (IObjRef**)&pResProvider);
-	pResProvider->Init((WPARAM)hInst, 0);
+		CreateResProvider(RES_PE, (IObjRef**)&pResProvider);
+		pResProvider->Init((WPARAM)hInst, 0);
 #endif
+	}
 
 	m_theApp->InitXmlNamedID(namedXmlID,ARRAYSIZE(namedXmlID),TRUE);
 	m_theApp->AddResProvider(pResProvider);
 	CDataCenter::getSingletonPtr()->GetData().m_defUiDefine = SUiDef::getSingletonPtr()->GetUiDef();
 	CDataCenter::getSingletonPtr()->GetData().m_ptSkinOffset = CSkinMananger::ExtractSkinOffset(pResProvider);
 
-	if(!CDataCenter::getSingletonPtr()->GetData().m_strSkin.IsEmpty())
+	if(!bDebugSkinLoaded && !CDataCenter::getSingletonPtr()->GetData().m_strSkin.IsEmpty())
 	{
 		//SLOG_INFO("apply user skin:"<< CDataCenter::getSingletonPtr()->GetData().m_strSkin);
 		IResProvider *pResProvider=NULL;
@@ -105,15 +121,21 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst)
 		param.ZipFile(GETRENDERFACTORY, CDataCenter::getSingletonPtr()->GetData().m_strSkin);
 		if(pResProvider->Init((WPARAM)&param,0))
 		{
-			IUiDefInfo * pUiDef = SUiDef::getSingleton().CreateUiDefInfo(pResProvider,_T("uidef:xml_init"));
-			if(!pUiDef->GetSkinPool())
-			{//不允许皮肤中存在全局的skin数据
+			IUiDefInfo * pUiDef = SUiDef::CreateUiDefInfo2(pResProvider,_T("uidef:xml_init"));
+			if(!pUiDef->GetSkinPool() && !pUiDef->GetStylePool() && !pUiDef->GetObjDefAttr())
+			{//不允许皮肤中存在全局的skin, style and defobjattr数据
 				m_theApp->AddResProvider(pResProvider,NULL);
+
+				IUiDefInfo * pBuiltinUidef = SUiDef::getSingleton().GetUiDef();
+				pUiDef->SetObjDefAttr(pBuiltinUidef->GetObjDefAttr());
+				pUiDef->SetStylePool(pBuiltinUidef->GetStylePool());
+				pUiDef->SetSkinPool(pBuiltinUidef->GetSkinPool());
+
 				SUiDef::getSingleton().SetUiDef(pUiDef);
 				CDataCenter::getSingletonPtr()->GetData().m_ptSkinOffset = CSkinMananger::ExtractSkinOffset(pResProvider);
 			}else
-			{//外置皮肤中禁止出现全局skin表。
-				//SLOG_WARN("previous skin is invalid");
+			{//外置皮肤中禁止出现全局skin, style and defobjattr表。
+				SLOG_WARN("previous skin is invalid");
 				CDataCenter::getSingletonPtr()->GetData().m_strSkin.Empty();
 			}
 			pUiDef->Release();

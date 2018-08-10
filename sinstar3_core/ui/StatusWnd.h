@@ -16,6 +16,7 @@ namespace SOUI
 			BTN_RECORD=1<<1,
 			BTN_SOUND=1<<2,
 			BTN_ENGLISHMODE = 1<<3,
+			BTN_FILTERGBK = 1<<4,
 			BTN_ALL=0xffffffff,
 		};
 
@@ -23,7 +24,7 @@ namespace SOUI
 		~CStatusWnd(void);
 
 		void UpdateCompInfo();
-		void UpdateToggleStatus(DWORD flags);
+		void UpdateToggleStatus(DWORD flags,BOOL bInit=FALSE);
 	protected:
 		virtual void OnReposition(CPoint pt);
 
@@ -42,40 +43,44 @@ namespace SOUI
 		END_MSG_MAP()
 
 	protected:
-
-		void OnCompInfo(EventArgs *e);
+		void ShowServerExit();
+		void OnSvrNotify(EventArgs *e);
 
 		void OnBtnExtend();
 		void OnBtnShrink();
-		void OnBtnMakeWord();
+		void OnBtnMakePhrase();
 		void OnSwitchCharMode(EventArgs *e);
 		void OnSwitchRecord(EventArgs *e);
 		void OnSwitchSound(EventArgs *e);
 		void OnSwitchEnglish(EventArgs *e);
+		void OnSwitchFilterGbk(EventArgs *e);
 		void OnLogoClick();
 		void OnUpdateBtnTooltip(EventArgs *e);
 		void OnMenuClick();
 		void OnHelpClick();
+		void OnQueryClick();
 
 		EVENT_MAP_BEGIN()
-			EVENT_HANDLER(EventSvrNotify::EventID, OnCompInfo)
+			EVENT_HANDLER(EventSvrNotify::EventID, OnSvrNotify)
 			EVENT_HANDLER(EventSwndUpdateTooltip::EventID, OnUpdateBtnTooltip)
 			EVENT_ID_COMMAND(R.id.btn_status_shrink, OnBtnShrink)
 			EVENT_ID_COMMAND(R.id.btn_status_extend, OnBtnExtend)
-			EVENT_ID_COMMAND(R.id.btn_makeword, OnBtnMakeWord)
+			EVENT_ID_COMMAND(R.id.btn_make_phrase, OnBtnMakePhrase)
 			EVENT_ID_HANDLER(R.id.btn_charmode, EventCmd::EventID, OnSwitchCharMode)
 			EVENT_ID_HANDLER(R.id.btn_record, EventCmd::EventID, OnSwitchRecord)
 			EVENT_ID_HANDLER(R.id.btn_sound, EventCmd::EventID, OnSwitchSound)
 			EVENT_ID_HANDLER(R.id.btn_english,EventCmd::EventID,OnSwitchEnglish)
+			EVENT_ID_HANDLER(R.id.btn_filter_gbk, EventCmd::EventID, OnSwitchFilterGbk)
 			EVENT_ID_COMMAND(R.id.img_logo, OnLogoClick)
 			EVENT_ID_COMMAND(R.id.btn_menu,OnMenuClick)
 			EVENT_ID_COMMAND(R.id.btn_help,OnHelpClick)
+			EVENT_ID_COMMAND(R.id.btn_query,OnQueryClick)
 		EVENT_MAP_END()
 
 	protected:
+		void UpdateCompInfo2(SWindow *pParent);
 		void UpdateUI();
 	protected:
-		SStatusBackground * m_pBackGround;
 		CSkinMananger       m_skinManager;
 		ICmdListener     *  m_pCmdListener;
 	};

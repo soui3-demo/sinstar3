@@ -13,8 +13,8 @@
 
 #define _sinstar3_ime_name			启程输入法
 #define _sinstar3_ime				启程输入法IME模块
-#define _sinstar3_tsf				启程输入法TSF模块
-
+#define _sinstar3_tsf				       启程输入法TSF模块
+#define _sinstar3_mutex                       sinstar3_mutex_40AC2365-F592-4BE3-8B41-04A6B5337BFB
 
 
 #define _sinstar3_ime_string(a)		#a
@@ -41,3 +41,4 @@
 
 #define PRODUCT_IME	sinstar3_ime_tstring( _sinstar3_ime)
 #define PRODUCT_TSF	sinstar3_ime_wstring( _sinstar3_tsf)
+#define SINSTAR3_MUTEX sinstar3_ime_tstring(_sinstar3_mutex)

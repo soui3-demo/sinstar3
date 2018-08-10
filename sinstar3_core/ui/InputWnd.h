@@ -6,11 +6,14 @@
 
 namespace SOUI
 {
-	class CInputWnd :
-		public CImeWnd
+	interface IInputWndListener {
+		virtual void OnInputDelayHide() = 0;
+	};
+
+	class CInputWnd : public CImeWnd
 	{
 	public:
-		CInputWnd(SEventSet *pEvtSets, InputContext * pCtx);
+		CInputWnd(SEventSet *pEvtSets, InputContext * pCtx,IInputWndListener *pListener);
 		~CInputWnd(void);
 
 		void SetFollowCaret(BOOL bFollowCaret);
@@ -61,6 +64,7 @@ namespace SOUI
 
 		short			 m_cPageSize;
 		InputContext	* m_pInputContext;
+		IInputWndListener * m_pInputWndListener;
 
 		CPoint			m_ptClick;
 		BOOL			m_bDraging;

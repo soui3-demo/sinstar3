@@ -16,6 +16,7 @@ class CSinstar3Impl:
 	public ISinstar,
 	public IInputListener,
 	public IDestroyListener,
+	public IInputWndListener,
 	public SOUI::SObject,
 	public SOUI::CSimpleWnd,
 	public SOUI::SEventSet
@@ -68,12 +69,15 @@ protected://ICmdListener
 	virtual InputContext * GetInputContext();
 protected://IDestroyListener
 	virtual void OnSkinAwareWndDestroy(CSkinAwareWnd * pWnd);
+protected://IInputWndListener
+	virtual void OnInputDelayHide();
 public:
 	BOOL ChangeSkin(const SStringT & strSkin);
 	void OpenConfig();
 	void OpenSpchar();
-	void InputSpchar(LPCTSTR pszText);
+	void ShowTip(LPCTSTR pszTitle, LPCTSTR pszContent);
 
+	void InputSpchar(LPCTSTR pszText);
 	void Broadcast(UINT uCmd, LPVOID pData, DWORD nLen);
 
 	LRESULT OnSvrNotify(UINT uMsg, WPARAM wParam, LPARAM lParam);

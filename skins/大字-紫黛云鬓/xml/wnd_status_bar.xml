@@ -8,9 +8,9 @@
   toolwindow="1"
 >
   <skin>
-       <imglist name="logo"	src="img:logo_32" states="2"/>
-   <imglist name="bg_status_open" src="img:png_status_open"/>
-    <imglist name="bg_status_close" src="img:png_status_close"/>  
+    <imglist name="bg_status_open" src="img:png_status_open"/>
+    <imglist name="bg_status_close" src="img:png_status_close"/>
+    <imglist name="logo"	src="img:logo_32" states="2"/>
     <imglist name="charmode" src="img:png_charmode" states="2"/>
     <imglist name="charmode_full" src="img:png_charmode_full" states="3"/>
     <imglist name="charmode_half" src="img:png_charmode_half" states="3"/>
@@ -22,23 +22,31 @@
     <imglist name="btn_record_disable" src="img:btn_record_disable" states="3"/>
     <imglist name="btn_sound_enable" src="img:btn_sound_enable" states="3"/>
     <imglist name="btn_sound_disable" src="img:btn_sound_disable" states="3"/>
+    <imglist name="btn_english_enable" src="img:btn_english_enable" states="3"/>
+    <imglist name="btn_english_disable" src="img:btn_english_disable" states="3"/>
   </skin>
 
-  <root size="-1,-1" layout="vbox">
-    <status_bg size="-1,-1" layout="vbox" name="status_bg" bg_extend="bg_status_open" bg_shrink="bg_status_close">
-      <window size="-2,0" weight="1" name="status_base" layout="hbox"> 
-         <flagView size="16,16" name="img_logo" defaultFlag="logo" margin="0,3,0,0" cursor="hand"/>
-        <caption2 size="0,-2" weight="1" name="txt_comp" colorText="@color/status_textcolor" text="五笔型86" cursor="sizeall"/>
-        <window size ="-1,-1">
-          <imgbtn pos="0,0" name="btn_status_extend" skin="btn_extend" visible="0"/>
-          <imgbtn pos="0,0" name="btn_status_shrink" skin="btn_shrink"/>
-        </window>
+  <root>
+    <status_bg size="-1,-1" name="status_shrink" visible="0" skin="bg_status_close" layout="hbox" gravity="center" padding="@dim/shrink_padding_left,@dim/shrink_padding_top,@dim/shrink_padding_right,@dim/shrink_padding_bottom">
+      <flagView size="@dim/status_logo_size,@dim/status_logo_size" name="img_logo" defaultFlag="logo" cursor="hand" margin="@dim/status_logo_margin_left,@dim/status_logo_margin_top,@dim/status_logo_margin_right,@dim/status_logo_margin_bottom"/>
+      <caption2 size="0,-2" weight="1" name="txt_comp" cursor="sizeall" dotted="1"/>
+      <imgbtn pos="-1,-1" name="btn_status_extend" skin="btn_extend"/>
+    </status_bg>
+    <status_bg size="-1,-1" name="status_extend" layout="vbox" skin="bg_status_open">
+      <window size="-2,0" weight="1" name="status_base" layout="hbox" gravity="center" padding="@dim/status_line1_padding_left,@dim/status_line1_padding_top,@dim/status_line1_padding_right,@dim/status_line1_padding_bottom">
+        <flagView size="@dim/status_logo_size,@dim/status_logo_size" name="img_logo" defaultFlag="logo" cursor="hand" margin="@dim/status_logo_margin_left,@dim/status_logo_margin_top,@dim/status_logo_margin_right,@dim/status_logo_margin_bottom"/>
+        <caption2 size="0,-2" weight="1" name="txt_comp" cursor="sizeall" dotted="1"/>
+        <imgbtn pos="-1,-1" name="btn_status_shrink" skin="btn_shrink"/>
       </window>
-      <window size="-2,0" weight="1" name="status_extend" display="0" layout="hbox">
-          <toggle2 size="-1,-1" skin1="charmode_full" skin2="charmode_half" name="btn_charmode" tip="change mode"/>
-          <imgbtn size="-1,-1" skin="btn_makeword" name="btn_makeword"/>
-          <toggle2 size="-1,-1" skin1="btn_record_enable" skin2="btn_record_disable" name="btn_record"/>
-          <toggle2 size="-1,-1" skin1="btn_sound_enable" skin2="btn_sound_disable" name="btn_sound"/>
+      <window size="-2,0" weight="1" name="status_extend" padding="@dim/status_line2_padding_left,@dim/status_line2_padding_top,@dim/status_line2_padding_right,@dim/status_line2_padding_bottom" layout="hbox" gravity="center">
+        <window size="0,0" weight="1" visible="0"/>
+        <toggle2 size="-1,-1" skin1="charmode_half" skin2="charmode_full" name="btn_charmode" tip="change mode"/>
+        <window size="0,0" weight="2" visible="0"/>
+        <imgbtn size="-1,-1" skin="btn_makeword" name="btn_make_phrase"/>
+        <window size="0,0" weight="2" visible="0"/>
+        <toggle2 size="-1,-1" skin1="btn_record_enable" skin2="btn_record_disable" name="btn_record"/>
+        <window size="0,0" weight="2" visible="0"/>
+        <toggle2 size="-1,-1" skin1="btn_sound_enable" skin2="btn_sound_disable" name="btn_sound"/>
       </window>
     </status_bg>
   </root>

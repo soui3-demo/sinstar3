@@ -11,21 +11,33 @@
     }
 
 enum {
-	CMD_MAKEWORD = 100,
-	CMD_QUERYINFO,
-	CMD_KEYMAP,
-	CMD_HIDESTATUSBAR,
-	CMD_INPUTMODE,
+	CMD_HOTKEY_MAKEPHRASE = 100,
+	CMD_HOTKEY_QUERYINFO,
+	CMD_HOTKEY_KEYMAP,
+	CMD_HOTKEY_HIDESTATUSBAR,
+	CMD_HOTKEY_INPUTMODE,
+	CMD_HOTKEY_CHARMODE,
+	CMD_HOTKEY_ENGLISHMODE,
+	CMD_HOTKEY_FILTERGBK,
+	CMD_HOTKEY_TTS,
+	CMD_HOTKEY_RECORD,
 	CMD_FOLLOWCARET,
 	CMD_KEYSPEED,
-	CMD_CHARMODE,
-	CMD_ENGLISHMODE,
 	CMD_UPDATEMODE,
 	CMD_CHANGESKIN,
 	CMD_OPENSKINDIR,
 	CMD_OPENCONFIG,
 	CMD_OPENSPCHAR,
 	CMD_INPUTSPCHAR,
+	CMD_SHOWTIP,
+};
+
+struct TIPINFO
+{
+	TIPINFO(const SStringT & title=_T(""), const SStringT & tip=_T("")) :strTitle(title), strTip(tip)
+	{}
+	SStringT strTitle;
+	SStringT strTip;
 };
 
 namespace SOUI {
@@ -39,43 +51,50 @@ public:
 	CCmdHandler(CSinstar3Impl * pSinstar3);
 	~CCmdHandler();
 
-	void SetTipWnd(STipWnd * pTipWnd);
 protected:
-	void OnMakeWord(LPARAM lp);
-	void OnKeyMap(LPARAM lp);
-	void OnHideStatusBar(LPARAM lp);
-	void OnQueryInfo(LPARAM lp);
+	void OnHotkeyMakePhrase(LPARAM lp);
+	void OnHotKeyKeyMap(LPARAM lp);
+	void OnHotKeyHideStatusBar(LPARAM lp);
+	void OnHotKeyQueryInfo(LPARAM lp);
+	void OnHotKeyCharMode(LPARAM lp);
+	void OnHotKeyEnglishMode(LPARAM lp);
+	void OnHotKeyInputMode(LPARAM lp);
+	void OnHotKeyFilterGbk(LPARAM lp);
 	void OnFollowCaret(LPARAM lp);
-	void OnInputMode(LPARAM lp);
 	void OnKeySpeed(LPARAM lp);
-	void OnCharMode(LPARAM lp);
-	void OnEnglishMode(LPARAM lp);
 	void OnUpdateMode(LPARAM lp);
+	void OnHotkeyTTS(LPARAM lp);
+	void OnHotkeyRecord(LPARAM lp);
 	void OnChangeSkin(LPARAM lp);
 	void OnOpenConfig(LPARAM lp);
 	void OnOpenSpchar(LPARAM lp);
 	void OnInputSpchar(LPARAM lp);
 	void OnOpenSkinDir(LPARAM lp);
+	void OnShowTip(LPARAM lp);
+
 	BEGIN_MSG_MAP_EX(CCmdHandler)
-		MSG_WM_COMMAND_EX(CMD_MAKEWORD, OnMakeWord)
-		MSG_WM_COMMAND_EX(CMD_KEYMAP, OnKeyMap)
-		MSG_WM_COMMAND_EX(CMD_HIDESTATUSBAR, OnHideStatusBar)
-		MSG_WM_COMMAND_EX(CMD_QUERYINFO, OnQueryInfo)
+		MSG_WM_COMMAND_EX(CMD_HOTKEY_TTS,OnHotkeyTTS)
+		MSG_WM_COMMAND_EX(CMD_HOTKEY_RECORD,OnHotkeyRecord)
+		MSG_WM_COMMAND_EX(CMD_HOTKEY_MAKEPHRASE, OnHotkeyMakePhrase)
+		MSG_WM_COMMAND_EX(CMD_HOTKEY_KEYMAP, OnHotKeyKeyMap)
+		MSG_WM_COMMAND_EX(CMD_HOTKEY_HIDESTATUSBAR, OnHotKeyHideStatusBar)
+		MSG_WM_COMMAND_EX(CMD_HOTKEY_QUERYINFO, OnHotKeyQueryInfo)
+		MSG_WM_COMMAND_EX(CMD_HOTKEY_ENGLISHMODE, OnHotKeyEnglishMode)
+		MSG_WM_COMMAND_EX(CMD_HOTKEY_INPUTMODE, OnHotKeyInputMode)
+		MSG_WM_COMMAND_EX(CMD_HOTKEY_CHARMODE, OnHotKeyCharMode)
+		MSG_WM_COMMAND_EX(CMD_HOTKEY_FILTERGBK, OnHotKeyFilterGbk)
 		MSG_WM_COMMAND_EX(CMD_FOLLOWCARET, OnFollowCaret)
-		MSG_WM_COMMAND_EX(CMD_INPUTMODE, OnInputMode)
 		MSG_WM_COMMAND_EX(CMD_KEYSPEED, OnKeySpeed)
-		MSG_WM_COMMAND_EX(CMD_CHARMODE,OnCharMode)
-		MSG_WM_COMMAND_EX(CMD_ENGLISHMODE,OnEnglishMode)
 		MSG_WM_COMMAND_EX(CMD_UPDATEMODE,OnUpdateMode)
 		MSG_WM_COMMAND_EX(CMD_CHANGESKIN,OnChangeSkin)
 		MSG_WM_COMMAND_EX(CMD_OPENCONFIG,OnOpenConfig)
 		MSG_WM_COMMAND_EX(CMD_OPENSPCHAR, OnOpenSpchar)
 		MSG_WM_COMMAND_EX(CMD_INPUTSPCHAR,OnInputSpchar)
 		MSG_WM_COMMAND_EX(CMD_OPENSKINDIR,OnOpenSkinDir)
+		MSG_WM_COMMAND_EX(CMD_SHOWTIP, OnShowTip)
 	END_MSG_MAP()
 
 private:
-	STipWnd * m_pTipWnd;
 	CSinstar3Impl * m_pSinstar3;
 };
 

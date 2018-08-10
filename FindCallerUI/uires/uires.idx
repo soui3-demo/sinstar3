@@ -15,6 +15,6 @@
   <IMG>
   </IMG>
   <ICON>
-    <file name="ICON_LOGO"  path="image\soui.ico"/>
+    <file name="ICON_LOGO"  path="image\FindCallerUI.ico"/>
   </ICON>
 </resource>

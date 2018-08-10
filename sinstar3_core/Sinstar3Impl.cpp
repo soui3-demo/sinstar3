@@ -41,13 +41,11 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr)
 
 	m_inputState.GetInputContext()->settings.Load(theModule->GetCfgIni());
 
- 	m_pInputWnd = new CInputWnd(this,m_inputState.GetInputContext());
-	m_pStatusWnd = new CStatusWnd(this,this);
-	m_pTipWnd = new STipWnd(this);
-	m_pStatusWnd->Create(_T("Sinstar3_Status"));
+ 	m_pInputWnd = new CInputWnd(this,m_inputState.GetInputContext(),this);
 	m_pInputWnd->Create(_T("Sinstar3_Input"));
-	m_pTipWnd->Create(_T("sinstar3_tip"));
-	m_cmdHandler.SetTipWnd(m_pTipWnd);
+
+	m_pStatusWnd = new CStatusWnd(this,this);
+	m_pStatusWnd->Create(_T("Sinstar3_Status"));
 	m_inputState.SetInputListener(this);
 	
 	m_pInputWnd->SetAnchorPosition(CDataCenter::getSingleton().GetData().m_ptInput);
@@ -56,6 +54,7 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr)
 	SLOG_INFO("status:"<<m_pStatusWnd->m_hWnd<<", input:"<<m_pInputWnd->m_hWnd);
 	SOUI::CSimpleWnd::Create(KSinstar3WndName,WS_DISABLED|WS_POPUP,WS_EX_TOOLWINDOW,0,0,0,0,HWND_MESSAGE,NULL);
 	CUtils::ChangeWindowMessageFilter(WM_COPYDATA, MSGFLT_ADD);
+	CUtils::ChangeWindowMessageFilter(ISComm_GetCommMsgID(), MSGFLT_ADD);
 	ISComm_Login(m_hWnd);
 
 }
@@ -66,11 +65,14 @@ CSinstar3Impl::~CSinstar3Impl(void)
 	SOUI::CSimpleWnd::DestroyWindow();
 	m_pInputWnd->DestroyWindow();
 	m_pStatusWnd->DestroyWindow();
-	m_pTipWnd->DestroyWindow();
 	delete m_pStatusWnd;
 	delete m_pInputWnd;
-	delete m_pTipWnd;
 
+	if (m_pTipWnd)
+	{
+		m_pTipWnd->DestroyWindow();
+		m_pTipWnd = NULL;
+	}
 	if (m_pConfig)
 	{
 		m_pConfig->DestroyWindow();
@@ -152,17 +154,31 @@ void CSinstar3Impl::OnCompositionTerminated()
 void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 {
 	SLOG_INFO("GetThreadID="<<GetCurrentThreadId()<<" focus="<<bFocus);
-	if(bFocus) m_pTxtSvr->SetConversionMode(FullNative);
-	m_pStatusWnd->Show(bFocus && !m_inputState.GetInputContext()->settings.bHideStatus);
-	
-	if (bFocus)
+
+	BOOL bOpen = FALSE;
+	LPVOID pImeCtx = m_pTxtSvr->GetImeContext();
+	if (pImeCtx)
 	{
-		if (m_inputState.IsTypeing()) m_pInputWnd->Show(TRUE);
+		bOpen = m_pTxtSvr->GetOpenStatus(pImeCtx);
+		m_pTxtSvr->ReleaseImeContext(pImeCtx);
 	}
-	else
+
+	if (bOpen)
 	{
-		m_pInputWnd->Show(FALSE,FALSE);
-		if (m_pSpcharWnd) m_pSpcharWnd->DestroyWindow();
+		if (bFocus)
+			m_pTxtSvr->SetConversionMode(FullNative);
+
+		m_pStatusWnd->Show(bFocus && !m_inputState.GetInputContext()->settings.bHideStatus);
+
+		if (bFocus)
+		{
+			if (m_inputState.IsTypeing()) m_pInputWnd->Show(TRUE);
+		}
+		else
+		{
+			m_pInputWnd->Show(FALSE, FALSE);
+			if (m_pSpcharWnd) m_pSpcharWnd->DestroyWindow();
+		}
 	}
 }
 
@@ -239,7 +255,7 @@ LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 		TCHAR szBuf[10]={0};
 		int i=0;
 
-		SStringT strHotKeyFile = SStringT().Format(_T("%s\\hotkey_%s.txt"),theModule->GetDataPath(),myData.m_compInfo.strCompName);
+		SStringT strHotKeyFile = SStringT().Format(_T("%s\\data\\hotkey_%s.txt"),theModule->GetDataPath(),myData.m_compInfo.strCompName);
 		//加载特定的自定义状态及语句输入状态开关
 		GetPrivateProfileString(_T("hotkey"),_T("umode"),_T(""),szBuf,2,strHotKeyFile);
 		g_SettingsG.hkUserDefSwitch=szBuf[0];
@@ -289,11 +305,25 @@ LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 			SStringW strFontFile = CDataCenter::getSingleton().GetData().getFontFile(S_CA2W(ISComm_GetFlmInfo()->szAddFont));
 			if (!strFontFile.IsEmpty())
 			{
-				m_strLoadedFontFile = theModule->GetDataPath() + _T("\\") + S_CW2T(strFontFile);
+				m_strLoadedFontFile = theModule->GetDataPath() + _T("\\data\\") + S_CW2T(strFontFile);
 				AddFontResourceEx(m_strLoadedFontFile, FR_PRIVATE , NULL);
 			}
 			m_pInputWnd->OnFlmInfo(ISComm_GetFlmInfo());
 		}
+		return 1;
+	}
+	else if (wp == NT_SERVEREXIT)
+	{
+		LPVOID pImeCtx = m_pTxtSvr->GetImeContext();
+		if (pImeCtx)
+		{
+			m_pTxtSvr->SetOpenStatus(pImeCtx, FALSE);
+			m_pTxtSvr->ReleaseImeContext(pImeCtx);
+		}
+		EventSvrNotify evt(this);
+		evt.wp = wp;
+		evt.lp = lp;
+		FireEvent(evt);
 		return 1;
 	}
 	else
@@ -304,23 +334,27 @@ LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 
 LRESULT CSinstar3Impl::OnAsyncCopyData(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+	SLOG_INFO("begin");
+
 	PCOPYDATASTRUCT pCds = (PCOPYDATASTRUCT)lParam;
 	HWND hSender = (HWND)wParam;
 	if (pCds->dwData == CMD_CHANGESKIN)
 	{//change skin
 		SStringA strUtf8((const char *)pCds->lpData, pCds->cbData);
 		SStringT strPath = S_CA2T(strUtf8, CP_UTF8);
+		SLOG_INFO("skin:"<<strPath);
 		ChangeSkin(strPath);
 	}
 
 	if (pCds->lpData) free(pCds->lpData);
 	free(pCds);
-
-	return LRESULT();
+	SLOG_INFO("end");
+	return 1;
 }
 
 BOOL CSinstar3Impl::OnCopyData(HWND wnd, PCOPYDATASTRUCT pCopyDataStruct)
 {
+	SLOG_INFO("nLen:"<<pCopyDataStruct->cbData);
 	PCOPYDATASTRUCT pCds = (PCOPYDATASTRUCT)malloc(sizeof(COPYDATASTRUCT));
 	pCds->dwData = pCopyDataStruct->dwData;
 	pCds->cbData = pCopyDataStruct->cbData;
@@ -410,16 +444,34 @@ void CSinstar3Impl::OnSkinAwareWndDestroy(CSkinAwareWnd * pWnd)
 		delete pWnd;
 		m_pSpcharWnd = NULL;
 	}
+	else if (pWnd->GetWndType() == IME_TIP)
+	{
+		delete pWnd;
+		m_pTipWnd = NULL;
+	}
+}
+
+void CSinstar3Impl::OnInputDelayHide()
+{
+	m_inputState.ClearContext(CPC_ALL);
 }
 
 BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 {
+	SLOG_INFO("skin:" << strSkin);
 	CDataCenter::getSingletonPtr()->Lock(); //注意处理多个输入法UI线程之间的同步.
+	SLOG_INFO("step1,lock ok");
+
+	//将内置皮肤的skinpool,stylepool,SObjDefAttr保存起来.
+	CAutoRefPtr<SSkinPool> curSkinPool = SUiDef::getSingleton().GetUiDef()->GetSkinPool();
+	CAutoRefPtr<SStylePool> curStylePool = SUiDef::getSingleton().GetUiDef()->GetStylePool();
+	CAutoRefPtr<SObjDefAttr> curObjDefAttr = SUiDef::getSingleton().GetUiDef()->GetObjDefAttr();
 
 	if (CDataCenter::getSingletonPtr()->GetData().m_strSkin != strSkin)
 	{
 		if (!strSkin.IsEmpty())
 		{//加载外部皮肤
+			SLOG_INFO("step2, prepare for load skin");
 			CAutoRefPtr<IResProvider> pResProvider;
 			CSouiEnv::getSingleton().theComMgr()->CreateResProvider_ZIP((IObjRef**)&pResProvider);
 			ZIPRES_PARAM param;
@@ -427,53 +479,69 @@ BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 			if (!pResProvider->Init((WPARAM)&param, 0))
 				return FALSE;
 
-			IUiDefInfo * pUiDef = SUiDef::getSingleton().CreateUiDefInfo(pResProvider, _T("uidef:xml_init"));
-			if (pUiDef->GetSkinPool())
-			{//不允许皮肤中存在全局的skin数据
+			IUiDefInfo * pUiDef = SUiDef::CreateUiDefInfo2(pResProvider, _T("uidef:xml_init"));
+			if (pUiDef->GetSkinPool() || pUiDef->GetStylePool())
+			{//不允许皮肤中存在全局的skin and style data
 				pUiDef->Release();
 				return FALSE;
 			}
 
+			SLOG_INFO("step3, load external skin ok");
+
 			if (!CDataCenter::getSingletonPtr()->GetData().m_strSkin.IsEmpty())
 			{//清除正在使用的外置皮肤。
+				SLOG_INFO("step4, remove current in using external skin");
+
 				IResProvider *pLastRes = SApplication::getSingleton().GetTailResProvider();
 				SApplication::getSingleton().RemoveResProvider(pLastRes);
 				IUiDefInfo *pUiDefInfo = SUiDef::getSingleton().GetUiDef();
-
-				SStylePoolMgr::getSingleton().PopStylePool(pUiDefInfo->GetStylePool());
 			}
 
+			SLOG_INFO("step6, extract skin defined offset");
 			CDataCenter::getSingleton().GetData().m_ptSkinOffset = CSkinMananger::ExtractSkinOffset(pResProvider);
 
+			SLOG_INFO("step7, add new skin to sinstar3");
 			SApplication::getSingleton().AddResProvider(pResProvider, NULL);
+			SLOG_INFO("step8, set uidef");
 			SUiDef::getSingleton().SetUiDef(pUiDef);
 			pUiDef->Release();
-
+			SLOG_INFO("step9, set external skin ok");
 		}
 		else if (!CDataCenter::getSingletonPtr()->GetData().m_strSkin.IsEmpty())
 		{//清除正在使用的外置皮肤,还原使用系统内置皮肤
+			SLOG_INFO("step10, remove external skin");
 			IResProvider *pLastRes = SApplication::getSingleton().GetTailResProvider();
 			SApplication::getSingleton().RemoveResProvider(pLastRes);
 			IUiDefInfo *pUiDefInfo = SUiDef::getSingleton().GetUiDef();
 
-			SStylePoolMgr::getSingleton().PopStylePool(pUiDefInfo->GetStylePool());
-
+			SLOG_INFO("step12, restore uidef");
 			IResProvider *pCurRes = SApplication::getSingleton().GetTailResProvider();
 			IUiDefInfo * pUiDef = SUiDef::getSingleton().CreateUiDefInfo(pCurRes, _T("uidef:xml_init"));
 			SUiDef::getSingleton().SetUiDef(pUiDef);
 			pUiDef->Release();
 
+			SLOG_INFO("step13, extract builtin skin defined offset");
 			CDataCenter::getSingleton().GetData().m_ptSkinOffset = CSkinMananger::ExtractSkinOffset(pCurRes);
 		}
 
+		SLOG_INFO("step14, save new skin name");
 		CDataCenter::getSingletonPtr()->GetData().m_strSkin = strSkin;
 	}
 
+	//还原skinpool and stylepool.
+	SUiDef::getSingleton().GetUiDef()->SetSkinPool(curSkinPool);
+	SUiDef::getSingleton().GetUiDef()->SetStylePool(curStylePool);
+	SUiDef::getSingleton().GetUiDef()->SetObjDefAttr(curObjDefAttr);
+
+	SLOG_INFO("step15, notify skin changed");
 	//notify skin changed
 	EventSetSkin evt(this);
 	FireEvent(evt);
 
+	SLOG_INFO("step16, notify skin changed finish");
+
 	CDataCenter::getSingletonPtr()->Unlock();
+	SLOG_INFO("step17, unlock");
 
 	return TRUE;
 }
@@ -499,6 +567,17 @@ void CSinstar3Impl::OpenSpchar()
 		m_pSpcharWnd->Create(_T("SpcharWnd"), NULL);
 	}
 	m_pSpcharWnd->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW | SWP_NOACTIVATE);
+}
+
+void CSinstar3Impl::ShowTip(LPCTSTR pszTitle, LPCTSTR pszContent)
+{
+	if (m_pTipWnd == NULL)
+	{
+		m_pTipWnd = new STipWnd(this);
+		m_pTipWnd->Create(_T("Sinstar3_Tip"));
+		m_pTipWnd->SetDestroyListener(this, IME_TIP);
+	}
+	m_pTipWnd->SetTip(pszTitle, pszContent);
 }
 
 void CSinstar3Impl::InputSpchar(LPCTSTR pszText)
@@ -531,6 +610,7 @@ void CSinstar3Impl::Broadcast(UINT uCmd, LPVOID pData, DWORD nLen)
 
 	SendMessage(WM_COPYDATA, (WPARAM)m_hWnd, (LPARAM)&cds);
 
+	SLOG_INFO("broadcast, nLen:" << nLen);
 	HWND hFind = FindWindowEx(HWND_MESSAGE, NULL, SINSTART3_WNDCLASS, KSinstar3WndName);
 	while (hFind)
 	{

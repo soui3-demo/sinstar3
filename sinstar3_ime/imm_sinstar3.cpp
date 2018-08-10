@@ -92,10 +92,11 @@ BOOL InitIMCC(HIMCC & hIMCC,DWORD dwSize)
 BOOL WINAPI ImeSelect(HIMC hIMC, BOOL fSelect)
 {
 	SLOGFMTI("\nImeSelect,hIMC=%p,fSelect=%d",hIMC,fSelect);
+	LPINPUTCONTEXT lpIMC = ImmLockIMC(hIMC);
+	if (!lpIMC) return FALSE;
+
 	if(fSelect)
 	{
-		LPINPUTCONTEXT lpIMC=ImmLockIMC(hIMC);
-		if(!lpIMC) return FALSE;
 		// Init the general member of IMC.
 		if(!InitIMCC(lpIMC->hCompStr,sizeof(CCompStrEx)))
 		{
@@ -108,26 +109,21 @@ BOOL WINAPI ImeSelect(HIMC hIMC, BOOL fSelect)
 			return FALSE;
 		}
 		Context_Init(lpIMC);
-		ImmUnlockIMC(hIMC);
-
 	}else
 	{
-		LPINPUTCONTEXT lpIMC=ImmLockIMC(hIMC);
-		if(lpIMC)
+		if (lpIMC->hCompStr)
 		{
-			if (lpIMC->hCompStr)
-			{
-				ImmDestroyIMCC(lpIMC->hCompStr);
-				lpIMC->hCompStr = NULL;
-			}
-			if(lpIMC->hPrivate)
-			{
-				ImmDestroyIMCC(lpIMC->hPrivate);
-				lpIMC->hPrivate = NULL;
-			}
+			ImmDestroyIMCC(lpIMC->hCompStr);
+			lpIMC->hCompStr = NULL;
 		}
-		ImmUnlockIMC(hIMC);
+		if (lpIMC->hPrivate)
+		{
+			ImmDestroyIMCC(lpIMC->hPrivate);
+			lpIMC->hPrivate = NULL;
+		}
 	}
+	lpIMC->fOpen = fSelect;
+	ImmUnlockIMC(hIMC);
 	return TRUE;
 }
 

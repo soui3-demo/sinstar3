@@ -66,7 +66,7 @@ namespace SOUI {
 
 		m_pZoomin = FindChildByID(R.id.sp_zoomin);
 		SASSERT(m_pZoomin);
-		SStringT strSpcharCfg = theModule->GetDataPath() + _T("\\spchar.xml");
+		SStringT strSpcharCfg = theModule->GetDataPath() + _T("\\data\\spchar.xml");
 		pugi::xml_document xmlDoc;
 		if (xmlDoc.load_file(strSpcharCfg))
 		{

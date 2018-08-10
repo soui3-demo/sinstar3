@@ -12,6 +12,9 @@ namespace SOUI
 		void SetSvrCompInfo(const COMPINFO * compInfo);
 
 		BOOL IsCompChar(char cInput);
+
+		CompInfo() :nCodeNum(0) ,cWild(0)
+		{}
 	};
 
 
@@ -26,6 +29,9 @@ namespace SOUI
 		CAutoRefPtr<IUiDefInfo> m_defUiDefine;
 
 		SStringT	m_strSkin;
+
+		SStringT	m_strDebugSkin;
+
 		CPoint		m_ptStatus;
 		CPoint		m_ptInput;
 		CPoint		m_ptSpchar;

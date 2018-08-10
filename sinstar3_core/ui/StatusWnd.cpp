@@ -26,8 +26,6 @@ namespace SOUI
 		int nRet = __super::OnCreate(lpCreateStruct);
 		if(nRet != 0) return nRet;
 
-		m_pBackGround = FindChildByID2<SStatusBackground>(R.id.status_bg);
-
 		CRect rcWnd = GetWindowRect();
 		CRect rcWorkArea;
 		SystemParametersInfo(SPI_GETWORKAREA,0,&rcWorkArea,0);
@@ -55,7 +53,7 @@ namespace SOUI
 
 	void CStatusWnd::UpdateUI()
 	{
-		UpdateToggleStatus(BTN_ALL);
+		UpdateToggleStatus(BTN_ALL, TRUE);
 		UpdateCompInfo();
 	}
 
@@ -146,29 +144,19 @@ namespace SOUI
 	void CStatusWnd::OnBtnExtend()
 	{
 		m_pCmdListener->GetInputContext()->settings.bFullStatus = TRUE;
-
-		m_pBackGround->SetMode(SStatusBackground::MODE_EXTEND);
-
-		FindChildByID(R.id.btn_status_shrink)->SetVisible(TRUE,TRUE);
-		FindChildByID(R.id.btn_status_extend)->SetVisible(FALSE,TRUE);
-		FindChildByID(R.id.status_extend)->SetVisible(TRUE,TRUE);
+		FindChildByID(R.id.status_extend)->SetVisible(TRUE, TRUE);
 	}
 
 	void CStatusWnd::OnBtnShrink()
 	{
 		m_pCmdListener->GetInputContext()->settings.bFullStatus = FALSE;
-		m_pBackGround->SetMode(SStatusBackground::MODE_SHRINK);
-
-		FindChildByID(R.id.btn_status_shrink)->SetVisible(FALSE,TRUE);
-		FindChildByID(R.id.btn_status_extend)->SetVisible(TRUE,TRUE);
-		FindChildByID(R.id.status_extend)->SetVisible(FALSE,TRUE);
-
+		FindChildByID(R.id.status_shrink)->SetVisible(TRUE,TRUE);
 	}
 
-	void CStatusWnd::UpdateCompInfo()
+	void CStatusWnd::UpdateCompInfo2(SWindow *pParent)
 	{
-		SWindow *pText = FindChildByID(R.id.txt_comp);
-		SFlagView * pFlagView = FindChildByID2<SFlagView>(R.id.img_logo);
+		SWindow *pText = pParent->FindChildByID(R.id.txt_comp);
+		SFlagView * pFlagView = pParent->FindChildByID2<SFlagView>(R.id.img_logo);
 		if (m_pCmdListener->GetInputContext()->compMode == IM_SHAPECODE)
 		{
 			if (pText) pText->SetWindowText(CDataCenter::getSingletonPtr()->GetData().m_compInfo.strCompName);
@@ -188,30 +176,100 @@ namespace SOUI
 				else
 					pText->SetWindowText(_T("启程拼音"));
 			}
-
 		}
 	}
 
-	void CStatusWnd::UpdateToggleStatus(DWORD flags)
+	void CStatusWnd::ShowServerExit()
+	{
+		{
+			SWindow *pStatus = FindChildByID(R.id.status_shrink);
+			SASSERT(pStatus);
+			SWindow *pText = pStatus->FindChildByID(R.id.txt_comp);
+			if (pText) pText->SetWindowText(_T("服务退出"));
+		}
+		{
+			SWindow *pStatus = FindChildByID(R.id.status_extend);
+			SASSERT(pStatus);
+			SWindow *pText = pStatus->FindChildByID(R.id.txt_comp);
+			if(pText) pText->SetWindowText(_T("服务退出"));
+		}
+	}
+	void CStatusWnd::UpdateCompInfo()
+	{
+		{
+			SWindow *pStatus = FindChildByID(R.id.status_shrink);
+			SASSERT(pStatus);
+			UpdateCompInfo2(pStatus);
+		}
+		{
+			SWindow *pStatus = FindChildByID(R.id.status_extend);
+			SASSERT(pStatus);
+			UpdateCompInfo2(pStatus);
+		}
+	}
+
+	void CStatusWnd::UpdateToggleStatus(DWORD flags, BOOL bInit)
 	{
 		CSettingsLocal & settings = m_pCmdListener->GetInputContext()->settings;
 
 		if(flags & BTN_CHARMODE){
 			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_charmode);
-			if (toggle) toggle->SetToggle(settings.bCharMode);
+			if (toggle)
+				toggle->SetToggle(settings.bCharMode);
+			if (m_pCmdListener && !bInit && (!toggle || !toggle->IsVisible(TRUE)))
+			{
+				TIPINFO ti(_T("标点模式改变"));
+				ti.strTip.Format(_T("当前标点:%s"), settings.bCharMode ? _T("中文标点") : _T("英文标点"));
+				m_pCmdListener->OnCommand(CMD_SHOWTIP,(LPARAM)&ti);
+			}
 		}
 		if(flags & BTN_SOUND){
 			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_sound);
-			if (toggle) toggle->SetToggle(!settings.bSound);
+			if (toggle) 
+				toggle->SetToggle(!settings.bSound);
+			if (m_pCmdListener && !bInit && (!toggle || !toggle->IsVisible(TRUE)))
+			{
+				TIPINFO ti(_T("语音较对改变:"));
+				ti.strTip.Format(_T("当前语音较对:%s"), settings.bSound ? _T("打开") : _T("关闭"));
+				m_pCmdListener->OnCommand(CMD_SHOWTIP, (LPARAM)&ti);
+			}
 		}
 		if (flags & BTN_RECORD) {
 			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_record);
-			if (toggle) toggle->SetToggle(!settings.bRecord);
+			if (toggle) 
+				toggle->SetToggle(!settings.bRecord);
+			if (m_pCmdListener && !bInit && (!toggle || !toggle->IsVisible(TRUE)))
+			{
+				TIPINFO ti(_T("记忆输入改变:"));
+				ti.strTip.Format(_T("当前记忆状态:%s"), settings.bRecord ? _T("启用") : _T("关闭"));
+				m_pCmdListener->OnCommand(CMD_SHOWTIP, (LPARAM)&ti);
+			}
+
 		}
 		if (flags & BTN_ENGLISHMODE)
 		{
 			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_english);
-			if (toggle) toggle->SetToggle(!settings.bEnglish);
+			if (toggle) 
+				toggle->SetToggle(!settings.bEnglish);
+			if (m_pCmdListener && !bInit && (!toggle || !toggle->IsVisible(TRUE)))
+			{
+				TIPINFO ti(_T("单词输入改变:"));
+				ti.strTip.Format(_T("当前单词输入状态:%s"), settings.bEnglish ? _T("启用") : _T("关闭"));
+				m_pCmdListener->OnCommand(CMD_SHOWTIP, (LPARAM)&ti);
+			}
+		}
+		if (flags & BTN_FILTERGBK)
+		{
+			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_filter_gbk);
+			if (toggle)
+				toggle->SetToggle(!settings.bFilterGbk);
+			if (m_pCmdListener && !bInit && (!toggle || !toggle->IsVisible(TRUE)))
+			{
+				TIPINFO ti(_T("GBK过滤策略改变:"));
+				ti.strTip.Format(_T("当前GBK过滤:%s"), settings.bFilterGbk ? _T("启用") : _T("关闭"));
+				m_pCmdListener->OnCommand(CMD_SHOWTIP, (LPARAM)&ti);
+			}
+
 		}
 	}
 
@@ -220,7 +278,7 @@ namespace SOUI
 		CDataCenter::getSingletonPtr()->GetData().m_ptStatus = pt;
 	}
 
-	void CStatusWnd::OnCompInfo(EventArgs *e)
+	void CStatusWnd::OnSvrNotify(EventArgs *e)
 	{
 		if(!IsWindow())
 			return;
@@ -229,6 +287,10 @@ namespace SOUI
 		if(e2->wp == NT_COMPINFO)
 		{
 			UpdateCompInfo();
+		}
+		else if (e2->wp == NT_SERVEREXIT)
+		{
+			ShowServerExit();
 		}
 	}
 
@@ -273,51 +335,100 @@ namespace SOUI
 		}
 	}
 
+	void CStatusWnd::OnSwitchFilterGbk(EventArgs * e)
+	{
+		SToggle * toggle = sobj_cast<SToggle>(e->sender);
+		if (toggle)
+		{
+			CSettingsLocal & settings = m_pCmdListener->GetInputContext()->settings;
+			settings.bFilterGbk = !toggle->GetToggle();
+		}
+	}
+
+	
 	void CStatusWnd::OnUpdateBtnTooltip(EventArgs *e)
 	{
 		CSettingsLocal & settings = m_pCmdListener->GetInputContext()->settings;
 		EventSwndUpdateTooltip *e2 = sobj_cast<EventSwndUpdateTooltip>(e);
 		SASSERT(e2);
+		SStringT strAccel;
 		switch (e2->idFrom)
 		{
 		case R.id.btn_charmode:
 			e2->bUpdated = TRUE;
+			strAccel = CAccelerator::FormatAccelKey(g_SettingsG.dwHotkeys[HKI_CharMode]);
 			e2->strToolTip = SStringT().Format(_T("标点模式:%s"), settings.bCharMode? _T("中文"):_T("英文"));
 			break;
-		case R.id.btn_makeword:
+		case R.id.btn_make_phrase:
 			e2->bUpdated = TRUE;
+			strAccel = CAccelerator::FormatAccelKey(g_SettingsG.dwHotkeys[HKI_MakePhrase]);
 			e2->strToolTip = _T("剪贴板造词");
 			break;
 		case R.id.btn_record:
 			e2->bUpdated = TRUE;
+			strAccel = CAccelerator::FormatAccelKey(g_SettingsG.dwHotkeys[HKI_Record]);
 			e2->strToolTip = SStringT().Format(_T("记录输入状态:%s"), settings.bRecord ? _T("启用") : _T("禁用"));
 			break;
 		case R.id.btn_sound:
 			e2->bUpdated = TRUE;
+			strAccel = CAccelerator::FormatAccelKey(g_SettingsG.dwHotkeys[HKI_TTS]);
 			e2->strToolTip = SStringT().Format(_T("语音较对:%s"), settings.bSound ? _T("启用") : _T("禁用"));
 			break;
 		case R.id.btn_english:
 			e2->bUpdated = TRUE;
+			strAccel = CAccelerator::FormatAccelKey(g_SettingsG.dwHotkeys[HKI_EnSwitch]);
 			e2->strToolTip = SStringT().Format(_T("单词输入:%s"), settings.bEnglish ? _T("启用") : _T("禁用"));
 			break;
-		case R.id.btn_status_extend:
+		case R.id.btn_query:
 			e2->bUpdated = TRUE;
-			e2->strToolTip = _T("展开状态栏");
+			strAccel = CAccelerator::FormatAccelKey(g_SettingsG.dwHotkeys[HKI_Query]);
+			e2->strToolTip = _T("编码反查");
+			break;
+		case R.id.btn_filter_gbk:
+			e2->bUpdated = TRUE;
+			strAccel = CAccelerator::FormatAccelKey(g_SettingsG.dwHotkeys[HKI_FilterGbk]);
+			e2->strToolTip = SStringT().Format(_T("过滤GBK重码:%s"), settings.bFilterGbk ? _T("启用") : _T("禁用"));
+			break;
+		case R.id.btn_menu:
+			{
+				e2->bUpdated = TRUE;
+				e2->strToolTip = _T("输入法菜单");
+			}
+			break;
+		case R.id.btn_help:
+			{
+				e2->bUpdated = TRUE;
+				e2->strToolTip = _T("打开帮助");
+			}
+			break;
+		case R.id.btn_status_extend:
+			if (e2->strToolTip.IsEmpty())
+			{
+				e2->bUpdated = TRUE;
+				e2->strToolTip = _T("展开状态栏");
+			}
 			break;
 		case R.id.btn_status_shrink:
-			e2->bUpdated = TRUE;
-			e2->strToolTip = _T("收缩状态栏");
+			{
+				e2->bUpdated = TRUE;
+				e2->strToolTip = _T("收缩状态栏");
+			}
 			break;
 		}
+		if (e2->bUpdated && !strAccel.IsEmpty())
+		{
+			e2->strToolTip += _T(",");
+			e2->strToolTip += strAccel;
+		}
 	}
-	void CStatusWnd::OnBtnMakeWord()
+	void CStatusWnd::OnBtnMakePhrase()
 	{
-		m_pCmdListener->OnCommand(CMD_MAKEWORD,0);
+		m_pCmdListener->OnCommand(CMD_HOTKEY_MAKEPHRASE,0);
 	}
 
 	void CStatusWnd::OnLogoClick()
 	{
-		m_pCmdListener->OnCommand(CMD_INPUTMODE, 0);
+		m_pCmdListener->OnCommand(CMD_HOTKEY_INPUTMODE, 0);
 	}
 
 	void CStatusWnd::OnMenuClick()
@@ -398,7 +509,7 @@ namespace SOUI
 		}
 		else if (nRet == R.id.key_map)
 		{
-			m_pCmdListener->OnCommand(CMD_KEYMAP, 0);
+			m_pCmdListener->OnCommand(CMD_HOTKEY_KEYMAP, 0);
 		}
 		else if (nRet == R.id.follow_caret)
 		{
@@ -406,7 +517,7 @@ namespace SOUI
 		}
 		else if (nRet == R.id.hide_statusbar)
 		{
-			m_pCmdListener->OnCommand(CMD_HIDESTATUSBAR, 0);
+			m_pCmdListener->OnCommand(CMD_HOTKEY_HIDESTATUSBAR, 0);
 		}
 		else if (nRet == R.id.input_big5)
 		{
@@ -421,7 +532,7 @@ namespace SOUI
 		{
 			OnHelpClick();
 		}
-		else if (nRet = R.id.open_spchar)
+		else if (nRet == R.id.open_spchar)
 		{
 			m_pCmdListener->OnCommand(CMD_OPENSPCHAR, 0);
 		}
@@ -431,8 +542,13 @@ namespace SOUI
 
 	void CStatusWnd::OnHelpClick()
 	{
-		SStringT path= SStringT().Format(_T("%s\\sinstar3.chm>main"), theModule->GetDataPath());
+		SStringT path= SStringT().Format(_T("%s\\data\\sinstar3.chm>main"), theModule->GetDataPath());
 		HtmlHelp(NULL, path, HH_DISPLAY_TOPIC, 0);
+	}
+
+	void CStatusWnd::OnQueryClick()
+	{
+		m_pCmdListener->OnCommand(CMD_HOTKEY_QUERYINFO, 0);
 	}
 
 }
