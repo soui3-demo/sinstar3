@@ -94,8 +94,13 @@ namespace SOUI
 
 	int CInputWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	{
+		return OnRecreateUI(lpCreateStruct);
+	}
+
+	int CInputWnd::OnRecreateUI(LPCREATESTRUCT lpCreateStruct)
+	{
 		int nRet = __super::OnCreate(lpCreateStruct);
-		if(nRet != 0) return nRet;
+		if (nRet != 0) return nRet;
 		UpdateUI();
 		MoveTo(m_ptCaret, m_nCaretHeight);
 		return 0;
@@ -469,7 +474,6 @@ namespace SOUI
 		__super::OnSetSkin(e);
 		OnFlmInfo(ISComm_GetFlmInfo());
 	}
-
 
 	BOOL CInputWnd::GoPrevCandidatePage()
 	{

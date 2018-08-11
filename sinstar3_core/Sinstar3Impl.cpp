@@ -180,6 +180,16 @@ void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 			if (m_pSpcharWnd) m_pSpcharWnd->DestroyWindow();
 		}
 	}
+	else
+	{
+		if (m_inputState.IsTypeing())
+			m_inputState.InputEnd();
+		m_pInputWnd->Show(FALSE);
+		m_pStatusWnd->Show(FALSE);
+		if (m_pConfig) m_pConfig->DestroyWindow();
+		if (m_pSpcharWnd) m_pSpcharWnd->DestroyWindow();
+		if (m_pTipWnd) m_pTipWnd->DestroyWindow();
+	}
 }
 
 int  CSinstar3Impl::GetCompositionSegments()

@@ -29,6 +29,8 @@ namespace SOUI
 
 		IMEWNDTYPE GetWndType() const { return m_wndType; }
 	protected:
+		virtual int OnRecreateUI(LPCREATESTRUCT lpCreateStruct);
+
 		virtual void OnFinalMessage(HWND hWnd);
 	protected:
 		bool OnEvent(EventArgs *e);

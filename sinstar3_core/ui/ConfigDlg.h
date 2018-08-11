@@ -9,6 +9,7 @@ namespace SOUI
 	public:
 		CConfigDlg(SEventSet *pEvtSet);
 		~CConfigDlg(void);		
+
 	protected:
 		void FindAndSetCheck(int id, BOOL bcheck);
 		void FindAndSetText(int id, LPCTSTR text);

@@ -30,6 +30,7 @@ namespace SOUI
 		void OnFlmInfo(PFLMINFO pFlmInfo);
 	protected:
 		virtual void OnSetSkin(EventArgs * e);
+		virtual int OnRecreateUI(LPCREATESTRUCT lpCreateStruct);
 
 		void UpdateAnchorPosition();
 		int GetCandMax(SWindow *pWnd, LPCWSTR pszCandClass) const;

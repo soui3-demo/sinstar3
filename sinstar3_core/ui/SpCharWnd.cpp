@@ -61,7 +61,12 @@ namespace SOUI {
 
 	int CSpCharWnd::OnCreate(LPCREATESTRUCT pCS)
 	{
-		int nRet = __super::OnCreate(pCS);
+		return OnRecreateUI(pCS);
+	}
+
+	int CSpCharWnd::OnRecreateUI(LPCREATESTRUCT lpCreateStruct)
+	{
+		int nRet = __super::OnCreate(lpCreateStruct);
 		if (nRet != 0) return nRet;
 
 		m_pZoomin = FindChildByID(R.id.sp_zoomin);
@@ -96,5 +101,6 @@ namespace SOUI {
 		}
 		return 0;
 	}
+
 }
 
