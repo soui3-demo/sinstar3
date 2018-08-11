@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<TITLE> 外挂编码 </TITLE>
+</HEAD>
+
+<body background="../images/lvbkgnd.jpg">
+<h1 align="center">编码码表</h1>
+<p>&nbsp;&nbsp;&nbsp; 
+输入之星是一个开放性的输入平台，支持编码外挂。非常简单，只要您简单的做几下选择就可以使用其它的满足一定要求的编码方案。</p>
+<h2>
+输入之星对码表的要求：</h2>
+<P>
+1、该码表必须是一个符号Windows输入法码表标准的纯文本码表,必须是ANSI编码，如果您的码表是UNICODE编码（如在win2k以上系统中使用输入法生成器导出的码表），您需要先转换成ANSI编码，方法是：用windows自带的notepad打开，再使用另存为，在编码项中选择ANSI。<P>
+2、和普通的码表有一点区别或者说限制是，输入之星要求码表的造词规则必须是ce2(二字词),ce3(三字词),ca4(多字词)。<P>
+3、除了与标准码表兼容的属性外，启程还支持下面几个启程使用的扩展属性：<blockquote>
+	<P>1）SymbolFirst=1&nbsp;&nbsp;&nbsp; //代表编码中有符号码元，而且符号可能是第一个编码。<P>
+	2）AutoSelect=1&nbsp;&nbsp;&nbsp;&nbsp; 
+	//代表该编码使用错码上屏功能：输入一个字的编码后，虽然该编码可能不是最大码长，但是再加任意的码元都不构成合法的编码时，该重码自动上屏。<P>
+	3）PhraseCompPart=1 //指示词组编码不一定是最大码长。如果所有词组都是最大码长，将该属性设置为0时可以增加输入法检索速度。<P>
+	4）YinXingMa=0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //指示该编码是音形码，并且允许启用音形码优化功能。<P>
+	5）WebSite=<a href="http://www.setoutsoft.cn">http://www.setoutsoft.cn</a> 
+	//编码作者提供的网站链接。</blockquote>
+<P><BR>4、基本的码表文件格式：<P>
+[Description]<BR>
+Name=五笔型<BR>
+
+MaxCodes=4<BR>
+
+UsedCodes=abcdefghijklmnopqrstuvwxy<BR>
+
+WildChar=z<BR>
+
+NumRules=3<BR>
+
+SymbolFirst=0<br>
+AutoSelect=0<br>
+PhraseCompPart=0<br>
+YinXingMa=0<br>
+WebSite=http://www.setoutsoft.cn<br>
+NumRules=3<br>
+
+[Rule]<BR>
+
+ca4=p11+p21+p31+n11<BR>
+
+ce2=p11+p12+p21+p22<BR>
+
+ce3=p11+p21+p31+p32<BR>
+
+[Text]<BR>
+
+工a aaaa<BR>
+
+式aa aad<BR>
+
+工aaa aaaa<BR>
+
+工aaaa<BR>
+
+工期aaad<BR>
+
+黄花菜aaae<BR>
+
+…….<P>
+整备好码表后，在输入之星伴侣的编码管理界面中选择编码导入就可以了，系统会自动弹出文件选择对话框。导入完成后系统并不会自动保存，这时您还可以从词组库中批量导入词组等辅助操作。<P>
+
+<B>小提示</B>：您可以利用输入法生成器的逆转换来获取标准输入法（如郑码，拼音）码表文本文件。输入法生成器如果是Windows98系统可以在Windows98的安装程序中找到，如果是Windows2000的系统其实在安装系统时已经安装，只是没有提供快捷的访问方式，一般您可以在C:\Program Files\Windows NT\Accessories\Imegen.exe找到它，或者干脆就是系统的安装目录中搜索imegen.exe就可以了。<P>
+
+</BODY>
+</HTML>

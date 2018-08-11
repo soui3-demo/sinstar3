@@ -1,0 +1,14 @@
+Microsoft HTML Help Compiler 4.74.8702
+
+Compiling d:\Æô³Ìhelp\sinstar2.chm
+
+
+Compile time: 0 minutes, 4 seconds
+35	Topics
+191	Local links
+6	Internet links
+61	Graphics
+
+
+Created d:\Æô³Ìhelp\sinstar2.chm, 833,924 bytes
+Compression decreased file by 76,127 bytes.

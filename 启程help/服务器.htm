@@ -1,0 +1,67 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 6.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>服务器使用</title>
+</head>
+
+<body background="./images/lvbkgnd.jpg">
+
+<h1 align="center">启程输入之星后台服务</h1>
+<p align="center">　</p>
+<h2>后台服务简介：</h2>
+<p>&nbsp;&nbsp;&nbsp; <font color="#0000FF"> <b>服务器</b></font>在后台为输入之星提供<b>数据处理</b>支持，是启程输入之星的<font color="#0000FF"><b>核心部分</b></font>，输入法打开时在后台启动。</p>
+<h2>显示服务器界面：</h2>
+<p style="line-height: 150%">&nbsp;&nbsp;&nbsp; 
+在状态栏上右键弹出<font color="#0000FF">系统菜单</font>，选择“<font color="#0000FF">数据管理</font>”打开服务器操作界面。</p> 
+<h2>包括以下几部分：</h2>
+<table border="1" width="500" id="table1">
+	<tr>
+		<td> 
+<ul>
+	<li>
+	<h3><a href="服务器/dataspell.htm"><font size="5">启程拼音</font></a></h3></li>
+	<li>
+	<h3><a href="服务器/compmgr.htm"><font size="5">编码管理</font></a></h3></li>
+	<li>
+	<h3><a href="服务器/toolcompedt.htm"><font size="5">编码编译</font></a></h3></li>
+	<li>
+	<h3><a href="服务器/dataphrase.htm"><font size="5">词库管理</font></a></h3></li>
+	<li>
+	<h3><a href="服务器/dataeng.htm"><font size="5">外文词库</font></a></h3></li>
+	<li>
+	<h3><a href="服务器/datauserdef.htm"><font size="5">用户定义</font></a></h3></li>
+</ul>
+		<p>　</td>
+		<td> 
+<ul>
+	<li>
+	<h3><a href="服务器/usercmd.htm"><font size="5">快捷命令</font></a></h3></li>
+	<li>
+	<h3><font size="5"><a href="使用方法/自定义简码.htm">自定义简码</a></font></h3></li>
+	<li>
+	<h3><a href="服务器/datauserdict.htm"><font size="5">启程词典</font></a></h3></li>
+	<li>
+	<h3><a href="服务器/symbol.htm"><font size="5">符号映射</font></a></h3></li>
+	<li>
+	<h3><a href="服务器/toolcfg.htm"><font size="5">系统配置</font></a></h3></li>
+	<li>
+	<h3><a href="服务器/about.htm"><font size="5">关于</font></a></h3></li>
+</ul>
+		<p>　</td>
+	</tr>
+</table>
+<h3></h3>
+<h2 style="line-height: 150%">软件结构与内存占用的关系：</h2>
+<p style="line-height: 150%">&nbsp;&nbsp;&nbsp; 细心的您可能会发现，输入之星启动后，在任务管理器的进程列表中多了一个isserver.exe进程，它就是输入之星的后台服务程序。启程输入之星采用了类似网络游戏的客户端服务器框架，将所有数据处理独立出来做为了一个单独的软件，在后台启动为输入法服务。这种设计一个突出的优点就是内存占用少。传统模式下，在一个软件中启动一个输入法，输入法将需要的数据载入到软件所在的内存空间。
+即一个软件需要一个内存拷贝，通常情况下需要同时在多个编辑器中启动输入法，这样就导致输入法重复载入数据到内存。采用客户端服务器结构，一个服务器为所有的输入法客户端服务，从而减少内存占用。</p>
+<h2 style="line-height: 150%">注:</h2>
+<p style="line-height: 150%">&nbsp;&nbsp;&nbsp; 
+在服务器的菜单中有一项&quot;强行退出&quot;,一般情况下不要选择强退,服务器退出以后如果还有输入之星正在打开,输入编码时将查询不到结果.如果已经退出服务器,您需要在打开输入之星的程序中先关掉输入之星再重新打开,此时系统会重新启动服务器.</p> 
+<p style="line-height: 150%">&nbsp;&nbsp;&nbsp; 返回<a href="输入之星.htm#系统维护">首页</a></p>  
+
+</body>
+
+</html>
