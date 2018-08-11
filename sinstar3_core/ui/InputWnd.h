@@ -29,6 +29,8 @@ namespace SOUI
 		short SelectCandidate(short iCand);
 		void OnFlmInfo(PFLMINFO pFlmInfo);
 	protected:
+		virtual void OnSetSkin(EventArgs * e);
+
 		void UpdateAnchorPosition();
 		int GetCandMax(SWindow *pWnd, LPCWSTR pszCandClass) const;
 	protected:

@@ -464,6 +464,12 @@ namespace SOUI
 		SDispatchMessage(UM_FLMINFO, 0, (LPARAM)pFlmInfo);
 	}
 
+	void CInputWnd::OnSetSkin(EventArgs * e)
+	{
+		__super::OnSetSkin(e);
+		OnFlmInfo(ISComm_GetFlmInfo());
+	}
+
 
 	BOOL CInputWnd::GoPrevCandidatePage()
 	{
