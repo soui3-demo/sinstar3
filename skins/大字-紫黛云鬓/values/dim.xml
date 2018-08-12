@@ -1,8 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
   <dim>
-    <input_height value="102"/>
-    <input_min_width value="100"/>
-
     <input_margin_left value="5"/>
     <input_margin_top value="32"/>
     <input_margin_right value="75"/>
