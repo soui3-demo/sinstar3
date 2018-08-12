@@ -57,6 +57,7 @@ using namespace SOUI;
 #include "controls/SEnglishCand.h"
 #include "controls/SPhraseCand.h"
 #include "controls/SCaption2.h"
+#include "controls/SCompBackground.h"
 #include "controls/SStatusBackground.h"
 #include "controls/SMutexView.h"
 #include "controls/SSpellView.h"

@@ -113,6 +113,26 @@ namespace SOUI
 			UpdateUI();
 	}
 
+	void CInputWnd::OnUpdateBtnTooltip(EventArgs * e)
+	{
+		EventSwndUpdateTooltip *e2 = sobj_cast<EventSwndUpdateTooltip>(e);
+		SASSERT(e2);
+		SStringT strAccel;
+		switch (e->sender->GetID())
+		{
+		case R.id.btn_prevpage:
+			e2->bUpdated = TRUE;
+			strAccel = CAccelerator::FormatAccelKey(g_SettingsG.byTurnPageUpVK);
+			e2->strToolTip = SStringT().Format(_T("ÖØÂëÉÏ·­Ò³,·­Ò³¼ü:%s"), strAccel);
+			break;
+		case R.id.btn_nextpage:
+			e2->bUpdated = TRUE;
+			strAccel = CAccelerator::FormatAccelKey(g_SettingsG.byTurnPageDownVK);
+			e2->strToolTip = SStringT().Format(_T("ÖØÂëÏÂ·­Ò³,·­Ò³¼ü:%s"),strAccel);
+			break;
+		}
+	}
+
 	void CInputWnd::OnBtnPrevPage()
 	{
 		if(GoPrevCandidatePage())

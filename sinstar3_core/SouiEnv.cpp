@@ -45,6 +45,7 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst,LPCTSTR pszWorkDir)
 	m_theApp->RegisterWindowClass<SPhraseCand>();
 	m_theApp->RegisterWindowClass<SSpellView>();
 	m_theApp->RegisterWindowClass<SCaption2>();
+	m_theApp->RegisterWindowClass<SCompBackground>();
 	m_theApp->RegisterWindowClass<SStatusBackground>();
 	m_theApp->RegisterWindowClass<SMutexView>();
 	m_theApp->RegisterWindowClass<SFlagView>();
