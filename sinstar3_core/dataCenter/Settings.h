@@ -13,6 +13,8 @@ enum HotKeyIndex{
 	HKI_FilterGbk,		// filter gbk
 	HKI_Record,			// record input
 	HKI_TTS,			// tts
+	HKI_UDMode,			// user define mode
+
 	HKI_COUNT,
 };
 
@@ -38,7 +40,6 @@ public:
 	BYTE	byTempSpellKey;		// 临时拼音开关
 	BYTE	byForecast;			// forecast mask
 	TCHAR	byLineKey[6];		// 笔画输入法转换键值
-	BOOL	bFastUMode;			// 快捷自定义模式切换
 	BOOL	bShowOpTip;			// 显示操作提示开关
 	GbkMode		nGbkMode;			// GBK Show Mode
 
@@ -53,7 +54,6 @@ public:
 
 	BYTE	byTurnPageUpVK;		// 重码上翻键
 	BYTE	byTurnPageDownVK;	// 重码下翻键
-
 	DWORD   dwHotkeys[HKI_COUNT];
 
 	BOOL	bPYPhraseFirst;		// 拼音词组优先
@@ -68,9 +68,7 @@ public:
 	BOOL	bCandSelNoNum;		// 禁用数字选择重码
 	BOOL	bOnlySimpleCode;	// 出简不出全
 
-	TCHAR	hkUserDefSwitch;	//切换到用户定义的与编码相关快捷键
-	TCHAR	hkSentSwitch;		//切换到语句输入的与编码相关快捷键
-
+	BYTE    bySentMode;
 };
 
 extern CSettingsGlobal	g_SettingsG;
