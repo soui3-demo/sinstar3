@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <SOUI
   name="dlg_config"
-  width="500"
+  width="600"
   height="400"
   resizable="0"
   wndType="normal"
@@ -11,22 +11,25 @@
     <class name="cls_radio" padding="5,5,5,5" extend_top="5" extend_bottom="5"/>
   </style>
   <skin>
-    <lineskin name="nav_config_tab" line_wid="0,0,2,1" right_pushdown="#568c8f" right_hover="#ebebeb" bottom_normal="#f5f6f6" bottom_hover="#f5f6f6" bottom_pushdown="#f5f6f6"/>
+    <colorrect name="nav_config_tab" normal="#f3f6fa" hover="#ebebeb" pushdown="#3973d6"/>
     <scrollbar name="skin.scrollbar"  src="IMG:SYS_SCROLLBAR" margin="5" hasgripper="0"/>    
   </skin>
-  <root colorBkgnd="#cccccc">
-    <window pos="1,1,-1,-1" colorBkgnd="@color/configborder">
-    <caption size="-2,-1" layout="hbox">
+  <root colorBkgnd="#000000">
+    <window pos="1,1,-1,-1" colorBkgnd="@color/configborder" font="size:16">
+    <caption size="-2,38" layout="hbox">
       <text extend_left="6" extend_top="6" size="-1,-1" text="@string/title_config"/>
       <window size="0,0" weight="1" visible="0"/>
       <imgbtn size="-1,-1" skin="_skin.sys.btn.close" name="btn_close" id="2" animate="1" tip="@string/btn_close"/>
     </caption>
-    <tabctrlex pos="0,30" text-x="22" align="left" size="-2, -2"  tabInterSize="0" tabWidth="100" tabskin="nav_config_tab"  colorBkgnd="@color/white" tabHeight="30" drawFocusRect="0" show="1" curSel="0">
-      <socrollviewStyle sbArrowSize="0" sbSkin="skin.scrollbar" updateInterval="0"/>
+    <tabctrlex pos="0,[" text-x="22" tabPos="10" align="left" size="-2, -2"  tabInterSize="0" tabWidth="120" tabskin="nav_config_tab" colorBkgnd="#f3f6fa"  tabHeight="32" drawFocusRect="0" show="1" curSel="0">
+      <socrollviewStyle sbArrowSize="0" sbSkin="skin.scrollbar" updateInterval="0"  colorBkgnd="#f2f2f2" colorBorder="#c6c6c6"/>
       <pages>
         <pageex title="@string/cfg_habit" tip="@string/cfg_habit">
-          <text pos="10,10">@string/cfg_habit</text>
-          <window pos="88,{" layout="vbox">
+          <window size="-2,-1" layout="hbox" gravity="center">
+          <text inset="10,5,5,5">@string/cfg_habit</text>
+            <hr width="-2" height="1"></hr>
+         </window>
+          <window pos="88,[" layout="vbox">
             <text >输入法开关:</text>
             <window layout="hbox">
               <radio text="左Shift" id="100" extend_top="10" name="ime_switch_left_shift"/>
@@ -55,8 +58,11 @@
         </pageex>
 
         <pageex title="@string/cfg_hotkey" tip="@string/cfg_hotkey">
-          <text pos="10,10">@string/cfg_hotkey</text>
-          <window pos="88,{" layout="vbox">
+          <window size="-2,-1" layout="hbox" gravity="center">
+            <text inset="10,5,5,5">@string/cfg_hotkey</text>           
+            <hr width="-2" height="1"></hr>
+          </window>
+          <window pos="88,[" layout="vbox">
             <window layout="gridLayout" xGravity="right" columnCount="2" xInterval="5dp" yInterval="10dp">
               <text text="音形码切换"/>
               <hotkey name="hk_switch_py" weight="1" width="120dp"/>
@@ -83,8 +89,11 @@
         </pageex>
 
         <pageex title="@string/cfg_associate" tip="@string/cfg_associate">
-          <text pos="10,10">@string/cfg_associate</text>
-          <window pos="88,{" layout="vbox">
+          <window size="-2,-1" layout="hbox" gravity="center">
+            <text inset="10,5,5,5">@string/cfg_associate</text>
+          <hr width="-2" height="1"></hr>
+        </window>
+  <window pos="88,[" layout="vbox">
             <text >联想类型:</text>
             <window extend_top="10" layout="hbox">
               <radio name="ass_mode_none" id="400" text="禁用"/>
@@ -111,8 +120,11 @@
           </window>
         </pageex>
         <pageex title="@string/cfg_candidate" tip="@string/cfg_candidate">
-          <text pos="10,10">@string/cfg_candidate</text>
-          <window pos="88,{" layout="vbox">
+          <window size="-2,-1" layout="hbox" gravity="center">
+            <text inset="10,5,5,5">@string/cfg_candidate</text>
+            <hr width="-2" height="1"></hr>
+          </window>
+          <window pos="88,[" layout="vbox">
             <text>快捷2,3重码</text>
             <window extend_top="10" layout="vbox">
               <check name="chk_enable_23cand_hotkey" text="启用"/>
@@ -141,8 +153,11 @@
           </window>
         </pageex>
         <pageex title="@string/cfg_misc" tip="@string/cfg_misc">
-          <text pos="10,10">@string/cfg_misc</text>
-          <window pos="88,{" layout="vbox">
+          <window size="-2,-1" layout="hbox" gravity="center">
+            <text inset="10,5,5,5">@string/cfg_misc</text>
+          <hr width="-2" height="1"></hr>
+        </window>
+  <window pos="88,[" layout="vbox">
             <group size="-1,-1" layout="vbox" text="提示音">
               <radio name="sound_disable" text="禁用" id="800"/>
               <radio name="sound_wave" text="WAV提示" id="801"/>
@@ -164,9 +179,9 @@
             </group>
           </window>
         </pageex>
-        <pageex title="@string/cfg_about" tip="@string/cfg_about" layout="vbox" gravity="center">
-          <text extend_top="30" text="启程输入法"/>
-          <window size="-1,-1" layout="hbox">
+        <pageex title="@string/cfg_about" tip="@string/cfg_about" layout="vbox" inset="10,0,0,0">
+          <text extend_top="30" text="启程输入法" layout_gravity="center"/>
+          <window size="-1,-1" layout="hbox" extend_top="10">
             <text text="输入法版本:"/>
             <text name="txt_ver"/>
           </window>

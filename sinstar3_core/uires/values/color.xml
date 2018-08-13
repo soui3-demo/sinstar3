@@ -6,17 +6,17 @@
   <blue value="rgb(0,0,255)"/>
   <white value="rgb(255,255,255)"/>
   <gray value="#808080"/>
-
+<tabnavbk value="#f0f0f1"/>
   <associate_english_prefix value="#808080"/>
   <temp_spell_flag value="rgb(255,0,0)"/>
-  <configborder value="#fecc01"/>
+  <configborder value="#fee51b"/>
   <cand_first value="rgb(255,0,0)"/>
   <cand_index value="rgb(128,128,128)"/>
   <cand_text value="rgb(0,0,0)"/>
   <cand_comp value="rgb(0,0,128)"/>
   <cand_wild value="rgb(255,0,0)"/>
   <cand_phonetic value="rgb(0,0,255)"/>
-
+  
   <sent_input value="rgb(255,0,0)"/>
   <sent_left value="rgb(0,0,255)"/>
   <sent_right value="rgb(0,0,0)"/>

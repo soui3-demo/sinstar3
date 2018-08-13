@@ -16,6 +16,7 @@
   </style>
 
   <objattr>
+    <hr colorLine="#cccccc"/>
     <edit class="edit_border"/>
     <group  padding="10,10,10,15"/>
     <hotkey class="edit_border"  padding="5,0,5,0"/>
