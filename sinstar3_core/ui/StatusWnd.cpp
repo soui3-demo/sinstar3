@@ -23,32 +23,7 @@ namespace SOUI
 
 	int CStatusWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	{
-		int nRet = __super::OnCreate(lpCreateStruct);
-		if(nRet != 0) return nRet;
-
-		CRect rcWnd = GetWindowRect();
-		CRect rcWorkArea;
-		SystemParametersInfo(SPI_GETWORKAREA,0,&rcWorkArea,0);
-
-		CPoint pt =CDataCenter::getSingletonPtr()->GetData().m_ptStatus;
-		if (pt.x < 0 || pt.y<0)
-		{
-			CSize szWnd = GetDesiredSize(-1, -1);
-			pt.x = rcWorkArea.right - rcWnd.Width();
-			pt.y = rcWorkArea.bottom - rcWnd.Height();
-		}
-		if(pt.x + rcWnd.Width() > rcWorkArea.right)
-			pt.x = rcWorkArea.right - rcWnd.Width();
-		if(pt.y + rcWnd.Height()> rcWorkArea.bottom)
-			pt.y = rcWorkArea.bottom - rcWnd.Height();
-		SetWindowPos(HWND_TOPMOST,pt.x,pt.y,0,0,SWP_NOSIZE|SWP_NOZORDER|SWP_NOACTIVATE);
-
-		if (m_pCmdListener->GetInputContext()->settings.bFullStatus)
-			OnBtnExtend();
-		else
-			OnBtnShrink();
-		UpdateUI();
-		return 0;
+		return OnRecreateUI(lpCreateStruct);
 	}
 
 	void CStatusWnd::UpdateUI()
@@ -276,6 +251,36 @@ namespace SOUI
 	void CStatusWnd::OnReposition(CPoint pt)
 	{
 		CDataCenter::getSingletonPtr()->GetData().m_ptStatus = pt;
+	}
+
+	int CStatusWnd::OnRecreateUI(LPCREATESTRUCT lpCreateStruct)
+	{
+		int nRet = __super::OnCreate(lpCreateStruct);
+		if (nRet != 0) return nRet;
+
+		CRect rcWnd = GetWindowRect();
+		CRect rcWorkArea;
+		SystemParametersInfo(SPI_GETWORKAREA, 0, &rcWorkArea, 0);
+
+		CPoint pt = CDataCenter::getSingletonPtr()->GetData().m_ptStatus;
+		if (pt.x < 0 || pt.y<0)
+		{
+			CSize szWnd = GetDesiredSize(-1, -1);
+			pt.x = rcWorkArea.right - rcWnd.Width();
+			pt.y = rcWorkArea.bottom - rcWnd.Height();
+		}
+		if (pt.x + rcWnd.Width() > rcWorkArea.right)
+			pt.x = rcWorkArea.right - rcWnd.Width();
+		if (pt.y + rcWnd.Height()> rcWorkArea.bottom)
+			pt.y = rcWorkArea.bottom - rcWnd.Height();
+		SetWindowPos(HWND_TOPMOST, pt.x, pt.y, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+
+		if (m_pCmdListener->GetInputContext()->settings.bFullStatus)
+			OnBtnExtend();
+		else
+			OnBtnShrink();
+		UpdateUI();
+		return 0;
 	}
 
 	void CStatusWnd::OnSvrNotify(EventArgs *e)

@@ -38,12 +38,9 @@
               <radio text="清除编码" id="110" name="enter_for_clear"/>
               <radio text="编码上屏" id="111" extend_left="10" name="enter_for_input"/>
             </window>
-            <text extend_top="10">形码状态快捷模式:</text>
             <window extend_top="10" layout="hbox">
-              <check text="U模式切换:" name="key_to_umode"/>
-              <edit size="30dp,-1" name="edit_to_umode"/>
               <text text="语句模式切换:" name="key_to_sentmode"/>
-              <edit size="30dp,-1" name="edit_to_sentmode"/>
+              <hotkey size="50dp,-1" name="hk_to_sentmode" extend_left="10" invalidComb="7" padding="5,0,5,0"/>
             </window>
             <text extend_top="10">临时拼音开关:</text>
             <window extend_top="10" layout="hbox">
@@ -63,6 +60,8 @@
             <window layout="gridLayout" xGravity="right" columnCount="2" xInterval="5dp" yInterval="10dp">
               <text text="音形码切换"/>
               <hotkey name="hk_switch_py" weight="1" width="120dp"/>
+              <text text="自定义模式"/>
+              <hotkey name="hk_to_umode" width="120dp"/>
               <text text="造词"/>
               <hotkey name="hk_make_phrase" width="120dp"/>
               <text text="字根表显示"/>

@@ -94,8 +94,13 @@ namespace SOUI
 
 	int CInputWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	{
+		return OnRecreateUI(lpCreateStruct);
+	}
+
+	int CInputWnd::OnRecreateUI(LPCREATESTRUCT lpCreateStruct)
+	{
 		int nRet = __super::OnCreate(lpCreateStruct);
-		if(nRet != 0) return nRet;
+		if (nRet != 0) return nRet;
 		UpdateUI();
 		MoveTo(m_ptCaret, m_nCaretHeight);
 		return 0;
@@ -106,6 +111,26 @@ namespace SOUI
 	{
 		if(GoNextCandidatePage())
 			UpdateUI();
+	}
+
+	void CInputWnd::OnUpdateBtnTooltip(EventArgs * e)
+	{
+		EventSwndUpdateTooltip *e2 = sobj_cast<EventSwndUpdateTooltip>(e);
+		SASSERT(e2);
+		SStringT strAccel;
+		switch (e->sender->GetID())
+		{
+		case R.id.btn_prevpage:
+			e2->bUpdated = TRUE;
+			strAccel = CAccelerator::FormatAccelKey(g_SettingsG.byTurnPageUpVK);
+			e2->strToolTip = SStringT().Format(_T("ÖØÂëÉÏ·­Ò³,·­Ò³¼ü:%s"), strAccel);
+			break;
+		case R.id.btn_nextpage:
+			e2->bUpdated = TRUE;
+			strAccel = CAccelerator::FormatAccelKey(g_SettingsG.byTurnPageDownVK);
+			e2->strToolTip = SStringT().Format(_T("ÖØÂëÏÂ·­Ò³,·­Ò³¼ü:%s"),strAccel);
+			break;
+		}
 	}
 
 	void CInputWnd::OnBtnPrevPage()
@@ -464,6 +489,11 @@ namespace SOUI
 		SDispatchMessage(UM_FLMINFO, 0, (LPARAM)pFlmInfo);
 	}
 
+	void CInputWnd::OnSetSkin(EventArgs * e)
+	{
+		__super::OnSetSkin(e);
+		OnFlmInfo(ISComm_GetFlmInfo());
+	}
 
 	BOOL CInputWnd::GoPrevCandidatePage()
 	{

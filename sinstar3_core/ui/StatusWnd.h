@@ -28,6 +28,8 @@ namespace SOUI
 	protected:
 		virtual void OnReposition(CPoint pt);
 
+		int OnRecreateUI(LPCREATESTRUCT lpCreateStruct);
+
 	protected:
 		int OnCreate(LPCREATESTRUCT lpCreateStruct);
 

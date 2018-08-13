@@ -1,0 +1,26 @@
+﻿<SOUI name="mainWindow" title="@string/title" bigIcon="ICON_LOGO:32" smallIcon="ICON_LOGO:16" width="600" height="400"  margin="5,5,5,5"  resizable="1" wndType="appMain"
+appWnd="1"
+translucent="1" 
+>
+  <root skin="_skin.sys.wnd.bkgnd" cache="1">
+    <caption pos="0,0,-0,30" show="1" font="adding:0">
+      <icon pos="10,8" src="ICON_LOGO:16"/>
+      <text pos="29,9">@string/title</text>
+      <imgbtn name="btn_close" skin="_skin.sys.btn.close"    pos="-45,0" tip="close" animate="1"/>
+      <imgbtn name="btn_max" skin="_skin.sys.btn.maximize"  pos="-83,0" animate="1" />
+      <imgbtn name="btn_restore" skin="_skin.sys.btn.restore"  pos="-83,0" show="0" animate="1" />
+      <imgbtn name="btn_min" skin="_skin.sys.btn.minimize" pos="-121,0" animate="1" />
+    </caption>
+    <window pos="5,[2,-5,-5" layout="vbox">
+      <window size="-2,-1" layout="hbox" gravity="center">
+        <text text="文件名:"/>
+        <edit size="0,-1" name="edit_path" weight="1"/>
+        <button size="100,30" name="btn_browse" text="..."/>
+      </window>
+      <window size="-2,0" weight="1">
+        <img pos="0,0,-0,-0" name="img_preview"/>
+        <button pos="|0,|0,@100,@30" offset="-0.5,-0.5" name="btn_convert" text="Convert"/>
+      </window>
+    </window>
+  </root>
+</SOUI>

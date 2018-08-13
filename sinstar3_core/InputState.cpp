@@ -170,6 +170,7 @@ int CInputState::TestHotKey(UINT uVk, const BYTE * lpbKeyState) const
 {
 	if (uVk == VK_CONTROL || uVk == VK_SHIFT || uVk == VK_MENU)
 		return -1;
+	int iRet = -1;
 	for (int i = 0; i < HKI_COUNT; i++)
 	{
 		DWORD dwHotkey = g_SettingsG.dwHotkeys[i];
@@ -183,10 +184,16 @@ int CInputState::TestHotKey(UINT uVk, const BYTE * lpbKeyState) const
 				continue;
 			if (((wModifier & MOD_SHIFT) != 0) ^ ((lpbKeyState[VK_SHIFT] & 0x80) != 0))
 				continue;
-			return i;
+			iRet = i;
+			break;
 		}
 	}
-	return -1;
+	if (iRet == HKI_UDMode)
+	{
+		if (m_ctx.cComp > 0 || m_ctx.inState == INST_USERDEF)
+			iRet = -1;
+	}
+	return iRet;
 }
 
 BOOL CInputState::Tips_Rand(BOOL bSpell, char *pszBuf)
@@ -433,6 +440,17 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 	int iHotKey = TestHotKey(uVKey, lpbKeyState);
 	if (iHotKey != -1)
 	{
+		if(iHotKey == HKI_UDMode)
+		{//切换到用户自定义输入状态
+			ClearContext(CPC_ALL);
+			m_ctx.inState = INST_USERDEF;
+			if (!IsTypeing())
+			{
+				InputStart();
+				InputOpen();
+			}
+			InputUpdate();
+		}
 		return TRUE;
 	}
 
@@ -1660,9 +1678,9 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 
 		if(lpCntxtPriv->cComp==0 && !bRet)
 		{
-			if((byInput<'a' || byInput>'z') && (byInput!=g_SettingsG.hkUserDefSwitch || !g_SettingsG.bFastUMode) )
+			if(byInput<'a' || byInput>'z')
 			{//标点：要么不是自定义模式快捷键，或者不支持快捷自定义模式切换
-				if(!ISComm_GetCompInfo()->bSymbolFirst || byInput==g_SettingsG.hkUserDefSwitch) return FALSE;//符号顶字上屏
+				if(!ISComm_GetCompInfo()->bSymbolFirst) return FALSE;//符号顶字上屏
 			}
 			if(g_SettingsG.bShowOpTip)
 			{//有编码后面显示操作提示
@@ -1672,13 +1690,6 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 			//开始编码输入,生成开始编码消息以获取光标跟随时输入窗口的坐标
 			InputStart();
 			InputOpen();
-			if(byInput==g_SettingsG.hkUserDefSwitch && g_SettingsG.bFastUMode)
-			{//切换到用户自定义输入状态
-				ClearContext(CPC_ALL);
-				lpCntxtPriv->inState=INST_USERDEF;
-				lpCntxtPriv->bShowTip=FALSE;
-				return TRUE;
-			}
 		}
 		if(lpCntxtPriv->cComp<MAX_COMP)
 		{
@@ -1728,16 +1739,6 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 			ClearContext(CPC_ALL);
 			return TRUE;
 		}
-	}else if(byInput==g_SettingsG.hkUserDefSwitch)
-	{//用户定义的自定义状态切换键
-		if(lpCntxtPriv->cComp==0 && g_SettingsG.bFastUMode)
-		{//切换到用户自定义输入状态
-			ClearContext(CPC_ALL);
-			lpCntxtPriv->inState=INST_USERDEF;
-			InputStart();
-			InputUpdate();
-			return TRUE;
-		}
 	}else if(lpCntxtPriv->cComp < MAX_COMP)
 	{
 		lpCntxtPriv->szComp[lpCntxtPriv->cComp++]=byInput;
@@ -1751,7 +1752,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 			{
 				lpCntxtPriv->bWebMode=TRUE;
 				bRet=TRUE;
-			}else if(byInput!=VK_BACK && byInput!=VK_ESCAPE && byInput!=VK_RETURN && byInput!=g_SettingsG.hkUserDefSwitch)
+			}else if(byInput!=VK_BACK && byInput!=VK_ESCAPE && byInput!=VK_RETURN)
 			{
 				lpCntxtPriv->cComp--;
 			}
@@ -1887,7 +1888,7 @@ BOOL CInputState::KeyIn_All_Associate(InputContext * lpCntxtPriv,UINT byInput,
 	BOOL bRet=FALSE;
 	SASSERT(lpCntxtPriv->sbState==SBST_ASSOCIATE);
 
-	if((lpCntxtPriv->compMode==IM_SHAPECODE && byInput==g_SettingsG.hkSentSwitch) ||(lpCntxtPriv->compMode==IM_SPELL && byInput==';'))
+	if((lpCntxtPriv->compMode==IM_SHAPECODE && byInput==g_SettingsG.bySentMode) ||(lpCntxtPriv->compMode==IM_SPELL && byInput==';'))
 	{
 		if(lpCntxtPriv->sSentLen)
 		{//切换到语句输入状态
@@ -1922,7 +1923,7 @@ BOOL CInputState::KeyIn_All_Sentence(InputContext * lpCntxtPriv,UINT byInput,
 	{
 		if(lpCntxtPriv->sSentCaret>0)
 			lpCntxtPriv->sSentCaret--;
-	}else if((lpCntxtPriv->compMode==IM_SHAPECODE && byInput==g_SettingsG.hkSentSwitch) ||(lpCntxtPriv->compMode==IM_SPELL && byInput==';'))
+	}else if((lpCntxtPriv->compMode==IM_SHAPECODE && byInput==g_SettingsG.bySentMode) ||(lpCntxtPriv->compMode==IM_SPELL && byInput==';'))
 	{
 		if(lpCntxtPriv->sSentCaret==0) return FALSE;//返回FALSE,以便进入符号输入过程
 	}else if(byInput=='.')
@@ -2185,6 +2186,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 	int iHotKey = TestHotKey(uKey, lpbKeyState);
 	if (iHotKey != -1)
 	{
+		bRet = TRUE;
 		if ( m_pListener)
 		{
 			switch (iHotKey)
@@ -2222,7 +2224,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 			}
 		}
 		bPressOther = TRUE;
-		return TRUE;
+		if(bRet) return TRUE;
 	}
 
 	if(uKey==VK_CAPITAL)

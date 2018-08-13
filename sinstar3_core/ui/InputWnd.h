@@ -29,14 +29,19 @@ namespace SOUI
 		short SelectCandidate(short iCand);
 		void OnFlmInfo(PFLMINFO pFlmInfo);
 	protected:
+		virtual void OnSetSkin(EventArgs * e);
+		virtual int OnRecreateUI(LPCREATESTRUCT lpCreateStruct);
+
 		void UpdateAnchorPosition();
 		int GetCandMax(SWindow *pWnd, LPCWSTR pszCandClass) const;
 	protected:
 		void OnBtnPrevPage();
 		void OnBtnNextPage();
+		void OnUpdateBtnTooltip(EventArgs *e);
 		EVENT_MAP_BEGIN()
 			EVENT_ID_COMMAND(R.id.btn_prevpage,OnBtnPrevPage)
 			EVENT_ID_COMMAND(R.id.btn_nextpage,OnBtnNextPage)
+			EVENT_HANDLER(EventSwndUpdateTooltip::EventID, OnUpdateBtnTooltip)
 		EVENT_MAP_END()
 
 	protected:

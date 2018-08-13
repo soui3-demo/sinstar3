@@ -209,6 +209,7 @@
     <ClCompile Include="CmdHandler.cpp" />
     <ClCompile Include="controls\SCandView.cpp" />
     <ClCompile Include="controls\SCaption2.cpp" />
+    <ClCompile Include="controls\SCompBackground.cpp" />
     <ClCompile Include="controls\SEnglishCand.cpp" />
     <ClCompile Include="controls\SMutexView.cpp" />
     <ClCompile Include="controls\SPhraseCand.cpp" />
@@ -263,6 +264,7 @@
     <ClInclude Include="CmdHandler.h" />
     <ClInclude Include="controls\SCandView.h" />
     <ClInclude Include="controls\SCaption2.h" />
+    <ClInclude Include="controls\SCompBackground.h" />
     <ClInclude Include="controls\SEnglishCand.h" />
     <ClInclude Include="controls\SMutexView.h" />
     <ClInclude Include="controls\SPhraseCand.h" />

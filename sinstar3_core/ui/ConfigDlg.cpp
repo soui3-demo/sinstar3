@@ -39,6 +39,19 @@ namespace SOUI
 				pCtrl->SetHotKey(LOWORD(accel), HIWORD(accel));
 	}
 
+	WORD Char2VKey(TCHAR wChar)
+	{
+		TCHAR szBuf[2] = { wChar,0 };
+		return CAccelerator::VkFromString(szBuf);
+	}
+
+	WORD Vkey2Char(WORD wVK)
+	{
+		SStringT strName = CAccelerator::GetKeyName(wVK);
+		if (strName.GetLength() > 1 || strName.IsEmpty()) return 0;
+		return strName[0];
+	}
+
 	void CConfigDlg::InitPageHabit()
 	{
 		int CtrlId;
@@ -53,8 +66,6 @@ namespace SOUI
 		//形码状态回车
 		CtrlId = g_SettingsG.bEnterClear ? 110 : 111;
 		FindAndSetCheck(CtrlId, TRUE);
-		//形码状态快捷模式		
-		FindAndSetCheck(R.id.key_to_umode, g_SettingsG.bFastUMode);
 		//临时拼音开关
 		CtrlId = 122;
 		switch (g_SettingsG.byTempSpellKey)
@@ -70,6 +81,8 @@ namespace SOUI
 		FindAndSetCheck(R.id.cand_py_phrase_first, g_SettingsG.bPYPhraseFirst);
 		//op tip
 		FindAndSetCheck(R.id.chk_show_op_tip, g_SettingsG.bShowOpTip);
+
+		FindAndSetHotKey(R.id.hk_to_sentmode, Char2VKey(g_SettingsG.bySentMode));
 	}
 
 	void CConfigDlg::InitPageHotKey()
@@ -83,6 +96,7 @@ namespace SOUI
 		FindAndSetHotKey(R.id.hk_filter_gbk, g_SettingsG.dwHotkeys[HKI_FilterGbk]);
 		FindAndSetHotKey(R.id.hk_tts, g_SettingsG.dwHotkeys[HKI_TTS]);
 		FindAndSetHotKey(R.id.hk_record, g_SettingsG.dwHotkeys[HKI_Record]);
+		FindAndSetHotKey(R.id.hk_to_umode, g_SettingsG.dwHotkeys[HKI_UDMode]);
 	}
 
 	void CConfigDlg::InitPageAssociate()
@@ -129,9 +143,7 @@ namespace SOUI
 
 		for (int i = 0; i < 6; i++)
 		{
-			BYTE byHotKey = g_SettingsG.byLineKey[i];
-			if (byHotKey >= 'a' && byHotKey <= 'z') byHotKey -= 0x20;//to upper letter
-			FindAndSetHotKey(R.id.hk_bihua_heng+i, byHotKey);
+			FindAndSetHotKey(R.id.hk_bihua_heng+i, Char2VKey(g_SettingsG.byLineKey[i]));
 		}
 	}
 
@@ -365,6 +377,8 @@ SWindow *pCtrl = FindChildByID(id);\
 			g_SettingsG.dwHotkeys[HKI_TTS] = dwAccel; break;
 		case R.id.hk_record:
 			g_SettingsG.dwHotkeys[HKI_Record] = dwAccel; break;
+		case R.id.hk_to_umode:
+			g_SettingsG.dwHotkeys[HKI_UDMode] = dwAccel;
 		case R.id.hk_2_cand:
 			g_SettingsG.by2CandVK = pHotKeyEvt->vKey; break;
 		case R.id.hk_3_cand:
@@ -379,12 +393,11 @@ SWindow *pCtrl = FindChildByID(id);\
 		case R.id.hk_bihua_na:
 		case R.id.hk_bihua_zhe:
 		case R.id.hk_bihua_wild:
-			{
-				BYTE byHotKey = pHotKeyEvt->vKey;
-				if (byHotKey >= 'A' && byHotKey <= 'Z')
-					byHotKey += 0x20; //to lower letter. 
-				g_SettingsG.byLineKey[pHotKeyCtrl->GetID() - R.id.hk_bihua_heng] = byHotKey;
-			}
+			g_SettingsG.byLineKey[pHotKeyCtrl->GetID() - R.id.hk_bihua_heng] = Vkey2Char(pHotKeyEvt->vKey);
+			break;
+			break;
+		case R.id.hk_to_sentmode:
+			g_SettingsG.bySentMode = Vkey2Char(pHotKeyEvt->vKey);
 			break;
 		}
 	}

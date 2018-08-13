@@ -1,0 +1,57 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="zh-cn">
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<meta name="GENERATOR" content="Microsoft FrontPage 6.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>用户定义</title>
+</head>
+
+<body background="../images/lvbkgnd.jpg">
+
+<h1 align="center">用户定义</h1>
+<blockquote>
+	<p><span style="font-weight: 400"><font size="3">&nbsp;&nbsp;&nbsp; 
+	</font></span>在<font color="#0000FF">系统菜单</font>--&gt;<font color="#0000FF">数据管理</font><span style="font-weight: 400"><font size="3">中选择<font color="#0000FF">用户定义</font>选项，打开下图。</font></span></p>
+	<p><img border="0" src="../images/userdef.gif" width="648" height="401"></p>
+</blockquote>
+<h3>一、界面介绍：</h3>
+<blockquote>
+	<p>1、新增：添加一个自定义短语，如果对应的编码已经存在，则会提示是否修改。所有短语编码不能重复。如果需要重复，可以通过不同的后缀加以区别，如emaila,emailb,email_c。</p>
+	<p>2、导出、导入：在文本文件中编辑好自定义短语后，选择“导入”，这是一个添加过程，不会删除现有词条，但如果编码与已有词条重复，则会被丢弃。</p>
+	<p>3、<b><font color="#0000FF">全文编辑</font></b>：打开系统中现有的自定义短语的文本文件，<b><font color="#0000FF">批量编辑用户定义短语</font></b>。文件格式为：编码=词条，每行一条记录。如果词条以“#”开头则会被忽略，并被视为注释。</p>
+	<p>4、自定义优先：选择此项后，与普通编码混合输出时，自定义重码排在前面。</p>
+</blockquote>
+<h3>二、用户定义编码及短语规则</h3>
+<blockquote>
+	<p>1、编码必须是英文、“－”，“.”这3种类型，编码长度&lt;20，编码不能以“.”开头。</p>
+</blockquote>
+<blockquote>
+	<p>2、短语可以包含各种字符，单个短语长度&lt;250字节，总长度&lt;1000字节。</p>
+	<p>3、需要换行时使用&quot;\n&quot;代替。注意：目前发现多行在FrontPage2003中不能正常输出。</p>
+	4、一个编码可以对应多个短语：短语之间用&quot;|&quot;分隔，如： date=$year年$month月$day日|$year-$month-$day 
+	，这样就可以用date输入两种日期格式了。<p>5、如果短语内部包含&quot;|&quot;,&quot;\&quot;这2个字符，则需要在此之前增加一
+	个&quot;\&quot;符号，称为转义符。</p>
+	<p>
+	6、当一个定义的短语太长时，通过在短语前增加&quot;{显示}&quot;您可以定义在输入法中的缩略显示方式。例如你可能定义自己的签名包括几行数据，您可以将签名定义为&quot;{签名}我的签名......&quot;</p>
+</blockquote>
+<h3>三、日期、时间函数</h3>
+<blockquote>
+	<p>$year, $month, $day, $hour, $minute, $second：分别对应年月日时分秒。</p>
+	<p>$Month, $Day, $Hour, $Minute, 
+	$Second：输出月日时分秒,如果不足2位以0补足,方便输出&quot;2008年09月07日&quot;类似格式。</p>
+	<p>$YEAR，$MONTH，$DAY：输出中文大写的日期。</p>
+	<p>通过在自定义短语中包含这些函数就可以灵活的输入当前日期及时间。示例参见服务器中自带的date编码。</p>
+</blockquote>
+<h3>　</h3>
+<blockquote>
+	<p>　</p>
+</blockquote>
+<p>　</p>
+<p>　</p>
+<p>　</p>
+
+</body>
+
+</html>

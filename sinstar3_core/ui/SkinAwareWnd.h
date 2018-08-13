@@ -29,12 +29,14 @@ namespace SOUI
 
 		IMEWNDTYPE GetWndType() const { return m_wndType; }
 	protected:
+		virtual int OnRecreateUI(LPCREATESTRUCT lpCreateStruct);
+
 		virtual void OnFinalMessage(HWND hWnd);
 	protected:
 		bool OnEvent(EventArgs *e);
 		SEventSet * m_pEvtSet;
 	protected:
-		void OnSetSkin(EventArgs * e);
+		virtual void OnSetSkin(EventArgs * e);
 		EVENT_MAP_BEGIN()
 			EVENT_HANDLER(EventSetSkin::EventID, OnSetSkin)
 		EVENT_MAP_END()

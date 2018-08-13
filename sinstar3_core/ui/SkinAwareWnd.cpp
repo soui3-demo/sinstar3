@@ -25,12 +25,12 @@ namespace SOUI{
 
 	void CSkinAwareWnd::OnSetSkin(EventArgs *e)
 	{
-		SendMessage(WM_DESTROY, 0, 0);
+		SHostWnd::OnDestroy();
 		SetWindowPos(0, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
 		CREATESTRUCT cs;
 		cs.cx = 0;
 		cs.cy = 0;
-		SendMessage(WM_CREATE, 0, (LPARAM)&cs);
+		OnRecreateUI(&cs);
 	}
 
 	HWND CSkinAwareWnd::Create(LPCTSTR pszTitle, HWND hParent)
@@ -42,6 +42,11 @@ namespace SOUI{
 	{
 		m_pListener = pListener;
 		m_wndType = type;
+	}
+
+	int CSkinAwareWnd::OnRecreateUI(LPCREATESTRUCT lpCreateStruct)
+	{
+		return __super::OnCreate(lpCreateStruct);
 	}
 
 	void CSkinAwareWnd::OnFinalMessage(HWND hWnd)

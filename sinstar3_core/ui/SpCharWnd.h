@@ -12,6 +12,7 @@ namespace SOUI
 
 	protected:
 		virtual void OnReposition(CPoint pt);
+		virtual int OnRecreateUI(LPCREATESTRUCT lpCreateStruct);
 	protected:
 		void OnClose();
 		void OnInsert(int nID);
