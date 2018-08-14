@@ -55,6 +55,7 @@ namespace SOUI
 		void OnEnable23Cand();
 		void OnHotKeyEvent(EventArgs *pEvt);
 		void OnClose();
+		void OnWebHeaderNotify(EventArgs *e);
 
 		EVENT_MAP_BEGIN()
 			EVENT_ID_COMMAND_RANGE(100, 102, OnClickInputSwitch)
@@ -77,6 +78,7 @@ namespace SOUI
 			EVENT_ID_COMMAND(R.id.chk_enable_23cand_hotkey, OnEnable23Cand)
 			EVENT_ID_COMMAND(R.id.btn_close,OnClose)
 			EVENT_HANDLER(EventSetHotKey::EventID, OnHotKeyEvent)
+			EVENT_ID_HANDLER(R.id.edit_webmode_header,EventRENotify::EventID,OnWebHeaderNotify)
 		EVENT_MAP_END()
 
 

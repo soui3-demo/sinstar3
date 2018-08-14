@@ -3,7 +3,7 @@
 
 namespace SOUI
 {
-	SCandView::SCandView(void):m_byRate(0),m_cWild(0)
+	SCandView::SCandView(void):m_byRate(0),m_cWild(0), m_crShadow(CR_INVALID), m_ptShadowOffset(1,1)
 	{
 		m_bDisplay=0;
 	}
@@ -26,6 +26,13 @@ namespace SOUI
 		pRT->MeasureText(m_strIndex,m_strIndex.GetLength(),&szBlock);
 		pt.x += szBlock.cx;
 
+		if (m_crShadow != CR_INVALID)
+		{//draw shadow
+			COLORREF crOld = pRT->SetTextColor(m_crShadow);
+			CPoint pt2 = pt + m_ptShadowOffset;
+			pRT->TextOut(pt2.x, pt2.y, m_strCand, m_strCand.GetLength());
+			pRT->SetTextColor(crOld);
+		}
 		pRT->SetTextColor(m_crCand);
 		pRT->TextOut(pt.x,pt.y,m_strCand,m_strCand.GetLength());
 		pRT->MeasureText(m_strCand,m_strCand.GetLength(),&szBlock);

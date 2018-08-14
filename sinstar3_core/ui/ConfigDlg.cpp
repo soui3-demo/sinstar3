@@ -118,6 +118,8 @@ namespace SOUI
 		FindAndSetCheck(R.id.chk_auto_dot, g_SettingsG.bAutoDot);
 		FindAndSetCheck(R.id.chk_auto_select_cand, g_SettingsG.bAutoMatch);
 		FindAndSetCheck(R.id.chk_sent_input, g_SettingsG.bAstSent);
+
+		FindAndSetText(R.id.edit_webmode_header, S_CA2T(g_SettingsG.szWebHeader));
 	}
 
 
@@ -405,6 +407,23 @@ SWindow *pCtrl = FindChildByID(id);\
 	void CConfigDlg::OnClose()
 	{
 		DestroyWindow();
+	}
+
+	void CConfigDlg::OnWebHeaderNotify(EventArgs * e)
+	{
+		EventRENotify *e2 = sobj_cast<EventRENotify>(e);
+		SASSERT(e2);
+		if (e2->iNotify == EN_CHANGE)
+		{
+			SWindow *pEdit = sobj_cast<SWindow>(e2->sender);
+			SStringT str = pEdit->GetWindowText();
+			SStringA strA = S_CT2A(str);
+			if (strA.GetLength() < 100)
+			{
+				strcpy(g_SettingsG.szWebHeader, strA);
+			}
+			
+		}
 	}
 
 	int CConfigDlg::OnCreate(LPCREATESTRUCT lpCreateStruct)

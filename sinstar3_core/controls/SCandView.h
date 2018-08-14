@@ -20,13 +20,15 @@ namespace SOUI
 		SOUI_MSG_MAP_END()
 	protected:
 		SOUI_ATTRS_BEGIN()
-			ATTR_STRINGT(L"index",m_strIndex,TRUE)
-			ATTR_STRINGT(L"cand",m_strCand,TRUE)
-			ATTR_STRINGT(L"comp",m_strComp,TRUE)
-			ATTR_COLOR(L"colorIndex",m_crIndex,TRUE)
-			ATTR_COLOR(L"colorCand",m_crCand,TRUE)
-			ATTR_COLOR(L"colorComp",m_crComp,TRUE)
-			ATTR_COLOR(L"colorWild",m_crWild,TRUE)
+			ATTR_STRINGT(L"index", m_strIndex, TRUE)
+			ATTR_STRINGT(L"cand", m_strCand, TRUE)
+			ATTR_STRINGT(L"comp", m_strComp, TRUE)
+			ATTR_COLOR(L"colorIndex", m_crIndex, TRUE)
+			ATTR_COLOR(L"colorCand", m_crCand, TRUE)
+			ATTR_COLOR(L"colorComp", m_crComp, TRUE)
+			ATTR_COLOR(L"colorWild", m_crWild, TRUE)
+			ATTR_COLOR(L"shadowColor", m_crShadow, TRUE)
+			ATTR_POINT(L"shadowOffset", m_ptShadowOffset, TRUE);
 		SOUI_ATTRS_END()
 
 		TCHAR	 m_cWild;
@@ -41,6 +43,9 @@ namespace SOUI
 		COLORREF m_crWild;
 
 		BYTE	 m_byRate;
+
+		COLORREF m_crShadow;
+		CPoint   m_ptShadowOffset;
 	};
 
 }
