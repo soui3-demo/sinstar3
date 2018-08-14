@@ -40,7 +40,7 @@
           <text size="-1,-2" name="txt_auto_complete" colorText="@color/comp_auto_complete"/>
         </mutexView>
         <window size="-1,-2" name="comp_sent" visible="1" layout="hbox" gravity="center" display="0">
-          <sentView name="stv_sent" colorText="@color/sent_right" colorHeader="@color/sent_input" colorSelected="@color/sent_left"/>
+          <sentView name="stv_sent" colorText="@color/sent_right" colorInput="@color/sent_input" colorSelected="@color/sent_left"/>
         </window>
       </window>
       <window size="-1,0" weight="1" layout="hbox" tip="candidate window" gravity="center">

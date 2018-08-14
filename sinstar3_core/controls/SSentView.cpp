@@ -3,7 +3,7 @@
 
 namespace SOUI
 {
-	SSentView::SSentView():m_crSel(RGBA(0,255,0,255)),m_crInput(RGBA(255,0,0,0)),m_nSelCount(0),m_nHeaderCount(0)
+	SSentView::SSentView():m_crSel(RGBA(0,255,0,255)),m_crInput(RGBA(255,0,0,255)),m_nSelCount(0),m_nHeaderCount(0)
 	{
 	}
 
@@ -15,14 +15,14 @@ namespace SOUI
 	{
 		SetWindowText(strInput);
 		m_nHeaderCount = nHeaderCount;
-		SASSERT(m_nHeaderCount < strInput.GetLength());
+		SASSERT(m_nHeaderCount <= strInput.GetLength());
 		Invalidate();
 	}
 
 	void SSentView::SetSelCount(int nLen)
 	{
 		m_nSelCount = nLen;
-		SASSERT(m_nHeaderCount+ m_nSelCount < GetWindowText().GetLength());
+		SASSERT(m_nHeaderCount+ m_nSelCount <= GetWindowText().GetLength());
 		Invalidate();
 	}
 
