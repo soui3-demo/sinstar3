@@ -93,6 +93,11 @@ namespace SOUI
 		szRet.cy = sz.cy;
 
 		pRT->MeasureText(m_strCand,m_strCand.GetLength(),&sz);
+		if (m_crShadow != CR_INVALID)
+		{
+			szRet.cx += m_ptShadowOffset.x;
+			szRet.cy += m_ptShadowOffset.y;
+		}
 		szRet.cx += sz.cx;
 		szRet.cy = smax(szRet.cy,sz.cy);
 

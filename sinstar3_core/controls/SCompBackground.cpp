@@ -18,11 +18,11 @@ namespace SOUI
 		if (m_pBgSkin)
 		{
 			CSize szBg = m_pBgSkin->GetSkinSize();
-			if (GetLayoutParam()->IsWrapContent(Vert) && szRet.cy < szBg.cy)
+			if (!GetLayoutParam()->IsSpecifiedSize(Vert) && szRet.cy < szBg.cy)
 			{
 				szRet.cy = szBg.cy;
 			}
-			if (GetLayoutParam()->IsWrapContent(Horz) && szRet.cx < szBg.cx)
+			if (!GetLayoutParam()->IsSpecifiedSize(Horz) && szRet.cx < szBg.cx)
 			{
 				szRet.cx = szBg.cx;
 			}
