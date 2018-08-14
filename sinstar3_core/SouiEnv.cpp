@@ -41,6 +41,7 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst,LPCTSTR pszWorkDir)
 
 	m_theApp->RegisterWindowClass<SToggle2>();
 	m_theApp->RegisterWindowClass<SCandView>();
+	m_theApp->RegisterWindowClass<SSentView>();
 	m_theApp->RegisterWindowClass<SEnglishCand>();
 	m_theApp->RegisterWindowClass<SPhraseCand>();
 	m_theApp->RegisterWindowClass<SSpellView>();
