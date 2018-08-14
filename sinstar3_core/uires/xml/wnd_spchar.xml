@@ -12,9 +12,9 @@
   </skin>
 
   <root  colorBkgnd="#cccccc">
-    <popupStyle translucent="1" resizable="0">
+    <popupStyle translucent="1" resizable="0" width="100" height="100">
       <root>
-        <text name="navtext" padding="10,10,10,10" text="A"  colorBkgnd="#ffffff" colorBorder="#000000" margin="1,1,1,1" font="size:70" pos="0,0,-0,-0" align="center"/>
+        <text name="txt_zoomin" padding="10,10,10,10" text="A"  colorBkgnd="#ffffff" colorBorder="#000000" margin="1,1,1,1" font="size:70" pos="0,0,-0,-0" align="center"/>
       </root>
     </popupStyle>
     <window pos="1,1,-1,-1" layout="vbox" colorBkgnd="#23ba3f">
