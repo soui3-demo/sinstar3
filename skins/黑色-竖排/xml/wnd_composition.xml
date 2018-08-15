@@ -9,7 +9,7 @@
 >
   <skin>
     <imgframe name="bg_comp" src="img:bg_comp" margin2="5,10,5,10"/>
-    <imgframe name="bg_cand" src="img:bg_cand" margin2="5,5,70,5"/>
+    <imgframe name="bg_cand" src="img:bg_cand" margin="5,5,90,90"/>
     <imglist name="btn_prevpage" src="img:btn_prevpage" states="3"/>
     <imglist name="btn_nextpage" src="img:btn_nextpage" states="3"/>
   </skin>
@@ -45,7 +45,7 @@
       <comp_bg size="-2,-1" skin="bg_cand"  layout="vbox" padding="5,5,5,5">
         <mutexView size="-1,-1" layout="vbox" name="cand_normal" visible="0" gravity="right">
           <window size="-1,-1" layout="vbox" name="cand_container">
-            <candidate size="-1,-1" index="1:" shadowColor="#cccccc" shadowOffset="2,2" colorIndex="@color/cand_first" colorCand="@color/cand_text" colorComp="@color/cand_comp" colorWild="@color/cand_wild"/>
+            <candidate size="-1,-1" index="1:" shadowColor="#cccccc" shadowOffset="1,1" colorIndex="@color/cand_first" colorCand="@color/cand_text" colorComp="@color/cand_comp" colorWild="@color/cand_wild"/>
             <candidate size="-1,-1" extend_top="@dim/interval_cand" index="2:"  colorCand="@color/cand_text" colorComp="@color/cand_comp" colorWild="@color/cand_wild"/>
             <candidate size="-1,-1" extend_top="@dim/interval_cand" index="3:"  colorCand="@color/cand_text" colorComp="@color/cand_comp" colorWild="@color/cand_wild"/>
             <candidate size="-1,-1" extend_top="@dim/interval_cand" index="4:"  colorCand="@color/cand_text" colorComp="@color/cand_comp" colorWild="@color/cand_wild"/>
