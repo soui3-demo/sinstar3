@@ -206,6 +206,7 @@ PMSGDATA ISComm_OnSeverNotify(HWND hWnd,WPARAM wParam,LPARAM lParam)
 
 BOOL ISComm_OpenServer()
 {
+	TCHAR szCmd[500];
 	STARTUPINFO         si={0};    
 	PROCESS_INFORMATION pi;         
 	DWORD dwWaitRet=1;
@@ -217,8 +218,9 @@ BOOL ISComm_OpenServer()
 	si.cb  = sizeof(si);  
 	si.dwFlags = STARTF_USESHOWWINDOW; 
 	si.wShowWindow  = SW_HIDE;
+	_stprintf(szCmd, _T("%s hide"), s_szSvrPath);
 	//以后台启动方式创建服务器进程
-	if(!CreateProcess(s_szSvrPath,NULL,NULL,NULL,FALSE,CREATE_NEW_PROCESS_GROUP,NULL,NULL,&si,&pi))
+	if(!CreateProcess(NULL, szCmd,NULL,NULL,FALSE,CREATE_NEW_PROCESS_GROUP,NULL,NULL,&si,&pi))
 	{
 		return FALSE;
 	}
