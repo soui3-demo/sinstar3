@@ -23,6 +23,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FindCaller", "FindCaller\Fi
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "png2bmp32", "png2bmp32\png2bmp32.vcxproj", "{615C9E65-042B-4E35-85EE-BC08C5D1A7ED}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "skins", "skins\skins.vcxproj", "{6599850C-B790-4D51-8EA4-42A6623EC13A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -125,6 +127,18 @@ Global
 		{615C9E65-042B-4E35-85EE-BC08C5D1A7ED}.Release|Win32.Build.0 = Release|Win32
 		{615C9E65-042B-4E35-85EE-BC08C5D1A7ED}.Release|x64.ActiveCfg = Release|x64
 		{615C9E65-042B-4E35-85EE-BC08C5D1A7ED}.Release|x64.Build.0 = Release|x64
+		{6599850C-B790-4D51-8EA4-42A6623EC13A}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{6599850C-B790-4D51-8EA4-42A6623EC13A}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{6599850C-B790-4D51-8EA4-42A6623EC13A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6599850C-B790-4D51-8EA4-42A6623EC13A}.Debug|Win32.Build.0 = Debug|Win32
+		{6599850C-B790-4D51-8EA4-42A6623EC13A}.Debug|x64.ActiveCfg = Debug|x64
+		{6599850C-B790-4D51-8EA4-42A6623EC13A}.Debug|x64.Build.0 = Debug|x64
+		{6599850C-B790-4D51-8EA4-42A6623EC13A}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{6599850C-B790-4D51-8EA4-42A6623EC13A}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{6599850C-B790-4D51-8EA4-42A6623EC13A}.Release|Win32.ActiveCfg = Release|Win32
+		{6599850C-B790-4D51-8EA4-42A6623EC13A}.Release|Win32.Build.0 = Release|Win32
+		{6599850C-B790-4D51-8EA4-42A6623EC13A}.Release|x64.ActiveCfg = Release|x64
+		{6599850C-B790-4D51-8EA4-42A6623EC13A}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

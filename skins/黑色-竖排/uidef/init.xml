@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UIDEF>
+  <desc author="setoutsoft" name="黑色-竖排" version="1.0" />
+  <font face="微软雅黑" size="15"/>
+
+  <color src="values:color"/>
+  <dim src="values:dim"/>
+  
+</UIDEF>

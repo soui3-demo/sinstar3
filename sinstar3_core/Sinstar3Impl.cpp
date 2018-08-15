@@ -85,6 +85,13 @@ CSinstar3Impl::~CSinstar3Impl(void)
 	}
 	m_inputState.GetInputContext()->settings.Save(theModule->GetCfgIni());
 
+	SStringT strHotKeyFile = SStringT().Format(_T("%s\\data\\hotkey_%s.txt"), theModule->GetDataPath(), CDataCenter::getSingleton().GetData().m_compInfo.strCompName);
+	//加载特定的自定义状态及语句输入状态开关
+	SStringT strHotKey = CAccelerator::FormatAccelKey(g_SettingsG.dwHotkeys[HKI_UDMode]);
+	WritePrivateProfileString(_T("hotkey"), _T("umode"), strHotKey, strHotKeyFile);
+	strHotKey = SStringT((TCHAR)g_SettingsG.bySentMode);
+	WritePrivateProfileString(_T("hotkey"), _T("sentence"), strHotKey, strHotKeyFile);
+
 	if (!m_strLoadedFontFile.IsEmpty())
 	{
 		RemoveFontResourceEx(m_strLoadedFontFile, FR_PRIVATE , NULL);
@@ -271,7 +278,8 @@ LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 		g_SettingsG.dwHotkeys[HKI_UDMode]=CAccelerator::TranslateAccelKey(szBuf);
 		if(g_SettingsG.dwHotkeys[HKI_UDMode] ==0)
 		{
-			g_SettingsG.dwHotkeys[HKI_UDMode] = myData.m_compInfo.cWild-0x20;//todo:hjx
+			short sKey = VkKeyScan(myData.m_compInfo.cWild);
+			g_SettingsG.dwHotkeys[HKI_UDMode] = LOBYTE(sKey);
 		}
 
 		szBuf[0]=0;
@@ -597,7 +605,9 @@ void CSinstar3Impl::InputSpchar(LPCTSTR pszText)
 	else
 	{
 		SStringW strTxt = S_CT2W(pszText);
+		m_pTxtSvr->StartComposition(pImeCtx);
 		m_pTxtSvr->UpdateResultAndCompositionStringW(pImeCtx, strTxt, strTxt.GetLength(), NULL, 0);
+		m_pTxtSvr->EndComposition(pImeCtx);
 		m_pTxtSvr->ReleaseImeContext(pImeCtx);
 	}
 }

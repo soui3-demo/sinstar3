@@ -40,16 +40,14 @@
           <text size="-1,-2" name="txt_auto_complete" colorText="@color/comp_auto_complete"/>
         </mutexView>
         <window size="-1,-2" name="comp_sent" visible="1" layout="hbox" gravity="center" display="0">
-          <text size="-1,-1" name="sent_input" colorText="@color/sent_input" />
-          <text size="-1,-1" name="sent_left" colorText="@color/sent_left" />
-          <text size="-1,-1" name="sent_right" colorText="@color/sent_right" />
+          <sentView name="stv_sent" colorText="@color/sent_right" colorInput="@color/sent_input" colorSelected="@color/sent_left"/>
         </window>
       </window>
       <window size="-1,0" weight="1" layout="hbox" tip="candidate window" gravity="center">
         <mutexView size="-1,-1" layout="hbox" name="cand_normal" visible="0">
           <imgbtn size="-1,-1" display="0" skin="btn_prevpage" name="btn_prevpage"/>
           <window size="-1,-1" layout="hbox" name="cand_container">
-            <candidate size="-1,-1" index="1:" colorIndex="@color/cand_first" colorCand="@color/cand_text" colorComp="@color/cand_comp" colorWild="@color/cand_wild"/>
+            <candidate size="-1,-1" index="1:" shadowColor="#cccccc" shadowOffset="2,2" colorIndex="@color/cand_first" colorCand="@color/cand_text" colorComp="@color/cand_comp" colorWild="@color/cand_wild"/>
             <candidate size="-1,-1" extend_left="@dim/interval_cand" index="2:" />
             <candidate size="-1,-1" extend_left="@dim/interval_cand" index="3:" />
             <candidate size="-1,-1" extend_left="@dim/interval_cand" index="4:" />

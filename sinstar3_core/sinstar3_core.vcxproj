@@ -33,7 +33,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141_xp</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -213,6 +213,7 @@
     <ClCompile Include="controls\SEnglishCand.cpp" />
     <ClCompile Include="controls\SMutexView.cpp" />
     <ClCompile Include="controls\SPhraseCand.cpp" />
+    <ClCompile Include="controls\SSentView.cpp" />
     <ClCompile Include="controls\SSpellView.cpp" />
     <ClCompile Include="controls\SStatusBackground.cpp" />
     <ClCompile Include="controls\SToggle2.cpp" />
@@ -268,6 +269,7 @@
     <ClInclude Include="controls\SEnglishCand.h" />
     <ClInclude Include="controls\SMutexView.h" />
     <ClInclude Include="controls\SPhraseCand.h" />
+    <ClInclude Include="controls\SSentView.h" />
     <ClInclude Include="controls\SSpellView.h" />
     <ClInclude Include="controls\SStatusBackground.h" />
     <ClInclude Include="controls\SToggle2.h" />

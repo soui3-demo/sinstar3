@@ -4,7 +4,7 @@
 
 namespace SOUI
 {
-	class SDropdownWnd;
+	class SZoominWnd;
 	class CSpCharWnd : public CImeWnd, public ISDropDownOwner
 	{
 	public:
@@ -44,6 +44,6 @@ namespace SOUI
 		ICmdListener * m_pCmdListener;
 		SStringWList m_spLayouts;
 		//SWindow		 * m_pZoomin;
-		SDropdownWnd * m_pDropDownWnd;
+		SZoominWnd * m_pZoominWnd;
 	};
 }

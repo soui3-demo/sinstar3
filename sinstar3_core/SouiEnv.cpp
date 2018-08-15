@@ -41,6 +41,7 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst,LPCTSTR pszWorkDir)
 
 	m_theApp->RegisterWindowClass<SToggle2>();
 	m_theApp->RegisterWindowClass<SCandView>();
+	m_theApp->RegisterWindowClass<SSentView>();
 	m_theApp->RegisterWindowClass<SEnglishCand>();
 	m_theApp->RegisterWindowClass<SPhraseCand>();
 	m_theApp->RegisterWindowClass<SSpellView>();
@@ -74,79 +75,81 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst,LPCTSTR pszWorkDir)
 	SASSERT_FMT(uFlag == 0, L"load system resource failed");
 	CAutoRefPtr<IResProvider>   pResProvider;
 
-	BOOL bDebugSkinLoaded = FALSE;
-	if (!CDataCenter::getSingletonPtr()->GetData().m_strDebugSkin.IsEmpty())
-	{
-		CreateResProvider(RES_FILE, (IObjRef**)&pResProvider);
-		SStringT strPath = CDataCenter::getSingletonPtr()->GetData().m_strDebugSkin;
-		bDebugSkinLoaded = pResProvider->Init((LPARAM)(LPCTSTR)strPath, 0);
-		if (!bDebugSkinLoaded)
-		{//release resprovider.
-			pResProvider = NULL;
-		}
-	}
-	
-	if(!bDebugSkinLoaded)
-	{
 #if (RES_TYPE == 0)
-		CreateResProvider(RES_FILE, (IObjRef**)&pResProvider);
+	CreateResProvider(RES_FILE, (IObjRef**)&pResProvider);
 
-		//获取调试阶段的皮肤目录位置
-		TCHAR szCurrentDir[MAX_PATH] = { 0 };
-		GetModuleFileName(hInst, szCurrentDir, sizeof(szCurrentDir));
-		LPTSTR lpInsertPos = _tcsstr(szCurrentDir, _T("\\program"));
-		SASSERT(lpInsertPos);
-		_tcscpy(lpInsertPos, _T("\\..\\sinstar3_core\\uires"));
-		if (!pResProvider->Init((LPARAM)szCurrentDir, 0))
-		{
-			SASSERT(0);
-			return;
-		}
-#else 
-		CreateResProvider(RES_PE, (IObjRef**)&pResProvider);
-		pResProvider->Init((WPARAM)hInst, 0);
-#endif
+	//获取调试阶段的皮肤目录位置
+	TCHAR szCurrentDir[MAX_PATH] = { 0 };
+	GetModuleFileName(hInst, szCurrentDir, sizeof(szCurrentDir));
+	LPTSTR lpInsertPos = _tcsstr(szCurrentDir, _T("\\program"));
+	SASSERT(lpInsertPos);
+	_tcscpy(lpInsertPos, _T("\\..\\sinstar3_core\\uires"));
+	if (!pResProvider->Init((LPARAM)szCurrentDir, 0))
+	{
+		SASSERT(0);
+		return;
 	}
+#else 
+	CreateResProvider(RES_PE, (IObjRef**)&pResProvider);
+	pResProvider->Init((WPARAM)hInst, 0);
+#endif
 
 	m_theApp->InitXmlNamedID(namedXmlID,ARRAYSIZE(namedXmlID),TRUE);
 	m_theApp->AddResProvider(pResProvider);
 	CDataCenter::getSingletonPtr()->GetData().m_defUiDefine = SUiDef::getSingletonPtr()->GetUiDef();
 	CDataCenter::getSingletonPtr()->GetData().m_ptSkinOffset = CSkinMananger::ExtractSkinOffset(pResProvider);
 
-	if(!bDebugSkinLoaded && !CDataCenter::getSingletonPtr()->GetData().m_strSkin.IsEmpty())
+
+	pResProvider = NULL;
+	if (!CDataCenter::getSingletonPtr()->GetData().m_strDebugSkin.IsEmpty())
+	{
+		CreateResProvider(RES_FILE, (IObjRef**)&pResProvider);
+		SStringT strPath = CDataCenter::getSingletonPtr()->GetData().m_strDebugSkin;
+		if (!pResProvider->Init((LPARAM)(LPCTSTR)strPath, 0))
+		{//release resprovider.
+			pResProvider = NULL;
+		}
+	}
+
+	if (!pResProvider && !CDataCenter::getSingletonPtr()->GetData().m_strSkin.IsEmpty())
 	{
 		//SLOG_INFO("apply user skin:"<< CDataCenter::getSingletonPtr()->GetData().m_strSkin);
-		IResProvider *pResProvider=NULL;
+
 		CSouiEnv::getSingleton().theComMgr()->CreateResProvider_ZIP((IObjRef**)&pResProvider);
 		ZIPRES_PARAM param;
 		param.ZipFile(GETRENDERFACTORY, CDataCenter::getSingletonPtr()->GetData().m_strSkin);
-		if(pResProvider->Init((WPARAM)&param,0))
+		if (!pResProvider->Init((WPARAM)&param, 0))
 		{
-			IUiDefInfo * pUiDef = SUiDef::CreateUiDefInfo2(pResProvider,_T("uidef:xml_init"));
-			if(!pUiDef->GetSkinPool() && !pUiDef->GetStylePool() && !pUiDef->GetObjDefAttr())
-			{//不允许皮肤中存在全局的skin, style and defobjattr数据
-				m_theApp->AddResProvider(pResProvider,NULL);
+			pResProvider = NULL;
+		}
+	}
 
-				IUiDefInfo * pBuiltinUidef = SUiDef::getSingleton().GetUiDef();
-				pUiDef->SetObjDefAttr(pBuiltinUidef->GetObjDefAttr());
-				pUiDef->SetStylePool(pBuiltinUidef->GetStylePool());
-				pUiDef->SetSkinPool(pBuiltinUidef->GetSkinPool());
-				pUiDef->GetNamedColor().Merge(pBuiltinUidef->GetNamedColor());
-				pUiDef->GetNamedString().Merge(pBuiltinUidef->GetNamedString());
-				pUiDef->GetNamedDimension().Merge(pBuiltinUidef->GetNamedDimension());
+	if(pResProvider)
+	{
+		IUiDefInfo * pUiDef = SUiDef::CreateUiDefInfo2(pResProvider,_T("uidef:xml_init"));
+		if(!pUiDef->GetSkinPool() && !pUiDef->GetStylePool() && !pUiDef->GetObjDefAttr())
+		{//不允许皮肤中存在全局的skin, style and defobjattr数据
+			m_theApp->AddResProvider(pResProvider,NULL);
 
-				SUiDef::getSingleton().SetUiDef(pUiDef);
-				CDataCenter::getSingletonPtr()->GetData().m_ptSkinOffset = CSkinMananger::ExtractSkinOffset(pResProvider);
-			}else
-			{//外置皮肤中禁止出现全局skin, style and defobjattr表。
-				SLOG_WARN("previous skin is invalid");
-				CDataCenter::getSingletonPtr()->GetData().m_strSkin.Empty();
-			}
-			pUiDef->Release();
+			IUiDefInfo * pBuiltinUidef = SUiDef::getSingleton().GetUiDef();
+			pUiDef->SetObjDefAttr(pBuiltinUidef->GetObjDefAttr());
+			pUiDef->SetStylePool(pBuiltinUidef->GetStylePool());
+			pUiDef->SetSkinPool(pBuiltinUidef->GetSkinPool());
+			pUiDef->GetNamedColor().Merge(pBuiltinUidef->GetNamedColor());
+			pUiDef->GetNamedString().Merge(pBuiltinUidef->GetNamedString());
+			pUiDef->GetNamedDimension().Merge(pBuiltinUidef->GetNamedDimension());
+
+			SUiDef::getSingleton().SetUiDef(pUiDef);
+			CDataCenter::getSingletonPtr()->GetData().m_ptSkinOffset = CSkinMananger::ExtractSkinOffset(pResProvider);
 		}else
-		{
+		{//外置皮肤中禁止出现全局skin, style and defobjattr表。
+			SLOG_WARN("previous skin is invalid");
 			CDataCenter::getSingletonPtr()->GetData().m_strSkin.Empty();
 		}
+		pUiDef->Release();
+	}else
+	{
+		CDataCenter::getSingletonPtr()->GetData().m_strSkin.Empty();
 	}
 }
 

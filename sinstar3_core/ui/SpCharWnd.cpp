@@ -4,10 +4,10 @@
 namespace SOUI {
 
 
-	class SDropdownWnd : public SDropDownWnd
+	class SZoominWnd : public SDropDownWnd
 	{
 	public:
-		SDropdownWnd(ISDropDownOwner * pOwner) :SDropDownWnd(pOwner), m_pNavWnd(NULL) {}
+		SZoominWnd(ISDropDownOwner * pOwner) :SDropDownWnd(pOwner), m_pNavWnd(NULL) {}
 		virtual BOOL Create(pugi::xml_node popupStyle) {
 			HWND hParent = m_pOwner->GetDropDownOwner()->GetContainer()->GetHostHwnd();
 			HWND hWnd = CSimpleWnd::Create(NULL, WS_POPUP, WS_EX_TOPMOST | WS_EX_TOOLWINDOW, 0, 0, 0, 0, hParent, 0);
@@ -16,7 +16,7 @@ namespace SOUI {
 			if (popupStyle)
 			{
 				InitFromXml(popupStyle);
-				m_pNavWnd = FindChildByName(L"navtext");
+				m_pNavWnd = FindChildByName(L"txt_zoomin");
 				SASSERT(m_pNavWnd);
 			}
 			return TRUE;
@@ -34,7 +34,7 @@ namespace SOUI {
 
 	CSpCharWnd::CSpCharWnd(SEventSet *pEvtSet,ICmdListener *pListener)
 		:CImeWnd(pEvtSet,UIRES.LAYOUT.wnd_spchar)
-		, m_pCmdListener(pListener), m_pDropDownWnd(NULL)
+		, m_pCmdListener(pListener), m_pZoominWnd(NULL)
 	{
 	}
 
@@ -86,16 +86,17 @@ namespace SOUI {
 	{
 		SWindow *pSender = sobj_cast<SWindow>(e->sender);
 		SASSERT(pSender);
-		static SWindow *pOldSender= pSender;
-		//m_pZoomin->SetWindowText(pSender->GetWindowText());
-		if (m_pDropDownWnd&&(pOldSender!= pSender))
+		if (m_pZoominWnd)
 		{
-			CPoint point = pSender->GetWindowRect().TopLeft();
-			ClientToScreen(&point);
-			m_pDropDownWnd->SetWndText(pSender->GetWindowText());
-			int cx = 100, cy = 100, x = (point.x - 36) < 0 ? 0 : point.x - 36, y = point.y - cy - 20;
-			m_pDropDownWnd->SetWindowPos(HWND_TOPMOST, x, y, cx, cy, SWP_SHOWWINDOW| SWP_NOACTIVATE);
-			pOldSender = pSender;
+			CRect rcCell= pSender->GetWindowRect();
+			ClientToScreen(&rcCell);
+			m_pZoominWnd->SetWndText(pSender->GetWindowText());
+			CRect rcZoomin = m_pZoominWnd->GetWindowRect();
+			CPoint pt = rcCell.TopLeft();
+			pt.x -= (rcZoomin.Width() - rcCell.Width()) / 2;
+			pt.y -= rcZoomin.Height()+20;
+
+			m_pZoominWnd->SetWindowPos(HWND_TOPMOST, pt.x, pt.y, 0, 0, SWP_SHOWWINDOW| SWP_NOACTIVATE|SWP_NOSIZE);
 		}
 	}
 
@@ -109,8 +110,6 @@ namespace SOUI {
 		int nRet = __super::OnCreate(lpCreateStruct);
 		if (nRet != 0) return nRet;
 
-		//m_pZoomin = FindChildByID(R.id.sp_zoomin);
-		//SASSERT(m_pZoomin);
 		SStringT strSpcharCfg = theModule->GetDataPath() + _T("\\data\\spchar.xml");
 		pugi::xml_document xmlDoc;
 		if (xmlDoc.load_file(strSpcharCfg))
@@ -153,31 +152,31 @@ namespace SOUI {
 
 	void CSpCharWnd::OnDestroyDropDown(SDropDownWnd * pDropDown)
 	{
-		m_pDropDownWnd = NULL;
+		m_pZoominWnd = NULL;
 	}
 	void CSpCharWnd::OnInitFinished(pugi::xml_node xmlNode)
 	{
 		__super::OnInitFinished(xmlNode);
-		if (!m_pDropDownWnd)
+		if (!m_pZoominWnd)
 		{
-			m_pDropDownWnd = new SDropdownWnd(this);
-			m_pDropDownWnd->Create(xmlNode.child(L"popupStyle"));
-			SASSERT(m_pDropDownWnd);
+			m_pZoominWnd = new SZoominWnd(this);
+			m_pZoominWnd->Create(xmlNode.child(L"popupStyle"));
+			SASSERT(m_pZoominWnd);
 		}
 	}
 	bool CSpCharWnd::OnMouseLeave(EventArgs *)
 	{
-		if (m_pDropDownWnd)
+		if (m_pZoominWnd)
 		{
-			m_pDropDownWnd->ShowWindow(SW_HIDE);			
+			m_pZoominWnd->ShowWindow(SW_HIDE);			
 		}
 		return true;
 	}
 	void CSpCharWnd::OnDestroy()
 	{
-		if (m_pDropDownWnd)
+		if (m_pZoominWnd)
 		{
-			m_pDropDownWnd->DestroyWindow();
+			m_pZoominWnd->DestroyWindow();
 		}
 	}
 }
