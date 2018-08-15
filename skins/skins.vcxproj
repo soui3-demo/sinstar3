@@ -21,25 +21,26 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6599850C-B790-4D51-8EA4-42A6623EC13A}</ProjectGuid>
     <Keyword>MakeFileProj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Makefile</ConfigurationType>
+    <ConfigurationType>Utility</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Makefile</ConfigurationType>
+    <ConfigurationType>Utility</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>Utility</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>Utility</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
@@ -71,7 +72,57 @@
     <NMakeOutput>skin.exe</NMakeOutput>
     <NMakePreprocessorDefinitions>WIN32;NDEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
   </PropertyGroup>
-  <ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <PreBuildEvent>
+      <Command>cd "windows 7"
+"..\..\tools\7z.exe" a -tzip "..\..\data\skins\windows 7.sskn" "*" -r -mmt=on 
+cd "..\黑色-竖排"
+"..\..\tools\7z.exe" a -tzip "..\..\data\skins\黑色-竖排.sskn" "*" -r -mmt=on 
+cd "..\大字-蓝色幽香"
+"..\..\tools\7z.exe" a -tzip "..\..\data\skins\大字-蓝色幽香.sskn" "*" -r -mmt=on 
+cd "..\大字-紫黛云鬓"
+"..\..\tools\7z.exe" a -tzip "..\..\data\skins\大字-紫黛云鬓.sskn" "*" -r -mmt=on 
+cd ..</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <PreBuildEvent>
+      <Command>cd "windows 7"
+"..\..\tools\7z.exe" a -tzip "..\..\data\skins\windows 7.sskn" "*" -r -mmt=on 
+cd "..\黑色-竖排"
+"..\..\tools\7z.exe" a -tzip "..\..\data\skins\黑色-竖排.sskn" "*" -r -mmt=on 
+cd "..\大字-蓝色幽香"
+"..\..\tools\7z.exe" a -tzip "..\..\data\skins\大字-蓝色幽香.sskn" "*" -r -mmt=on 
+cd "..\大字-紫黛云鬓"
+"..\..\tools\7z.exe" a -tzip "..\..\data\skins\大字-紫黛云鬓.sskn" "*" -r -mmt=on 
+cd ..</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <PreBuildEvent>
+      <Command>cd "windows 7"
+"..\..\tools\7z.exe" a -tzip "..\..\data\skins\windows 7.sskn" "*" -r -mmt=on 
+cd "..\黑色-竖排"
+"..\..\tools\7z.exe" a -tzip "..\..\data\skins\黑色-竖排.sskn" "*" -r -mmt=on 
+cd "..\大字-蓝色幽香"
+"..\..\tools\7z.exe" a -tzip "..\..\data\skins\大字-蓝色幽香.sskn" "*" -r -mmt=on 
+cd "..\大字-紫黛云鬓"
+"..\..\tools\7z.exe" a -tzip "..\..\data\skins\大字-紫黛云鬓.sskn" "*" -r -mmt=on 
+cd ..</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <PreBuildEvent>
+      <Command>cd "windows 7"
+"..\..\tools\7z.exe" a -tzip "..\..\data\skins\windows 7.sskn" "*" -r -mmt=on 
+cd "..\黑色-竖排"
+"..\..\tools\7z.exe" a -tzip "..\..\data\skins\黑色-竖排.sskn" "*" -r -mmt=on 
+cd "..\大字-蓝色幽香"
+"..\..\tools\7z.exe" a -tzip "..\..\data\skins\大字-蓝色幽香.sskn" "*" -r -mmt=on 
+cd "..\大字-紫黛云鬓"
+"..\..\tools\7z.exe" a -tzip "..\..\data\skins\大字-紫黛云鬓.sskn" "*" -r -mmt=on 
+cd ..</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
