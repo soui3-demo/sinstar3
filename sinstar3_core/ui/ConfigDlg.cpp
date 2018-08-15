@@ -199,10 +199,10 @@ SWindow *pCtrl = FindChildByID(id);\
 		switch (CheckId)
 		{
 		case 100:
-			g_SettingsG.bySwitchKey = 0x36;
+			g_SettingsG.bySwitchKey = 0x2a;
 			break;
 		case 101:
-			g_SettingsG.bySwitchKey = 0x2a;
+			g_SettingsG.bySwitchKey = 0x36;
 			break;
 		default:g_SettingsG.bySwitchKey = 0; break;
 		}
