@@ -605,7 +605,9 @@ void CSinstar3Impl::InputSpchar(LPCTSTR pszText)
 	else
 	{
 		SStringW strTxt = S_CT2W(pszText);
+		m_pTxtSvr->StartComposition(pImeCtx);
 		m_pTxtSvr->UpdateResultAndCompositionStringW(pImeCtx, strTxt, strTxt.GetLength(), NULL, 0);
+		m_pTxtSvr->EndComposition(pImeCtx);
 		m_pTxtSvr->ReleaseImeContext(pImeCtx);
 	}
 }

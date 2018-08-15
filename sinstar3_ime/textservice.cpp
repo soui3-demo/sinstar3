@@ -78,8 +78,8 @@ void CUiWnd::ReplaceSelCompositionW(LPVOID lpImeContext,int nLeft,int nRight,con
 
 void CUiWnd::UpdateResultAndCompositionStringW(LPVOID lpImeContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen)
 {
+	if (!lpImeContext) return;
 #ifdef _UNICODE
-	_ASSERT(lpImeContext);
 	_ASSERT(m_pSinstar3);
 	if(!IsCompositing()) StartComposition(lpImeContext);
 	CImeContext *pCtx=(CImeContext *)lpImeContext;
