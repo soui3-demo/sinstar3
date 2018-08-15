@@ -179,7 +179,7 @@ void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 
 		if (bFocus)
 		{
-			if (m_inputState.IsTypeing()) m_pInputWnd->Show(TRUE);
+			if (m_pTxtSvr->IsCompositing()) m_pInputWnd->Show(TRUE);
 		}
 		else
 		{
@@ -189,7 +189,7 @@ void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 	}
 	else
 	{
-		if (m_inputState.IsTypeing())
+		if (m_pTxtSvr->IsCompositing())
 			m_inputState.InputEnd();
 		m_pInputWnd->Show(FALSE);
 		m_pStatusWnd->Show(FALSE);
@@ -383,6 +383,11 @@ BOOL CSinstar3Impl::OnCopyData(HWND wnd, PCOPYDATASTRUCT pCopyDataStruct)
 	return TRUE;
 }
 
+
+BOOL CSinstar3Impl::IsCompositing() const
+{
+	return m_pTxtSvr->IsCompositing();
+}
 
 HWND CSinstar3Impl::GetHwnd() const
 {
@@ -591,24 +596,15 @@ void CSinstar3Impl::ShowTip(LPCTSTR pszTitle, LPCTSTR pszContent)
 
 void CSinstar3Impl::InputSpchar(LPCTSTR pszText)
 {
-	if (m_inputState.IsTypeing())
+	if (m_pTxtSvr->IsCompositing())
 	{
 		m_inputState.ClearContext(CPC_ALL);
 		m_inputState.InputEnd();
 		m_inputState.InputHide();
 	}
-	LPVOID pImeCtx = m_pTxtSvr->GetImeContext();
-	if (!pImeCtx)
+	if (!m_pTxtSvr->InputStringW(pszText, _tcslen(pszText)))
 	{
 		CUtils::SoundPlay(_T("error"));
-	}
-	else
-	{
-		SStringW strTxt = S_CT2W(pszText);
-		m_pTxtSvr->StartComposition(pImeCtx);
-		m_pTxtSvr->UpdateResultAndCompositionStringW(pImeCtx, strTxt, strTxt.GetLength(), NULL, 0);
-		m_pTxtSvr->EndComposition(pImeCtx);
-		m_pTxtSvr->ReleaseImeContext(pImeCtx);
 	}
 }
 

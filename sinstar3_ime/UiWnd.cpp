@@ -58,12 +58,13 @@ void CUiWnd::UnregisterClass(HINSTANCE hInstance)
 }
 
 CUiWnd::CUiWnd(void)
+	: m_bCompositing(FALSE)
+	, m_pCurContext(NULL)
+	, m_pSinstar3(NULL)
+	, m_nFontHei(20)
+	, m_fntComp(0)
+	, m_bActivate(TRUE)
 {
-	m_pSinstar3=NULL;
-	m_pCurContext=NULL;
-	m_nFontHei=20;
-	m_fntComp=0;
-	m_bActivate=TRUE;
 }
 
 CUiWnd::~CUiWnd(void)

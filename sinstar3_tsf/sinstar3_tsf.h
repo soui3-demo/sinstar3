@@ -80,7 +80,8 @@ public:
 
 
 	//ITextService
-	BOOL IsCompositing();
+	BOOL InputStringW(LPCWSTR pszBuf, int nLen);
+	BOOL IsCompositing() const;
 	void StartComposition(LPVOID pImeContext);
 	void ReplaceSelCompositionW(LPVOID pImeContext,int nLeft,int nRight,const WCHAR* wszComp,int nLen);
 	void UpdateResultAndCompositionStringW(LPVOID lpImeContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen);
@@ -119,7 +120,7 @@ public:
 	BOOL _EndCompositionEx();
 	void _TerminateComposition(TfEditCookie ecWrite,ITfContext *pContext);
 	int  _MoveCaretPos(ITfContext *pContext,int nPos,BOOL bSet);
-	BOOL _IsComposing();
+	BOOL _IsComposing() const;
 	BOOL _SetCompositionDisplayAttributes(TfEditCookie ec, ITfContext *pContext,ITfRange *pRange, TF_DA_ATTR_INFO attr);
 	BOOL _GetSegRange(TfEditCookie ec,ITfRange **pRange,int nLeft,int nRight);
 	

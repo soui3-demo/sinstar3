@@ -45,7 +45,8 @@ enum EInputMethod
 
 interface ITextService
 {
-	virtual BOOL IsCompositing()=NULL;
+	virtual BOOL InputStringW(LPCWSTR pszBuf, int nLen) = NULL;
+	virtual BOOL IsCompositing() const =NULL;
 	virtual void StartComposition(LPVOID lpImeContext)=NULL;
 
 	//使用指定数据替换当前编码串

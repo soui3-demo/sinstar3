@@ -152,7 +152,7 @@ BOOL KeyIn_IsCoding(InputContext * lpCntxtPriv)
 	return bOpen;
 }
 
-CInputState::CInputState(void):m_pListener(NULL),m_fOpen(FALSE),m_bTypeing(FALSE), m_bUpdateTips(TRUE)
+CInputState::CInputState(void):m_pListener(NULL),m_fOpen(FALSE), m_bUpdateTips(TRUE)
 {
 	memset(&m_ctx,0,sizeof(InputContext));
 	ClearContext(CPC_ALL);
@@ -351,7 +351,6 @@ void CInputState::InputStart()
 {
 	SLOG_INFO("");
 	m_pListener->OnInputStart();
-	m_bTypeing = TRUE;
 	
 	DWORD tmCur = GetTickCount();
 	if (tmCur - m_tmInputEnd > 10 * 1000)
@@ -404,7 +403,6 @@ void CInputState::InputEnd()
 {
 	SLOG_INFO("");
 	m_pListener->OnInputEnd();
-	m_bTypeing = FALSE;
 }
 
 void CInputState::InputUpdate()
@@ -424,7 +422,8 @@ void CInputState::InputOpen()
 void CInputState::InputHide(BOOL bDelay)
 {
 	SLOG_INFO("delay:"<<bDelay);
-	if(m_bTypeing) m_pListener->OnInputEnd();
+	if(m_pListener->IsCompositing()) 
+		m_pListener->OnInputEnd();
 	m_pListener->CloseInputWnd(bDelay);
 }
 
@@ -444,7 +443,7 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 		{//切换到用户自定义输入状态
 			ClearContext(CPC_ALL);
 			m_ctx.inState = INST_USERDEF;
-			if (!IsTypeing())
+			if (!m_pListener->IsCompositing())
 			{
 				InputStart();
 				InputOpen();
@@ -2308,7 +2307,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 						InputOpen();
 						InputUpdate();
 						StatusbarUpdate();
-						if (!m_bTypeing)
+						if (!m_pListener->IsCompositing())
 						{//query cursor position
 							InputStart();
 							InputEnd();

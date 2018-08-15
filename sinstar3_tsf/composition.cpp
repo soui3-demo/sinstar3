@@ -4,7 +4,7 @@
 
 
 
-BOOL CSinstar3Tsf::_IsComposing()
+BOOL CSinstar3Tsf::_IsComposing() const
 {
     return _pComposition != NULL;
 }

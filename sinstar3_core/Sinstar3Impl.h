@@ -51,6 +51,7 @@ public:
 	virtual HRESULT OnQueryInterface(REFIID riid, void **ppvObject);
 	virtual int GetID() const {	return SENDER_SINSTSR3;}
 protected://IInputListener
+	virtual BOOL IsCompositing() const;
 	virtual HWND GetHwnd() const;
 	virtual void OnInputStart();
 	virtual void OnInputResult(const SStringT & strResult,const SStringT & strComp=SStringT() );

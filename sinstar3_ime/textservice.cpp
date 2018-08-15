@@ -3,35 +3,42 @@
 #include "CompStrEx.h"
 #include "../include/sinstar3_guids.h"
 
-BOOL CUiWnd::IsCompositing()
+
+
+BOOL CUiWnd::InputStringW(LPCWSTR pszBuf, int nLen)
 {
-	CImeContext *pCtx=(CImeContext *)GetImeContext();
-	if(!pCtx) return FALSE;
-	BOOL bRet=FALSE;
-	CCompStrEx *pCompStr=(CCompStrEx *)ImmLockIMCC(pCtx->_lpContext->hCompStr);
-	if(pCompStr)
+	if (IsCompositing())
 	{
-		bRet=pCompStr->bComposing;
-		ImmUnlockIMCC(pCtx->_lpContext->hCompStr);
+		return FALSE;
 	}
+	LPVOID pCtx = GetImeContext();
+	if (!pCtx) return FALSE;
+	StartComposition(pCtx);
+	UpdateResultAndCompositionStringW(pCtx, pszBuf, nLen, NULL, 0);
+	EndComposition(pCtx);
 	ReleaseImeContext(pCtx);
-	return bRet;
+	return TRUE;
+}
+
+BOOL CUiWnd::IsCompositing() const
+{
+	return m_bCompositing;
 }
 
 void CUiWnd::StartComposition(LPVOID lpImeContext)
 {
-	_ASSERT(lpImeContext);
+	if (!lpImeContext) return;
 	if(!IsCompositing())
 	{
 		CImeContext *pCtx=(CImeContext *)lpImeContext;
 		CCompStrEx *pCompStr=(CCompStrEx *)ImmLockIMCC(pCtx->_lpContext->hCompStr);
 		_ASSERT(pCompStr);
 		pCompStr->Init();
-		pCompStr->bComposing=TRUE;
 		ImmUnlockIMCC(pCtx->_lpContext->hCompStr);
 		pCtx->GenerateMessage(WM_IME_STARTCOMPOSITION,0,0);
 		pCtx->GenerateMessage(WM_IME_NOTIFY,IMN_SETCOMPOSITIONWINDOW,0);
 		if(m_pSinstar3) m_pSinstar3->OnCompositionStarted();
+		m_bCompositing = TRUE;
 	}
 }
 
@@ -41,8 +48,8 @@ void CUiWnd::StartComposition(LPVOID lpImeContext)
 //				 [left,right]:替换该范围，都不能为负值
 void CUiWnd::ReplaceSelCompositionW(LPVOID lpImeContext,int nLeft,int nRight,const WCHAR *wszComp,int nLen)
 {
+	if (!lpImeContext) return;
 #ifdef _UNICODE
-	_ASSERT(lpImeContext);
 	_ASSERT(m_pSinstar3);
 	if(!IsCompositing()) StartComposition(lpImeContext);
 	CImeContext *pCtx=(CImeContext *)lpImeContext;
@@ -111,28 +118,28 @@ void CUiWnd::UpdateResultAndCompositionStringW(LPVOID lpImeContext,const WCHAR *
 
 void CUiWnd::EndComposition(LPVOID lpImeContext)
 {
-	_ASSERT(lpImeContext);
-	CImeContext *pCtx=(CImeContext *)lpImeContext;
-	CCompStrEx *pCompStr=(CCompStrEx *)ImmLockIMCC(pCtx->_lpContext->hCompStr);
-	if(pCompStr && pCompStr->dwCompStrLen)
+	if (!lpImeContext) return;
+	CImeContext *pCtx = (CImeContext *)lpImeContext;
+	CCompStrEx *pCompStr = (CCompStrEx *)ImmLockIMCC(pCtx->_lpContext->hCompStr);
+	if (pCompStr && pCompStr->dwCompStrLen)
 	{
-		TCHAR szResult[MAXCOMPSIZE*2];
-		DWORD dwResStrLen=pCompStr->dwCompStrLen;
-		_tcsncpy(szResult,pCompStr->szCompStr,pCompStr->dwCompStrLen);
+		TCHAR szResult[MAXCOMPSIZE * 2];
+		DWORD dwResStrLen = pCompStr->dwCompStrLen;
+		_tcsncpy(szResult, pCompStr->szCompStr, pCompStr->dwCompStrLen);
 		pCompStr->Init();
-		_tcsncpy(pCompStr->szResultStr,szResult,dwResStrLen);
-		pCompStr->dwResultStrLen=dwResStrLen;
-		pCtx->GenerateMessage(WM_IME_COMPOSITION,0,GCS_RESULTSTR|GCS_COMP);
+		_tcsncpy(pCompStr->szResultStr, szResult, dwResStrLen);
+		pCompStr->dwResultStrLen = dwResStrLen;
+		pCtx->GenerateMessage(WM_IME_COMPOSITION, 0, GCS_RESULTSTR | GCS_COMP);
 	}
-	pCompStr->bComposing=FALSE;
 	ImmUnlockIMCC(pCtx->_lpContext->hCompStr);
-	pCtx->GenerateMessage(WM_IME_NOTIFY,IMN_CLOSECANDIDATE,0);
-	pCtx->GenerateMessage(WM_IME_ENDCOMPOSITION,0,0);
+	pCtx->GenerateMessage(WM_IME_NOTIFY, IMN_CLOSECANDIDATE, 0);
+	pCtx->GenerateMessage(WM_IME_ENDCOMPOSITION, 0, 0);
+	m_bCompositing = FALSE;
 }
 
 int  CUiWnd::MoveCaretPos(LPVOID lpImeContext,int nPos,BOOL bSet)
 {
-	_ASSERT(lpImeContext);
+	if (!lpImeContext) return 0;
 	CImeContext *pCtx=(CImeContext *)lpImeContext;
 	CCompStrEx *pCompStr=(CCompStrEx *)ImmLockIMCC(pCtx->_lpContext->hCompStr);
 	int nRet=0;

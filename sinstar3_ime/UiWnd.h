@@ -29,7 +29,8 @@ public:
 	LRESULT OnTimer(WPARAM nEventID);
 
 	//ITextService
-	BOOL IsCompositing();
+	BOOL InputStringW(LPCWSTR pszBuf, int nLen);
+	BOOL IsCompositing() const;
 	void StartComposition(LPVOID lpImeContext);
 	void ReplaceSelCompositionW(LPVOID lpImeContext,int nLeft,int nRight,const WCHAR *wszComp,int nLen);
 	void UpdateResultAndCompositionStringW(LPVOID lpImeContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen);
@@ -50,6 +51,8 @@ public:
 
 	ISinstar* m_pSinstar3;
 	CImeContext *m_pCurContext;
+	BOOL		m_bCompositing;
+
 	int        m_nFontHei;
 	HFONT		m_fntComp;
 	BOOL		m_bActivate;

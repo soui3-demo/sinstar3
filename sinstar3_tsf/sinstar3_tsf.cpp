@@ -313,7 +313,14 @@ STDMETHODIMP CSinstar3Tsf::GetDisplayName(BSTR* pbstrName)
 }
 
 
-BOOL CSinstar3Tsf::IsCompositing()
+
+//ITextService
+
+BOOL CSinstar3Tsf::InputStringW(LPCWSTR pszBuf, int nLen) {
+	return FALSE;
+}
+
+BOOL CSinstar3Tsf::IsCompositing() const
 {
 	return _IsComposing();
 }

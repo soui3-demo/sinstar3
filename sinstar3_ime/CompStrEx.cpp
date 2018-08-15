@@ -1,9 +1,25 @@
 #include "StdAfx.h"
 #include "CompStrEx.h"
 
+template<class T>
+void ARRAY_MOVE(T * buf, int nSize, int nBeginOld, int nBeginNew)
+{
+	if (nSize>nBeginOld) memmove(buf + nBeginNew, buf + nBeginOld, (nSize - nBeginOld) * sizeof(T));
+}
+
+template<class T>
+void ARRAY_COPY(T * pDest, const T *pSour, int nSize)
+{
+	if (nSize>0) memcpy(pDest, pSour, nSize * sizeof(T));
+}
+template<class T>
+void ARRAY_SET(T *buf, T data, int nSize)
+{
+	for (int i = 0; i<nSize; i++) buf[i] = data;
+}
+
 void CCompStrEx::Init(void)
 {
-	BOOL _bComposing=bComposing;
 	memset(this, 0, sizeof(CCompStrEx));
 	dwSize=sizeof(CCompStrEx);
  	dwCompReadAttrOffset = (DWORD)((LPBYTE)byCompReadAttr - (LPBYTE)this);
@@ -13,9 +29,8 @@ void CCompStrEx::Init(void)
 	dwCompReadClauseOffset = dwCompClauseOffset = (DWORD)((LPBYTE)dwCompCls - (LPBYTE)this);
 	dwCompReadStrOffset = dwCompStrOffset = (DWORD)((LPBYTE)szCompStr - (LPBYTE)this);
 	dwResultStrOffset = (DWORD)((LPBYTE)szResultStr - (LPBYTE)this);
-	dwPrivateOffset = (DWORD)((LPBYTE)&bComposing-(LPBYTE)this);
-	dwPrivateSize=sizeof(BOOL);
-	bComposing=_bComposing;
+	dwPrivateOffset = (DWORD)sizeof(CCompStrEx);
+	dwPrivateSize=0;
 }
 
 void CCompStrEx::Insert(ISinstar *pSinstar3,int nLeft,int nRight,LPCWSTR pszComp,int nLen)
