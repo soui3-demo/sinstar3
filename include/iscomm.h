@@ -119,12 +119,12 @@ typedef struct tagFLMINFO
 extern "C"{
 #endif//__cplusplus
 
-	void ISComm_FreeImeFlagData(IMEFLAGDATA *pData);
+void ISComm_SetSvrPath(LPCTSTR pszPath);
+
+void ISComm_FreeImeFlagData(IMEFLAGDATA *pData);
 
 const UINT ISComm_GetCommMsgID();
-BOOL ISComm_GetConfig(LPSTR pszConfig);
-void ISComm_SetSvrPath(LPCTSTR pszPath);
-BOOL ISComm_GetDataPath(LPSTR pszPath);
+
 
 DWORD ISComm_SendMsg(DWORD dwType,LPVOID pData,short sSize,HWND hWnd);
 DWORD ISComm_PostMsg(DWORD dwType,LPVOID pData,short sSize,HWND hWnd);

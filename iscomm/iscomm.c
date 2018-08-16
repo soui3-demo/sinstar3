@@ -1,3 +1,6 @@
+#ifndef _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
+#endif 
 #include <windows.h>
 #include <assert.h>
 #include <stdio.h>
@@ -21,6 +24,11 @@ static UINT		s_uCount=0;			//访问计数
 
 static TCHAR	s_szSvrPath[MAX_PATH]={0};	//服务器路径
 
+void ISComm_SetSvrPath(LPCTSTR pszPath)
+{
+	_tcscpy(s_szSvrPath,pszPath);
+}
+
 void ISComm_FreeImeFlagData(IMEFLAGDATA * pData)
 {
 	if (pData->rgba) free(pData->rgba);
@@ -30,12 +38,6 @@ void ISComm_FreeImeFlagData(IMEFLAGDATA * pData)
 const UINT ISComm_GetCommMsgID(){
 	if(s_uMsgID==0) s_uMsgID=RegisterWindowMessage(MSG_NAME_SINSTAR2);
 	return s_uMsgID;
-}
-
-
-void ISComm_SetSvrPath(LPCTSTR pszPath)
-{
-	_tcscpy(s_szSvrPath,pszPath);
 }
 
 void ClearComm()
@@ -78,12 +80,13 @@ IMEFLAGDATA * Helper_CreateImeFlagDataFromBuffer(LPBYTE pBuffer, DWORD cbSize,CO
 	// If bmiHeader.biClrUsed is zero we have to infer the number
 	// of colors from the number of bits used to specify it.
 	int nColors= 0;
+	LPVOID lpDIBBits;
+
 	if (pbmiHeader->biClrUsed)
 		nColors = pbmiHeader->biClrUsed;
 	else if(pbmiHeader->biBitCount<=8)
 		nColors = 1 << pbmiHeader->biBitCount;
 
-	LPVOID lpDIBBits;
 	if (pbmfHeader->bfType != ((WORD) ('M' << 8) | 'B')) return NULL;
 	if( pbmInfo->bmiHeader.biBitCount > 8 )
 		lpDIBBits = (LPVOID)((LPDWORD)(pbmInfo->bmiColors + pbmInfo->bmiHeader.biClrUsed) + 
@@ -140,13 +143,14 @@ IMEFLAGDATA * Helper_CreateImeFlagDataFromBuffer(LPBYTE pBuffer, DWORD cbSize,CO
 			HDC hmemdc = CreateCompatibleDC(hdc);
 			HGDIOBJ hOldBmp = SelectObject(hmemdc, hBmp);
 			char *p;
+			int i,j;
 			pRet = (IMEFLAGDATA*)malloc(sizeof(IMEFLAGDATA));
 			pRet->wid = pbmInfo->bmiHeader.biWidth;
 			pRet->hei = pbmInfo->bmiHeader.biHeight;
 			pRet->rgba = p = (char*)malloc(4 * pRet->wid*pRet->hei);
-			for (int i = 0; i < pRet->hei; i++)
+			for ( i = 0; i < pRet->hei; i++)
 			{
-				for (int j = 0; j < pRet->wid; j++)
+				for ( j = 0; j < pRet->wid; j++)
 				{
 					COLORREF cr = GetPixel(hmemdc, j, i);
 					if (pbmInfo->bmiHeader.biBitCount == 32)
@@ -185,8 +189,8 @@ PMSGDATA ISComm_OnSeverNotify(HWND hWnd,WPARAM wParam,LPARAM lParam)
 		s_CompInfo.pImeFlagData =NULL;
 		if(s_pDataAck->sSize>CISIZE_BASE)
 		{
-			pData+=CISIZE_BASE;
 			COLORREF crKey = 0;
+			pData+=CISIZE_BASE;
 			memcpy(&crKey,pData,sizeof(COLORREF));
 			pData+=sizeof(COLORREF);
 			s_CompInfo.pImeFlagData = Helper_CreateImeFlagDataFromBuffer(pData,s_pDataAck->sSize-CISIZE_BASE-sizeof(COLORREF),crKey);
