@@ -53,7 +53,9 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst,LPCTSTR pszWorkDir)
 	m_theApp->RegisterWindowClass<STabPageEx>();
 	m_theApp->RegisterWindowClass<STabCtrlEx>();
 	m_theApp->RegisterWindowClass<SLineComp>();
+	m_theApp->RegisterWindowClass<SApngPlayer>();
 
+	m_theApp->RegisterSkinClass<SSkinAPNG>();
 	m_theApp->RegisterSkinClass<SLineSkin>();
 
 	CAutoRefPtr<ILog4zManager> pLogMgr;
