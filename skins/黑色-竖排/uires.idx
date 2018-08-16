@@ -30,6 +30,7 @@
     <file name="btn_record_enable" path="image\btn_record_enable.png"/>
     <file name="btn_record_disable" path="image\btn_record_disable.png"/>
     <file name="btn_sound_enable" path="image\btn_sound_enable.png"/>
-    <file name="btn_sound_disable" path="image\btn_sound_disable.png"/>    
+    <file name="btn_sound_disable" path="image\btn_sound_disable.png"/>
+    <file name="apng_haha" path="image\apng_haha.png"/>
   </IMG>
 </resource>
