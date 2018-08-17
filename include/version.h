@@ -42,3 +42,7 @@
 #define PRODUCT_IME	sinstar3_ime_tstring( _sinstar3_ime)
 #define PRODUCT_TSF	sinstar3_ime_wstring( _sinstar3_tsf)
 #define SINSTAR3_MUTEX sinstar3_ime_tstring(_sinstar3_mutex)
+
+#define _sinstar3_ime_name_ver(n,a,b)	_T(#n) _T(#a) _T(".") _T(#b)
+
+#define PRODUCT_NAMEANDVER _sinstar3_ime_name_ver(_sinstar3_ime_name,_sinstar3_ime_version_a,_sinstar3_ime_version_b)

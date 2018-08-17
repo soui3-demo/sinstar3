@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by register.rc
+// Microsoft Visual C++ 生成的包含文件。
+// 供 register.rc 使用
 //
 #define IDR_MANIFEST                    1
 #define IDC_MYICON                      2
@@ -23,6 +23,9 @@
 #define IDC_INSTALL                     1002
 #define IDC_UNINSTALL                   1003
 #define IDC_UPDATE                      1004
+#define IDC_LISENCE                     1005
+#define IDC_CHECK1                      1006
+#define IDC_AGREE                       1006
 #define IDC_STATIC                      -1
 
 // Next default values for new objects
@@ -31,7 +34,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        136
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1005
+#define _APS_NEXT_CONTROL_VALUE         1007
 #define _APS_NEXT_SYMED_VALUE           110
 #endif
 #endif

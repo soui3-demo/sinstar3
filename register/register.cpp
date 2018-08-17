@@ -24,69 +24,9 @@
 #define SINSTARE_IME	_T("sinstar3_ime")
 
 TCHAR g_szPath[MAX_PATH]={0};	//程序启动位置
-
-//定义一个结构，以便初始化对话框
-typedef struct tagDLGPARAM
-{
-	HINSTANCE hInst;	//程序实例
-	TCHAR szIme[MAX_PATH];	//输入法文件名
-	TCHAR szName[100];	//安装到注册表中的名称
-}DLGPARAM;
+HINSTANCE g_hInst = 0;
 
 
-//获取一个PE文件的version + ProductName +  FileDescription
-BOOL Helper_PEVersion(LPCTSTR pszFileName,DWORD *pdwVer,TCHAR *pszName ,TCHAR *pszDesc)
-{
-	DWORD dwResHandle;
-	LPTSTR lszVer = NULL; 
-	UINT  cchVer = 0;  
-	void *pBuf;
-	BOOL bRet=FALSE;
-	DWORD dwVerInfoSize=GetFileVersionInfoSize((TCHAR*)pszFileName,&dwResHandle);
-	if(!dwVerInfoSize) return FALSE;
-	pBuf=malloc(dwVerInfoSize);
-	GetFileVersionInfo((TCHAR*)pszFileName, dwResHandle, dwVerInfoSize, pBuf); 
-	if(pdwVer)
-	{
-		UINT nVersionLen;
-		VS_FIXEDFILEINFO *pstFileVersion;
-		if(VerQueryValue(pBuf, _T("\\"), (void**)&pstFileVersion, &nVersionLen) && nVersionLen>=sizeof(VS_FIXEDFILEINFO) )
-		{
-			*pdwVer=MAKELONG(MAKEWORD(LOWORD(pstFileVersion->dwFileVersionLS),HIWORD(pstFileVersion->dwFileVersionLS)),
-				MAKEWORD(LOWORD(pstFileVersion->dwFileVersionMS),HIWORD(pstFileVersion->dwFileVersionMS)));
-		}
-	}
-
-	bRet = VerQueryValue(pBuf, _T("\\VarFileInfo\\Translation"), (void**)&lszVer, &cchVer); 
-	if(bRet&&cchVer==4)
-	{
-		TCHAR szLangCode[20]={0};
-		TCHAR szSection[256]; 
-		BOOL bOK;
-		WORD * pwVer = (WORD*)lszVer;
-		_stprintf(szLangCode,_T("%04x"),pwVer[0]);
-		_stprintf(szLangCode+4,_T("%04x"), pwVer[1]);
-		if(pszName)
-		{
-			_stprintf(szSection,_T("\\StringFileInfo\\%s\\ProductName"),szLangCode);
-			bOK= VerQueryValue(pBuf, szSection, (void**)&lszVer, &cchVer); 
-			if(bOK) _tcscpy(pszName,lszVer);
-		}
-		if(pszDesc)
-		{
-			_stprintf(szSection,_T("\\StringFileInfo\\%s\\FileDescription"),szLangCode);
-			bOK = VerQueryValue(pBuf, szSection, (void**)&lszVer, &cchVer); 
-			if(bOK) _tcscpy(pszDesc,lszVer);
-		}
-	}
-	free(pBuf);
-	return bRet;
-}
-//获取文件的版本号
-void Helper_VersionString(DWORD dwVer,TCHAR *pszBuf)
-{
-	_stprintf(pszBuf,_T("%u.%u.%u.%u"),(dwVer>>24)&0xFF,(dwVer>>16)&0xFF,(dwVer>>8)&0xFF,dwVer&0xFF);
-}
 
 #include <AclAPI.h>
 BOOL Helper_SetFileACL(LPCTSTR pszPath)
@@ -198,42 +138,6 @@ BOOL Is64OS()
 	}
 } 
 
-
-
-//从输入文件中获取文件属性
-BOOL QueryImeProp(TCHAR *pszIme,TCHAR *pszImeProp)
-{
-	TCHAR szImeFile[MAX_PATH] = { 0 }, szName[100] = { 0 };
-	_stprintf(szImeFile,_T("%s\\%s"),g_szPath,pszIme);
-	DWORD dwVer = 0;
-	if(!Helper_PEVersion(szImeFile,&dwVer,NULL,szName)) return FALSE;
-	BYTE byVer[4];
-	memcpy(byVer, &dwVer, 4);
-	_stprintf(pszImeProp,_T("%s%d.%d"),szName,UINT(byVer[3]),UINT(byVer[2]));
-	return TRUE;
-}
-
-void VerDot2Space(TCHAR *pszVer)
-{
-	while(*pszVer)
-	{
-		if(*pszVer == '.') *pszVer=0x20;
-		pszVer++;
-	}
-}
-
-BOOL CheckVersion(TCHAR *pszVerNew,TCHAR *pszVerCur)
-{
-	DWORD dwVerCur=0,dwVerNew=0;
-	int byVer1,byVer2,byVer3,byVer4;
-	VerDot2Space(pszVerNew);
-	VerDot2Space(pszVerCur);
-	_stscanf(pszVerCur,_T("%u %u %u %u"),&byVer1,&byVer2,&byVer3,&byVer4);
-	dwVerCur=MAKELONG(MAKEWORD(byVer4,byVer3),MAKEWORD(byVer2,byVer1));
-	_stscanf(pszVerNew,_T("%u %u %u %u"),&byVer1,&byVer2,&byVer3,&byVer4);
-	dwVerNew=MAKELONG(MAKEWORD(byVer4,byVer3),MAKEWORD(byVer2,byVer1));
-	return (dwVerCur<dwVerNew);
-}
 
 void ShowCaller(LPCTSTR pszImeCore)
 {
@@ -445,7 +349,7 @@ BOOL MyCopyFile(LPCTSTR pszSour,LPCTSTR pszDest)
 	return nRet==0;
 }
 
-BOOL Sinstar_Install(LPCTSTR pszImeName,LPCTSTR pszIme)
+BOOL Sinstar_Install(LPCTSTR pszImeName)
 {
 	TCHAR szSysPath[MAX_PATH];
 	TCHAR szPath1[300],szPath2[300];
@@ -455,11 +359,11 @@ BOOL Sinstar_Install(LPCTSTR pszImeName,LPCTSTR pszIme)
 	GetSysWow64Dir(szSysWow64, MAX_PATH);
 	
 	//step1:验证文件有效性
-	_stprintf(szPath1,_T("%s\\program\\%s.dll"),g_szPath, pszIme);
+	_stprintf(szPath1,_T("%s\\program\\%s.dll"),g_szPath, pszImeName);
 	if(GetFileAttributes(szPath1)==0xFFFFFFFF)
 	{
 		TCHAR szMsg[100];
-		_stprintf(szMsg,_T("输入法目录下没有找到输入法文件：%s"),pszIme);
+		_stprintf(szMsg,_T("输入法目录下没有找到输入法文件：%s"), pszImeName);
 		MessageBox(GetActiveWindow(),szMsg,_T("提示"),MB_OK|MB_ICONSTOP);
 		return FALSE;
 	}
@@ -526,21 +430,21 @@ BOOL Sinstar_Install(LPCTSTR pszImeName,LPCTSTR pszIme)
 	if(Is64OS())
 	{
 		//复制64位版本到系统目录
-		_stprintf(szPath1,_T("%s\\program\\x64\\%s.dll"),g_szPath,pszIme);
-		_stprintf(szPath2, _T("%s\\%s.ime"), szSysPath, pszIme);
+		_stprintf(szPath1,_T("%s\\program\\x64\\%s.dll"),g_szPath, pszImeName);
+		_stprintf(szPath2, _T("%s\\%s.ime"), szSysPath, pszImeName);
 		MyCopyFile(szPath1, szPath2);
 		//复制32位版本到wow64目录
-		_stprintf(szPath1,_T("%s\\program\\%s.dll"),g_szPath,pszIme);
-		_stprintf(szPath2, _T("%s\\%s.ime"), szSysWow64, pszIme);
+		_stprintf(szPath1,_T("%s\\program\\%s.dll"),g_szPath, pszImeName);
+		_stprintf(szPath2, _T("%s\\%s.ime"), szSysWow64, pszImeName);
 		MyCopyFile(szPath1, szPath2);
 	}else
 	{
-		_stprintf(szPath1, _T("%s\\program\\%s.dll"), g_szPath, pszIme);
-		_stprintf(szPath2, _T("%s\\%s.ime"), szSysPath, pszIme);
+		_stprintf(szPath1, _T("%s\\program\\%s.dll"), g_szPath, pszImeName);
+		_stprintf(szPath2, _T("%s\\%s.ime"), szSysPath, pszImeName);
 		MyCopyFile(szPath1, szPath2);
 	}
 	//step6:安装输入法
-	_stprintf(szPath1,_T("%s\\%s.ime"),szSysPath,pszIme);
+	_stprintf(szPath1,_T("%s\\%s.ime"),szSysPath, pszImeName);
 	if (0 != CallRegsvr32(szPath1, TRUE))
 	{
 		MessageBox(GetActiveWindow(), _T("注册失败"), _T("install"), MB_OK | MB_ICONSTOP);
@@ -569,6 +473,7 @@ void Helper_CenterWindow(HWND hWnd,UINT uFlag)
 	SetWindowPos(hWnd,NULL,x,y,0,0,SWP_NOSIZE|SWP_NOZORDER|uFlag);
 }
 
+#define IME_NAME _T("sinstar3_ime")
 
 BOOL CALLBACK DlgProc_Option(
   HWND hwndDlg,  // handle to dialog box
@@ -582,12 +487,41 @@ BOOL CALLBACK DlgProc_Option(
 	{
 	case WM_INITDIALOG:
 		{
-			DLGPARAM *pdlgParam=(DLGPARAM*)lParam;
-			SetDlgItemText(hwndDlg,IDC_NAME,pdlgParam->szName);
-			HICON hIcon=LoadIcon(pdlgParam->hInst,MAKEINTRESOURCE(IDI_FLAG));
+			HICON hIcon=LoadIcon(g_hInst,MAKEINTRESOURCE(IDI_FLAG));
 			SendMessage(hwndDlg, WM_SETICON, ICON_BIG, (LPARAM)hIcon);
 			SendMessage(hwndDlg, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
 			Helper_CenterWindow(hwndDlg,0);
+
+			TCHAR szLicenseFile[MAX_PATH];
+			_stprintf(szLicenseFile, _T("%s\\license.txt"), g_szPath);
+			FILE *f = _tfopen(szLicenseFile, _T("rb"));
+			if (!f)
+			{
+				MessageBox(hwndDlg, _T("当前目录下没有找到licnese.txt,请保证安装包完整"), _T("错误"), MB_OK | MB_ICONSTOP);
+				PostQuitMessage(1);
+				return 0;
+			}
+			BYTE utf16[2];
+			fread(utf16, 1, 2, f);
+			if (utf16[0] != 0xff || utf16[1] != 0xfe)
+			{
+				MessageBox(hwndDlg, _T("license.txt非法,请保证安装包完整"), _T("错误"), MB_OK | MB_ICONSTOP);
+				PostQuitMessage(1);
+				return 0;
+			}
+			fseek(f, 0, SEEK_END);
+			int nLen = ftell(f);
+			wchar_t *pLisence = new wchar_t[nLen / 2];//
+			fseek(f, 2, SEEK_SET);
+			fread(pLisence, 1, nLen -2, f);
+			fclose(f);
+			pLisence[nLen / 2 - 1] = 0;
+			SetDlgItemTextW(hwndDlg, IDC_LISENCE, pLisence);
+			delete[]pLisence;
+			CheckDlgButton(hwndDlg, IDC_AGREE, 0);
+			EnableWindow(GetDlgItem(hwndDlg, IDC_INSTALL), FALSE);
+			EnableWindow(GetDlgItem(hwndDlg, IDC_UPDATE), FALSE);
+			EnableWindow(GetDlgItem(hwndDlg, IDC_UNINSTALL), FALSE);
 		}
 		break;
 	case WM_COMMAND:
@@ -595,23 +529,27 @@ BOOL CALLBACK DlgProc_Option(
 		{
 			switch(LOWORD(wParam))
 			{
+			case IDC_AGREE:
+				{
+					BOOL bAgree = IsDlgButtonChecked(hwndDlg, IDC_AGREE);
+					EnableWindow(GetDlgItem(hwndDlg, IDC_INSTALL), bAgree);
+					EnableWindow(GetDlgItem(hwndDlg, IDC_UPDATE), bAgree);
+					EnableWindow(GetDlgItem(hwndDlg, IDC_UNINSTALL), bAgree);
+				}
+				break;
 			case IDC_INSTALL:
 				{
-					TCHAR szIme[]=_T("sinstar3_ime"),szName[100];
-					GetDlgItemText(hwndDlg,IDC_NAME,szName,100);
-					EndDialog(hwndDlg,Sinstar_Install(szName,szIme));
+					EndDialog(hwndDlg,Sinstar_Install(IME_NAME));
 				}
 				break;
 			case IDC_UNINSTALL:
 				{
-					TCHAR szIme[] = _T("sinstar3_ime");
-					EndDialog(hwndDlg,Sinstar_Uninstall(szIme));
+					EndDialog(hwndDlg,Sinstar_Uninstall(IME_NAME));
 				}
 				break;
 			case IDC_UPDATE:
 				{
-					TCHAR szIme[] = _T("sinstar3_ime");
-					EndDialog(hwndDlg,Sinstar_Update(szIme));
+					EndDialog(hwndDlg,Sinstar_Update(IME_NAME));
 				}
 				break;
 			case IDCANCEL:
@@ -633,7 +571,6 @@ typedef BOOL (WINAPI *FunWow64DisableWow64FsRedirection)(
 int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int /*nCmdShow*/)
 {
 	int nRet=0;
-	DLGPARAM dlgParam={hInstance,0};
 	//获得程序启动目录
 	TCHAR szFilePath[MAX_PATH];
 	int nLen=GetModuleFileName(NULL,szFilePath,MAX_PATH);
@@ -650,37 +587,8 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*
 	}
 	FreeLibrary(hMod);
 
-	TCHAR szImeCorePath[MAX_PATH];
-	_stprintf(szImeCorePath, _T("program\\%s"), SINSTAR3_CORE);
-	if(!QueryImeProp(szImeCorePath,dlgParam.szName))
-	{
-		MessageBox(GetActiveWindow(),_T("查询输入法文件信息失败"),_T("提示"),MB_OK|MB_ICONSTOP);
-		return 1;
-	}
+	nRet = DialogBoxParam(hInstance, MAKEINTRESOURCE(IDD_OPTION), GetActiveWindow(), DlgProc_Option, NULL);
 
-	_tcscpy(dlgParam.szIme, SINSTARE_IME);
-	if(__argc==1)
-	{
-		nRet=DialogBoxParam(hInstance,MAKEINTRESOURCE(IDD_OPTION),GetActiveWindow(),DlgProc_Option,(LPARAM)&dlgParam);
-	}else if(__argc==2 && (__targv[1][0]==_T('/') || __targv[1][0]==_T('-')))
-	{
-		switch(__targv[1][1])
-		{
-		case _T('i'):case _T('I'):
-			nRet=Sinstar_Install(dlgParam.szName,dlgParam.szIme);
-			break;
-		case _T('u'):case _T('U'):
-			nRet=Sinstar_Uninstall(dlgParam.szIme);
-			break;
-		case _T('c'):case _T('C'):
-			nRet=Sinstar_Update(dlgParam.szIme);
-			break;
-		default:
-			MessageBox(GetActiveWindow(),_T("无效的参数"),_T("提示"),MB_OK|MB_ICONSTOP);
-			nRet=1;
-			break;
-		}
-	}
 	return nRet;
 }
 
