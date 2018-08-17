@@ -1,5 +1,7 @@
 #pragma once
 
+#include "EditFileFinishMonitor.h"
+
 #define MSG_WM_COMMAND_EX(code, func) \
     if (uMsg == WM_COMMAND && code == HIWORD(wParam)) \
     { \
@@ -30,6 +32,7 @@ enum {
 	CMD_OPENSPCHAR,
 	CMD_INPUTSPCHAR,
 	CMD_SHOWTIP,
+	CMD_EDITFILE,
 };
 
 struct TIPINFO
@@ -39,6 +42,7 @@ struct TIPINFO
 	SStringT strTitle;
 	SStringT strTip;
 };
+
 
 namespace SOUI {
 	class STipWnd;
@@ -71,6 +75,8 @@ protected:
 	void OnInputSpchar(LPARAM lp);
 	void OnOpenSkinDir(LPARAM lp);
 	void OnShowTip(LPARAM lp);
+	void OnEditFile(LPARAM lp);
+	LRESULT OnEditFileFinish(UINT uMsg, WPARAM wp, LPARAM lp);
 
 	BEGIN_MSG_MAP_EX(CCmdHandler)
 		MSG_WM_COMMAND_EX(CMD_HOTKEY_TTS,OnHotkeyTTS)
@@ -92,9 +98,12 @@ protected:
 		MSG_WM_COMMAND_EX(CMD_INPUTSPCHAR,OnInputSpchar)
 		MSG_WM_COMMAND_EX(CMD_OPENSKINDIR,OnOpenSkinDir)
 		MSG_WM_COMMAND_EX(CMD_SHOWTIP, OnShowTip)
+		MSG_WM_COMMAND_EX(CMD_EDITFILE,OnEditFile)
+		MESSAGE_HANDLER_EX(UM_EDITFILEFINISH,OnEditFileFinish)
 	END_MSG_MAP()
 
 private:
+	SMap<int, CEditFileFinishMonitor*> m_mapEditFileMonitor;
 	CSinstar3Impl * m_pSinstar3;
 };
 

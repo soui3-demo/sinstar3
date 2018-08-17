@@ -17,6 +17,13 @@ CCmdHandler::CCmdHandler(CSinstar3Impl * pSinstar3)
 
 CCmdHandler::~CCmdHandler()
 {
+	SPOSITION pos = m_mapEditFileMonitor.GetStartPosition();
+	while (pos)
+	{
+		CEditFileFinishMonitor * pEditFileFinishMonitor = m_mapEditFileMonitor.GetNextValue(pos);
+		delete pEditFileFinishMonitor;
+	}
+	m_mapEditFileMonitor.RemoveAll();
 }
 
 void CCmdHandler::OnHotkeyMakePhrase(LPARAM lp)
@@ -280,4 +287,28 @@ void CCmdHandler::OnShowTip(LPARAM lp)
 {
 	TIPINFO *pTi = (TIPINFO*)lp;
 	m_pSinstar3->ShowTip(pTi->strTitle, pTi->strTip);
+}
+
+void CCmdHandler::OnEditFile(LPARAM lp)
+{
+	EDITFILEINFO *efi = (EDITFILEINFO*)lp;
+	if (m_mapEditFileMonitor.Lookup(efi->nType))
+		return;
+	CEditFileFinishMonitor *editFileMonitor = new CEditFileFinishMonitor(efi, m_pSinstar3->m_hWnd);
+	m_mapEditFileMonitor[efi->nType] = editFileMonitor;
+	editFileMonitor->BeginThread();
+}
+
+LRESULT CCmdHandler::OnEditFileFinish(UINT uMsg, WPARAM wp, LPARAM lp)
+{
+	CEditFileFinishMonitor *editFileMonitor = (CEditFileFinishMonitor*)lp;
+	const EDITFILEINFO *efi = editFileMonitor->GetEditFileInfo();
+	if (wp == 1)
+	{//edit finish
+		SStringA strUtf8 = S_CT2A(efi->strFileName, CP_UTF8);
+		ISComm_UpdateUserDefData(efi->nType, strUtf8);
+	}
+	m_mapEditFileMonitor.RemoveKey(efi->nType);
+	delete editFileMonitor;
+	return 0;
 }

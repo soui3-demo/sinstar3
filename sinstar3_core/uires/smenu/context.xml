@@ -32,7 +32,7 @@
     <menuItem text="后台运行指示" name="svr_showicon" id="601"/>
     <sep/>
   </menuItem>
-  <menuItem text="数据管理" name="menu_data_mgr" contextHelpId="7">
+  <menuItem text="数据管理2" name="menu_data_mgr" contextHelpId="7">
     <menuItem text="编辑自定义词库" name="memu_edit_userdef" id="701"/>
     <menuItem text="编辑符号映射表" name="memu_edit_symbol" id="702"/>
     <menuItem text="编辑快捷命令" name="memu_edit_usercmd" id="703"/>

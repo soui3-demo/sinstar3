@@ -235,6 +235,7 @@
       </PrecompiledHeader>
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</CompileAsManaged>
     </ClCompile>
+    <ClCompile Include="EditFileFinishMonitor.cpp" />
     <ClCompile Include="InputState.cpp" />
     <ClCompile Include="Minidump.cpp" />
     <ClCompile Include="controls\SFlagView.cpp" />
@@ -248,6 +249,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="ThreadObject.cpp" />
     <ClCompile Include="ui\SkinAwareWnd.cpp" />
     <ClCompile Include="ui\SpCharWnd.cpp" />
     <ClCompile Include="ui\STipWnd.cpp" />
@@ -280,6 +282,7 @@
     <ClInclude Include="controls\SToggle2.h" />
     <ClInclude Include="dataCenter\DataCenter.h" />
     <ClInclude Include="dataCenter\Settings.h" />
+    <ClInclude Include="EditFileFinishMonitor.h" />
     <ClInclude Include="global_def.h" />
     <ClInclude Include="include\sinstar-i.h" />
     <ClInclude Include="include\TextService-i.h" />
@@ -293,6 +296,7 @@
     <ClInclude Include="controls\SLineComp.h" />
     <ClInclude Include="SouiEnv.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="ThreadObject.h" />
     <ClInclude Include="ui\SkinAwareWnd.h" />
     <ClInclude Include="ui\SpCharWnd.h" />
     <ClInclude Include="ui\STipWnd.h" />
