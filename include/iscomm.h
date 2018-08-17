@@ -125,6 +125,8 @@ void ISComm_FreeImeFlagData(IMEFLAGDATA *pData);
 
 const UINT ISComm_GetCommMsgID();
 
+DWORD ISComm_UpdateUserDefData(int nType, LPCSTR pszFilename);
+DWORD ISComm_FatctUserDefFileName(int nType);
 
 DWORD ISComm_SendMsg(DWORD dwType,LPVOID pData,short sSize,HWND hWnd);
 DWORD ISComm_PostMsg(DWORD dwType,LPVOID pData,short sSize,HWND hWnd);

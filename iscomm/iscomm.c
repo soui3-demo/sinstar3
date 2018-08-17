@@ -24,6 +24,22 @@ static UINT		s_uCount=0;			//访问计数
 
 static TCHAR	s_szSvrPath[MAX_PATH]={0};	//服务器路径
 
+DWORD ISComm_UpdateUserDefData(int nType, LPCSTR pszFilename)
+{
+	short sOffset = 0;
+	int nFilenamelen = (int)strlen(pszFilename);
+	memcpy(s_byBuf, &nType, sizeof(int));
+	sOffset += sizeof(int);
+	memcpy(s_byBuf + sOffset, pszFilename, nFilenamelen);
+	sOffset += nFilenamelen;
+	return ISComm_SendMsg(CT_DATA_FILEUPDATE, (LPVOID)s_byBuf, sOffset, 0);
+}
+
+DWORD ISComm_FatctUserDefFileName(int nType)
+{
+	return ISComm_SendMsg(CT_DATA_FILENAME, &nType, sizeof(int), 0);
+}
+
 void ISComm_SetSvrPath(LPCTSTR pszPath)
 {
 	_tcscpy(s_szSvrPath,pszPath);

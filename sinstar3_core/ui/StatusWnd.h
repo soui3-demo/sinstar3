@@ -45,6 +45,8 @@ namespace SOUI
 		END_MSG_MAP()
 
 	protected:
+		void OnEditUserDefData(int nType);
+
 		void ShowServerExit();
 		void OnSvrNotify(EventArgs *e);
 

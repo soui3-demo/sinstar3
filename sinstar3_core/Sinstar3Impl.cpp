@@ -602,7 +602,7 @@ void CSinstar3Impl::InputSpchar(LPCTSTR pszText)
 		m_inputState.InputEnd();
 		m_inputState.InputHide();
 	}
-	if (!m_pTxtSvr->InputStringW(pszText, _tcslen(pszText)))
+	if (!m_pTxtSvr->InputStringW(pszText, (int)_tcslen(pszText)))
 	{
 		CUtils::SoundPlay(_T("error"));
 	}

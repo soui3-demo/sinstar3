@@ -2,10 +2,13 @@
 #include "StatusWnd.h"
 #include <helper/SMenuEx.h>
 #include <HtmlHelp.h>
+#pragma comment(lib,"htmlhelp.lib")
+#include <shellapi.h>
+
 #include "ConfigDlg.h"
+#include "../Utils.h"
 #include "../InputState.h"
 
-#pragma comment(lib,"htmlhelp.lib")
 
 #define MAX_SKINS	 80
 namespace SOUI
@@ -541,6 +544,16 @@ namespace SOUI
 		{
 			m_pCmdListener->OnCommand(CMD_OPENSPCHAR, 0);
 		}
+		else if (nRet >= R.id.memu_edit_userdef && nRet <=R.id.memu_edit_userjm)
+		{
+			int types[] = {
+				FU_USERDEF,
+				FU_USERCMD,
+				FU_SYMBOL,
+				FU_USERJM,
+			};
+			OnEditUserDefData(types[nRet - R.id.memu_edit_userdef]);
+		}
 
 		m_skinManager.ClearMap();
 	}
@@ -556,5 +569,41 @@ namespace SOUI
 		m_pCmdListener->OnCommand(CMD_HOTKEY_QUERYINFO, 0);
 	}
 
+	BOOL OpenFile(LPCTSTR pszFileName)
+	{
+		SHELLEXECUTEINFO ShExecInfo = { 0 };
+		ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
+		ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
+		ShExecInfo.hwnd = NULL;
+		ShExecInfo.lpVerb = _T("open");
+		ShExecInfo.lpFile = pszFileName;
+		ShExecInfo.lpParameters = NULL;
+		ShExecInfo.lpDirectory = NULL;
+		ShExecInfo.nShow = SW_SHOWDEFAULT;
+		ShExecInfo.hInstApp = NULL;
+		BOOL bRet = ShellExecuteEx(&ShExecInfo);
+		if (bRet)
+		{
+			CloseHandle(ShExecInfo.hProcess);
+		}
+		return bRet;
+	}
+
+
+	void CStatusWnd::OnEditUserDefData(int nType)
+	{
+		if (ISComm_FatctUserDefFileName(nType) == ISACK_SUCCESS)
+		{
+			PMSGDATA pMsgData = ISComm_GetData();
+			SStringA strUtf8((char*)pMsgData->byData, pMsgData->sSize);
+			SStringT strFileName = S_CA2T(strUtf8, CP_UTF8);
+			OpenFile(strFileName);
+			//ShellExecute(NULL, _T("open"), strFileName, NULL, NULL, SW_SHOWDEFAULT);
+		}
+		else
+		{
+			CUtils::SoundPlay(_T("error"));
+		}
+	}
 }
 
