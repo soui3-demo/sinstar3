@@ -730,3 +730,28 @@ LPCSTR ISComm_Svr_Pages()
 	}
 	return pszPages;
 }
+
+DWORD ISComm_GetTtsTokens()
+{
+	return ISComm_SendMsg(CT_TTS_GET_TOKENS,NULL,0,0);
+}
+
+
+DWORD ISComm_SetTtsToken(char bCh, int iToken)
+{
+	s_byBuf[0]=bCh;
+	memcpy(s_byBuf+1,&iToken,sizeof(int));
+	return ISComm_SendMsg(CT_TTS_SET_TOKEN,s_byBuf,5,0);
+}
+
+
+DWORD ISComm_GetTtsSpeed()
+{
+	return ISComm_SendMsg(CT_TTS_GET_SPEED,NULL,0,0);
+}
+
+
+DWORD ISComm_SetTtsSpeed(int nSpeed)
+{
+	return ISComm_SendMsg(CT_TTS_SET_SPEED,&nSpeed,sizeof(int),0);
+}

@@ -199,6 +199,11 @@ void  ISComm_SvrTray_Set(BOOL bTray);
 
 LPCSTR ISComm_Svr_Pages();
 
+
+DWORD ISComm_GetTtsTokens();
+DWORD ISComm_SetTtsToken(char bCh, int iToken);
+DWORD ISComm_GetTtsSpeed();
+DWORD ISComm_SetTtsSpeed(int nSpeed);
 #ifdef __cplusplus
 }
 #endif//__cplusplus
