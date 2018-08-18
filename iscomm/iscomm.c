@@ -758,5 +758,5 @@ DWORD ISComm_SetTtsSpeed(int nSpeed)
 
 DWORD ISComm_BlurZCS(int bBlur)
 {
-	return ISComm_SendMsg(CT_BLUR_ZCS,&bBlur,4);
+	return ISComm_SendMsg(CT_BLUR_ZCS,&bBlur,sizeof(int), 0);
 }

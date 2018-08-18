@@ -662,7 +662,7 @@ SWindow *pCtrl = FindChildByID(id);\
 	{
 		SCheckBox *pCheck = sobj_cast<SCheckBox>(e->sender);
 		BOOL bCheck = pCheck->IsChecked();
-		ISComm_Blur_Set(bCheck);
+		ISComm_BlurZCS(bCheck);
 	}
 
 	int CConfigDlg::OnCreate(LPCREATESTRUCT lpCreateStruct)
