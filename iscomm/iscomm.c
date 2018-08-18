@@ -755,3 +755,8 @@ DWORD ISComm_SetTtsSpeed(int nSpeed)
 {
 	return ISComm_SendMsg(CT_TTS_SET_SPEED,&nSpeed,sizeof(int),0);
 }
+
+DWORD ISComm_BlurZCS(int bBlur)
+{
+	return ISComm_SendMsg(CT_BLUR_ZCS,&bBlur,4);
+}

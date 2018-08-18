@@ -204,6 +204,9 @@ DWORD ISComm_GetTtsTokens();
 DWORD ISComm_SetTtsToken(char bCh, int iToken);
 DWORD ISComm_GetTtsSpeed();
 DWORD ISComm_SetTtsSpeed(int nSpeed);
+
+DWORD ISComm_BlurZCS(int bBlur);
+
 #ifdef __cplusplus
 }
 #endif//__cplusplus
