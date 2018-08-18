@@ -20,7 +20,11 @@ namespace SOUI
 		void InitPageCandidate();
 		void InitPageMisc();
 		void InitPageAbout();
+		void InitPageTTS();
 		void InitPages();
+
+		LPBYTE InitTtsTokenInfo(LPBYTE pBuf, SComboBox *pCbx);
+
 		void OnClickInputSwitch(int id);
 		//»Ø³µ
 		void OnClickEnter(int id);
@@ -57,6 +61,10 @@ namespace SOUI
 		void OnClose();
 		void OnWebHeaderNotify(EventArgs *e);
 
+		void OnTtsSpeedChanged(EventArgs *e);
+		void OnTtsChPreview();
+		void OnTtsEnPreview();
+
 		EVENT_MAP_BEGIN()
 			EVENT_ID_COMMAND_RANGE(100, 102, OnClickInputSwitch)
 			EVENT_ID_COMMAND_RANGE(110, 111, OnClickInputSwitch)
@@ -79,6 +87,9 @@ namespace SOUI
 			EVENT_ID_COMMAND(R.id.btn_close,OnClose)
 			EVENT_HANDLER(EventSetHotKey::EventID, OnHotKeyEvent)
 			EVENT_ID_HANDLER(R.id.edit_webmode_header,EventRENotify::EventID,OnWebHeaderNotify)
+			EVENT_ID_HANDLER(R.id.slider_tts_speed,EventSliderPos::EventID,OnTtsSpeedChanged)
+			EVENT_ID_COMMAND(R.id.btn_tts_ch_preview,OnTtsChPreview)
+			EVENT_ID_COMMAND(R.id.btn_tts_en_preview, OnTtsEnPreview)
 		EVENT_MAP_END()
 
 

@@ -176,6 +176,65 @@ namespace SOUI
 
 	}
 
+	static LPBYTE ExtractTtsToken(LPBYTE pBuf, SStringAList & tokens, int &iSelToken)
+	{
+		int nCount = 0;
+		memcpy(&nCount, pBuf, sizeof(int));
+		pBuf += sizeof(int);
+		for (int i = 0; i < nCount; i++)
+		{
+			int nLen = 0;
+			memcpy(&nLen, pBuf, sizeof(int));
+			pBuf += sizeof(int);
+			SStringA str;
+			char *p = str.GetBufferSetLength(nLen);
+			memcpy(p, pBuf, nLen);
+			str.ReleaseBuffer();
+			tokens.Add(str);
+			pBuf += nLen;
+		}
+		memcpy(&iSelToken, pBuf, sizeof(int));
+		pBuf += sizeof(int);
+		return pBuf;
+	}
+
+	LPBYTE CConfigDlg::InitTtsTokenInfo(LPBYTE pBuf, SComboBox *pCbx)
+	{
+		SStringAList lstToken;
+		int iSelToken = -1;
+		LPBYTE p = ExtractTtsToken(pBuf, lstToken, iSelToken);
+
+		if (lstToken.GetCount())
+		{
+			for (int i = 0; i < lstToken.GetCount(); i++)
+			{
+				pCbx->InsertItem(-1, S_CA2T(lstToken[i]), 0, 0);
+			}
+			if (iSelToken < lstToken.GetCount())
+			{
+				pCbx->SetCurSel(iSelToken);
+			}
+		}
+		return p;
+	}
+
+	void CConfigDlg::InitPageTTS()
+	{
+		if (ISComm_GetTtsTokens() == ISACK_SUCCESS)
+		{
+			PMSGDATA pMsgData = ISComm_GetData();
+			LPBYTE p = InitTtsTokenInfo(pMsgData->byData, FindChildByID2<SComboBox>(R.id.cbx_tts_en_token));
+			InitTtsTokenInfo(p, FindChildByID2<SComboBox>(R.id.cbx_tts_ch_token));
+		}
+		if (ISComm_GetTtsSpeed() == ISACK_SUCCESS)
+		{
+			PMSGDATA pMsgData = ISComm_GetData();
+			int nSpeed = *(int*)pMsgData->byData;
+			FindChildByID(R.id.txt_tts_speed)->SetWindowText(SStringT().Format(_T("%d"), nSpeed));
+			FindChildByID2<SSliderBar>(R.id.slider_tts_speed)->SetValue(nSpeed);
+		}
+	}
+
 	void CConfigDlg::InitPages()
 	{		
 		InitPageHabit();
@@ -183,6 +242,7 @@ namespace SOUI
 		InitPageAssociate();	
 		InitPageCandidate();
 		InitPageMisc();
+		InitPageTTS();
 		InitPageAbout();
 	}
 
@@ -424,6 +484,27 @@ SWindow *pCtrl = FindChildByID(id);\
 			}
 			
 		}
+	}
+
+	void CConfigDlg::OnTtsSpeedChanged(EventArgs * e)
+	{
+		EventSliderPos *e2 = sobj_cast<EventSliderPos>(e);
+		SASSERT(e2);
+		FindChildByID(R.id.txt_tts_speed)->SetWindowText(SStringT().Format(_T("%d"), e2->nPos));
+		ISComm_SetTtsSpeed(e2->nPos);
+	}
+
+	const char KTTS_SAMPLE_CH[] = "中文朗读速度测试。";
+	const char KTTS_SAMPLE_EN[] = "speed test for English speaking.";
+
+	void CConfigDlg::OnTtsChPreview()
+	{
+		ISComm_TTS(KTTS_SAMPLE_CH, sizeof(KTTS_SAMPLE_CH) - 1, MTTS_CH);
+	}
+
+	void CConfigDlg::OnTtsEnPreview()
+	{
+		ISComm_TTS(KTTS_SAMPLE_EN, sizeof(KTTS_SAMPLE_EN) - 1, MTTS_EN);
 	}
 
 	int CConfigDlg::OnCreate(LPCREATESTRUCT lpCreateStruct)
