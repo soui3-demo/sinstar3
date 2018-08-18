@@ -2,10 +2,112 @@
 #include "ConfigDlg.h"
 #include "../../include/version.h"
 #include <helper/STime.h>
+#include <helper/SAdapterBase.h>
 
 #pragma warning(disable:4244)
 namespace SOUI
 {
+	class CBlurListAdapter : public SAdapterBase
+	{
+		struct INDEXINFO
+		{
+			int iGroup;
+			int iIndex;
+		};
+
+
+	public:
+		enum BLURTYPE {
+			BLUR_TUNE = 0,
+			BLUR_RHYME,
+			BLUR_FULL,
+		};
+
+		void AddBlur(BLURTYPE bt,const SStringT& str)
+		{
+			m_lstBlur[bt].Add(str);
+		}
+		
+		void update()
+		{
+			m_lstIndex.RemoveAll();
+			for (int i = 0; i < 3; i++)
+			{
+				INDEXINFO ii = { i,-1 };
+				m_lstIndex.Add(ii);
+				for (int j = 0; j < m_lstBlur[i].GetCount(); j++)
+				{
+					ii.iIndex = j;
+					m_lstIndex.Add(ii);
+				}
+			}
+			notifyDataSetChanged();
+		}
+	protected:
+		INDEXINFO position2IndexInfo(int position)
+		{
+			return m_lstIndex[position];
+		}
+
+		void getGroupView(int position, SWindow * pItem, pugi::xml_node xmlTemplate)
+		{
+			if (pItem->GetChildrenCount() == 0)
+			{
+				pItem->InitFromXml(xmlTemplate.child(L"group"));
+			}
+			const TCHAR * KGroupName[3] = {
+				_T("ÉùÄ¸Ä£ºý"),
+				_T("ÔÏÄ¸Ä£ºý"),
+				_T("È«Æ´Ä£ºý"),
+			};
+			INDEXINFO ii = position2IndexInfo(position);
+			pItem->FindChildByID(R.id.txt_blur_group)->SetWindowText(KGroupName[ii.iGroup]);
+		}
+
+		void getItemView(int position, SWindow * pItem, pugi::xml_node xmlTemplate)
+		{
+			if (pItem->GetChildrenCount() == 0)
+			{
+				pItem->InitFromXml(xmlTemplate.child(L"item"));
+			}
+			INDEXINFO ii = position2IndexInfo(position);
+			pItem->FindChildByID(R.id.txt_blur_info)->SetWindowText(m_lstBlur[ii.iGroup][ii.iIndex]);
+		}
+
+		virtual void getView(int position, SWindow * pItem, pugi::xml_node xmlTemplate) override
+		{
+			int viewType = getItemViewType(position, 0);
+			if (viewType == 0)
+			{
+				getGroupView(position, pItem, xmlTemplate);
+			}
+			else
+			{
+				getItemView(position, pItem, xmlTemplate);
+			}
+		}
+
+		virtual int getCount() override
+		{
+			return (int)m_lstIndex.GetCount();
+		}
+
+		virtual int getViewTypeCount()
+		{
+			return 2;
+		}
+		
+		virtual int getItemViewType(int position, DWORD dwState)
+		{
+			INDEXINFO ii = m_lstIndex[position];
+			return ii.iIndex == -1 ? 0 : 1;
+		}
+		
+	private:
+		SArray<SStringT> m_lstBlur[3];
+		SArray<INDEXINFO> m_lstIndex;
+	};
+
 	CConfigDlg::CConfigDlg(SEventSet *pEvtSet)
 		:CSkinAwareWnd(pEvtSet,UIRES.LAYOUT.dlg_config)
 	{
@@ -235,6 +337,47 @@ namespace SOUI
 		}
 	}
 
+
+	void CConfigDlg::InitPinyinBlur(COMFILE & cf, CBlurListAdapter * pBlurAdapter, int iGroup)
+	{
+		int nCount;
+		CF_Read(&cf, &nCount, sizeof(int));
+		for (int i = 0; i < nCount; i++)
+		{
+			char szPY1[20], szPY2[20];
+			CF_ReadString(&cf, szPY1, 20);
+			CF_ReadString(&cf, szPY2, 20);
+			SStringA str = SStringA().Format("%s=%s", szPY1, szPY2);
+			pBlurAdapter->AddBlur((CBlurListAdapter::BLURTYPE)iGroup,S_CA2T(str));
+		}
+	}
+
+	void CConfigDlg::InitPagePinYin()
+	{
+		CBlurListAdapter * pAdapter = new CBlurListAdapter;
+		SListView *pLvBlur = FindChildByID2<SListView>(R.id.lv_blur);
+		SASSERT(pLvBlur);
+		pLvBlur->SetAdapter(pAdapter);
+
+		if (ISComm_Blur_Query() == ISACK_SUCCESS)
+		{
+			PMSGDATA pMsgData = ISComm_GetData();
+			COMFILE cf = CF_Init(pMsgData->byData, MAX_BUF_ACK, pMsgData->sSize, 0);
+			int bEnableBlur = 0, bZcsBlur=0; 
+			CF_Read(&cf, &bEnableBlur, sizeof(int));
+			FindAndSetCheck(R.id.chk_py_blur, bEnableBlur);
+			CF_Read(&cf, &bZcsBlur, sizeof(int));
+			FindAndSetCheck(R.id.chk_jp_zcs, bZcsBlur);
+
+			InitPinyinBlur(cf, pAdapter, CBlurListAdapter::BLUR_TUNE);
+			InitPinyinBlur(cf, pAdapter, CBlurListAdapter::BLUR_RHYME);
+			InitPinyinBlur(cf, pAdapter, CBlurListAdapter::BLUR_FULL);
+			pAdapter->update();
+		}
+		pAdapter->Release();
+
+	}
+
 	void CConfigDlg::InitPages()
 	{		
 		InitPageHabit();
@@ -243,6 +386,7 @@ namespace SOUI
 		InitPageCandidate();
 		InitPageMisc();
 		InitPageTTS();
+		InitPagePinYin();
 		InitPageAbout();
 	}
 
@@ -505,6 +649,20 @@ SWindow *pCtrl = FindChildByID(id);\
 	void CConfigDlg::OnTtsEnPreview()
 	{
 		ISComm_TTS(KTTS_SAMPLE_EN, sizeof(KTTS_SAMPLE_EN) - 1, MTTS_EN);
+	}
+
+	void CConfigDlg::OnPyBlurClick(EventArgs * e)
+	{
+		SCheckBox *pCheck = sobj_cast<SCheckBox>(e->sender);
+		BOOL bCheck = pCheck->IsChecked();
+		ISComm_Blur_Set(bCheck);
+	}
+
+	void CConfigDlg::OnJPBlurClick(EventArgs * e)
+	{
+		SCheckBox *pCheck = sobj_cast<SCheckBox>(e->sender);
+		BOOL bCheck = pCheck->IsChecked();
+		ISComm_Blur_Set(bCheck);
 	}
 
 	int CConfigDlg::OnCreate(LPCREATESTRUCT lpCreateStruct)

@@ -3,6 +3,7 @@
 
 namespace SOUI
 {
+	class CBlurListAdapter;
 
 	class CConfigDlg: public CSkinAwareWnd
 	{
@@ -21,7 +22,12 @@ namespace SOUI
 		void InitPageMisc();
 		void InitPageAbout();
 		void InitPageTTS();
+
+		void InitPinyinBlur(COMFILE & cf, CBlurListAdapter * pBlurAdapter, int iGroup);
+		void InitPagePinYin();
+
 		void InitPages();
+
 
 		LPBYTE InitTtsTokenInfo(LPBYTE pBuf, SComboBox *pCbx);
 
@@ -65,6 +71,9 @@ namespace SOUI
 		void OnTtsChPreview();
 		void OnTtsEnPreview();
 
+		void OnPyBlurClick(EventArgs *e);
+		void OnJPBlurClick(EventArgs *e);
+
 		EVENT_MAP_BEGIN()
 			EVENT_ID_COMMAND_RANGE(100, 102, OnClickInputSwitch)
 			EVENT_ID_COMMAND_RANGE(110, 111, OnClickInputSwitch)
@@ -90,6 +99,8 @@ namespace SOUI
 			EVENT_ID_HANDLER(R.id.slider_tts_speed,EventSliderPos::EventID,OnTtsSpeedChanged)
 			EVENT_ID_COMMAND(R.id.btn_tts_ch_preview,OnTtsChPreview)
 			EVENT_ID_COMMAND(R.id.btn_tts_en_preview, OnTtsEnPreview)
+			EVENT_ID_HANDLER(R.id.chk_py_blur, EventCmd::EventID, OnPyBlurClick)
+			EVENT_ID_HANDLER(R.id.chk_jp_zcs, EventCmd::EventID, OnJPBlurClick)
 		EVENT_MAP_END()
 
 
