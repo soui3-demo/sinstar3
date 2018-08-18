@@ -44,8 +44,8 @@
 using namespace SOUI;
 
 #include "../include/reg.h"
-#include "../include/isProtocol.h"
-#include "../include/iscomm.h"
+#include "../iscomm/isProtocol.h"
+#include "../iscomm/iscomm.h"
 
 #include "global_def.h"
 

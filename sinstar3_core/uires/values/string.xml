@@ -8,4 +8,5 @@
     <cfg_candidate value="重码"/>
     <cfg_misc value="其它"/>
     <cfg_about value="关于"/>
+    <cfg_tts value="TTS"/>
   </string>

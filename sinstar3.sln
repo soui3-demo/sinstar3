@@ -10,6 +10,7 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sinstar3_core", "sinstar3_core\sinstar3_core.vcxproj", "{BDAF647A-8421-43D7-B43E-7618BE211BFA}"
 	ProjectSection(ProjectDependencies) = postProject
 		{4893E464-3664-442B-8BFB-6D13679EAB23} = {4893E464-3664-442B-8BFB-6D13679EAB23}
+		{016B6ACF-5766-4D73-8A9C-280998E814CC} = {016B6ACF-5766-4D73-8A9C-280998E814CC}
 		{9CD9D0D2-9A72-4EBB-A459-8229E224B02C} = {9CD9D0D2-9A72-4EBB-A459-8229E224B02C}
 	EndProjectSection
 EndProject
@@ -24,6 +25,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "png2bmp32", "png2bmp32\png2bmp32.vcxproj", "{615C9E65-042B-4E35-85EE-BC08C5D1A7ED}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "skins", "skins\skins.vcxproj", "{6599850C-B790-4D51-8EA4-42A6623EC13A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iscomm", "iscomm\iscomm.vcxproj", "{016B6ACF-5766-4D73-8A9C-280998E814CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -139,6 +142,18 @@ Global
 		{6599850C-B790-4D51-8EA4-42A6623EC13A}.Release|Win32.Build.0 = Release|Win32
 		{6599850C-B790-4D51-8EA4-42A6623EC13A}.Release|x64.ActiveCfg = Release|x64
 		{6599850C-B790-4D51-8EA4-42A6623EC13A}.Release|x64.Build.0 = Release|x64
+		{016B6ACF-5766-4D73-8A9C-280998E814CC}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{016B6ACF-5766-4D73-8A9C-280998E814CC}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{016B6ACF-5766-4D73-8A9C-280998E814CC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{016B6ACF-5766-4D73-8A9C-280998E814CC}.Debug|Win32.Build.0 = Debug|Win32
+		{016B6ACF-5766-4D73-8A9C-280998E814CC}.Debug|x64.ActiveCfg = Debug|x64
+		{016B6ACF-5766-4D73-8A9C-280998E814CC}.Debug|x64.Build.0 = Debug|x64
+		{016B6ACF-5766-4D73-8A9C-280998E814CC}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{016B6ACF-5766-4D73-8A9C-280998E814CC}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{016B6ACF-5766-4D73-8A9C-280998E814CC}.Release|Win32.ActiveCfg = Release|Win32
+		{016B6ACF-5766-4D73-8A9C-280998E814CC}.Release|Win32.Build.0 = Release|Win32
+		{016B6ACF-5766-4D73-8A9C-280998E814CC}.Release|x64.ActiveCfg = Release|x64
+		{016B6ACF-5766-4D73-8A9C-280998E814CC}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

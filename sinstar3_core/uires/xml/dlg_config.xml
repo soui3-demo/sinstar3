@@ -157,7 +157,26 @@
               <check extend_top="10" name="chk_full_skip_simple" text="出简不出全"/>
             </window>
           </pageex>
-          <pageex title="@string/cfg_misc" tip="@string/cfg_misc">
+          <pageex title="@string/cfg_tts" tip="@string/cfg_tts">
+            <window size="-2,-1" layout="hbox" gravity="center">
+              <text inset="10,5,5,5">@string/cfg_tts</text>
+              <hr width="-2" height="1"></hr>
+            </window>
+            <window pos="88,[" layout="vbox">
+              <text text="中文語音" extend_top="10dp"/>
+              <window size="-1,-1" layout="hbox">
+                <combobox size="200dp,-1" name="cbx_tts_ch_token" dropdown="1"/>
+                <button size="100dp,30dp" name="btn_tts_ch_preview"/>
+              </window>
+              <text text="英文語音" extend_top="10dp"/>
+              <window size="-1,-1" layout="hbox">
+                <combobox size="200dp,-1" name="cbx_tts_en_token" dropdown="1"/>
+                <button size="100dp,30dp" name="btn_tts_en_preview"/>
+              </window>
+              <sliderbar size="300dp,-1" name="slider_tts_speed" min="-10" max="10" value="0"/>
+            </window>
+          </pageex>
+              <pageex title="@string/cfg_misc" tip="@string/cfg_misc">
             <window size="-2,-1" layout="hbox" gravity="center">
               <text inset="10,5,5,5">@string/cfg_misc</text>
               <hr width="-2" height="1"></hr>

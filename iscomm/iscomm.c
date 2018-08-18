@@ -5,8 +5,8 @@
 #include <assert.h>
 #include <stdio.h>
 #include <tchar.h>
-#include "..\include\iscomm.h"
-#include "..\include\isProtocol.h"
+#include "iscomm.h"
+#include "isProtocol.h"
 
 static HWND	s_hWndServer=NULL;			//server´°¿Ú
 static HANDLE	s_hMapDataReq=0;		//MapFile Handle
