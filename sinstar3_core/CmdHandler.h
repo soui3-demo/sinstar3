@@ -75,8 +75,8 @@ protected:
 	void OnInputSpchar(LPARAM lp);
 	void OnOpenSkinDir(LPARAM lp);
 	void OnShowTip(LPARAM lp);
-	void OnEditFile(LPARAM lp);
-	LRESULT OnEditFileFinish(UINT uMsg, WPARAM wp, LPARAM lp);
+	void OnStartProcess(LPARAM lp);
+	LRESULT OnProcessExit(UINT uMsg, WPARAM wp, LPARAM lp);
 
 	BEGIN_MSG_MAP_EX(CCmdHandler)
 		MSG_WM_COMMAND_EX(CMD_HOTKEY_TTS,OnHotkeyTTS)
@@ -98,8 +98,8 @@ protected:
 		MSG_WM_COMMAND_EX(CMD_INPUTSPCHAR,OnInputSpchar)
 		MSG_WM_COMMAND_EX(CMD_OPENSKINDIR,OnOpenSkinDir)
 		MSG_WM_COMMAND_EX(CMD_SHOWTIP, OnShowTip)
-		MSG_WM_COMMAND_EX(CMD_EDITFILE,OnEditFile)
-		MESSAGE_HANDLER_EX(UM_EDITFILEFINISH,OnEditFileFinish)
+		MSG_WM_COMMAND_EX(CMD_EDITFILE,OnStartProcess)
+		MESSAGE_HANDLER_EX(UM_PROCESSEXIT,OnProcessExit)
 	END_MSG_MAP()
 
 private:

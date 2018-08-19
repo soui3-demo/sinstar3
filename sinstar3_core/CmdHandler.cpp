@@ -9,6 +9,7 @@ using namespace SOUI;
 #define MAX_UDICTKEY	40	//最大关键字长度
 #define MAX_UDICTPHRASE	1000
 
+
 CCmdHandler::CCmdHandler(CSinstar3Impl * pSinstar3)
 	:m_pSinstar3(pSinstar3)
 {
@@ -257,11 +258,6 @@ void CCmdHandler::OnChangeSkin(LPARAM lp)
 	}
 }
 
-void CCmdHandler::OnOpenConfig(LPARAM lp)
-{
-	m_pSinstar3->OpenConfig();
-}
-
 void CCmdHandler::OnOpenSpchar(LPARAM lp)
 {
 	m_pSinstar3->OpenSpchar();
@@ -289,7 +285,7 @@ void CCmdHandler::OnShowTip(LPARAM lp)
 	m_pSinstar3->ShowTip(pTi->strTitle, pTi->strTip);
 }
 
-void CCmdHandler::OnEditFile(LPARAM lp)
+void CCmdHandler::OnStartProcess(LPARAM lp)
 {
 	SHELLEXECUTEDATA *efi = (SHELLEXECUTEDATA*)lp;
 	if (m_mapShellExecuteMonitor.Lookup(efi->nType))
@@ -299,14 +295,28 @@ void CCmdHandler::OnEditFile(LPARAM lp)
 	editFileMonitor->BeginThread();
 }
 
-LRESULT CCmdHandler::OnEditFileFinish(UINT uMsg, WPARAM wp, LPARAM lp)
+#define EFI_CONFIG	(0x80000001)
+void CCmdHandler::OnOpenConfig(LPARAM lp)
+{
+	SHELLEXECUTEDATA sed = { EFI_CONFIG ,_T("open"), theModule->GetSettingPath()};
+	OnStartProcess((LPARAM)&sed);
+}
+
+LRESULT CCmdHandler::OnProcessExit(UINT uMsg, WPARAM wp, LPARAM lp)
 {
 	CShellExecuteMonitor *shellExecuteMonitor = (CShellExecuteMonitor*)lp;
 	const SHELLEXECUTEDATA *efi = shellExecuteMonitor->GetShellExecuteInfo();
 	if (wp == 1 && shellExecuteMonitor->GetExitCode() == 0)
 	{//edit finish
-		SStringA strUtf8 = S_CT2A(efi->strFileName, CP_UTF8);
-		ISComm_UpdateUserDefData(efi->nType, strUtf8);
+		if (efi->nType == EFI_CONFIG)
+		{
+			g_SettingsG.Load(theModule->GetCfgIni());
+		}
+		else
+		{
+			SStringA strUtf8 = S_CT2A(efi->strFileName, CP_UTF8);
+			ISComm_UpdateUserDefData(efi->nType, strUtf8);
+		}
 	}
 	m_mapShellExecuteMonitor.RemoveKey(efi->nType);
 	delete shellExecuteMonitor;

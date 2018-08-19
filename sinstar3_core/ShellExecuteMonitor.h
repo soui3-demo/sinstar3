@@ -8,7 +8,7 @@ struct SHELLEXECUTEDATA
 	SStringT strFileName;
 };
 
-#define UM_EDITFILEFINISH	(WM_USER+400)
+#define UM_PROCESSEXIT	(WM_USER+400)
 
 class CShellExecuteMonitor : public CThreadObject
 {

@@ -68,6 +68,11 @@ CSinstar3Core::~CSinstar3Core()
 	CloseHandle(m_hMutex);
 }
 
+SOUI::SStringT CSinstar3Core::GetSettingPath() const
+{
+	return m_strDataPath + _T("\\program\\settings.exe");
+}
+
 void CSinstar3Core::OnInit()
 {
 	CMinidump::Enable();

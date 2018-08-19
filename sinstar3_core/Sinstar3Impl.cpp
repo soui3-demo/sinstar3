@@ -4,7 +4,6 @@
 #include <initguid.h>
 #include "ui/SkinMananger.h"
 #include "SouiEnv.h"
-#include <shellapi.h>
 
 class CAutoContext
 {
@@ -552,9 +551,7 @@ BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 
 void CSinstar3Impl::OpenConfig()
 {
-	SStringT strPath = theModule->GetDataPath();
-	strPath += _T("\\program\\settings.exe");
-	ShellExecute(NULL, _T("open"), strPath, NULL, NULL, SW_SHOWDEFAULT);
+	OnCommand(CMD_OPENCONFIG, 0);
 }
 
 void CSinstar3Impl::OpenSpchar()

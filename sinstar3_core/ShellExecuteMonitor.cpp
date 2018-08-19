@@ -40,7 +40,7 @@ UINT CShellExecuteMonitor::Run()
 	HANDLE hProc = ShellExe(m_shellExecuteInfo->strOp,m_shellExecuteInfo->strFileName);
 	if (!hProc)
 	{
-		PostMessage(m_hWndRecv, UM_EDITFILEFINISH, 0, (LPARAM)this);
+		PostMessage(m_hWndRecv, UM_PROCESSEXIT, 0, (LPARAM)this);
 		return -1;
 	}
 	HANDLE hWaitObjs[2] = { m_evtStop,hProc };
@@ -48,7 +48,7 @@ UINT CShellExecuteMonitor::Run()
 	if (dwRet == WAIT_OBJECT_0 + 1)
 	{
 		GetExitCodeProcess(hProc, &m_exitCode);
-		PostMessage(m_hWndRecv, UM_EDITFILEFINISH, 1, (LPARAM)this);
+		PostMessage(m_hWndRecv, UM_PROCESSEXIT, 1, (LPARAM)this);
 	}
 	CloseHandle(hProc);
 	return 0;

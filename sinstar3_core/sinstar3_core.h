@@ -29,6 +29,8 @@ public:
 
 	SOUI::SStringT GetDataPath() const {return m_strDataPath;}
 	SOUI::SStringT GetCfgIni() const { return m_strConfig; }
+	SOUI::SStringT GetSettingPath() const;
+
 protected:
 	virtual void OnInit();
 
