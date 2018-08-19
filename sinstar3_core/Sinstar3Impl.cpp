@@ -4,6 +4,7 @@
 #include <initguid.h>
 #include "ui/SkinMananger.h"
 #include "SouiEnv.h"
+#include <shellapi.h>
 
 class CAutoContext
 {
@@ -30,7 +31,6 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr)
 ,m_pStatusWnd(NULL)
 ,m_pTipWnd(NULL)
 , m_pSpcharWnd(NULL)
-,m_pConfig(NULL)
 ,m_pCurImeContext(NULL)
 , m_cmdHandler(this)
 {
@@ -73,11 +73,7 @@ CSinstar3Impl::~CSinstar3Impl(void)
 		m_pTipWnd->DestroyWindow();
 		m_pTipWnd = NULL;
 	}
-	if (m_pConfig)
-	{
-		m_pConfig->DestroyWindow();
-		m_pConfig = NULL;
-	}
+
 	if (m_pSpcharWnd)
 	{
 		m_pSpcharWnd->DestroyWindow();
@@ -193,7 +189,6 @@ void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 			m_inputState.InputEnd();
 		m_pInputWnd->Show(FALSE);
 		m_pStatusWnd->Show(FALSE);
-		if (m_pConfig) m_pConfig->DestroyWindow();
 		if (m_pSpcharWnd) m_pSpcharWnd->DestroyWindow();
 		if (m_pTipWnd) m_pTipWnd->DestroyWindow();
 	}
@@ -451,12 +446,7 @@ InputContext * CSinstar3Impl::GetInputContext()
 
 void CSinstar3Impl::OnSkinAwareWndDestroy(CSkinAwareWnd * pWnd)
 {
-	if (pWnd->GetWndType() == IME_CONFIG)
-	{
-		delete pWnd;
-		m_pConfig = NULL;
-	}
-	else if (pWnd->GetWndType() == IME_SPCHAR)
+	if (pWnd->GetWndType() == IME_SPCHAR)
 	{
 		delete pWnd;
 		m_pSpcharWnd = NULL;
@@ -562,14 +552,9 @@ BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 
 void CSinstar3Impl::OpenConfig()
 {
-	if (m_pConfig == NULL)
-	{
-		m_pConfig = new CConfigDlg(this);
-		m_pConfig->SetDestroyListener(this, IME_CONFIG);
-		m_pConfig->Create(_T("Config"),NULL);
-		m_pConfig->CenterWindow(GetActiveWindow());
-	}
-	m_pConfig->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
+	SStringT strPath = theModule->GetDataPath();
+	strPath += _T("\\program\\settings.exe");
+	ShellExecute(NULL, _T("open"), strPath, NULL, NULL, SW_SHOWDEFAULT);
 }
 
 void CSinstar3Impl::OpenSpchar()

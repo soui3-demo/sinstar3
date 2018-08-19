@@ -5,7 +5,6 @@
 #pragma comment(lib,"htmlhelp.lib")
 #include <shellapi.h>
 
-#include "ConfigDlg.h"
 #include "../Utils.h"
 #include "../InputState.h"
 #include "../EditFileFinishMonitor.h"

@@ -1,8 +1,8 @@
 #include "StdAfx.h"
 #include "ConfigDlg.h"
-#include "../../include/version.h"
 #include <helper/STime.h>
 #include <helper/SAdapterBase.h>
+#include "Settings.h"
 
 #pragma warning(disable:4244)
 namespace SOUI
@@ -108,8 +108,8 @@ namespace SOUI
 		SArray<INDEXINFO> m_lstIndex;
 	};
 
-	CConfigDlg::CConfigDlg(SEventSet *pEvtSet)
-		:CSkinAwareWnd(pEvtSet,UIRES.LAYOUT.dlg_config)
+	CConfigDlg::CConfigDlg()
+		:SHostWnd(UIRES.LAYOUT.dlg_config)
 	{
 	}
 
@@ -253,10 +253,11 @@ namespace SOUI
 
 	void CConfigDlg::InitPageAbout()
 	{
-		FindChildByID(R.id.txt_ver)->SetWindowText(VERSION_TSTR);
+//		FindChildByID(R.id.txt_ver)->SetWindowText(VERSION_TSTR);
 		WIN32_FIND_DATA wfd;
 		TCHAR szPath[1000];
-		GetModuleFileName(theModule->GetModule(), szPath, 1000);
+		SStringT strPath = SApplication::getSingleton().GetAppDir();
+		strPath += _T("\\sinstar3_core.dll");
 		HANDLE h=FindFirstFile(szPath, &wfd);
 		FindClose(h);
 		FILETIME lft;
@@ -665,12 +666,19 @@ SWindow *pCtrl = FindChildByID(id);\
 		ISComm_BlurZCS(bCheck);
 	}
 
+	void CConfigDlg::OnDestroy()
+	{
+		ISComm_Logout(m_hWnd);
+		__super::OnDestroy();
+	}
+
+
 	int CConfigDlg::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	{
 		int nRet = __super::OnCreate(lpCreateStruct);
 		if (nRet != 0) return nRet;
 
-		ImmAssociateContext(m_hWnd, (HIMC)NULL);
+		ISComm_Login(m_hWnd);
 		InitPages();
 		return 0;
 	}

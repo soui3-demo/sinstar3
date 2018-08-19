@@ -64,7 +64,6 @@ using namespace SOUI;
 #include "controls/SSpellView.h"
 #include "controls/SFlagView.h"
 #include "controls/SLineComp.h"
-#include "controls/STabCtrlEx.h"
 #include "controls/SApngPlayer.h"
 
 #include "controls/SSkinAPNG.h"

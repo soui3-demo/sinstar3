@@ -189,7 +189,7 @@ void CCmdHandler::OnHotKeyInputMode(LPARAM lp)
 			g_SettingsG.compMode = IM_SPELL;
 		else
 			g_SettingsG.compMode = IM_SHAPECODE;
-		pCtx->compMode = g_SettingsG.compMode;
+		pCtx->compMode = (COMPMODE)g_SettingsG.compMode;
 		pCtx->bShowTip = FALSE;
 		m_pSinstar3->m_pInputWnd->UpdateUI();
 		m_pSinstar3->m_pStatusWnd->UpdateCompInfo();

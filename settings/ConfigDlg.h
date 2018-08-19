@@ -1,14 +1,13 @@
 #pragma once
-#include "SkinAwareWnd.h"
 
 namespace SOUI
 {
 	class CBlurListAdapter;
 
-	class CConfigDlg: public CSkinAwareWnd
+	class CConfigDlg: public SHostWnd
 	{
 	public:
-		CConfigDlg(SEventSet *pEvtSet);
+		CConfigDlg();
 		~CConfigDlg(void);		
 
 	protected:
@@ -106,9 +105,12 @@ namespace SOUI
 
 	protected:
 		int OnCreate(LPCREATESTRUCT lpCreateStruct);
+		void OnDestroy();
+
 		BEGIN_MSG_MAP_EX(CConfigDlg)
 			MSG_WM_CREATE(OnCreate)
-			CHAIN_MSG_MAP(CSkinAwareWnd)
+			MSG_WM_DESTROY(OnDestroy)
+			CHAIN_MSG_MAP(SHostWnd)
 		END_MSG_MAP()
 
 	};

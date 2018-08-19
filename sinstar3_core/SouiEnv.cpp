@@ -50,8 +50,6 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst,LPCTSTR pszWorkDir)
 	m_theApp->RegisterWindowClass<SStatusBackground>();
 	m_theApp->RegisterWindowClass<SMutexView>();
 	m_theApp->RegisterWindowClass<SFlagView>();
-	m_theApp->RegisterWindowClass<STabPageEx>();
-	m_theApp->RegisterWindowClass<STabCtrlEx>();
 	m_theApp->RegisterWindowClass<SLineComp>();
 	m_theApp->RegisterWindowClass<SApngPlayer>();
 

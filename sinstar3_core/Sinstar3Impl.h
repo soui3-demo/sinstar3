@@ -4,7 +4,6 @@
 #include "ui/InputWnd.h"
 #include "ui/StatusWnd.h"
 #include "ui/STipWnd.h"
-#include "ui/ConfigDlg.h"
 #include "ui/SpCharWnd.h"
 
 #include "InputState.h"
@@ -100,7 +99,6 @@ private:
 	CStatusWnd		*m_pStatusWnd;
 	STipWnd			*m_pTipWnd;
 	CSpCharWnd      *m_pSpcharWnd;
-	CConfigDlg		*m_pConfig;
 	CInputState		m_inputState;
 
 	void			*m_pCurImeContext;

@@ -67,7 +67,7 @@
     <_ProjectFileVersion>14.0.25431.1</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)\data\program\$(TargetFileName)</OutDir>
+    <OutDir>$(SolutionDir)\data\program\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
@@ -244,12 +244,10 @@
     <ClCompile Include="ui\SkinAwareWnd.cpp" />
     <ClCompile Include="ui\SpCharWnd.cpp" />
     <ClCompile Include="ui\STipWnd.cpp" />
-    <ClCompile Include="ui\ConfigDlg.cpp" />
     <ClCompile Include="ui\ImeWnd.cpp" />
     <ClCompile Include="ui\InputWnd.cpp" />
     <ClCompile Include="ui\SkinMananger.cpp" />
     <ClCompile Include="controls\SLineSkin.cpp" />
-    <ClCompile Include="controls\STabCtrlEx.cpp" />
     <ClCompile Include="ui\StatusWnd.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
@@ -290,12 +288,10 @@
     <ClInclude Include="ui\SpCharWnd.h" />
     <ClInclude Include="ui\STipWnd.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="ui\ConfigDlg.h" />
     <ClInclude Include="ui\ImeWnd.h" />
     <ClInclude Include="ui\InputWnd.h" />
     <ClInclude Include="ui\SkinMananger.h" />
     <ClInclude Include="controls\SLineSkin.h" />
-    <ClInclude Include="controls\STabCtrlEx.h" />
     <ClInclude Include="ui\StatusWnd.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
@@ -330,9 +326,6 @@
     <Xml Include="uires\values\dim.xml" />
     <Xml Include="uires\values\skin.xml" />
     <Xml Include="uires\values\string.xml">
-      <SubType>Designer</SubType>
-    </Xml>
-    <Xml Include="uires\xml\dlg_config.xml">
       <SubType>Designer</SubType>
     </Xml>
     <Xml Include="uires\xml\wnd_composition.xml" />

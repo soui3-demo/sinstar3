@@ -156,7 +156,7 @@ CInputState::CInputState(void):m_pListener(NULL),m_fOpen(FALSE), m_bUpdateTips(T
 {
 	memset(&m_ctx,0,sizeof(InputContext));
 	ClearContext(CPC_ALL);
-	m_ctx.compMode  = g_SettingsG.compMode;
+	m_ctx.compMode  = (COMPMODE)g_SettingsG.compMode;
 	m_ctx.bShowTip = FALSE;
 	m_pbyMsgBuf=(LPBYTE)malloc(MAX_BUF_ACK);
 }
