@@ -226,7 +226,7 @@
       </PrecompiledHeader>
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</CompileAsManaged>
     </ClCompile>
-    <ClCompile Include="EditFileFinishMonitor.cpp" />
+    <ClCompile Include="ShellExecuteMonitor.cpp" />
     <ClCompile Include="InputState.cpp" />
     <ClCompile Include="Minidump.cpp" />
     <ClCompile Include="controls\SFlagView.cpp" />
@@ -269,7 +269,7 @@
     <ClInclude Include="controls\SToggle2.h" />
     <ClInclude Include="dataCenter\DataCenter.h" />
     <ClInclude Include="dataCenter\Settings.h" />
-    <ClInclude Include="EditFileFinishMonitor.h" />
+    <ClInclude Include="ShellExecuteMonitor.h" />
     <ClInclude Include="global_def.h" />
     <ClInclude Include="include\sinstar-i.h" />
     <ClInclude Include="include\TextService-i.h" />

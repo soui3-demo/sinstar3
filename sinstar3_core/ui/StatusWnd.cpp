@@ -7,7 +7,7 @@
 
 #include "../Utils.h"
 #include "../InputState.h"
-#include "../EditFileFinishMonitor.h"
+#include "../ShellExecuteMonitor.h"
 
 #define MAX_SKINS	 80
 namespace SOUI
@@ -576,7 +576,7 @@ namespace SOUI
 			PMSGDATA pMsgData = ISComm_GetData();
 			SStringA strUtf8((char*)pMsgData->byData, pMsgData->sSize);
 			SStringT strFileName = S_CA2T(strUtf8, CP_UTF8);
-			EDITFILEINFO efi = { nType,strFileName };
+			SHELLEXECUTEDATA efi = { nType,_T("open"),strFileName };
 			m_pCmdListener->OnCommand(CMD_EDITFILE, (LPARAM)&efi);
 		}
 		else

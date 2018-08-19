@@ -1,6 +1,6 @@
 #pragma once
 
-#include "EditFileFinishMonitor.h"
+#include "ShellExecuteMonitor.h"
 
 #define MSG_WM_COMMAND_EX(code, func) \
     if (uMsg == WM_COMMAND && code == HIWORD(wParam)) \
@@ -103,7 +103,7 @@ protected:
 	END_MSG_MAP()
 
 private:
-	SMap<int, CEditFileFinishMonitor*> m_mapEditFileMonitor;
+	SMap<int, CShellExecuteMonitor*> m_mapShellExecuteMonitor;
 	CSinstar3Impl * m_pSinstar3;
 };
 

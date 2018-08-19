@@ -17,13 +17,13 @@ CCmdHandler::CCmdHandler(CSinstar3Impl * pSinstar3)
 
 CCmdHandler::~CCmdHandler()
 {
-	SPOSITION pos = m_mapEditFileMonitor.GetStartPosition();
+	SPOSITION pos = m_mapShellExecuteMonitor.GetStartPosition();
 	while (pos)
 	{
-		CEditFileFinishMonitor * pEditFileFinishMonitor = m_mapEditFileMonitor.GetNextValue(pos);
+		CShellExecuteMonitor * pEditFileFinishMonitor = m_mapShellExecuteMonitor.GetNextValue(pos);
 		delete pEditFileFinishMonitor;
 	}
-	m_mapEditFileMonitor.RemoveAll();
+	m_mapShellExecuteMonitor.RemoveAll();
 }
 
 void CCmdHandler::OnHotkeyMakePhrase(LPARAM lp)
@@ -291,24 +291,24 @@ void CCmdHandler::OnShowTip(LPARAM lp)
 
 void CCmdHandler::OnEditFile(LPARAM lp)
 {
-	EDITFILEINFO *efi = (EDITFILEINFO*)lp;
-	if (m_mapEditFileMonitor.Lookup(efi->nType))
+	SHELLEXECUTEDATA *efi = (SHELLEXECUTEDATA*)lp;
+	if (m_mapShellExecuteMonitor.Lookup(efi->nType))
 		return;
-	CEditFileFinishMonitor *editFileMonitor = new CEditFileFinishMonitor(efi, m_pSinstar3->m_hWnd);
-	m_mapEditFileMonitor[efi->nType] = editFileMonitor;
+	CShellExecuteMonitor *editFileMonitor = new CShellExecuteMonitor(efi, m_pSinstar3->m_hWnd);
+	m_mapShellExecuteMonitor[efi->nType] = editFileMonitor;
 	editFileMonitor->BeginThread();
 }
 
 LRESULT CCmdHandler::OnEditFileFinish(UINT uMsg, WPARAM wp, LPARAM lp)
 {
-	CEditFileFinishMonitor *editFileMonitor = (CEditFileFinishMonitor*)lp;
-	const EDITFILEINFO *efi = editFileMonitor->GetEditFileInfo();
-	if (wp == 1)
+	CShellExecuteMonitor *shellExecuteMonitor = (CShellExecuteMonitor*)lp;
+	const SHELLEXECUTEDATA *efi = shellExecuteMonitor->GetShellExecuteInfo();
+	if (wp == 1 && shellExecuteMonitor->GetExitCode() == 0)
 	{//edit finish
 		SStringA strUtf8 = S_CT2A(efi->strFileName, CP_UTF8);
 		ISComm_UpdateUserDefData(efi->nType, strUtf8);
 	}
-	m_mapEditFileMonitor.RemoveKey(efi->nType);
-	delete editFileMonitor;
+	m_mapShellExecuteMonitor.RemoveKey(efi->nType);
+	delete shellExecuteMonitor;
 	return 0;
 }
