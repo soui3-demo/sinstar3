@@ -83,11 +83,11 @@ namespace SOUI
 		{
 			BOOL bCe2 = 0, bCe3 = 0, bCa4 = 0;
 			ISComm_Bldsp_Get(&bCe2, &bCe3, &bCa4);
-			menuPopup->CheckMenuItem(R.id.spell_one,MF_BYCOMMAND | (g_SettingsG.bBlendSpWord ? MF_CHECKED : 0));
+			menuPopup->CheckMenuItem(R.id.spell_one,MF_BYCOMMAND | (g_SettingsG->bBlendSpWord ? MF_CHECKED : 0));
 			menuPopup->CheckMenuItem(R.id.spell_two, MF_BYCOMMAND | (bCe2 ? MF_CHECKED : 0));
 			menuPopup->CheckMenuItem(R.id.spell_three, MF_BYCOMMAND | (bCe3 ? MF_CHECKED : 0));
 			menuPopup->CheckMenuItem(R.id.spell_all, MF_BYCOMMAND | (bCa4 ? MF_CHECKED : 0));
-			menuPopup->CheckMenuItem(R.id.userdef, MF_BYCOMMAND | (g_SettingsG.bBlendUD ? MF_CHECKED : 0));
+			menuPopup->CheckMenuItem(R.id.userdef, MF_BYCOMMAND | (g_SettingsG->bBlendUD ? MF_CHECKED : 0));
 
 			break;
 		}
@@ -148,7 +148,7 @@ namespace SOUI
 			if (pFlagView) pFlagView->ShowSpellFlag(TRUE);
 			if (pText)
 			{
-				if (g_SettingsG.compMode == IM_SHAPECODE)
+				if (g_SettingsG->compMode == IM_SHAPECODE)
 					pText->SetWindowText(_T("临时拼音"));
 				else
 					pText->SetWindowText(_T("启程拼音"));
@@ -363,37 +363,37 @@ namespace SOUI
 		{
 		case R.id.btn_charmode:
 			e2->bUpdated = TRUE;
-			strAccel = CAccelerator::FormatAccelKey(g_SettingsG.dwHotkeys[HKI_CharMode]);
+			strAccel = CAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_CharMode]);
 			e2->strToolTip = SStringT().Format(_T("标点模式:%s"), settings.bCharMode? _T("中文"):_T("英文"));
 			break;
 		case R.id.btn_make_phrase:
 			e2->bUpdated = TRUE;
-			strAccel = CAccelerator::FormatAccelKey(g_SettingsG.dwHotkeys[HKI_MakePhrase]);
+			strAccel = CAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_MakePhrase]);
 			e2->strToolTip = _T("剪贴板造词");
 			break;
 		case R.id.btn_record:
 			e2->bUpdated = TRUE;
-			strAccel = CAccelerator::FormatAccelKey(g_SettingsG.dwHotkeys[HKI_Record]);
+			strAccel = CAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_Record]);
 			e2->strToolTip = SStringT().Format(_T("记录输入状态:%s"), settings.bRecord ? _T("启用") : _T("禁用"));
 			break;
 		case R.id.btn_sound:
 			e2->bUpdated = TRUE;
-			strAccel = CAccelerator::FormatAccelKey(g_SettingsG.dwHotkeys[HKI_TTS]);
+			strAccel = CAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_TTS]);
 			e2->strToolTip = SStringT().Format(_T("语音较对:%s"), settings.bSound ? _T("启用") : _T("禁用"));
 			break;
 		case R.id.btn_english:
 			e2->bUpdated = TRUE;
-			strAccel = CAccelerator::FormatAccelKey(g_SettingsG.dwHotkeys[HKI_EnSwitch]);
+			strAccel = CAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_EnSwitch]);
 			e2->strToolTip = SStringT().Format(_T("单词输入:%s"), settings.bEnglish ? _T("启用") : _T("禁用"));
 			break;
 		case R.id.btn_query:
 			e2->bUpdated = TRUE;
-			strAccel = CAccelerator::FormatAccelKey(g_SettingsG.dwHotkeys[HKI_Query]);
+			strAccel = CAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_Query]);
 			e2->strToolTip = _T("编码反查");
 			break;
 		case R.id.btn_filter_gbk:
 			e2->bUpdated = TRUE;
-			strAccel = CAccelerator::FormatAccelKey(g_SettingsG.dwHotkeys[HKI_FilterGbk]);
+			strAccel = CAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_FilterGbk]);
 			e2->strToolTip = SStringT().Format(_T("过滤GBK重码:%s"), settings.bFilterGbk ? _T("启用") : _T("禁用"));
 			break;
 		case R.id.btn_menu:
@@ -487,7 +487,7 @@ namespace SOUI
 		}
 		else if (nRet == R.id.spell_one)
 		{
-			g_SettingsG.bBlendSpWord = !g_SettingsG.bBlendSpWord;
+			g_SettingsG->bBlendSpWord = !g_SettingsG->bBlendSpWord;
 		}
 		else if (nRet == R.id.spell_two)
 		{
@@ -512,7 +512,7 @@ namespace SOUI
 		}
 		else if (nRet == R.id.userdef)
 		{
-			g_SettingsG.bBlendUD = !g_SettingsG.bBlendUD;
+			g_SettingsG->bBlendUD = !g_SettingsG->bBlendUD;
 		}
 		else if (nRet == R.id.key_map)
 		{

@@ -122,12 +122,12 @@ namespace SOUI
 		{
 		case R.id.btn_prevpage:
 			e2->bUpdated = TRUE;
-			strAccel = CAccelerator::FormatAccelKey(g_SettingsG.byTurnPageUpVK);
+			strAccel = CAccelerator::FormatAccelKey(g_SettingsG->byTurnPageUpVK);
 			e2->strToolTip = SStringT().Format(_T("重码上翻页,翻页键:%s"), strAccel);
 			break;
 		case R.id.btn_nextpage:
 			e2->bUpdated = TRUE;
-			strAccel = CAccelerator::FormatAccelKey(g_SettingsG.byTurnPageDownVK);
+			strAccel = CAccelerator::FormatAccelKey(g_SettingsG->byTurnPageDownVK);
 			e2->strToolTip = SStringT().Format(_T("重码下翻页,翻页键:%s"),strAccel);
 			break;
 		}
@@ -153,7 +153,7 @@ namespace SOUI
 				pMutexView = FindChildByID(R.id.comp_spell);
 				pMutexView->SetVisible(TRUE, TRUE);
 				SWindow * pTempFlag = pMutexView->FindChildByID(R.id.txt_temp_spell_flag);
-				pTempFlag->SetVisible(g_SettingsG.compMode != IM_SPELL, TRUE);
+				pTempFlag->SetVisible(g_SettingsG->compMode != IM_SPELL, TRUE);
 				SSpellView * spellView = pMutexView->FindChildByID2<SSpellView>(R.id.txt_comps);
 				spellView->UpdateByContext(m_pInputContext);
 			}
@@ -360,7 +360,7 @@ namespace SOUI
 					pTip->SetWindowText(NULL);
 				}
 			}
-			else if (g_SettingsG.byAstMode == AST_ENGLISH)
+			else if (g_SettingsG->byAstMode == AST_ENGLISH)
 			{//单词联想
 				SWindow * pCandEnglish = FindChildByID(R.id.cand_english);
 				pCandEnglish->SetVisible(TRUE, TRUE);
@@ -402,7 +402,7 @@ namespace SOUI
 					pCand = pCand->GetWindow(GSW_NEXTSIBLING);
 				}
 			}
-			else if (g_SettingsG.byAstMode == AST_CAND)
+			else if (g_SettingsG->byAstMode == AST_CAND)
 			{//词组联想
 				SWindow * pCandEnglish = FindChildByID(R.id.cand_phrase);
 				pCandEnglish->SetVisible(TRUE, TRUE);

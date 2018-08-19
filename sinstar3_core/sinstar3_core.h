@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../include/module_ref.h"
+#include <Sddl.h>
+#include <Aclapi.h>
 
 #ifdef SINSTAR3_CORE_EXPORTS
 #define SINSTAR3_API __declspec(dllexport)
@@ -28,9 +30,10 @@ public:
 	void SetLogStateListener(ILogStateListener *pListener);
 
 	SOUI::SStringT GetDataPath() const {return m_strDataPath;}
-	SOUI::SStringT GetCfgIni() const { return m_strConfig; }
 	SOUI::SStringT GetSettingPath() const;
-
+	SOUI::SStringT GetCfgIni() const { return m_strConfigIni; }
+public:
+	static BOOL SetObjectToLowIntegrity(HANDLE hObject, SE_OBJECT_TYPE type);
 protected:
 	virtual void OnInit();
 
@@ -38,8 +41,10 @@ protected:
 
 	ILogStateListener * m_pLogStateListener;
 	SOUI::SStringT m_strDataPath;
-	SOUI::SStringT m_strConfig;
+	SOUI::SStringT m_strConfigIni;
 	HANDLE m_hMutex;
+	HANDLE m_hSettingFileMap;
 };
 
 extern CSinstar3Core *theModule;
+extern int				g_nRefCount;

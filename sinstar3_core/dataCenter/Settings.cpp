@@ -2,11 +2,7 @@
 #include "Settings.h"
 #include <core/Accelerator.h>
 
-//使用共享内存方式使设置信息在所有输入法进程中共享
-#pragma data_seg(".sinstar3")
-int				g_nRefCount = 0;	//ref count
-CSettingsGlobal	g_SettingsG;		//输入法全局设置
-#pragma data_seg()
+CSettingsGlobal	*g_SettingsG = NULL;
 
 struct HotKeyEntry {
 	int idx;

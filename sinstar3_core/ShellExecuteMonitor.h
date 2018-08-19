@@ -23,8 +23,9 @@ public:
 	DWORD GetExitCode() const {
 		return m_exitCode;
 	}
-protected:
+
 	static HANDLE ShellExe(LPCTSTR pszOp, LPCTSTR pszFileName);
+protected:
 	virtual UINT Run();
 
 	SHELLEXECUTEDATA *m_shellExecuteInfo;

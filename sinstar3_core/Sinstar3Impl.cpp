@@ -82,9 +82,9 @@ CSinstar3Impl::~CSinstar3Impl(void)
 
 	SStringT strHotKeyFile = SStringT().Format(_T("%s\\data\\hotkey_%s.txt"), theModule->GetDataPath(), CDataCenter::getSingleton().GetData().m_compInfo.strCompName);
 	//加载特定的自定义状态及语句输入状态开关
-	SStringT strHotKey = CAccelerator::FormatAccelKey(g_SettingsG.dwHotkeys[HKI_UDMode]);
+	SStringT strHotKey = CAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_UDMode]);
 	WritePrivateProfileString(_T("hotkey"), _T("umode"), strHotKey, strHotKeyFile);
-	strHotKey = SStringT((TCHAR)g_SettingsG.bySentMode);
+	strHotKey = SStringT((TCHAR)g_SettingsG->bySentMode);
 	WritePrivateProfileString(_T("hotkey"), _T("sentence"), strHotKey, strHotKeyFile);
 
 	if (!m_strLoadedFontFile.IsEmpty())
@@ -269,23 +269,23 @@ LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 		SStringT strHotKeyFile = SStringT().Format(_T("%s\\data\\hotkey_%s.txt"),theModule->GetDataPath(),myData.m_compInfo.strCompName);
 		//加载特定的自定义状态及语句输入状态开关
 		GetPrivateProfileString(_T("hotkey"),_T("umode"),_T(""),szBuf,100,strHotKeyFile);
-		g_SettingsG.dwHotkeys[HKI_UDMode]=CAccelerator::TranslateAccelKey(szBuf);
-		if(g_SettingsG.dwHotkeys[HKI_UDMode] ==0)
+		g_SettingsG->dwHotkeys[HKI_UDMode]=CAccelerator::TranslateAccelKey(szBuf);
+		if(g_SettingsG->dwHotkeys[HKI_UDMode] ==0)
 		{
 			short sKey = VkKeyScan(myData.m_compInfo.cWild);
-			g_SettingsG.dwHotkeys[HKI_UDMode] = LOBYTE(sKey);
+			g_SettingsG->dwHotkeys[HKI_UDMode] = LOBYTE(sKey);
 		}
 
 		szBuf[0]=0;
 		if(GetPrivateProfileString(_T("hotkey"),_T("sentence"),_T(""),szBuf,2,strHotKeyFile))
 		{
-			g_SettingsG.bySentMode=(BYTE)szBuf[0];
+			g_SettingsG->bySentMode=(BYTE)szBuf[0];
 		}else
 		{//默认设置为“；”，如果是编码则取消
 			if(!myData.m_compInfo.IsCompChar(';'))
-				g_SettingsG.bySentMode =';';
+				g_SettingsG->bySentMode =';';
 			else
-				g_SettingsG.bySentMode =0;
+				g_SettingsG->bySentMode =0;
 		}
 
 		CDataCenter::getSingleton().Unlock();

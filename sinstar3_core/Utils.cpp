@@ -41,12 +41,12 @@ int CUtils::GetClipboardText(HWND hWnd, WCHAR *pszBuf, int nBufSize)
 
 void CUtils::SoundPlay(LPCTSTR pszSound)
 {
-	if (g_SettingsG.nSoundAlert == 1)
+	if (g_SettingsG->nSoundAlert == 1)
 	{
 		SStringT strPath = SStringT().Format(_T("%s\\sound\\%s.wav"), theModule->GetDataPath(), pszSound);
 		PlaySound(strPath, NULL, SND_ASYNC | SND_FILENAME);
 	}
-	else if (g_SettingsG.nSoundAlert == 2)
+	else if (g_SettingsG->nSoundAlert == 2)
 	{
 		MessageBeep(1000);
 	}

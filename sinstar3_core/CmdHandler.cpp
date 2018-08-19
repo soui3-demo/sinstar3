@@ -180,17 +180,17 @@ void CCmdHandler::OnHotKeyQueryInfo(LPARAM lp)
 void CCmdHandler::OnHotKeyInputMode(LPARAM lp)
 {
 	InputContext * pCtx = m_pSinstar3->m_inputState.GetInputContext();
-	if (g_SettingsG.compMode != pCtx->compMode)
+	if (g_SettingsG->compMode != pCtx->compMode)
 	{
 		m_pSinstar3->ShowTip(_T("提示"), _T("临时拼音模式不能切换！请先退出临时拼音"));
 	}else
 	{
 		m_pSinstar3->m_inputState.ClearContext(CPC_ALL);
-		if (g_SettingsG.compMode == IM_SHAPECODE)
-			g_SettingsG.compMode = IM_SPELL;
+		if (g_SettingsG->compMode == IM_SHAPECODE)
+			g_SettingsG->compMode = IM_SPELL;
 		else
-			g_SettingsG.compMode = IM_SHAPECODE;
-		pCtx->compMode = (COMPMODE)g_SettingsG.compMode;
+			g_SettingsG->compMode = IM_SHAPECODE;
+		pCtx->compMode = (COMPMODE)g_SettingsG->compMode;
 		pCtx->bShowTip = FALSE;
 		m_pSinstar3->m_pInputWnd->UpdateUI();
 		m_pSinstar3->m_pStatusWnd->UpdateCompInfo();
@@ -295,11 +295,9 @@ void CCmdHandler::OnStartProcess(LPARAM lp)
 	editFileMonitor->BeginThread();
 }
 
-#define EFI_CONFIG	(0x80000001)
 void CCmdHandler::OnOpenConfig(LPARAM lp)
 {
-	SHELLEXECUTEDATA sed = { EFI_CONFIG ,_T("open"), theModule->GetSettingPath()};
-	OnStartProcess((LPARAM)&sed);
+	ShellExecute(NULL, _T("open"), theModule->GetSettingPath(),NULL,NULL,SW_SHOWDEFAULT);
 }
 
 LRESULT CCmdHandler::OnProcessExit(UINT uMsg, WPARAM wp, LPARAM lp)
@@ -308,15 +306,8 @@ LRESULT CCmdHandler::OnProcessExit(UINT uMsg, WPARAM wp, LPARAM lp)
 	const SHELLEXECUTEDATA *efi = shellExecuteMonitor->GetShellExecuteInfo();
 	if (wp == 1 && shellExecuteMonitor->GetExitCode() == 0)
 	{//edit finish
-		if (efi->nType == EFI_CONFIG)
-		{
-			g_SettingsG.Load(theModule->GetCfgIni());
-		}
-		else
-		{
-			SStringA strUtf8 = S_CT2A(efi->strFileName, CP_UTF8);
-			ISComm_UpdateUserDefData(efi->nType, strUtf8);
-		}
+		SStringA strUtf8 = S_CT2A(efi->strFileName, CP_UTF8);
+		ISComm_UpdateUserDefData(efi->nType, strUtf8);
 	}
 	m_mapShellExecuteMonitor.RemoveKey(efi->nType);
 	delete shellExecuteMonitor;
