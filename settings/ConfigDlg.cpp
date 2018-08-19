@@ -133,6 +133,14 @@ namespace SOUI
 				pCtrl->SetWindowText(text);
 	}
 
+	void CConfigDlg::FindAndSetSpin(int id, int nValue)
+	{
+		SSpinButtonCtrl *pCtrl = FindChildByID2<SSpinButtonCtrl>(id);
+		SASSERT(pCtrl);
+		if (pCtrl)
+			pCtrl->SetValue(nValue);
+	}
+
 	void CConfigDlg::FindAndSetHotKey(int id,DWORD accel)
 	{
 		SHotKeyCtrl *pCtrl = FindChildByID2<SHotKeyCtrl>(id);
@@ -222,6 +230,25 @@ namespace SOUI
 		FindAndSetCheck(R.id.chk_sent_input, g_SettingsG->bAstSent);
 
 		FindAndSetText(R.id.edit_webmode_header, S_CA2T(g_SettingsG->szWebHeader));
+
+		if (ISComm_GetSentRecordMax() == ISACK_SUCCESS)
+		{
+			PMSGDATA pMsgData = ISComm_GetData();
+			int nSentMax = *(int*)pMsgData->byData;
+			FindAndSetText(R.id.edit_sent_record_max, SStringT().Format(_T("%d"), nSentMax));
+		}
+		if (ISComm_GetMaxPhrasePredictLength() == ISACK_SUCCESS)
+		{
+			PMSGDATA pMsgData = ISComm_GetData();
+			int nPredictLength = *(int*)pMsgData->byData;
+			FindAndSetSpin(R.id.spin_predict_phrase_maxlength, nPredictLength);
+		}
+		if (ISComm_GetMaxPhraseAssociateDeepness() == ISACK_SUCCESS)
+		{
+			PMSGDATA pMsgData = ISComm_GetData();
+			int nDeepness = *(int*)pMsgData->byData;
+			FindAndSetSpin(R.id.spin_phrase_ast_deepness_max, nDeepness);
+		}
 	}
 
 
@@ -678,6 +705,37 @@ SWindow *pCtrl = FindChildByID(id);\
 	{
 		EventCBSelChange *e2 = sobj_cast<EventCBSelChange>(e);
 		ISComm_SetTtsToken(0, e2->nCurSel);
+	}
+
+	void CConfigDlg::OnReNotify(EventArgs * e)
+	{
+		EventRENotify *e2 = sobj_cast<EventRENotify>(e);
+		if (e2->iNotify == EN_CHANGE)
+		{
+			SRichEdit *pEdit = sobj_cast<SRichEdit>(e->sender);
+			SStringT str = pEdit->GetWindowText();
+			switch (e2->idFrom)
+			{
+			case R.id.edit_predict_phrase_maxlength:
+				{
+					int nPredictLength = _ttoi(str);
+					ISComm_SetMaxPhrasePredictLength(nPredictLength);
+				}
+				break;
+			case R.id.edit_phrase_ast_deepness_max:
+				{
+					int nDeepness = _ttoi(str);
+					ISComm_SetMaxPhraseAssociateDeepness(nDeepness);
+				}
+				break;
+			case R.id.edit_sent_record_max:
+				{
+					int nSentMax = _ttoi(str);
+					ISComm_SetSentRecordMax(nSentMax);
+				}
+				break;
+			}
+		}
 	}
 
 	void CConfigDlg::OnDestroy()

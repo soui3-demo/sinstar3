@@ -13,6 +13,7 @@ namespace SOUI
 	protected:
 		void FindAndSetCheck(int id, BOOL bcheck);
 		void FindAndSetText(int id, LPCTSTR text);
+		void FindAndSetSpin(int id, int nValue);
 		void FindAndSetHotKey(int id, DWORD accel);
 		void InitPageHabit();
 		void InitPageHotKey();
@@ -75,6 +76,8 @@ namespace SOUI
 		void OnTtsChTokenChange(EventArgs *e);
 		void OnTtsEnTokenChange(EventArgs *e);
 
+		void OnReNotify(EventArgs *e);
+
 		EVENT_MAP_BEGIN()
 			EVENT_ID_COMMAND_RANGE(100, 102, OnClickInputSwitch)
 			EVENT_ID_COMMAND_RANGE(110, 111, OnClickInputSwitch)
@@ -104,7 +107,10 @@ namespace SOUI
 			EVENT_ID_COMMAND(R.id.btn_tts_en_preview, OnTtsEnPreview)
 			EVENT_ID_HANDLER(R.id.chk_py_blur, EventCmd::EventID, OnPyBlurClick)
 			EVENT_ID_HANDLER(R.id.chk_jp_zcs, EventCmd::EventID, OnJPBlurClick)
-		EVENT_MAP_END()
+			EVENT_ID_HANDLER(R.id.edit_predict_phrase_maxlength,EventRENotify::EventID,OnReNotify)
+			EVENT_ID_HANDLER(R.id.edit_phrase_ast_deepness_max, EventRENotify::EventID, OnReNotify)
+			EVENT_ID_HANDLER(R.id.edit_sent_record_max, EventRENotify::EventID, OnReNotify)
+			EVENT_MAP_END()
 
 
 	protected:

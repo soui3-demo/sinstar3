@@ -207,6 +207,18 @@ DWORD ISComm_SetTtsSpeed(int nSpeed);
 
 DWORD ISComm_BlurZCS(int bBlur);
 
+DWORD ISComm_GetMaxPhrasePredictLength();
+DWORD ISComm_SetMaxPhrasePredictLength(int nLen);
+
+DWORD ISComm_GetMaxPhraseAssociateDeepness();
+DWORD ISComm_SetMaxPhraseAssociateDeepness(int nDeepness);
+
+DWORD ISComm_GetSentRecordMax();
+DWORD ISComm_SetSentRecordMax(int nSentRecordMax);
+
+DWORD ISComm_GetSvrAutorun();
+DWORD ISComm_SetSvrAutorun(int bAutoRun);
+
 #ifdef __cplusplus
 }
 #endif//__cplusplus

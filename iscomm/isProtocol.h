@@ -290,11 +290,35 @@
 #define CT_TTS_GET_SPEED 212
 #define CT_TTS_SET_SPEED 213
 
-
 //----------------------------------------------
 //	设置拼音ZCS模糊开关状态
 //----------------------------------------------
 #define CT_BLUR_ZCS			215
+
+//----------------------------------------------
+//	get and set predict phrase max lenth
+//----------------------------------------------
+#define CT_GET_PREDICT_PHRASE_MAX_LENGTH 220
+#define CT_SET_PREDICT_PHRASE_MAX_LENGTH 221
+
+//----------------------------------------------
+//	get and set max deepness of phrase association
+//----------------------------------------------
+#define CT_GET_PHRASE_AST_MAX_DEEPNESS 230
+#define CT_SET_PHRASE_AST_MAX_DEEPNESS 231
+
+//----------------------------------------------
+//	get and set sentences size
+//----------------------------------------------
+#define CT_GET_SENT_RECORD_MAX	  240
+#define CT_SET_SENT_RECORD_MAX	  241
+
+//----------------------------------------------
+//	get and set max server autorun
+//----------------------------------------------
+#define CT_GET_SVR_AUTORUN 250
+#define CT_SET_SVR_AUTORUN 251
+
 
 /////////////////////////////////////////////////////////////////////////////
 //服务器广播的消息

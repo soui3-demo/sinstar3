@@ -760,3 +760,43 @@ DWORD ISComm_BlurZCS(int bBlur)
 {
 	return ISComm_SendMsg(CT_BLUR_ZCS,&bBlur,sizeof(int), 0);
 }
+
+DWORD ISComm_GetMaxPhrasePredictLength()
+{
+	return ISComm_SendMsg(CT_GET_PREDICT_PHRASE_MAX_LENGTH,NULL,0,0);
+}
+
+DWORD ISComm_SetMaxPhrasePredictLength(int nLen)
+{
+	return ISComm_SendMsg(CT_SET_PREDICT_PHRASE_MAX_LENGTH,&nLen,sizeof(int), 0);
+}
+
+DWORD ISComm_GetMaxPhraseAssociateDeepness()
+{
+	return ISComm_SendMsg(CT_GET_PHRASE_AST_MAX_DEEPNESS,NULL,0,0);
+}
+
+DWORD ISComm_SetMaxPhraseAssociateDeepness(int nDeepness)
+{
+	return ISComm_SendMsg(CT_SET_PHRASE_AST_MAX_DEEPNESS,&nDeepness,sizeof(int), 0);
+}
+
+DWORD ISComm_GetSentRecordMax()
+{
+	return ISComm_SendMsg(CT_GET_SENT_RECORD_MAX,NULL,0,0);
+}
+
+DWORD ISComm_SetSentRecordMax(int nSentRecordMax)
+{
+	return ISComm_SendMsg(CT_SET_SENT_RECORD_MAX,&nSentRecordMax,sizeof(int),0);
+}
+
+DWORD ISComm_GetSvrAutorun()
+{
+	return ISComm_SendMsg(CT_GET_SVR_AUTORUN,NULL,0,0);
+}
+
+DWORD ISComm_SetSvrAutorun(int bAutoRun)
+{
+	return ISComm_SendMsg(CT_SET_SVR_AUTORUN,&bAutoRun,sizeof(int),0);
+}
