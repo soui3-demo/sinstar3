@@ -209,9 +209,9 @@
               </window>
             </window>
           </pageex>
-          <pageex title="@string/cfg_pinying" tip="@string/cfg_pinying">
+          <pageex title="@string/cfg_pinyin" tip="@string/cfg_pinyin">
             <window size="-2,-1" layout="hbox" gravity="center">
-              <text inset="10,5,5,5">@string/cfg_pinying</text>
+              <text inset="10,5,5,5">@string/cfg_pinyin</text>
               <hr width="-2" height="1"></hr>
             </window>
             <window pos="88,[" layout="vbox">
@@ -260,7 +260,10 @@
             </window>
           </pageex>
           <pageex title="@string/cfg_about" tip="@string/cfg_about" layout="vbox" inset="10,0,0,0">
-            <text extend_top="30" text="启程输入法" layout_gravity="center"/>
+            <window size="-2,-1" layout="hbox" gravity="center">
+              <text inset="10,5,5,5">@string/cfg_about_title</text>
+              <hr width="-2" height="1"></hr>
+            </window>
             <window size="-1,-1" layout="hbox" extend_top="10">
               <text text="输入法版本:"/>
               <text name="txt_ver"/>

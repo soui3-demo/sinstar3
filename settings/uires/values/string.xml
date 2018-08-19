@@ -9,5 +9,6 @@
     <cfg_misc value="其它"/>
     <cfg_about value="关于"/>
     <cfg_tts value="TTS"/>
-    <cfg_pinying value="启程拼音"/>
+    <cfg_pinyin value="启程拼音"/>
+    <cfg_about_title value="关于启程输入法"/>
   </string>

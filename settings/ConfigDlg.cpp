@@ -3,10 +3,65 @@
 #include <helper/STime.h>
 #include <helper/SAdapterBase.h>
 #include "Settings.h"
+#pragma comment(lib,"version.lib")
 
 #pragma warning(disable:4244)
 namespace SOUI
 {
+	//获取一个PE文件的version + ProductName +  FileDescription
+	BOOL Helper_PEVersion(LPCTSTR pszFileName, DWORD *pdwVer, TCHAR *pszName, TCHAR *pszDesc)
+	{
+		DWORD dwResHandle;
+		LPSTR lszVer = NULL;
+		UINT  cchVer = 0;
+		void *pBuf;
+		BOOL bRet = FALSE;
+		DWORD dwVerInfoSize = GetFileVersionInfoSize(pszFileName, &dwResHandle);
+		if (!dwVerInfoSize) return FALSE;
+		pBuf = malloc(dwVerInfoSize);
+		GetFileVersionInfo(pszFileName, dwResHandle, dwVerInfoSize, pBuf);
+		if (pdwVer)
+		{
+			UINT nVersionLen;
+			VS_FIXEDFILEINFO *pstFileVersion;
+			if (VerQueryValue(pBuf, _T("\\"), (void**)&pstFileVersion, &nVersionLen) && nVersionLen >= sizeof(VS_FIXEDFILEINFO))
+			{
+				*pdwVer = MAKELONG(MAKEWORD(LOWORD(pstFileVersion->dwFileVersionLS), HIWORD(pstFileVersion->dwFileVersionLS)),
+					MAKEWORD(LOWORD(pstFileVersion->dwFileVersionMS), HIWORD(pstFileVersion->dwFileVersionMS)));
+			}
+		}
+
+		bRet = VerQueryValue(pBuf, _T("\\VarFileInfo\\Translation"), (void**)&lszVer, &cchVer);
+		if (bRet&&cchVer == 4)
+		{
+			TCHAR szLangCode[20] = { 0 };
+			TCHAR szSection[256];
+			BOOL bOK;
+			_stprintf(szLangCode, _T("%04x"), *(WORD*)lszVer);
+			_stprintf(szLangCode + 4, _T("%04x"), *(WORD*)(lszVer + 2));
+			if (pszName)
+			{
+				_stprintf(szSection, _T("\\StringFileInfo\\%s\\ProductName"), szLangCode);
+				bOK = VerQueryValue(pBuf, szSection, (void**)&lszVer, &cchVer);
+				if (bOK) _tcscpy(pszName, (LPCTSTR)lszVer);
+			}
+			if (pszDesc)
+			{
+				_stprintf(szSection, _T("\\StringFileInfo\\%s\\FileDescription"), szLangCode);
+				bOK = VerQueryValue(pBuf, szSection, (void**)&lszVer, &cchVer);
+				if (bOK) _tcscpy(pszDesc, (LPCTSTR)lszVer);
+			}
+		}
+		free(pBuf);
+		return bRet;
+	}
+
+	SStringT DwordVer2String(DWORD dwVer)
+	{
+		BYTE * pByte = (BYTE*)&dwVer;
+		return SStringT().Format(_T("%u.%u.%u.%u"), UINT(pByte[3]), UINT(pByte[2]), UINT(pByte[1]), UINT(pByte[0]));
+	}
+
 	class CBlurListAdapter : public SAdapterBase
 	{
 		struct INDEXINFO
@@ -280,12 +335,16 @@ namespace SOUI
 
 	void CConfigDlg::InitPageAbout()
 	{
-//		FindChildByID(R.id.txt_ver)->SetWindowText(VERSION_TSTR);
-		WIN32_FIND_DATA wfd;
-		TCHAR szPath[1000];
 		SStringT strPath = SApplication::getSingleton().GetAppDir();
 		strPath += _T("\\sinstar3_core.dll");
-		HANDLE h=FindFirstFile(szPath, &wfd);
+
+		DWORD dwVer = 0;
+		Helper_PEVersion(strPath, &dwVer, NULL, NULL);
+		SStringT strVer = DwordVer2String(dwVer);
+		FindChildByID(R.id.txt_ver)->SetWindowText(strVer);
+
+		WIN32_FIND_DATA wfd;
+		HANDLE h=FindFirstFile(strPath, &wfd);
 		FindClose(h);
 		FILETIME lft;
 		FileTimeToLocalFileTime(&wfd.ftLastWriteTime,&lft);
@@ -298,9 +357,7 @@ namespace SOUI
 		if (ISComm_ServerVersion() == ISACK_SUCCESS)
 		{
 			PMSGDATA pData = ISComm_GetData();
-			BYTE byVer[4];
-			memcpy(byVer, pData->byData, 4);
-			SStringT strVer =  SStringT().Format(_T("%u.%u.%u.%u"), UINT(byVer[3]), UINT(byVer[2]), UINT(byVer[1]), UINT(byVer[0]));
+			SStringT strVer = DwordVer2String(*(DWORD*)pData->byData);
 			FindChildByID(R.id.txt_svr_ver)->SetWindowText(strVer);
 		}
 
