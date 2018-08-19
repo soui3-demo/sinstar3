@@ -315,7 +315,9 @@ namespace SOUI
 			}
 			if (iSelToken < lstToken.GetCount())
 			{
+				pCbx->GetEventSet()->setMutedState(true);
 				pCbx->SetCurSel(iSelToken);
+				pCbx->GetEventSet()->setMutedState(false);
 			}
 		}
 		return p;
@@ -664,6 +666,18 @@ SWindow *pCtrl = FindChildByID(id);\
 		SCheckBox *pCheck = sobj_cast<SCheckBox>(e->sender);
 		BOOL bCheck = pCheck->IsChecked();
 		ISComm_BlurZCS(bCheck);
+	}
+
+	void CConfigDlg::OnTtsChTokenChange(EventArgs * e)
+	{
+		EventCBSelChange *e2 = sobj_cast<EventCBSelChange>(e);
+		ISComm_SetTtsToken(1, e2->nCurSel);
+	}
+
+	void CConfigDlg::OnTtsEnTokenChange(EventArgs * e)
+	{
+		EventCBSelChange *e2 = sobj_cast<EventCBSelChange>(e);
+		ISComm_SetTtsToken(0, e2->nCurSel);
 	}
 
 	void CConfigDlg::OnDestroy()

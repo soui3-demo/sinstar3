@@ -72,6 +72,8 @@ namespace SOUI
 
 		void OnPyBlurClick(EventArgs *e);
 		void OnJPBlurClick(EventArgs *e);
+		void OnTtsChTokenChange(EventArgs *e);
+		void OnTtsEnTokenChange(EventArgs *e);
 
 		EVENT_MAP_BEGIN()
 			EVENT_ID_COMMAND_RANGE(100, 102, OnClickInputSwitch)
@@ -96,6 +98,8 @@ namespace SOUI
 			EVENT_HANDLER(EventSetHotKey::EventID, OnHotKeyEvent)
 			EVENT_ID_HANDLER(R.id.edit_webmode_header,EventRENotify::EventID,OnWebHeaderNotify)
 			EVENT_ID_HANDLER(R.id.slider_tts_speed,EventSliderPos::EventID,OnTtsSpeedChanged)
+			EVENT_ID_HANDLER(R.id.cbx_tts_ch_token,EventCBSelChange::EventID,OnTtsChTokenChange)
+			EVENT_ID_HANDLER(R.id.cbx_tts_en_token, EventCBSelChange::EventID, OnTtsEnTokenChange)
 			EVENT_ID_COMMAND(R.id.btn_tts_ch_preview,OnTtsChPreview)
 			EVENT_ID_COMMAND(R.id.btn_tts_en_preview, OnTtsEnPreview)
 			EVENT_ID_HANDLER(R.id.chk_py_blur, EventCmd::EventID, OnPyBlurClick)
