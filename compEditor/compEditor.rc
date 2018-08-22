@@ -1,0 +1,413 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#ifndef APSTUDIO_INVOKED
+#include "targetver.h"
+#endif
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 中文(中华人民共和国) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+#ifdef _WIN32
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#pragma code_page(936)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#ifndef APSTUDIO_INVOKED\r\n"
+    "#include ""targetver.h""\r\n"
+    "#endif\r\n"
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)\r\n"
+    "LANGUAGE 4, 2\r\n"
+    "#pragma code_page(936)\r\n"
+    "#include ""res\\compEditor.rc2""  // 非 Microsoft Visual C++ 编辑的资源\r\n"
+    "#include ""l.CHS\\afxres.rc""      // 标准组件\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\compEditor.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_TP_COMPEDITOR DIALOGEX 0, 0, 250, 160
+STYLE DS_SETFONT | DS_MODALFRAME | DS_SETFOREGROUND | DS_3DLOOK | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_STATICEDGE | WS_EX_APPWINDOW
+CAPTION "CompEditor"
+FONT 11, "宋体", 0, 0, 0x0
+BEGIN
+    LTEXT           "编码文件(*):",IDC_STATIC,7,10,47,8
+    EDITTEXT        IDC_COMP,60,7,160,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_BROWSECOMP,225,7,18,13
+    LTEXT           "相关网址：",IDC_STATIC,7,144,40,8
+    EDITTEXT        IDC_URL,60,141,114,14,ES_AUTOHSCROLL
+    LTEXT           "保存为(*):",IDC_STATIC,7,28,40,8
+    EDITTEXT        IDC_SAVEFILE,60,25,160,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_BROWSE_SAVE,225,25,18,13
+    DEFPUSHBUTTON   "创建",IDC_MAKE,180,127,63,28
+    PUSHBUTTON      "选择位图",IDC_BROWSEICON,128,65,46,13
+    CONTROL         "",IDC_BMWND,"Static",SS_BLACKFRAME | SS_NOTIFY | SS_SUNKEN,60,65,63,65
+    LTEXT           "透明色:",IDC_STATIC,131,85,30,8
+    CONTROL         "",IDC_COLORTRANS,"Static",SS_GRAYFRAME | SS_SUNKEN,128,117,46,12
+    CTEXT           "无",IDC_COLOR_TEXT,128,99,46,12,SS_SUNKEN
+    LTEXT           "字根图:",IDC_STATIC,7,45,28,8
+    EDITTEXT        IDC_KEYMAP,60,43,160,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_BROWSE_KEYMAP,225,43,18,13
+    CONTROL         "标点顶字上屏",IDC_SYMBOL_NOFIRST,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,182,65,61,10
+    LTEXT           "编码图标:\n(16*16位图)",IDC_STATIC,5,85,43,20
+    CONTROL         "禁止编码导出",IDC_ENCRYPT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,182,93,61,10
+    CONTROL         "音形码优化",IDC_YINXINGMA,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,182,79,54,10
+    PUSHBUTTON      "授权文件",IDC_LICENSE,183,107,60,15
+END
+
+IDD_PROG_DIALOG DIALOGEX 0, 0, 199, 39
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE
+EXSTYLE WS_EX_TOOLWINDOW
+FONT 11, "宋体", 0, 0, 0x1
+BEGIN
+    LTEXT           "正在..，请稍候......",IDC_STATIC_TITLE,5,5,190,8
+    CONTROL         "Progress1",IDC_PROGRESS,"msctls_progress32",WS_BORDER,5,20,190,14
+END
+
+IDD_LICENSE DIALOG  0, 0, 187, 100
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "授权文件"
+FONT 11, "宋体"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,41,29,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,99,29,50,14
+    LTEXT           "文件名:",IDC_STATIC,7,7,27,8
+    EDITTEXT        IDC_LICENSE,38,7,120,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_BROWSE,161,7,19,13
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,22,173,1
+    LTEXT           "授权文件是一个导入一个C兼容接口的Dll文件，\n您可以自己编写该文件，以验证用户的合法性，\n启程会先验证该文件没有被用户修改，\n再调用该文件中的验证接口。",IDC_STATIC,7,45,173,35
+    LTEXT           "授权文件的编写参见网站的示例代码(VC6)",IDC_STATIC,7,85,146,8
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "080403a8"
+        BEGIN
+            VALUE "CompanyName", "TODO: <公司名>"
+            VALUE "FileDescription", "TODO: <文件说明>"
+            VALUE "FileVersion", "1.0.0.1"
+            VALUE "InternalName", "compEditor.exe"
+            VALUE "LegalCopyright", "TODO: (C) <公司名>。保留所有权利。"
+            VALUE "OriginalFilename", "compEditor.exe"
+            VALUE "ProductName", "TODO: <产品名>"
+            VALUE "ProductVersion", "1.0.0.1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x804, 936
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_TP_COMPEDITOR, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 243
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 155
+    END
+
+    IDD_PROG_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 192
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 32
+    END
+
+    IDD_LICENSE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 180
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 93
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_ERROR_DELDEFCOMP    "不能删除正在被使用的缺省编码"
+    IDS_QUESTION_DELCOMP    "确定删除[%s]吗?"
+    IDS_ERROR_OPENCOMP      "打开编码失败!"
+    IDS_ERROR_COMPEXIST     "目标文件已经在系统的编码目录中，不需要安装!"
+    IDS_COMPSETUP_SUCCESS   "安装成功!"
+    IDS_COMPSETUP_FAILED    "安装成功!"
+    IDS_ERROR_OPENFILE      "打开文件失败!"
+    IDS_EXPORT_FINISH       "导出完成!"
+    IDS_QUESTION_PLSETUP    "安装新的词库将替换当前词库，确定要安装吗?"
+    IDS_ERROR_PLSETUP       "安装词库失败!"
+    IDS_EXPORT_SELGROUP     "还没有选择词库组"
+    IDS_ERROR_PLEXPORT      "导出词库失败!"
+    IDS_ERROR_BLUREXIST     "该模糊音已经存在!"
+    IDS_ERROR_BLURINPUT     "输入错误!"
+    IDS_QUESTION_POLYPHONE  "导入多音字上下文将清除当前的多音字上下文！确定要导入吗？"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_IMPORT_FINISH       "导入完成！"
+    IDS_COMPIMPORT_SUCCESS  "导入编码成功！"
+    IDS_COMPIMPORT_FAILED   "导入编码失败!"
+    IDS_COMPIMPORT_SUCCESS2 "导出编码成功,查看导出结果吗?"
+    IDS_COMPEXPORT_FAILED   "导出编码失败!"
+    IDS_USERDEF_NODATA      "请输入编码及词组!"
+    IDS_USERDEF_EXIST       "编码已经存在,修改对应词组吗?"
+    IDS_USERDEF_INPUTERROR  "输入错误：\n编码不能以数字及小数点开头;\n编码长度小于20;\n词组长度小于1000"
+    IDS_USERDEF_NOTEXIST    "没有找到与编码对应的词组!"
+    IDS_USERDEF_NOTEXIST2   "没有找到编码!"
+    IDS_ERROR_FILEEXIST     "文件复制失败，文件名已经存在!"
+    IDS_QUESTION_DELUD2     "确定删除当前用户词典吗?"
+    IDS_ERROR_TEMPFILE      "创建临时文件出错"
+    IDS_ERROR_ICONFORMAT    "请指定一个16*16的位图"
+    IDS_COMPCREATE_NOCOMP   "请选择编码文件"
+    IDS_COMPCREATE_NOOUTPUT "请指定码表输出文件"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_COMPCREATE_COMPEXIST "您选择输出到系统编码安装目录，该编码已经存在，不能覆盖"
+    IDS_COMPCREATE_COMPEXIST2 "输出文件已经存在,覆盖原编码吗?"
+    IDS_COMPCREATE_RULE     "本系统不支持码表中的编码规则！"
+    IDS_COMPCREATE_CHAR     "编码字符不能少于2000"
+    IDS_COMPCREATE_SUCCESS  "创建编码方案成功!"
+    IDS_COMPCREATE_ERROR    "创建编码方案失败！请检查您的输入信息！"
+    IDS_COMPCREATE_KEYMAPERR "字根表文件错误"
+    IDS_UPDATE_NONEW        "没有发现新版本"
+    IDS_FORMAT_CIT          "启程输入之星编码文件(*.cit)|*.cit||"
+    IDS_FORMAT_TXT          "文本文件(*.txt)|*.txt||"
+    IDS_FORMAT_SPL          "启程输入之星词库(*.spl)|*.spl||"
+    IDS_FORMAT_UD2          "输入之星用户词典(*.ud2)|*.ud2||"
+    IDS_FORMAT_BMP          "位图文件(*.bmp)|*.bmp||"
+    IDS_FORMAT_IMAGE        "图片文件(*.jpg;*.gif;*.bmp)|*.jpg;*.gif;*.bmp|jpg file(*.jpg)|*.jpg|gif File(*.gif)|*.gif|bmp file(*.bmp)|*.bmp||"
+    IDS_GROUP_DATA          "数据管理"
+    IDS_GROUP_OTHER         "其它"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_DATA_SPELL          "启程拼音"
+    IDS_DATA_COMP           "编码管理"
+    IDS_DATA_PL             "词库管理"
+    IDS_DATA_FLM            "外文词库"
+    IDS_DATA_USERDEF        "用户定义"
+    IDS_OTHER_CONFIG        "系统配置"
+    IDS_OTHER_COMPEDITOR    "编码编译"
+    IDS_DATA_SYMBOL         "符号映射"
+    IDS_OTHER_ABOUT         "关于..."
+    IDS_EXIT                "强行退出"
+    IDS_BLUR_TUNE           "声母模糊"
+    IDS_BLUR_RHYME          "韵母模糊"
+    IDS_BLUR_FULL           "全拼模糊"
+    IDS_FDT_USERLIB         "输入之星用户词库"
+    IDS_FDT_WORDRATE        "单字词频表"
+    IDS_FDT_POLYPHONE       "启程拼音多音字上下文"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_FDT_BIHUA           "笔画输入法码表"
+    IDS_TRAY_TIP            "启程输入之星后台服务\n版本: %s"
+    IDS_KEYMAP_NODATA       "没有字根表数据"
+    IDS_KEYMAP_TITLE        "字根表:%s"
+    IDS_LSTCOL_NAME         "名称"
+    IDS_LSTCOL_FL_COUNT     "词条数"
+    IDS_LSTCOL_EDITOR       "编辑"
+    IDS_LSTCOL_MEMO         "备注"
+    IDS_LSTCOL_COMP_WORDS   "单字数"
+    IDS_LSTCOL_COMP_PL      "词库"
+    IDS_LSTCOL_COMP_URL     "相关网址"
+    IDS_LSTCOL_P_GNAME      "组名称"
+    IDS_LSTCOL_P_SIZE       "容量"
+    IDS_LSTCOL_UD_COMP      "编码"
+    IDS_LSTCOL_UD_PHRASE    "词组"
+    IDS_DATA_USERCMD        "快捷命令"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_DATA_SCM            "自定义简码"
+    IDS_PL_SYS              "通用"
+    IDS_PROG_CREATEINDEX_SHAPE "正在创建形码词库索引表..."
+    IDS_PROG_CREATEINDEX_SPELL "正在创建拼音词库索引表..."
+    IDS_REG_SETVALUE        "写入注册表失败"
+    IDS_REG_DELVALUE        "删除注册表项失败"
+    IDS_REG_OPENKEY         "打开注册表失败"
+    IDS_ERROR_UNICODE       "不支持UNICODE编码文本格式"
+    IDS_RATE_MIN            "最小词频"
+    IDS_RATE_MAX            "最大词频"
+    IDS_DATA_UDICT          "启程词典"
+    IDS_KEYMAP_NOURL        "没有网址数据"
+    IDS_KEYMAP_NOCHM        "没有帮助文件"
+    IDS_KM_TWST2            "->普通窗口"
+    IDS_GROUP_COMP          "输入法管理"
+    IDS_LSTCOL_SYMBOL       "符号"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_LSTCOL_SYMBOL_TYPE  "类型"
+    IDS_LSTCOL_SYMBOL_OUTPUT "转换为"
+    IDS_SYMBOL_MODE1        "奇数"
+    IDS_SYMBOL_MODE2        "偶数"
+    IDS_SYMBOL_MODE3        "默认"
+    IDS_SYMBOL_ERROR        "符号修改出错！"
+    IDS_COMP_ENCRYPTED      "编码[%s]被加密！"
+    IDS_PROG_CREATEINDEX_SPELL2 "正在创建拼音词库简码索引表..."
+    IDS_USERDEF_OVERFLOW    "自定义命令超过250字节"
+    IDS_LICENSEWARNING      "该编码经过加密，需要执行第三方验证插件，请确认来源可靠！"
+    IDS_UD_MODIFIED         "自定义词库修改后还没有保存！现在保存吗？"
+    IDS_UD_SAVE             "编辑完成，保存修改"
+    IDS_UD_EMPTYCONFIRM     "确定要清空所有记录吗？"
+    IDS_EXPORT_SCODE_SUCCESS "简码表导出成功，打开查看吗？"
+    IDS_EXPORT_SCODE_ERROR  "简码表导出失败！确认有文件写入权限！"
+    IDS_LSTCOL_SCODEMAP     "简码重码"
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_MSCODE_NONE         "在当前编码中没有发现多重简码！"
+    IDS_USERDEF_LONGPHRASE  "检测到短语长度超过250字节，如果单个重码长度大于250将不能正常显示。"
+    IDS_IMPORT_USER_DICT_PROG "导入用户词库[%d],请耐心等待"
+END
+
+STRINGTABLE 
+BEGIN
+    IDC_SAVE                "保存"
+END
+
+STRINGTABLE 
+BEGIN
+    IDC_IMPORT              "导入"
+    IDC_MODIFY              "修改"
+END
+
+STRINGTABLE 
+BEGIN
+    IDC_EXPORT              "导出"
+END
+
+STRINGTABLE 
+BEGIN
+    IDC_ADD                 "新增"
+    IDC_DEL                 "删除"
+    IDC_DELALL              "清空"
+END
+
+STRINGTABLE 
+BEGIN
+    IDC_EDIT                "全文编辑"
+    IDC_EXTRACT_SCM         "提取简码"
+END
+
+#endif    // 中文(中华人民共和国) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+LANGUAGE 4, 2
+#pragma code_page(936)
+#include "res\compEditor.rc2"  // 非 Microsoft Visual C++ 编辑的资源
+#include "l.CHS\afxres.rc"      // 标准组件
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

@@ -36,6 +36,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "isserver3", "isserver3\isse
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iscore", "iscore\iscore.vcxproj", "{2CBFA93E-21BF-49C1-8583-A8DE1319DED9}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "compEditor", "compEditor\compEditor.vcxproj", "{20933DB8-DD48-45B9-8F1D-3EDF6F641894}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -205,6 +207,16 @@ Global
 		{2CBFA93E-21BF-49C1-8583-A8DE1319DED9}.Release|Win32.ActiveCfg = Release|Win32
 		{2CBFA93E-21BF-49C1-8583-A8DE1319DED9}.Release|Win32.Build.0 = Release|Win32
 		{2CBFA93E-21BF-49C1-8583-A8DE1319DED9}.Release|x64.ActiveCfg = Release|Win32
+		{20933DB8-DD48-45B9-8F1D-3EDF6F641894}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{20933DB8-DD48-45B9-8F1D-3EDF6F641894}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{20933DB8-DD48-45B9-8F1D-3EDF6F641894}.Debug|Win32.ActiveCfg = Debug|Win32
+		{20933DB8-DD48-45B9-8F1D-3EDF6F641894}.Debug|Win32.Build.0 = Debug|Win32
+		{20933DB8-DD48-45B9-8F1D-3EDF6F641894}.Debug|x64.ActiveCfg = Debug|Win32
+		{20933DB8-DD48-45B9-8F1D-3EDF6F641894}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{20933DB8-DD48-45B9-8F1D-3EDF6F641894}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{20933DB8-DD48-45B9-8F1D-3EDF6F641894}.Release|Win32.ActiveCfg = Release|Win32
+		{20933DB8-DD48-45B9-8F1D-3EDF6F641894}.Release|Win32.Build.0 = Release|Win32
+		{20933DB8-DD48-45B9-8F1D-3EDF6F641894}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
