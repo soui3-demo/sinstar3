@@ -1,8 +1,8 @@
 #pragma once
-#include "../iscore/iscore-i.h"
 #include "trayIcon.h"
 #include "MyTTS.h"
 #include "KeyMapDlg.h"
+#include <iscore-i.h>
 
 typedef IServerCore * (*funIscore_Create)();
 typedef void(*funIscore_Destroy)(IServerCore* pCore);

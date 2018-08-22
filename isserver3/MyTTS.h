@@ -11,7 +11,7 @@
 
 #include <sapi.h>           // SAPI includes
 #include "threadobject.h"
-#include "../iscore/iscore-i.h"
+#include <iscore-i.h>
 
 
 enum {
