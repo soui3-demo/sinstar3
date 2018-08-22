@@ -12,8 +12,7 @@
 #pragma comment(lib,"shell32.lib")
 #pragma comment(lib,"imm32.lib")
 #include <winver.h>
-#pragma comment(lib,"version.lib")
-
+#include "../helper/helper.h"
 #include "../include/version.h"
 #include "../include/reg.h"
 
@@ -27,100 +26,6 @@ TCHAR g_szPath[MAX_PATH]={0};	//≥Ã–Ú∆Ù∂ØŒª÷√
 HINSTANCE g_hInst = 0;
 
 
-
-#include <AclAPI.h>
-BOOL Helper_SetFileACL(LPCTSTR pszPath)
-{
-	HANDLE hDir = CreateFile(pszPath,READ_CONTROL|WRITE_DAC,0,NULL,OPEN_EXISTING,FILE_FLAG_BACKUP_SEMANTICS,NULL);
-	if(hDir == INVALID_HANDLE_VALUE)
-		return FALSE; 
-
-	ACL* pOldDACL;
-	SECURITY_DESCRIPTOR* pSD = NULL;
-	GetSecurityInfo(hDir, SE_FILE_OBJECT , DACL_SECURITY_INFORMATION,NULL, NULL, &pOldDACL, NULL, (void**)&pSD);
-
-	PSID pSid = NULL;
-	SID_IDENTIFIER_AUTHORITY authNt = SECURITY_NT_AUTHORITY;
-	AllocateAndInitializeSid(&authNt,2,SECURITY_BUILTIN_DOMAIN_RID,DOMAIN_ALIAS_RID_USERS,0,0,0,0,0,0,&pSid);
-
-	EXPLICIT_ACCESS ea={0};
-	ea.grfAccessMode = GRANT_ACCESS;
-	ea.grfAccessPermissions = GENERIC_ALL;
-	ea.grfInheritance = CONTAINER_INHERIT_ACE|OBJECT_INHERIT_ACE;
-	ea.Trustee.TrusteeType = TRUSTEE_IS_GROUP;
-	ea.Trustee.TrusteeForm = TRUSTEE_IS_SID;
-	ea.Trustee.ptstrName = (LPTSTR)pSid;
-
-	ACL* pNewDACL = 0;
-	DWORD err = SetEntriesInAcl(1,&ea,pOldDACL,&pNewDACL);
-
-	if(pNewDACL)
-		SetSecurityInfo(hDir,SE_FILE_OBJECT,DACL_SECURITY_INFORMATION,NULL, NULL, pNewDACL, NULL);
-
-	FreeSid(pSid);
-	LocalFree(pNewDACL);
-	LocalFree(pSD);
-	LocalFree(pOldDACL);
-	CloseHandle(hDir);
-
-	return TRUE;
-
-}
-
-
-BOOL Helper_SetFileACLEx(LPCTSTR pszPath,BOOL bSubFile)
-{
-	SECURITY_DESCRIPTOR* pSD = NULL;
-
-	PSID pSid = NULL;
-	SID_IDENTIFIER_AUTHORITY authNt = SECURITY_NT_AUTHORITY;
-	AllocateAndInitializeSid(&authNt,2,SECURITY_BUILTIN_DOMAIN_RID,DOMAIN_ALIAS_RID_USERS,0,0,0,0,0,0,&pSid);
-
-	EXPLICIT_ACCESS ea={0};
-	ea.grfAccessMode = GRANT_ACCESS;
-	ea.grfAccessPermissions = GENERIC_ALL;
-	ea.grfInheritance = CONTAINER_INHERIT_ACE|OBJECT_INHERIT_ACE;
-	ea.Trustee.TrusteeType = TRUSTEE_IS_GROUP;
-	ea.Trustee.TrusteeForm = TRUSTEE_IS_SID;
-	ea.Trustee.ptstrName = (LPTSTR)pSid;
-
-	ACL* pNewDACL = 0;
-	DWORD err = SetEntriesInAcl(1,&ea,NULL,&pNewDACL);
-
-	if(pNewDACL)
-	{
-		HANDLE hFile = CreateFile(pszPath,READ_CONTROL|WRITE_DAC,0,NULL,OPEN_EXISTING,FILE_FLAG_BACKUP_SEMANTICS,NULL);
-		if(hFile != INVALID_HANDLE_VALUE) SetSecurityInfo(hFile,SE_FILE_OBJECT,DACL_SECURITY_INFORMATION,NULL, NULL, pNewDACL, NULL);
-		CloseHandle(hFile);
-		if(bSubFile)
-		{
-			WIN32_FIND_DATA wfd={0};
-			TCHAR szPath[MAX_PATH],szFilter[MAX_PATH];
-			_stprintf(szFilter,_T("%s\\*.*"),pszPath);
-			HANDLE hFind=FindFirstFile(szFilter,&wfd);
-			if(hFind)
-			{
-				do 
-				{
-					if(!(wfd.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY))
-					{
-						_stprintf(szPath,_T("%s\\%s"),pszPath,wfd.cFileName);
-						HANDLE hFile = CreateFile(szPath,READ_CONTROL|WRITE_DAC,0,NULL,OPEN_EXISTING,FILE_FLAG_BACKUP_SEMANTICS,NULL);
-						if(hFile != INVALID_HANDLE_VALUE) SetSecurityInfo(hFile,SE_FILE_OBJECT,DACL_SECURITY_INFORMATION,NULL, NULL, pNewDACL, NULL);
-						CloseHandle(hFile);
-					}
-				} while (FindNextFile(hFind,&wfd));
-				FindClose(hFind);
-			}
-		}
-	}
-	FreeSid(pSid);
-	LocalFree(pNewDACL);
-	LocalFree(pSD);
-
-	return TRUE;
-
-}
 
 BOOL Is64OS()
 {
@@ -457,20 +362,6 @@ BOOL Sinstar_Install(LPCTSTR pszImeName)
 	Helper_SetFileACLEx(szSvrData,TRUE);
 
 	return TRUE;
-}
-
-void Helper_CenterWindow(HWND hWnd,UINT uFlag)
-{
-	RECT rc,screenrc;
-	int x,y;
-	SystemParametersInfo(SPI_GETWORKAREA,
-		0,
-		&screenrc,
-		0);
-	GetWindowRect(hWnd,&rc);
-	x=(screenrc.right-rc.right+rc.left)/2;
-	y=(screenrc.bottom-rc.bottom+rc.top)/2;
-	SetWindowPos(hWnd,NULL,x,y,0,0,SWP_NOSIZE|SWP_NOZORDER|uFlag);
 }
 
 #define IME_NAME _T("sinstar3_ime")
