@@ -17,6 +17,7 @@ public:
 	CTPCompEditor(CWnd *pParentWnd=NULL);   // standard constructor
 	char m_szLicenseMD5[33];
 	CString	m_strKeyDll;
+	CString m_strIconFile;
 // Dialog Data
 	//{{AFX_DATA(CTPCompEditor)
 	enum { IDD = IDD_TP_COMPEDITOR };

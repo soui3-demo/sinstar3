@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "TPCompEditor.h"
 #include "../iscore/compbuilder-i.h"
+#include "base64.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -124,12 +125,11 @@ void CTPCompEditor::OnBrowsecomp()
 void CTPCompEditor::OnBrowseicon() 
 {
 	CString strExt;
-	strExt.LoadString(IDS_FORMAT_BMP);
+	strExt.LoadString(IDS_FORMAT_IMAGE);
 	CFileDialog browseDlg(TRUE,NULL,NULL,0,strExt);
 	if(browseDlg.DoModal()==IDOK)
 	{
-		if(!m_bmwIcon.SetBitmapFile(browseDlg.GetPathName()))
-			AfxMessageBox(IDS_ERROR_ICONFORMAT);
+		m_strIconFile = browseDlg.GetPathName();
 	}
 }
 
@@ -206,7 +206,6 @@ void CTPCompEditor::OnMake()
 	CArchive ar(&file,CArchive::load);
 
 	char szLine[1000];
-
 	//find text section
 	char *pBuf=ar.ReadString(szLine,1000);
 	while(pBuf && stricmp(pBuf,"[Text]")!=0)
@@ -257,8 +256,8 @@ void CTPCompEditor::OnMake()
 	_splitpath(strSave,szDriver,szPath,szTitle,NULL);
 	BOOL bSuccess= pCompBuilder->Make(strSave,head,
 		pCodingRule,
-		m_bmwIcon.m_strFileName.IsEmpty()?NULL:(LPCTSTR)m_bmwIcon.m_strFileName,
-		m_bmwIcon.m_crSel,
+		m_strIconFile.IsEmpty()?NULL:m_strIconFile,
+		0,
 		strKeyMap.IsEmpty()?NULL:(LPCTSTR)strKeyMap,
 		m_szLicenseMD5);
 
@@ -308,9 +307,6 @@ BOOL CTPCompEditor::OnInitDialog()
 	              // EXCEPTION: OCX Property Pages should return FALSE
 }
 
-BITMAPFILEHEADER bmpFileHeader={'MB',0x00000336,0,0,0x36};
-BITMAPINFOHEADER bmpInfoHeader={sizeof(BITMAPINFOHEADER),16,16,1,24,0,0x0300,0,0,0,0};
-
 void CTPCompEditor::OnChangeComp() 
 {
 	char szFileName[MAX_PATH];
@@ -324,32 +320,36 @@ void CTPCompEditor::OnChangeComp()
 		char szWebSite[200];
 		GetPrivateProfileString("Description","WebSite","",szWebSite,200,szFileName);
 		SetDlgItemText(IDC_URL,szWebSite);
-		char szIcon[2000]; //icon buf
-		if(GetPrivateProfileSection("ICON",szIcon,2000,szFileName))
+		char *szIcon=(char*)malloc(32*1024);//max to 32k
+
+		int nLen = GetPrivateProfileSection("Icon2",szIcon,32*1024,szFileName);
+		if(nLen)
 		{
-			char szTempPath[MAX_PATH],szIconFile[MAX_PATH];
-			GetTempPath(MAX_PATH,szTempPath);
-			GetTempFileName(szTempPath,"ssi",0,szIconFile);
-			FILE *f=fopen(szIconFile,"wb");
-			fwrite(&bmpFileHeader,sizeof(BITMAPFILEHEADER),1,f);
-			fwrite(&bmpInfoHeader,sizeof(BITMAPINFOHEADER),1,f);
-			char *pLine=szIcon;
-			COLORREF cr;
-			for(int y=0;y<16;y++)
+
+			char szIconFile[MAX_PATH];
+			strcpy(szIconFile,szFileName);
+			strcat(szIconFile,".img");
+
+			std::string tmp;
+			char *p=szIcon;
+			char *pEnd = p+nLen;
+
+			while(p<pEnd)
 			{
-				for(int x=0;x<16;x++)
-				{
-					sscanf(pLine,"%06X ",&cr);
-					fwrite(&cr,3,1,f);
-					pLine+=7;
-				}
+				tmp+=p;
+				p+=strlen(p)+1;
 			}
+
+			std::string result;
+			result.resize(nLen);
+			size_t nUsed=0;
+			Base64::DecodeFromArray(&tmp[0],tmp.length(),Base64::DO_LAX,&result,&nUsed);
+
+			FILE *f=fopen(szIconFile,"wb");
+			fwrite(&result[0],1,result.length(),f);
 			fclose(f);
-			m_bmwIcon.SetBitmapFile(szIconFile);
-			sscanf(pLine,"%06X",&cr);//color key
-			m_bmwIcon.m_crSel=cr;
-			OnBMWndClick(cr,0);
 		}
+		free(szIcon);
 	}
 }
 

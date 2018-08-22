@@ -17,8 +17,6 @@
 
 typedef unsigned char uint8_t;
 
-namespace rtc {
-
 class Base64 {
  public:
   enum DecodeOption {
@@ -120,6 +118,5 @@ class Base64 {
                                       size_t* data_used);
 };
 
-}  // namespace rtc
 
 #endif  // WEBRTC_BASE_BASE64_H__

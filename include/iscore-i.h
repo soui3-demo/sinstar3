@@ -21,7 +21,7 @@ struct IBuildIndexProgressListener
 	virtual void OnBuildSpellPhraseIndex2(PROGTYPE uType, unsigned int dwData) = 0;
 };
 
-struct IKeyMapData {
+struct IDataBlock {
 	virtual void * GetData() const = 0;
 	virtual int GetLength() const = 0;
 };
@@ -36,7 +36,7 @@ struct IUiMsgHandler : IBuildIndexProgressListener
 
 	virtual void OnShowTray(bool bTray) = 0;
 
-	virtual void OnShowKeyMap(IKeyMapData * pCompData, LPCSTR pszName, LPCSTR pszUrl) = 0;
+	virtual void OnShowKeyMap(IDataBlock * pCompData, LPCSTR pszName, LPCSTR pszUrl) = 0;
 
 	virtual int  TtsGetSpeed() = 0;
 	virtual void TtsSetSpeed(int nSpeed) = 0;

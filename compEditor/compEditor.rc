@@ -250,7 +250,7 @@ BEGIN
     IDS_FORMAT_SPL          "启程输入之星词库(*.spl)|*.spl||"
     IDS_FORMAT_UD2          "输入之星用户词典(*.ud2)|*.ud2||"
     IDS_FORMAT_BMP          "位图文件(*.bmp)|*.bmp||"
-    IDS_FORMAT_IMAGE        "图片文件(*.jpg;*.gif;*.bmp)|*.jpg;*.gif;*.bmp|jpg file(*.jpg)|*.jpg|gif File(*.gif)|*.gif|bmp file(*.bmp)|*.bmp||"
+    IDS_FORMAT_IMAGE        "图片文件(*.jpg;*.gif;*.bmp;*.png)|*.png;*.jpg;*.gif;*.bmp|png file(*.png)|*.png|jpg file(*.jpg)|*.jpg|gif File(*.gif)|*.gif|bmp file(*.bmp)|*.bmp||"
     IDS_GROUP_DATA          "数据管理"
     IDS_GROUP_OTHER         "其它"
 END

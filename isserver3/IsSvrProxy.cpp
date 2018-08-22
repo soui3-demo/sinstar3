@@ -116,7 +116,7 @@ void CIsSvrProxy::OnKeyMapFree(CKeyMapDlg * pWnd)
 	m_pKeyMapDlg = NULL;
 }
 
-void CIsSvrProxy::OnShowKeyMap(IKeyMapData * pCompData, LPCSTR pszName, LPCSTR pszUrl) {
+void CIsSvrProxy::OnShowKeyMap(IDataBlock * pCompData, LPCSTR pszName, LPCSTR pszUrl) {
 	SOUI::IBitmap *pBmp = SResLoadFromMemory::LoadImage(pCompData->GetData(), pCompData->GetLength());
 	if (pBmp)
 	{

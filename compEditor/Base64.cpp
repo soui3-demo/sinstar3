@@ -13,6 +13,7 @@
 //*     o reserve string buffer space in advance
 //*
 //*********************************************************************
+#include "stdafx.h"
 #include "base64.h"
 
 #include <string.h>
@@ -20,8 +21,6 @@
 using std::vector;
 
 #define RTC_DCHECK(x) if(!(x)) assert(false)
-
-namespace rtc {
 
 static const char kPad = '=';
 static const unsigned char pd = 0xFD;  // Padding
@@ -271,5 +270,3 @@ bool Base64::DecodeFromArrayTemplate(const char* data,
   }
   return success;
 }
-
-}  // namespace rtc

@@ -27,7 +27,7 @@ protected:
 
 	virtual void OnShowTray(bool bTray) ;
 
-	virtual void OnShowKeyMap(IKeyMapData * pCompData, LPCSTR pszName, LPCSTR pszUrl) ;
+	virtual void OnShowKeyMap(IDataBlock * pCompData, LPCSTR pszName, LPCSTR pszUrl) ;
 
 	virtual int TtsGetSpeed();
 	virtual int TtsGetVoice(bool bCh);
