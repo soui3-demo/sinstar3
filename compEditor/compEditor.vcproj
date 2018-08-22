@@ -330,5 +330,9 @@
 		</File>
 	</Files>
 	<Globals>
+		<Global
+			Name="RESOURCE_FILE"
+			Value="compEditor.rc"
+		/>
 	</Globals>
 </VisualStudioProject>

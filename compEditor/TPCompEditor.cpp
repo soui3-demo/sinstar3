@@ -16,6 +16,8 @@ static char THIS_FILE[] = __FILE__;
 
 typedef ICompBuilder* (* FunICompBuilder_Create)();
 typedef void (*FunICompBuilder_Destroy)(ICompBuilder* pCompBuilder);
+typedef ICompReaderEx * (*FunICompReader_Create)();
+typedef void (*FunICompReader_Destroy)(ICompReaderEx* pCompReader);
 
 class CompBuilderLoader
 {
@@ -25,6 +27,10 @@ public:
 		m_hMod = LoadLibrary(_T("iscore.dll"));
 		m_funCreate = (FunICompBuilder_Create)GetProcAddress(m_hMod, "ICompBuilder_Create");
 		m_funDestroy = (FunICompBuilder_Destroy)GetProcAddress(m_hMod, "ICompBuilder_Destroy");
+
+		m_funCreateReader = (FunICompReader_Create)GetProcAddress(m_hMod,"ICompReader_Create");
+	    m_funDestroyReader = (FunICompReader_Destroy)GetProcAddress(m_hMod,"ICompReader_Destroy");
+
 	}
 
 	ICompBuilder * Create() {
@@ -35,6 +41,16 @@ public:
 		return m_funDestroy(pCompBuilder);
 	}
 
+	ICompReaderEx *CreateReader()
+	{
+		return m_funCreateReader();
+	}
+
+	void DestroyReader(ICompReaderEx *pReader)
+	{
+		m_funDestroyReader(pReader);
+	}
+
 	~CompBuilderLoader()
 	{
 		if(m_hMod) FreeLibrary(m_hMod);
@@ -42,6 +58,10 @@ public:
 private:
 	FunICompBuilder_Create m_funCreate;
 	FunICompBuilder_Destroy m_funDestroy;
+
+	FunICompReader_Create  m_funCreateReader;
+	FunICompReader_Destroy m_funDestroyReader;
+
 	HMODULE m_hMod;
 }s_Loader;
 
@@ -76,6 +96,7 @@ BEGIN_MESSAGE_MAP(CTPCompEditor, CDialog)
 	ON_BN_CLICKED(IDC_LICENSE, OnLicense)
 	//}}AFX_MSG_MAP
 	ON_MESSAGE(UM_BMWND_CLICK,OnBMWndClick)
+	ON_BN_CLICKED(IDC_EXPORT, &CTPCompEditor::OnBnClickedExport)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -352,5 +373,32 @@ void CTPCompEditor::OnLicense()
 		return;
 error:
 		MessageBox("无效的授权文件");
+	}
+}
+
+void CTPCompEditor::OnBnClickedExport()
+{
+	CString strExt;
+	strExt.LoadString(IDS_FORMAT_CIT);
+	CFileDialog browseDlg(TRUE,NULL,NULL,0,strExt);
+	if(browseDlg.DoModal()!=IDOK) return;
+	ICompReaderEx *pReader = s_Loader.CreateReader();
+	bool bOk = false;
+	if(pReader->Load(browseDlg.GetPathName()))
+	{
+		char szDrive[5],szDir[MAX_PATH];
+		_splitpath(browseDlg.GetPathName(),szDrive,szDir,NULL,NULL);
+		char szSave[MAX_PATH*2];
+		sprintf(szSave,"%s%s%s.txt",szDrive,szDir,pReader->GetProps()->szName);
+		if(pReader->Export(szSave))
+		{
+			ShellExecute(NULL,"open",szSave,NULL,NULL,SW_SHOWDEFAULT);
+			bOk = true;
+		}
+	}
+	s_Loader.DestroyReader(pReader);
+	if(!bOk)
+	{
+		AfxMessageBox(IDS_EXPORT_COMP_FAILED,MB_OK|MB_ICONSTOP);
 	}
 }

@@ -116,13 +116,12 @@
 #define IDS_MSCODE_NONE                 112
 #define IDS_USERDEF_LONGPHRASE          113
 #define IDS_IMPORT_USER_DICT_PROG       114
+#define IDS_EXPORT_COMP_FAILED          115
 #define IDR_MAINFRAME                   128
 #define IDD_TP_COMPEDITOR               155
-#define IDD_PROG_DIALOG                 174
 #define IDD_LICENSE                     189
 #define IDC_BROWSE                      1006
 #define IDC_SAVE                        1018
-#define IDC_PROGRESS                    1026
 #define IDC_IMPORT                      1047
 #define IDC_MODIFY                      1048
 #define IDC_SAVEFILE                    1049
@@ -131,7 +130,6 @@
 #define IDC_BROWSECOMP                  1113
 #define IDC_URL                         1114
 #define IDC_EXPORT                      1117
-#define IDC_STATIC_TITLE                1137
 #define IDC_BROWSE_SAVE                 1139
 #define IDC_MAKE                        1140
 #define IDC_BROWSE_KEYMAP               1141
@@ -155,7 +153,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        129
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1000
+#define _APS_NEXT_CONTROL_VALUE         1001
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
