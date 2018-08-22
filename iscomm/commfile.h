@@ -19,7 +19,7 @@ COMFILE CF_Init(LPBYTE pbyBuf,int nBufSize,int nValidSize,int nOffset);
 int CF_Read(COMFILE *pcf,void *pBuf,int nSize);
 int CF_ReadString(COMFILE *pcf,char *buf,int nBufLen);
 BYTE CF_ReadChar(COMFILE *pcf);
-int CF_Write(COMFILE *pcf,void *pBuf,int nSize);
+int CF_Write(COMFILE *pcf,const void *pBuf,int nSize);
 int CF_WriteChar(COMFILE *pcf,BYTE byData);
 BOOL CF_EOF(COMFILE *pcf);
 int CF_Tell(COMFILE *pcf);

@@ -39,7 +39,7 @@ int CF_ReadString(COMFILE *pcf,char *pBuf,int nBufLen)
 	return nLen+1;
 }
 
-int CF_Write(COMFILE *pcf,void *pBuf,int nSize)
+int CF_Write(COMFILE *pcf,const void *pBuf,int nSize)
 {
 	int nWrited=nSize;
 	if(pcf->nOffset+nSize>pcf->nBufSize) nWrited=pcf->nBufSize-pcf->nOffset;
