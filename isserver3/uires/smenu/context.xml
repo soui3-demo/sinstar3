@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menuRoot itemHeight="28" contextHelpId="100"
+          sepSkin="TrayMenu_menu_sep"  itemSkin="TrayMenu_menu_bkgnd"
+          font="face:微软雅黑,size:14" margin="1,1,1,1" colorBorder="#cccccc"
+          maxWidth="300" minWidth="150" iconPos="4">
+  <menuItem text="About..." name="menu_about" id="100" />
+  <menuItem text="Auto Exit" name="menu_auto" id="101"/>
+  <menuItem text="Exit!" name="menu_exit" id="102"/>
+</menuRoot>

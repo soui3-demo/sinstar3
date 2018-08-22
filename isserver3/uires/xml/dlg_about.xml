@@ -1,0 +1,16 @@
+﻿<SOUI name="mainWindow" title="@string/title" bigIcon="ICON_LOGO:32" smallIcon="ICON_LOGO:16" width="600" height="400"  margin="5,5,5,5"  resizable="0" wndType="normal"
+appWnd="1"
+translucent="1" 
+>
+  <root skin="_skin.sys.wnd.bkgnd" cache="1" layout="vbox">
+    <caption size="-2,30" layout="hbox" gravity="center">
+      <icon pos="10,8" src="ICON_LOGO:16"/>
+      <text pos="29,9">@string/title</text>
+      <window size="0,0" weight="1" visible="0"/>
+      <imgbtn name="btn_close" skin="_skin.sys.btn.close"    pos="-45,0" tip="close" animate="1"/>
+    </caption>
+    <window size="-2,0" weight="1">
+      <text pos="|0,|0" offset="-0.5,-0.5" text="启程输入法后台服务器 3.0"/>
+    </window>
+  </root>
+</SOUI>

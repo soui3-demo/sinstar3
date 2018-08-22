@@ -1,0 +1,26 @@
+﻿<resource>
+  <UIDEF>
+    <file name="XML_INIT" path="uidef\init.xml"/>
+  </UIDEF>
+  <LAYOUT>
+    <file name="dlg_about" path="xml\dlg_about.xml"/>
+    <file name="dlg_keymap" path="xml\dlg_keymap.xml"/>
+  </LAYOUT>
+  
+  <values>
+  	<file name="string" path="values\string.xml"/>
+  	<file name="color" path="values\color.xml"/>
+  	<file name="skin" path="values\skin.xml"/>
+  </values>
+
+  <ICON>
+    <file name="ICON_LOGO"  path="icon\logo.ico"/>
+    <file name="ICON_LOGO1" path="icon\logo1.ico"/>
+    <file name="ICON_LOGO2" path="icon\logo2.ico"/>
+    <file name="ICON_LOGO3" path="icon\logo3.ico"/>
+    <file name="ICON_LOGO4" path="icon\logo4.ico"/>
+  </ICON>
+  <smenu>
+    <file name="menu_context" path="smenu\context.xml"/>
+  </smenu>
+</resource>
