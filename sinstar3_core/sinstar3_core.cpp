@@ -5,6 +5,7 @@
 #include "Sinstar3Impl.h"
 #include "../include/autolock.h"
 #include "../include/version.h"
+#include "../helper/helper.h"
 #include "SouiEnv.h"
 #include "Minidump.h"
 #include "dataCenter/DataCenter.h"
@@ -42,33 +43,6 @@ EXTERN_C SINSTAR3_API void Sinstar3_SetHostInfo(HostInfo *pHostInfo)
 	theModule->SetLogStateListener(pHostInfo->pLogStateListener);
 }
 
-LPCWSTR LOW_INTEGRITY_SDDL_SACL_W = L"S:(ML;;NW;;;LW)";
-#define LABEL_SECURITY_INFORMATION (0x00000010L)
-BOOL CSinstar3Core::SetObjectToLowIntegrity(HANDLE hObject, SE_OBJECT_TYPE type)
-{
-	BOOL bRet = FALSE;
-	DWORD dwErr = ERROR_SUCCESS;
-	PSECURITY_DESCRIPTOR pSD = NULL;
-	PACL pSacl = NULL;
-	BOOL fSaclPresent = FALSE;
-	BOOL fSaclDefaulted = FALSE;
-	if (ConvertStringSecurityDescriptorToSecurityDescriptorW(
-		LOW_INTEGRITY_SDDL_SACL_W, SDDL_REVISION_1, &pSD, NULL))
-	{
-		if (GetSecurityDescriptorSacl(
-			pSD, &fSaclPresent, &pSacl, &fSaclDefaulted))
-		{
-			dwErr = SetSecurityInfo(hObject, type, LABEL_SECURITY_INFORMATION, NULL, NULL, NULL, pSacl);
-
-			bRet = (ERROR_SUCCESS == dwErr);
-		}
-
-		LocalFree(pSD);
-	}
-
-	return bRet;
-}
-
 CSinstar3Core::CSinstar3Core(HINSTANCE hInst):CModuleRef(hInst),m_pLogStateListener(NULL), m_hMutex(0), m_hSettingFileMap(NULL)
 {
 	m_hMutex = CreateMutex(NULL, FALSE, SINSTAR3_MUTEX);
@@ -95,7 +69,7 @@ CSinstar3Core::CSinstar3Core(HINSTANCE hInst):CModuleRef(hInst),m_pLogStateListe
 		g_SettingsG = (CSettingsGlobal*)MapViewOfFile(m_hSettingFileMap, FILE_MAP_READ | FILE_MAP_WRITE, 0, 0, 0);
 		if (bCreate)
 		{//first create object
-			SetObjectToLowIntegrity(m_hSettingFileMap, SE_KERNEL_OBJECT);//降低内核对象访问权限
+			Helper_SetObjectToLowIntegrity(m_hSettingFileMap, SE_KERNEL_OBJECT);//降低内核对象访问权限
 			m_strConfigIni = m_strDataPath + _T("\\data\\") + KSettingINI;
 			g_SettingsG->Load(m_strConfigIni);
 		}

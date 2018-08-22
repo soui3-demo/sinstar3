@@ -49,6 +49,32 @@ BOOL Helper_SetFileACL(LPCTSTR pszPath)
 
 }
 
+LPCWSTR LOW_INTEGRITY_SDDL_SACL_W = L"S:(ML;;NW;;;LW)";
+#define LABEL_SECURITY_INFORMATION (0x00000010L)
+BOOL Helper_SetObjectToLowIntegrity(HANDLE hObject, SE_OBJECT_TYPE type)
+{
+	BOOL bRet = FALSE;
+	DWORD dwErr = ERROR_SUCCESS;
+	PSECURITY_DESCRIPTOR pSD = NULL;
+	PACL pSacl = NULL;
+	BOOL fSaclPresent = FALSE;
+	BOOL fSaclDefaulted = FALSE;
+	if (ConvertStringSecurityDescriptorToSecurityDescriptorW(
+		LOW_INTEGRITY_SDDL_SACL_W, SDDL_REVISION_1, &pSD, NULL))
+	{
+		if (GetSecurityDescriptorSacl(
+			pSD, &fSaclPresent, &pSacl, &fSaclDefaulted))
+		{
+			dwErr = SetSecurityInfo(hObject, type, LABEL_SECURITY_INFORMATION, NULL, NULL, NULL, pSacl);
+
+			bRet = (ERROR_SUCCESS == dwErr);
+		}
+
+		LocalFree(pSD);
+	}
+
+	return bRet;
+}
 
 BOOL Helper_SetFileACLEx(LPCTSTR pszPath, BOOL bSubFile)
 {

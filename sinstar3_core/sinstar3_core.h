@@ -32,8 +32,6 @@ public:
 	SOUI::SStringT GetDataPath() const {return m_strDataPath;}
 	SOUI::SStringT GetSettingPath() const;
 	SOUI::SStringT GetCfgIni() const { return m_strConfigIni; }
-public:
-	static BOOL SetObjectToLowIntegrity(HANDLE hObject, SE_OBJECT_TYPE type);
 protected:
 	virtual void OnInit();
 

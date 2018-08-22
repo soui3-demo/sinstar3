@@ -1,6 +1,9 @@
 #pragma once
 #define _CRT_SECURE_NO_WARNINGS
 
+#include <Sddl.h>
+#include <AccCtrl.h>
+
 #ifdef __cplusplus
 extern "C"{
 #endif//__cplusplus
@@ -10,6 +13,7 @@ extern BOOL	g_bRecordLog;
 
 BOOL Helper_SetFileACL(LPCTSTR pszPath);
 BOOL Helper_SetFileACLEx(LPCTSTR pszPath, BOOL bSubFile);
+BOOL Helper_SetObjectToLowIntegrity(HANDLE hObject, SE_OBJECT_TYPE type);
 
 
 void Helper_TraceW(wchar_t * pszFormat,...);
