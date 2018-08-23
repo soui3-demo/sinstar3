@@ -1,0 +1,57 @@
+﻿<SOUI name="mainWindow" title="@string/title" bigIcon="ICON_LOGO:32" smallIcon="ICON_LOGO:16" width="600" height="400"  margin="5,5,5,5"  resizable="1" wndType="appMain"
+appWnd="1"
+translucent="1" 
+>
+  <root skin="_skin.sys.wnd.bkgnd" cache="1">
+    <caption pos="0,0,-0,30" show="1" font="adding:0">
+      <icon pos="10,8" src="ICON_LOGO:16"/>
+      <text pos="29,9">@string/title</text>
+      <imgbtn name="btn_close" skin="_skin.sys.btn.close"    pos="-45,0" tip="close" animate="1"/>
+      <imgbtn name="btn_max" skin="_skin.sys.btn.maximize"  pos="-83,0" animate="1" />
+      <imgbtn name="btn_restore" skin="_skin.sys.btn.restore"  pos="-83,0" show="0" animate="1" />
+      <imgbtn name="btn_min" skin="_skin.sys.btn.minimize" pos="-121,0" animate="1" />
+    </caption>
+    <window pos="5,[2,-5,-5" layout="vbox">
+      <window size="-2,-1" layout="gridlayout" columnCount="3" xGravity="fill" xInterval="5" yInterval="5">
+        <text text="码表文件:" tip="ini格式ansi文本"  msgTransparent="0"/>
+        <edit size="0,30" name="edit_comp" columnWeight="1"/>
+        <button size="50,30" name="btn_browse_comp" text="..."/>
+        <text text="启程码表文件:" tip="cit格式二进制码表"  msgTransparent="0"/>
+        <edit size="0,30" name="edit_cit_save" weight="1"/>
+        <button size="50,30" name="btn_browse_save" text="..."/>
+        <text text="字根表图片:" tip="png,gif,jpg格式，可以不提供" msgTransparent="0"/>
+        <edit size="0,30" name="edit_keymap" weight="1"/>
+        <button size="50,30" name="btn_browse_keymap" text="..."/>
+        <text text="编码图标:" tip="3.0只支持png格式，可以不提供" msgTransparent="0"/>
+        <edit size="0,30" name="edit_comp_logo" weight="1"/>
+        <button size="50,30" name="btn_browse_logo" text="..."/>
+      </window>
+      <window size="-2,-1" layout="hbox" padding="0,5,0,5">
+        <check name="chk_symbol_first" text="标点顶字上屏"/>
+        <check name="chk_yinxingma" text="音形码优化"/>
+        <check name="chk_disable_export" text="禁止导出编码"/>
+      </window>
+      <window size="-2,-1" layout="hbox" padding="0,5,0,5" gravity="center">
+        <text text="编码官网:"/>
+        <edit name="edit_url" size="0,30" weight="1"/>
+      </window>
+      <window size="-2,0" weight="1" layout="hbox" padding="0,5,0,5">
+        <window size="0,-2" weight="1" layout="vbox">
+          <text text="编码logo"/>
+          <img size="-1,-1" name="img_logo"/>
+        </window>
+        <window size="0,-2" weight="1" layout="vbox">
+          <text text="字根表"/>
+          <img size="-2,0" weight="1" name="img_keymap"/>
+        </window>
+      </window>
+      <window size="-2,-1" layout="hbox" gravity="center">
+        <window size="0,0" weight="1" visible="0"/>
+        <button size="100,30" name="btn_build" text="创建码表"/>
+        <window size="0,0" weight="1.5" visible="0"/>
+        <button size="100,30" name="btn_export" text="导出码表"/>
+        <window size="0,0" weight="1" visible="0"/>
+      </window>
+    </window>
+  </root>
+</SOUI>
