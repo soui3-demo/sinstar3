@@ -114,10 +114,10 @@ void CTPCompEditor::OnBrowsecomp()
 	GetDlgItemText(IDC_SAVEFILE,strSave);
 	if(strSave.IsEmpty())
 	{
-		char szDrive[5],szPath[MAX_PATH],szTitle[MAX_PATH];
-		char szSave[MAX_PATH];
-		_splitpath(browseDlg.GetPathName(),szDrive,szPath,szTitle,NULL);
-		sprintf(szSave,"%s%s%s.cit",szDrive,szPath,szTitle);
+		TCHAR szDrive[5],szPath[MAX_PATH],szTitle[MAX_PATH];
+		TCHAR szSave[MAX_PATH];
+		_tsplitpath(browseDlg.GetPathName(),szDrive,szPath,szTitle,NULL);
+		_stprintf(szSave,_T("%s%s%s.cit"),szDrive,szPath,szTitle);
 		SetDlgItemText(IDC_SAVEFILE,szSave);
 	}
 }
@@ -137,10 +137,11 @@ void CTPCompEditor::OnBrowseSave()
 {
 	CString strExt;
 	strExt.LoadString(IDS_FORMAT_CIT);
-	CFileDialog browseDlg(FALSE,"cit",NULL,0,strExt);
+	CFileDialog browseDlg(FALSE,_T("cit"),NULL,0,strExt);
 	if(browseDlg.DoModal()!=IDOK) return;
 	SetDlgItemText(IDC_SAVEFILE,browseDlg.GetPathName());		
 }
+
 
 
 #define MIN_WORDS	2000
@@ -155,7 +156,7 @@ void CTPCompEditor::OnMake()
 
 	GetDlgItemText(IDC_COMP,strComp);
 	GetDlgItemText(IDC_KEYMAP,strKeyMap);
-	GetDlgItemText(IDC_URL,head.szUrl,49);
+	GetDlgItemTextA(m_hWnd,IDC_URL,head.szUrl,49);
 	GetDlgItemText(IDC_SAVEFILE,strSave);
 	head.bSymbolFirst=!(BOOL)IsDlgButtonChecked(IDC_SYMBOL_NOFIRST);
 	head.dwEncrypt=IsDlgButtonChecked(IDC_ENCRYPT)?1:0;
@@ -177,20 +178,21 @@ void CTPCompEditor::OnMake()
 		AfxMessageBox(IDS_ERROR_UNICODE,MB_OK|MB_ICONSTOP);
 		return;
 	}
-	char szWildChar[2];
+	wchar_t szWildChar[2];
 	BYTE byNumRules;
 	char szRules[RULE_MAX*100];
 
-	GetPrivateProfileString("Description","Name","",head.szName,50,strComp);
-	GetPrivateProfileString("Description","UsedCodes","",head.szCode,50,strComp);
-	GetPrivateProfileString("Description","WildChar","",szWildChar,2,strComp);
+	wchar_t buf[100];
+	//GetPrivateProfileString(_T("Description"),_T("Name"),L"",head.szName,50,strComp);
+	//GetPrivateProfileString(_T("Description"),L"UsedCodes",L"",head.szCode,50,strComp);
+	GetPrivateProfileString(_T("Description"),L"WildChar",L"",szWildChar,2,strComp);
 	head.cWildChar=szWildChar[0];
-	head.cCodeMax=GetPrivateProfileInt("Description","MaxCodes",0,strComp);
-	head.dwAutoSelect=GetPrivateProfileInt("Description","AutoSelect",0,strComp)?1:0;//唯一重码自动上屏属性
-	head.dwPhraseCompPart=GetPrivateProfileInt("Description","PhraseCompPart",0,strComp)?1:0;//词组可以不是全码标志
+	head.cCodeMax=GetPrivateProfileInt(_T("Description"),L"MaxCodes",0,strComp);
+	head.dwAutoSelect=GetPrivateProfileInt(_T("Description"),L"AutoSelect",0,strComp)?1:0;//唯一重码自动上屏属性
+	head.dwPhraseCompPart=GetPrivateProfileInt(_T("Description"),L"PhraseCompPart",0,strComp)?1:0;//词组可以不是全码标志
 
-	byNumRules=GetPrivateProfileInt("Description","NumRules",0,strComp);
-	GetPrivateProfileSection("Rule",szRules,RULE_MAX*100,strComp);	
+	byNumRules=GetPrivateProfileInt(_T("Description"),L"NumRules",0,strComp);
+	GetPrivateProfileSectionA("Rule",szRules,RULE_MAX*100,strComp);	
 
 	ICompBuilder * pCompBuilder = s_Loader.Create();
 	ICodingRule * pCodingRule = pCompBuilder->CreateCodingRule();
@@ -205,10 +207,10 @@ void CTPCompEditor::OnMake()
 	CFile file(strComp,CFile::modeRead);
 	CArchive ar(&file,CArchive::load);
 
-	char szLine[1000];
+	TCHAR szLine[1000];
 	//find text section
-	char *pBuf=ar.ReadString(szLine,1000);
-	while(pBuf && stricmp(pBuf,"[Text]")!=0)
+	TCHAR *pBuf=ar.ReadString(szLine,1000);
+	while(pBuf && _tcsicmp(pBuf,L"[Text]")!=0)
 	{
 		pBuf=ar.ReadString(szLine,1000);
 	}
@@ -313,16 +315,16 @@ void CTPCompEditor::OnChangeComp()
 	GetDlgItemText(IDC_COMP,szFileName,MAX_PATH);
 	if(GetFileAttributes(szFileName)!=0xffffffff)
 	{
-		int nSymbolFirst=GetPrivateProfileInt("Description","SymbolFirst",2,szFileName);
+		int nSymbolFirst=GetPrivateProfileIntA(("Description"),"SymbolFirst",2,szFileName);
 		if(nSymbolFirst!=2) CheckDlgButton(IDC_SYMBOL_NOFIRST,!nSymbolFirst);
-		int nYinXingMa=GetPrivateProfileInt("Description","YinXingMa",2,szFileName);
+		int nYinXingMa=GetPrivateProfileIntA(("Description"),"YinXingMa",2,szFileName);
 		if(nYinXingMa!=2) CheckDlgButton(IDC_YINXINGMA,nYinXingMa);
 		char szWebSite[200];
-		GetPrivateProfileString("Description","WebSite","",szWebSite,200,szFileName);
+		GetPrivateProfileStringA(("Description"),"WebSite","",szWebSite,200,szFileName);
 		SetDlgItemText(IDC_URL,szWebSite);
 		char *szIcon=(char*)malloc(32*1024);//max to 32k
 
-		int nLen = GetPrivateProfileSection("Icon2",szIcon,32*1024,szFileName);
+		int nLen = GetPrivateProfileSectionA("Icon2",szIcon,32*1024,szFileName);
 		if(nLen)
 		{
 
@@ -373,7 +375,7 @@ void CTPCompEditor::OnLicense()
 		m_strKeyDll=lcsDlg.m_strLicenseDll;
 		return;
 error:
-		MessageBox("无效的授权文件");
+		MessageBox(L"无效的授权文件");
 	}
 }
 
@@ -387,13 +389,13 @@ void CTPCompEditor::OnBnClickedExport()
 	bool bOk = false;
 	if(pReader->Load(browseDlg.GetPathName()))
 	{
-		char szDrive[5],szDir[MAX_PATH];
-		_splitpath(browseDlg.GetPathName(),szDrive,szDir,NULL,NULL);
-		char szSave[MAX_PATH*2];
-		sprintf(szSave,"%s%s%s.txt",szDrive,szDir,pReader->GetProps()->szName);
+		TCHAR szDrive[5],szDir[MAX_PATH];
+		_tsplitpath(browseDlg.GetPathName(),szDrive,szDir,NULL,NULL);
+		TCHAR szSave[MAX_PATH*2];
+		_stprintf(szSave,L"%s%s%s.txt",szDrive,szDir,pReader->GetProps()->szName);
 		if(pReader->Export(szSave))
 		{
-			ShellExecute(NULL,"open",szSave,NULL,NULL,SW_SHOWDEFAULT);
+			ShellExecute(NULL,_T("open"),szSave,NULL,NULL,SW_SHOWDEFAULT);
 			bOk = true;
 		}
 	}

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SOUI name="mainWindow" title="@string/title" bigIcon="ICON_LOGO:32" smallIcon="ICON_LOGO:16" width="600" height="400"  margin="5,5,5,5"  resizable="1" wndType="normal"
+<SOUI name="mainWindow" title="@string/title" bigIcon="ICON_LOGO:32" smallIcon="ICON_LOGO:16" width="600" height="40"  margin="5,5,5,5"  resizable="1" wndType="normal"
 appWnd="1"
 translucent="1"
 >
@@ -11,7 +11,7 @@ translucent="1"
         <text name="txt_comp_name"/>
         <link name="link_comp_website"/>
       </window>
-      <imgbtn pos ="-0,|0" offset="-1,-0.5" name="btn_close" skin="_skin.sys.btn.close"  tip="close" animate="1"/>
+      <imgbtn pos ="-0,|0" offset="-1,-0.5" name="btn_close" skin="_skin.sys.btn.close"  id="IDCANCEL" tip="close" animate="1"/>
     </caption>
     <img size="-2,0" weight="1" name="img_keymap"/>
   </root>

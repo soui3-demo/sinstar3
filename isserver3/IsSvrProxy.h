@@ -40,6 +40,8 @@ protected:
 	virtual void TtsSpeakText(const wchar_t* pText, int nLen, bool bChinese) ;
 	virtual void TtsSetVoice(bool bCh, int iToken) ;
 	virtual int TtsGetTokensInfo(bool bCh, wchar_t token[][MAX_TOKEN_NAME_LENGHT], int nBufSize);
+
+	virtual DWORD OnQueryVersion() const;
 protected:
 	void _OnBuildIndexProg(int indexMode, PROGTYPE uType, unsigned int dwData);
 	int OnCreate(LPCREATESTRUCT pCS);

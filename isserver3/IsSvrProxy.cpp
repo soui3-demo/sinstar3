@@ -3,6 +3,7 @@
 #include <helper\smenuex.h>
 #include "AboutDlg.h"
 #include "KeyMapDlg.h"
+#include "../helper/helper.h"
 
 #define TIMERID_DELAY_EXIT	200
 #define SPAN_DELAY_EXIT		5000
@@ -61,7 +62,13 @@ int CIsSvrProxy::OnCreate(LPCREATESTRUCT pCS)
 	}
 	else
 	{
-		m_trayIcon.Init(m_hWnd, _T("sinstar3 server"));
+		DWORD dwVer = 0;
+		SStringT strTip = CAboutDlg::GetVersionInfo(dwVer);
+		strTip += _T("ver:");
+		TCHAR szVer[100];
+		Helper_VersionString(dwVer, szVer);
+		strTip += szVer;
+		m_trayIcon.Init(m_hWnd, strTip);
 		if(m_pCore->IsShowTray()) m_trayIcon.Show();
 	}
 	return nRet;
@@ -207,6 +214,13 @@ void CIsSvrProxy::TtsSetVoice(bool bCh, int iToken) {
 
 int CIsSvrProxy::TtsGetTokensInfo(bool bCh, wchar_t token[][MAX_TOKEN_NAME_LENGHT], int nBufSize) { 
 	return m_tts.GetTokensInfo(bCh, token, nBufSize);
+}
+
+DWORD CIsSvrProxy::OnQueryVersion() const
+{
+	DWORD dwVer;
+	CAboutDlg::GetVersionInfo(dwVer);
+	return dwVer;
 }
 
 

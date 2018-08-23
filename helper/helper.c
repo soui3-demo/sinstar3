@@ -193,9 +193,9 @@ void Helper_CenterWindow(HWND hWnd,UINT uFlag)
 }
 
 //获取文件的版本号
-void Helper_VersionString(DWORD dwVer,char *pszBuf)
+void Helper_VersionString(DWORD dwVer,TCHAR *pszBuf)
 {
-	sprintf(pszBuf,"%u.%u.%u.%u",(dwVer>>24)&0xFF,(dwVer>>16)&0xFF,(dwVer>>8)&0xFF,dwVer&0xFF);
+	_stprintf(pszBuf,_T("%u.%u.%u.%u"),(dwVer>>24)&0xFF,(dwVer>>16)&0xFF,(dwVer>>8)&0xFF,dwVer&0xFF);
 }
 
 //获取一个PE文件的version + ProductName +  FileDescription

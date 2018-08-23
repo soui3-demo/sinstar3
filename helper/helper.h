@@ -24,7 +24,7 @@ void Helper_CenterWindow(HWND hWnd,UINT uFlag);
 BOOL Helper_ParseIniLine(LPCSTR pszLine, LPSTR pszKey, LPSTR pszData);
 
 #pragma comment(lib,"version.lib")
-void Helper_VersionString(DWORD dwVer,char *pszBuf);
+void Helper_VersionString(DWORD dwVer,TCHAR *pszBuf);
 
 BOOL Helper_PEVersion(LPCTSTR pszFileName, DWORD *pdwVer, TCHAR *pszName, TCHAR *pszDesc);
 

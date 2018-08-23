@@ -45,10 +45,12 @@ struct IUiMsgHandler : IBuildIndexProgressListener
 	virtual int  TtsGetVoice(bool bCh) = 0;
 	virtual void TtsSetVoice(bool bCh, int iToken) = 0;
 	virtual int TtsGetTokensInfo(bool bCh, wchar_t token[][MAX_TOKEN_NAME_LENGHT],int nBufSize) = 0;
+
+	virtual DWORD OnQueryVersion() const = 0;
 };
 
 
-struct ISCORE_API IServerCore {
+struct IServerCore {
 	virtual ~IServerCore() {}
 
 	virtual BOOL Init(HWND hWnd, IUiMsgHandler * pUiMsgHander, LPCSTR pszDataPath) = 0;
