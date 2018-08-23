@@ -2,6 +2,7 @@
 #include "ImeMgr.h"
 #include <shlwapi.h>
 #pragma comment(lib,"imm32.lib")
+#pragma comment(lib,"Shlwapi.lib")
 
 using namespace std;
 
