@@ -2,6 +2,7 @@
 #include "trayIcon.h"
 #include "MyTTS.h"
 #include "KeyMapDlg.h"
+#include "BuildIndexProgWnd.h"
 #include <iscore-i.h>
 
 typedef IServerCore * (*funIscore_Create)();
@@ -36,6 +37,8 @@ protected:
 	virtual void TtsSetVoice(bool bCh, int iToken) ;
 	virtual int TtsGetTokensInfo(bool bCh, wchar_t token[][MAX_TOKEN_NAME_LENGHT], int nBufSize);
 protected:
+	void OnBuildIndexProg(int index, PROGTYPE uType, unsigned int dwData);
+
 	int OnCreate(LPCREATESTRUCT pCS);
 	void OnDestroy();
 	LRESULT OnTrayNotify(UINT uMsg, WPARAM wp, LPARAM lp);
@@ -73,5 +76,6 @@ private:
 	UINT	    m_uMsgTaskbarCreated;
 
 	CKeyMapDlg *  m_pKeyMapDlg;
+	CBuildIndexProgWnd * m_pBuildIndexProg;
 };
 

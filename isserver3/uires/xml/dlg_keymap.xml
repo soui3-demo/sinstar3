@@ -3,15 +3,15 @@
 appWnd="1"
 translucent="1"
 >
-  <root skin="_skin.sys.wnd.bkgnd" cache="1" layout="vbox">
-    <caption size="-2,30" layout="hbox" gravity="center">
-      <icon pos="10,8" src="ICON_LOGO:16"/>
-      <text pos="29,9">@string/keymap</text>
-      <window size="0,0" weight="1" visible="0"/>
-      <text name="txt_comp_name"/>
-      <link name="link_comp_website"/>
-      <window size="0,0" weight="1" visible="0"/>
-      <imgbtn name="btn_close" skin="_skin.sys.btn.close"    pos="-45,0" tip="close" animate="1"/>
+  <root skin="_skin.sys.wnd.bkgnd" cache="1" layout="vbox" padding="5,5,5,5">
+    <caption size="-2,30" >
+      <icon pos="10,|0" offset="0,-0.5" src="ICON_LOGO:16"/>
+      <text pos="[5,|0" offset="0,-0.5">@string/keymap</text>
+      <window pos="|0,|0" offset="-0.5,-0.f" layout="hbox">
+        <text name="txt_comp_name"/>
+        <link name="link_comp_website"/>
+      </window>
+      <imgbtn pos ="-0,|0" offset="-1,-0.5" name="btn_close" skin="_skin.sys.btn.close"  tip="close" animate="1"/>
     </caption>
     <img size="-2,0" weight="1" name="img_keymap"/>
   </root>

@@ -102,6 +102,7 @@
     <Text Include="readme.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BuildIndexProgWnd.cpp" />
     <ClCompile Include="isserver3.cpp">
       <ShowIncludes Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ShowIncludes>
     </ClCompile>
@@ -120,6 +121,7 @@
     <ResourceCompile Include="isserver3.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BuildIndexProgWnd.h" />
     <ClInclude Include="IsSvrProxy.h" />
     <ClInclude Include="AboutDlg.h" />
     <ClInclude Include="KeyMapDlg.h" />
@@ -148,6 +150,7 @@
     <Xml Include="uires\values\string.xml" />
     <Xml Include="uires\xml\dlg_about.xml" />
     <Xml Include="uires\xml\dlg_keymap.xml" />
+    <Xml Include="uires\xml\wnd_build_index_prog.xml" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="uires\icon\logo.ico" />

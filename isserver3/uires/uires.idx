@@ -5,6 +5,7 @@
   <LAYOUT>
     <file name="dlg_about" path="xml\dlg_about.xml"/>
     <file name="dlg_keymap" path="xml\dlg_keymap.xml"/>
+    <file name="wnd_build_index_prog" path="xml\wnd_build_index_prog.xml"/>
   </LAYOUT>
   
   <values>

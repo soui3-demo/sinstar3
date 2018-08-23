@@ -15,6 +15,7 @@ CIsSvrProxy::CIsSvrProxy(const SStringT & strDataPath)
 	,m_funIsCore_Create(NULL)
 	,m_funIsCore_Destroy(NULL)
 	, m_pKeyMapDlg(NULL)
+	, m_pBuildIndexProg(NULL)
 {
 	m_uMsgTaskbarCreated = RegisterWindowMessage(TEXT("TaskbarCreated"));
 }
@@ -23,6 +24,7 @@ CIsSvrProxy::CIsSvrProxy(const SStringT & strDataPath)
 CIsSvrProxy::~CIsSvrProxy()
 {
 	if (m_pKeyMapDlg) m_pKeyMapDlg->DestroyWindow();
+	if (m_pBuildIndexProg) m_pBuildIndexProg->DestroyWindow();
 }
 
 int CIsSvrProxy::OnCreate(LPCREATESTRUCT pCS)
@@ -80,10 +82,36 @@ void CIsSvrProxy::OnDestroy()
 	}
 }
 
+void CIsSvrProxy::OnBuildIndexProg(int index, PROGTYPE uType, unsigned int dwData)
+{
+	if (uType == PT_MAX)
+	{
+		m_pBuildIndexProg = new CBuildIndexProgWnd();
+		m_pBuildIndexProg->Create(NULL, WS_POPUP, WS_EX_TOOLWINDOW, 0, 0, 0, 0);
+		m_pBuildIndexProg->CenterWindow(GetDesktopWindow());
+		m_pBuildIndexProg->SetPage(index);
+		m_pBuildIndexProg->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
+	}
+	else if (uType == PT_PROG)
+	{
+		m_pBuildIndexProg->SetProg(dwData);
+	}
+	else if (uType == PT_END)
+	{
+		m_pBuildIndexProg->DestroyWindow();
+		m_pBuildIndexProg = NULL;
+	}
+}
 
-void CIsSvrProxy::OnBuildShapePhraseIndex(PROGTYPE uType, unsigned int dwData) {}
-void CIsSvrProxy::OnBuildSpellPhraseIndex(PROGTYPE uType, unsigned int dwData) {}
-void CIsSvrProxy::OnBuildSpellPhraseIndex2(PROGTYPE uType, unsigned int dwData) {}
+void CIsSvrProxy::OnBuildShapePhraseIndex(PROGTYPE uType, unsigned int dwData) {
+	OnBuildIndexProg(0, uType, dwData);
+}
+void CIsSvrProxy::OnBuildSpellPhraseIndex(PROGTYPE uType, unsigned int dwData) {
+	OnBuildIndexProg(1, uType, dwData);
+}
+void CIsSvrProxy::OnBuildSpellPhraseIndex2(PROGTYPE uType, unsigned int dwData) {
+	OnBuildIndexProg(2, uType, dwData);
+}
 
 void CIsSvrProxy::OnClientActive() {
 	m_trayIcon.AnimateIcon();
@@ -159,6 +187,7 @@ void CIsSvrProxy::TtsSetVoice(bool bCh, int iToken) {
 int CIsSvrProxy::TtsGetTokensInfo(bool bCh, wchar_t token[][MAX_TOKEN_NAME_LENGHT], int nBufSize) { 
 	return m_tts.GetTokensInfo(bCh, token, nBufSize);
 }
+
 
 LRESULT CIsSvrProxy::OnTrayNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 {
