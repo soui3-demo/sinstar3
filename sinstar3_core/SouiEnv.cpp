@@ -7,10 +7,7 @@
 #else
 #define RES_TYPE 1
 #endif
-
-// #define RES_TYPE 0   //从文件中加载资源，加载失败再从PE加载
-// #define RES_TYPE 1   //从PE资源中加载UI资源
-// #define RES_TYPE 2   //从zip包中加载资源
+#define SYS_NAMED_RESOURCE _T("soui-sys-resource.dll")
 
 
 //定义唯一的一个R,UIRES对象,ROBJ_IN_CPP是resource.h中定义的宏。
@@ -68,13 +65,22 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst,LPCTSTR pszWorkDir)
 	pLogMgr->start();
 
 	//从DLL加载系统资源
-	CAutoRefPtr<IResProvider> sysResProvider;
-	CreateResProvider(RES_PE, (IObjRef**)&sysResProvider);
-	sysResProvider->Init((WPARAM)hInst, 0);
-	UINT uFlag = m_theApp->LoadSystemNamedResource(sysResProvider);
-	SASSERT_FMT(uFlag == 0, L"load system resource failed");
-	CAutoRefPtr<IResProvider>   pResProvider;
+	HMODULE hModSysResource = LoadLibrary(SYS_NAMED_RESOURCE);
+	if (hModSysResource)
+	{
+		CAutoRefPtr<IResProvider> sysResProvider;
+		CreateResProvider(RES_PE, (IObjRef**)&sysResProvider);
+		sysResProvider->Init((WPARAM)hModSysResource, 0);
+		m_theApp->LoadSystemNamedResource(sysResProvider);
+		FreeLibrary(hModSysResource);
+	}
+	else
+	{
+		SASSERT_FMT(0, L"load system resource failed");
+	}
 
+
+	CAutoRefPtr<IResProvider>   pResProvider;
 #if (RES_TYPE == 0)
 	CreateResProvider(RES_FILE, (IObjRef**)&pResProvider);
 
