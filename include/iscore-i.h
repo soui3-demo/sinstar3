@@ -22,6 +22,7 @@ struct IBuildIndexProgressListener
 };
 
 struct IDataBlock {
+	virtual void Release() = 0;
 	virtual void * GetData() const = 0;
 	virtual int GetLength() const = 0;
 };
