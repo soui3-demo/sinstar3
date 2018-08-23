@@ -8,6 +8,10 @@
 typedef IServerCore * (*funIscore_Create)();
 typedef void(*funIscore_Destroy)(IServerCore* pCore);
 
+#define UM_BUILD_INDEX_PROG0	(WM_USER+2000)
+#define UM_BUILD_INDEX_PROG1	(WM_USER+2001)
+#define UM_BUILD_INDEX_PROG2	(WM_USER+2002)
+
 class CIsSvrProxy : public CSimpleWnd, public IUiMsgHandler, public IKeyMapListener
 {
 public:
@@ -37,23 +41,26 @@ protected:
 	virtual void TtsSetVoice(bool bCh, int iToken) ;
 	virtual int TtsGetTokensInfo(bool bCh, wchar_t token[][MAX_TOKEN_NAME_LENGHT], int nBufSize);
 protected:
-	void OnBuildIndexProg(int index, PROGTYPE uType, unsigned int dwData);
-
+	void _OnBuildIndexProg(int indexMode, PROGTYPE uType, unsigned int dwData);
 	int OnCreate(LPCREATESTRUCT pCS);
 	void OnDestroy();
 	LRESULT OnTrayNotify(UINT uMsg, WPARAM wp, LPARAM lp);
 	LRESULT OnTaskbarCreated(UINT uMsg, WPARAM wp, LPARAM lp);
+	LRESULT OnBuildIndexProg(UINT uMsg, WPARAM wp, LPARAM lp);
+
 	void OnTimer(UINT_PTR uID);
 
 	void OnMenuExit(UINT uNotifyCode, int nID, HWND wndCtl);
 	void OnMenuAbout(UINT uNotifyCode, int nID, HWND wndCtl);
 	void OnMenuAutoExit(UINT uNotifyCode, int nID, HWND wndCtl);
+	
 
 	BEGIN_MSG_MAP_EX(CIsSvrProxy)
 		MSG_WM_CREATE(OnCreate)
 		MSG_WM_DESTROY(OnDestroy)
 		MSG_WM_TIMER(OnTimer)
 		MESSAGE_HANDLER_EX(m_uMsgTaskbarCreated,OnTaskbarCreated)
+		MESSAGE_RANGE_HANDLER_EX(UM_BUILD_INDEX_PROG0, UM_BUILD_INDEX_PROG2,OnBuildIndexProg)
 		COMMAND_ID_HANDLER_EX(R.id.menu_about, OnMenuAbout)
 		COMMAND_ID_HANDLER_EX(R.id.menu_exit, OnMenuExit)
 		if(m_pCore) CHAIN_MSG_MAP_MEMBER(*m_pCore)

@@ -82,35 +82,56 @@ void CIsSvrProxy::OnDestroy()
 	}
 }
 
-void CIsSvrProxy::OnBuildIndexProg(int index, PROGTYPE uType, unsigned int dwData)
+LRESULT CIsSvrProxy::OnBuildIndexProg(UINT uMsg, WPARAM wp, LPARAM lp)
 {
+	int iPage = uMsg - UM_BUILD_INDEX_PROG0;
+	PROGTYPE uType = (PROGTYPE)wp;
+	int nProg = (int)lp;
 	if (uType == PT_MAX)
 	{
 		m_pBuildIndexProg = new CBuildIndexProgWnd();
 		m_pBuildIndexProg->Create(NULL, WS_POPUP, WS_EX_TOOLWINDOW, 0, 0, 0, 0);
 		m_pBuildIndexProg->CenterWindow(GetDesktopWindow());
-		m_pBuildIndexProg->SetPage(index);
+		m_pBuildIndexProg->SetPage(iPage,nProg);
 		m_pBuildIndexProg->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
 	}
 	else if (uType == PT_PROG)
 	{
-		m_pBuildIndexProg->SetProg(dwData);
+		m_pBuildIndexProg->SetProg(nProg);
 	}
 	else if (uType == PT_END)
 	{
 		m_pBuildIndexProg->DestroyWindow();
 		m_pBuildIndexProg = NULL;
 	}
+	return 0;
 }
 
+
 void CIsSvrProxy::OnBuildShapePhraseIndex(PROGTYPE uType, unsigned int dwData) {
-	OnBuildIndexProg(0, uType, dwData);
+	_OnBuildIndexProg(0, uType, dwData);
 }
+
 void CIsSvrProxy::OnBuildSpellPhraseIndex(PROGTYPE uType, unsigned int dwData) {
-	OnBuildIndexProg(1, uType, dwData);
+	_OnBuildIndexProg(1, uType, dwData);
 }
 void CIsSvrProxy::OnBuildSpellPhraseIndex2(PROGTYPE uType, unsigned int dwData) {
-	OnBuildIndexProg(2, uType, dwData);
+	_OnBuildIndexProg(2, uType, dwData);
+}
+
+void CIsSvrProxy::_OnBuildIndexProg(int indexMode, PROGTYPE uType, unsigned int dwData)
+{
+	static int nMax = 0, nPrevProg = 0;
+	if (uType == PT_MAX) nMax = dwData, nPrevProg = 0;
+	if (uType == PT_PROG)
+	{
+		if (dwData - nPrevProg < nMax / 200)
+		{
+			return;
+		}
+		nPrevProg = dwData;
+	}
+	PostMessage(UM_BUILD_INDEX_PROG0+ indexMode, uType, dwData);
 }
 
 void CIsSvrProxy::OnClientActive() {
