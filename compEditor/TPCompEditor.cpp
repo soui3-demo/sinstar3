@@ -256,7 +256,7 @@ void CTPCompEditor::OnMake()
 	_splitpath(strSave,szDriver,szPath,szTitle,NULL);
 	BOOL bSuccess= pCompBuilder->Make(strSave,head,
 		pCodingRule,
-		m_strIconFile.IsEmpty()?NULL:m_strIconFile,
+		m_strIconFile.IsEmpty()?NULL:(LPCTSTR)m_strIconFile,
 		0,
 		strKeyMap.IsEmpty()?NULL:(LPCTSTR)strKeyMap,
 		m_szLicenseMD5);
@@ -348,6 +348,7 @@ void CTPCompEditor::OnChangeComp()
 			FILE *f=fopen(szIconFile,"wb");
 			fwrite(&result[0],1,result.length(),f);
 			fclose(f);
+			m_strIconFile = szIconFile;
 		}
 		free(szIcon);
 	}

@@ -17,8 +17,7 @@ namespace SOUI {
 		m_imeFlag = NULL;
 		if (pData)
 		{
-			GETRENDERFACTORY->CreateBitmap(&m_imeFlag);
-			m_imeFlag->Init(pData->wid, pData->hei, pData->rgba);
+			m_imeFlag.Attach(SResLoadFromMemory::LoadImage(pData->pData, pData->nLen));
 		}
 		Invalidate();
 	}

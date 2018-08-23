@@ -26,9 +26,8 @@ typedef struct tagMSGDATA{
 
 typedef struct tagIMEFLAGDATA
 {
-	char * rgba;
-	int    wid;
-	int    hei;
+	char * pData;
+	unsigned int    nLen;
 }IMEFLAGDATA;
 
 typedef struct tagCOMPINFO

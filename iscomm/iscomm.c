@@ -47,7 +47,7 @@ void ISComm_SetSvrPath(LPCTSTR pszPath)
 
 void ISComm_FreeImeFlagData(IMEFLAGDATA * pData)
 {
-	if (pData->rgba) free(pData->rgba);
+	if (pData->pData) free(pData->pData);
 	free(pData);
 }
 
@@ -81,113 +81,12 @@ void ClearComm()
 }
 
 //从缓冲区中创建一个位图句柄
-IMEFLAGDATA * Helper_CreateImeFlagDataFromBuffer(LPBYTE pBuffer, DWORD cbSize,COLORREF crKey)
+IMEFLAGDATA * Helper_CreateImeFlagDataFromBuffer(LPBYTE pBuffer, DWORD cbSize)
 {
-	IMEFLAGDATA * pRet = NULL;
-	HBITMAP hBmp=NULL;
-	HDC hdc=NULL;
-	HPALETTE hPal=NULL,hOldPal=NULL;
-	BITMAPFILEHEADER *pbmfHeader=(BITMAPFILEHEADER *)pBuffer;
-	DWORD dwOffset=sizeof(BITMAPFILEHEADER);
-	// File type should be 'BM'
-
-	BITMAPINFOHEADER *pbmiHeader = (LPBITMAPINFOHEADER)(pBuffer+dwOffset) ;
-	BITMAPINFO * pbmInfo = (LPBITMAPINFO)(pBuffer+dwOffset) ;
-	// If bmiHeader.biClrUsed is zero we have to infer the number
-	// of colors from the number of bits used to specify it.
-	int nColors= 0;
-	LPVOID lpDIBBits;
-
-	if (pbmiHeader->biClrUsed)
-		nColors = pbmiHeader->biClrUsed;
-	else if(pbmiHeader->biBitCount<=8)
-		nColors = 1 << pbmiHeader->biBitCount;
-
-	if (pbmfHeader->bfType != ((WORD) ('M' << 8) | 'B')) return NULL;
-	if( pbmInfo->bmiHeader.biBitCount > 8 )
-		lpDIBBits = (LPVOID)((LPDWORD)(pbmInfo->bmiColors + pbmInfo->bmiHeader.biClrUsed) + 
-		((pbmInfo->bmiHeader.biCompression == BI_BITFIELDS) ? 3 : 0));
-	else
-		lpDIBBits = (LPVOID)(pbmInfo->bmiColors + nColors);
-
-	if (pbmiHeader->biBitCount == 32)
-	{//32bit need a case.
-		pRet = (IMEFLAGDATA*)malloc(sizeof(IMEFLAGDATA));
-		pRet->wid = pbmInfo->bmiHeader.biWidth;
-		pRet->hei = pbmInfo->bmiHeader.biHeight;
-		pRet->rgba = (char*)malloc(4 * pRet->wid*pRet->hei);
-		memcpy(pRet->rgba, lpDIBBits, 4 * pRet->wid*pRet->hei);
-	}
-	else
-	{
-		hdc = GetDC(NULL);
-		// Create the palette
-		if (nColors <= 256 && nColors != 0)
-		{
-			UINT nSize = sizeof(LOGPALETTE) + (sizeof(PALETTEENTRY) * nColors);
-			LOGPALETTE *pLP = (LOGPALETTE *)malloc(nSize);
-			int i;
-			pLP->palVersion = 0x300;
-			pLP->palNumEntries = nColors;
-
-			for (i = 0; i < nColors; i++)
-			{
-				pLP->palPalEntry[i].peRed = pbmInfo->bmiColors[i].rgbRed;
-				pLP->palPalEntry[i].peGreen = pbmInfo->bmiColors[i].rgbGreen;
-				pLP->palPalEntry[i].peBlue = pbmInfo->bmiColors[i].rgbBlue;
-				pLP->palPalEntry[i].peFlags = 0;
-			}
-			hPal = CreatePalette(pLP);
-			free(pLP);
-			hOldPal = (HPALETTE)SelectObject(hdc, hPal);
-			RealizePalette(hdc);
-		}
-
-
-		hBmp = CreateDIBitmap(hdc,		// handle to device context 
-			pbmiHeader,	// pointer to bitmap size and format data 
-			CBM_INIT,	// initialization flag 
-			lpDIBBits,	// pointer to initialization data 
-			pbmInfo,	// pointer to bitmap color-format data 
-			DIB_RGB_COLORS);		// color-data usage 
-		if (hPal)
-		{
-			SelectObject(hdc, hOldPal);
-			DeleteObject(hPal);
-		}
-		if (hBmp) {
-			HDC hmemdc = CreateCompatibleDC(hdc);
-			HGDIOBJ hOldBmp = SelectObject(hmemdc, hBmp);
-			char *p;
-			int i,j;
-			pRet = (IMEFLAGDATA*)malloc(sizeof(IMEFLAGDATA));
-			pRet->wid = pbmInfo->bmiHeader.biWidth;
-			pRet->hei = pbmInfo->bmiHeader.biHeight;
-			pRet->rgba = p = (char*)malloc(4 * pRet->wid*pRet->hei);
-			for ( i = 0; i < pRet->hei; i++)
-			{
-				for ( j = 0; j < pRet->wid; j++)
-				{
-					COLORREF cr = GetPixel(hmemdc, j, i);
-					if (pbmInfo->bmiHeader.biBitCount == 32)
-					{
-						memcpy(p, &cr, 4);
-					}
-					else
-					{
-						memcpy(p, &cr, 3);
-						p[3] = (cr == crKey) ? 0 : 255; //p[3] is alpha, if cr is key color then set it to 0.
-						p += 4;
-					}
-				}
-			}
-			SelectObject(hmemdc, hOldBmp);
-			DeleteDC(hmemdc);
-			DeleteObject(hBmp);
-		}
-		ReleaseDC(NULL, hdc);
-	}
-
+	IMEFLAGDATA * pRet = (IMEFLAGDATA *)malloc(sizeof(IMEFLAGDATA));
+	pRet->nLen = cbSize;
+	pRet->pData = (char*)malloc(cbSize);
+	memcpy(pRet->pData, pBuffer, cbSize);
 	return pRet;
 }
 
@@ -209,7 +108,7 @@ PMSGDATA ISComm_OnSeverNotify(HWND hWnd,WPARAM wParam,LPARAM lParam)
 			pData+=CISIZE_BASE;
 			memcpy(&crKey,pData,sizeof(COLORREF));
 			pData+=sizeof(COLORREF);
-			s_CompInfo.pImeFlagData = Helper_CreateImeFlagDataFromBuffer(pData,s_pDataAck->sSize-CISIZE_BASE-sizeof(COLORREF),crKey);
+			s_CompInfo.pImeFlagData = Helper_CreateImeFlagDataFromBuffer(pData,s_pDataAck->sSize-CISIZE_BASE-sizeof(COLORREF));
 		}
 	}else if(wParam==NT_FLMINFO)
 	{//广播的英文库信息
