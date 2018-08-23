@@ -93,24 +93,7 @@ namespace SOUI
 		}
 		case 6://svr data manager
 		{
-			LPCSTR pszPages = ISComm_Svr_Pages();
-			if (pszPages)
-			{
-				int nPos = 1;
-				UINT uID = R.id.svr_showicon;
-				while (*pszPages)
-				{
-					SStringA strName = pszPages;
-					if (*pszPages == '\n')
-						menuPopup->InsertMenu(nPos++, MF_BYPOSITION | MF_SEPARATOR, 0 , _T(""));
-					else
-						menuPopup->InsertMenu(nPos++, MF_BYPOSITION | MF_STRING, uID, S_CA2T(strName));
-					uID++;
-					pszPages += strName.GetLength() + 1;
-				}
-			}
 			menuPopup->CheckMenuItem(R.id.svr_showicon, MF_BYCOMMAND | ISComm_SvrTray_Get() ? MF_CHECKED : 0);
-
 			break;
 		}
 		}
@@ -468,17 +451,6 @@ namespace SOUI
 			{
 				ISComm_Comp_Open(compList[iComp].strName);
 			}
-		}
-		else if (nRet > R.id.svr_showicon && nRet < R.id.svr_showicon + 50)
-		{//svr page
-			LPCSTR pszPages = ISComm_Svr_Pages();
-			int uID = R.id.svr_showicon + 1;
-			while (uID <= nRet)
-			{
-				pszPages += strlen(pszPages) + 1;
-				uID++;
-			}
-			ISComm_ShowServer(pszPages, (char)strlen(pszPages));
 		}
 		else if (nRet == R.id.svr_showicon)
 		{//show icon

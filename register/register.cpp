@@ -274,12 +274,12 @@ BOOL Sinstar_Install(LPCTSTR pszImeName)
 	}
 
 	TCHAR szSvrExe[256] = { 0 }, szSvrData[256] = { 0 };
-	_stprintf(szSvrExe, _T("%s\\server\\isserver.exe"), g_szPath);
+	_stprintf(szSvrExe, _T("%s\\program\\isserver3.exe"), g_szPath);
 	_stprintf(szSvrData,_T("%s\\server"),g_szPath);
 	if(GetFileAttributes(szSvrExe)==0xFFFFFFFF)
 	{
 		TCHAR szMsg[100];
-		_stprintf(szMsg,_T("服务器目录下没有找到isserver.exe"));
+		_stprintf(szMsg,_T("服务器目录下没有找到isserver3.exe"));
 		MessageBox(GetActiveWindow(),szMsg,_T("提示"),MB_OK|MB_ICONSTOP);
 		return FALSE;
 	}

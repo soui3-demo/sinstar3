@@ -189,7 +189,11 @@ BOOL ISComm_Login(HWND hWnd)
 		if(!s_hMutexReq)
 		{
 			if(!ISComm_OpenServer()) return FALSE;
-			s_hMutexReq=OpenMutex(MUTEX_ALL_ACCESS,FALSE,NAME_REQ_SYNCOMMUTEX);
+			for(;;) {//wait for server ready
+				s_hMutexReq = OpenMutex(MUTEX_ALL_ACCESS, FALSE, NAME_REQ_SYNCOMMUTEX);
+				if (s_hMutexReq) break;
+				Sleep(10);
+			} 
 		}
 		//打开双向通讯数据通道
 
