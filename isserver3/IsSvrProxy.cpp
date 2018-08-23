@@ -131,7 +131,7 @@ void CIsSvrProxy::_OnBuildIndexProg(int indexMode, PROGTYPE uType, unsigned int 
 		}
 		nPrevProg = dwData;
 	}
-	PostMessage(UM_BUILD_INDEX_PROG0+ indexMode, uType, dwData);
+	SendMessage(UM_BUILD_INDEX_PROG0+ indexMode, uType, dwData);
 }
 
 void CIsSvrProxy::OnClientActive() {
