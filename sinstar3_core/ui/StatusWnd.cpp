@@ -15,7 +15,6 @@ namespace SOUI
 	CStatusWnd::CStatusWnd(SEventSet *pEvtSets, ICmdListener *pListener)
 		:CImeWnd(pEvtSets,UIRES.LAYOUT.wnd_status_bar)
 		, m_pCmdListener(pListener)
-		, m_skinManager(pEvtSets)
 	{
 	}
 
@@ -55,7 +54,7 @@ namespace SOUI
 			break;
 		}
 		case 2:
-		{
+		{//skin
 			SStringT strCurSkin = CDataCenter::getSingletonPtr()->GetData().m_strSkin;
 			if (strCurSkin.IsEmpty())
 			{
@@ -96,8 +95,12 @@ namespace SOUI
 			menuPopup->CheckMenuItem(R.id.svr_showicon, MF_BYCOMMAND | ISComm_SvrTray_Get() ? MF_CHECKED : 0);
 			break;
 		}
+		case 7://tools
+			{
+				m_toolManager.InitToolMenu(menuPopup, theModule->GetDataPath() + _T("\\tools"), R.id.menu_tool_base);
+				break;
+			}
 		}
-
 	}
 
 

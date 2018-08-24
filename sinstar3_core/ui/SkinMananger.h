@@ -1,10 +1,10 @@
 #pragma once
 
 #define MAX_SKINS	80
-class CSkinMananger : public SObject
+class CSkinMananger 
 {
 public:
-	CSkinMananger(SEventSet *pEvtSets);
+	CSkinMananger();
 	~CSkinMananger(void);
 
 	void ClearMap(){m_mapSkin.RemoveAll();}
@@ -13,12 +13,6 @@ public:
 	SStringT SkinPathFromID(int nSkinID) const;
 
 	static CPoint ExtractSkinOffset(IResProvider *pResProvider);
-public:
-	virtual int GetID() const
-	{
-		return SENDER_SKINMANAGER;
-	}
 protected:
 	SMap<int,SStringT> m_mapSkin;	//map of ID->skin path
-	SEventSet *m_pEvtSets;
 };

@@ -4,7 +4,7 @@
 #include <helper/mybuffer.h>
 #include "../SouiEnv.h"
 
-CSkinMananger::CSkinMananger(SEventSet *pEvtSets):m_pEvtSets(pEvtSets)
+CSkinMananger::CSkinMananger()
 {
 }
 

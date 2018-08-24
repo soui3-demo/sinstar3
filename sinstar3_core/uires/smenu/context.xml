@@ -37,7 +37,10 @@
     <menuItem text="编辑自定义简码" name="memu_edit_userjm" id="605"/>
     <sep/>
   </menuItem>
-  
+  <menuItem text="输入法工具" name="menu_data_mgr" contextHelpId="7">
+    <menuItem text="无" name="menu_tool_base" id="701"/>
+  </menuItem>
+
   <menuItem text="字 根 表" name="key_map" id="110"/>
   <menuItem text="打字速度" name="key_speed" id="111"/>
   <sep/>

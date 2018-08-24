@@ -75,7 +75,9 @@ STDAPI DllRegisterServer(void)
 	TCHAR szSysDir[MAX_PATH];
 	GetSystemDir(szSysDir);
 	// register this service's profile with the tsf
-	if (!ImmInstallIME(szPath, PRODUCT_NAMEANDVER))
+	TCHAR szDesc[100];
+	_stprintf(szDesc, _T("%s %d.%d"), PRODUCT_NAME, _sinstar3_ime_version_a, _sinstar3_ime_version_b);
+	if (!ImmInstallIME(szPath, szDesc))
 	{
 		DWORD dwErr=GetLastError();
 		TCHAR szErr[100];

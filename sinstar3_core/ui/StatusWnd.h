@@ -2,6 +2,7 @@
 
 #include "ImeWnd.h"
 #include "SkinMananger.h"
+#include "SToolsMgr.h"
 
 interface ICmdListener;
 
@@ -86,6 +87,7 @@ namespace SOUI
 		void UpdateUI();
 	protected:
 		CSkinMananger       m_skinManager;
+		SToolsMgr			m_toolManager;
 		ICmdListener     *  m_pCmdListener;
 	};
 
