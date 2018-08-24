@@ -16,10 +16,31 @@ ROBJ_IN_CPP
 template<>
 CSouiEnv* SSingleton<CSouiEnv>::ms_Singleton = NULL;
 
+class CCurrentDirSet {
+public:
+	CCurrentDirSet(LPCTSTR pszNewDir)
+	{
+		GetCurrentDirectory(1000, m_szCurDirBackup);
+		SetCurrentDirectory(pszNewDir);
+	}
+	~CCurrentDirSet()
+	{
+		SetCurrentDirectory(m_szCurDirBackup);
+	}
+private:
+	TCHAR m_szCurDirBackup[1000];
+};
 
 CSouiEnv::CSouiEnv(HINSTANCE hInst,LPCTSTR pszWorkDir)
 {
 	int nRet = 0;
+
+	SStringT strDllPath = pszWorkDir;
+	strDllPath += _T("\\program");
+#ifdef _WIN64
+	strDllPath += _T("\\x64");
+#endif
+	CCurrentDirSet curDirSet(strDllPath);
 
 	m_pComMgr = new SComMgr(_T("imgdecoder-png"));
 
