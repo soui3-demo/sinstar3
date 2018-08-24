@@ -64,7 +64,7 @@ int CIsSvrProxy::OnCreate(LPCREATESTRUCT pCS)
 	{
 		DWORD dwVer = 0;
 		SStringT strTip = CAboutDlg::GetVersionInfo(dwVer);
-		strTip += _T("ver:");
+		strTip += _T("\n°æ±¾:");
 		TCHAR szVer[100];
 		Helper_VersionString(dwVer, szVer);
 		strTip += szVer;

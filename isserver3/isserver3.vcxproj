@@ -109,6 +109,7 @@
     <ClCompile Include="IsSvrProxy.cpp" />
     <ClCompile Include="AboutDlg.cpp" />
     <ClCompile Include="KeyMapDlg.cpp" />
+    <ClCompile Include="Minidump.cpp" />
     <ClCompile Include="MyTTS.cpp" />
     <ClCompile Include="TrayIcon.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -125,6 +126,7 @@
     <ClInclude Include="IsSvrProxy.h" />
     <ClInclude Include="AboutDlg.h" />
     <ClInclude Include="KeyMapDlg.h" />
+    <ClInclude Include="Minidump.h" />
     <ClInclude Include="MyTTS.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="TrayIcon.h" />

@@ -11,14 +11,26 @@ translucent="1"
     </caption>
     <window size="-2,0" weight="1" layout="vbox" gravity="center">
       <text name="txt_name"/>
-      <window size="-1,-1" layout="hbox">
+      <window size="-1,-1" layout="hbox" extend_top="10">
         <text text="版本："/>
         <text name="txt_ver"/>
       </window>
-      <text text="版权所有(C)：启程软件 2002-2018"/>
-      <window size="-1,-1" layout="hbox">
+      <text text="版权所有(C)：启程软件 2002-2018" extend_top="10"/>
+      <window size="-1,-1" layout="hbox" extend_top="10">
         <text text="官网:"/>
         <link href="http://soime.cn" text="http://soime.cn"/>
+      </window>
+      <check name="chk_auto_update" text="启用自动更新" extend_top="10"/>
+      <window size="-1,-1" layout="hbox" extend_top="10" gravity="center">
+        <text text="检查更新周期:"/>
+        <combobox name="cbx_update_circle" size="60,25">
+          <liststyle colorBkgnd="#ffffff"/>
+          <items>
+            <item text="周"/>
+            <item text="月"/>
+            <item text="季"/>
+          </items>
+        </combobox>
       </window>
     </window>
   </root>
