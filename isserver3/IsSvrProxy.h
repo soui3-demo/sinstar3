@@ -4,6 +4,7 @@
 #include "KeyMapDlg.h"
 #include "BuildIndexProgWnd.h"
 #include <iscore-i.h>
+#include "AboutDlg.h"
 
 typedef IServerCore * (*funIscore_Create)();
 typedef void(*funIscore_Destroy)(IServerCore* pCore);
@@ -12,7 +13,7 @@ typedef void(*funIscore_Destroy)(IServerCore* pCore);
 #define UM_BUILD_INDEX_PROG1	(WM_USER+2001)
 #define UM_BUILD_INDEX_PROG2	(WM_USER+2002)
 
-class CIsSvrProxy : public CSimpleWnd, public IUiMsgHandler, public IKeyMapListener
+class CIsSvrProxy : public CSimpleWnd, public IUiMsgHandler, public IKeyMapListener, public IUpdateIntervalObserver
 {
 public:
 	CIsSvrProxy(const SStringT & strDataPath);
@@ -21,6 +22,9 @@ public:
 protected:
 	virtual void OnKeyMapFree(CKeyMapDlg *pWnd);
 
+protected:
+	virtual int GetUpdateInterval() const;
+	virtual void OnUpdateIntervalChanged(int nInterval);
 protected:
 	virtual void OnBuildShapePhraseIndex(PROGTYPE uType, unsigned int dwData);
 	virtual void OnBuildSpellPhraseIndex(PROGTYPE uType, unsigned int dwData) ;
@@ -55,6 +59,8 @@ protected:
 	void OnMenuExit(UINT uNotifyCode, int nID, HWND wndCtl);
 	void OnMenuAbout(UINT uNotifyCode, int nID, HWND wndCtl);
 	void OnMenuAutoExit(UINT uNotifyCode, int nID, HWND wndCtl);
+
+	void CheckUpdate(BOOL bManual);
 	
 
 	BEGIN_MSG_MAP_EX(CIsSvrProxy)
@@ -73,6 +79,8 @@ protected:
 	END_MSG_MAP()
 
 private:
+	int			m_nUpdateInterval;
+private:
 	IServerCore * m_pCore;
 	HMODULE		  m_hCoreModule;
 	funIscore_Create m_funIsCore_Create;
@@ -86,5 +94,6 @@ private:
 
 	CKeyMapDlg *  m_pKeyMapDlg;
 	CBuildIndexProgWnd * m_pBuildIndexProg;
+
 };
 

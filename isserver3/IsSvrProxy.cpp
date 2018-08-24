@@ -4,9 +4,14 @@
 #include "AboutDlg.h"
 #include "KeyMapDlg.h"
 #include "../helper/helper.h"
+#include "../include/reg.h"
+#include <helper/STime.h>
+#include <process.h>
 
 #define TIMERID_DELAY_EXIT	200
 #define SPAN_DELAY_EXIT		5000
+#define TIMERID_CHECK_UPDATE 300
+#define SPAN_CHECK_UPDATE	1000
 
 CIsSvrProxy::CIsSvrProxy(const SStringT & strDataPath)
 	:m_strDataPath(strDataPath)
@@ -70,6 +75,12 @@ int CIsSvrProxy::OnCreate(LPCREATESTRUCT pCS)
 		strTip += szVer;
 		m_trayIcon.Init(m_hWnd, strTip);
 		if(m_pCore->IsShowTray()) m_trayIcon.Show();
+
+		char szConfig[MAX_PATH];
+		m_pCore->GetConfigIni(szConfig, MAX_PATH);
+		m_nUpdateInterval = GetPrivateProfileIntA("update", "interval", 30, szConfig);
+
+		CSimpleWnd::SetTimer(TIMERID_CHECK_UPDATE, SPAN_CHECK_UPDATE, NULL);
 	}
 	return nRet;
 }
@@ -172,6 +183,19 @@ void CIsSvrProxy::OnKeyMapFree(CKeyMapDlg * pWnd)
 	m_pKeyMapDlg = NULL;
 }
 
+int CIsSvrProxy::GetUpdateInterval() const
+{
+	return m_nUpdateInterval;
+}
+
+void CIsSvrProxy::OnUpdateIntervalChanged(int nInterval)
+{
+	m_nUpdateInterval = nInterval;
+	char szConfig[MAX_PATH];
+	m_pCore->GetConfigIni(szConfig, MAX_PATH);
+	WritePrivateProfileStringA("update", "interval", SStringA().Format("%d",m_nUpdateInterval), szConfig);
+}
+
 void CIsSvrProxy::OnShowKeyMap(IDataBlock * pCompData, LPCSTR pszName, LPCSTR pszUrl) {
 	SOUI::IBitmap *pBmp = SResLoadFromMemory::LoadImage(pCompData->GetData(), pCompData->GetLength());
 	if (pBmp)
@@ -263,6 +287,11 @@ void CIsSvrProxy::OnTimer(UINT_PTR uID)
 	{
 		PostQuitMessage(0);
 	}
+	else if (uID == TIMERID_CHECK_UPDATE)
+	{
+		CSimpleWnd::KillTimer(uID);
+		CheckUpdate(FALSE);
+	}
 	else
 	{
 		SetMsgHandled(FALSE);
@@ -276,11 +305,49 @@ void CIsSvrProxy::OnMenuExit(UINT uNotifyCode, int nID, HWND wndCtl)
 
 void CIsSvrProxy::OnMenuAbout(UINT uNotifyCode, int nID, HWND wndCtl)
 {
-	CAboutDlg aboutDlg;
-	aboutDlg.DoModal();
+	CAboutDlg aboutDlg(this);
+	if (ID_CHECK_UPDATE_NOW == aboutDlg.DoModal())
+	{
+		CheckUpdate(TRUE);
+	}
 }
 
 void CIsSvrProxy::OnMenuAutoExit(UINT uNotifyCode, int nID, HWND wndCtl)
 {
 	m_pCore->SetAutoQuit(!m_pCore->IsAutoQuit());
+}
+
+typedef struct tagCKUPARAM
+{
+	CIsSvrProxy * pSvrProxy;
+	BOOL		  bManual;
+}CKUPARAM;
+
+
+void CIsSvrProxy::CheckUpdate(BOOL bManual)
+{
+	char szConfig[MAX_PATH];
+	char szDate[100];
+	CTime timeToday = CTime::GetCurrentTime();
+	m_pCore->GetConfigIni(szConfig, MAX_PATH);
+	if (!bManual)
+	{
+		if (m_nUpdateInterval == 0) return;
+		int nDay, nMonth, nYear;
+		GetPrivateProfileStringA("update", "date", "0-0-0", szDate, 100, szConfig);
+		sscanf(szDate, "%d-%d-%d", &nMonth, &nDay, &nYear);
+		int nDays = 360 * (timeToday.GetYear() - nYear);
+		nDays += 30 * (timeToday.GetMonth() - nMonth);
+		nDays += timeToday.GetDay() - nDay;
+		if (nDays<m_nUpdateInterval) return;
+	}
+
+	//update date
+	sprintf(szDate, "%d-%d-%d", timeToday.GetMonth(), timeToday.GetDay(), timeToday.GetYear());
+	WritePrivateProfileStringA("update", "date", szDate, szConfig);
+	
+	CKUPARAM *pParam = new CKUPARAM;
+	pParam->pSvrProxy = this;
+	pParam->bManual = bManual;
+
 }

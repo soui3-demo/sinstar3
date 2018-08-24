@@ -23,7 +23,7 @@ translucent="1"
       <check name="chk_auto_update" text="启用自动更新" extend_top="10"/>
       <window size="-1,-1" layout="hbox" extend_top="10" gravity="center">
         <text text="检查更新周期:"/>
-        <combobox name="cbx_update_circle" size="60,25">
+        <combobox name="cbx_update_interval" size="60,25">
           <liststyle colorBkgnd="#ffffff"/>
           <items>
             <item text="周"/>
@@ -31,6 +31,7 @@ translucent="1"
             <item text="季"/>
           </items>
         </combobox>
+        <button name="btn_update_now" text="立即检查" padding="10,5,10,5" extend_left="5"/>
       </window>
     </window>
   </root>

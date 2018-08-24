@@ -66,6 +66,8 @@ struct IServerCore {
 	virtual bool IsAutoQuit() const = 0;
 
 	virtual void SetAutoQuit(bool bAutoQuit) = 0;
+
+	virtual void GetConfigIni(LPSTR pszBuf, int nLen) = 0;
 };
 
 
