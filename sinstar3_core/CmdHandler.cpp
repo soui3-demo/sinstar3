@@ -295,6 +295,12 @@ void CCmdHandler::OnStartProcess(LPARAM lp)
 	editFileMonitor->BeginThread();
 }
 
+void CCmdHandler::OnExecuteTool(LPARAM lp)
+{
+	SStringT * pPath = (SStringT*)lp;
+	ShellExecute(NULL, _T("open"), *pPath, NULL, NULL, SW_SHOWDEFAULT);
+}
+
 void CCmdHandler::OnOpenConfig(LPARAM lp)
 {
 	ShellExecute(NULL, _T("open"), theModule->GetSettingPath(),NULL,NULL,SW_SHOWDEFAULT);

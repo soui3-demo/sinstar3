@@ -528,6 +528,11 @@ namespace SOUI
 			};
 			OnEditUserDefData(types[nRet - R.id.memu_edit_userdef]);
 		}
+		else if (nRet > R.id.menu_tool_base && nRet < (R.id.menu_tool_base + 99) % 100 * 100)
+		{//open tools.
+			SStringT strToolPath = m_toolManager.ToolPathFromID(nRet);
+			m_pCmdListener->OnCommand(CMD_EXECUTETOOL, (LPARAM)&strToolPath);
+		}
 
 		m_skinManager.ClearMap();
 	}

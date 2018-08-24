@@ -33,6 +33,7 @@ enum {
 	CMD_INPUTSPCHAR,
 	CMD_SHOWTIP,
 	CMD_EDITFILE,
+	CMD_EXECUTETOOL,
 };
 
 struct TIPINFO
@@ -76,6 +77,7 @@ protected:
 	void OnOpenSkinDir(LPARAM lp);
 	void OnShowTip(LPARAM lp);
 	void OnStartProcess(LPARAM lp);
+	void OnExecuteTool(LPARAM lp);
 	LRESULT OnProcessExit(UINT uMsg, WPARAM wp, LPARAM lp);
 
 	BEGIN_MSG_MAP_EX(CCmdHandler)
@@ -99,6 +101,7 @@ protected:
 		MSG_WM_COMMAND_EX(CMD_OPENSKINDIR,OnOpenSkinDir)
 		MSG_WM_COMMAND_EX(CMD_SHOWTIP, OnShowTip)
 		MSG_WM_COMMAND_EX(CMD_EDITFILE,OnStartProcess)
+		MSG_WM_COMMAND_EX(CMD_EXECUTETOOL,OnExecuteTool)
 		MESSAGE_HANDLER_EX(UM_PROCESSEXIT,OnProcessExit)
 	END_MSG_MAP()
 
