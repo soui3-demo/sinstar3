@@ -6,7 +6,7 @@ namespace SOUI
 
 #define SIZE_MAGNETIC	 5
 
-CImeWnd::CImeWnd(SEventSet *pEvtSets,LPCTSTR pszLayout):CSkinAwareWnd(pEvtSets,pszLayout)
+CImeWnd::CImeWnd(SEventSet *pEvtSets,LPCTSTR pszLayout):CSkinAwareWnd(pEvtSets,pszLayout), m_canReleaseCapture(TRUE)
 {
 }
 
