@@ -38,7 +38,7 @@
     <sep/>
   </menuItem>
   <menuItem text="输入法工具" name="menu_data_mgr" contextHelpId="7">
-    <menuItem text="无" name="menu_tool_base" id="701"/>
+    <menuItem text="无" name="menu_tool_base" id="701" enable="0"/>
   </menuItem>
 
   <menuItem text="字 根 表" name="key_map" id="110"/>
