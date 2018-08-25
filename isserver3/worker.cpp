@@ -370,6 +370,30 @@ LRESULT CWorker::OnDataReport(UINT uMsg, WPARAM wp, LPARAM lp)
 			_stprintf(szUerID, _T("what_fuck_machine_#%d"), rand());
 		}
 
+		OSVERSIONINFOEX osvi = { 0 };
+		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
+		GetVersionEx((OSVERSIONINFO*)&osvi);
+		SStringT strOsVer=_T("Unknown");
+		if (osvi.dwMajorVersion == 10)
+		{
+			strOsVer = _T("Win10");
+		}
+		else if (osvi.dwMajorVersion == 6)
+		{
+			switch (osvi.dwMinorVersion)
+			{
+			case 3:strOsVer = _T("Win8.1"); break;
+			case 2:strOsVer = _T("Win8"); break;
+			case 1:strOsVer = _T("Win7"); break;
+			case 0:strOsVer = _T("Vista"); break;
+			}
+		}
+		else if (osvi.dwMajorVersion == 5)
+		{
+			strOsVer = _T("WinXP");
+		}
+		_tcscat(szUerID, _T("_"));
+		_tcscat(szUerID, strOsVer);
 		CRegKey reg;
 		LONG ret = reg.Open(HKEY_CURRENT_USER, _T("SOFTWARE\\SetoutSoft\\sinstar3"), KEY_READ|KEY_WRITE | KEY_WOW64_64KEY);
 		if (ret == ERROR_SUCCESS)
@@ -387,11 +411,11 @@ LRESULT CWorker::OnDataReport(UINT uMsg, WPARAM wp, LPARAM lp)
 	Helper_PEVersion(szModuleName, (DWORD*)byVer, NULL, NULL);
 	SStringT strVer = SStringT().Format(_T("%u.%u.%u.%u"), byVer[3], byVer[2], byVer[1], byVer[0]);
 
-	SStringT strInfo = SStringT().Format(_T("userName=qcshf|guid=%s|softVersion=%s"), szUerID, strVer);
+	SStringT strInfo = SStringT().Format(_T("userName=qcsrf|guid=%s|softVersion=%s"), szUerID, strVer);
 	SStringA strInfoA = S_CT2A(strInfo);
 	std::string info64 = Base64::Encode((LPCSTR)strInfoA);
 
-	std::string url = "http://pdftj.mmbangshou.net:8888/web/tj_az?";
+	std::string url = "http://pdftj.mmbangshou.net:8888/web/tj_az?param=";
 	url += info64;
 
 	CWinHttp  winHttp;
