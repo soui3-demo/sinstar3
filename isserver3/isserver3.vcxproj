@@ -102,6 +102,7 @@
     <Text Include="readme.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Base64.cpp" />
     <ClCompile Include="BuildIndexProgWnd.cpp" />
     <ClCompile Include="isserver3.cpp">
       <ShowIncludes Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ShowIncludes>
@@ -125,6 +126,7 @@
     <ResourceCompile Include="isserver3.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Base64.h" />
     <ClInclude Include="BuildIndexProgWnd.h" />
     <ClInclude Include="IsSvrProxy.h" />
     <ClInclude Include="AboutDlg.h" />

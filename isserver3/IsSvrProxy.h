@@ -19,8 +19,8 @@ class CIsSvrProxy : public CSimpleWnd
 	, public IUiMsgHandler
 	, public IKeyMapListener
 	, public IUpdateIntervalObserver
-	, public CThreadObject
 {
+	friend class CWorker;
 public:
 	CIsSvrProxy(const SStringT & strDataPath);
 	~CIsSvrProxy();
@@ -87,8 +87,6 @@ protected:
 	END_MSG_MAP()
 
 private:
-	virtual UINT Run(LPARAM lp);
-
 	int			m_nUpdateInterval;
 
 private:

@@ -5,6 +5,11 @@
 #include "stdafx.h"
 #include "worker.h"
 #include <sphelper.h>
+#include "WinHttp\HttpClient.h"
+#include "UpdateInfoDlg.h"
+#include "IsSvrProxy.h"
+#include "../helper/helper.h"
+#include "Base64.h"
 
 #define ASSERT SASSERT
 //////////////////////////////////////////////////////////////////////
@@ -295,4 +300,103 @@ LRESULT CWorker::OnTTSMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 		break;
 	}
 	return lRet;
+}
+
+LRESULT CWorker::OnCheckUpdate(UINT uMsg, WPARAM wp, LPARAM lp)
+{
+	BOOL bManual = (BOOL)wp;
+	
+	CIsSvrProxy *pSvrProxy = (CIsSvrProxy*)lp;
+
+	CWinHttp  winHttp;
+	char szConfig[MAX_PATH];
+	pSvrProxy->m_pCore->GetConfigIni(szConfig, MAX_PATH);
+	char szUrl[500];
+	GetPrivateProfileStringA("update", "url", "http://soime.cm/sinstar3_update.xml", szUrl, 500, szConfig);
+	string strHtml = winHttp.Request(szUrl, Hr_Get);
+	pugi::xml_document doc;
+	if (doc.load_buffer(strHtml.c_str(), strHtml.length()))
+	{
+		pugi::xml_node update = doc.root().child(L"update");
+		CheckUpdateResult *result = new CheckUpdateResult;
+		result->strUrl = update.attribute(L"url").as_string();
+		result->strNewUpdateUrl = update.attribute(L"newUpdateUrl").as_string();
+		result->strInfo = update.text().as_string();
+
+		SStringW strVerClient = update.attribute(L"version_client").as_string();
+		SStringW strVerServer = update.attribute(L"version_server").as_string();
+		int a = 0, b = 0, c = 0, d = 0;
+		sscanf(S_CW2A(strVerClient), "%d.%d.%d.%d", &a, &b, &c, &d);
+		result->dwClientVer = MAKELONG(MAKEWORD(d, c), MAKEWORD(b, a));
+		a = b = c = d = 0;
+		sscanf(S_CW2A(strVerServer), "%d.%d.%d.%d", &a, &b, &c, &d);
+		result->dwServerVer = MAKELONG(MAKEWORD(d, c), MAKEWORD(b, a));
+
+		pSvrProxy->PostMessage(UM_CHECK_UPDATE_RESULT, 0, (LPARAM)result);
+	}
+
+	return 0;
+}
+
+LRESULT CWorker::OnDataReport(UINT uMsg, WPARAM wp, LPARAM lp)
+{
+	CRegKey reg;
+	LONG ret = reg.Open(HKEY_CURRENT_USER, _T("SOFTWARE\\SetoutSoft\\sinstar3"), KEY_READ | KEY_WOW64_64KEY);
+	TCHAR szUerID[100] = { 0 };
+	if (ret == ERROR_SUCCESS)
+	{
+		ULONG len = 100;
+		reg.QueryStringValue(_T("userid"), szUerID, &len);
+		reg.Close();
+	}
+	if(szUerID[0] == 0)
+	{
+		GUID guid;
+		if (S_OK == ::CoCreateGuid(&guid))
+		{
+			_stprintf(szUerID
+				, _T("{%08X-%04X-%04x-%02X%02X-%02X%02X%02X%02X%02X%02X}")
+				, guid.Data1
+				, guid.Data2
+				, guid.Data3
+				, guid.Data4[0], guid.Data4[1]
+				, guid.Data4[2], guid.Data4[3], guid.Data4[4], guid.Data4[5]
+				, guid.Data4[6], guid.Data4[7]
+			);
+		}
+		else
+		{
+			srand(time(NULL));
+			_stprintf(szUerID, _T("what_fuck_machine_#%d"), rand());
+		}
+
+		CRegKey reg;
+		LONG ret = reg.Open(HKEY_CURRENT_USER, _T("SOFTWARE\\SetoutSoft\\sinstar3"), KEY_READ|KEY_WRITE | KEY_WOW64_64KEY);
+		if (ret == ERROR_SUCCESS)
+		{
+			ULONG len = 100;
+			reg.SetStringValue(_T("userid"), szUerID, REG_SZ);
+			reg.Close();
+		}
+	}
+
+	TCHAR szModuleName[MAX_PATH];
+	GetModuleFileName(NULL, szModuleName, MAX_PATH);
+	
+	BYTE byVer[4];
+	Helper_PEVersion(szModuleName, (DWORD*)byVer, NULL, NULL);
+	SStringT strVer = SStringT().Format(_T("%u.%u.%u.%u"), byVer[3], byVer[2], byVer[1], byVer[0]);
+
+	SStringT strInfo = SStringT().Format(_T("userName=qcshf|guid=%s|softVersion=%s"), szUerID, strVer);
+	SStringA strInfoA = S_CT2A(strInfo);
+	std::string info64 = Base64::Encode((LPCSTR)strInfoA);
+
+	std::string url = "http://pdftj.mmbangshou.net:8888/web/tj_az?";
+	url += info64;
+
+	CWinHttp  winHttp;
+	string strResp = winHttp.Request(url.c_str(), Hr_Get);
+	SLOG_INFO("data report result:" << strResp.c_str());
+
+	return 0;
 }

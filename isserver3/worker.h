@@ -21,6 +21,8 @@ enum {
 	UM_FUN_SETVOICE,
 	UM_FUN_SETSPEED,
 	UM_FUN_GETTOKENINFO,
+	UM_FUN_CHECK_UPDATE,
+	UM_FUN_DATA_REPORT,
 };
 
 class CWorker : public CSimpleWnd
@@ -48,9 +50,13 @@ protected:
 	virtual UINT Run(LPARAM lp);
 protected:
 	LRESULT OnTTSMessage(UINT uMsg, WPARAM wp, LPARAM lp);
+	LRESULT OnCheckUpdate(UINT uMsg, WPARAM wp, LPARAM lp);
+	LRESULT OnDataReport(UINT uMsg, WPARAM wp, LPARAM lp);
 
 	BEGIN_MSG_MAP_EX(CWorker)
 		MESSAGE_RANGE_HANDLER_EX(UM_TTS_FINISH, UM_FUN_GETTOKENINFO,OnTTSMessage)
+		MESSAGE_HANDLER_EX(UM_FUN_CHECK_UPDATE, OnCheckUpdate)
+		MESSAGE_HANDLER_EX(UM_FUN_DATA_REPORT, OnDataReport)
 		CHAIN_MSG_MAP(__super)
 	END_MSG_MAP()
 private:

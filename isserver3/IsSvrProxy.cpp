@@ -7,13 +7,16 @@
 #include "../include/reg.h"
 #include <helper/STime.h>
 #include <process.h>
-#include "WinHttp\HttpClient.h"
 #include "UpdateInfoDlg.h"
 
 #define TIMERID_DELAY_EXIT	200
 #define SPAN_DELAY_EXIT		5000
 #define TIMERID_CHECK_UPDATE 300
 #define SPAN_CHECK_UPDATE	1000
+
+#define TIMERID_DATA_REPORT 400
+#define SPAN_DATA_REPORT1	50
+#define SPAN_DATA_REPORT2	24*60*60*1000	//1 day
 
 CIsSvrProxy::CIsSvrProxy(const SStringT & strDataPath)
 	:m_strDataPath(strDataPath)
@@ -83,6 +86,7 @@ int CIsSvrProxy::OnCreate(LPCREATESTRUCT pCS)
 		m_nUpdateInterval = GetPrivateProfileIntA("update", "interval", 30, szConfig);
 
 		CSimpleWnd::SetTimer(TIMERID_CHECK_UPDATE, SPAN_CHECK_UPDATE, NULL);
+		CSimpleWnd::SetTimer(TIMERID_DATA_REPORT, SPAN_DATA_REPORT1, NULL);
 	}
 	return nRet;
 }
@@ -292,7 +296,13 @@ void CIsSvrProxy::OnTimer(UINT_PTR uID)
 	else if (uID == TIMERID_CHECK_UPDATE)
 	{
 		CSimpleWnd::KillTimer(uID);
-//		CheckUpdate(FALSE);
+		CheckUpdate(FALSE);
+	}
+	else if (uID == TIMERID_DATA_REPORT)
+	{
+		m_worker.PostMessage(UM_FUN_DATA_REPORT);
+		KillTimer(uID);
+		CSimpleWnd::SetTimer(uID, SPAN_DATA_REPORT2, NULL);
 	}
 	else
 	{
@@ -341,42 +351,10 @@ void CIsSvrProxy::CheckUpdate(BOOL bManual)
 	//update date
 	sprintf(szDate, "%d-%d-%d", timeToday.GetMonth(), timeToday.GetDay(), timeToday.GetYear());
 	WritePrivateProfileStringA("update", "date", szDate, szConfig);
-	BeginThread(bManual);
+
+	m_worker.PostMessage(UM_FUN_CHECK_UPDATE, bManual,(LPARAM)this);
 }
 
-
-UINT CIsSvrProxy::Run(LPARAM lp)
-{
-	BOOL bManual = (BOOL)lp;
-	CWinHttp  winHttp;
-	char szConfig[MAX_PATH];
-	m_pCore->GetConfigIni(szConfig, MAX_PATH);
-	char szUrl[500];
-	GetPrivateProfileStringA("update", "url", "http://soime.cm/sinstar3_update.xml", szUrl, 500, szConfig);
-	string strHtml = winHttp.Request(szUrl, Hr_Get);
-	pugi::xml_document doc;
-	if (doc.load_buffer(strHtml.c_str(), strHtml.length()))
-	{
-		pugi::xml_node update = doc.root().child(L"update");
-		CheckUpdateResult *result = new CheckUpdateResult;
-		result->strUrl = update.attribute(L"url").as_string();
-		result->strNewUpdateUrl = update.attribute(L"newUpdateUrl").as_string();
-		result->strInfo = update.text().as_string();
-
-		SStringW strVerClient = update.attribute(L"version_client").as_string();
-		SStringW strVerServer = update.attribute(L"version_server").as_string();
-		int a=0, b=0, c=0, d=0;
-		sscanf(S_CW2A(strVerClient), "%d.%d.%d.%d", &a, &b, &c, &d);
-		result->dwClientVer = MAKELONG(MAKEWORD(d, c), MAKEWORD(b, a));
-		a = b = c = d = 0;
-		sscanf(S_CW2A(strVerServer), "%d.%d.%d.%d", &a, &b, &c, &d);
-		result->dwServerVer = MAKELONG(MAKEWORD(d, c), MAKEWORD(b, a));
-
-		PostMessage(UM_CHECK_UPDATE_RESULT, 0, (LPARAM)result);
-	}
-
-	return 0;
-}
 
 LRESULT CIsSvrProxy::OnCheckUpdateResult(UINT uMsg, WPARAM wp, LPARAM lp)
 {
