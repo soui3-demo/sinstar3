@@ -1,6 +1,6 @@
 #pragma once
 #include "trayIcon.h"
-#include "MyTTS.h"
+#include "worker.h"
 #include "KeyMapDlg.h"
 #include "BuildIndexProgWnd.h"
 #include <iscore-i.h>
@@ -100,7 +100,7 @@ private:
 	SStringT	m_strDataPath;
 
 	CTrayIcon	m_trayIcon;
-	CMyTTS		m_tts;
+	CWorker		m_worker;
 	UINT	    m_uMsgTaskbarCreated;
 
 	CKeyMapDlg *  m_pKeyMapDlg;

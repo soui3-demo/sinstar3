@@ -1,4 +1,4 @@
-// MyTTS.h: interface for the CMyTTS class.
+// MyTTS.h: interface for the CWorker class.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -23,12 +23,12 @@ enum {
 	UM_FUN_GETTOKENINFO,
 };
 
-class CMyTTS : public CSimpleWnd
+class CWorker : public CSimpleWnd
 	, protected CThreadObject
 {
 public:
-	CMyTTS(LPCTSTR pszDataPath);
-	virtual ~CMyTTS();
+	CWorker(LPCTSTR pszDataPath);
+	virtual ~CWorker();
 
 	int GetSpeed();
 	void SetSpeed(int nSpeed);
@@ -49,7 +49,7 @@ protected:
 protected:
 	LRESULT OnTTSMessage(UINT uMsg, WPARAM wp, LPARAM lp);
 
-	BEGIN_MSG_MAP_EX(CMyTTS)
+	BEGIN_MSG_MAP_EX(CWorker)
 		MESSAGE_RANGE_HANDLER_EX(UM_TTS_FINISH, UM_FUN_GETTOKENINFO,OnTTSMessage)
 		CHAIN_MSG_MAP(__super)
 	END_MSG_MAP()

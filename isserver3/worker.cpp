@@ -1,9 +1,9 @@
-// MyTTS.cpp: implementation of the CMyTTS class.
+// MyTTS.cpp: implementation of the CWorker class.
 //
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
-#include "MyTTS.h"
+#include "worker.h"
 #include <sphelper.h>
 
 #define ASSERT SASSERT
@@ -17,7 +17,7 @@ const TCHAR * KTtsSpeed = _T("speed");
 const TCHAR * KTtsChVoice = _T("ChVoice");
 const TCHAR * KTtsEnVoice = _T("EnVoice");
 
-CMyTTS::CMyTTS(LPCTSTR pszDataPath):m_bInitOK(FALSE), m_CurVoice(VOICE_NULL)
+CWorker::CWorker(LPCTSTR pszDataPath):m_bInitOK(FALSE), m_CurVoice(VOICE_NULL)
 {
 	m_strConfigIni = pszDataPath;
 	m_strConfigIni += _T("\\");
@@ -25,7 +25,7 @@ CMyTTS::CMyTTS(LPCTSTR pszDataPath):m_bInitOK(FALSE), m_CurVoice(VOICE_NULL)
 	BeginThread();
 }
 
-CMyTTS::~CMyTTS()
+CWorker::~CWorker()
 {
 	StopThread();
 	::PostMessage(m_hWnd, WM_QUIT, 0, 0);// quit get message.
@@ -35,7 +35,7 @@ CMyTTS::~CMyTTS()
 //*****************************************
 //	初始化TTS引擎，成功返回TRUE,失败返回FALSE
 //******************************************
-BOOL CMyTTS::Init()
+BOOL CWorker::Init()
 {
 	CoInitialize(NULL);
 	HWND hWnd = Create(_T("sinstar3_server_tts_host"), WS_POPUP, 0, 0, 0, 0, 0, HWND_MESSAGE, NULL);
@@ -81,7 +81,7 @@ BOOL CMyTTS::Init()
 	}
 }
 
-void CMyTTS::Uninit()
+void CWorker::Uninit()
 {
 	WritePrivateProfileString(KTtsEntry, KTtsSpeed, SStringT().Format(_T("%d"),m_nSpeed),m_strConfigIni);
 	WritePrivateProfileString(KTtsEntry, KTtsChVoice, SStringT().Format(_T("%d"), m_iChVoice), m_strConfigIni);
@@ -96,14 +96,14 @@ void CMyTTS::Uninit()
 	CoUninitialize();
 }
 
-void CMyTTS::SpeakWText(const WCHAR * pwcText,int nLen,BOOL bCh)
+void CWorker::SpeakWText(const WCHAR * pwcText,int nLen,BOOL bCh)
 {
 	if (nLen == -1) nLen = wcslen(pwcText);
 	SStringW *pStr = new SStringW(pwcText,nLen);
 	::PostMessage(m_hWnd, UM_FUN_SPEAK, bCh, (LPARAM)pStr);
 }
 
-void CMyTTS::_SpeakText(WPARAM wp, LPARAM lp)
+void CWorker::_SpeakText(WPARAM wp, LPARAM lp)
 {
 	BOOL bCh = (BOOL)wp;
 	SStringW *pStr = (SStringW*)lp;
@@ -114,7 +114,7 @@ void CMyTTS::_SpeakText(WPARAM wp, LPARAM lp)
 	delete pStr;
 }
 
-void CMyTTS::SpeakText(LPCSTR pszText,int nLen,BOOL bCh)
+void CWorker::SpeakText(LPCSTR pszText,int nLen,BOOL bCh)
 {
 	if(nLen==-1) nLen=strlen(pszText);
 	SStringA strA(pszText, nLen);
@@ -123,7 +123,7 @@ void CMyTTS::SpeakText(LPCSTR pszText,int nLen,BOOL bCh)
 }
 
 
-BOOL CMyTTS::IsTTSBusy()
+BOOL CWorker::IsTTSBusy()
 {
 	ASSERT(m_bInitOK);
 	if(m_CurVoice==VOICE_NULL) return FALSE;
@@ -134,18 +134,18 @@ BOOL CMyTTS::IsTTSBusy()
 }
 
 
-int CMyTTS::GetVoice(BOOL bCh)
+int CWorker::GetVoice(BOOL bCh)
 {
 	return bCh?m_iChVoice:m_iEnVoice;
 }
 
 
-void CMyTTS::SetVoice(BOOL bCh, int nToken)
+void CWorker::SetVoice(BOOL bCh, int nToken)
 {
 	::PostMessage(m_hWnd, UM_FUN_SETVOICE, (WPARAM)bCh, (LPARAM)nToken);
 }
 
-BOOL CMyTTS::_SetVoice(WPARAM wp, LPARAM lp)
+BOOL CWorker::_SetVoice(WPARAM wp, LPARAM lp)
 {
 	BOOL bCh = (BOOL)wp;
 	int nToken = (int)lp;
@@ -176,12 +176,12 @@ BOOL CMyTTS::_SetVoice(WPARAM wp, LPARAM lp)
 	return TRUE;
 }
 
-int CMyTTS::GetTokensInfo(bool bCh, wchar_t token[][MAX_TOKEN_NAME_LENGHT], int nBufSize)
+int CWorker::GetTokensInfo(bool bCh, wchar_t token[][MAX_TOKEN_NAME_LENGHT], int nBufSize)
 {
 	return ::SendMessage(m_hWnd, UM_FUN_GETTOKENINFO, MAKEWPARAM(bCh,nBufSize), (LPARAM)token);
 }
 
-int CMyTTS::_GetTokensInfo(WPARAM wp,LPARAM lp)
+int CWorker::_GetTokensInfo(WPARAM wp,LPARAM lp)
 {
 	BOOL bCh = LOWORD(wp);
 	int nBufSize = HIWORD(wp);
@@ -209,12 +209,12 @@ int CMyTTS::_GetTokensInfo(WPARAM wp,LPARAM lp)
 }
 
 
-void CMyTTS::Stop()
+void CWorker::Stop()
 {
 	::PostMessage(m_hWnd, UM_FUN_STOP, 0, 0);
 }
 
-void CMyTTS::_Stop()
+void CWorker::_Stop()
 {
 	if (m_CurVoice != VOICE_NULL)
 	{
@@ -223,7 +223,7 @@ void CMyTTS::_Stop()
 }
 
 
-void CMyTTS::SetMsgOwner(ULONGLONG ullEvent, HWND hWnd, UINT uMsg)
+void CWorker::SetMsgOwner(ULONGLONG ullEvent, HWND hWnd, UINT uMsg)
 {
 	_ASSERT(m_bInitOK);
 	m_cpVoiceCh->SetInterest( ullEvent,ullEvent );
@@ -232,17 +232,17 @@ void CMyTTS::SetMsgOwner(ULONGLONG ullEvent, HWND hWnd, UINT uMsg)
 	m_cpVoiceEn->SetNotifyWindowMessage( hWnd, uMsg, 1, 0 );
 }
 
-int CMyTTS::GetSpeed()
+int CWorker::GetSpeed()
 {
 	return m_nSpeed;
 }
 
-void CMyTTS::SetSpeed(int nSpeed)
+void CWorker::SetSpeed(int nSpeed)
 {
 	PostMessage(UM_FUN_SETSPEED, (WPARAM)nSpeed, 0);
 }
 
-void CMyTTS::_SetSpeed(WPARAM lp)
+void CWorker::_SetSpeed(WPARAM lp)
 {
 	if(!m_bInitOK) return;
 	int nSpeed = (int)lp;
@@ -251,7 +251,7 @@ void CMyTTS::_SetSpeed(WPARAM lp)
 }
 
 
-UINT CMyTTS::Run(LPARAM lp)
+UINT CWorker::Run(LPARAM lp)
 {
 	if (!Init())
 		return -1;
@@ -268,7 +268,7 @@ UINT CMyTTS::Run(LPARAM lp)
 	return 0;
 }
 
-LRESULT CMyTTS::OnTTSMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT CWorker::OnTTSMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	LRESULT lRet= 1;
 	switch (uMsg)

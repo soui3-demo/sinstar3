@@ -17,7 +17,7 @@
 
 CIsSvrProxy::CIsSvrProxy(const SStringT & strDataPath)
 	:m_strDataPath(strDataPath)
-	, m_tts(strDataPath)
+	, m_worker(strDataPath)
 	,m_hCoreModule(NULL)
 	,m_pCore(NULL)
 	,m_funIsCore_Create(NULL)
@@ -218,28 +218,28 @@ void CIsSvrProxy::OnShowKeyMap(IDataBlock * pCompData, LPCSTR pszName, LPCSTR ps
 
 int CIsSvrProxy::TtsGetSpeed()
 {
-	return m_tts.GetSpeed();
+	return m_worker.GetSpeed();
 }
 
 int CIsSvrProxy::TtsGetVoice(bool bCh)
 {
-	return m_tts.GetVoice(bCh);
+	return m_worker.GetVoice(bCh);
 }
 
 void CIsSvrProxy::TtsSetSpeed(int nSpeed) {
-	m_tts.SetSpeed(nSpeed);
+	m_worker.SetSpeed(nSpeed);
 }
 
 void CIsSvrProxy::TtsSpeakText(const wchar_t* pText, int nLen, bool bChinese) {
-	m_tts.SpeakWText(pText, nLen, bChinese);
+	m_worker.SpeakWText(pText, nLen, bChinese);
 }
 
 void CIsSvrProxy::TtsSetVoice(bool bCh, int iToken) {
-	m_tts.SetVoice(bCh, iToken);
+	m_worker.SetVoice(bCh, iToken);
 }
 
 int CIsSvrProxy::TtsGetTokensInfo(bool bCh, wchar_t token[][MAX_TOKEN_NAME_LENGHT], int nBufSize) { 
-	return m_tts.GetTokensInfo(bCh, token, nBufSize);
+	return m_worker.GetTokensInfo(bCh, token, nBufSize);
 }
 
 DWORD CIsSvrProxy::OnQueryVersion() const

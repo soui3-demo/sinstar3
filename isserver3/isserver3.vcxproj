@@ -110,7 +110,7 @@
     <ClCompile Include="AboutDlg.cpp" />
     <ClCompile Include="KeyMapDlg.cpp" />
     <ClCompile Include="Minidump.cpp" />
-    <ClCompile Include="MyTTS.cpp" />
+    <ClCompile Include="worker.cpp" />
     <ClCompile Include="SChatEdit.cpp" />
     <ClCompile Include="TrayIcon.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -130,7 +130,7 @@
     <ClInclude Include="AboutDlg.h" />
     <ClInclude Include="KeyMapDlg.h" />
     <ClInclude Include="Minidump.h" />
-    <ClInclude Include="MyTTS.h" />
+    <ClInclude Include="worker.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SChatEdit.h" />
     <ClInclude Include="TrayIcon.h" />
