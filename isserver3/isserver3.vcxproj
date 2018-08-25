@@ -111,12 +111,14 @@
     <ClCompile Include="KeyMapDlg.cpp" />
     <ClCompile Include="Minidump.cpp" />
     <ClCompile Include="MyTTS.cpp" />
+    <ClCompile Include="SChatEdit.cpp" />
     <ClCompile Include="TrayIcon.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="ThreadObject.cpp" />
+    <ClCompile Include="UpdateInfoDlg.cpp" />
     <ClCompile Include="WinHttp\HttpClient.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -130,9 +132,11 @@
     <ClInclude Include="Minidump.h" />
     <ClInclude Include="MyTTS.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="SChatEdit.h" />
     <ClInclude Include="TrayIcon.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="ThreadObject.h" />
+    <ClInclude Include="UpdateInfoDlg.h" />
     <ClInclude Include="WinHttp\Common.h" />
     <ClInclude Include="WinHttp\HttpClient.h" />
     <ClInclude Include="WinHttp\IHttpInterface.h" />
@@ -157,6 +161,7 @@
     <Xml Include="uires\values\string.xml" />
     <Xml Include="uires\xml\dlg_about.xml" />
     <Xml Include="uires\xml\dlg_keymap.xml" />
+    <Xml Include="uires\xml\dlg_update_info.xml" />
     <Xml Include="uires\xml\wnd_build_index_prog.xml" />
   </ItemGroup>
   <ItemGroup>

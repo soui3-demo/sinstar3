@@ -13,6 +13,7 @@ typedef void(*funIscore_Destroy)(IServerCore* pCore);
 #define UM_BUILD_INDEX_PROG0	(WM_USER+2000)
 #define UM_BUILD_INDEX_PROG1	(WM_USER+2001)
 #define UM_BUILD_INDEX_PROG2	(WM_USER+2002)
+#define UM_CHECK_UPDATE_RESULT  (WM_USER+2010)
 
 class CIsSvrProxy : public CSimpleWnd
 	, public IUiMsgHandler
@@ -58,6 +59,7 @@ protected:
 	LRESULT OnTrayNotify(UINT uMsg, WPARAM wp, LPARAM lp);
 	LRESULT OnTaskbarCreated(UINT uMsg, WPARAM wp, LPARAM lp);
 	LRESULT OnBuildIndexProg(UINT uMsg, WPARAM wp, LPARAM lp);
+	LRESULT OnCheckUpdateResult(UINT uMsg, WPARAM wp, LPARAM lp);
 
 	void OnTimer(UINT_PTR uID);
 
@@ -73,6 +75,7 @@ protected:
 		MSG_WM_DESTROY(OnDestroy)
 		MSG_WM_TIMER(OnTimer)
 		MESSAGE_HANDLER_EX(m_uMsgTaskbarCreated,OnTaskbarCreated)
+		MESSAGE_HANDLER_EX(UM_CHECK_UPDATE_RESULT,OnCheckUpdateResult)
 		MESSAGE_RANGE_HANDLER_EX(UM_BUILD_INDEX_PROG0, UM_BUILD_INDEX_PROG2,OnBuildIndexProg)
 		COMMAND_ID_HANDLER_EX(R.id.menu_about, OnMenuAbout)
 		COMMAND_ID_HANDLER_EX(R.id.menu_exit, OnMenuExit)

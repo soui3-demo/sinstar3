@@ -4,4 +4,6 @@
     <ver value="3.0"/>
     <keymap value="keymap"/>
     <prog value="prog"/>
+    <update value="update"/>
+    <new_ver_found value="发现新版本"/>
   </string>

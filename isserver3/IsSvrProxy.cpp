@@ -8,6 +8,7 @@
 #include <helper/STime.h>
 #include <process.h>
 #include "WinHttp\HttpClient.h"
+#include "UpdateInfoDlg.h"
 
 #define TIMERID_DELAY_EXIT	200
 #define SPAN_DELAY_EXIT		5000
@@ -348,8 +349,69 @@ UINT CIsSvrProxy::Run(LPARAM lp)
 {
 	BOOL bManual = (BOOL)lp;
 	CWinHttp  winHttp;
-	const char* pUrl = "www.haoso.com";
-	string strHtml = winHttp.Request(pUrl, Hr_Get);
+	char szConfig[MAX_PATH];
+	m_pCore->GetConfigIni(szConfig, MAX_PATH);
+	char szUrl[500];
+	GetPrivateProfileStringA("update", "url", "http://soime.cm/sinstar3_update.xml", szUrl, 500, szConfig);
+	string strHtml = winHttp.Request(szUrl, Hr_Get);
+	pugi::xml_document doc;
+	if (doc.load_buffer(strHtml.c_str(), strHtml.length()))
+	{
+		pugi::xml_node update = doc.root().child(L"update");
+		CheckUpdateResult *result = new CheckUpdateResult;
+		result->strUrl = update.attribute(L"url").as_string();
+		result->strNewUpdateUrl = update.attribute(L"newUpdateUrl").as_string();
+		result->strInfo = update.text().as_string();
 
+		SStringW strVerClient = update.attribute(L"version_client").as_string();
+		SStringW strVerServer = update.attribute(L"version_server").as_string();
+		int a=0, b=0, c=0, d=0;
+		sscanf(S_CW2A(strVerClient), "%d.%d.%d.%d", &a, &b, &c, &d);
+		result->dwClientVer = MAKELONG(MAKEWORD(d, c), MAKEWORD(b, a));
+		a = b = c = d = 0;
+		sscanf(S_CW2A(strVerServer), "%d.%d.%d.%d", &a, &b, &c, &d);
+		result->dwServerVer = MAKELONG(MAKEWORD(d, c), MAKEWORD(b, a));
+
+		PostMessage(UM_CHECK_UPDATE_RESULT, 0, (LPARAM)result);
+	}
+
+	return 0;
+}
+
+LRESULT CIsSvrProxy::OnCheckUpdateResult(UINT uMsg, WPARAM wp, LPARAM lp)
+{
+	CheckUpdateResult *pResult = (CheckUpdateResult*)lp;
+
+	char szConfig[MAX_PATH];
+	m_pCore->GetConfigIni(szConfig, MAX_PATH);
+	WritePrivateProfileStringA("update", "url", S_CW2A(pResult->strNewUpdateUrl), szConfig);
+
+	CRegKey reg;
+	LONG ret = reg.Open(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\SetoutSoft\\sinstar3"), KEY_READ | KEY_WOW64_64KEY);
+	if (ret == ERROR_SUCCESS)
+	{
+		TCHAR szClientPath[MAX_PATH];
+		ULONG len = MAX_PATH;
+		reg.QueryStringValue(_T("path_client"), szClientPath, &len);
+		reg.Close();
+
+		SStringT strClient = szClientPath;
+		strClient += _T("\\program\\sinstar3_core.dll");
+		TCHAR szSvrPath[MAX_PATH];
+		GetModuleFileName(NULL, szSvrPath, MAX_PATH);
+		DWORD dwVerSvr = 0, dwVerClient = 0;
+		Helper_PEVersion(szSvrPath, &dwVerSvr, NULL, NULL);
+		Helper_PEVersion(strClient, &dwVerClient, NULL, NULL);
+
+		if (pResult->dwClientVer > dwVerClient || pResult->dwServerVer > dwVerSvr)
+		{//found new ver
+			pResult->dwClientCurVer = dwVerClient;
+			pResult->dwServerCurVer = dwVerSvr;
+
+			CUpdateInfoDlg updateDlg(pResult);
+			updateDlg.DoModal(GetDesktopWindow());
+		}
+	}
+	delete pResult;
 	return 0;
 }
