@@ -7,6 +7,7 @@
 #include "../include/reg.h"
 #include <helper/STime.h>
 #include <process.h>
+#include "WinHttp\HttpClient.h"
 
 #define TIMERID_DELAY_EXIT	200
 #define SPAN_DELAY_EXIT		5000
@@ -290,7 +291,7 @@ void CIsSvrProxy::OnTimer(UINT_PTR uID)
 	else if (uID == TIMERID_CHECK_UPDATE)
 	{
 		CSimpleWnd::KillTimer(uID);
-		CheckUpdate(FALSE);
+//		CheckUpdate(FALSE);
 	}
 	else
 	{
@@ -317,12 +318,6 @@ void CIsSvrProxy::OnMenuAutoExit(UINT uNotifyCode, int nID, HWND wndCtl)
 	m_pCore->SetAutoQuit(!m_pCore->IsAutoQuit());
 }
 
-typedef struct tagCKUPARAM
-{
-	CIsSvrProxy * pSvrProxy;
-	BOOL		  bManual;
-}CKUPARAM;
-
 
 void CIsSvrProxy::CheckUpdate(BOOL bManual)
 {
@@ -345,9 +340,16 @@ void CIsSvrProxy::CheckUpdate(BOOL bManual)
 	//update date
 	sprintf(szDate, "%d-%d-%d", timeToday.GetMonth(), timeToday.GetDay(), timeToday.GetYear());
 	WritePrivateProfileStringA("update", "date", szDate, szConfig);
-	
-	CKUPARAM *pParam = new CKUPARAM;
-	pParam->pSvrProxy = this;
-	pParam->bManual = bManual;
+	BeginThread(bManual);
+}
 
+
+UINT CIsSvrProxy::Run(LPARAM lp)
+{
+	BOOL bManual = (BOOL)lp;
+	CWinHttp  winHttp;
+	const char* pUrl = "www.haoso.com";
+	string strHtml = winHttp.Request(pUrl, Hr_Get);
+
+	return 0;
 }

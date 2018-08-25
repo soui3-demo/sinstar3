@@ -251,7 +251,7 @@ void CMyTTS::_SetSpeed(WPARAM lp)
 }
 
 
-UINT CMyTTS::Run()
+UINT CMyTTS::Run(LPARAM lp)
 {
 	if (!Init())
 		return -1;

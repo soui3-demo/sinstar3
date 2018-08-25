@@ -3,7 +3,7 @@
 #include <process.h>
 #include <assert.h>
 
-CThreadObject::CThreadObject() :m_hThread(0)
+CThreadObject::CThreadObject() :m_hThread(0),m_startParam(0)
 {
 	m_evtStart = CreateEvent(NULL, TRUE, FALSE, NULL);
 	m_evtStop = CreateEvent(NULL, TRUE, FALSE, NULL);
@@ -18,11 +18,11 @@ CThreadObject::~CThreadObject()
 }
 
 
-UINT CThreadObject::ThreadProc()
+UINT CThreadObject::ThreadProc(LPARAM lp)
 {
 	SetEvent(m_evtStart);	//标记线程启动
 	ResetEvent(m_evtStop);  //清除线程结束标志
-	UINT uRet = Run();		//执行线程
+	UINT uRet = Run(lp);		//执行线程
 	ResetEvent(m_evtStart); //清除线程启动标志
 	return uRet;
 }
@@ -31,12 +31,13 @@ UINT CThreadObject::ThreadProc()
 UINT __stdcall CThreadObject::StaticTheadProc(LPVOID param)
 {
 	CThreadObject * _this = (CThreadObject*)param;
-	return _this->ThreadProc();
+	return _this->ThreadProc(_this->m_startParam);
 }
 
-BOOL CThreadObject::BeginThread()
+BOOL CThreadObject::BeginThread(LPARAM lParam)
 {
 	if (IsRunning()) return FALSE;
+	m_startParam = lParam;
 	m_hThread = (HANDLE)_beginthreadex(NULL, 0, &CThreadObject::StaticTheadProc, this, 0, NULL);
 	if (m_hThread == NULL) return FALSE;
 	DWORD dwRet = WaitForSingleObject(m_evtStart, INFINITE);

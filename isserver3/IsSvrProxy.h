@@ -5,6 +5,7 @@
 #include "BuildIndexProgWnd.h"
 #include <iscore-i.h>
 #include "AboutDlg.h"
+#include "ThreadObject.h"
 
 typedef IServerCore * (*funIscore_Create)();
 typedef void(*funIscore_Destroy)(IServerCore* pCore);
@@ -13,7 +14,11 @@ typedef void(*funIscore_Destroy)(IServerCore* pCore);
 #define UM_BUILD_INDEX_PROG1	(WM_USER+2001)
 #define UM_BUILD_INDEX_PROG2	(WM_USER+2002)
 
-class CIsSvrProxy : public CSimpleWnd, public IUiMsgHandler, public IKeyMapListener, public IUpdateIntervalObserver
+class CIsSvrProxy : public CSimpleWnd
+	, public IUiMsgHandler
+	, public IKeyMapListener
+	, public IUpdateIntervalObserver
+	, public CThreadObject
 {
 public:
 	CIsSvrProxy(const SStringT & strDataPath);
@@ -79,7 +84,10 @@ protected:
 	END_MSG_MAP()
 
 private:
+	virtual UINT Run(LPARAM lp);
+
 	int			m_nUpdateInterval;
+
 private:
 	IServerCore * m_pCore;
 	HMODULE		  m_hCoreModule;

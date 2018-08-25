@@ -45,7 +45,7 @@ private:
 	BOOL _SetVoice(WPARAM wp, LPARAM lp);
 	int  _GetTokensInfo(WPARAM wp, LPARAM lp);
 protected:
-	virtual UINT Run();
+	virtual UINT Run(LPARAM lp);
 protected:
 	LRESULT OnTTSMessage(UINT uMsg, WPARAM wp, LPARAM lp);
 
