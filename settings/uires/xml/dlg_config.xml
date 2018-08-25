@@ -259,7 +259,7 @@
               </window>
             </window>
           </pageex>
-          <pageex title="@string/cfg_about" tip="@string/cfg_about" layout="vbox" inset="10,0,0,0">
+          <pageex title="@string/cfg_about" tip="@string/cfg_about" layout="vbox" inset="20,0,0,0">
             <window size="-2,-1" layout="hbox" gravity="center">
               <text inset="10,5,5,5">@string/cfg_about_title</text>
               <hr width="-2" height="1"></hr>
@@ -281,6 +281,20 @@
             <text text="将会受到所在地区的最大可能的民事或刑事诉讼"/>
             <text text="包括但不限于以上 "/>
             <text text="2002-2018（C）启程 All right is reserved."/>
+            <window size="-2,-1" layout="vbox" gravity="center" extend_top="20">
+              <window size="-1,-1" layout="vbox">
+                <text>微信赞助</text>
+                <qrctrl size="250,250" text="wxp://f2f0J_TGrQJ7F_KjpfCdDTFNKDAvDFIYrSM5">
+                  <icon pos="|0,|0,@48,@48" offset="-0.5,-0.5" src="ICON_LOGO:48"/>
+                </qrctrl>
+              </window>
+              <window size="-1,-1" layout="vbox" gravity="center" extend_top="10">
+                <text>支付宝赞助</text>
+                <qrctrl size="250,250" text="HTTPS://QR.ALIPAY.COM/FKX07171QGERGGU4MNY8C8">
+                  <icon pos="|0,|0,@48,@48" offset="-0.5,-0.5" src="ICON_LOGO:48"/>
+                </qrctrl>
+              </window>
+            </window>
           </pageex>
         </pages>
       </tabctrlex>

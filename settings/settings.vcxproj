@@ -104,6 +104,8 @@
   <ItemGroup>
     <ClCompile Include="ConfigDlg.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="qrcode\QR_Encode.cpp" />
+    <ClCompile Include="qrcode\SQrCtrl.cpp" />
     <ClCompile Include="settings.cpp" />
     <ClCompile Include="STabCtrlEx.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -116,6 +118,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConfigDlg.h" />
+    <ClInclude Include="qrcode\QR_Encode.h" />
+    <ClInclude Include="qrcode\SQrCtrl.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="STabCtrlEx.h" />
