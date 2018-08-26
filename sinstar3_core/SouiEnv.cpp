@@ -16,31 +16,30 @@ ROBJ_IN_CPP
 template<>
 CSouiEnv* SSingleton<CSouiEnv>::ms_Singleton = NULL;
 
-class CCurrentDirSet {
-public:
-	CCurrentDirSet(LPCTSTR pszNewDir)
-	{
-		GetCurrentDirectory(1000, m_szCurDirBackup);
-		SetCurrentDirectory(pszNewDir);
-	}
-	~CCurrentDirSet()
-	{
-		SetCurrentDirectory(m_szCurDirBackup);
-	}
-private:
-	TCHAR m_szCurDirBackup[1000];
-};
+/////////////////////////////////////////////////////////////////////////
+CCurrentDirSet::CCurrentDirSet(LPCTSTR pszNewDir)
+{
+	GetCurrentDirectory(1000, m_szCurDirBackup);
+	SetCurrentDirectory(pszNewDir);
+}
+
+CCurrentDirSet::~CCurrentDirSet()
+{
+	SetCurrentDirectory(m_szCurDirBackup);
+}
+
+/////////////////////////////////////////////////////////////////////////
 
 CSouiEnv::CSouiEnv(HINSTANCE hInst,LPCTSTR pszWorkDir)
 {
 	int nRet = 0;
 
-	SStringT strDllPath = pszWorkDir;
-	strDllPath += _T("\\program");
+	SStringT m_strSouiDll = pszWorkDir;
+	m_strSouiDll += _T("\\program");
 #ifdef _WIN64
-	strDllPath += _T("\\x64");
+	m_strSouiDll += _T("\\x64");
 #endif
-	CCurrentDirSet curDirSet(strDllPath);
+	CCurrentDirSet curDirSet(m_strSouiDll);
 
 	m_pComMgr = new SComMgr(_T("imgdecoder-png"));
 
@@ -192,3 +191,9 @@ CSouiEnv::~CSouiEnv(void)
  	delete m_theApp;
 	delete m_pComMgr;
 }
+
+SApplication * CSouiEnv::theApp() { return m_theApp; }
+
+SComMgr * CSouiEnv::theComMgr() { return m_pComMgr; }
+
+LPCTSTR CSouiEnv::SouiDllDir() const { return m_strSouiDll; }
