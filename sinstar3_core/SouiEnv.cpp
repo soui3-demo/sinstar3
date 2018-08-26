@@ -101,24 +101,15 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst,LPCTSTR pszWorkDir)
 
 
 	CAutoRefPtr<IResProvider>   pResProvider;
-#if (RES_TYPE == 0)
 	CreateResProvider(RES_FILE, (IObjRef**)&pResProvider);
 
-	//获取调试阶段的皮肤目录位置
-	TCHAR szCurrentDir[MAX_PATH] = { 0 };
-	GetModuleFileName(hInst, szCurrentDir, sizeof(szCurrentDir));
-	LPTSTR lpInsertPos = _tcsstr(szCurrentDir, _T("\\program"));
-	SASSERT(lpInsertPos);
-	_tcscpy(lpInsertPos, _T("\\..\\sinstar3_core\\uires"));
-	if (!pResProvider->Init((LPARAM)szCurrentDir, 0))
+	SStringT strDefSkin = pszWorkDir;
+	strDefSkin += _T("\\defskin");
+	if (!pResProvider->Init((LPARAM)(LPCTSTR)strDefSkin, 0))
 	{
 		SASSERT(0);
 		return;
 	}
-#else 
-	CreateResProvider(RES_PE, (IObjRef**)&pResProvider);
-	pResProvider->Init((WPARAM)hInst, 0);
-#endif
 
 	m_theApp->InitXmlNamedID(namedXmlID,ARRAYSIZE(namedXmlID),TRUE);
 	m_theApp->AddResProvider(pResProvider);
