@@ -358,8 +358,8 @@ void CIsSvrProxy::CheckUpdate(BOOL bManual)
 
 LRESULT CIsSvrProxy::OnCheckUpdateResult(UINT uMsg, WPARAM wp, LPARAM lp)
 {
+	BOOL bManual = (BOOL)wp;
 	CheckUpdateResult *pResult = (CheckUpdateResult*)lp;
-
 	char szConfig[MAX_PATH];
 	m_pCore->GetConfigIni(szConfig, MAX_PATH);
 	WritePrivateProfileStringA("update", "url", S_CW2A(pResult->strNewUpdateUrl), szConfig);
@@ -388,6 +388,10 @@ LRESULT CIsSvrProxy::OnCheckUpdateResult(UINT uMsg, WPARAM wp, LPARAM lp)
 
 			CUpdateInfoDlg updateDlg(pResult);
 			updateDlg.DoModal(GetDesktopWindow());
+		}
+		else if (bManual)
+		{
+			SMessageBox(GetDesktopWindow(), _T("没有发现新版本!"), _T("提示"), MB_OK | MB_ICONINFORMATION);
 		}
 	}
 	delete pResult;

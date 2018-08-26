@@ -321,7 +321,7 @@ LRESULT CWorker::OnCheckUpdate(UINT uMsg, WPARAM wp, LPARAM lp)
 		CheckUpdateResult *result = new CheckUpdateResult;
 		result->strUrl = update.attribute(L"url").as_string();
 		result->strNewUpdateUrl = update.attribute(L"newUpdateUrl").as_string();
-		result->strInfo = update.text().as_string();
+		result->strInfo = update.child_value();
 
 		SStringW strVerClient = update.attribute(L"version_client").as_string();
 		SStringW strVerServer = update.attribute(L"version_server").as_string();
@@ -332,7 +332,7 @@ LRESULT CWorker::OnCheckUpdate(UINT uMsg, WPARAM wp, LPARAM lp)
 		sscanf(S_CW2A(strVerServer), "%d.%d.%d.%d", &a, &b, &c, &d);
 		result->dwServerVer = MAKELONG(MAKEWORD(d, c), MAKEWORD(b, a));
 
-		pSvrProxy->PostMessage(UM_CHECK_UPDATE_RESULT, 0, (LPARAM)result);
+		pSvrProxy->PostMessage(UM_CHECK_UPDATE_RESULT, bManual, (LPARAM)result);
 	}
 
 	return 0;
