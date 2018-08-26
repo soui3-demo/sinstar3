@@ -214,6 +214,13 @@ BOOL Sinstar_Uninstall(LPCTSTR pszIme)
 	}
 	reg.RecurseDeleteKey(_T("sinstar3"));
 	reg.Close();
+	ret = reg.Open(HKEY_CURRENT_USER, _T("SOFTWARE\\SetoutSoft"), KEY_WRITE | KEY_WOW64_64KEY);
+	if (ret == ERROR_SUCCESS)
+	{
+		reg.RecurseDeleteKey(_T("sinstar3"));
+		reg.Close();
+	}
+
 
 	//ÍË³ö·þÎñÆ÷
 	HANDLE hMapData = OpenFileMapping(FILE_MAP_READ | FILE_MAP_WRITE, FALSE, NAME_MAPFILE);
