@@ -79,8 +79,8 @@ BOOL IsDigitEx(char c)
 //判断当前状态下数字键区是不是有较编码,自定义状态及笔画输入状态下支持数字键盘当作编码
 BOOL KeyIn_IsNumCode(InputContext * lpCntxtPriv)
 {
-	return (lpCntxtPriv->inState==INST_USERDEF
-		&& ((lpCntxtPriv->cComp>0 && IsDigitEx(lpCntxtPriv->szComp[0])))
+	return (lpCntxtPriv->inState == INST_USERDEF
+		&& ((lpCntxtPriv->cComp>0 && IsDigitEx(lpCntxtPriv->szComp[0])) || lpCntxtPriv->cComp == 0)
 		);
 }
 
