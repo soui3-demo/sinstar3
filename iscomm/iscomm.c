@@ -229,7 +229,7 @@ void  ISComm_Logout(HWND hWnd)
 //------------------------------------------------------
 //	向服务器发送一个消息
 //------------------------------------------------------
-DWORD ISComm_SendMsg(DWORD dwType,LPVOID pData,short sSize,HWND hWnd)
+DWORD ISComm_SendMsg(DWORD dwType,const LPVOID pData,short sSize,HWND hWnd)
 {
 	DWORD dwRet=0;
 	PMSGDATA pIsBuf=(PMSGDATA)s_pDataReq;
@@ -252,7 +252,7 @@ DWORD ISComm_SendMsg(DWORD dwType,LPVOID pData,short sSize,HWND hWnd)
 }
 
 //使用消息类型的最高位来标识该消息需要立即返回
-DWORD ISComm_PostMsg(DWORD dwType,LPVOID pData,short sSize,HWND hWnd)
+DWORD ISComm_PostMsg(DWORD dwType,const LPVOID pData,short sSize,HWND hWnd)
 {
 	return ISComm_SendMsg(dwType|0x80000000,pData,sSize,hWnd);
 }
@@ -702,4 +702,33 @@ DWORD ISComm_GetSvrAutorun()
 DWORD ISComm_SetSvrAutorun(int bAutoRun)
 {
 	return ISComm_SendMsg(CT_SET_SVR_AUTORUN,&bAutoRun,sizeof(int),0);
+}
+
+BOOL ISComm_GetDataPathA(LPSTR pszDataPath, int nLength)
+{
+	HKEY hKey = 0;
+	int nBytes = nLength;
+	DWORD dwType;
+	LSTATUS status= RegOpenKeyExA(HKEY_LOCAL_MACHINE, "SOFTWARE\\SetoutSoft\\sinstar3", 0, KEY_READ | KEY_WOW64_64KEY, &hKey);
+	if (status != ERROR_SUCCESS) return FALSE;
+	status = RegQueryValueExA(hKey, "path_svr_data", NULL, &dwType, (LPBYTE)pszDataPath, &nBytes);
+	RegCloseKey(hKey);
+	return status == ERROR_SUCCESS && dwType == REG_SZ;
+}
+
+BOOL ISComm_GetDataPathW(LPWSTR pszDataPath, int nLength)
+{
+	HKEY hKey = 0;
+	int nBytes = nLength * sizeof(wchar_t);
+	DWORD dwType;
+	LSTATUS status = RegOpenKeyEx(HKEY_LOCAL_MACHINE, L"SOFTWARE\\SetoutSoft\\sinstar3", 0, KEY_READ | KEY_WOW64_64KEY, &hKey);
+	if (status != ERROR_SUCCESS) return FALSE;
+	status = RegQueryValueEx(hKey, L"path_svr_data", NULL, &dwType, (LPBYTE)pszDataPath, &nBytes);
+	RegCloseKey(hKey);
+	return status == ERROR_SUCCESS && dwType == REG_SZ;
+}
+
+DWORD ISComm_InstallPhraseLib(LPCSTR pszPlnameUtf8)
+{
+	return ISComm_SendMsg(CT_INSTALL_PHRASELIB, (LPVOID)pszPlnameUtf8, (short)strlen(pszPlnameUtf8), 0);
 }

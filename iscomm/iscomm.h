@@ -118,6 +118,9 @@ typedef struct tagFLMINFO
 extern "C"{
 #endif//__cplusplus
 
+BOOL ISComm_GetDataPathW(LPWSTR pszDataPath,int nLength);
+BOOL ISComm_GetDataPathA(LPSTR pszDataPath, int nLength);
+
 void ISComm_SetSvrPath(LPCTSTR pszPath);
 
 void ISComm_FreeImeFlagData(IMEFLAGDATA *pData);
@@ -127,8 +130,8 @@ const UINT ISComm_GetCommMsgID();
 DWORD ISComm_UpdateUserDefData(int nType, LPCSTR pszFilename);
 DWORD ISComm_FatctUserDefFileName(int nType);
 
-DWORD ISComm_SendMsg(DWORD dwType,LPVOID pData,short sSize,HWND hWnd);
-DWORD ISComm_PostMsg(DWORD dwType,LPVOID pData,short sSize,HWND hWnd);
+DWORD ISComm_SendMsg(DWORD dwType,const LPVOID pData,short sSize,HWND hWnd);
+DWORD ISComm_PostMsg(DWORD dwType,const LPVOID pData,short sSize,HWND hWnd);
 PMSGDATA ISComm_GetData();
 
 BOOL ISComm_Login(HWND hWnd);
@@ -218,6 +221,7 @@ DWORD ISComm_SetSentRecordMax(int nSentRecordMax);
 DWORD ISComm_GetSvrAutorun();
 DWORD ISComm_SetSvrAutorun(int bAutoRun);
 
+DWORD ISComm_InstallPhraseLib(LPCSTR pszPlnameUtf8);
 #ifdef __cplusplus
 }
 #endif//__cplusplus
