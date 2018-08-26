@@ -34,7 +34,7 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst,LPCTSTR pszWorkDir)
 {
 	int nRet = 0;
 
-	SStringT m_strSouiDll = pszWorkDir;
+	m_strSouiDll = pszWorkDir;
 	m_strSouiDll += _T("\\program");
 #ifdef _WIN64
 	m_strSouiDll += _T("\\x64");

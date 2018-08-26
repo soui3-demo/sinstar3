@@ -23,5 +23,5 @@ public:
 private:
 	SApplication	* m_theApp;
 	SComMgr	*		  m_pComMgr;
-	SStringT		m_strSouiDll;
+	SStringT		  m_strSouiDll;
 };
