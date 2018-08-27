@@ -28,6 +28,7 @@ void CCoreLoader::SetCorePath(LPCTSTR pszPath)
 #ifdef _WIN64
 	_tcscat(m_szPath, _T("\\x64"));
 #endif
+	_tcscat(m_szPath, _T("\\sinstar3_core.dll"));
 }
 
 ISinstar *CCoreLoader::Sinstar3_Create(ITextService *pTxtSvr)
@@ -35,16 +36,18 @@ ISinstar *CCoreLoader::Sinstar3_Create(ITextService *pTxtSvr)
 	CAutoLock lock(&m_cs);
 	BOOL bLoad=FALSE;
 
-	TCHAR szCore[MAX_PATH];
-	_stprintf(szCore, _T("%s\\sinstar3_core.dll"), m_szPath);
 
-	HMODULE hCoreModule=GetModuleHandle(szCore);
+	HMODULE hCoreModule=GetModuleHandle(m_szPath);
 	if(!hCoreModule)
 	{
 		TCHAR szCurrentDir[MAX_PATH];
 		GetCurrentDirectory(MAX_PATH,szCurrentDir);
-		SetCurrentDirectory(m_szPath);
-		hCoreModule=LoadLibrary(szCore);
+		TCHAR szBuf[MAX_PATH];
+		_tcscpy(szBuf, m_szPath);
+		TCHAR *p = _tcsrchr(szBuf, _T('\\'));
+		*p = 0;
+		SetCurrentDirectory(szBuf);
+		hCoreModule=LoadLibrary(m_szPath);
 		SetCurrentDirectory(szCurrentDir);
 		bLoad=TRUE;
 	}

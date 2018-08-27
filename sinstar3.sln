@@ -34,8 +34,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iscore", "iscore\iscore.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CompBuilder", "CompBuilder\CompBuilder.vcxproj", "{AA60B9CF-C5FA-4A37-BB0E-F7AE325268A2}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pleditor", "pleditor\pleditor.vcxproj", "{9533734B-2C1A-42AC-99BA-86B97A6A9585}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -192,16 +190,6 @@ Global
 		{AA60B9CF-C5FA-4A37-BB0E-F7AE325268A2}.Release|Win32.ActiveCfg = Release|Win32
 		{AA60B9CF-C5FA-4A37-BB0E-F7AE325268A2}.Release|Win32.Build.0 = Release|Win32
 		{AA60B9CF-C5FA-4A37-BB0E-F7AE325268A2}.Release|x64.ActiveCfg = Release|Win32
-		{9533734B-2C1A-42AC-99BA-86B97A6A9585}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{9533734B-2C1A-42AC-99BA-86B97A6A9585}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{9533734B-2C1A-42AC-99BA-86B97A6A9585}.Debug|Win32.ActiveCfg = Debug|Win32
-		{9533734B-2C1A-42AC-99BA-86B97A6A9585}.Debug|Win32.Build.0 = Debug|Win32
-		{9533734B-2C1A-42AC-99BA-86B97A6A9585}.Debug|x64.ActiveCfg = Debug|Win32
-		{9533734B-2C1A-42AC-99BA-86B97A6A9585}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{9533734B-2C1A-42AC-99BA-86B97A6A9585}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{9533734B-2C1A-42AC-99BA-86B97A6A9585}.Release|Win32.ActiveCfg = Release|Win32
-		{9533734B-2C1A-42AC-99BA-86B97A6A9585}.Release|Win32.Build.0 = Release|Win32
-		{9533734B-2C1A-42AC-99BA-86B97A6A9585}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

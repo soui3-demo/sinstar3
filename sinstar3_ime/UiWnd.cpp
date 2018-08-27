@@ -428,8 +428,8 @@ LRESULT CUiWnd::OnCreate()
 LRESULT CUiWnd::OnDestroy()
 {
 	SLOGFMTI("CUiWnd::OnDestroy");
-	AttachToIMC(FALSE);
 	_UninitSinstar3();
+	AttachToIMC(FALSE);
 	m_wndComp.Destroy();
 	return 0;
 }
