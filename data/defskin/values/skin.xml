@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+  <skin>
+    <colorrect name="TrayMenu_menu_bkgnd" hover="#cccccc" alpha="188"/>
+    <colorrect name="TrayMenu_menu_sep" normal="#cccccc" alpha="188"/>
+  </skin>
