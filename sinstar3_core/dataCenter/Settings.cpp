@@ -3,7 +3,7 @@
 #include <core/Accelerator.h>
 
 CSettingsGlobal	*g_SettingsG = NULL;
-
+CSettingsUI  *g_SettingsUI = NULL;
 struct HotKeyEntry {
 	int idx;
 	LPCTSTR szName;
@@ -157,7 +157,7 @@ void CSettingsGlobal::Load(LPCTSTR pszIniFile)
 
 //////////////////////////////////////////////////////////////////////////
 
-void CSettingsLocal::Load(LPCTSTR pszIniFile)
+void CSettingsUI::Load(LPCTSTR pszIniFile)
 {
 	bCharMode=GetPrivateProfileInt(KSession,_T("CharMode"),TRUE,pszIniFile);
 	bFullStatus=GetPrivateProfileInt(KSession,_T("FullStatus"),TRUE,pszIniFile);
@@ -170,7 +170,7 @@ void CSettingsLocal::Load(LPCTSTR pszIniFile)
 	bFilterGbk = GetPrivateProfileInt(KSession, _T("FilterGbk"), 0, pszIniFile);
 }
 
-void CSettingsLocal::Save(LPCTSTR pszIniFile)
+void CSettingsUI::Save(LPCTSTR pszIniFile)
 {
 	WritePrivateProfileInt(KSession,_T("CharMode"),bCharMode,pszIniFile);
 	WritePrivateProfileInt(KSession,_T("FullStatus"),bFullStatus,pszIniFile);

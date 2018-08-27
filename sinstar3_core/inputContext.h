@@ -56,23 +56,6 @@ struct SPELLINFO
 #define CPC_ALL			0xFFFFFFFF
 
 
-class CSettingsLocal
-{
-public:
-
-	void Load(LPCTSTR pszIniFile);
-	void Save(LPCTSTR pszIniFile);
-
-	BOOL	bHideStatus;		// 当前状态栏隐藏状态
-	BOOL	bMouseFollow;		// 鼠标跟随开关
-	BOOL	bEnglish;			// 英文单词输入开关
-	BOOL	bFullStatus;		// 状态栏展开标志
-	BOOL	bCharMode;			// 标点模式
-	BOOL	bSound;				// 语音较对
-	BOOL	bRecord;			// 记录输入语句
-	BOOL	bInputBig5;			// 繁体输出标志
-	BOOL    bFilterGbk;			// filter gbk
-};
 
 
 struct InputContext
@@ -122,6 +105,4 @@ struct InputContext
 
 	char   szCompAutoComplete[MAX_COMP];	//auto complete composition string. valid for umode.
 	int    cCompACLen;						//auto complete composition string length
-
-	CSettingsLocal settings;
 };

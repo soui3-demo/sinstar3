@@ -56,9 +56,9 @@ CSinstar3Core::CSinstar3Core(HINSTANCE hInst):CModuleRef(hInst),m_pLogStateListe
 		reg.Close();
 	}
 	m_strDataPath = szPath;
+	m_strConfigIni = m_strDataPath + _T("\\data\\") + KSettingINI;
 
-
-	m_hSettingFileMap = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, sizeof(CSettingsGlobal), KFileMapName_GlobalSetting);
+	m_hSettingFileMap = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, sizeof(CSettingsGlobal)+sizeof(CSettingsUI), KFileMapName_GlobalSetting);
 	if (!m_hSettingFileMap)
 	{
 		SLOG_ERROR("open file map object for global settings storage failed");
@@ -67,11 +67,12 @@ CSinstar3Core::CSinstar3Core(HINSTANCE hInst):CModuleRef(hInst),m_pLogStateListe
 	{
 		bool bCreate = GetLastError() != ERROR_ALREADY_EXISTS;
 		g_SettingsG = (CSettingsGlobal*)MapViewOfFile(m_hSettingFileMap, FILE_MAP_READ | FILE_MAP_WRITE, 0, 0, 0);
+		g_SettingsUI = (CSettingsUI*)(g_SettingsG + 1);
 		if (bCreate)
 		{//first create object
 			Helper_SetObjectToLowIntegrity(m_hSettingFileMap, SE_KERNEL_OBJECT);//降低内核对象访问权限
-			m_strConfigIni = m_strDataPath + _T("\\data\\") + KSettingINI;
 			g_SettingsG->Load(m_strConfigIni);
+			g_SettingsUI->Load(m_strConfigIni);
 		}
 		new CDataCenter(m_strDataPath);
 	}
@@ -79,6 +80,7 @@ CSinstar3Core::CSinstar3Core(HINSTANCE hInst):CModuleRef(hInst),m_pLogStateListe
 
 CSinstar3Core::~CSinstar3Core()
 {
+	g_SettingsUI->Save(m_strConfigIni);
 	delete CDataCenter::getSingletonPtr();
 	g_nRefCount --;
 	CloseHandle(m_hMutex);

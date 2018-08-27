@@ -38,8 +38,6 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr)
 	addEvent(EVENTID(EventSvrNotify));
 	addEvent(EVENTID(EventSetSkin));
 
-	m_inputState.GetInputContext()->settings.Load(theModule->GetCfgIni());
-
  	m_pInputWnd = new CInputWnd(this,m_inputState.GetInputContext(),this);
 	m_pInputWnd->Create(_T("Sinstar3_Input"));
 
@@ -48,7 +46,7 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr)
 	m_inputState.SetInputListener(this);
 	
 	m_pInputWnd->SetAnchorPosition(CDataCenter::getSingleton().GetData().m_ptInput);
-	m_pInputWnd->SetFollowCaret(m_inputState.GetInputContext()->settings.bMouseFollow);
+	m_pInputWnd->SetFollowCaret(g_SettingsUI->bMouseFollow);
 
 	SLOG_INFO("status:"<<m_pStatusWnd->m_hWnd<<", input:"<<m_pInputWnd->m_hWnd);
 	SOUI::CSimpleWnd::Create(KSinstar3WndName,WS_DISABLED|WS_POPUP,WS_EX_TOOLWINDOW,0,0,0,0,HWND_MESSAGE,NULL);
@@ -78,7 +76,6 @@ CSinstar3Impl::~CSinstar3Impl(void)
 		m_pSpcharWnd->DestroyWindow();
 		m_pSpcharWnd = NULL;
 	}
-	m_inputState.GetInputContext()->settings.Save(theModule->GetCfgIni());
 
 	SStringT strHotKeyFile = SStringT().Format(_T("%s\\data\\hotkey_%s.txt"), theModule->GetDataPath(), CDataCenter::getSingleton().GetData().m_compInfo.strCompName);
 	//加载特定的自定义状态及语句输入状态开关
@@ -170,7 +167,7 @@ void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 		if (bFocus)
 			m_pTxtSvr->SetConversionMode(FullNative);
 
-		m_pStatusWnd->Show(bFocus && !m_inputState.GetInputContext()->settings.bHideStatus);
+		m_pStatusWnd->Show(bFocus && !g_SettingsUI->bHideStatus);
 
 		if (bFocus)
 		{
@@ -216,7 +213,7 @@ BOOL CSinstar3Impl::OnHotkey(LPVOID lpImeContext,REFGUID guidHotKey)
 
 void CSinstar3Impl::OnOpenStatusChanged(BOOL bOpen)
 {
-	m_pStatusWnd->Show(bOpen && !m_inputState.GetInputContext()->settings.bHideStatus);
+	m_pStatusWnd->Show(bOpen && !g_SettingsUI->bHideStatus);
 }
 
 void CSinstar3Impl::OnConversionModeChanged(EInputMethod nMode)
@@ -350,6 +347,11 @@ LRESULT CSinstar3Impl::OnAsyncCopyData(UINT uMsg, WPARAM wParam, LPARAM lParam)
 		SStringT strPath = S_CA2T(strUtf8, CP_UTF8);
 		SLOG_INFO("skin:"<<strPath);
 		ChangeSkin(strPath);
+	}
+	else if (pCds->dwData == CMD_SYNCUI)
+	{
+		DWORD dwFlag = *(DWORD*)pCds->lpData;
+		m_pStatusWnd->UpdateToggleStatus(dwFlag);
 	}
 
 	if (pCds->lpData) free(pCds->lpData);

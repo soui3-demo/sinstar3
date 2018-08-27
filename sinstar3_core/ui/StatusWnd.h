@@ -18,6 +18,7 @@ namespace SOUI
 			BTN_SOUND=1<<2,
 			BTN_ENGLISHMODE = 1<<3,
 			BTN_FILTERGBK = 1<<4,
+			BTN_STATUSMODE = 1<<5,
 			BTN_ALL=0xffffffff,
 		};
 

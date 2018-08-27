@@ -59,8 +59,8 @@ void CCmdHandler::OnHotKeyKeyMap(LPARAM lp)
 
 void CCmdHandler::OnHotKeyHideStatusBar(LPARAM lp)
 {
-	m_pSinstar3->GetInputContext()->settings.bHideStatus = !m_pSinstar3->GetInputContext()->settings.bHideStatus;
-	m_pSinstar3->m_pStatusWnd->Show(!m_pSinstar3->GetInputContext()->settings.bHideStatus);
+	g_SettingsUI->bHideStatus = !g_SettingsUI->bHideStatus;
+	m_pSinstar3->m_pStatusWnd->Show(!g_SettingsUI->bHideStatus);
 }
 
 void CCmdHandler::OnHotKeyQueryInfo(LPARAM lp)
@@ -209,38 +209,38 @@ void CCmdHandler::OnKeySpeed(LPARAM lp)
 
 void CCmdHandler::OnHotKeyCharMode(LPARAM lp)
 {
-	m_pSinstar3->GetInputContext()->settings.bCharMode = !m_pSinstar3->GetInputContext()->settings.bCharMode;
-	m_pSinstar3->m_pStatusWnd->UpdateToggleStatus(CStatusWnd::BTN_CHARMODE);
+	g_SettingsUI->bCharMode = !g_SettingsUI->bCharMode;
+	OnSyncUI(CStatusWnd::BTN_CHARMODE);
 }
 
 void CCmdHandler::OnHotKeyEnglishMode(LPARAM lp)
 {
-	m_pSinstar3->GetInputContext()->settings.bEnglish = !m_pSinstar3->GetInputContext()->settings.bEnglish;
-	m_pSinstar3->m_pStatusWnd->UpdateToggleStatus(CStatusWnd::BTN_ENGLISHMODE);
+	g_SettingsUI->bEnglish = !g_SettingsUI->bEnglish;
+	OnSyncUI(CStatusWnd::BTN_ENGLISHMODE);
 }
 
 void CCmdHandler::OnHotKeyFilterGbk(LPARAM lp)
 {
-	m_pSinstar3->GetInputContext()->settings.bFilterGbk = !m_pSinstar3->GetInputContext()->settings.bFilterGbk;
-	m_pSinstar3->m_pStatusWnd->UpdateToggleStatus(CStatusWnd::BTN_FILTERGBK);
+	g_SettingsUI->bFilterGbk = !g_SettingsUI->bFilterGbk;
+	OnSyncUI(CStatusWnd::BTN_FILTERGBK);
 }
 
 void CCmdHandler::OnHotkeyTTS(LPARAM lp)
 {
-	m_pSinstar3->GetInputContext()->settings.bSound = !m_pSinstar3->GetInputContext()->settings.bSound;
-	m_pSinstar3->m_pStatusWnd->UpdateToggleStatus(CStatusWnd::BTN_SOUND);
+	g_SettingsUI->bSound = !g_SettingsUI->bSound;
+	OnSyncUI(CStatusWnd::BTN_SOUND);
 }
 
 void CCmdHandler::OnHotkeyRecord(LPARAM lp)
 {
-	m_pSinstar3->GetInputContext()->settings.bRecord = !m_pSinstar3->GetInputContext()->settings.bRecord;
-	m_pSinstar3->m_pStatusWnd->UpdateToggleStatus(CStatusWnd::BTN_RECORD);
+	g_SettingsUI->bRecord = !g_SettingsUI->bRecord;
+	OnSyncUI(CStatusWnd::BTN_RECORD);
 }
 
 void CCmdHandler::OnFollowCaret(LPARAM lp)
 {
-	m_pSinstar3->GetInputContext()->settings.bMouseFollow = !m_pSinstar3->GetInputContext()->settings.bMouseFollow;
-	m_pSinstar3->m_pInputWnd->SetFollowCaret(m_pSinstar3->GetInputContext()->settings.bMouseFollow);
+	g_SettingsUI->bMouseFollow = !g_SettingsUI->bMouseFollow;
+	m_pSinstar3->m_pInputWnd->SetFollowCaret(g_SettingsUI->bMouseFollow);
 }
 
 void CCmdHandler::OnUpdateMode(LPARAM lp)
@@ -299,6 +299,12 @@ void CCmdHandler::OnExecuteTool(LPARAM lp)
 {
 	SStringT * pPath = (SStringT*)lp;
 	ShellExecute(NULL, _T("open"), *pPath, NULL, NULL, SW_SHOWDEFAULT);
+}
+
+void CCmdHandler::OnSyncUI(LPARAM lp)
+{
+	DWORD dwData = (DWORD)lp;
+	m_pSinstar3->Broadcast(CMD_SYNCUI, &dwData, sizeof(DWORD));
 }
 
 void CCmdHandler::OnOpenConfig(LPARAM lp)
