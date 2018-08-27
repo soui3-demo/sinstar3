@@ -22,7 +22,8 @@ namespace SOUI
 		void InitPageMisc();
 		void InitPageAbout();
 		void InitPageTTS();
-
+		void InitPhraseLib();
+		void InitPhraseLibListview();
 		void InitPinyinBlur(COMFILE & cf, CBlurListAdapter * pBlurAdapter, int iGroup);
 		void InitPagePinYin();
 
@@ -78,7 +79,10 @@ namespace SOUI
 
 		void OnReNotify(EventArgs *e);
 
+		void OnInstallSysPhraseLib();
+		
 		EVENT_MAP_BEGIN()
+			EVENT_ID_COMMAND(R.id.btn_install_sys_phrase,OnInstallSysPhraseLib)
 			EVENT_ID_COMMAND_RANGE(100, 102, OnClickInputSwitch)
 			EVENT_ID_COMMAND_RANGE(110, 111, OnClickInputSwitch)
 			EVENT_ID_COMMAND_RANGE(120, 122, OnClickPYTemp)
@@ -110,7 +114,7 @@ namespace SOUI
 			EVENT_ID_HANDLER(R.id.edit_predict_phrase_maxlength,EventRENotify::EventID,OnReNotify)
 			EVENT_ID_HANDLER(R.id.edit_phrase_ast_deepness_max, EventRENotify::EventID, OnReNotify)
 			EVENT_ID_HANDLER(R.id.edit_sent_record_max, EventRENotify::EventID, OnReNotify)
-			EVENT_MAP_END()
+		EVENT_MAP_END()
 
 
 	protected:

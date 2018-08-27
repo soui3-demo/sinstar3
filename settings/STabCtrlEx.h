@@ -38,6 +38,7 @@ namespace SOUI
         */
         STabPageEx():m_iIcon(-1), m_iHeight(0), m_strTitle(this)
         {			
+			m_bClipClient = TRUE;
         }
 		void SetHeight(int Height)
 		{

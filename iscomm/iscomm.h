@@ -222,6 +222,9 @@ DWORD ISComm_GetSvrAutorun();
 DWORD ISComm_SetSvrAutorun(int bAutoRun);
 
 DWORD ISComm_InstallPhraseLib(LPCSTR pszPlnameUtf8);
+
+DWORD ISComm_QueryPhraseGroup();
+DWORD ISComm_EnablePhraseGroup(LPCSTR pszGroupName, char bEnable);
 #ifdef __cplusplus
 }
 #endif//__cplusplus

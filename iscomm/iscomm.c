@@ -732,3 +732,18 @@ DWORD ISComm_InstallPhraseLib(LPCSTR pszPlnameUtf8)
 {
 	return ISComm_SendMsg(CT_INSTALL_PHRASELIB, (LPVOID)pszPlnameUtf8, (short)strlen(pszPlnameUtf8), 0);
 }
+
+DWORD ISComm_QueryPhraseGroup()
+{
+	return ISComm_SendMsg(CT_QUERY_PHRASEGROUP, NULL, 0, 0);
+}
+
+DWORD ISComm_EnablePhraseGroup(LPCSTR pszGroupName, char bEnable)
+{
+	int nLen = strlen(pszGroupName);
+	COMFILE cf = CF_Init(s_byBuf, MAX_BUF_ACK, 0, 0);
+	CF_WriteChar(&cf, bEnable);
+	CF_Write(&cf, &nLen, sizeof(int));
+	CF_Write(&cf, pszGroupName, nLen);
+	return ISComm_SendMsg(CT_ENABLE_PHRASEGROUP, s_byBuf, cf.nOffset, 0);
+}

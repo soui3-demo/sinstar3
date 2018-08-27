@@ -3,7 +3,9 @@
 #include <helper.h>
 #include <helper/STime.h>
 #include <helper/SAdapterBase.h>
-
+#include "../include/cf_helper.hpp"
+#include "../include/filehelper.h"
+#include <string>
 #include "Settings.h"
 #pragma comment(lib,"version.lib")
 
@@ -15,6 +17,76 @@ namespace SOUI
 		BYTE * pByte = (BYTE*)&dwVer;
 		return SStringT().Format(_T("%u.%u.%u.%u"), UINT(pByte[3]), UINT(pByte[2]), UINT(pByte[1]), UINT(pByte[0]));
 	}
+
+	class CPhraseGroupAdapter : public SMcAdapterBase
+	{
+	public:
+		struct GroupInfo
+		{
+			int bEnable;
+			SStringT strName;
+			DWORD dwCount;
+			SStringT strEditor;
+			SStringT strRemark;
+		};
+
+		void AddGroup(const GroupInfo & gi)
+		{
+			m_arrGroupInfo.Add(gi);
+		}
+
+		void RemoveAll()
+		{
+			m_arrGroupInfo.RemoveAll();
+		}
+	protected:
+		bool OnGroupEnableChanged(EventArgs *e)
+		{
+			EventSwndStateChanged *e2 = sobj_cast<EventSwndStateChanged>(e);
+			if ((e2->dwOldState & WndState_Check) != (e2->dwNewState & WndState_Check))
+			{
+				SWindow *pSender = sobj_cast<SWindow>(e->sender);
+				int idx = pSender->GetUserData();
+				SStringA strName = S_CT2A(m_arrGroupInfo[idx].strName);
+				ISComm_EnablePhraseGroup(strName, (e2->dwNewState & WndState_Check)?1:0);
+			}
+			return false;
+		}
+
+		virtual int getCount()
+		{
+			return m_arrGroupInfo.GetCount();
+		}
+
+		virtual void getView(int position, SWindow * pItem, pugi::xml_node xmlTemplate)
+		{
+			if (pItem->GetChildrenCount() == 0)
+			{
+				pItem->InitFromXml(xmlTemplate);
+			}
+			SCheckBox *pCheck = pItem->FindChildByID2<SCheckBox>(R.id.chk_group_name);
+			pCheck->SetUserData(position);
+			pCheck->SetWindowText(m_arrGroupInfo[position].strName);
+			pCheck->GetEventSet()->subscribeEvent(EventSwndStateChanged::EventID, Subscriber(&CPhraseGroupAdapter::OnGroupEnableChanged, this));
+			pCheck->GetEventSet()->setMutedState(true);
+			pCheck->SetAttribute(L"checked", m_arrGroupInfo[position].bEnable?L"1":L"0");
+			pCheck->GetEventSet()->setMutedState(false);
+
+			pItem->FindChildByID(R.id.txt_group_size)->SetWindowText(SStringT().Format(_T("%d"), m_arrGroupInfo[position].dwCount));
+			pItem->FindChildByID(R.id.txt_editor)->SetWindowText(m_arrGroupInfo[position].strEditor);
+			pItem->FindChildByID(R.id.txt_remark)->SetWindowText(m_arrGroupInfo[position].strRemark);
+		}
+
+		virtual SStringW GetColumnName(int iCol) const {
+			const wchar_t * pszColNames[] = {
+				L"col_group",L"col_size",L"col_editor",L"col_remark"
+			};
+			return pszColNames[iCol];
+		}
+
+	private:
+		SArray<GroupInfo> m_arrGroupInfo;
+	};
 
 	class CBlurListAdapter : public SAdapterBase
 	{
@@ -378,7 +450,6 @@ namespace SOUI
 		}
 	}
 
-
 	void CConfigDlg::InitPinyinBlur(COMFILE & cf, CBlurListAdapter * pBlurAdapter, int iGroup)
 	{
 		int nCount;
@@ -419,6 +490,45 @@ namespace SOUI
 
 	}
 
+	void CConfigDlg::InitPhraseLib()
+	{
+		SMCListView * pLvPhraseLib = FindChildByID2<SMCListView>(R.id.mc_phraselib);
+		CPhraseGroupAdapter *pAdapter = new CPhraseGroupAdapter();
+		pLvPhraseLib->SetAdapter(pAdapter);
+		pAdapter->Release();
+		InitPhraseLibListview();
+	}
+
+	void CConfigDlg::InitPhraseLibListview()
+	{
+		if (ISACK_SUCCESS == ISComm_QueryPhraseGroup())
+		{
+			SMCListView * pLvPhraseLib = FindChildByID2<SMCListView>(R.id.mc_phraselib);
+			CPhraseGroupAdapter *pAdapter = (CPhraseGroupAdapter*)pLvPhraseLib->GetAdapter();
+			pAdapter->RemoveAll();
+
+			PMSGDATA pMsgData = ISComm_GetData();
+			COMFILE cf = CF_Init(pMsgData->byData, MAX_BUF_ACK, pMsgData->sSize, 0);
+			BYTE byCount;
+			CF_ReadT(cf, &byCount);
+			for (BYTE i = 0; i < byCount; i++)
+			{
+				CPhraseGroupAdapter::GroupInfo gi;
+				CF_ReadT(cf, &gi.bEnable);
+				std::string buf;
+				CF_ReadString(cf, buf);
+				gi.strName = S_CA2T(buf.c_str());
+				CF_ReadT(cf, &gi.dwCount);
+				CF_ReadString(cf, buf);
+				gi.strEditor = S_CA2T(buf.c_str());
+				CF_ReadString(cf, buf);
+				gi.strRemark = S_CA2T(buf.c_str());
+				pAdapter->AddGroup(gi);
+			}
+			pAdapter->notifyDataSetChanged();
+		}
+	}
+
 	void CConfigDlg::InitPages()
 	{		
 		InitPageHabit();
@@ -428,6 +538,7 @@ namespace SOUI
 		InitPageMisc();
 		InitPageTTS();
 		InitPagePinYin();
+		InitPhraseLib();
 		InitPageAbout();
 	}
 
@@ -745,6 +856,29 @@ SWindow *pCtrl = FindChildByID(id);\
 					ISComm_SetSentRecordMax(nSentMax);
 				}
 				break;
+			}
+		}
+	}
+
+	void CConfigDlg::OnInstallSysPhraseLib()
+	{
+		CFileDialogEx dlg(TRUE, _T("spl"), 0, 6, _T("启程词库文件(*.spl)\0*.spl\0All files (*.*)\0*.*\0\0"));
+		if (dlg.DoModal() == IDOK)
+		{
+			SStringA strNameUtf8 = S_CT2A(dlg.m_szFileName, CP_UTF8);
+			DWORD dwRet = ISComm_InstallPhraseLib(strNameUtf8);
+			if (dwRet == ISACK_ERROR)
+			{
+				SMessageBox(m_hWnd,_T("安装失败"),_T("提示"),MB_OK|MB_ICONSTOP);
+			}
+			else if (dwRet == ISACK_UNINIT)
+			{
+				SMessageBox(m_hWnd, _T("服务器正在加载数据，请稍后重试"), _T("提示"), MB_OK | MB_ICONSTOP);
+			}
+			else if (dwRet == ISACK_SUCCESS)
+			{
+				InitPhraseLibListview();
+				SMessageBox(m_hWnd, _T("安装成功"), _T("提示"), MB_OK);
 			}
 		}
 	}
