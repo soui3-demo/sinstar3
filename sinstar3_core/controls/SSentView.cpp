@@ -22,7 +22,8 @@ namespace SOUI
 	void SSentView::SetSelCount(int nLen)
 	{
 		m_nSelCount = nLen;
-		SASSERT(m_nHeaderCount+ m_nSelCount <= GetWindowText().GetLength());
+		SStringT str = GetWindowText();
+		SASSERT(m_nHeaderCount+ m_nSelCount <= str.GetLength());
 		Invalidate();
 	}
 

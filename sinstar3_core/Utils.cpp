@@ -57,7 +57,6 @@ void CUtils::SoundPlay(LPCTSTR pszSound)
 // 中华人民共和国 --> 中華人民共和國
 int  CUtils::GB2GIB5(LPCTSTR szBuf, int nBufLen, TCHAR *szBig5, int nOutLen)
 {
-	if (nBufLen == -1) nBufLen = (int)_tcslen(szBuf);
 	DWORD wLCID = MAKELCID(MAKELANGID(LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED), SORT_CHINESE_PRC);
 	return LCMapString(wLCID, LCMAP_TRADITIONAL_CHINESE, szBuf, nBufLen*sizeof(TCHAR), szBig5, nOutLen * sizeof(TCHAR));
 }

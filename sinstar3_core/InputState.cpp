@@ -372,9 +372,9 @@ void CInputState::InputResult(const SStringT &strResult,BYTE byAstMask)
 	if (g_SettingsUI->bInputBig5)
 	{
 		int nLen = CUtils::GB2GIB5(strResult, strResult.GetLength(), NULL, 0);
-		TCHAR *pBig5 = new TCHAR[nLen / sizeof(TCHAR)+1];
-		nLen = CUtils::GB2GIB5(strResult, strResult.GetLength(), pBig5, nLen);
-		strTemp = SStringW(pBig5,nLen/sizeof(TCHAR));
+		TCHAR *pBig5 = new TCHAR[nLen+1];
+		CUtils::GB2GIB5(strResult, strResult.GetLength(), pBig5, nLen+1);
+		strTemp = SStringW(pBig5);
 		delete[]pBig5;
 	}
 	{
