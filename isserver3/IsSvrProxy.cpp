@@ -18,6 +18,16 @@
 #define SPAN_DATA_REPORT1	50
 #define SPAN_DATA_REPORT2	24*60*60*1000	//1 day
 
+static void DoSomething()
+{
+	MSG msg;
+	while (PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
+	{
+		::TranslateMessage(&msg);
+		::DispatchMessage(&msg);
+	}
+}
+
 CIsSvrProxy::CIsSvrProxy(const SStringT & strDataPath)
 	:m_strDataPath(strDataPath)
 	, m_worker(strDataPath)
@@ -161,6 +171,7 @@ void CIsSvrProxy::_OnBuildIndexProg(int indexMode, PROGTYPE uType, unsigned int 
 		nPrevProg = dwData;
 	}
 	SendMessage(UM_BUILD_INDEX_PROG0+ indexMode, uType, dwData);
+	DoSomething();
 }
 
 void CIsSvrProxy::OnClientActive() {

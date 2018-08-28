@@ -15,16 +15,16 @@
     <scrollbar name="skin.scrollbar"  src="IMG:SYS_SCROLLBAR" margin="5" hasgripper="0"/>
   </skin>
   <root colorBkgnd="#000000">
-    <window pos="1,1,-1,-1" colorBkgnd="@color/configborder" font="size:16">
+    <window pos="1,1,-1,-1" colorBkgnd="@color/configborder" font="size:16" layout="vbox">
       <caption size="-2,38" layout="hbox">
         <text extend_left="6" extend_top="6" size="-1,-1" text="@string/title_config"/>
         <window size="0,0" weight="1" visible="0"/>
         <imgbtn size="-1,-1" skin="_skin.sys.btn.close" name="btn_close" id="2" animate="1" tip="@string/btn_close"/>
       </caption>
-      <tabctrlex pos="0,[" text-x="22" tabPos="10" align="left" size="-2, -2"  tabInterSize="0" tabWidth="120" tabskin="nav_config_tab" colorBkgnd="#f3f6fa"  tabHeight="32" drawFocusRect="0" show="1" curSel="0">
+      <tabctrlex size="-2,0" weight="1" text-x="22" tabPos="10" align="left" clipClient="1" tabInterSize="0" tabWidth="120" tabskin="nav_config_tab" colorBkgnd="#f3f6fa"  tabHeight="32" drawFocusRect="0" show="1" curSel="0">
         <socrollviewStyle sbArrowSize="0" sbSkin="skin.scrollbar" updateInterval="0"  colorBkgnd="#f2f2f2" colorBorder="#c6c6c6"/>
         <pages>
-          <pageex title="@string/cfg_habit" tip="@string/cfg_habit">
+          <pageex title="@string/cfg_habit" tip="@string/cfg_habit"  size="-2,-1">
             <window size="-2,-1" layout="hbox" gravity="center">
               <text inset="10,5,5,5">@string/cfg_habit</text>
               <hr width="-2" height="1"></hr>
@@ -57,7 +57,7 @@
             </window>
           </pageex>
 
-          <pageex title="@string/cfg_hotkey" tip="@string/cfg_hotkey">
+          <pageex title="@string/cfg_hotkey" tip="@string/cfg_hotkey"  size="-2,-1">
             <window size="-2,-1" layout="hbox" gravity="center">
               <text inset="10,5,5,5">@string/cfg_hotkey</text>
               <hr width="-2" height="1"/>
@@ -88,7 +88,7 @@
             </window>
           </pageex>
 
-          <pageex title="@string/cfg_associate" tip="@string/cfg_associate">
+          <pageex title="@string/cfg_associate" tip="@string/cfg_associate"  size="-2,-1">
             <window size="-2,-1" layout="hbox" gravity="center">
               <text inset="10,5,5,5">@string/cfg_associate</text>
               <hr width="-2" height="1"/>
@@ -149,7 +149,7 @@
               </window>
             </window>
           </pageex>
-          <pageex title="@string/cfg_candidate" tip="@string/cfg_candidate">
+          <pageex title="@string/cfg_candidate" tip="@string/cfg_candidate" size="-2,-1">
             <window size="-2,-1" layout="hbox" gravity="center">
               <text inset="10,5,5,5">@string/cfg_candidate</text>
               <hr width="-2" height="1"></hr>
@@ -182,7 +182,7 @@
               <check extend_top="10" name="chk_full_skip_simple" text="出简不出全"/>
             </window>
           </pageex>
-          <pageex title="@string/cfg_tts" tip="@string/cfg_tts">
+          <pageex title="@string/cfg_tts" tip="@string/cfg_tts" size="-2,-1">
             <window size="-2,-1" layout="hbox" gravity="center">
               <text inset="10,5,5,5">@string/cfg_tts</text>
               <hr width="-2" height="1"></hr>
@@ -209,7 +209,7 @@
               </window>
             </window>
           </pageex>
-          <pageex title="@string/cfg_pinyin" tip="@string/cfg_pinyin">
+          <pageex title="@string/cfg_pinyin" tip="@string/cfg_pinyin" size="-2,-1">
             <window size="-2,-1" layout="hbox" gravity="center">
               <text inset="10,5,5,5">@string/cfg_pinyin</text>
               <hr width="-2" height="1"></hr>
@@ -267,7 +267,7 @@
               <button name="btn_export_user_phrase" padding="10,5,10,5" text="导出用户词库"/>
             </window>
           </pageex>
-          <pageex title="@string/cfg_misc" tip="@string/cfg_misc">
+          <pageex title="@string/cfg_misc" tip="@string/cfg_misc" size="-2,-1">
             <window size="-2,-1" layout="hbox" gravity="center">
               <text inset="10,5,5,5">@string/cfg_misc</text>
               <hr width="-2" height="1"></hr>
@@ -296,38 +296,42 @@
               </window>
             </window>
           </pageex>
-          <pageex title="@string/cfg_about" tip="@string/cfg_about" layout="vbox" inset="20,0,0,0">
-            <window size="-2,-1" layout="hbox" gravity="center">
-              <text inset="10,5,5,5">@string/cfg_about_title</text>
-              <hr width="-2" height="1"></hr>
+          <pageex title="@string/cfg_about" tip="@string/cfg_about" layout="vbox" size="-2,-1">
+            <window size="-2,-1" padding="10,10,10,10" layout="vbox">
+              <window size="-2,-1" layout="hbox" gravity="center">
+                <text inset="5,5,5,5">@string/cfg_about_title</text>
+                <hr width="-2" height="1"></hr>
+              </window>
+              <window size="-1,-1" layout="hbox" extend_top="10">
+                <text text="输入法版本:"/>
+                <text name="txt_ver"/>
+              </window>
+              <window size="-1,-1" layout="hbox">
+                <text text="服务器版本:"/>
+                <text name="txt_svr_ver"/>
+              </window>
+              <window size="-1,-1" layout="hbox">
+                <text text="编译时间:"/>
+                <text name="txt_build_time"/>
+              </window>
+              <text text="警告：计算机软件受著作权和国际公约保护"/>
+              <text text="未经授权擅自用于商业用途"/>
+              <text text="将会受到所在地区的最大可能的民事或刑事诉讼"/>
+              <text text="包括但不限于以上 "/>
+              <text text="2002-2018（C）启程 All right is reserved."/>
             </window>
-            <window size="-1,-1" layout="hbox" extend_top="10">
-              <text text="输入法版本:"/>
-              <text name="txt_ver"/>
-            </window>
-            <window size="-1,-1" layout="hbox">
-              <text text="服务器版本:"/>
-              <text name="txt_svr_ver"/>
-            </window>
-            <window size="-1,-1" layout="hbox">
-              <text text="编译时间:"/>
-              <text name="txt_build_time"/>
-            </window>
-            <text text="警告：计算机软件受著作权和国际公约保护"/>
-            <text text="未经授权擅自用于商业用途"/>
-            <text text="将会受到所在地区的最大可能的民事或刑事诉讼"/>
-            <text text="包括但不限于以上 "/>
-            <text text="2002-2018（C）启程 All right is reserved."/>
-            <window size="-2,-1" layout="vbox" gravity="center" extend_top="20">
-              <window size="-1,-1" layout="vbox">
+
+            <window size="-2,-1" layout="hbox" gravity="center" extend_top="20">
+              <window size="-1,-1" layout="vbox" gravity="center">
                 <text>微信赞助</text>
-                <qrctrl size="250,250" text="wxp://f2f0J_TGrQJ7F_KjpfCdDTFNKDAvDFIYrSM5">
+                <qrctrl size="200,200" text="wxp://f2f0J_TGrQJ7F_KjpfCdDTFNKDAvDFIYrSM5">
                   <icon pos="|0,|0,@48,@48" offset="-0.5,-0.5" src="ICON_LOGO:48"/>
                 </qrctrl>
               </window>
-              <window size="-1,-1" layout="vbox" gravity="center" extend_top="10">
+              <window size="0,0" weight="1"/>
+              <window size="-1,-1" layout="vbox" gravity="center">
                 <text>支付宝赞助</text>
-                <qrctrl size="250,250" text="HTTPS://QR.ALIPAY.COM/FKX07171QGERGGU4MNY8C8">
+                <qrctrl size="200,200" text="HTTPS://QR.ALIPAY.COM/FKX07171QGERGGU4MNY8C8">
                   <icon pos="|0,|0,@48,@48" offset="-0.5,-0.5" src="ICON_LOGO:48"/>
                 </qrctrl>
               </window>

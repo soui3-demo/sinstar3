@@ -5,6 +5,7 @@
 #include <helper/SAdapterBase.h>
 #include "../include/cf_helper.hpp"
 #include "../include/filehelper.h"
+#include "../iscomm/isProtocol.h"
 #include <string>
 #include <shellapi.h>
 #pragma comment(lib,"version.lib")
@@ -219,7 +220,12 @@ namespace SOUI
 		SSpinButtonCtrl *pCtrl = FindChildByID2<SSpinButtonCtrl>(id);
 		SASSERT(pCtrl);
 		if (pCtrl)
+		{
+			SWindow *pBuddy = pCtrl->GetBuddy();
+			if(pBuddy) pBuddy->GetEventSet()->setMutedState(true);
 			pCtrl->SetValue(nValue);
+			if (pBuddy) pBuddy->GetEventSet()->setMutedState(false);
+		}
 	}
 
 	void CConfigDlg::FindAndSetHotKey(int id,DWORD accel)
@@ -866,7 +872,9 @@ SWindow *pCtrl = FindChildByID(id);\
 		if (dlg.DoModal() == IDOK)
 		{
 			SStringA strNameUtf8 = S_CT2A(dlg.m_szFileName, CP_UTF8);
+			::SetCursor(SApplication::getSingleton().LoadCursor(_T("wait")));
 			DWORD dwRet = ISComm_InstallPhraseLib(strNameUtf8);
+			::SetCursor(SApplication::getSingleton().LoadCursor(_T("arrow")));
 			if (dwRet == ISACK_ERROR)
 			{
 				SMessageBox(m_hWnd,_T("安装失败"),_T("提示"),MB_OK|MB_ICONSTOP);
@@ -925,13 +933,21 @@ SWindow *pCtrl = FindChildByID(id);\
 		__super::OnDestroy();
 	}
 
+	LRESULT CConfigDlg::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
+	{
+		if (wp == NT_COMPINFO)
+		{
+			InitPages();
+		}
+		return 0;
+	}
+
 
 	int CConfigDlg::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	{
 		int nRet = __super::OnCreate(lpCreateStruct);
 		if (nRet != 0) return nRet;
 		ISComm_Login(m_hWnd);
-		InitPages();
 		return 0;
 	}
 }

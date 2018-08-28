@@ -126,7 +126,10 @@ namespace SOUI
 		int OnCreate(LPCREATESTRUCT lpCreateStruct);
 		void OnDestroy();
 
+		LRESULT OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp);
+
 		BEGIN_MSG_MAP_EX(CConfigDlg)
+			MESSAGE_HANDLER_EX(ISComm_GetCommMsgID(), OnSvrNotify)
 			MSG_WM_CREATE(OnCreate)
 			MSG_WM_DESTROY(OnDestroy)
 			CHAIN_MSG_MAP(SHostWnd)

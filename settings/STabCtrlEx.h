@@ -25,7 +25,7 @@ namespace SOUI
     {
 		SOUI_CLASS_NAME(STabPageEx, L"pageex")		
     public:
- 		virtual CSize GetDesiredSize(LPCRECT pRcContainer)override
+ 		virtual CSize GetDesiredSize(LPCRECT pRcContainer)
  		{			
  			CSize size = __super::GetDesiredSize(pRcContainer);
  			return CSize(size.cx, max(m_iHeight, size.cy));
