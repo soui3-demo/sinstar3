@@ -102,11 +102,11 @@
     <Text Include="readme.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\sinstar3_core\dataCenter\Settings.cpp" />
     <ClCompile Include="ConfigDlg.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="qrcode\QR_Encode.cpp" />
     <ClCompile Include="qrcode\SQrCtrl.cpp" />
-    <ClCompile Include="settings.cpp" />
     <ClCompile Include="STabCtrlEx.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -117,11 +117,11 @@
     <ResourceCompile Include="settings.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\sinstar3_core\dataCenter\Settings.h" />
     <ClInclude Include="ConfigDlg.h" />
     <ClInclude Include="qrcode\QR_Encode.h" />
     <ClInclude Include="qrcode\SQrCtrl.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Settings.h" />
     <ClInclude Include="STabCtrlEx.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>

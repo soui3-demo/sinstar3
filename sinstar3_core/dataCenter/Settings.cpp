@@ -94,7 +94,7 @@ void CSettingsGlobal::Save(LPCTSTR pszIniFile)
 void CSettingsGlobal::Load(LPCTSTR pszIniFile)
 {
 	TCHAR szBuf[100];
-	compMode = (COMPMODE)GetPrivateProfileInt(KSession,_T("CompMode"),IM_SHAPECODE,pszIniFile);
+	compMode = GetPrivateProfileInt(KSession,_T("CompMode"),1,pszIniFile);
 
 	byRateAdjust=GetPrivateProfileInt(KSession,_T("RateAdjust"),1,pszIniFile);
 	b23CandKey=GetPrivateProfileInt(KSession,_T("23CandKey"),FALSE,pszIniFile);
@@ -110,7 +110,7 @@ void CSettingsGlobal::Load(LPCTSTR pszIniFile)
 		dwHotkeys[KHotKeyEntryMap[i].idx] = CAccelerator::TranslateAccelKey(szBuf);
 	}
 
-	byAstMode=GetPrivateProfileInt(KSession,_T("Associate"),AST_ENGLISH,pszIniFile);
+	byAstMode=GetPrivateProfileInt(KSession,_T("Associate"),2,pszIniFile);//2=english
 	bAstSent=GetPrivateProfileInt(KSession,_T("SentAssociate"),1,pszIniFile);
 	bySwitchKey=GetPrivateProfileInt(KSession,_T("SwitchKey"),0x36,pszIniFile);//”“SHIFT
 	byTempSpellKey=GetPrivateProfileInt(KSession,_T("TempSpellKey"),0xC1,pszIniFile);//”“Ctrl

@@ -6,7 +6,6 @@
 #include "../include/cf_helper.hpp"
 #include "../include/filehelper.h"
 #include <string>
-#include "Settings.h"
 #pragma comment(lib,"version.lib")
 
 #pragma warning(disable:4244)

@@ -34,7 +34,7 @@ public:
 	void Load(LPCTSTR pszIniFile);
 	void Save(LPCTSTR pszIniFile);
 
-	COMPMODE	compMode;		//当前输入类型
+	int		compMode;		//当前输入类型
 	BOOL	b23CandKey;			// ;+'选23重码
 	BYTE	by2CandVK;			// 2 Cand key
 	BYTE	by3CandVK;			// 3 Cand Key

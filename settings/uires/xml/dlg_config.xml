@@ -230,12 +230,12 @@
               <check text="简拼时z=zh,c=ch,s=sh" name="chk_jp_zcs"/>
             </window>
           </pageex>
-          <pageex title="@string/cfg_phraselib" layout="vbox" size="-2,-1">
+          <pageex title="@string/cfg_phraselib" layout="vbox" size="-2,-1" padding="10,10,10,10">
             <window size="-2,-1" layout="hbox" gravity="center">
-              <text inset="10,5,5,5">@string/cfg_phraselib</text>
+              <text inset="0,5,5,5">@string/cfg_phraselib</text>
               <hr width="-2" height="1"></hr>
             </window>
-            <mclistview name="mc_phraselib" headerHeigth="30" size="-2,100">
+            <mclistview name="mc_phraselib" headerHeight="30" size="-2,130">
               <header align="center" itemSwapEnable="1" fixWidth="0" colorBkgnd="#ffffff" >
                 <items>
                   <item width="100">分组名称</item>
@@ -259,9 +259,11 @@
                 </window>
               </template>
             </mclistview>
-            <window size="-2,-1" layout="hbox">
+            <window size="-2,-1" layout="hbox" extend_top="10">
               <button name="btn_install_sys_phrase" padding="10,5,10,5" text="安装系统词库"/>
+              <window size="0,0" weight="1" visible="0"/>
               <button name="btn_install_user_phrase" padding="10,5,10,5" text="安装用户词库"/>
+              <window size="0,0" weight="1" visible="0"/>
               <button name="btn_export_user_phrase" padding="10,5,10,5" text="导出用户词库"/>
             </window>
           </pageex>
