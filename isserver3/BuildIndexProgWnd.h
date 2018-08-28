@@ -29,10 +29,6 @@ namespace SOUI
 		}
 
 		virtual void OnFinalMessage(HWND hWnd);
-
-		BEGIN_MSG_MAP_EX(CBuildIndexProgWnd)
-			CHAIN_MSG_MAP(__super)
-		END_MSG_MAP()
 	};
 
 

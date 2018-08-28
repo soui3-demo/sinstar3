@@ -81,7 +81,12 @@ namespace SOUI
 
 		void OnInstallSysPhraseLib();
 		
+		void OnImportUserLib();
+		void OnExportUserLib();
+
 		EVENT_MAP_BEGIN()
+			EVENT_ID_COMMAND(R.id.btn_export_user_phrase, OnExportUserLib)
+			EVENT_ID_COMMAND(R.id.btn_import_user_phrase, OnImportUserLib)
 			EVENT_ID_COMMAND(R.id.btn_install_sys_phrase,OnInstallSysPhraseLib)
 			EVENT_ID_COMMAND_RANGE(100, 102, OnClickInputSwitch)
 			EVENT_ID_COMMAND_RANGE(110, 111, OnClickInputSwitch)

@@ -13,6 +13,8 @@ typedef void(*funIscore_Destroy)(IServerCore* pCore);
 #define UM_BUILD_INDEX_PROG0	(WM_USER+2000)
 #define UM_BUILD_INDEX_PROG1	(WM_USER+2001)
 #define UM_BUILD_INDEX_PROG2	(WM_USER+2002)
+#define UM_IMPORT_USER_LIB		(WM_USER+2003)
+
 #define UM_CHECK_UPDATE_RESULT  (WM_USER+2010)
 
 class CIsSvrProxy : public CSimpleWnd
@@ -35,6 +37,7 @@ protected:
 	virtual void OnBuildShapePhraseIndex(PROGTYPE uType, unsigned int dwData);
 	virtual void OnBuildSpellPhraseIndex(PROGTYPE uType, unsigned int dwData) ;
 	virtual void OnBuildSpellPhraseIndex2(PROGTYPE uType, unsigned int dwData) ;
+	virtual void OnImportUserDict(PROGTYPE uType, unsigned int dwData);
 
 	virtual void OnClientActive() ;
 	virtual void OnClientLogin() ;
@@ -76,7 +79,7 @@ protected:
 		MSG_WM_TIMER(OnTimer)
 		MESSAGE_HANDLER_EX(m_uMsgTaskbarCreated,OnTaskbarCreated)
 		MESSAGE_HANDLER_EX(UM_CHECK_UPDATE_RESULT,OnCheckUpdateResult)
-		MESSAGE_RANGE_HANDLER_EX(UM_BUILD_INDEX_PROG0, UM_BUILD_INDEX_PROG2,OnBuildIndexProg)
+		MESSAGE_RANGE_HANDLER_EX(UM_BUILD_INDEX_PROG0, UM_IMPORT_USER_LIB,OnBuildIndexProg)
 		COMMAND_ID_HANDLER_EX(R.id.menu_about, OnMenuAbout)
 		COMMAND_ID_HANDLER_EX(R.id.menu_exit, OnMenuExit)
 		if(m_pCore) CHAIN_MSG_MAP_MEMBER(*m_pCore)

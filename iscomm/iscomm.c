@@ -730,7 +730,7 @@ BOOL ISComm_GetDataPathW(LPWSTR pszDataPath, int nLength)
 
 DWORD ISComm_InstallPhraseLib(LPCSTR pszPlnameUtf8)
 {
-	return ISComm_SendMsg(CT_INSTALL_PHRASELIB, (LPVOID)pszPlnameUtf8, (short)strlen(pszPlnameUtf8), 0);
+	return ISComm_SendMsg(CT_INSTALL_PHRASELIB, (const LPVOID)pszPlnameUtf8, (short)strlen(pszPlnameUtf8), 0);
 }
 
 DWORD ISComm_QueryPhraseGroup()
@@ -746,4 +746,14 @@ DWORD ISComm_EnablePhraseGroup(LPCSTR pszGroupName, char bEnable)
 	CF_Write(&cf, &nLen, sizeof(int));
 	CF_Write(&cf, pszGroupName, nLen);
 	return ISComm_SendMsg(CT_ENABLE_PHRASEGROUP, s_byBuf, cf.nOffset, 0);
+}
+
+DWORD ISComm_ImportUserLib(LPCSTR pszUserLibUtf8)
+{
+	return ISComm_SendMsg(CT_IMPORT_USERLIB, (const LPVOID)pszUserLibUtf8, (short)strlen(pszUserLibUtf8), 0);
+}
+
+DWORD ISComm_ExportUserLib(LPCSTR pszUserLibUtf8)
+{
+	return ISComm_SendMsg(CT_EXPORT_USERLIB, (const LPVOID)pszUserLibUtf8, (short)strlen(pszUserLibUtf8), 0);
 }

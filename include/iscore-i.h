@@ -6,19 +6,13 @@
 #define ISCORE_API __declspec(dllimport)
 #endif
 
-struct IImportUserDictListener
-{
-	virtual void OnStart(int nMax) = 0;
-	virtual void OnProgress(int iLine, int nPos, int nMax) const = 0;
-	virtual void OnFinish(int errorCode) = 0;
-};
-
 typedef enum tagPROGTYPE { PT_MAX = 0, PT_PROG, PT_END } PROGTYPE;
 struct IBuildIndexProgressListener
 {
 	virtual void OnBuildShapePhraseIndex(PROGTYPE uType, unsigned int dwData) = 0;
 	virtual void OnBuildSpellPhraseIndex(PROGTYPE uType, unsigned int dwData) = 0;
 	virtual void OnBuildSpellPhraseIndex2(PROGTYPE uType, unsigned int dwData) = 0;
+	virtual void OnImportUserDict(PROGTYPE uType, unsigned int dwData) = 0;
 };
 
 struct IDataBlock {
@@ -29,7 +23,7 @@ struct IDataBlock {
 
 #define MAX_TOKEN_NAME_LENGHT	200
 
-struct IUiMsgHandler : IBuildIndexProgressListener
+struct IUiMsgHandler : IBuildIndexProgressListener 
 {
 	virtual void OnClientActive() = 0;
 	virtual void OnClientLogin() = 0;

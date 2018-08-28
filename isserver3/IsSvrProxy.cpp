@@ -143,6 +143,11 @@ void CIsSvrProxy::OnBuildSpellPhraseIndex2(PROGTYPE uType, unsigned int dwData) 
 	_OnBuildIndexProg(2, uType, dwData);
 }
 
+void CIsSvrProxy::OnImportUserDict(PROGTYPE uType, unsigned int dwData) {
+	_OnBuildIndexProg(3, uType, dwData);
+}
+
+
 void CIsSvrProxy::_OnBuildIndexProg(int indexMode, PROGTYPE uType, unsigned int dwData)
 {
 	static int nMax = 0, nPrevProg = 0;
