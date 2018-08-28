@@ -72,6 +72,21 @@ public:
 	BYTE    bySentMode;
 };
 
-extern CSettingsGlobal	*g_SettingsG;
+class CSettingsUI
+{
+public:
+	void Load(LPCTSTR pszIniFile) {}
+	void Save(LPCTSTR pszIniFile) {}
 
-extern int				g_nRefCount;
+	BOOL	bHideStatus;		// 当前状态栏隐藏状态
+	BOOL	bMouseFollow;		// 鼠标跟随开关
+	BOOL	bEnglish;			// 英文单词输入开关
+	BOOL	bFullStatus;		// 状态栏展开标志
+	BOOL	bCharMode;			// 标点模式
+	BOOL	bSound;				// 语音较对
+	BOOL	bRecord;			// 记录输入语句
+	BOOL	bInputBig5;			// 繁体输出标志
+	BOOL    bFilterGbk;			// filter gbk
+};
+
+extern CSettingsGlobal	*g_SettingsG;
