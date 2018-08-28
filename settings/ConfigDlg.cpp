@@ -248,9 +248,9 @@ namespace SOUI
 		int CtrlId;
 		CtrlId = 102;
 		//输入法开关
-		if (g_SettingsG->bySwitchKey == 0x36)
+		if (g_SettingsG->bySwitchKey == 0x2a)
 			CtrlId = 100;
-		else if (g_SettingsG->bySwitchKey == 0x2a)
+		else if (g_SettingsG->bySwitchKey == 0x36)
 			CtrlId = 101;
 		FindAndSetCheck(CtrlId,TRUE);
 

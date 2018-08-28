@@ -2020,16 +2020,8 @@ BOOL CInputState::KeyIn_Code_English(InputContext * lpCntxtPriv,UINT byInput,
 		}
 	}else if(byInput==VK_RETURN)
 	{//输入当前英文
-		SStringA strResult;
-		if(lpCntxtPriv->pbyEnSpell)
-		{
-			strResult = SStringA((char*)lpCntxtPriv->pbyEnSpell+1,lpCntxtPriv->pbyEnSpell[0]);
-		}else
-		{
-			strResult = SStringA((char*)lpCntxtPriv->szComp,lpCntxtPriv->cComp);
-		}
+		SStringA strResult = SStringA((char*)lpCntxtPriv->szComp, lpCntxtPriv->cComp);
 		if(g_SettingsUI->bSound) ISComm_TTS(strResult,(char)strResult.GetLength(),MTTS_EN);
-		//输入单词
 		InputResult(strResult,0);
 		InputEnd();
 		InputHide(FALSE);
