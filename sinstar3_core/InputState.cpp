@@ -1132,6 +1132,7 @@ BOOL CInputState::KeyIn_Spell_ChangeComp(InputContext* lpCntxtPriv,UINT byInput,
 	}else if(byInput==VK_ESCAPE)
 	{
 		InputEnd();
+		InputHide(TRUE);
 		ClearContext(CPC_ALL);
 		if(IsTempSpell())
 		{//restore shape code input mode
