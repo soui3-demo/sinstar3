@@ -1217,6 +1217,14 @@ BOOL CInputState::KeyIn_Spell_InputText(InputContext* lpCntxtPriv,UINT byInput,
 		InputEnd();
 		InputHide(TRUE);
 
+		if (IsTempSpell())
+		{//临时拼音模式自动获得输入拼音的编码
+			lpCntxtPriv->bShowTip = TRUE;
+			GetShapeComp(strResult, strResult.GetLength());
+			lpCntxtPriv->compMode = IM_SHAPECODE;
+			StatusbarUpdate();
+		}
+
 		//将用户输入提交给服务器保存
 		if(bGetSpID) ISComm_SpellMemoryEx(strResult,strResult.GetLength(),bySpellID);
 		if(lpCntxtPriv->bPYBiHua)
@@ -1224,13 +1232,6 @@ BOOL CInputState::KeyIn_Spell_InputText(InputContext* lpCntxtPriv,UINT byInput,
 			lpCntxtPriv->bPYBiHua=FALSE;
 			lpCntxtPriv->szBiHua[0]=0;
 		}		
-		if(IsTempSpell()) 
-		{//临时拼音模式自动获得输入拼音的编码
-			lpCntxtPriv->bShowTip=TRUE;
-			GetShapeComp(strResult,strResult.GetLength());
-			lpCntxtPriv->compMode = IM_SHAPECODE;
-			StatusbarUpdate();
-		}
 		bRet=TRUE;
 	}else if ( byInput == VK_RETURN && g_SettingsG->compMode == IM_SPELL && !lpCntxtPriv->bPYBiHua)
 	{//回车输入编码
@@ -1394,7 +1395,8 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 							lpCntxtPriv->compMode=IM_SHAPECODE;
 							InputUpdate();
 						}
-					}else
+					}
+					else
 					{
 						KeyIn_Spell_Forecast(lpCntxtPriv,lpCntxtPriv->byCaret);
 						if(byCaret+byPhraseLen<lpCntxtPriv->bySyllables)
@@ -1456,7 +1458,6 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 						}else
 						{//不是自定义编码
 							strResultA = SStringA((char*)pData+2,pData[1]);
-							//								Plugin_TextInput(pResult,lpCompStr->dwResultStrLen,pData+1+pData[1]+1,pData[1+pData[1]],pData[0]==RATE_WILD);
 							if(pData[0]!=RATE_FORECAST)
 							{//不是预测词，词频调整
 								if(lpbKeyState[VK_CONTROL] & 0x80)
@@ -1515,7 +1516,7 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 		InputEnd();
 
 		InputUpdate();
-		InputHide(TRUE);
+		InputHide(byMask &(MKI_ASTENGLISH|MKI_ASTCAND|MKI_ASTSENT|MKI_PHRASEREMIND) || lpCntxtPriv->bShowTip);
 	}
 end:
 	if(bRet && lpCntxtPriv->bWebMode) lpCntxtPriv->bWebMode=FALSE;
