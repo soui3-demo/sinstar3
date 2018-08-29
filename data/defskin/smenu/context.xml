@@ -17,7 +17,8 @@
     <sep/>
   </menuItem>
   <menuItem text="编码方案" name="menu_comp" contextHelpId="4">
-    <menuItem text="[empty]" name="comp_start" id="400"/>
+    <menuItem text="安装编码" name="comp_install" id="400"/>
+    <sep/>
   </menuItem>
   <menuItem text="形码混输" name="menu_blend" contextHelpId="5">
     <menuItem text="拼音:单字" name="spell_one" id="501"/>

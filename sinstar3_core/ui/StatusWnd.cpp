@@ -8,10 +8,16 @@
 #include "../Utils.h"
 #include "../InputState.h"
 #include "../ShellExecuteMonitor.h"
+#include "../../include/FileHelper.h"
 
-#define MAX_SKINS	 80
 namespace SOUI
 {
+	static int PopupMenuEndID(int nStart)
+	{
+		if (nStart % 100 == 0) return nStart + 100;
+		else return (nStart + 99) / 100 * 100;
+	}
+
 	CStatusWnd::CStatusWnd(SEventSet *pEvtSets, ICmdListener *pListener)
 		:CImeWnd(pEvtSets,UIRES.LAYOUT.wnd_status_bar)
 		, m_pCmdListener(pListener)
@@ -65,15 +71,14 @@ namespace SOUI
 		case 4://comp select
 		{
 			const SArray<CNameTypePair> &comps = CDataCenter::getSingleton().UpdateCompList();
-			int idStart = R.id.comp_start;
-			menuPopup->DeleteMenu(R.id.comp_start,MF_BYCOMMAND);
+			int idStart = R.id.comp_install;
 			int iSelComp = CDataCenter::getSingleton().GetSelectCompIndex();
-			for (size_t i = 0; i < comps.GetCount(); i++)
+			for (int i = 0; i < (int)comps.GetCount(); i++)
 			{
 				SStringA strText = SStringA().Format("%s[%s]", comps[i].strName, comps[i].strType);
 				UINT flag = MF_BYPOSITION;
 				if (iSelComp == i) flag |= MF_CHECKED;
-				menuPopup->InsertMenu(-1, flag, idStart + (int)i, S_CA2T(strText));
+				menuPopup->InsertMenu(-1, flag, idStart + i+1, S_CA2T(strText));
 			}
 			break;
 		}
@@ -451,9 +456,21 @@ namespace SOUI
 		{
 			m_pCmdListener->OnCommand(CMD_OPENSKINDIR, 0);
 		}
-		else if (nRet >= R.id.comp_start && nRet < R.id.comp_start + 50)
+		else if (nRet == R.id.comp_install)
+		{//install comp
+			CFileDialogEx openDlg(TRUE, _T("cit"), 0, 6, _T("启程码表(*.cit)\0*.cit\0All files (*.*)\0*.*\0\0"));
+			if (openDlg.DoModal() == IDOK)
+			{
+				SStringA strCompUtf8 = S_CT2A(openDlg.m_szFileName, CP_UTF8);
+				if (ISACK_SUCCESS != ISComm_InstallComp(strCompUtf8, 1))
+				{
+					SMessageBox(GetActiveWindow(), _T("安装编码失败,可能已经存在该编码"), _T("提示"), MB_OK | MB_ICONSTOP);
+				}
+			}
+		}
+		else if (nRet > R.id.comp_install && nRet < PopupMenuEndID(R.id.comp_install))
 		{//comps
-			int iComp = nRet - R.id.comp_start;
+			int iComp = nRet - (R.id.comp_install +1);
 			const SArray<CNameTypePair> & compList = CDataCenter::getSingleton().GetCompList();
 			if (iComp < (int)compList.GetCount())
 			{

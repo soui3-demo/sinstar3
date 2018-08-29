@@ -757,3 +757,13 @@ DWORD ISComm_ExportUserLib(LPCSTR pszUserLibUtf8)
 {
 	return ISComm_SendMsg(CT_EXPORT_USERLIB, (const LPVOID)pszUserLibUtf8, (short)strlen(pszUserLibUtf8), 0);
 }
+
+DWORD ISComm_InstallComp(LPCSTR pszCompNameUtf8, char bApplyNow)
+{
+	int nLen = strlen(pszCompNameUtf8);
+	COMFILE cf = CF_Init(s_byBuf, MAX_BUF_ACK, 0, 0);
+	CF_WriteChar(&cf, bApplyNow);
+	CF_Write(&cf, &nLen, sizeof(int));
+	CF_Write(&cf, pszCompNameUtf8, nLen);
+	return ISComm_SendMsg(CT_INSTALL_COMP, s_byBuf, cf.nOffset, 0);
+}
