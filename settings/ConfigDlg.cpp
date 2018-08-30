@@ -314,7 +314,6 @@ namespace SOUI
 		FindAndSetCheck(R.id.chk_auto_comp_promp, g_SettingsG->bAutoPrompt);
 		FindAndSetCheck(R.id.chk_auto_dot, g_SettingsG->bAutoDot);
 		FindAndSetCheck(R.id.chk_auto_select_cand, g_SettingsG->bAutoMatch);
-		FindAndSetCheck(R.id.chk_sent_input, g_SettingsG->bAstSent);
 
 		FindAndSetText(R.id.edit_webmode_header, S_CA2T(g_SettingsG->szWebHeader));
 
@@ -701,10 +700,7 @@ SWindow *pCtrl = FindChildByID(id);\
 	{
 		g_SettingsG->bAutoMatch = FindChildByID(R.id.chk_auto_select_cand)->IsChecked();
 	}
-	void CConfigDlg::OnClickSendInput()
-	{
-		g_SettingsG->bAstSent = FindChildByID(R.id.chk_sent_input)->IsChecked();
-	}
+
 	void CConfigDlg::OnDisableNumSelCand()
 	{
 		g_SettingsG->bCandSelNoNum= FindChildByID(R.id.chk_disable_number_to_select_cand)->IsChecked();

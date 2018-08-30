@@ -61,7 +61,6 @@ namespace SOUI
 		void OnClickAutoCompPromp();
 		void OnClickAutoDot();
 		void OnClickAutoSelectCand();
-		void OnClickSendInput();
 		void OnDisableNumSelCand();
 		void OnEnable23Cand();
 		void OnHotKeyEvent(EventArgs *pEvt);
@@ -103,7 +102,6 @@ namespace SOUI
 			EVENT_ID_COMMAND(R.id.chk_auto_comp_promp, OnClickAutoCompPromp)
 			EVENT_ID_COMMAND(R.id.chk_auto_dot, OnClickAutoDot)
 			EVENT_ID_COMMAND(R.id.chk_auto_select_cand, OnClickAutoSelectCand)
-			EVENT_ID_COMMAND(R.id.chk_sent_input, OnClickSendInput)
 			EVENT_ID_COMMAND(R.id.chk_disable_number_to_select_cand, OnDisableNumSelCand)
 			EVENT_ID_COMMAND(R.id.chk_enable_23cand_hotkey, OnEnable23Cand)
 			EVENT_ID_COMMAND(R.id.btn_close,OnClose)

@@ -242,6 +242,8 @@ BOOL Sinstar_Uninstall(LPCTSTR pszIme)
 				Sleep(500);
 		}
 	}
+	MessageBox(GetActiveWindow(), _T("卸载成功！"), _T("install"), MB_OK | MB_ICONSTOP);
+
 	return TRUE;
 }
 
@@ -367,7 +369,7 @@ BOOL Sinstar_Install(LPCTSTR pszImeName)
 	_stprintf(szPath1,_T("%s\\data\\config.ini"),g_szPath);
 	Helper_SetFileACL(szPath1);
 	Helper_SetFileACLEx(szSvrData,TRUE);
-
+	MessageBox(GetActiveWindow(), _T("安装成功！"), _T("install"), MB_OK | MB_ICONSTOP);
 	return TRUE;
 }
 

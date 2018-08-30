@@ -267,7 +267,7 @@ BYTE CInputState::GetKeyinMask(BOOL bAssociate,BYTE byMask)
 	if(g_SettingsUI->bSound) byRet|=(MKI_TTSINPUT&byMask);
 	if(bAssociate)
 	{
-		if(g_SettingsG->bAstSent) byRet|=MKI_ASTSENT;
+		if(g_SettingsUI->bRecord) byRet|=MKI_ASTSENT;
 		switch(g_SettingsG->byAstMode)
 		{
 		case AST_CAND:byRet |= MKI_ASTCAND; break;

@@ -47,7 +47,6 @@ public:
 
 	BYTE	byRateAdjust;		// 词频调整类型 0-不使用，１－智能调频，２－快速调频
 	BYTE	byAstMode;			// 联想类型 (ASTMODE)
-	BOOL	bAstSent;			// 语句联想
 	BOOL	bAutoMatch;			// 智能选词
 
 	BOOL	bBlendUD;			// 混合检索自定义编码表

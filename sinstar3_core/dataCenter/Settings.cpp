@@ -56,7 +56,6 @@ void CSettingsGlobal::Save(LPCTSTR pszIniFile)
 	}
 
 	WritePrivateProfileInt(KSession,_T("Associate"),byAstMode,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("SentAssociate"),bAstSent,pszIniFile);
 	WritePrivateProfileInt(KSession,_T("SwitchKey"),bySwitchKey,pszIniFile);
 	WritePrivateProfileInt(KSession,_T("TempSpellKey"),byTempSpellKey,pszIniFile);
 	WritePrivateProfileInt(KSession,_T("Forecast"),byForecast,pszIniFile);
@@ -111,7 +110,6 @@ void CSettingsGlobal::Load(LPCTSTR pszIniFile)
 	}
 
 	byAstMode=GetPrivateProfileInt(KSession,_T("Associate"),2,pszIniFile);//2=english
-	bAstSent=GetPrivateProfileInt(KSession,_T("SentAssociate"),1,pszIniFile);
 	bySwitchKey=GetPrivateProfileInt(KSession,_T("SwitchKey"),0x36,pszIniFile);//”“SHIFT
 	byTempSpellKey=GetPrivateProfileInt(KSession,_T("TempSpellKey"),0xC1,pszIniFile);//”“Ctrl
 	GetPrivateProfileString(KSession,_T("LineKey1"),_T("g"),szBuf,2,pszIniFile);

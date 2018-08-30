@@ -116,13 +116,12 @@
               <check extend_top="10" name="chk_auto_dot" text="智能小数点"/>
               <check extend_top="10" name="chk_auto_select_cand" text="智能选词"/>
               <check extend_top="10" name="chk_auto_comp_promp" text="智能编码提示"/>
-              <check extend_top="10" name="chk_sent_input" text="语句联想"/>
               <window extend_top="10" layout="hbox" size="-2,-1">
                 <text text="网址模式识别:"/>
                 <edit name="edit_webmode_header" size="250,-1" notifyChange="1" maxBuf="100"/>
               </window>
 
-              <window extend_top="10" layout="hbox">
+              <window extend_top="10" layout="hbox" gravity="center">
                 <text text="词组预测长度："/>
                 <window size="-1,-1" class="edit_border" trackMouseEvent="1" layout="hbox" gravity="center">
                   <edit size="40dp,25dp" name="edit_predict_phrase_maxlength" margin-x="0" margin-y="0" notifyChange="1" readonly="1"/>
@@ -133,7 +132,7 @@
                 </window>
               </window>
               
-              <window extend_top="10" layout="hbox">
+              <window extend_top="10" layout="hbox" gravity="center">
                 <text text="词组联想深度："/>
                 <window size="-1,-1" class="edit_border" trackMouseEvent="1" layout="hbox" gravity="center">
                   <edit size="40dp,25dp" name="edit_phrase_ast_deepness_max" margin-x="0" margin-y="0" notifyChange="1" readonly="1"/>
@@ -143,7 +142,7 @@
                   </spinButton>
                 </window>
               </window>
-              <window extend_top="10" layout="hbox">
+              <window extend_top="10" layout="hbox" gravity="center">
                 <text text="语句记录库容量："/>
                 <edit size="80dp,25dp" name="edit_sent_record_max" notifyChange="1" number="1"/>
               </window>
@@ -188,22 +187,22 @@
               <hr width="-2" height="1"></hr>
             </window>
             <window pos="88,[" layout="vbox">
-              <text text="中文語音" extend_top="10dp"/>
+              <text text="中文语音" extend_top="10dp"/>
               <window size="-1,-1" layout="hbox" gravity="center">
                 <combobox size="250dp,-1" name="cbx_tts_ch_token" dropdown="1">
                   <liststyle colorBkgnd="#ffffff"/>
                 </combobox>
-                <button size="70dp,30dp" name="btn_tts_ch_preview" text="試聽"/>
+                <button size="70dp,30dp" name="btn_tts_ch_preview" text="试听" extend_left="10"/>
               </window>
-              <text text="英文語音" extend_top="10dp"/>
+              <text text="英文语音" extend_top="10dp"/>
               <window size="-1,-1" layout="hbox" gravity="center">
                 <combobox size="250dp,-1" name="cbx_tts_en_token" dropdown="1">
                   <liststyle colorBkgnd="#ffffff"/>
                 </combobox>
-                <button size="70dp,30dp" name="btn_tts_en_preview" text="試聽"/>
+                <button size="70dp,30dp" name="btn_tts_en_preview" text="试听" extend_left="10"/>
               </window>
               <window size="-1,-1" layout="hbox" gravity="center">
-                <text text="語速:[-10,10]"/>
+                <text text="语速:[-10,10]"/>
                 <sliderbar size="200dp,-1" name="slider_tts_speed" min="-10" max="10" value="0" extend_top="10dp"/>
                 <text size="30dp,-1" name="txt_tts_speed"/>
               </window>
