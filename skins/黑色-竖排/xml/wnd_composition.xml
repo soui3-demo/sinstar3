@@ -40,14 +40,14 @@
           <text size="-1,-2" name="txt_auto_complete" colorText="@color/comp_auto_complete"/>
         </mutexView>
         <window size="-1,-2" name="comp_sent" visible="1" layout="hbox" gravity="center" display="0">
-          <sentView name="stv_sent" colorText="@color/sent_right" colorInput="@color/sent_input" colorSelected="@color/sent_left" multiLines="1" maxWidth="100"/>
+          <sentView name="stv_sent" colorText="@color/sent_right" colorInput="@color/sent_input" colorSelected="@color/sent_left" multiLines="1" maxWidth="160"/>
         </window>
       </comp_bg>
-      <comp_bg size="-2,-1" skin="bg_cand" padding="5,5,5,5">
-        <window pos="0,0,-1,-1" layout="vbox">
-          <mutexView size="-1,-1" layout="vbox" name="cand_normal" visible="0" gravity="right">
+      <comp_bg size="-2,-1" skin="bg_cand" padding="5,5,5,5" clipClient="1">
+        <window pos="0,0" layout="vbox">
+          <mutexView size="-1,-1" layout="vbox" name="cand_normal" visible="1" gravity="right">
             <window size="-1,-1" layout="vbox" name="cand_container">
-              <candidate size="-1,-1" index="1:" shadowColor="#cccccc" shadowOffset="1,1" colorIndex="@color/cand_first" colorCand="@color/cand_text" colorComp="@color/cand_comp" colorWild="@color/cand_wild"/>
+              <candidate size="-1,-1" index="1:" colorIndex="@color/cand_first" colorCand="@color/cand_text" colorComp="@color/cand_comp" colorWild="@color/cand_wild"/>
               <candidate size="-1,-1" extend_top="@dim/interval_cand" index="2:"  colorCand="@color/cand_text" colorComp="@color/cand_comp" colorWild="@color/cand_wild"/>
               <candidate size="-1,-1" extend_top="@dim/interval_cand" index="3:"  colorCand="@color/cand_text" colorComp="@color/cand_comp" colorWild="@color/cand_wild"/>
               <candidate size="-1,-1" extend_top="@dim/interval_cand" index="4:"  colorCand="@color/cand_text" colorComp="@color/cand_comp" colorWild="@color/cand_wild"/>
