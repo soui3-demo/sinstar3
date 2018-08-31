@@ -172,8 +172,8 @@ DWORD ISComm_QueryUserDict(LPCSTR pszkey,char cKeyLen);
 DWORD ISComm_SortWordByBiHua(LPCSTR pszBiHua,char cBiHuaLen,LPCSTR pszWordList,short nWords);
 
 DWORD ISComm_Blur_Set(BOOL bBlur);
-DWORD ISComm_Blur_Add(char *pszSpell1,char *pszSpell2);
-DWORD ISComm_Blur_Del(char *pszSpell1,char *pszSpell2);
+DWORD ISComm_Blur_Add(const char *pszSpell1, const char *pszSpell2);
+DWORD ISComm_Blur_Del(const char *pszSpell1, const char *pszSpell2);
 DWORD ISComm_Blur_Query();
 DWORD ISComm_Blur_DelAll();
 

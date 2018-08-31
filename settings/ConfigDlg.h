@@ -29,6 +29,7 @@ namespace SOUI
 
 		void InitPages();
 
+		void InitPinyinBlurListView(SListView *pLvBLur);
 
 		LPBYTE InitTtsTokenInfo(LPBYTE pBuf, SComboBox *pCbx);
 
@@ -83,7 +84,11 @@ namespace SOUI
 		void OnImportUserLib();
 		void OnExportUserLib();
 
+		void OnAddBlur();
+		void OnDelBlur();
 		EVENT_MAP_BEGIN()
+			EVENT_ID_COMMAND(R.id.btn_add_blur,OnAddBlur)
+			EVENT_ID_COMMAND(R.id.btn_del_blur, OnDelBlur)
 			EVENT_ID_COMMAND(R.id.btn_export_user_phrase, OnExportUserLib)
 			EVENT_ID_COMMAND(R.id.btn_import_user_phrase, OnImportUserLib)
 			EVENT_ID_COMMAND(R.id.btn_install_sys_phrase,OnInstallSysPhraseLib)

@@ -34,6 +34,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iscore", "iscore\iscore.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CompBuilder", "CompBuilder\CompBuilder.vcxproj", "{AA60B9CF-C5FA-4A37-BB0E-F7AE325268A2}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "soui", "..\soui.git\SOUI\soui.vcxproj", "{18D0AE68-E629-373A-BF5D-73ABC3D6B93A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -190,6 +192,16 @@ Global
 		{AA60B9CF-C5FA-4A37-BB0E-F7AE325268A2}.Release|Win32.ActiveCfg = Release|Win32
 		{AA60B9CF-C5FA-4A37-BB0E-F7AE325268A2}.Release|Win32.Build.0 = Release|Win32
 		{AA60B9CF-C5FA-4A37-BB0E-F7AE325268A2}.Release|x64.ActiveCfg = Release|Win32
+		{18D0AE68-E629-373A-BF5D-73ABC3D6B93A}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{18D0AE68-E629-373A-BF5D-73ABC3D6B93A}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{18D0AE68-E629-373A-BF5D-73ABC3D6B93A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{18D0AE68-E629-373A-BF5D-73ABC3D6B93A}.Debug|Win32.Build.0 = Debug|Win32
+		{18D0AE68-E629-373A-BF5D-73ABC3D6B93A}.Debug|x64.ActiveCfg = Debug|Win32
+		{18D0AE68-E629-373A-BF5D-73ABC3D6B93A}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{18D0AE68-E629-373A-BF5D-73ABC3D6B93A}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{18D0AE68-E629-373A-BF5D-73ABC3D6B93A}.Release|Win32.ActiveCfg = Release|Win32
+		{18D0AE68-E629-373A-BF5D-73ABC3D6B93A}.Release|Win32.Build.0 = Release|Win32
+		{18D0AE68-E629-373A-BF5D-73ABC3D6B93A}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

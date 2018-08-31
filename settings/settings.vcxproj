@@ -103,6 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\sinstar3_core\dataCenter\Settings.cpp" />
+    <ClCompile Include="AddBlurDlg.cpp" />
     <ClCompile Include="ConfigDlg.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="qrcode\QR_Encode.cpp" />
@@ -118,6 +119,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\sinstar3_core\dataCenter\Settings.h" />
+    <ClInclude Include="AddBlurDlg.h" />
     <ClInclude Include="ConfigDlg.h" />
     <ClInclude Include="qrcode\QR_Encode.h" />
     <ClInclude Include="qrcode\SQrCtrl.h" />
@@ -141,6 +143,7 @@
     <Xml Include="uires\values\color.xml" />
     <Xml Include="uires\values\skin.xml" />
     <Xml Include="uires\values\string.xml" />
+    <Xml Include="uires\xml\dlg_addblur.xml" />
     <Xml Include="uires\xml\dlg_config.xml" />
     <Xml Include="uires\xml\page_about.xml" />
     <Xml Include="uires\xml\page_associate.xml" />

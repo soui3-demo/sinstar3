@@ -9,6 +9,7 @@
 #include <string>
 #include <shellapi.h>
 #pragma comment(lib,"version.lib")
+#include "AddBlurDlg.h"
 
 #pragma warning(disable:4244)
 namespace SOUI
@@ -97,7 +98,10 @@ namespace SOUI
 			int iIndex;
 		};
 
-
+		struct BLUREQUILTEX : BLUREQUILT
+		{
+			SStringT strBlur;
+		};
 	public:
 		enum BLURTYPE {
 			BLUR_TUNE = 0,
@@ -105,9 +109,21 @@ namespace SOUI
 			BLUR_FULL,
 		};
 
-		void AddBlur(BLURTYPE bt,const SStringT& str)
+		void RemoveAll()
 		{
-			m_lstBlur[bt].Add(str);
+			for (int i = 0; i < 3; i++)
+			{
+				m_lstBlur[i].RemoveAll();
+			}
+		}
+
+		void AddBlur(BLURTYPE bt, LPCSTR pszFrom,LPCSTR pszTo)
+		{
+			BLUREQUILTEX br;
+			strcpy_s(br.szFrom, 7, pszFrom);
+			strcpy_s(br.szTo, 7, pszTo);
+			br.strBlur = S_CA2T(SStringA().Format("%s=%s", pszFrom, pszTo));
+			m_lstBlur[bt].Add(br);
 		}
 		
 		void update()
@@ -124,6 +140,15 @@ namespace SOUI
 				}
 			}
 			notifyDataSetChanged();
+		}
+
+		bool getBlur(int iItem, char szFrom[7], char szTo[7])
+		{
+			INDEXINFO ii = position2IndexInfo(iItem);
+			if (ii.iIndex == -1) return false;
+			strcpy(szFrom, m_lstBlur[ii.iGroup][ii.iIndex].szFrom);
+			strcpy(szTo, m_lstBlur[ii.iGroup][ii.iIndex].szTo);
+			return true;
 		}
 	protected:
 		INDEXINFO position2IndexInfo(int position)
@@ -153,7 +178,7 @@ namespace SOUI
 				pItem->InitFromXml(xmlTemplate.child(L"item"));
 			}
 			INDEXINFO ii = position2IndexInfo(position);
-			pItem->FindChildByID(R.id.txt_blur_info)->SetWindowText(m_lstBlur[ii.iGroup][ii.iIndex]);
+			pItem->FindChildByID(R.id.txt_blur_info)->SetWindowText(m_lstBlur[ii.iGroup][ii.iIndex].strBlur);
 		}
 
 		virtual void getView(int position, SWindow * pItem, pugi::xml_node xmlTemplate) override
@@ -186,7 +211,7 @@ namespace SOUI
 		}
 		
 	private:
-		SArray<SStringT> m_lstBlur[3];
+		SArray<BLUREQUILTEX> m_lstBlur[3];
 		SArray<INDEXINFO> m_lstIndex;
 	};
 
@@ -461,26 +486,22 @@ namespace SOUI
 		CF_Read(&cf, &nCount, sizeof(int));
 		for (int i = 0; i < nCount; i++)
 		{
-			char szPY1[20], szPY2[20];
-			CF_ReadString(&cf, szPY1, 20);
-			CF_ReadString(&cf, szPY2, 20);
-			SStringA str = SStringA().Format("%s=%s", szPY1, szPY2);
-			pBlurAdapter->AddBlur((CBlurListAdapter::BLURTYPE)iGroup,S_CA2T(str));
+			char szPY1[7], szPY2[7];
+			CF_ReadString(&cf, szPY1, 7);
+			CF_ReadString(&cf, szPY2, 7);
+			pBlurAdapter->AddBlur((CBlurListAdapter::BLURTYPE)iGroup,szPY1,szPY2);
 		}
 	}
 
-	void CConfigDlg::InitPagePinYin()
+	void CConfigDlg::InitPinyinBlurListView(SListView *pLvBLur)
 	{
-		CBlurListAdapter * pAdapter = new CBlurListAdapter;
-		SListView *pLvBlur = FindChildByID2<SListView>(R.id.lv_blur);
-		SASSERT(pLvBlur);
-		pLvBlur->SetAdapter(pAdapter);
-
+		CBlurListAdapter *pAdapter = (CBlurListAdapter*)pLvBLur->GetAdapter();
+		pAdapter->RemoveAll();
 		if (ISComm_Blur_Query() == ISACK_SUCCESS)
 		{
 			PMSGDATA pMsgData = ISComm_GetData();
 			COMFILE cf = CF_Init(pMsgData->byData, MAX_BUF_ACK, pMsgData->sSize, 0);
-			int bEnableBlur = 0, bZcsBlur=0; 
+			int bEnableBlur = 0, bZcsBlur = 0;
 			CF_Read(&cf, &bEnableBlur, sizeof(int));
 			FindAndSetCheck(R.id.chk_py_blur, bEnableBlur);
 			CF_Read(&cf, &bZcsBlur, sizeof(int));
@@ -489,8 +510,17 @@ namespace SOUI
 			InitPinyinBlur(cf, pAdapter, CBlurListAdapter::BLUR_TUNE);
 			InitPinyinBlur(cf, pAdapter, CBlurListAdapter::BLUR_RHYME);
 			InitPinyinBlur(cf, pAdapter, CBlurListAdapter::BLUR_FULL);
-			pAdapter->update();
 		}
+		pAdapter->update();
+	}
+
+	void CConfigDlg::InitPagePinYin()
+	{
+		CBlurListAdapter * pAdapter = new CBlurListAdapter;
+		SListView *pLvBlur = FindChildByID2<SListView>(R.id.lv_blur);
+		SASSERT(pLvBlur);
+		pLvBlur->SetAdapter(pAdapter);
+		InitPinyinBlurListView(pLvBlur);
 		pAdapter->Release();
 
 	}
@@ -546,6 +576,7 @@ namespace SOUI
 		InitPhraseLib();
 		InitPageAbout();
 	}
+
 
 #define GetGroupCheck(id) int CheckId=0;\
 SWindow *pCtrl = FindChildByID(id);\
@@ -919,6 +950,37 @@ SWindow *pCtrl = FindChildByID(id);\
 			else if (dwRet == ISACK_SUCCESS)
 			{
 				ShellExecute(m_hWnd, _T("open"), dlg.m_szFileName, NULL,NULL, SW_SHOWDEFAULT);
+			}
+		}
+	}
+
+	void CConfigDlg::OnAddBlur()
+	{
+		CAddBlurDlg addBlurDlg;
+		if (addBlurDlg.DoModal() == IDOK)
+		{
+			if (ISACK_SUCCESS == ISComm_Blur_Add(addBlurDlg.m_strFrom, addBlurDlg.m_strTo))
+			{
+				SListView *pLvBlur = FindChildByID2<SListView>(R.id.lv_blur);
+				InitPinyinBlurListView(pLvBlur);
+			}
+		}
+	}
+
+	void CConfigDlg::OnDelBlur()
+	{
+		SListView *pLvBlur = FindChildByID2<SListView>(R.id.lv_blur);
+		int iSel = pLvBlur->GetSel();
+		if (iSel != -1)
+		{
+			CBlurListAdapter *pAdapter = (CBlurListAdapter*)pLvBlur->GetAdapter();
+			char szFrom[7], szTo[7];
+			if (pAdapter->getBlur(iSel, szFrom, szTo))
+			{
+				if (ISACK_SUCCESS == ISComm_Blur_Del(szFrom, szTo))
+				{
+					InitPinyinBlurListView(pLvBlur);
+				}
 			}
 		}
 	}

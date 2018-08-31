@@ -461,7 +461,7 @@ DWORD ISComm_Blur_Set(BOOL bBlur)
 	return ISComm_SendMsg(CT_BLUR_SET,(LPVOID)&bBlur,4,0);
 }
 
-DWORD ISComm_Blur_Add(char *pszSpell1,char *pszSpell2)
+DWORD ISComm_Blur_Add(const char *pszSpell1, const char *pszSpell2)
 {
 	char szBuf[50];
 	char cLen1=(char)strlen(pszSpell1);
@@ -472,7 +472,7 @@ DWORD ISComm_Blur_Add(char *pszSpell1,char *pszSpell2)
 	return ISComm_SendMsg(CT_BLUR_ADD,(LPVOID)szBuf,(short)(cLen1+1+cLen2+1),0);
 }
 
-DWORD ISComm_Blur_Del(char *pszSpell1,char *pszSpell2)
+DWORD ISComm_Blur_Del(const char *pszSpell1, const char *pszSpell2)
 {
 	char szBuf[50];
 	char cLen1=(char)strlen(pszSpell1);
