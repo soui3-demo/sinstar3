@@ -170,6 +170,8 @@ int CInputState::TestHotKey(UINT uVk, const BYTE * lpbKeyState) const
 {
 	if (uVk == VK_CONTROL || uVk == VK_SHIFT || uVk == VK_MENU)
 		return -1;
+	if (!m_pListener->GetOpenStatus())
+		return -1;
 	int iRet = -1;
 	for (int i = 0; i < HKI_COUNT; i++)
 	{
