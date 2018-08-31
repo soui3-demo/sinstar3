@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<include>
+  <window size="-2,-1" layout="hbox" gravity="center">
+    <text inset="10,5,5,5">@string/cfg_associate</text>
+    <hr width="-2" height="1"/>
+  </window>
+  <window pos="88,[" layout="vbox">
+    <text >联想类型:</text>
+    <window extend_top="10" layout="hbox">
+      <radio name="ass_mode_none" id="400" text="禁用"/>
+      <radio name="ass_mode_phrase" id="401" text="词组联想"/>
+      <radio name="ass_mode_english_prompt" id="402" text="单词提示"/>
+      <radio name="ass_mode_phrase_prompt" id="403" text="词组提示"/>
+    </window>
+    <text extend_top="10">词频调整:</text>
+    <window extend_top="10" layout="hbox">
+      <radio name="rate_adjust_disable" id="500" text="禁用"/>
+      <radio name="rate_adjust_auto" id="501" text="智能"/>
+      <radio name="rate_adjust_fast" id="502" text="快速"/>
+    </window>
+    <text extend_top="10">全码词组预测:</text>
+    <window extend_top="10" layout="hbox">
+      <radio name="forcast_disable" id="600" text="禁用"/>
+      <radio name="forcast_always" id="601" text="总是启用"/>
+      <radio name="forcast_no_cand" id="602" text="无重码时启用"/>
+    </window>
+    <check extend_top="10" name="chk_auto_dot" text="智能小数点"/>
+    <check extend_top="10" name="chk_auto_select_cand" text="智能选词"/>
+    <check extend_top="10" name="chk_auto_comp_promp" text="智能编码提示"/>
+    <window extend_top="10" layout="hbox" size="-2,-1">
+      <text text="网址模式识别:"/>
+      <edit name="edit_webmode_header" size="250,-1" notifyChange="1" maxBuf="100"/>
+    </window>
+
+    <window extend_top="10" layout="hbox" gravity="center">
+      <text text="词组预测长度："/>
+      <window size="-1,-1" class="edit_border" trackMouseEvent="1" layout="hbox" gravity="center">
+        <edit size="40dp,25dp" name="edit_predict_phrase_maxlength" margin-x="0" margin-y="0" notifyChange="1" readonly="1"/>
+        <spinButton size="20dp,-2" max="8" min="2" value="4" buddy="edit_predict_phrase_maxlength" name="spin_predict_phrase_maxlength">
+          <button name="btn_up"/>
+          <button name="btn_down"/>
+        </spinButton>
+      </window>
+    </window>
+
+    <window extend_top="10" layout="hbox" gravity="center">
+      <text text="词组联想深度："/>
+      <window size="-1,-1" class="edit_border" trackMouseEvent="1" layout="hbox" gravity="center">
+        <edit size="40dp,25dp" name="edit_phrase_ast_deepness_max" margin-x="0" margin-y="0" notifyChange="1" readonly="1"/>
+        <spinButton size="20dp,-2" max="5" min="-1" value="4" buddy="edit_phrase_ast_deepness_max" name="spin_phrase_ast_deepness_max">
+          <button name="btn_up"/>
+          <button name="btn_down"/>
+        </spinButton>
+      </window>
+    </window>
+    <window extend_top="10" layout="hbox" gravity="center">
+      <text text="语句记录库容量："/>
+      <edit size="80dp,25dp" name="edit_sent_record_max" notifyChange="1" number="1"/>
+    </window>
+  </window>
+</include>

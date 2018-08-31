@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<include>
+  <window size="-2,-1" padding="10,10,10,10" layout="vbox">
+    <window size="-2,-1" layout="hbox" gravity="center">
+      <text inset="5,5,5,5">@string/cfg_about_title</text>
+      <hr width="-2" height="1"></hr>
+    </window>
+    <window size="-1,-1" layout="hbox" extend_top="10">
+      <text text="输入法版本:"/>
+      <text name="txt_ver"/>
+    </window>
+    <window size="-1,-1" layout="hbox">
+      <text text="服务器版本:"/>
+      <text name="txt_svr_ver"/>
+    </window>
+    <window size="-1,-1" layout="hbox">
+      <text text="编译时间:"/>
+      <text name="txt_build_time"/>
+    </window>
+    <text text="警告：计算机软件受著作权和国际公约保护"/>
+    <text text="未经授权擅自用于商业用途"/>
+    <text text="将会受到所在地区的最大可能的民事或刑事诉讼"/>
+    <text text="包括但不限于以上 "/>
+    <text text="2002-2018（C）启程 All right is reserved."/>
+  </window>
+
+  <window size="-2,-1" layout="hbox" gravity="center" extend_top="20">
+    <window size="-1,-1" layout="vbox" gravity="center">
+      <text>微信赞助</text>
+      <qrctrl size="200,200" text="wxp://f2f0J_TGrQJ7F_KjpfCdDTFNKDAvDFIYrSM5">
+        <icon pos="|0,|0,@48,@48" offset="-0.5,-0.5" src="ICON_LOGO:48"/>
+      </qrctrl>
+    </window>
+    <window size="0,0" weight="1"/>
+    <window size="-1,-1" layout="vbox" gravity="center">
+      <text>支付宝赞助</text>
+      <qrctrl size="200,200" text="HTTPS://QR.ALIPAY.COM/FKX07171QGERGGU4MNY8C8">
+        <icon pos="|0,|0,@48,@48" offset="-0.5,-0.5" src="ICON_LOGO:48"/>
+      </qrctrl>
+    </window>
+  </window>
+</include>

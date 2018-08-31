@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<include>
+  <window size="-2,-1" layout="hbox" gravity="center">
+    <text inset="10,5,5,5">@string/cfg_habit</text>
+    <hr width="-2" height="1"></hr>
+  </window>
+  <window pos="88,[" layout="vbox">
+    <text >输入法开关:</text>
+    <window layout="hbox">
+      <radio text="左Shift" id="100" extend_top="10" name="ime_switch_left_shift"/>
+      <radio text="右Shift" id="101" extend_top="10" extend_left="10" name="ime_switch_right_shift"/>
+      <radio text="禁用" id="102" extend_top="10" extend_left="10" name="ime_switch_disabled"/>
+    </window>
+    <text extend_top="10">形码状态回车:</text>
+    <window extend_top="10" layout="hbox">
+      <radio text="清除编码" id="110" name="enter_for_clear"/>
+      <radio text="编码上屏" id="111" extend_left="10" name="enter_for_input"/>
+    </window>
+    <window extend_top="10" layout="hbox">
+      <text text="语句模式切换:" name="key_to_sentmode"/>
+      <hotkey size="50dp,-1" name="hk_to_sentmode" extend_left="10" invalidComb="7" padding="5,0,5,0"/>
+    </window>
+    <text extend_top="10">临时拼音开关:</text>
+    <window extend_top="10" layout="hbox">
+      <radio text="左Ctrl" id="120" name="py_switch_left_ctrl"/>
+      <radio text="右Ctrl" id="121" name="py_switch_right_ctrl"/>
+      <radio text="禁用" id="122" name="py_switch_disabled"/>
+    </window>
+    <check extend_top="10" text="重码自动上屏" pos="58,[5" name="cand_auto_input"/>
+    <check extend_top="10" text="拼音重码词组优先" pos="58,[5" name="cand_py_phrase_first"/>
+    <check extend_top="10" text="显示使用技巧" pos="58,[5" name="chk_show_op_tip"/>
+  </window>
+</include>

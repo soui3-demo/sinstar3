@@ -153,6 +153,10 @@ BOOL Sinstar_Update(LPCTSTR pszIme)
 	{
 		MessageBox(GetActiveWindow(), _T("Copy File Failed"), _T("update"), MB_OK);
 	}
+	else
+	{
+		MessageBox(GetActiveWindow(), _T("更新成功！"), _T("install"), MB_OK | MB_ICONINFORMATION);
+	}
 	return bCopied;
 }
 
@@ -242,7 +246,7 @@ BOOL Sinstar_Uninstall(LPCTSTR pszIme)
 				Sleep(500);
 		}
 	}
-	MessageBox(GetActiveWindow(), _T("卸载成功！"), _T("install"), MB_OK | MB_ICONSTOP);
+	MessageBox(GetActiveWindow(), _T("卸载成功！"), _T("install"), MB_OK | MB_ICONINFORMATION);
 
 	return TRUE;
 }
@@ -369,7 +373,7 @@ BOOL Sinstar_Install(LPCTSTR pszImeName)
 	_stprintf(szPath1,_T("%s\\data\\config.ini"),g_szPath);
 	Helper_SetFileACL(szPath1);
 	Helper_SetFileACLEx(szSvrData,TRUE);
-	MessageBox(GetActiveWindow(), _T("安装成功！"), _T("install"), MB_OK | MB_ICONSTOP);
+	MessageBox(GetActiveWindow(), _T("安装成功！"), _T("install"), MB_OK | MB_ICONINFORMATION);
 	return TRUE;
 }
 

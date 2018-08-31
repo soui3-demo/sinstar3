@@ -142,6 +142,15 @@
     <Xml Include="uires\values\skin.xml" />
     <Xml Include="uires\values\string.xml" />
     <Xml Include="uires\xml\dlg_config.xml" />
+    <Xml Include="uires\xml\page_about.xml" />
+    <Xml Include="uires\xml\page_associate.xml" />
+    <Xml Include="uires\xml\page_candidate.xml" />
+    <Xml Include="uires\xml\page_habit.xml" />
+    <Xml Include="uires\xml\page_hotkey.xml" />
+    <Xml Include="uires\xml\page_misc.xml" />
+    <Xml Include="uires\xml\page_phraselib.xml" />
+    <Xml Include="uires\xml\page_pinyin.xml" />
+    <Xml Include="uires\xml\page_tts.xml" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="uires\image\soui.ico" />

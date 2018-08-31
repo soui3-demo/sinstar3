@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<include>
+  <window size="-2,-1" layout="hbox" gravity="center">
+    <text inset="0,5,5,5">@string/cfg_phraselib</text>
+    <hr width="-2" height="1"></hr>
+  </window>
+  <mclistview name="mc_phraselib" headerHeight="30" size="-2,130">
+    <header align="center" itemSwapEnable="1" fixWidth="0" colorBkgnd="#ffffff" >
+      <items>
+        <item width="100">分组名称</item>
+        <item width="95">容量</item>
+        <item width="100">编辑</item>
+        <item width="100">备注</item>
+      </items>
+    </header>
+    <template itemHeight="30" colorHover="#cccccc" colorSelected="#0000ff">
+      <window name="col_group" clipClient="1" layout="hbox" gravity="center">
+        <check name="chk_group_name" />
+      </window>
+      <window name="col_size" clipClient="1" layout="hbox" gravity="center">
+        <text name="txt_group_size" />
+      </window>
+      <window name="col_editor" clipClient="1" layout="hbox" gravity="center">
+        <text name="txt_editor" />
+      </window>
+      <window  name="col_remark" clipClient="1" layout="hbox" gravity="center">
+        <text name="txt_remark" />
+      </window>
+    </template>
+  </mclistview>
+  <window size="-2,-1" layout="hbox" extend_top="10">
+    <button name="btn_install_sys_phrase" padding="10,5,10,5" text="安装系统词库"/>
+    <window size="0,0" weight="1" visible="0"/>
+    <button name="btn_import_user_phrase" padding="10,5,10,5" text="导入用户词库"/>
+    <window size="0,0" weight="1" visible="0"/>
+    <button name="btn_export_user_phrase" padding="10,5,10,5" text="导出用户词库"/>
+  </window>
+</include>
