@@ -543,8 +543,8 @@ namespace SOUI
 		{
 			int types[] = {
 				FU_USERDEF,
-				FU_USERCMD,
 				FU_SYMBOL,
+				FU_USERCMD,
 				FU_USERJM,
 			};
 			OnEditUserDefData(types[nRet - R.id.memu_edit_userdef]);
