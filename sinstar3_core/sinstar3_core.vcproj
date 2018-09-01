@@ -21,7 +21,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)data\program\"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
@@ -64,9 +64,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="utilitiesd.lib souid.lib"
+				AdditionalDependencies="utilitiesd.lib souid.lib iscommd.lib helperd.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(SOUIPATH)\bin&quot;"
+				AdditionalLibraryDirectories="&quot;$(SOUIPATH)\bin&quot;;&quot;$(SolutionDir)lib&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -91,12 +91,12 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy $(TargetPath) $(SolutionDir)\data\$(TargetFileName)"
+				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
-			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)data\program\$(PlatformName)\"
 			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
@@ -140,9 +140,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="utilitiesd.lib souid.lib"
+				AdditionalDependencies="utilitiesd.lib souid.lib iscommd.lib helperd.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(SOUIPATH)\bin64&quot;"
+				AdditionalLibraryDirectories="&quot;$(SOUIPATH)\bin64&quot;;&quot;$(SolutionDir)lib\x64&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="17"
@@ -167,7 +167,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy $(TargetPath) $(SolutionDir)\data\x64\$(TargetFileName)"
+				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
@@ -216,9 +216,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="utilities.lib soui.lib"
+				AdditionalDependencies="utilities.lib soui.lib iscomm.lib helper.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(SOUIPATH)\bin&quot;"
+				AdditionalLibraryDirectories="&quot;$(SOUIPATH)\bin&quot;;&quot;$(SolutionDir)lib&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -294,9 +294,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="utilities.lib soui.lib"
+				AdditionalDependencies="utilities.lib soui.lib iscomm.lib helper.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(SOUIPATH)\bin64&quot;"
+				AdditionalLibraryDirectories="&quot;$(SOUIPATH)\bin64&quot;;&quot;$(SolutionDir)lib\x64&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -335,7 +335,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\ui\ConfigDlg.cpp"
+				RelativePath=".\CmdHandler.cpp"
 				>
 			</File>
 			<File
@@ -435,6 +435,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\controls\SApngPlayer.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\controls\SCandView.cpp"
 				>
 			</File>
@@ -443,7 +447,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\controls\SCompBackground.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SEnglishCand.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\dataCenter\Settings.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SFlagView.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ShellExecuteMonitor.cpp"
 				>
 			</File>
 			<File
@@ -455,7 +475,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ui\SkinAwareWnd.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ui\SkinMananger.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SLineComp.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SLineSkin.cpp"
 				>
 			</File>
 			<File
@@ -464,6 +496,22 @@
 			</File>
 			<File
 				RelativePath=".\SouiEnv.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ui\SpCharWnd.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SPhraseCand.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SSentView.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SSkinAPNG.cpp"
 				>
 			</File>
 			<File
@@ -515,7 +563,23 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\ui\STipWnd.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\controls\SToggle2.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ui\SToolsMgr.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ThreadObject.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Utils.cpp"
 				>
 			</File>
 		</Filter>
@@ -529,7 +593,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ui\ConfigDlg.h"
+				RelativePath=".\CmdHandler.h"
 				>
 			</File>
 			<File
@@ -557,19 +621,19 @@
 				>
 			</File>
 			<File
-				RelativePath="..\include\iscomm.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\isProtocol.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Minidump.h"
 				>
 			</File>
 			<File
 				RelativePath=".\resource.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SAniImgFrame.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SApngPlayer.h"
 				>
 			</File>
 			<File
@@ -581,7 +645,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\controls\SCompBackground.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SEnglishCand.h"
+				>
+			</File>
+			<File
 				RelativePath=".\dataCenter\Settings.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SFlagView.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ShellExecuteMonitor.h"
 				>
 			</File>
 			<File
@@ -597,7 +677,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ui\SkinAwareWnd.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ui\SkinMananger.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SLineComp.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SLineSkin.h"
 				>
 			</File>
 			<File
@@ -606,6 +698,22 @@
 			</File>
 			<File
 				RelativePath=".\SouiEnv.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ui\SpCharWnd.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SPhraseCand.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SSentView.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SSkinAPNG.h"
 				>
 			</File>
 			<File
@@ -625,7 +733,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ui\STipWnd.h"
+				>
+			</File>
+			<File
 				RelativePath=".\controls\SToggle2.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ui\SToolsMgr.h"
 				>
 			</File>
 			<File
@@ -634,6 +750,14 @@
 			</File>
 			<File
 				RelativePath=".\include\TextService-i.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ThreadObject.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Utils.h"
 				>
 			</File>
 		</Filter>

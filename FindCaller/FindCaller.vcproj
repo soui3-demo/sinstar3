@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="sinstar3_tsf"
-	ProjectGUID="{4893E464-3664-442B-8BFB-6D13679EAB23}"
-	RootNamespace="sinstar3_tsf"
+	Name="FindCaller"
+	ProjectGUID="{57D17CAC-20CB-4F1A-8408-BB0181AF1695}"
+	RootNamespace="FindCaller"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -23,7 +23,7 @@
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)data\program\"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="2"
+			ConfigurationType="1"
 			CharacterSet="1"
 			>
 			<Tool
@@ -44,8 +44,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(SOUIPATH)\SOUI\include;$(SOUIPATH)\utilities\include;$(SOUIPATH)\config"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;SINSTAR3_TSF_EXPORTS"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -64,10 +63,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="souid.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(SOUIPATH)\bin"
-				ModuleDefinitionFile="sinstar3_tsf.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -92,91 +88,13 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine=""
-			/>
-		</Configuration>
-		<Configuration
-			Name="Debug|x64"
-			OutputDirectory="$(SolutionDir)data\program\$(PlatformName)\"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
-			ConfigurationType="2"
-			CharacterSet="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-				TargetEnvironment="3"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="0"
-				AdditionalIncludeDirectories="$(SOUIPATH)\SOUI\include;$(SOUIPATH)\utilities\include;$(SOUIPATH)\config"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;SINSTAR3_TSF_EXPORTS"
-				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
-				UsePrecompiledHeader="0"
-				WarningLevel="3"
-				DebugInformationFormat="3"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="souid.lib"
-				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(SOUIPATH)\bin64"
-				ModuleDefinitionFile="sinstar3_tsf.def"
-				GenerateDebugInformation="true"
-				SubSystem="2"
-				TargetMachine="17"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="2"
+			ConfigurationType="1"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -199,8 +117,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="$(SOUIPATH)\SOUI\include;$(SOUIPATH)\utilities\include;$(SOUIPATH)\config"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;SINSTAR3_TSF_EXPORTS"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -218,10 +135,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="soui.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(SOUIPATH)\bin"
-				ModuleDefinitionFile="sinstar3_tsf.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -251,10 +165,82 @@
 			/>
 		</Configuration>
 		<Configuration
+			Name="Debug|x64"
+			OutputDirectory="$(SolutionDir)data\program\$(PlatformName)\"
+			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			ConfigurationType="1"
+			CharacterSet="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="1"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				LinkIncremental="2"
+				GenerateDebugInformation="true"
+				SubSystem="2"
+				TargetMachine="17"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
 			Name="Release|x64"
 			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
 			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
-			ConfigurationType="2"
+			ConfigurationType="1"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
 			>
@@ -278,8 +264,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="$(SOUIPATH)\SOUI\include;$(SOUIPATH)\utilities\include;$(SOUIPATH)\config"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;SINSTAR3_TSF_EXPORTS"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -298,7 +283,6 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkIncremental="1"
-				ModuleDefinitionFile="sinstar3_tsf.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -337,79 +321,15 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\ClassFactory.cpp"
+				RelativePath=".\dllcaller.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\compartment.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\composition.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\core_loader\core_loader.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\DisplayAttributeInfo.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\DisplayAttributeProvider.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\dllmain.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\editsession.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\EnumDisplayAttributeInfo.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\globals.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\keyeventsink.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\register.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\server.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\sinstar3_tsf.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\sinstar3_tsf.def"
+				RelativePath=".\FindCaller.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\stdafx.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\texteditsink.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\threadmgreventsink.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\TsfModule.cpp"
 				>
 			</File>
 		</Filter>
@@ -419,35 +339,15 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\ClassFactory.h"
+				RelativePath=".\dllcaller.h"
 				>
 			</File>
 			<File
-				RelativePath="..\core_loader\core_loader.h"
+				RelativePath=".\fc_const.h"
 				>
 			</File>
 			<File
-				RelativePath=".\DisplayAttributeInfo.h"
-				>
-			</File>
-			<File
-				RelativePath=".\editsession.h"
-				>
-			</File>
-			<File
-				RelativePath=".\EnumDisplayAttributeInfo.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Globals.h"
-				>
-			</File>
-			<File
-				RelativePath=".\IMEMan.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\module_ref.h"
+				RelativePath=".\FindCaller.h"
 				>
 			</File>
 			<File
@@ -455,11 +355,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\include\sinstar3_guids.h"
-				>
-			</File>
-			<File
-				RelativePath=".\sinstar3_tsf.h"
+				RelativePath=".\SArray.hpp"
 				>
 			</File>
 			<File
@@ -467,7 +363,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\TsfModule.h"
+				RelativePath=".\targetver.h"
 				>
 			</File>
 		</Filter>
@@ -477,18 +373,18 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
-				RelativePath=".\res\sinstar3.ICO"
+				RelativePath=".\FindCaller.ico"
 				>
 			</File>
 			<File
-				RelativePath=".\sinstar3_tsf.rc"
-				>
-			</File>
-			<File
-				RelativePath=".\res\version.rc2"
+				RelativePath=".\FindCaller.rc"
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath=".\ReadMe.txt"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

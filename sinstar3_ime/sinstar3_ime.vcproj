@@ -21,7 +21,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)data\program\"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
@@ -94,12 +94,12 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy $(TargetPath) $(SolutionDir)\data\$(TargetFileName)"
+				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
-			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)data\program\$(PlatformName)\"
 			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
@@ -173,7 +173,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy $(TargetPath) $(SolutionDir)\data\x64\$(TargetFileName)"
+				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
@@ -363,6 +363,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ImeMgr.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ImeModule.cpp"
 				>
 			</File>
@@ -438,6 +442,10 @@
 			</File>
 			<File
 				RelativePath=".\imeContext.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ImeMgr.h"
 				>
 			</File>
 			<File

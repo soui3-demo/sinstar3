@@ -539,7 +539,7 @@ BOOL ImeMgr::KLIDMapToVector(map<tstring, unsigned int>& mapPreLoad, vector<tstr
 {
 	while (mapPreLoad.size() != 0)
 	{
-		unsigned int nMinValue = (numeric_limits<unsigned int>::max)();
+		unsigned int nMinValue = INT_MAX;
 		tstring strKLID;
 		for (map< tstring, unsigned int>::iterator i = mapPreLoad.begin(); i != mapPreLoad.end(); i++)
 		{

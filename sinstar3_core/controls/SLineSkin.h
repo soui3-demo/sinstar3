@@ -33,5 +33,4 @@ protected:
 	SOUI_ATTRS_END()
 	COLORREF m_crStates[16];
 	SLayoutSize m_szLine[4];
-	int m_scale=100;
 };

@@ -1,11 +1,11 @@
 #include "StdAfx.h"
 #include "ConfigDlg.h"
-#include <helper.h>
 #include <helper/STime.h>
 #include <helper/SAdapterBase.h>
 #include "../include/cf_helper.hpp"
 #include "../include/filehelper.h"
 #include "../iscomm/isProtocol.h"
+#include "../helper/helper.h"
 #include <string>
 #include <shellapi.h>
 #pragma comment(lib,"version.lib")
@@ -699,13 +699,13 @@ SWindow *pCtrl = FindChildByID(id);\
 		switch (CheckId)
 		{
 		case 700:
-			g_SettingsG->nGbkMode = CSettingsGlobal::GbkMode::GBK_HIDE;
+			g_SettingsG->nGbkMode = CSettingsGlobal::GBK_HIDE;
 			break;
 		case 701:
-			g_SettingsG->nGbkMode = CSettingsGlobal::GbkMode::GBK_SHOW_MANUAL;
+			g_SettingsG->nGbkMode = CSettingsGlobal::GBK_SHOW_MANUAL;
 			break;
 		case 702:
-			g_SettingsG->nGbkMode = CSettingsGlobal::GbkMode::GBK_SHOW_NORMAL;
+			g_SettingsG->nGbkMode = CSettingsGlobal::GBK_SHOW_NORMAL;
 		}
 	}
 

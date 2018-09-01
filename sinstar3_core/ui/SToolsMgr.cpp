@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "SToolsMgr.h"
-#include "../helper/helper.h"
+#include "../../helper/helper.h"
 
 SToolsMgr::SToolsMgr()
 {

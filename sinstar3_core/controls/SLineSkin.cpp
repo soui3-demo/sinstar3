@@ -4,13 +4,13 @@
 
 SLineSkin::SLineSkin()
 {
-	for (auto& color : m_crStates)
+	for (int i=0;i< ARRAYSIZE(m_crStates);i++)
 	{
-		color = CR_INVALID;
+		m_crStates[i] = CR_INVALID;
 	}
-	for (auto &sizeLine : m_szLine)
+	for (int i=0;i<ARRAYSIZE(m_szLine);i++)
 	{
-		sizeLine.fSize = 1;
+		m_szLine[i].fSize = 1;
 	}
 }
 
@@ -31,10 +31,10 @@ void SLineSkin::_Draw(IRenderTarget * pRT, LPCRECT prcDraw, DWORD dwState, BYTE 
 		cr.updateAlpha(byAlpha);
 		CAutoRefPtr<IPen> pen;
 		IPen *oldpen = NULL;
-		pRT->CreatePen(PS_SOLID,cr.toCOLORREF(), m_szLine[i].toPixelSize(m_scale),&pen);
+		pRT->CreatePen(PS_SOLID,cr.toCOLORREF(), m_szLine[i].toPixelSize(GetScale()),&pen);
 		pRT->SelectObject(pen, (IRenderObj**)&oldpen);
 		POINT point[2];
-		int halflinewid = (int)(m_szLine[i].toPixelSize(m_scale) / 2 + 0.5);
+		int halflinewid = (int)(m_szLine[i].toPixelSize(GetScale()) / 2 + 0.5);
 		switch (i)
 		{
 		case 0:
@@ -77,8 +77,7 @@ int SLineSkin::GetStates()
 
 ISkinObj * SLineSkin::Scale(int nScale)
 {
-	m_scale = nScale;
-	return nullptr;
+	return NULL;
 }
 
 

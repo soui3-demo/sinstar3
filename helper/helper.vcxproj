@@ -22,7 +22,7 @@
     <ClInclude Include="helper.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="helper.c" />
+    <ClCompile Include="helper.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{223D1DB1-C67B-4B54-BEE8-B60F24D7E8CE}</ProjectGuid>
