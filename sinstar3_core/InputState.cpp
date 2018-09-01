@@ -1332,7 +1332,7 @@ BOOL CInputState::KeyIn_InputAndAssociate(InputContext * lpCntxtPriv,const char 
 //选择一个重码
 //BYTE byInput: Virtual Key
 BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,char cCompLen,
-									   CONST BYTE * lpbKeyState)
+									   CONST BYTE * lpbKeyState,bool bKeepVisible)
 {
 	BOOL bRet=FALSE;
 
@@ -1519,7 +1519,10 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 		InputEnd();
 
 		InputUpdate();
-		InputHide(byMask &(MKI_ASTENGLISH|MKI_ASTCAND|MKI_ASTSENT|MKI_PHRASEREMIND) || lpCntxtPriv->bShowTip);
+		if (!bKeepVisible)
+		{
+			InputHide(byMask &(MKI_ASTENGLISH | MKI_ASTCAND | MKI_ASTSENT | MKI_PHRASEREMIND) || lpCntxtPriv->bShowTip);
+		}
 	}
 end:
 	if(bRet && lpCntxtPriv->bWebMode) lpCntxtPriv->bWebMode=FALSE;
@@ -1672,18 +1675,18 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 				if((byInput<'a' || byInput>'z') && !ISComm_GetCompInfo()->bSymbolFirst) return FALSE;
 				if(byType!=RATE_FORECAST && (byType!=RATE_GBK || g_SettingsG->nGbkMode==2)) 
 				{
-					KeyIn_All_SelectCand(lpCntxtPriv,'1',1,lpbKeyState);
+					KeyIn_All_SelectCand(lpCntxtPriv,'1',1,lpbKeyState,true);
 					bRet=TRUE;
 				}
 			}
 			lpCntxtPriv->cComp=0;
 		}
 
-		if(lpCntxtPriv->cComp==0 && !bRet)
+		if(lpCntxtPriv->cComp==0)
 		{
 			if(byInput<'a' || byInput>'z')
 			{//标点：要么不是自定义模式快捷键，或者不支持快捷自定义模式切换
-				if(!ISComm_GetCompInfo()->bSymbolFirst) return FALSE;//符号顶字上屏
+				if(!ISComm_GetCompInfo()->bSymbolFirst) return bRet;//符号顶字上屏
 			}
 			if(g_SettingsG->bShowOpTip)
 			{//有编码后面显示操作提示
@@ -1692,7 +1695,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 			}
 			//开始编码输入,生成开始编码消息以获取光标跟随时输入窗口的坐标
 			InputStart();
-			InputOpen();
+			if(!bRet) InputOpen();
 		}
 		if(lpCntxtPriv->cComp<MAX_COMP)
 		{

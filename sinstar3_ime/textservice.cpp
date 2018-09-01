@@ -33,7 +33,6 @@ void CUiWnd::StartComposition(LPVOID lpImeContext)
 		CImeContext *pCtx=(CImeContext *)lpImeContext;
 		CCompStrEx *pCompStr=(CCompStrEx *)ImmLockIMCC(pCtx->_lpContext->hCompStr);
 		_ASSERT(pCompStr);
-		pCompStr->Init();
 		ImmUnlockIMCC(pCtx->_lpContext->hCompStr);
 		pCtx->GenerateMessage(WM_IME_STARTCOMPOSITION,0,0);
 		pCtx->GenerateMessage(WM_IME_NOTIFY,IMN_SETCOMPOSITIONWINDOW,0);
