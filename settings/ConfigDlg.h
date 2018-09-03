@@ -93,7 +93,7 @@ namespace SOUI
 			EVENT_ID_COMMAND(R.id.btn_import_user_phrase, OnImportUserLib)
 			EVENT_ID_COMMAND(R.id.btn_install_sys_phrase,OnInstallSysPhraseLib)
 			EVENT_ID_COMMAND_RANGE(100, 102, OnClickInputSwitch)
-			EVENT_ID_COMMAND_RANGE(110, 111, OnClickInputSwitch)
+			EVENT_ID_COMMAND_RANGE(110, 111, OnClickEnter)
 			EVENT_ID_COMMAND_RANGE(120, 122, OnClickPYTemp)
 			EVENT_ID_COMMAND(R.id.cand_auto_input, OnAutoInput)
 			EVENT_ID_COMMAND(R.id.cand_py_phrase_first, OnPyPhraseFirst)

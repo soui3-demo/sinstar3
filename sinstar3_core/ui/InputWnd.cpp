@@ -268,7 +268,9 @@ namespace SOUI
 			pCandEnglish->SetVisible(TRUE, TRUE);
 			SWindow * pCandContainer = pCandEnglish->FindChildByID(R.id.cand_container);
 
-			int nPageSize = GetCandMax(pCandContainer, SEnglishCand::GetClassName());
+			int nCandMax = GetCandMax(pCandContainer, SEnglishCand::GetClassName());
+			int nPageSize = GetCandMax2(nCandMax);
+
 			int iBegin = m_pInputContext->iCandBegin;
 			int iEnd = smin(iBegin + nPageSize, m_pInputContext->sCandCount);
 			m_pInputContext->iCandLast = iEnd;
@@ -291,7 +293,7 @@ namespace SOUI
 				pCand = pCand->GetWindow(GSW_NEXTSIBLING);
 			}
 
-			while (iCand < iBegin + nPageSize && pCand)
+			while (iCand < iBegin + nCandMax && pCand)
 			{
 				if (pCand->IsClass(SEnglishCand::GetClassName()))
 				{
@@ -308,7 +310,9 @@ namespace SOUI
 			pCandNormal->SetVisible(TRUE, TRUE);
 			SWindow * pCandContainer = pCandNormal->FindChildByID(R.id.cand_container);
 
-			int nPageSize = GetCandMax(pCandContainer, SCandView::GetClassName());
+			int nCandMax = GetCandMax(pCandContainer, SCandView::GetClassName());
+			int nPageSize = GetCandMax2(nCandMax);
+
 			int iBegin = m_pInputContext->iCandBegin;
 			int iEnd = smin(iBegin + nPageSize, m_pInputContext->sCandCount);
 			m_pInputContext->iCandLast = iEnd;
@@ -332,7 +336,7 @@ namespace SOUI
 				pCand = pCand->GetWindow(GSW_NEXTSIBLING);
 			}
 
-			while (iCand < iBegin + nPageSize && pCand)
+			while (iCand < iBegin + nCandMax && pCand)
 			{
 				if (pCand->IsClass(SCandView::GetClassName()))
 				{
@@ -368,7 +372,8 @@ namespace SOUI
 
 				pCandEnglish->FindChildByID(R.id.txt_en_header)->SetWindowText(SStringT(m_pInputContext->szInput, m_pInputContext->cInput));
 
-				int nPageSize = GetCandMax(pCandContainer, SEnglishCand::GetClassName());
+				int nCandMax = GetCandMax(pCandContainer, SEnglishCand::GetClassName());
+				int nPageSize = GetCandMax2(nCandMax);
 				int iBegin = m_pInputContext->iCandBegin;
 				int iEnd = smin(iBegin + nPageSize, m_pInputContext->sCandCount);
 				m_pInputContext->iCandLast = iEnd;
@@ -391,7 +396,7 @@ namespace SOUI
 					pCand = pCand->GetWindow(GSW_NEXTSIBLING);
 				}
 
-				while (iCand < iBegin + nPageSize && pCand)
+				while (iCand < iBegin + nCandMax && pCand)
 				{
 					if (pCand->IsClass(SEnglishCand::GetClassName()))
 					{
@@ -408,7 +413,8 @@ namespace SOUI
 				pCandEnglish->SetVisible(TRUE, TRUE);
 				SWindow * pCandContainer = pCandEnglish->FindChildByID(R.id.cand_container);
 
-				int nPageSize = GetCandMax(pCandContainer, SPhraseCand::GetClassName());
+				int nCandMax = GetCandMax(pCandContainer, SPhraseCand::GetClassName());
+				int nPageSize = GetCandMax2(nCandMax);
 				int iBegin = m_pInputContext->iCandBegin;
 				int iEnd = smin(iBegin + nPageSize, m_pInputContext->sCandCount);
 				m_pInputContext->iCandLast = iEnd;
@@ -431,7 +437,7 @@ namespace SOUI
 					pCand = pCand->GetWindow(GSW_NEXTSIBLING);
 				}
 
-				while (iCand < iBegin + nPageSize && pCand)
+				while (iCand < iBegin + nCandMax && pCand)
 				{
 					if (pCand->IsClass(SPhraseCand::GetClassName()))
 					{
@@ -476,6 +482,21 @@ namespace SOUI
 			pCand = pCand->GetWindow(GSW_NEXTSIBLING);
 		}
 		return nRet;
+	}
+
+
+	int CInputWnd::GetCandMax2(int nCands)
+	{
+		if(g_SettingsG->bCandSelNoNum)
+		{
+			if(g_SettingsG->b23CandKey)
+				return smin(nCands,3);
+			else
+				return 1;
+		}else
+		{
+			return nCands;
+		}
 	}
 
 	short CInputWnd::SelectCandidate(short iCand)

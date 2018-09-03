@@ -10,7 +10,7 @@
 #include "IsSvrProxy.h"
 #include "../helper/helper.h"
 #include "Base64.h"
-
+#pragma warning(disable:4995)
 #define ASSERT SASSERT
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

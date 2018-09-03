@@ -34,6 +34,8 @@ namespace SOUI
 
 		void UpdateAnchorPosition();
 		int GetCandMax(SWindow *pWnd, LPCWSTR pszCandClass) const;
+
+		int GetCandMax2(int nCands);
 	protected:
 		void OnBtnPrevPage();
 		void OnBtnNextPage();

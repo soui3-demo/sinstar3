@@ -277,23 +277,23 @@ namespace SOUI
 	void CConfigDlg::InitPageHabit()
 	{
 		int CtrlId;
-		CtrlId = 102;
+		CtrlId = R.id.ime_switch_disabled;
 		//输入法开关
 		if (g_SettingsG->bySwitchKey == 0x2a)
-			CtrlId = 100;
+			CtrlId = R.id.ime_switch_left_shift;
 		else if (g_SettingsG->bySwitchKey == 0x36)
-			CtrlId = 101;
+			CtrlId = R.id.ime_switch_right_shift;
 		FindAndSetCheck(CtrlId,TRUE);
 
 		//形码状态回车
-		CtrlId = g_SettingsG->bEnterClear ? 110 : 111;
+		CtrlId = g_SettingsG->bEnterClear ? R.id.enter_for_clear : R.id.enter_for_input;
 		FindAndSetCheck(CtrlId, TRUE);
 		//临时拼音开关
-		CtrlId = 122;
+		CtrlId = R.id.py_switch_disabled;
 		switch (g_SettingsG->byTempSpellKey)
 		{
-		case 0xc0:CtrlId = 120; break;
-		case 0xc1:CtrlId = 121; break;
+		case 0xc0:CtrlId = R.id.py_switch_left_ctrl; break;
+		case 0xc1:CtrlId = R.id.py_switch_right_ctrl; break;
 		default:g_SettingsG->byTempSpellKey = 0; break;
 		}
 		FindAndSetCheck(CtrlId, TRUE);
@@ -605,12 +605,10 @@ SWindow *pCtrl = FindChildByID(id);\
 		GetGroupCheck(id);
 		switch (CheckId)
 		{
-		case 110:
+		case R.id.enter_for_clear:
 			g_SettingsG->bEnterClear=TRUE;
 			break;
-		case 111:
-			g_SettingsG->bEnterClear = FALSE;
-			break;
+		case R.id.enter_for_input:
 		default:
 			g_SettingsG->bEnterClear = FALSE;
 			break;
@@ -622,10 +620,10 @@ SWindow *pCtrl = FindChildByID(id);\
 		GetGroupCheck(id);
 		switch (CheckId)
 		{
-		case 120:
+		case R.id.py_switch_left_ctrl:
 			g_SettingsG->byTempSpellKey = 0xC0;
 			break;
-		case 121:
+		case R.id.py_switch_right_ctrl:
 			g_SettingsG->byTempSpellKey = 0xC1;
 			break;
 		default:
