@@ -20,7 +20,7 @@ namespace SOUI
 		return SStringT().Format(_T("%u.%u.%u.%u"), UINT(pByte[3]), UINT(pByte[2]), UINT(pByte[1]), UINT(pByte[0]));
 	}
 
-	class CPhraseGroupAdapter : public SMcAdapterBase
+	class CGroupAdapter : public SMcAdapterBase
 	{
 	public:
 		struct GroupInfo
@@ -42,18 +42,6 @@ namespace SOUI
 			m_arrGroupInfo.RemoveAll();
 		}
 	protected:
-		bool OnGroupEnableChanged(EventArgs *e)
-		{
-			EventSwndStateChanged *e2 = sobj_cast<EventSwndStateChanged>(e);
-			if ((e2->dwOldState & WndState_Check) != (e2->dwNewState & WndState_Check))
-			{
-				SWindow *pSender = sobj_cast<SWindow>(e->sender);
-				int idx = pSender->GetUserData();
-				SStringA strName = S_CT2A(m_arrGroupInfo[idx].strName);
-				ISComm_EnablePhraseGroup(strName, (e2->dwNewState & WndState_Check)?1:0);
-			}
-			return false;
-		}
 
 		virtual int getCount()
 		{
@@ -69,7 +57,7 @@ namespace SOUI
 			SCheckBox *pCheck = pItem->FindChildByID2<SCheckBox>(R.id.chk_group_name);
 			pCheck->SetUserData(position);
 			pCheck->SetWindowText(m_arrGroupInfo[position].strName);
-			pCheck->GetEventSet()->subscribeEvent(EventSwndStateChanged::EventID, Subscriber(&CPhraseGroupAdapter::OnGroupEnableChanged, this));
+			subscribeCheckEvent(pCheck);
 			pCheck->GetEventSet()->setMutedState(true);
 			pCheck->SetAttribute(L"checked", m_arrGroupInfo[position].bEnable?L"1":L"0");
 			pCheck->GetEventSet()->setMutedState(false);
@@ -86,8 +74,63 @@ namespace SOUI
 			return pszColNames[iCol];
 		}
 
-	private:
+		virtual void subscribeCheckEvent(SCheckBox *pCheck)
+		{
+		}
+	protected:
 		SArray<GroupInfo> m_arrGroupInfo;
+	};
+
+	class CPhraseGroupAdapter: public CGroupAdapter
+	{
+
+	protected:
+		virtual void subscribeCheckEvent(SCheckBox *pCheck)
+		{
+			pCheck->GetEventSet()->subscribeEvent(EventSwndStateChanged::EventID, Subscriber(&CPhraseGroupAdapter::OnGroupEnableChanged, this));
+
+		}
+
+		bool OnGroupEnableChanged(EventArgs *e)
+		{
+			EventSwndStateChanged *e2 = sobj_cast<EventSwndStateChanged>(e);
+			if ((e2->dwOldState & WndState_Check) != (e2->dwNewState & WndState_Check))
+			{
+				SWindow *pSender = sobj_cast<SWindow>(e->sender);
+				int idx = pSender->GetUserData();
+				SStringA strName = S_CT2A(m_arrGroupInfo[idx].strName);
+				ISComm_EnablePhraseGroup(strName, (e2->dwNewState & WndState_Check)?1:0);
+			}
+			return false;
+		}
+	};
+
+	class CCelibGroupAdapter: public CGroupAdapter
+	{
+
+	protected:
+		virtual void subscribeCheckEvent(SCheckBox *pCheck)
+		{
+			pCheck->GetEventSet()->subscribeEvent(EventSwndStateChanged::EventID, Subscriber(&CCelibGroupAdapter::OnGroupEnableChanged, this));
+
+		}
+
+		bool OnGroupEnableChanged(EventArgs *e)
+		{
+			EventSwndStateChanged *e2 = sobj_cast<EventSwndStateChanged>(e);
+			if ((e2->dwOldState & WndState_Check) != (e2->dwNewState & WndState_Check))
+			{
+				SWindow *pSender = sobj_cast<SWindow>(e->sender);
+				int idx = pSender->GetUserData();
+				SStringA strName = S_CT2A(m_arrGroupInfo[idx].strName);
+				char bEnable = (e2->dwNewState & WndState_Check)?1:0;
+				if(ISACK_SUCCESS == ISComm_Flm_EnableGroup(strName,bEnable ))
+				{
+					m_arrGroupInfo[idx].bEnable = bEnable;
+				}
+			}
+			return false;
+		}
 	};
 
 	class CBlurListAdapter : public SAdapterBase
@@ -548,7 +591,7 @@ namespace SOUI
 			CF_ReadT(cf, &byCount);
 			for (BYTE i = 0; i < byCount; i++)
 			{
-				CPhraseGroupAdapter::GroupInfo gi;
+				CGroupAdapter::GroupInfo gi;
 				CF_ReadT(cf, &gi.bEnable);
 				std::string buf;
 				CF_ReadString(cf, buf);
@@ -564,6 +607,102 @@ namespace SOUI
 		}
 	}
 
+	void CConfigDlg::InitCeLib()
+	{
+		SComboBox * pCbxCelib = FindChildByID2<SComboBox>(R.id.cbx_celib);
+		pCbxCelib->InsertItem(0,_T("Close"),0,0);
+		if(ISACK_SUCCESS == ISComm_Flm_List())
+		{
+			PMSGDATA pMsgData = ISComm_GetData();
+			COMFILE cf = CF_Init(pMsgData->byData, MAX_BUF_ACK, pMsgData->sSize, 0);
+
+			for(;;)
+			{
+				std::string strCelib;
+				CF_ReadString(cf,strCelib);
+				if(strCelib.empty()) break;
+				pCbxCelib->InsertItem(-1,S_CA2T(strCelib.c_str()),0,0);
+			}
+			std::string strCurCelib;
+			CF_ReadString(cf,strCurCelib);
+			pCbxCelib->GetEventSet()->setMutedState(true);
+			if(strCurCelib.empty())
+			{
+				pCbxCelib->SetCurSel(0);
+			}else
+			{
+				int iItem = pCbxCelib->GetListBox()->FindString(-1,S_CA2T(strCurCelib.c_str()));
+				pCbxCelib->SetCurSel(iItem);
+			}
+			pCbxCelib->GetEventSet()->setMutedState(false);
+		}
+
+		SMCListView * pLvCeLib = FindChildByID2<SMCListView>(R.id.mc_celib);
+		CCelibGroupAdapter *pAdapter = new CCelibGroupAdapter();
+		pLvCeLib->SetAdapter(pAdapter);
+		pAdapter->Release();
+		InitCeLibListview();
+	}
+
+	void CConfigDlg::InitCeLibListview()
+	{
+		if (ISACK_SUCCESS == ISComm_Flm_GetInfo())
+		{
+			SMCListView * pLvCeLib = FindChildByID2<SMCListView>(R.id.mc_celib);
+			CCelibGroupAdapter *pAdapter = (CCelibGroupAdapter*)pLvCeLib->GetAdapter();
+			pAdapter->RemoveAll();
+
+			PMSGDATA pMsgData = ISComm_GetData();
+			COMFILE cf = CF_Init(pMsgData->byData, MAX_BUF_ACK, pMsgData->sSize, 0);
+			int bOpen;
+			CF_ReadT(cf,&bOpen);
+			if(!bOpen)
+			{
+				FindChildByID(R.id.edit_flm_name)->SetWindowText(NULL);
+				FindChildByID(R.id.edit_flm_addtion)->SetWindowText(NULL);
+			}else
+			{
+				FLMINFO flmInfo;
+				CF_ReadT(cf,&flmInfo);
+				FindChildByID(R.id.edit_flm_name)->SetWindowText(S_CA2T(flmInfo.szName));
+				FindChildByID(R.id.edit_flm_addtion)->SetWindowText(S_CA2T(flmInfo.szAddition));
+				BYTE byCount;
+				CF_ReadT(cf, &byCount);
+				for (BYTE i = 0; i < byCount; i++)
+				{
+					CGroupAdapter::GroupInfo gi;
+					CF_ReadT(cf, &gi.bEnable);
+					std::string buf;
+					CF_ReadString(cf, buf);
+					gi.strName = S_CA2T(buf.c_str());
+					CF_ReadT(cf, &gi.dwCount);
+					CF_ReadString(cf, buf);
+					gi.strEditor = S_CA2T(buf.c_str());
+					CF_ReadString(cf, buf);
+					gi.strRemark = S_CA2T(buf.c_str());
+					pAdapter->AddGroup(gi);
+				}
+			}
+			pAdapter->notifyDataSetChanged();
+		}
+	}
+
+	void CConfigDlg::OnCbxFlmChange(EventArgs * e)
+	{
+		EventCBSelChange *e2 = sobj_cast<EventCBSelChange>(e);
+		if(e2->nCurSel == 0)
+		{//close flm
+			ISComm_Flm_Open(NULL);
+		}else
+		{
+			SComboBox *pCbx = sobj_cast<SComboBox>(e->sender);
+			SStringT strFlm = pCbx->GetLBText(e2->nCurSel,TRUE);
+			SStringA strFlmUtf8=S_CT2A(strFlm,CP_UTF8);
+			ISComm_Flm_Open(strFlmUtf8);
+		}
+		InitCeLibListview();
+	}
+
 	void CConfigDlg::InitPages()
 	{		
 		InitPageHabit();
@@ -574,6 +713,7 @@ namespace SOUI
 		InitPageTTS();
 		InitPagePinYin();
 		InitPhraseLib();
+		InitCeLib();
 		InitPageAbout();
 	}
 

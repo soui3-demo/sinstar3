@@ -231,6 +231,11 @@ DWORD ISComm_ExportUserLib(LPCSTR pszUserLibUtf8);
 
 DWORD ISComm_InstallComp(LPCSTR pszCompNameUtf8,char bApplyNow);
 
+DWORD ISComm_Flm_List();
+DWORD ISComm_Flm_Open(LPCSTR pszFlmUtf8);
+DWORD ISComm_Flm_GetInfo();
+DWORD ISComm_Flm_EnableGroup(LPCSTR pszGroup,char bEnable);
+
 #ifdef __cplusplus
 }
 #endif//__cplusplus

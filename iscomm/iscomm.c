@@ -767,3 +767,30 @@ DWORD ISComm_InstallComp(LPCSTR pszCompNameUtf8, char bApplyNow)
 	CF_Write(&cf, pszCompNameUtf8, nLen);
 	return ISComm_SendMsg(CT_INSTALL_COMP, s_byBuf, cf.nOffset, 0);
 }
+
+
+DWORD ISComm_Flm_List()
+{
+	return ISComm_SendMsg(CT_FLM_LIST,NULL,0,0);
+}
+
+DWORD ISComm_Flm_Open(LPCSTR pszFlmUtf8)
+{
+	short nLen = pszFlmUtf8?(short)strlen(pszFlmUtf8):0;
+	return ISComm_SendMsg(CT_FLM_OPEN,pszFlmUtf8,nLen,0);
+}
+
+DWORD ISComm_Flm_GetInfo()
+{
+	return ISComm_SendMsg(CT_FLM_GET_INFO,NULL,0,0);
+}
+
+DWORD ISComm_Flm_EnableGroup(LPCSTR pszGroup,char bEnable)
+{
+	int nLen = strlen(pszGroup);
+	COMFILE cf = CF_Init(s_byBuf, MAX_BUF_ACK, 0, 0);
+	CF_WriteChar(&cf, bEnable);
+	CF_Write(&cf, &nLen, sizeof(int));
+	CF_Write(&cf, pszGroup, nLen);
+	return ISComm_SendMsg(CT_FLM_ENABLE_GROUP, s_byBuf, cf.nOffset, 0);
+}

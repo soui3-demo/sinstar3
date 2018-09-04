@@ -249,22 +249,12 @@
 #define FU_USERJM   (1<<3)  //user define jm map
 
 //----------------------------------------------
-// 获得/设置外文词库分组信息 todo
+// 获得/设置外文词库分组信息
 //----------------------------------------------
-#define CT_DATA_FLMGROUP_GET 202
-#define CT_DATA_FLMGROUP_SET 203
-
-//----------------------------------------------
-// 获得/设置词库分组信息 todo
-//----------------------------------------------
-#define CT_DATA_PLGROUP_GET 204
-#define CT_DATA_PLGROUP_SET 205
-
-//----------------------------------------------
-// 获得/设置TTS语音信息 todo
-//----------------------------------------------
-#define CT_DATA_TTSTOKEN_GET 206
-#define CT_DATA_TTSTOKEN_SET 207
+#define CT_FLM_LIST			 202	//get file list
+#define CT_FLM_OPEN			 203    //open flm
+#define CT_FLM_GET_INFO		 204    //get flm info
+#define CT_FLM_ENABLE_GROUP  205    //enable or disable a group
 
 
 //----------------------------------------------

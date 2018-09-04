@@ -42,6 +42,7 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst,LPCTSTR pszWorkDir)
 	CCurrentDirSet curDirSet(m_strSouiDll);
 
 	m_pComMgr = new SComMgr(_T("imgdecoder-png"));
+	m_pComMgr->SetDllPath(m_strSouiDll);
 
 	BOOL bLoaded = FALSE;
 	CAutoRefPtr<SOUI::IImgDecoderFactory> pImgDecoderFactory;

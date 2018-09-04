@@ -12,4 +12,5 @@
     <cfg_pinyin value="启程拼音"/>
     <cfg_about_title value="关于启程输入法"/>
     <cfg_phraselib value="词库管理"/>
+    <cfg_celib value="外文词库"/>
   </string>

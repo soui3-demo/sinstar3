@@ -14,6 +14,7 @@
     <file name="page_associate" path="xml\page_associate.xml"/>
     <file name="page_hotkey" path="xml\page_hotkey.xml"/>
     <file name="page_habit" path="xml\page_habit.xml"/>
+    <file name="page_celib" path="xml\page_celib.xml"/>
   </LAYOUT>
   
   <values>

@@ -45,6 +45,9 @@
           <pageex title="@string/cfg_phraselib" layout="vbox" size="-2,-1" padding="10,10,10,10">
             <include src="layout:page_phraselib"/>
           </pageex>
+          <pageex title="@string/cfg_celib" layout="vbox" size="-2,-1" padding="10,10,10,10">
+            <include src="layout:page_celib"/>
+          </pageex>
           <pageex title="@string/cfg_misc" tip="@string/cfg_misc" size="-2,-1">
             <include src="layout:page_misc"/>
           </pageex>
