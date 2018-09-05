@@ -60,6 +60,8 @@ private:
 
 	BYTE GetKeyinMask(BOOL bAssociate,BYTE byMask);
 
+	BOOL KeyIn_RepeatInput(InputContext * lpCntxtPriv);
+
 	void KeyIn_Spell_UpdateCandList(InputContext * lpCntxtPriv,BYTE byCaret);
 	void KeyIn_Spell_Forecast(InputContext * lpCntxtPriv,BYTE byStartPos);
 	BOOL KeyIn_Spell_MoveCaret(InputContext *lpCntxtPriv,UINT byInput, CONST BYTE * lpbKeyState);

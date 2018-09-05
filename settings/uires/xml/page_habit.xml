@@ -29,5 +29,17 @@
     <check extend_top="10" text="重码自动上屏" pos="58,[5" name="cand_auto_input"/>
     <check extend_top="10" text="拼音重码词组优先" pos="58,[5" name="cand_py_phrase_first"/>
     <check extend_top="10" text="显示使用技巧" pos="58,[5" name="chk_show_op_tip"/>
+
+    <window pos="58,[5"  layout="hbox" gravity="center">
+      <text text="提示等待时间(秒)："/>
+      <window size="-1,-1" class="edit_border" trackMouseEvent="1" layout="hbox" gravity="center">
+        <edit size="40dp,25dp" name="edit_delay_time" margin-x="0" margin-y="0" notifyChange="1" readonly="1"/>
+        <spinButton size="20dp,-2" max="5" min="1" value="4" buddy="edit_delay_time" name="spin_delay_time">
+          <button name="btn_up"/>
+          <button name="btn_down"/>
+        </spinButton>
+      </window>
+    </window>
+
   </window>
 </include>

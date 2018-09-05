@@ -171,7 +171,7 @@ void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 
 		if (bFocus)
 		{
-			if (m_pTxtSvr->IsCompositing()) m_pInputWnd->Show(TRUE);
+			if (m_pTxtSvr->IsCompositing() || m_inputState.IsTempSpell()) m_pInputWnd->Show(TRUE);
 		}
 		else
 		{
@@ -420,7 +420,7 @@ short CSinstar3Impl::SelectCandidate(short iCand)
 
 void CSinstar3Impl::CloseInputWnd(BOOL bDelay)
 {
-	m_pInputWnd->Hide(bDelay?5000:0);
+	m_pInputWnd->Hide(bDelay?g_SettingsG->nDelayTime*1000:0);
 }
 
 BOOL CSinstar3Impl::SetOpenStatus(BOOL bOpen)
@@ -461,7 +461,7 @@ void CSinstar3Impl::OnSkinAwareWndDestroy(CSkinAwareWnd * pWnd)
 
 void CSinstar3Impl::OnInputDelayHide()
 {
-	m_inputState.ClearContext(CPC_ALL);
+	m_inputState.ClearContext(CPC_ALL&~CPC_INPUT);
 }
 
 BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)

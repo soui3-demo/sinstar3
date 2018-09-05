@@ -348,6 +348,9 @@ namespace SOUI
 		FindAndSetCheck(R.id.chk_show_op_tip, g_SettingsG->bShowOpTip);
 
 		FindAndSetHotKey(R.id.hk_to_sentmode, Char2VKey(g_SettingsG->bySentMode));
+
+		FindAndSetSpin(R.id.spin_delay_time, g_SettingsG->nDelayTime);
+
 	}
 
 	void CConfigDlg::InitPageHotKey()
@@ -1009,18 +1012,6 @@ SWindow *pCtrl = FindChildByID(id);\
 			SStringT str = pEdit->GetWindowText();
 			switch (e2->idFrom)
 			{
-			case R.id.edit_predict_phrase_maxlength:
-				{
-					int nPredictLength = _ttoi(str);
-					ISComm_SetMaxPhrasePredictLength(nPredictLength);
-				}
-				break;
-			case R.id.edit_phrase_ast_deepness_max:
-				{
-					int nDeepness = _ttoi(str);
-					ISComm_SetMaxPhraseAssociateDeepness(nDeepness);
-				}
-				break;
 			case R.id.edit_sent_record_max:
 				{
 					int nSentMax = _ttoi(str);
@@ -1028,6 +1019,30 @@ SWindow *pCtrl = FindChildByID(id);\
 				}
 				break;
 			}
+		}
+	}
+
+	void CConfigDlg::OnSpinValue2String(EventArgs * e)
+	{
+		EventSpinValue2String *e2 = sobj_cast<EventSpinValue2String>(e);
+		if(e2->bInit) return;
+		switch (e2->idFrom)
+		{
+		case R.id.spin_predict_phrase_maxlength:
+			{
+				int nPredictLength = e2->nValue;
+				ISComm_SetMaxPhrasePredictLength(nPredictLength);
+			}
+			break;
+		case R.id.spin_phrase_ast_deepness_max:
+			{
+				int nDeepness =  e2->nValue;
+				ISComm_SetMaxPhraseAssociateDeepness(nDeepness);
+			}
+			break;
+		case R.id.spin_delay_time:
+			g_SettingsG->nDelayTime =  e2->nValue;
+			break;
 		}
 	}
 

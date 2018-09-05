@@ -70,6 +70,8 @@ public:
 	BOOL	bOnlySimpleCode;	// 出简不出全
 
 	BYTE    bySentMode;
+
+	int		nDelayTime;			//delay timer for closing composition window in seconds.
 };
 
 class CSettingsUI

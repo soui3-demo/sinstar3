@@ -503,6 +503,11 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 		if(!bHandle && uVKey==VK_DELETE) bHandle=KeyIn_Spell_SyFix(lpCntxtPriv,uVKey,lpbKeyState);//处理VK_DELETE
 	}
 
+	if(uVKey==VK_RETURN && lpbKeyState[VK_SHIFT]&0x80)
+	{
+		bHandle=KeyIn_RepeatInput(lpCntxtPriv);
+	}
+
 	WCHAR wChar = 0;
 	int test = ToUnicode(uVKey,uScanCode,lpbKeyState,&wChar,1,0);
 
@@ -657,6 +662,16 @@ void SpellBuf_ClearSyllable(InputContext * lpCntxtPriv,BYTE bySyllable)
 	memset(lpCntxtPriv->spellData+bySyllable,0,sizeof(SPELLINFO));
 	memset(lpCntxtPriv->bySelect+bySyllable,0,sizeof(BYTE));
 	memset(lpCntxtPriv->szWord+bySyllable,VK_SPACE,2);
+}
+
+BOOL CInputState::KeyIn_RepeatInput(InputContext *  lpCntxtPriv)
+{
+	if (lpCntxtPriv->cInput == 0)
+		return FALSE;
+	InputStart();
+	InputResult(SStringT(lpCntxtPriv->szInput,lpCntxtPriv->cInput), GetKeyinMask(FALSE, MKI_ALL));
+	InputEnd();
+	return TRUE;
 }
 
 //拼音状态下更新候选词窗口
@@ -2297,21 +2312,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 			{
 				if(g_SettingsG->byTempSpellKey==byKey)
 				{//临时拼音｜拼音辅助
-					if(g_SettingsG->compMode==IM_SHAPECODE)
-					{//五笔输入状态，进入临时拼音状态
-						m_ctx.compMode=IM_SPELL;
-						ClearContext(CPC_ALL);
-						m_ctx.bShowTip=TRUE;
-						strcpy(m_ctx.szTip,"临时拼音:上屏后自动提示编码");
-						InputOpen();
-						InputUpdate();
-						StatusbarUpdate();
-						if (!m_pListener->IsCompositing())
-						{//query cursor position
-							InputStart();
-							InputEnd();
-						}
-					}else if(g_SettingsG->compMode==IM_SPELL)
+					if(m_ctx.compMode==IM_SPELL)
 					{//拼音输入状态
 						if(IsTempSpell() && m_ctx.bySyllables==1 && m_ctx.spellData[0].bySpellLen==0)
 						{//退出临时拼音状态
@@ -2343,7 +2344,21 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 							}
 							InputUpdate();
 						}
-					}
+					}else if(g_SettingsG->compMode==IM_SHAPECODE)
+					{//五笔输入状态，进入临时拼音状态
+						ClearContext(CPC_ALL);
+						m_ctx.compMode=IM_SPELL;
+						m_ctx.bShowTip=TRUE;
+						strcpy(m_ctx.szTip,"临时拼音:上屏后自动提示编码");
+						InputOpen();
+						InputUpdate();
+						StatusbarUpdate();
+						if (!m_pListener->IsCompositing())
+						{//query cursor position
+							InputStart();
+							InputEnd();
+						}
+					} 
 				}else if(!g_SettingsG->bDisableFnKey && ((g_SettingsG->byTempSpellKey==0 && byKey==0xC1)||g_SettingsG->byTempSpellKey!=0))
 				{//功能键
 					if(!KeyIn_IsCoding(&m_ctx)) 

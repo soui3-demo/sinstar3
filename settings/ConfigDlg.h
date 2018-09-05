@@ -92,6 +92,8 @@ namespace SOUI
 
 		void OnCbxFlmChange(EventArgs *e);
 
+		void OnSpinValue2String(EventArgs *e);
+
 		EVENT_MAP_BEGIN()
 			EVENT_ID_COMMAND(R.id.btn_add_blur,OnAddBlur)
 			EVENT_ID_COMMAND(R.id.btn_del_blur, OnDelBlur)
@@ -126,8 +128,9 @@ namespace SOUI
 			EVENT_ID_COMMAND(R.id.btn_tts_en_preview, OnTtsEnPreview)
 			EVENT_ID_HANDLER(R.id.chk_py_blur, EventCmd::EventID, OnPyBlurClick)
 			EVENT_ID_HANDLER(R.id.chk_jp_zcs, EventCmd::EventID, OnJPBlurClick)
-			EVENT_ID_HANDLER(R.id.edit_predict_phrase_maxlength,EventRENotify::EventID,OnReNotify)
-			EVENT_ID_HANDLER(R.id.edit_phrase_ast_deepness_max, EventRENotify::EventID, OnReNotify)
+			EVENT_ID_HANDLER(R.id.spin_predict_phrase_maxlength,EventSpinValue2String::EventID,OnSpinValue2String)
+			EVENT_ID_HANDLER(R.id.spin_phrase_ast_deepness_max, EventSpinValue2String::EventID, OnSpinValue2String)
+			EVENT_ID_HANDLER(R.id.spin_delay_time,EventSpinValue2String::EventID, OnSpinValue2String)
 			EVENT_ID_HANDLER(R.id.edit_sent_record_max, EventRENotify::EventID, OnReNotify)
 		EVENT_MAP_END()
 

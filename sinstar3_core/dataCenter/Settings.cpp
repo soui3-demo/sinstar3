@@ -87,6 +87,7 @@ void CSettingsGlobal::Save(LPCTSTR pszIniFile)
 	WritePrivateProfileInt(KSession,_T("CandSelNoNum"),bCandSelNoNum,pszIniFile);
 	WritePrivateProfileString(KSession,_T("WebHeader"),S_CA2T(szWebHeader),pszIniFile);
 	WritePrivateProfileInt(KSession,_T("OnlySimpleCode"),bOnlySimpleCode,pszIniFile);
+	WritePrivateProfileInt(KSession,_T("delayTime"),nDelayTime,pszIniFile);
 
 }
 
@@ -150,6 +151,7 @@ void CSettingsGlobal::Load(LPCTSTR pszIniFile)
 	strcpy(szWebHeader,strHeader);
 
 	bOnlySimpleCode=GetPrivateProfileInt(KSession,_T("OnlySimpleCode"),0,pszIniFile);
+	nDelayTime = GetPrivateProfileInt(KSession,_T("delayTime"),5,pszIniFile);
 }
 
 
