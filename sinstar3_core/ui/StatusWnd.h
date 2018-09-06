@@ -8,6 +8,8 @@ interface ICmdListener;
 
 namespace SOUI
 {
+#define UM_POSTUPDATEUI	(WM_USER+2000)
+
 	class CStatusWnd :
 		public CImeWnd
 	{
@@ -22,6 +24,18 @@ namespace SOUI
 			BTN_ALL=0xffffffff,
 		};
 
+		enum AnchorModeH{
+			AMH_NULL=0,
+			AMH_LEFT=1,
+			AMH_RIGHT=1<<1,
+		};
+
+		enum AnchorModeV{
+			AMV_NULL=0,
+			AMV_TOP = 1<<8,
+			AMV_BOTTOM = 1<<9,
+		};
+
 		CStatusWnd(SEventSet *pEvtSets, ICmdListener *pListener);
 		~CStatusWnd(void);
 
@@ -29,6 +43,9 @@ namespace SOUI
 		void UpdateToggleStatus(DWORD flags,BOOL bInit=FALSE);
 	protected:
 		virtual void OnReposition(CPoint pt);
+		virtual bool onRootResize(EventArgs *e);
+
+		void UpdateAnchorMode();
 
 		int OnRecreateUI(LPCREATESTRUCT lpCreateStruct);
 
@@ -39,10 +56,16 @@ namespace SOUI
 
 		void OnInitMenuPopup(SMenuEx * menuPopup, UINT nIndex);
 
+		LRESULT OnPostUpdateUI(UINT uMsg,WPARAM wp,LPARAM lp)
+		{
+			UpdateUI();
+			return 0;
+		}
 		BEGIN_MSG_MAP_EX(CStatusWnd)
 			MSG_WM_INITMENUPOPUP_EX(OnInitMenuPopup)
 			MSG_WM_CREATE(OnCreate)
 			MSG_WM_RBUTTONUP(OnRButtonUp)
+			MESSAGE_HANDLER_EX(UM_POSTUPDATEUI,OnPostUpdateUI)
 			CHAIN_MSG_MAP(CImeWnd)
 		END_MSG_MAP()
 
@@ -90,6 +113,8 @@ namespace SOUI
 		CSkinMananger       m_skinManager;
 		SToolsMgr			m_toolManager;
 		ICmdListener     *  m_pCmdListener;
+
+		int					m_anchorMode;
 	};
 
 }

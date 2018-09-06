@@ -21,6 +21,7 @@ namespace SOUI
 	CStatusWnd::CStatusWnd(SEventSet *pEvtSets, ICmdListener *pListener)
 		:CImeWnd(pEvtSets,UIRES.LAYOUT.wnd_status_bar)
 		, m_pCmdListener(pListener)
+		,m_anchorMode(AMH_NULL|AMV_NULL)
 	{
 	}
 
@@ -254,6 +255,7 @@ namespace SOUI
 	void CStatusWnd::OnReposition(CPoint pt)
 	{
 		CDataCenter::getSingletonPtr()->GetData().m_ptStatus = pt;
+		UpdateAnchorMode();
 	}
 
 	int CStatusWnd::OnRecreateUI(LPCREATESTRUCT lpCreateStruct)
@@ -264,6 +266,7 @@ namespace SOUI
 		CRect rcWnd = GetWindowRect();
 		CRect rcWorkArea;
 		SystemParametersInfo(SPI_GETWORKAREA, 0, &rcWorkArea, 0);
+
 
 		CPoint pt = CDataCenter::getSingletonPtr()->GetData().m_ptStatus;
 		if (pt.x < 0 || pt.y<0)
@@ -277,8 +280,8 @@ namespace SOUI
 		if (pt.y + rcWnd.Height()> rcWorkArea.bottom)
 			pt.y = rcWorkArea.bottom - rcWnd.Height();
 		SetWindowPos(HWND_TOPMOST, pt.x, pt.y, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
-
-		UpdateUI();
+		UpdateAnchorMode();
+		PostMessage(UM_POSTUPDATEUI);
 		return 0;
 	}
 
@@ -585,5 +588,58 @@ namespace SOUI
 			CUtils::SoundPlay(_T("error"));
 		}
 	}
+
+	void CStatusWnd::UpdateAnchorMode()
+	{
+		CRect rcWnd;
+		CSimpleWnd::GetWindowRect(&rcWnd);
+		CRect rcWorkArea;
+		SystemParametersInfo(SPI_GETWORKAREA, 0, &rcWorkArea, 0);
+
+		m_anchorMode = AMH_NULL|AMV_NULL;
+		if(rcWnd.left == rcWorkArea.left)
+			m_anchorMode |= AMH_LEFT;
+		else if(rcWnd.right == rcWorkArea.right)
+			m_anchorMode |= AMH_RIGHT;
+		if(rcWnd.top == rcWorkArea.top)
+			m_anchorMode |= AMV_TOP;
+		else if(rcWnd.bottom == rcWorkArea.bottom)
+			m_anchorMode |= AMV_BOTTOM;
+	}
+
+	bool CStatusWnd::onRootResize(EventArgs *e)
+	{
+		EventSwndSize *e2 = sobj_cast<EventSwndSize>(e);
+		if(m_bResizing) return true;
+		CRect rcFrom;
+		CSimpleWnd::GetWindowRect(&rcFrom);
+		CRect rcTo=CRect(rcFrom.TopLeft(),e2->szWnd);
+
+		CRect rcWorkArea;
+		SystemParametersInfo(SPI_GETWORKAREA, 0, &rcWorkArea, 0);
+		if(m_anchorMode & AMH_LEFT)
+			rcTo.MoveToX(rcWorkArea.left);
+		else if(m_anchorMode & AMH_RIGHT)
+			rcTo.MoveToX(rcWorkArea.right-rcTo.Width());
+		if(m_anchorMode & AMV_TOP)
+			rcTo.MoveToY(rcWorkArea.top);
+		else if(m_anchorMode & AMV_BOTTOM)
+			rcTo.MoveToY(rcWorkArea.bottom-rcTo.Height());
+
+		if(rcTo.left <rcWorkArea.left)
+			rcWorkArea.MoveToX(rcWorkArea.left);
+		if(rcTo.top < rcWorkArea.top)
+			rcWorkArea.MoveToY(rcWorkArea.top);
+		if(rcTo.right>rcWorkArea.right)
+			rcTo.MoveToX(rcWorkArea.right-e2->szWnd.cx);
+		if(rcTo.bottom>rcWorkArea.bottom)
+			rcTo.MoveToY(rcWorkArea.bottom-e2->szWnd.cy);
+
+		SetWindowPos(NULL,rcTo.left,rcTo.top,rcTo.Width(),rcTo.Height(),SWP_NOZORDER|SWP_NOACTIVATE);
+		UpdateAnchorMode();
+		CDataCenter::getSingletonPtr()->GetData().m_ptStatus = rcTo.TopLeft();
+		return true;
+	}
+
 }
 
