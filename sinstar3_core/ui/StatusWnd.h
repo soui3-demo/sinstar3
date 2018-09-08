@@ -8,8 +8,6 @@ interface ICmdListener;
 
 namespace SOUI
 {
-#define UM_POSTUPDATEUI	(WM_USER+2000)
-
 	class CStatusWnd :
 		public CImeWnd
 	{
@@ -39,8 +37,11 @@ namespace SOUI
 		CStatusWnd(SEventSet *pEvtSets, ICmdListener *pListener);
 		~CStatusWnd(void);
 
+		HWND Create(LPCTSTR pszWndName);
+
 		void UpdateCompInfo();
 		void UpdateToggleStatus(DWORD flags,BOOL bInit=FALSE);
+		void UpdateMode();
 	protected:
 		virtual void OnReposition(CPoint pt);
 		virtual bool onRootResize(EventArgs *e);
@@ -56,16 +57,10 @@ namespace SOUI
 
 		void OnInitMenuPopup(SMenuEx * menuPopup, UINT nIndex);
 
-		LRESULT OnPostUpdateUI(UINT uMsg,WPARAM wp,LPARAM lp)
-		{
-			UpdateUI();
-			return 0;
-		}
 		BEGIN_MSG_MAP_EX(CStatusWnd)
 			MSG_WM_INITMENUPOPUP_EX(OnInitMenuPopup)
 			MSG_WM_CREATE(OnCreate)
 			MSG_WM_RBUTTONUP(OnRButtonUp)
-			MESSAGE_HANDLER_EX(UM_POSTUPDATEUI,OnPostUpdateUI)
 			CHAIN_MSG_MAP(CImeWnd)
 		END_MSG_MAP()
 
