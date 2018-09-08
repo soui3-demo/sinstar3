@@ -18,33 +18,21 @@ purpose:	动画PNG（APNG）扩展支持，依赖于当前使用的图片解码器。
 namespace SOUI
 {
 
-	class SAniImgFrame
-	{
-	public:
-		CAutoRefPtr<IBitmap> pBmp;
-		int                  nDelay;
-	};
-
-
     /**
     * @class     SSkinAPNG
     * @brief     APNG图片加载及显示对象
     * 
     * Describe
     */
-    class SSkinAPNG : public SSkinAni
+    class SSkinPNGX : public SSkinAni
     {
-        SOUI_CLASS_NAME(SSkinAPNG, L"apng")
+        SOUI_CLASS_NAME(SSkinPNGX, L"pngx")
     public:
-		SSkinAPNG():m_pFrames(NULL)
+		SSkinPNGX():m_bVert(FALSE)
         {
 
         }
-		~SSkinAPNG()
-		{
-			if(m_pFrames) delete [] m_pFrames;
-		}
-        
+
         /**
          * LoadFromFile
          * @brief    从文件加载APNG
@@ -52,7 +40,7 @@ namespace SOUI
          * @return   int -- APNG帧数，0-失败
          * Describe  
          */    
-        int LoadFromFile(LPCTSTR pszFileName);
+		int LoadFromFile(LPCTSTR pszFileName);
 
         /**
          * LoadFromMemory
@@ -62,28 +50,16 @@ namespace SOUI
          * @return   int -- APNG帧数，0-失败
          * Describe  
          */    
-        int LoadFromMemory(LPVOID pBits,size_t szData);
+		int LoadFromMemory(LPVOID pBits,size_t szData);
 
         SOUI_ATTRS_BEGIN()
-            ATTR_CUSTOM(L"src",OnAttrSrc)   //XML文件中指定的图片资源名,(type:name)
+            ATTR_IMAGEAUTOREF(L"src",m_pngx,FALSE)   //XML文件中指定的图片资源名,(type:name)
+			ATTR_CUSTOM(L"delay",OnAttrDelay)
+			ATTR_BOOL(L"vert",m_bVert,FALSE)
         SOUI_ATTRS_END()
-
 	protected:
-		
-        /**
-        * GetStates
-        * @brief    获得GIF帧数
-        * @return   int -- 帧数
-        * Describe  
-        */    
-        virtual int GetStates(){return m_nFrames;}
+		virtual int GetStates();
 
-        /**
-        * GetSkinSize
-        * @brief    获得图片大小
-        * @return   SIZE -- 图片大小
-        * Describe  
-        */    
         virtual SIZE GetSkinSize();
 
         /**
@@ -106,16 +82,11 @@ namespace SOUI
         * Describe  
         */    
         virtual void _Draw(IRenderTarget *pRT, LPCRECT rcDraw, DWORD dwState,BYTE byAlpha=0xFF);
-
-
-		IBitmap * GetFrameImage(int iFrame=-1);
-
     protected:
-        HRESULT OnAttrSrc(const SStringW &strValue,BOOL bLoading);
-        
-        int _InitImgFrame(IImgX *pImgX);
-
-	protected:
-		SAniImgFrame * m_pFrames;
+		HRESULT OnAttrDelay(const SStringW &strValue,BOOL bLoading);
+ 
+		CAutoRefPtr<IBitmap> m_pngx;
+		SArray<int>			 m_nDelays;
+		BOOL				 m_bVert;
     };
 }//end of name space SOUI

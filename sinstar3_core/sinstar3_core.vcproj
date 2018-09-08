@@ -515,6 +515,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\controls\SSkinPNGX.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\controls\SSpellView.cpp"
 				>
 			</File>
@@ -714,6 +718,10 @@
 			</File>
 			<File
 				RelativePath=".\controls\SSkinAPNG.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SSkinPNGX.h"
 				>
 			</File>
 			<File

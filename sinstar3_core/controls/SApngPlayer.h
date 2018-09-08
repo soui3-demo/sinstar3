@@ -22,7 +22,7 @@ namespace SOUI
 		BOOL PlayFile(LPCTSTR pszFileName);
 
     protected://SWindowµÄÐéº¯Êý
-        virtual CSize GetDesiredSize(LPCRECT pRcContainer);
+        virtual CSize GetDesiredSize( int nWid,int nHei );
     protected://ITimerLineHander
         virtual void OnNextFrame();
 

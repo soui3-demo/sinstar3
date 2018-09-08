@@ -3,85 +3,34 @@
 #include <interface/render-i.h>
 namespace SOUI
 {
-    class SAniImgFrame
-    {
-    public:
-        CAutoRefPtr<IBitmap> pBmp;
-        int                  nDelay;
-    };
-
     class SSkinAni : public SSkinObjBase
     {
         SOUI_CLASS_NAME(SSkinAni,L"skinani")
     public:
-        SSkinAni():m_nFrames(0),m_iFrame(0),m_pFrames(NULL)
+        SSkinAni():m_nFrames(0),m_iFrame(0)
         {
 
         }
 
         virtual ~SSkinAni()
         {
-            if(m_pFrames) delete [] m_pFrames;
         }
 
+		virtual long GetFrameDelay(int iFrame=-1) = 0;
+
+		virtual int LoadFromFile(LPCTSTR pszFileName)=0;
 
         /**
-        * GetStates
-        * @brief    获得GIF帧数
-        * @return   int -- 帧数
-        * Describe  
-        */    
-        virtual int GetStates(){return m_nFrames;}
+         * LoadFromMemory
+         * @brief    从内存加载APNG
+         * @param    LPVOID pBits --  内存地址
+         * @param    size_t szData --  内存数据长度
+         * @return   int -- APNG帧数，0-失败
+         * Describe  
+         */    
+        virtual int LoadFromMemory(LPVOID pBits,size_t szData)=0;
 
-        /**
-        * GetSkinSize
-        * @brief    获得图片大小
-        * @return   SIZE -- 图片大小
-        * Describe  
-        */    
-        virtual SIZE GetSkinSize()
-        {
-            SIZE sz={0};
-            if(m_nFrames>0 && m_pFrames)
-            {
-                sz=m_pFrames[0].pBmp->Size();
-            }
-            return sz;
-        }
-
-        /**
-        * GetFrameDelay
-        * @brief    获得指定帧的显示时间
-        * @param    int iFrame --  帧号,为-1时代表获得当前帧的延时
-        * @return   long -- 延时时间(*10ms)
-        * Describe  
-        */    
-        long GetFrameDelay(int iFrame=-1)
-        {
-            if(iFrame==-1) iFrame=m_iFrame;
-            long nRet=-1;
-            if(m_nFrames>1 && iFrame>=0 && iFrame<m_nFrames)
-            {
-                nRet=m_pFrames[iFrame].nDelay;
-            }
-            return nRet;
-        }
-        
-        IBitmap * GetFrameImage(int iFrame=-1)
-        {
-            if(iFrame==-1) iFrame=m_iFrame;
-            long nRet=-1;
-            if(m_nFrames>1 && iFrame>=0 && iFrame<m_nFrames)
-            {
-                return m_pFrames[iFrame].pBmp;
-            }else
-            {
-                return NULL;
-            }
-        }
-
-
-        /**
+		/**
         * ActiveNextFrame
         * @brief    激活下一帧
         * @return   void 
@@ -112,32 +61,10 @@ namespace SOUI
             }
         }
 
-    public:
-        virtual int LoadFromFile(LPCTSTR pszFileName){return 0;}
-        virtual int LoadFromMemory(LPVOID pData,size_t len){return 0;}
-    protected:
-        /**
-        * Draw
-        * @brief    绘制指定帧的GIF图
-        * @param    IRenderTarget * pRT --  绘制目标
-        * @param    LPCRECT rcDraw --  绘制范围
-        * @param    DWORD dwState --  绘制状态，这里被解释为帧号
-        * @param    BYTE byAlpha --  透明度
-        * @return   void
-        * Describe  
-        */    
-        virtual void _Draw(IRenderTarget *pRT, LPCRECT rcDraw, DWORD dwState,BYTE byAlpha=0xFF)
-        {
-            if(m_nFrames == 0 || !m_pFrames) return;
-            if(dwState!=-1) SelectActiveFrame(dwState);
-            CRect rcSrc(CPoint(0,0),GetSkinSize());
-            pRT->DrawBitmapEx(rcDraw,m_pFrames[m_iFrame].pBmp,rcSrc,EM_STRETCH,byAlpha);
-        }
-
-        int m_nFrames;
+	protected:
+		int m_nFrames;
         int m_iFrame;
 
-        SAniImgFrame * m_pFrames;
     };
 
 }

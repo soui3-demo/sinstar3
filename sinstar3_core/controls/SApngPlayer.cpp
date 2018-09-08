@@ -74,11 +74,20 @@ HRESULT SApngPlayer::OnAttrSkin( const SStringW & strValue, BOOL bLoading )
 	return bLoading?S_OK:S_FALSE;
 }
 
-CSize SApngPlayer::GetDesiredSize( LPCRECT /*pRcContainer*/ )
+CSize SApngPlayer::GetDesiredSize( int nWid,int nHei )
 {
-	CSize sz;
-	if(m_aniSkin) sz=m_aniSkin->GetSkinSize();
-	return sz;
+	CSize szRet = __super::GetDesiredSize(nWid,nHei);
+	CSize szSkin;
+	if(m_aniSkin) szSkin=m_aniSkin->GetSkinSize();
+	if(GetLayoutParam()->IsWrapContent(Horz))
+		szRet.cx = szSkin.cx;
+	else if(GetLayoutParam()->IsSpecifiedSize(Horz))
+		szRet.cx = GetLayoutParam()->GetSpecifiedSize(Horz).toPixelSize(GetScale());
+	if(GetLayoutParam()->IsWrapContent(Vert))
+		szRet.cy = szSkin.cy;
+	else if(GetLayoutParam()->IsSpecifiedSize(Vert))
+		szRet.cy = GetLayoutParam()->GetSpecifiedSize(Vert).toPixelSize(GetScale());
+	return szRet;
 }
 
 

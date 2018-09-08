@@ -77,4 +77,45 @@ int SSkinAPNG::_InitImgFrame( IImgX *pImgX )
     return m_nFrames;
 }
 
+void SSkinAPNG::_Draw(IRenderTarget *pRT, LPCRECT rcDraw, DWORD dwState,BYTE byAlpha/*=0xFF*/)
+{
+	if(dwState!=-1) SelectActiveFrame(dwState);
+	CRect rcSrc(CPoint(0,0),GetSkinSize());
+	pRT->DrawBitmapEx(rcDraw,m_pFrames[m_iFrame].pBmp,rcSrc,EM_STRETCH,byAlpha);
+}
+
+long SSkinAPNG::GetFrameDelay(int iFrame/*=-1*/)
+{
+	if(iFrame==-1) iFrame=m_iFrame;
+	long nRet=-1;
+	if(m_nFrames>1 && iFrame>=0 && iFrame<m_nFrames)
+	{
+		nRet=m_pFrames[iFrame].nDelay;
+	}
+	return nRet;
+}
+
+SIZE SSkinAPNG::GetSkinSize()
+{
+	SIZE sz={0};
+	if(m_nFrames>0 && m_pFrames)
+	{
+		sz=m_pFrames[0].pBmp->Size();
+	}
+	return sz;
+}
+
+IBitmap * SSkinAPNG::GetFrameImage(int iFrame/*=-1*/)
+{
+	if(iFrame==-1) iFrame=m_iFrame;
+	long nRet=-1;
+	if(m_nFrames>1 && iFrame>=0 && iFrame<m_nFrames)
+	{
+		return m_pFrames[iFrame].pBmp;
+	}else
+	{
+		return NULL;
+	}
+}
+
 }//end of namespace SOUI

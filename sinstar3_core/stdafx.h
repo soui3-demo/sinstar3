@@ -67,6 +67,7 @@ using namespace SOUI;
 #include "controls/SApngPlayer.h"
 
 #include "controls/SSkinAPNG.h"
+#include "controls/SSkinPNGX.h"
 #include "controls/SLineSkin.h"
 
 #include "dataCenter/datacenter.h"
