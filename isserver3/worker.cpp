@@ -12,6 +12,7 @@
 #include "Base64.h"
 #pragma warning(disable:4995)
 #define ASSERT SASSERT
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -338,6 +339,13 @@ LRESULT CWorker::OnCheckUpdate(UINT uMsg, WPARAM wp, LPARAM lp)
 	return 0;
 }
 
+static DWORD GetKernelVer()
+{
+	DWORD dwRet;
+	Helper_PEVersion(_T("kernel32.dll"),&dwRet,NULL,NULL);
+	return dwRet;
+}
+
 LRESULT CWorker::OnDataReport(UINT uMsg, WPARAM wp, LPARAM lp)
 {
 	CRegKey reg;
@@ -370,17 +378,15 @@ LRESULT CWorker::OnDataReport(UINT uMsg, WPARAM wp, LPARAM lp)
 			_stprintf(szUerID, _T("what_fuck_machine_#%d"), rand());
 		}
 
-		OSVERSIONINFOEX osvi = { 0 };
-		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-		GetVersionEx((OSVERSIONINFO*)&osvi);
-		SStringT strOsVer=_T("Unknown");
-		if (osvi.dwMajorVersion == 10)
+		DWORD dwVer = GetKernelVer();
+		BYTE *byVer = (BYTE*)&dwVer;
+		SStringT strOsVer;
+		if(byVer[3] == 10)
 		{
 			strOsVer = _T("Win10");
-		}
-		else if (osvi.dwMajorVersion == 6)
+		}else if(byVer[3] == 6)
 		{
-			switch (osvi.dwMinorVersion)
+			switch (byVer[2])
 			{
 			case 3:strOsVer = _T("Win8.1"); break;
 			case 2:strOsVer = _T("Win8"); break;
@@ -388,7 +394,7 @@ LRESULT CWorker::OnDataReport(UINT uMsg, WPARAM wp, LPARAM lp)
 			case 0:strOsVer = _T("Vista"); break;
 			}
 		}
-		else if (osvi.dwMajorVersion == 5)
+		else if (byVer[3] == 5)
 		{
 			strOsVer = _T("WinXP");
 		}
