@@ -791,17 +791,21 @@ BOOL CInputState::KeyIn_Spell_MoveCaret(InputContext *lpCntxtPriv, UINT byInput,
 		//处理方向键
 		if(byInput==VK_LEFT)
 		{
-			if(lpCntxtPriv->bySyCaret>0) 
+			if(lpCntxtPriv->bySyCaret>1) 
 				lpCntxtPriv->bySyCaret--;
+			else
+				lpCntxtPriv->bySyCaret = lpCntxtPriv->spellData[lpCntxtPriv->byCaret].bySpellLen;
 			bRet=TRUE;
 		}else if(byInput==VK_RIGHT)
 		{
 			if(lpCntxtPriv->bySyCaret<lpCntxtPriv->spellData[lpCntxtPriv->byCaret].bySpellLen)
 				lpCntxtPriv->bySyCaret++;
+			else
+				lpCntxtPriv->bySyCaret = 1;
 			bRet=TRUE;
 		}else if(byInput==VK_HOME)
 		{
-			lpCntxtPriv->bySyCaret=0;
+			lpCntxtPriv->bySyCaret=1;
 			bRet=TRUE;
 		}else if(byInput==VK_END)
 		{

@@ -6,4 +6,6 @@ cd "..\大字-蓝色幽香"
 "..\..\tools\7z.exe" a -tzip "..\..\data\skins\大字-蓝色幽香.sskn" "*" -r -mmt=on 
 cd "..\大字-紫黛云鬓"
 "..\..\tools\7z.exe" a -tzip "..\..\data\skins\大字-紫黛云鬓.sskn" "*" -r -mmt=on 
+cd "..\多点纯色"
+"..\..\tools\7z.exe" a -tzip "..\..\data\skins\多点纯色.sskn" "*" -r -mmt=on 
 cd ..

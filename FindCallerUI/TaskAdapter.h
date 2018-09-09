@@ -18,6 +18,7 @@ namespace SOUI
 		void AddTask(TASKINFO ti, BOOL bX64);
 		TASKINFOEX* GetTask(int iTask);
 		BOOL DelTask(int iTask);
+		void RemoveAll();
 	protected:
 		virtual int getCount();
 

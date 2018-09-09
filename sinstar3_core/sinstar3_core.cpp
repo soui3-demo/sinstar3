@@ -80,6 +80,7 @@ CSinstar3Core::CSinstar3Core(HINSTANCE hInst):CModuleRef(hInst),m_pLogStateListe
 
 CSinstar3Core::~CSinstar3Core()
 {
+	g_SettingsG->Save(m_strConfigIni);
 	g_SettingsUI->Save(m_strConfigIni);
 	delete CDataCenter::getSingletonPtr();
 	g_nRefCount --;

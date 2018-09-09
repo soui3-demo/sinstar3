@@ -86,5 +86,11 @@ namespace SOUI {
 		return 0;
 	}
 
+	 void CTaskAdapter::RemoveAll()
+	 {
+		 m_arrTasks.RemoveAll();
+		 notifyDataSetChanged();
+	 }
+
 }
 

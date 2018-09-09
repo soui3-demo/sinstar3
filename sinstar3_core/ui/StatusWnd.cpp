@@ -36,7 +36,13 @@ namespace SOUI
 		if(hWnd)
 		{
 			CPoint pt = CDataCenter::getSingletonPtr()->GetData().m_ptStatus;
-			SetWindowPos(HWND_TOPMOST,pt.x,pt.y,0,0,SWP_NOACTIVATE|SWP_NOSIZE);
+			if(pt.x==-1 || pt.y==-1)
+			{
+				m_anchorMode = AMH_RIGHT|AMV_BOTTOM;
+			}else
+			{
+				SetWindowPos(HWND_TOPMOST,pt.x,pt.y,0,0,SWP_NOACTIVATE|SWP_NOSIZE);
+			}
 			UpdateUI();
 		}
 		return hWnd;
