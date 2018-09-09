@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "SFlagView.h"
+#include <helper/SDIBHelper.h>
 
 namespace SOUI {
-	SFlagView::SFlagView():m_bSpellFlag(FALSE)
+	SFlagView::SFlagView():m_bSpellFlag(FALSE),m_crTheme(CR_INVALID)
 	{
 		m_bMsgTransparent = FALSE;
 	}
@@ -18,6 +19,10 @@ namespace SOUI {
 		if (pData)
 		{
 			m_imeFlag.Attach(SResLoadFromMemory::LoadImage(pData->pData, pData->nLen));
+			if(m_crTheme != CR_INVALID)
+			{
+				SDIBHelper::Colorize(m_imeFlag,m_crTheme);
+			}
 		}
 		Invalidate();
 	}

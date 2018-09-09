@@ -25,7 +25,7 @@
   <root> 
     <status_bg size="-1,-1" name="status_shrink" layout="hbox" skin="bg_status_bar" gravity="center"  padding="@dim/extend_padding_left,@dim/extend_padding_top,@dim/extend_padding_right,@dim/extend_padding_bottom">
       <caption2 size="-1,-2" weight="1" extend_left="32" name="txt_comp" cursor="sizeall" dotted="1"/>
-      <flagView size="20,20" tip="拼音五笔切换" name="img_logo" extend_left="4" defaultFlag="logo" cursor="hand"/>
+      <flagView size="20,20" tip="拼音五笔切换" colorTheme="@color/theme" name="img_logo" extend_left="4" defaultFlag="logo" cursor="hand"/>
       <toggle2 size="-1,-1" skin1="charmode_half" extend_left="2" skin2="charmode_full" name="btn_charmode" tip="change mode"/>
       <imgbtn size="-1,-1" skin="btn_makeword" extend_left="2" name="btn_make_phrase"/>
       <toggle2 size="-1,-1" skin1="btn_record_enable" extend_left="2" skin2="btn_record_disable" name="btn_record"/>

@@ -14,6 +14,7 @@ namespace SOUI
 
 		SOUI_ATTRS_BEGIN()
 			ATTR_SKIN(L"defaultFlag",m_defFlag,TRUE)
+			ATTR_COLOR(L"colorTheme",m_crTheme,TRUE)
 		SOUI_ATTRS_END()
 
 	protected:
@@ -26,5 +27,6 @@ namespace SOUI
 		CAutoRefPtr<ISkinObj> m_defFlag;
 		CAutoRefPtr<IBitmap>  m_imeFlag;
 		BOOL				  m_bSpellFlag;
+		COLORREF			  m_crTheme;
 	};
 }

@@ -87,7 +87,7 @@ CSouiEnv::CSouiEnv(HINSTANCE hInst,LPCTSTR pszWorkDir)
 	pLogMgr->start();
 
 	//从DLL加载系统资源
-	HMODULE hModSysResource = LoadLibrary(SYS_NAMED_RESOURCE);
+	HMODULE hModSysResource = LoadLibrary(m_strSouiDll+_T("\\")+SYS_NAMED_RESOURCE);
 	if (hModSysResource)
 	{
 		CAutoRefPtr<IResProvider> sysResProvider;

@@ -190,7 +190,14 @@ int CInputState::TestHotKey(UINT uVk, const BYTE * lpbKeyState) const
 			break;
 		}
 	}
-	if (iRet == HKI_UDMode)
+	if(iRet==-1 && m_ctx.sCandCount && ((uVk>='0' && uVk<='9')||(uVk>=VK_NUMPAD0 && uVk<=VK_NUMPAD9)))
+	{//number
+		if(lpbKeyState[VK_CONTROL] & 0x80)
+		{
+			iRet = (lpbKeyState[VK_SHIFT] & 0x80)?HKI_DelCandidate:HKI_AdjustRate;
+		}
+	}
+	else if (iRet == HKI_UDMode)
 	{
 		if (m_ctx.cComp > 0 || m_ctx.inState == INST_USERDEF)
 			iRet = -1;
@@ -452,7 +459,8 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 			}
 			InputUpdate();
 		}
-		return TRUE;
+		if(iHotKey != HKI_AdjustRate && iHotKey != HKI_DelCandidate)//调频，删词交给后面逻辑处理。
+			return TRUE;
 	}
 
 	BOOL bHandle=FALSE;

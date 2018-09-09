@@ -76,6 +76,9 @@ void CSettingsGlobal::Save(LPCTSTR pszIniFile)
 	WritePrivateProfileString(KSession,_T("LineKey6"),szBuf,pszIniFile);
 
 	WritePrivateProfileInt(KSession,_T("GBKMODE"),nGbkMode,pszIniFile);
+	WritePrivateProfileInt(KSession,_T("BlendUD"),bBlendUD,pszIniFile);
+	WritePrivateProfileInt(KSession,_T("BlendSpWord"),bBlendSpWord,pszIniFile);
+
 	WritePrivateProfileInt(KSession,_T("AutoInput"),bAutoInput,pszIniFile);
 	WritePrivateProfileInt(KSession,_T("PYPhraseFirst"),bPYPhraseFirst,pszIniFile);
 	WritePrivateProfileInt(KSession,_T("EnterClear"),bEnterClear,pszIniFile);

@@ -18,6 +18,9 @@ enum HotKeyIndex{
 	HKI_UDMode,			// user define mode
 
 	HKI_COUNT,
+
+	HKI_AdjustRate,		// 快速调频: ctrl+重码号 
+	HKI_DelCandidate,	// 在线删词: Ctrl+Shift+重码号 
 };
 
 class CSettingsGlobal
