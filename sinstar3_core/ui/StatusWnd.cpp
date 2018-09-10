@@ -198,15 +198,16 @@ namespace SOUI
 	void CStatusWnd::OnBtnExtend()
 	{
 		g_SettingsUI->bFullStatus = TRUE;
-		SWindow *pExtend=FindChildByID(R.id.status_extend);
-		if(pExtend) pExtend->SetVisible(TRUE, TRUE);
+		SWindow *pStatus=FindChildByID(R.id.status_extend);
+		if(pStatus) pStatus->SetVisible(TRUE, TRUE);
 		m_pCmdListener->OnCommand(CMD_SYNCUI, BTN_STATUSMODE);
 	}
 
 	void CStatusWnd::OnBtnShrink()
 	{
 		g_SettingsUI->bFullStatus = FALSE;
-		FindChildByID(R.id.status_shrink)->SetVisible(TRUE,TRUE);
+		SWindow *pStatus=FindChildByID(R.id.status_shrink);
+		if(pStatus) pStatus->SetVisible(TRUE,TRUE);
 		m_pCmdListener->OnCommand(CMD_SYNCUI, BTN_STATUSMODE);
 	}
 
@@ -240,9 +241,11 @@ namespace SOUI
 	{
 		{
 			SWindow *pStatus = FindChildByID(R.id.status_shrink);
-			SASSERT(pStatus);
-			SWindow *pText = pStatus->FindChildByID(R.id.txt_comp);
-			if (pText) pText->SetWindowText(_T("服务退出"));
+			if(pStatus)
+			{
+				SWindow *pText = pStatus->FindChildByID(R.id.txt_comp);
+				if (pText) pText->SetWindowText(_T("服务退出"));
+			}
 		}
 		{
 			SWindow *pStatus = FindChildByID(R.id.status_extend);
@@ -280,7 +283,11 @@ namespace SOUI
 		}
 		else
 		{
-			FindChildByID(R.id.status_shrink)->SetVisible(TRUE, TRUE);
+			SWindow *pStatus = FindChildByID(R.id.status_shrink);
+			if(pStatus)
+				pStatus->SetVisible(TRUE, TRUE);
+			else
+				FindChildByID(R.id.status_extend)->SetVisible(TRUE, TRUE);
 		}
 	}
 
