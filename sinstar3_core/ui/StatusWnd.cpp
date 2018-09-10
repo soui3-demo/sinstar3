@@ -96,9 +96,9 @@ namespace SOUI
 	{
 		EventSwndSize *e2 = sobj_cast<EventSwndSize>(e);
 		if(m_bResizing) return true;
-		CRect rcFrom;
-		CSimpleWnd::GetWindowRect(&rcFrom);
-		CRect rcTo=CRect(rcFrom.TopLeft(),e2->szWnd);
+
+		CPoint pt = CDataCenter::getSingletonPtr()->GetData().m_ptStatus;
+		CRect rcTo=CRect(pt,e2->szWnd);
 
 		CRect rcWorkArea;
 		SystemParametersInfo(SPI_GETWORKAREA, 0, &rcWorkArea, 0);
@@ -275,6 +275,8 @@ namespace SOUI
 			SWindow *pStatus = FindChildByID(R.id.status_extend);
 			if(pStatus)
 				pStatus->SetVisible(TRUE, TRUE);
+			else
+				FindChildByID(R.id.status_shrink)->SetVisible(TRUE, TRUE);
 		}
 		else
 		{

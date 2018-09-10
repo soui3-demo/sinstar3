@@ -6,6 +6,7 @@ namespace SOUI
 	SMutexView::SMutexView(void)
 	{
 		m_bDisplay = 0;
+		m_bVisible = 0;
 	}
 
 	SMutexView::~SMutexView(void)

@@ -147,64 +147,57 @@ namespace SOUI
 		{
 		case INST_CODING:
 		{
-			SWindow *pMutexView = NULL;
-			if (m_pInputContext->compMode == IM_SPELL)
+			if(m_pInputContext->sbState == SBST_NORMAL)
 			{
-				pMutexView = FindChildByID(R.id.comp_spell);
-				pMutexView->SetVisible(TRUE, TRUE);
-				SWindow * pTempFlag = pMutexView->FindChildByID(R.id.txt_temp_spell_flag);
-				pTempFlag->SetVisible(g_SettingsG->compMode != IM_SPELL, TRUE);
-				SSpellView * spellView = pMutexView->FindChildByID2<SSpellView>(R.id.txt_comps);
-				spellView->UpdateByContext(m_pInputContext);
-			}
-			else
-			{
-				pMutexView = FindChildByID(R.id.comp_normal);
-				pMutexView->SetVisible(TRUE, TRUE);
-				pMutexView->FindChildByID(R.id.txt_comps)->SetWindowText(S_CA2T(SStringA(m_pInputContext->szComp, m_pInputContext->cComp)));
-			}
-			//update tips
-			SWindow *pTip = pMutexView->FindChildByID(R.id.txt_tip);
-			if (pTip)
-			{
-				if (m_pInputContext->sbState == SBST_NORMAL && m_pInputContext->bShowTip)
+				SWindow *pMutexView = NULL;
+				if (m_pInputContext->compMode == IM_SPELL)
 				{
-					pTip->SetVisible(TRUE);
-					pTip->SetWindowText(S_CA2T(m_pInputContext->szTip));
+					pMutexView = FindChildByID(R.id.comp_spell);
+					pMutexView->SetVisible(TRUE, TRUE);
+					SWindow * pTempFlag = pMutexView->FindChildByID(R.id.txt_temp_spell_flag);
+					pTempFlag->SetVisible(g_SettingsG->compMode != IM_SPELL, TRUE);
+					SSpellView * spellView = pMutexView->FindChildByID2<SSpellView>(R.id.txt_comps);
+					spellView->UpdateByContext(m_pInputContext);
 				}
 				else
 				{
-					pTip->SetVisible(FALSE);
-					pTip->SetWindowText(NULL);
+					pMutexView = FindChildByID(R.id.comp_normal);
+					pMutexView->SetVisible(TRUE, TRUE);
+					pMutexView->FindChildByID(R.id.txt_comps)->SetWindowText(S_CA2T(SStringA(m_pInputContext->szComp, m_pInputContext->cComp)));
 				}
-			}
-			//update sentence input state
-			{
-				pMutexView->SetVisible(m_pInputContext->sbState == SBST_NORMAL, TRUE);
+				//update tips
+				SWindow *pTip = pMutexView->FindChildByID(R.id.txt_tip);
+				if (pTip)
+				{
+					if (m_pInputContext->sbState == SBST_NORMAL && m_pInputContext->bShowTip)
+					{
+						pTip->SetVisible(TRUE);
+						pTip->SetWindowText(S_CA2T(m_pInputContext->szTip));
+					}
+					else
+					{
+						pTip->SetVisible(FALSE);
+						pTip->SetWindowText(NULL);
+					}
+				}
+			}else
+			{//update sentence input state
 				SWindow * compSent = FindChildByID(R.id.comp_sent);
 				compSent->SetVisible(m_pInputContext->sbState != SBST_NORMAL, TRUE);
 
 				SSentView *pStvSent = compSent->FindChildByID2<SSentView>(R.id.stv_sent);
 				SASSERT(pStvSent);
 
-				if (m_pInputContext->sbState != SBST_NORMAL)
-				{//
-					SStringT strInput(m_pInputContext->szInput, m_pInputContext->cInput);
-					int nSelLen = int(m_pInputContext->pbySentWord[m_pInputContext->sSentCaret] - m_pInputContext->pbySentWord[0]);
-					SStringA strLeftA((char*)m_pInputContext->pbySentWord[0], nSelLen);
-					SStringA strRightA((char*)m_pInputContext->pbySentWord[m_pInputContext->sSentCaret], m_pInputContext->sSentLen - nSelLen);
-					SStringT strLeft = S_CA2T(strLeftA);
-					SStringT strRight = S_CA2T(strRightA);
+				SStringT strInput(m_pInputContext->szInput, m_pInputContext->cInput);
+				int nSelLen = int(m_pInputContext->pbySentWord[m_pInputContext->sSentCaret] - m_pInputContext->pbySentWord[0]);
+				SStringA strLeftA((char*)m_pInputContext->pbySentWord[0], nSelLen);
+				SStringA strRightA((char*)m_pInputContext->pbySentWord[m_pInputContext->sSentCaret], m_pInputContext->sSentLen - nSelLen);
+				SStringT strLeft = S_CA2T(strLeftA);
+				SStringT strRight = S_CA2T(strRightA);
 
-					SStringT strAll = strInput + strLeft + strRight;
-					pStvSent->SetSent(strAll, strInput.GetLength());
-					pStvSent->SetSelCount(strLeft.GetLength());
-				}
-				else
-				{
-					pStvSent->SetSent(_T(""), 0);
-					pStvSent->SetSelCount(0);
-				}
+				SStringT strAll = strInput + strLeft + strRight;
+				pStvSent->SetSent(strAll, strInput.GetLength());
+				pStvSent->SetSelCount(strLeft.GetLength());
 			}
 			break;
 		}

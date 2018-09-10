@@ -1929,6 +1929,12 @@ BOOL CInputState::KeyIn_All_Associate(InputContext * lpCntxtPriv,UINT byInput,
 			lpCntxtPriv->sSentCaret=0;
 			InputStart();
 			InputOpen();
+			if(g_SettingsG->bShowOpTip)
+			{
+				m_ctx.bShowTip=TRUE;
+				Tips_Rand(FALSE,m_ctx.szTip);
+			}
+
 			bRet=TRUE;
 		}
 	}
@@ -2372,7 +2378,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 						}
 					} 
 				}else if(!g_SettingsG->bDisableFnKey && ((g_SettingsG->byTempSpellKey==0 && byKey==0xC1)||g_SettingsG->byTempSpellKey!=0))
-				{//功能键
+				{//功能键, 0xC1=右Ctrl
 					if(!KeyIn_IsCoding(&m_ctx)) 
 					{
 						if(m_ctx.inState==INST_CODING && m_ctx.sbState==SBST_ASSOCIATE
@@ -2382,6 +2388,13 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 							m_ctx.sbState=SBST_SENTENCE;
 							m_ctx.sSentCaret=0;
 							InputStart();
+							InputOpen();
+							if(g_SettingsG->bShowOpTip)
+							{
+								m_ctx.bShowTip=TRUE;
+								strcpy(m_ctx.szTip,"语句输入模式");
+							}
+
 							bRet=TRUE;
 						}else
 						{//进入用户自定义输入状态
