@@ -103,16 +103,16 @@ BOOL CSinstar3Tsf::_IsKeyboardOpen() const
     if (_pThreadMgr->QueryInterface(IID_ITfCompartmentMgr, (void **)&pCompMgr) == S_OK)
     {
         ITfCompartment *pCompartment;
-        if (pCompMgr->GetCompartment(GUID_COMPARTMENT_KEYBOARD_OPENCLOSE, &pCompartment) == S_OK)
+		HRESULT hr = pCompMgr->GetCompartment(GUID_COMPARTMENT_KEYBOARD_OPENCLOSE, &pCompartment);
+        if (hr == S_OK)
         {
             VARIANT var;
-            if (S_OK == pCompartment->GetValue(&var))
+			hr = pCompartment->GetValue(&var);
+            if (S_OK == hr && var.vt == VT_I4)
             {
-                if (var.vt == VT_I4) // Even VT_EMPTY, GetValue() can succeed
-                {
-                    fOpen = (BOOL)var.lVal;
-                }
+				fOpen = (BOOL)var.lVal;
             }
+			pCompartment->Release();
         }
         pCompMgr->Release();
     }
@@ -143,6 +143,7 @@ HRESULT CSinstar3Tsf::_SetKeyboardOpen(BOOL fOpen)
             var.vt = VT_I4;
             var.lVal = fOpen;
             hr = pCompartment->SetValue(_tfClientId, &var);
+			pCompartment->Release();
         }
         pCompMgr->Release();
     }
@@ -270,6 +271,11 @@ BOOL CSinstar3Tsf::_InitThreadCompartment()
 			fRet = AdviseSink( pCompartment, (ITfCompartmentEventSink *)this,
 				IID_ITfCompartmentEventSink, &_dwThreadKeyboardSinkCookie);
 
+			VARIANT var;
+			var.vt = VT_I4;
+			var.lVal = TRUE;
+			pCompartment->SetValue(_tfClientId, &var);
+
 			pCompartment->Release();
 
 			if ( !fRet)
@@ -348,7 +354,6 @@ void CSinstar3Tsf::ShowCandidateWindow()
 	ITfContext *pContext = (ITfContext *)GetImeContext();
 	if ( pContext != NULL)
 	{
-		//hr = _pThreadMgr->QueryInterface(IID_ITfCompartmentMgr, (void **)&pCompMgr);
 		hr = pContext->QueryInterface(IID_ITfCompartmentMgr, (void **)&pCompMgr);
 		if ( SUCCEEDED(hr) && pCompMgr != NULL)
 		{
