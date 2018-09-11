@@ -147,7 +147,7 @@ namespace SOUI
 		{
 		case INST_CODING:
 		{
-			if(m_pInputContext->sbState == SBST_NORMAL)
+			if(m_pInputContext->sbState == ::SBST_NORMAL)
 			{
 				SWindow *pMutexView = NULL;
 				if (m_pInputContext->compMode == IM_SPELL)
