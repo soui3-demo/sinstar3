@@ -48,10 +48,10 @@
 #define sinstar3_str_name_version(n,a,b)		_sinstar3_str_name_version(n,a,b)
 #define PRODUCT_NAMEVER		sinstar3_str_name_version( _sinstar3_ime_name,_sinstar3_ime_version_a, _sinstar3_ime_version_b)
 
-#define _sinstar3_tstr_name_version(n,a,b)		_T(#n #a "." #b)
+#define _sinstar3_tstr_name_version(n,a,b)		_T(#n) _T(#a) _T(".") _T(#b)
 #define sinstar3_tstr_name_version(n,a,b)		_sinstar3_tstr_name_version(n,a,b)
 #define PRODUCT_TNAMEVER		sinstar3_tstr_name_version( _sinstar3_ime_name,_sinstar3_ime_version_a, _sinstar3_ime_version_b)
 
-#define _sinstar3_wstr_name_version(n,a,b)		L#n #a "." #b
+#define _sinstar3_wstr_name_version(n,a,b)		L#n L#a L"." L#b
 #define sinstar3_wstr_name_version(n,a,b)		_sinstar3_wstr_name_version(n,a,b)
 #define PRODUCT_WNAMEVER		sinstar3_wstr_name_version( _sinstar3_ime_name,_sinstar3_ime_version_a, _sinstar3_ime_version_b)

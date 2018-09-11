@@ -289,7 +289,7 @@ BOOL RegisterServer()
     if (fRet = RegCreateKeyEx(HKEY_CLASSES_ROOT, achIMEKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey, &dw)
             == ERROR_SUCCESS)
     {
-        fRet &= RegSetValueEx(hKey, NULL, 0, REG_SZ, (BYTE *)PRODUCT_WNAMEVER, (int)(_tcslen(PRODUCT_WNAMEVER)+1)*sizeof(TCHAR))
+        fRet &= RegSetValueEx(hKey, NULL, 0, REG_SZ, (BYTE *)PRODUCT_TNAMEVER, (int)(_tcslen(PRODUCT_TNAMEVER)+1)*sizeof(TCHAR))
             == ERROR_SUCCESS;
 
         if (fRet &= RegCreateKeyEx(hKey, KInProcSvr32, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hSubKey, &dw)
