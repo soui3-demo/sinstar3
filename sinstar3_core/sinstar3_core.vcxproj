@@ -207,6 +207,7 @@
     <ClCompile Include="controls\SPhraseCand.cpp" />
     <ClCompile Include="controls\SSentView.cpp" />
     <ClCompile Include="controls\SSkinAPNG.cpp" />
+    <ClCompile Include="controls\SSkinPNGX.cpp" />
     <ClCompile Include="controls\SSpellView.cpp" />
     <ClCompile Include="controls\SStatusBackground.cpp" />
     <ClCompile Include="controls\SToggle2.cpp" />
@@ -265,6 +266,7 @@
     <ClInclude Include="controls\SPhraseCand.h" />
     <ClInclude Include="controls\SSentView.h" />
     <ClInclude Include="controls\SSkinAPNG.h" />
+    <ClInclude Include="controls\SSkinPNGX.h" />
     <ClInclude Include="controls\SSpellView.h" />
     <ClInclude Include="controls\SStatusBackground.h" />
     <ClInclude Include="controls\SToggle2.h" />
