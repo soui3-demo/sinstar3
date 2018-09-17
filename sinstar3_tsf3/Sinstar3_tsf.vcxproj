@@ -28,7 +28,6 @@
     <None Include="Sinstar3_Tsf.def" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BaseDictionaryEngine.h" />
     <ClInclude Include="BaseWindow.h" />
     <ClInclude Include="ButtonWindow.h" />
     <ClInclude Include="CandidateListUIPresenter.h" />
@@ -40,11 +39,7 @@
     <ClInclude Include="KeyStateCategory.h" />
     <ClInclude Include="Sinstar3TsfBaseStructure.h" />
     <ClInclude Include="SearchCandidateProvider.h" />
-    <ClInclude Include="DictionaryParser.h" />
-    <ClInclude Include="DictionarySearch.h" />
     <ClInclude Include="EditSession.h" />
-    <ClInclude Include="File.h" />
-    <ClInclude Include="FileMapping.h" />
     <ClInclude Include="GetTextExtentEditSession.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="KeyHandlerEditSession.h" />
@@ -56,7 +51,6 @@
     <ClInclude Include="ScrollBarWindow.h" />
     <ClInclude Include="ShadowWindow.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="TableDictionaryEngine.h" />
     <ClInclude Include="TfInputProcessorProfile.h" />
     <ClInclude Include="TfTextLayoutSink.h" />
     <ClInclude Include="TipCandidateList.h" />
@@ -64,7 +58,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ActiveLanguageProfileNotifySink.cpp" />
-    <ClCompile Include="BaseDictionaryEngine.cpp" />
     <ClCompile Include="BaseWindow.cpp" />
     <ClCompile Include="ButtonWindow.cpp" />
     <ClCompile Include="CandidateListUIPresenter.cpp" />
@@ -76,13 +69,9 @@
     <ClCompile Include="KeyStateCategory.cpp" />
     <ClCompile Include="Sinstar3TsfBaseStructure.cpp" />
     <ClCompile Include="SearchCandidateProvider.cpp" />
-    <ClCompile Include="DictionaryParser.cpp" />
-    <ClCompile Include="DictionarySearch.cpp" />
     <ClCompile Include="DllMain.cpp" />
     <ClCompile Include="EditSession.cpp" />
     <ClCompile Include="EndComposition.cpp" />
-    <ClCompile Include="File.cpp" />
-    <ClCompile Include="FileMapping.cpp" />
     <ClCompile Include="FunctionProviderSink.cpp" />
     <ClCompile Include="GetTextExtentEditSession.cpp" />
     <ClCompile Include="Globals.cpp" />
@@ -96,7 +85,6 @@
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="ShadowWindow.cpp" />
     <ClCompile Include="StartComposition.cpp" />
-    <ClCompile Include="TableDictionaryEngine.cpp" />
     <ClCompile Include="Sinstar3_Tsf.cpp" />
     <ClCompile Include="TextEditSink.cpp" />
     <ClCompile Include="TfInputProcessorProfile.cpp" />

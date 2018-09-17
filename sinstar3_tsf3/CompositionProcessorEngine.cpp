@@ -8,8 +8,6 @@
 #include "Private.h"
 #include "Sinstar3_Tsf.h"
 #include "CompositionProcessorEngine.h"
-#include "TableDictionaryEngine.h"
-#include "DictionarySearch.h"
 #include "TfInputProcessorProfile.h"
 #include "Globals.h"
 #include "Compartment.h"
@@ -98,8 +96,6 @@ BOOL CSinstar3Tsf::_AddTextProcessorEngine()
 
 CCompositionProcessorEngine::CCompositionProcessorEngine()
 {
-    _pTableDictionaryEngine = nullptr;
-    _pDictionaryFile = nullptr;
 
     _langid = 0xffff;
     _guidProfile = GUID_NULL;
@@ -133,12 +129,6 @@ CCompositionProcessorEngine::CCompositionProcessorEngine()
 
 CCompositionProcessorEngine::~CCompositionProcessorEngine()
 {
-    if (_pTableDictionaryEngine)
-    {
-        delete _pTableDictionaryEngine;
-        _pTableDictionaryEngine = nullptr;
-    }
-
     if (_pLanguageBar_IMEMode)
     {
         _pLanguageBar_IMEMode->CleanUp();
@@ -164,11 +154,6 @@ CCompositionProcessorEngine::~CCompositionProcessorEngine()
         _pCompartmentConversionEventSink = nullptr;
     }
 
-    if (_pDictionaryFile)
-    {
-        delete _pDictionaryFile;
-        _pDictionaryFile = nullptr;
-    }
 }
 
 //+---------------------------------------------------------------------------
@@ -207,7 +192,6 @@ BOOL CCompositionProcessorEngine::SetupLanguageProfile(LANGID langid, REFGUID gu
     SetupLanguageBar(pThreadMgr, tfClientId, isSecureMode);
     SetupKeystroke();
     SetupConfiguration();
-    SetupDictionaryFile();
 
 Exit:
     return ret;
@@ -354,110 +338,11 @@ void CCompositionProcessorEngine::GetReadingStrings(_Inout_ CSampleImeArray<CStr
 
 void CCompositionProcessorEngine::GetCandidateList(_Inout_ CSampleImeArray<CCandidateListItem> *pCandidateList, BOOL isIncrementalWordSearch, BOOL isWildcardSearch)
 {
-    if (!IsDictionaryAvailable())
-    {
-        return;
-    }
-
-    if (isIncrementalWordSearch)
-    {
-        CStringRange wildcardSearch;
-        DWORD_PTR keystrokeBufLen = _keystrokeBuffer.GetLength() + 2;
-        PWCHAR pwch = new (std::nothrow) WCHAR[ keystrokeBufLen ];
-        if (!pwch)
-        {
-            return;
-        }
-
-        // check keystroke buffer already has wildcard char which end user want wildcard serach
-        DWORD wildcardIndex = 0;
-        BOOL isFindWildcard = FALSE;
-
-        if (IsWildcard())
-        {
-            for (wildcardIndex = 0; wildcardIndex < _keystrokeBuffer.GetLength(); wildcardIndex++)
-            {
-                if (IsWildcardChar(*(_keystrokeBuffer.Get() + wildcardIndex)))
-                {
-                    isFindWildcard = TRUE;
-                    break;
-                }
-            }
-        }
-
-        StringCchCopyN(pwch, keystrokeBufLen, _keystrokeBuffer.Get(), _keystrokeBuffer.GetLength());
-
-        if (!isFindWildcard)
-        {
-            // add wildcard char for incremental search
-            StringCchCat(pwch, keystrokeBufLen, L"*");
-        }
-
-        size_t len = 0;
-        if (StringCchLength(pwch, STRSAFE_MAX_CCH, &len) == S_OK)
-        {
-            wildcardSearch.Set(pwch, len);
-        }
-        else
-        {
-            return;
-        }
-
-        _pTableDictionaryEngine->CollectWordForWildcard(&wildcardSearch, pCandidateList);
-
-        if (0 >= pCandidateList->Count())
-        {
-            return;
-        }
-
-        if (IsKeystrokeSort())
-        {
-            _pTableDictionaryEngine->SortListItemByFindKeyCode(pCandidateList);
-        }
-
-        // Incremental search would show keystroke data from all candidate list items
-        // but wont show identical keystroke data for user inputted.
-        for (UINT index = 0; index < pCandidateList->Count(); index++)
-        {
-            CCandidateListItem *pLI = pCandidateList->GetAt(index);
-            DWORD_PTR keystrokeBufferLen = 0;
-
-            if (IsWildcard())
-            {
-                keystrokeBufferLen = wildcardIndex;
-            }
-            else
-            {
-                keystrokeBufferLen = _keystrokeBuffer.GetLength();
-            }
-
-            CStringRange newFindKeyCode;
-            newFindKeyCode.Set(pLI->_FindKeyCode.Get() + keystrokeBufferLen, pLI->_FindKeyCode.GetLength() - keystrokeBufferLen);
-            pLI->_FindKeyCode.Set(newFindKeyCode);
-        }
-
-        delete [] pwch;
-    }
-    else if (isWildcardSearch)
-    {
-        _pTableDictionaryEngine->CollectWordForWildcard(&_keystrokeBuffer, pCandidateList);
-    }
-    else
-    {
-        _pTableDictionaryEngine->CollectWord(&_keystrokeBuffer, pCandidateList);
-    }
-
-    for (UINT index = 0; index < pCandidateList->Count();)
-    {
-        CCandidateListItem *pLI = pCandidateList->GetAt(index);
-        CStringRange startItemString;
-        CStringRange endItemString;
-
-        startItemString.Set(pLI->_ItemString.Get(), 1);
-        endItemString.Set(pLI->_ItemString.Get() + pLI->_ItemString.GetLength() - 1, 1);
-
-        index++;
-    }
+	for (int i = 0; i < 5; i++)
+	{
+		CCandidateListItem * pItem = pCandidateList->Append();
+		pItem->str = L"abc";
+	}
 }
 
 //+---------------------------------------------------------------------------
@@ -468,40 +353,7 @@ void CCompositionProcessorEngine::GetCandidateList(_Inout_ CSampleImeArray<CCand
 
 void CCompositionProcessorEngine::GetCandidateStringInConverted(CStringRange &searchString, _In_ CSampleImeArray<CCandidateListItem> *pCandidateList)
 {
-    if (!IsDictionaryAvailable())
-    {
-        return;
-    }
 
-    // Search phrase from SECTION_TEXT's converted string list
-    CStringRange wildcardSearch;
-    DWORD_PTR srgKeystrokeBufLen = searchString.GetLength() + 2;
-    PWCHAR pwch = new (std::nothrow) WCHAR[ srgKeystrokeBufLen ];
-    if (!pwch)
-    {
-        return;
-    }
-
-    StringCchCopyN(pwch, srgKeystrokeBufLen, searchString.Get(), searchString.GetLength());
-    StringCchCat(pwch, srgKeystrokeBufLen, L"*");
-
-    // add wildcard char
-	size_t len = 0;
-	if (StringCchLength(pwch, STRSAFE_MAX_CCH, &len) != S_OK)
-    {
-        return;
-    }
-    wildcardSearch.Set(pwch, len);
-
-    _pTableDictionaryEngine->CollectWordFromConvertedStringForWildcard(&wildcardSearch, pCandidateList);
-
-    if (IsKeystrokeSort())
-    {
-        _pTableDictionaryEngine->SortListItemByFindKeyCode(pCandidateList);
-    }
-
-    wildcardSearch.Clear();
-    delete [] pwch;
 }
 
 //+---------------------------------------------------------------------------
@@ -957,80 +809,6 @@ VOID CCompositionProcessorEngine::SetLanguageBarStatus(DWORD status, BOOL isSet)
 	}
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetupDictionaryFile
-//
-//----------------------------------------------------------------------------
-
-BOOL CCompositionProcessorEngine::SetupDictionaryFile()
-{	
-    // Not yet registered
-    // Register CFileMapping
-	/*
-    WCHAR wszFileName[MAX_PATH] = {'\0'};
-    DWORD cchA = GetModuleFileName(Global::dllInstanceHandle, wszFileName, ARRAYSIZE(wszFileName));
-    size_t iDicFileNameLen = cchA + wcslen(TEXTSERVICE_DIC);
-    WCHAR *pwszFileName = new (std::nothrow) WCHAR[iDicFileNameLen + 1];
-    if (!pwszFileName)
-    {
-        goto ErrorExit;
-    }
-    *pwszFileName = L'\0';
-
-    // find the last '/'
-    while (cchA--)
-    {
-        WCHAR wszChar = wszFileName[cchA];
-        if (wszChar == '\\' || wszChar == '/')
-        {
-            StringCchCopyN(pwszFileName, iDicFileNameLen + 1, wszFileName, cchA + 1);
-            StringCchCatN(pwszFileName, iDicFileNameLen + 1, TEXTSERVICE_DIC, wcslen(TEXTSERVICE_DIC));
-            break;
-        }
-    }
-	*/
-
-    // create CFileMapping object
-    if (_pDictionaryFile == nullptr)
-    {
-        _pDictionaryFile = new (std::nothrow) CFileMapping();
-        if (!_pDictionaryFile)
-        {
-            goto ErrorExit;
-        }
-    }
-    if (!(_pDictionaryFile)->CreateFile(TEXTSERVICE_DIC, GENERIC_READ, OPEN_EXISTING, FILE_SHARE_READ))
-    {
-        goto ErrorExit;
-    }
-
-    _pTableDictionaryEngine = new (std::nothrow) CTableDictionaryEngine(GetLocale(), _pDictionaryFile);
-    if (!_pTableDictionaryEngine)
-    {
-        goto ErrorExit;
-    }
-
-    //delete []pwszFileName;
-    return TRUE;
-ErrorExit:
-    //if (pwszFileName)
-    //{
-    //    delete []pwszFileName;
-    //}
-    return FALSE;
-}
-
-//+---------------------------------------------------------------------------
-//
-// GetDictionaryFile
-//
-//----------------------------------------------------------------------------
-
-CFile* CCompositionProcessorEngine::GetDictionaryFile()
-{
-    return _pDictionaryFile;
-}
 
 //+---------------------------------------------------------------------------
 //

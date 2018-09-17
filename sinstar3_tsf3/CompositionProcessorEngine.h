@@ -9,10 +9,8 @@
 #pragma once
 
 #include "sal.h"
-#include "TableDictionaryEngine.h"
 #include "KeyHandlerEditSession.h"
 #include "Sinstar3TsfBaseStructure.h"
-#include "FileMapping.h"
 #include "Compartment.h"
 #include "define.h"
 
@@ -65,9 +63,6 @@ public:
     BOOL IsMakePhraseFromText() { return _hasMakePhraseFromText; }
     BOOL IsKeystrokeSort() { return _isKeystrokeSort; }
 
-    // Dictionary engine
-    BOOL IsDictionaryAvailable() { return (_pTableDictionaryEngine ? TRUE : FALSE); }
-
     // Language bar control
     void SetLanguageBarStatus(DWORD status, BOOL isSet);
 
@@ -109,9 +104,6 @@ private:
     void PrivateCompartmentsUpdated(_In_ ITfThreadMgr *pThreadMgr);
     void KeyboardOpenCompartmentUpdated(_In_ ITfThreadMgr *pThreadMgr);
 
-    
-    BOOL SetupDictionaryFile();
-    CFile* GetDictionaryFile();
 
 private:
     struct _KEYSTROKE
@@ -129,7 +121,6 @@ private:
     };
     _KEYSTROKE _keystrokeTable[26];
 
-    CTableDictionaryEngine* _pTableDictionaryEngine;
     CStringRange _keystrokeBuffer;
 
     BOOL _hasWildcardIncludedInKeystrokeBuffer;
@@ -159,8 +150,6 @@ private:
     };
 
     XPreservedKey _PreservedKey_IMEMode;
-    XPreservedKey _PreservedKey_DoubleSingleByte;
-    XPreservedKey _PreservedKey_Punctuation;
 
     // Punctuation data
     CSampleImeArray<CPunctuationPair> _PunctuationPair;
@@ -183,8 +172,6 @@ private:
     CCandidateRange _candidateListIndexRange;
     UINT _candidateListPhraseModifier;
     UINT _candidateWndWidth;
-
-    CFileMapping* _pDictionaryFile;
 
     static const int OUT_OF_FILE_INDEX = -1;
 };

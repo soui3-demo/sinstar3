@@ -1081,18 +1081,19 @@ HRESULT CCandidateListUIPresenter::OnKillThreadFocus()
 
 void CCandidateListUIPresenter::RemoveSpecificCandidateFromList(_In_ LCID Locale, _Inout_ CSampleImeArray<CCandidateListItem> &candidateList, _In_ CStringRange &candidateString)
 {
-    for (UINT index = 0; index < candidateList.Count();)
-    {
-        CCandidateListItem* pLI = candidateList.GetAt(index);
+	return;
+    //for (UINT index = 0; index < candidateList.Count();)
+    //{
+    //    CCandidateListItem* pLI = candidateList.GetAt(index);
 
-        if (CStringRange::Compare(Locale, &candidateString, &pLI->_ItemString) == CSTR_EQUAL)
-        {
-            candidateList.RemoveAt(index);
-            continue;
-        }
+    //    if (CStringRange::Compare(Locale, &candidateString, &pLI->_ItemString) == CSTR_EQUAL)
+    //    {
+    //        candidateList.RemoveAt(index);
+    //        continue;
+    //    }
 
-        index++;
-    }
+    //    index++;
+    //}
 }
 
 void CCandidateListUIPresenter::AdviseUIChangedByArrowKey(_In_ KEYSTROKE_FUNCTION arrowKey)

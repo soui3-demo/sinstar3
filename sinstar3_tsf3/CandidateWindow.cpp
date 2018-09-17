@@ -652,7 +652,7 @@ void CCandidateWindow::_DrawList(_In_ HDC dcHandle, _In_ UINT iIndex, _In_ RECT 
         }
 
         pItemList = _candidateList.GetAt(iIndex);
-        ExtTextOut(dcHandle, StringPosition * cxLine, pageCount * cyLine + cyOffset, ETO_OPAQUE, &rc, pItemList->_ItemString.Get(), (DWORD)pItemList->_ItemString.GetLength(), NULL);
+        ExtTextOut(dcHandle, StringPosition * cxLine, pageCount * cyLine + cyOffset, ETO_OPAQUE, &rc, pItemList->str.c_str(), (DWORD)pItemList->str.length(), NULL);
     }
     for (; (pageCount < candidateListPageCnt); pageCount++)
     {
@@ -704,60 +704,9 @@ void CCandidateWindow::_DrawBorder(_In_ HWND wndHandle, _In_ int cx)
 
 void CCandidateWindow::_AddString(_Inout_ CCandidateListItem *pCandidateItem, _In_ BOOL isAddFindKeyCode)
 {
-    DWORD_PTR dwItemString = pCandidateItem->_ItemString.GetLength();
-    const WCHAR* pwchString = nullptr;
-    if (dwItemString)
-    {
-        pwchString = new (std::nothrow) WCHAR[ dwItemString ];
-        if (!pwchString)
-        {
-            return;
-        }
-        memcpy((void*)pwchString, pCandidateItem->_ItemString.Get(), dwItemString * sizeof(WCHAR));
-    }
-
-    DWORD_PTR itemWildcard = pCandidateItem->_FindKeyCode.GetLength();
-    const WCHAR* pwchWildcard = nullptr;
-    if (itemWildcard && isAddFindKeyCode)
-    {
-        pwchWildcard = new (std::nothrow) WCHAR[ itemWildcard ];
-        if (!pwchWildcard)
-        {
-            if (pwchString)
-            {
-                delete [] pwchString;
-            }
-            return;
-        }
-        memcpy((void*)pwchWildcard, pCandidateItem->_FindKeyCode.Get(), itemWildcard * sizeof(WCHAR));
-    }
-
     CCandidateListItem* pLI = nullptr;
     pLI = _candidateList.Append();
-    if (!pLI)
-    {
-        if (pwchString)
-        {
-            delete [] pwchString;
-            pwchString = nullptr;
-        }
-        if (pwchWildcard)
-        {
-            delete [] pwchWildcard;
-            pwchWildcard = nullptr;
-        }
-        return;
-    }
-
-    if (pwchString)
-    {
-        pLI->_ItemString.Set(pwchString, dwItemString);
-    }
-    if (pwchWildcard)
-    {
-        pLI->_FindKeyCode.Set(pwchWildcard, itemWildcard);
-    }
-
+	pLI->str = pCandidateItem->str;
     return;
 }
 
@@ -769,13 +718,6 @@ void CCandidateWindow::_AddString(_Inout_ CCandidateListItem *pCandidateItem, _I
 
 void CCandidateWindow::_ClearList()
 {
-    for (UINT index = 0; index < _candidateList.Count(); index++)
-    {
-        CCandidateListItem* pItemList = nullptr;
-        pItemList = _candidateList.GetAt(index);
-        delete [] pItemList->_ItemString.Get();
-        delete [] pItemList->_FindKeyCode.Get();
-    }
     _currentSelection = 0;
     _candidateList.Clear();
     _PageIndex.Clear();
@@ -827,9 +769,9 @@ DWORD CCandidateWindow::_GetCandidateString(_In_ int iIndex, _Outptr_result_mayb
     pItemList = _candidateList.GetAt(iIndex);
     if (ppwchCandidateString)
     {
-        *ppwchCandidateString = pItemList->_ItemString.Get();
+        *ppwchCandidateString = pItemList->str.c_str();
     }
-    return (DWORD)pItemList->_ItemString.GetLength();
+    return (DWORD)pItemList->str.length();
 }
 
 //+---------------------------------------------------------------------------
@@ -851,9 +793,9 @@ DWORD CCandidateWindow::_GetSelectedCandidateString(_Outptr_result_maybenull_ co
     pItemList = _candidateList.GetAt(_currentSelection);
     if (ppwchCandidateString)
     {
-        *ppwchCandidateString = pItemList->_ItemString.Get();
+        *ppwchCandidateString = pItemList->str.c_str();
     }
-    return (DWORD)pItemList->_ItemString.GetLength();
+    return (DWORD)pItemList->str.length();
 }
 
 //+---------------------------------------------------------------------------

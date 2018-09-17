@@ -225,6 +225,7 @@ protected:
     const WCHAR *_pStringBuf;    // Buffer which is not add zero terminate.
 };
 
+#include <string>
 //---------------------------------------------------------------------
 // CCandidateListItem
 //	_ItemString - candidate string
@@ -232,15 +233,7 @@ protected:
 //---------------------------------------------------------------------
 struct CCandidateListItem
 {
-    CStringRange _ItemString;
-    CStringRange _FindKeyCode;
-
-	CCandidateListItem& CCandidateListItem::operator =( const CCandidateListItem& rhs)
-	{
-		_ItemString = rhs._ItemString;
-		_FindKeyCode = rhs._FindKeyCode;
-		return *this;
-	}
+	std::wstring str;
 };
 
 class CPunctuationPair
