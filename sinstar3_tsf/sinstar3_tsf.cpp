@@ -60,8 +60,6 @@ PCTSTR pszAppList_Use_Ms_Method[] =
 
 CSinstar3Tsf::CSinstar3Tsf()
 {
-	_cRef = 1;
-
     theModule->AddRef();
 
     //
@@ -261,35 +259,29 @@ STDMETHODIMP CSinstar3Tsf::OnLayoutChange(ITfContext *pContext, TfLayoutCode lco
 	switch (lcode)
 	{
 	case TF_LC_CHANGE:
-		_bGetLayoutChangeMsg=TRUE;
-		if (IsCompositing())
 		{
-			CEsGetTextExtent *pEditSession;
-
-			if ((pEditSession = new CEsGetTextExtent(this, pContext, pContextView)) != NULL)
-			{
-				HRESULT hr;
-				HRESULT hrSession;
-				//由于这个接口可能是延时定时器触发的，因此不能使用TF_ES_SYNC标志来同步执行
-				hr = pContext->RequestEditSession(_GetClientId(), pEditSession, TF_ES_ASYNCDONTCARE | TF_ES_READ, &hrSession);
-				pEditSession->Release();
-			}
+			SLOGFMTI("TF_LC_CHANGE");
+			CEsGetTextExtent *pEditSession  = new CEsGetTextExtent(this, pContext, pContextView);
+			HRESULT hrSession;
+			pContext->RequestEditSession(_GetClientId(), pEditSession, TF_ES_SYNC | TF_ES_READ, &hrSession);
+			pEditSession->Release();
 		}
-
-		// 处理完之后，设置一个时间标记
-		_dwLastLayoutChangeTime = GetTickCount();
 
 		break;
 
 	case TF_LC_DESTROY:
 		{
-			SLOGFMTI("LayoutChange:Destroy");
+			SLOGFMTI("TF_LC_DESTROY");
 		}
 		break;
 
 	case TF_LC_CREATE:
 		{
-			SLOGFMTI("LayoutChange:Create");
+			SLOGFMTI("TF_LC_CREATE");
+			CEsGetTextExtent *pEditSession  = new CEsGetTextExtent(this, pContext, pContextView);
+			HRESULT hrSession;
+			HRESULT hr = pContext->RequestEditSession(_GetClientId(), pEditSession, TF_ES_SYNC | TF_ES_READ, &hrSession);
+			pEditSession->Release();
 		}
 		break;
 

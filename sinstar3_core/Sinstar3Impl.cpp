@@ -240,17 +240,6 @@ LRESULT CSinstar3Impl::OnWildMessage(WPARAM wParam,LPARAM lParam)
 	return E_NOTIMPL;
 }
 
-
-void CSinstar3Impl::OnFinalRelease()
-{
-
-}
-
-HRESULT CSinstar3Impl::OnQueryInterface(REFIID riid, void **ppvObject)
-{
-	return E_NOINTERFACE;
-}
-
 LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 {
 	PMSGDATA pMsg=ISComm_OnSeverNotify(m_hWnd,wp,lp);

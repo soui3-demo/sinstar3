@@ -4,36 +4,6 @@
 
 CSinstar3Tsf *g_pCurTSF=NULL;
 
-
-VOID CALLBACK OnTimerProc(HWND hwnd,
-						UINT uMsg,
-						UINT_PTR idEvent,
-						DWORD dwTime
-						)
-{
-	KillTimer(NULL,idEvent);
-
-	DWORD dwCurTime = GetTickCount();	
-	if ( dwCurTime - g_pCurTSF->_dwLastLayoutChangeTime < 20)
-		return;
-
-	//if(!g_pCurTSF->_bGetLayoutChangeMsg)
-	{
-		ITfContext *pContext=(ITfContext *)g_pCurTSF->GetImeContext();
-		if(pContext)
-		{
-			ITfContextView *pCtxView;
-			pContext->GetActiveView(&pCtxView);
-			if(pCtxView)
-			{
-				g_pCurTSF->OnLayoutChange(pContext,TF_LC_CHANGE,pCtxView);
-				pCtxView->Release();
-			}
-			g_pCurTSF->ReleaseImeContext(pContext);
-		}
-	}
-}
-
 STDAPI CSinstar3Tsf::OnEndEdit(ITfContext *pContext, TfEditCookie ecReadOnly, ITfEditRecord *pEditRecord)
 {
     BOOL fSelectionChanged;
@@ -95,11 +65,6 @@ STDAPI CSinstar3Tsf::OnEndEdit(ITfContext *pContext, TfEditCookie ecReadOnly, IT
 		}
        pEnumTextChanges->Release();
     }
-	//在XP下的Word中需要这一段代码才能收到TF_LC_CHANGE消息,目前还不清楚原因。
-	g_pCurTSF=this;	
-	_dwLastLayoutChangeTime = GetTickCount();
-	SetTimer(NULL,0,20,OnTimerProc);
-
     return S_OK;
 }
 

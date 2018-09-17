@@ -6,7 +6,6 @@ CEditSessionBase::CEditSessionBase(CSinstar3Tsf *pTextService, ITfContext *pCont
 :_pTextService(pTextService)
 ,_pContext(pContext)
 {
-	_cRef = 1;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -113,7 +112,7 @@ STDMETHODIMP CEsGetTextExtent::DoEditSession(TfEditCookie ec)
 	RECT rc;
 	LONG cch=0;
 
-	if ( !_pTextService->_IsComposing() || _pTextService->m_pSinstar3==NULL) return S_FALSE;
+	if (!_pTextService->m_pSinstar3) return S_FALSE;
 
 
 

@@ -2,7 +2,8 @@
 
 #include <Ctffunc.h>
 
-class CSinstar3Tsf : public ITfTextInputProcessor,
+class CSinstar3Tsf : public CUnknown,
+					 public ITfTextInputProcessor,
                      public ITfThreadMgrEventSink,
 					 public ITfThreadFocusSink,
                      public ITfTextEditSink,
@@ -23,17 +24,17 @@ public:
     virtual ~CSinstar3Tsf();
 
     // IUnknown
-	IUNKNOWN_BEGIN(IID_ITfTextInputProcessor,ITfTextInputProcessor)
-		IUNKNOWN_ADD_IID(IID_ITfThreadMgrEventSink,ITfThreadMgrEventSink)
-		IUNKNOWN_ADD_IID(IID_ITfThreadFocusSink,ITfThreadFocusSink)
-		IUNKNOWN_ADD_IID(IID_ITfTextEditSink,ITfTextEditSink)
-		IUNKNOWN_ADD_IID(IID_ITfKeyEventSink,ITfKeyEventSink)
-		IUNKNOWN_ADD_IID(IID_ITfDisplayAttributeProvider,ITfDisplayAttributeProvider)
-		IUNKNOWN_ADD_IID(IID_ITfCompositionSink,ITfCompositionSink)
-		IUNKNOWN_ADD_IID(IID_ITfTextLayoutSink,ITfTextLayoutSink)
-		IUNKNOWN_ADD_IID(IID_ITfFnConfigure,ITfFnConfigure)
-		IUNKNOWN_ADD_IID(IID_ITfFunction,ITfFunction)
-		IUNKNOWN_ADD_IID(IID_ITfCompartmentEventSink,ITfCompartmentEventSink)
+	IUNKNOWN_BEGIN2(ITfTextInputProcessor)
+		IUNKNOWN_ADD_IID2(ITfThreadMgrEventSink)
+		IUNKNOWN_ADD_IID2(ITfThreadFocusSink)
+		IUNKNOWN_ADD_IID2(ITfTextEditSink)
+		IUNKNOWN_ADD_IID2(ITfKeyEventSink)
+		IUNKNOWN_ADD_IID2(ITfDisplayAttributeProvider)
+		IUNKNOWN_ADD_IID2(ITfCompositionSink)
+		IUNKNOWN_ADD_IID2(ITfTextLayoutSink)
+		IUNKNOWN_ADD_IID2(ITfFnConfigure)
+		IUNKNOWN_ADD_IID2(ITfFunction)
+		IUNKNOWN_ADD_IID2(ITfCompartmentEventSink)
 	IUNKNOWN_END()
 
     // ITfTextInputProcessor

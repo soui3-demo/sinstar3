@@ -12,6 +12,7 @@
 #define UM_ASYNC_COPYDATA (WM_USER+2000)
 
 class CSinstar3Impl:
+	public CUnknown,
 	public ISinstar,
 	public IInputListener,
 	public IDestroyListener,
@@ -46,8 +47,9 @@ public:
 	virtual LRESULT OnWildMessage(WPARAM wParam,LPARAM lParam);
 
 public:
-	virtual void OnFinalRelease();
-	virtual HRESULT OnQueryInterface(REFIID riid, void **ppvObject);
+	IUNKNOWN_BEGIN2(IUnknown)
+	IUNKNOWN_END()
+public:
 	virtual int GetID() const {	return SENDER_SINSTSR3;}
 protected://IInputListener
 	virtual BOOL IsCompositing() const;

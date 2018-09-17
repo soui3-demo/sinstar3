@@ -24,14 +24,14 @@
 //
 //----------------------------------------------------------------------------
 
-class CDisplayAttributeInfo : public ITfDisplayAttributeInfo
+class CDisplayAttributeInfo : public CUnknown,public ITfDisplayAttributeInfo
 {
 public:
     CDisplayAttributeInfo();
     ~CDisplayAttributeInfo();
 
     // IUnknown
-	IUNKNOWN_BEGIN(IID_ITfDisplayAttributeInfo,ITfDisplayAttributeInfo)
+	IUNKNOWN_BEGIN2(ITfDisplayAttributeInfo)
 	IUNKNOWN_END()
 
     // ITfDisplayAttributeInfo

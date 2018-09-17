@@ -54,56 +54,45 @@ static HKL GetKeyboardLayoutFromFileName(LPCTSTR pszImeName)
 
 BOOL RegisterProfiles()
 {
-    ITfInputProcessorProfiles *pInputProcessProfiles;
-    WCHAR achIconFile[MAX_PATH];
-    HRESULT hr;
+	HRESULT hr = S_FALSE;
 
-    hr = CoCreateInstance(CLSID_TF_InputProcessorProfiles, NULL, CLSCTX_INPROC_SERVER,
-                          IID_ITfInputProcessorProfiles, (void**)&pInputProcessProfiles);
-
-    if (hr != S_OK)
-        return E_FAIL;
-
-    hr = pInputProcessProfiles->Register(c_clsidSinstar3TSF);
-
-    if (hr != S_OK)
-        goto Exit;
-
-    GetModuleFileNameW(theModule->GetModule(), achIconFile, ARRAYSIZE(achIconFile));
-
-    hr = pInputProcessProfiles->AddLanguageProfile(c_clsidSinstar3TSF,
-                                  TEXTSERVICE_LANGID, 
-                                  c_guidProfile, 
-								  PRODUCT_WNAMEVER,
-                                  (ULONG)wcslen(PRODUCT_WNAMEVER),
-                                  achIconFile,
-                                  (ULONG)wcslen(achIconFile),
-                                  TEXTSERVICE_ICON_INDEX);
-
-
-	if (hr != S_OK)
-		goto Exit;
-	//
-	// 22:04 2010-11-1 Ren zhi jie
-	// 考虑到兼容性，我们需要同时提供ime, tsf两种框架下的日文输入法，这样即使用户设置了不使用高级文字服务，仍可以通过我们提供的ime输入法。
-	// 另一方面， 如果系统开启了高级文字服务，用户打开word进行文字编辑，在选择日文输入法时，为了避免系统同时显示我们的ime, tsf两种模式的输入法，
-	// 可以使用SubstituteKeyboardLayout函数来设置，这样就只显示tsf输入法给用户选择了。
-	//
-	HKL hKLBaiduJP=GetKeyboardLayoutFromFileName( SINSTAR3_IME_FILE_NAME);
-	if ( hKLBaiduJP)
+	ITfInputProcessorProfileMgr *pITfInputProcessorProfileMgr = NULL;
+	hr = CoCreateInstance(CLSID_TF_InputProcessorProfiles, NULL, CLSCTX_INPROC_SERVER,
+		IID_ITfInputProcessorProfileMgr, (void**)&pITfInputProcessorProfileMgr);
+	if (FAILED(hr))
 	{
-		hr = pInputProcessProfiles->SubstituteKeyboardLayout( c_clsidSinstar3TSF, TEXTSERVICE_LANGID, c_guidProfile, hKLBaiduJP);
-		SLOGFMTI("SubstituteKeyboardLayout:%d",SUCCEEDED(hr));
+		return FALSE;
 	}
 
-	hr = pInputProcessProfiles->EnableLanguageProfile( c_clsidSinstar3TSF, TEXTSERVICE_LANGID, c_guidProfile, TRUE);
-	hr = pInputProcessProfiles->EnableLanguageProfileByDefault( c_clsidSinstar3TSF, TEXTSERVICE_LANGID, c_guidProfile, TRUE);
+	WCHAR achIconFile[MAX_PATH] = {'\0'};
+	GetModuleFileNameW(theModule->GetModule(), achIconFile, ARRAYSIZE(achIconFile));
+	LONG cchA = wcslen(achIconFile);
 
+	HKL hKLSinstar3=GetKeyboardLayoutFromFileName( SINSTAR3_IME_FILE_NAME);
+
+	hr = pITfInputProcessorProfileMgr->RegisterProfile(c_clsidSinstar3TSF,
+		TEXTSERVICE_LANGID, 
+		c_guidProfile, 
+		PRODUCT_WNAMEVER,
+		(ULONG)wcslen(PRODUCT_WNAMEVER),
+		achIconFile,
+		cchA,
+		(UINT)0, hKLSinstar3, 0, TRUE, 0);
+
+	if (FAILED(hr))
+	{
+		goto Exit;
+	}
 
 Exit:
-    pInputProcessProfiles->Release();
-    return (hr == S_OK);
+	if (pITfInputProcessorProfileMgr)
+	{
+		pITfInputProcessorProfileMgr->Release();
+	}
+
+	return (hr == S_OK);
 }
+
 
 //+---------------------------------------------------------------------------
 //

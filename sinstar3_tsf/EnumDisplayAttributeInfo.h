@@ -22,14 +22,14 @@
 //
 //----------------------------------------------------------------------------
 
-class CEnumDisplayAttributeInfo : public IEnumTfDisplayAttributeInfo
+class CEnumDisplayAttributeInfo : public CUnknown,public IEnumTfDisplayAttributeInfo
 {
 public:
     CEnumDisplayAttributeInfo();
     ~CEnumDisplayAttributeInfo();
 
     // IUnknown
-	IUNKNOWN_BEGIN(IID_IEnumTfDisplayAttributeInfo,IEnumTfDisplayAttributeInfo)
+	IUNKNOWN_BEGIN2(IEnumTfDisplayAttributeInfo)
 	IUNKNOWN_END()
 
     // IEnumTfDisplayAttributeInfo

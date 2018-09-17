@@ -2,7 +2,7 @@
 
 #include "sinstar3_tsf.h"
 
-class CEditSessionBase : public ITfEditSession
+class CEditSessionBase : public CUnknown,public ITfEditSession
 {
 public:
     CEditSessionBase(CSinstar3Tsf *pTextService, ITfContext *pContext);
@@ -10,7 +10,7 @@ public:
 	
     virtual STDMETHODIMP DoEditSession(TfEditCookie ec) = 0;
 public:
-	IUNKNOWN_BEGIN(IID_ITfEditSession,ITfEditSession)
+	IUNKNOWN_BEGIN2(ITfEditSession)
 	IUNKNOWN_END()
 
 protected:

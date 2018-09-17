@@ -24,7 +24,7 @@
 
 #include "../include/sinstar-i.h"
 #include "../include/TextService-i.h"
-#include "../include/unknownimpl.h"
+#include "../include/unknown.h"
 
 #define LOG_FILTER "sinstar3_core"
 

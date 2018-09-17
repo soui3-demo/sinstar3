@@ -18,7 +18,7 @@ int				g_nRefCount = 0;	//ref count
 
 EXTERN_C SINSTAR3_API  ISinstar* Sinstar3_Create(ITextService* pTxtSvr)
 {
-	CSinstar3Impl*  pRet= new CUnknownImpl<CSinstar3Impl>(pTxtSvr);
+	CSinstar3Impl*  pRet= new CSinstar3Impl(pTxtSvr);
 	return pRet;
 }
 

@@ -90,8 +90,6 @@ CDisplayAttributeInfo::CDisplayAttributeInfo()
     _pguid = NULL;
     _pDisplayAttribute = NULL;
     _pszValueName = NULL;
-
-    _cRef = 1;
 }
 
 //+---------------------------------------------------------------------------

@@ -29,7 +29,6 @@ CEnumDisplayAttributeInfo::CEnumDisplayAttributeInfo()
     theModule->AddRef();
 
     _iIndex = 0;
-    _cRef = 1;
 }
 
 //+---------------------------------------------------------------------------
