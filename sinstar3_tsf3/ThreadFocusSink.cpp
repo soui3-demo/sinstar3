@@ -20,7 +20,7 @@ STDAPI CSinstar3Tsf::OnSetThreadFocus()
     if (_pCandidateListUIPresenter)
     {
         ITfDocumentMgr* pCandidateListDocumentMgr = nullptr;
-        ITfContext* pTfContext = _pCandidateListUIPresenter->_GetContextDocument();
+        ITfContext* pTfContext = _pCandidateListUIPresenter->GetLayoutSink()->_GetContextDocument();
 
         if ((nullptr != pTfContext) && SUCCEEDED(pTfContext->GetDocumentMgr(&pCandidateListDocumentMgr)))
         {
@@ -47,7 +47,7 @@ STDAPI CSinstar3Tsf::OnKillThreadFocus()
     if (_pCandidateListUIPresenter)
     {
         ITfDocumentMgr* pCandidateListDocumentMgr = nullptr;
-        ITfContext* pTfContext = _pCandidateListUIPresenter->_GetContextDocument();
+        ITfContext* pTfContext = _pCandidateListUIPresenter->GetLayoutSink()->_GetContextDocument();
 
         if ((nullptr != pTfContext) && SUCCEEDED(pTfContext->GetDocumentMgr(&pCandidateListDocumentMgr)))
         {

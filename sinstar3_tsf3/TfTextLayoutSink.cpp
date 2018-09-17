@@ -10,9 +10,11 @@
 #include "Sinstar3_Tsf.h"
 #include "GetTextExtentEditSession.h"
 
-CTfTextLayoutSink::CTfTextLayoutSink(_In_ CSinstar3Tsf *pTextService)
+
+CTfTextLayoutSink::CTfTextLayoutSink(_In_ CSinstar3Tsf *pTextService, ILayoutListener *pListener)
 {
     _pTextService = pTextService;
+	m_pListener = pListener;
     _pTextService->AddRef();
 
     _pRangeComposition = nullptr;
@@ -53,7 +55,7 @@ STDAPI CTfTextLayoutSink::OnLayoutChange(_In_ ITfContext *pContext, TfLayoutCode
     case TF_LC_CHANGE:
         {
             CGetTextExtentEditSession* pEditSession = nullptr;
-            pEditSession = new (std::nothrow) CGetTextExtentEditSession(_pTextService, pContext, pContextView, _pRangeComposition, this);
+            pEditSession = new (std::nothrow) CGetTextExtentEditSession(_pTextService, pContext, pContextView, _pRangeComposition, m_pListener);
             if (nullptr != (pEditSession))
             {
                 HRESULT hr = S_OK;
@@ -65,7 +67,7 @@ STDAPI CTfTextLayoutSink::OnLayoutChange(_In_ ITfContext *pContext, TfLayoutCode
         break;
 
     case TF_LC_DESTROY:
-        _LayoutDestroyNotification();
+		if(m_pListener) m_pListener->OnLayoutDestroy();
         break;
 
     }
@@ -100,6 +102,7 @@ VOID CTfTextLayoutSink::_EndLayout()
         _pContextDocument = nullptr;
     }
 }
+
 
 HRESULT CTfTextLayoutSink::_AdviseTextLayoutSink()
 {

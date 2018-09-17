@@ -62,7 +62,7 @@ STDAPI CSinstar3Tsf::OnSetFocus(_In_ ITfDocumentMgr *pDocMgrFocus, _In_ ITfDocum
     if (_pCandidateListUIPresenter)
     {
         ITfDocumentMgr* pCandidateListDocumentMgr = nullptr;
-        ITfContext* pTfContext = _pCandidateListUIPresenter->_GetContextDocument();
+        ITfContext* pTfContext = _pCandidateListUIPresenter->GetLayoutSink()->_GetContextDocument();
         if ((nullptr != pTfContext) && SUCCEEDED(pTfContext->GetDocumentMgr(&pCandidateListDocumentMgr)))
         {
             if (pCandidateListDocumentMgr != pDocMgrFocus)

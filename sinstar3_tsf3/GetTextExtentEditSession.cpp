@@ -16,11 +16,10 @@
 //
 //----------------------------------------------------------------------------
 
-CGetTextExtentEditSession::CGetTextExtentEditSession(_In_ CSinstar3Tsf *pTextService, _In_ ITfContext *pContext, _In_ ITfContextView *pContextView, _In_ ITfRange *pRangeComposition, _In_ CTfTextLayoutSink *pTfTextLayoutSink) : CEditSessionBase(pTextService, pContext)
+CGetTextExtentEditSession::CGetTextExtentEditSession(_In_ CSinstar3Tsf *pTextService, _In_ ITfContext *pContext, _In_ ITfContextView *pContextView, _In_ ITfRange *pRangeComposition, _In_ ILayoutListener *pListener) : CEditSessionBase(pTextService, pContext),_pListener(pListener)
 {
     _pContextView = pContextView;
     _pRangeComposition = pRangeComposition;
-    _pTfTextLayoutSink = pTfTextLayoutSink;
 }
 
 //+---------------------------------------------------------------------------
@@ -36,7 +35,7 @@ STDAPI CGetTextExtentEditSession::DoEditSession(TfEditCookie ec)
 
     if (SUCCEEDED(_pContextView->GetTextExt(ec, _pRangeComposition, &rc, &isClipped)))
     {
-        _pTfTextLayoutSink->_LayoutChangeNotification(&rc);
+		_pListener->OnLayoutChange(&rc);
     }
 
     return S_OK;

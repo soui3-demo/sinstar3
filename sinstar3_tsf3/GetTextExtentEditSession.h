@@ -10,7 +10,7 @@
 #include "EditSession.h"
 
 class CSinstar3Tsf;
-class CTfTextLayoutSink;
+struct ILayoutListener;
 
 //////////////////////////////////////////////////////////////////////
 //
@@ -29,7 +29,7 @@ class CTfTextLayoutSink;
 class CGetTextExtentEditSession : public CEditSessionBase
 {
 public:
-    CGetTextExtentEditSession(_In_ CSinstar3Tsf *pTextService, _In_ ITfContext *pContext, _In_ ITfContextView *pContextView, _In_ ITfRange *pRangeComposition, _In_ CTfTextLayoutSink *pTextLayoutSink);
+    CGetTextExtentEditSession(_In_ CSinstar3Tsf *pTextService, _In_ ITfContext *pContext, _In_ ITfContextView *pContextView, _In_ ITfRange *pRangeComposition, _In_ ILayoutListener *pListener);
 
     // ITfEditSession
     STDMETHODIMP DoEditSession(TfEditCookie ec);
@@ -37,5 +37,5 @@ public:
 private:
     ITfContextView* _pContextView;
     ITfRange* _pRangeComposition;
-    CTfTextLayoutSink* _pTfTextLayoutSink;
+	ILayoutListener *_pListener;
 };

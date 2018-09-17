@@ -9,10 +9,14 @@
 
 class CSinstar3Tsf;
 
+struct ILayoutListener {
+	virtual void OnLayoutChange( RECT *lpRect) = 0;
+	virtual void OnLayoutDestroy() = 0;
+};
 class CTfTextLayoutSink : public CUnknown, public ITfTextLayoutSink
 {
 public:
-    CTfTextLayoutSink(_In_ CSinstar3Tsf *pTextService);
+    CTfTextLayoutSink(_In_ CSinstar3Tsf *pTextService, ILayoutListener *pListener);
     virtual ~CTfTextLayoutSink();
 
     // ITfTextLayoutSink
@@ -24,9 +28,6 @@ public:
     HRESULT _GetTextExt(_Out_ RECT *lpRect);
     ITfContext* _GetContextDocument() { return _pContextDocument; };
 
-    virtual VOID _LayoutChangeNotification(_In_ RECT *lpRect) = 0;
-    virtual VOID _LayoutDestroyNotification() = 0;
-
 private:
     HRESULT _AdviseTextLayoutSink();
     HRESULT _UnadviseTextLayoutSink();
@@ -37,6 +38,8 @@ private:
     TfEditCookie _tfEditCookie;
     CSinstar3Tsf* _pTextService;
     DWORD _dwCookieTextLayoutSink;
+
+	ILayoutListener * m_pListener;
 public:
 	IUNKNOWN_BEGIN(ITfTextLayoutSink)
 	IUNKNOWN_END()

@@ -17,8 +17,7 @@ class CCompositionProcessorEngine;
 const DWORD WM_CheckGlobalCompartment = WM_USER;
 LRESULT CALLBACK CSinstar3Tsf_WindowProc(HWND wndHandle, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-class CSinstar3Tsf : public CUnknown,
-	public ITfTextInputProcessorEx,
+class CSinstar3Tsf : public ITfTextInputProcessorEx,
     public ITfThreadMgrEventSink,
     public ITfTextEditSink,
     public ITfKeyEventSink,
@@ -32,6 +31,11 @@ class CSinstar3Tsf : public CUnknown,
 public:
     CSinstar3Tsf();
     ~CSinstar3Tsf();
+
+    // IUnknown
+    STDMETHODIMP QueryInterface(REFIID riid, _Outptr_ void **ppvObj);
+    STDMETHODIMP_(ULONG) AddRef(void);
+    STDMETHODIMP_(ULONG) Release(void);
 
     // ITfTextInputProcessor
     STDMETHODIMP Activate(ITfThreadMgr *pThreadMgr, TfClientId tfClientId) {
@@ -237,20 +241,8 @@ private:
 
     HWND _msgWndHandle; 
 
+    LONG _refCount;
+
     // Support the search integration
     ITfFnSearchCandidateProvider* _pITfFnSearchCandidateProvider;
-
-public:
-	IUNKNOWN_BEGIN(ITfTextInputProcessorEx)
-		IUNKNOWN_ADD_IID( ITfTextInputProcessor)
-		IUNKNOWN_ADD_IID( ITfThreadMgrEventSink)
-		IUNKNOWN_ADD_IID( ITfTextEditSink)
-		IUNKNOWN_ADD_IID( ITfKeyEventSink)
-		IUNKNOWN_ADD_IID( ITfCompositionSink)
-		IUNKNOWN_ADD_IID( ITfDisplayAttributeProvider)
-		IUNKNOWN_ADD_IID( ITfActiveLanguageProfileNotifySink)
-		IUNKNOWN_ADD_IID( ITfThreadFocusSink)
-		IUNKNOWN_ADD_IID( ITfFunctionProvider)
-		IUNKNOWN_ADD_IID( ITfFnGetPreferredTouchKeyboardLayout)
-	IUNKNOWN_END()
 };

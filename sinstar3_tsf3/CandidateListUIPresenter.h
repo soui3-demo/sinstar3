@@ -26,7 +26,7 @@ class CReadingLine;
 // 3rd party IME.
 //----------------------------------------------------------------------------
 
-class CCandidateListUIPresenter : public CTfTextLayoutSink,
+class CCandidateListUIPresenter :public ILayoutListener,
     public ITfCandidateListUIElementBehavior,
     public ITfIntegratableCandidateListUIElement
 {
@@ -88,8 +88,8 @@ public:
     void _MoveWindowToTextExt();
 
     // CTfTextLayoutSink
-    virtual VOID _LayoutChangeNotification(_In_ RECT *lpRect);
-    virtual VOID _LayoutDestroyNotification();
+    virtual void OnLayoutChange(_In_ RECT *lpRect);
+    virtual void OnLayoutDestroy();
 
     // Event for ITfThreadFocusSink
     virtual HRESULT OnSetThreadFocus();
@@ -98,6 +98,7 @@ public:
     void RemoveSpecificCandidateFromList(_In_ LCID Locale, _Inout_ CSampleImeArray<CCandidateListItem> &candidateList, _In_ CStringRange &srgCandidateString);
     void AdviseUIChangedByArrowKey(_In_ KEYSTROKE_FUNCTION arrowKey);
 
+	CTfTextLayoutSink * GetLayoutSink() { return &m_layoutSink; }
 private:
     virtual HRESULT CALLBACK _CandidateChangeNotification(_In_ enum CANDWND_ACTION action);
 
@@ -126,6 +127,7 @@ protected:
     BOOL _isShowMode;
     BOOL _hideWindow;
 
+	CTfTextLayoutSink	m_layoutSink;
 private:
 
     HWND _parentWndHandle;

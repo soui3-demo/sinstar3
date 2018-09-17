@@ -318,7 +318,7 @@ HRESULT CSinstar3Tsf::_HandlePhraseSelectByNumber(TfEditCookie ec, _In_ ITfConte
 //
 //----------------------------------------------------------------------------
 
-CCandidateListUIPresenter::CCandidateListUIPresenter(_In_ CSinstar3Tsf *pTextService, ATOM atom, KEYSTROKE_CATEGORY Category, _In_ CCandidateRange *pIndexRange, BOOL hideWindow) : CTfTextLayoutSink(pTextService)
+CCandidateListUIPresenter::CCandidateListUIPresenter(_In_ CSinstar3Tsf *pTextService, ATOM atom, KEYSTROKE_CATEGORY Category, _In_ CCandidateRange *pIndexRange, BOOL hideWindow) : m_layoutSink(pTextService,this)
 {
     _atom = atom;
 
@@ -361,7 +361,7 @@ CCandidateListUIPresenter::~CCandidateListUIPresenter()
 
 STDAPI CCandidateListUIPresenter::QueryInterface(REFIID riid, _Outptr_ void **ppvObj)
 {
-    if (CTfTextLayoutSink::QueryInterface(riid, ppvObj) == S_OK)
+    if (m_layoutSink.QueryInterface(riid, ppvObj) == S_OK)
     {
         return S_OK;
     }
@@ -405,7 +405,7 @@ STDAPI CCandidateListUIPresenter::QueryInterface(REFIID riid, _Outptr_ void **pp
 
 STDAPI_(ULONG) CCandidateListUIPresenter::AddRef()
 {
-    CTfTextLayoutSink::AddRef();
+	m_layoutSink.AddRef();
     return ++_refCount;
 }
 
@@ -417,7 +417,7 @@ STDAPI_(ULONG) CCandidateListUIPresenter::AddRef()
 
 STDAPI_(ULONG) CCandidateListUIPresenter::Release()
 {
-    CTfTextLayoutSink::Release();
+	m_layoutSink.Release();
 
     LONG cr = --_refCount;
 
@@ -768,7 +768,7 @@ HRESULT CCandidateListUIPresenter::_StartCandidateList(TfClientId tfClientId, _I
 
     HRESULT hr = E_FAIL;
 
-    if (FAILED(_StartLayout(pContextDocument, ec, pRangeComposition)))
+    if (FAILED(m_layoutSink._StartLayout(pContextDocument, ec, pRangeComposition)))
     {
         goto Exit;
     }
@@ -784,9 +784,9 @@ HRESULT CCandidateListUIPresenter::_StartCandidateList(TfClientId tfClientId, _I
     Show(_isShowMode);
 
     RECT rcTextExt;
-    if (SUCCEEDED(_GetTextExt(&rcTextExt)))
+    if (SUCCEEDED(m_layoutSink._GetTextExt(&rcTextExt)))
     {
-        _LayoutChangeNotification(&rcTextExt);
+        OnLayoutChange(&rcTextExt);
     }
 
 Exit:
@@ -809,7 +809,7 @@ void CCandidateListUIPresenter::_EndCandidateList()
 
     DisposeCandidateWindow();
 
-    _EndLayout();
+	m_layoutSink._EndLayout();
 }
 
 //+---------------------------------------------------------------------------
@@ -989,7 +989,7 @@ void CCandidateListUIPresenter::_MoveWindowToTextExt()
 {
     RECT rc;
 
-    if (FAILED(_GetTextExt(&rc)))
+    if (FAILED(m_layoutSink._GetTextExt(&rc)))
     {
         return;
     }
@@ -1002,7 +1002,7 @@ void CCandidateListUIPresenter::_MoveWindowToTextExt()
 //
 //----------------------------------------------------------------------------
 
-VOID CCandidateListUIPresenter::_LayoutChangeNotification(_In_ RECT *lpRect)
+void CCandidateListUIPresenter::OnLayoutChange(_In_ RECT *lpRect)
 {
     RECT rectCandidate = {0, 0, 0, 0};
     POINT ptCandidate = {0, 0};
@@ -1018,7 +1018,7 @@ VOID CCandidateListUIPresenter::_LayoutChangeNotification(_In_ RECT *lpRect)
 //
 //----------------------------------------------------------------------------
 
-VOID CCandidateListUIPresenter::_LayoutDestroyNotification()
+void CCandidateListUIPresenter::OnLayoutDestroy()
 {
     _EndCandidateList();
 }
