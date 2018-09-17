@@ -173,8 +173,6 @@ private:
     CCompartment* _pCompartmentConversion;
     CCompartmentEventSink* _pCompartmentConversionEventSink;
     CCompartmentEventSink* _pCompartmentKeyboardOpenEventSink;
-    CCompartmentEventSink* _pCompartmentDoubleSingleByteEventSink;
-    CCompartmentEventSink* _pCompartmentPunctuationEventSink;
 
     // Configuration data
     BOOL _isWildcard : 1;

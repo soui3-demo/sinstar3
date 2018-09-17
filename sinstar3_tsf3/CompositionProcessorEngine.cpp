@@ -110,8 +110,6 @@ CCompositionProcessorEngine::CCompositionProcessorEngine()
     _pCompartmentConversion = nullptr;
     _pCompartmentKeyboardOpenEventSink = nullptr;
     _pCompartmentConversionEventSink = nullptr;
-    _pCompartmentDoubleSingleByteEventSink = nullptr;
-    _pCompartmentPunctuationEventSink = nullptr;
 
     _hasWildcardIncludedInKeystrokeBuffer = FALSE;
 
@@ -164,18 +162,6 @@ CCompositionProcessorEngine::~CCompositionProcessorEngine()
         _pCompartmentConversionEventSink->_Unadvise();
         delete _pCompartmentConversionEventSink;
         _pCompartmentConversionEventSink = nullptr;
-    }
-    if (_pCompartmentDoubleSingleByteEventSink)
-    {
-        _pCompartmentDoubleSingleByteEventSink->_Unadvise();
-        delete _pCompartmentDoubleSingleByteEventSink;
-        _pCompartmentDoubleSingleByteEventSink = nullptr;
-    }
-    if (_pCompartmentPunctuationEventSink)
-    {
-        _pCompartmentPunctuationEventSink->_Unadvise();
-        delete _pCompartmentPunctuationEventSink;
-        _pCompartmentPunctuationEventSink = nullptr;
     }
 
     if (_pDictionaryFile)
@@ -686,19 +672,7 @@ void CCompositionProcessorEngine::SetupPreserved(_In_ ITfThreadMgr *pThreadMgr, 
     preservedKeyImeMode.uModifiers = _TF_MOD_ON_KEYUP_SHIFT_ONLY;
     SetPreservedKey(Global::Sinstar3TsfGuidImeModePreserveKey, preservedKeyImeMode, Global::ImeModeDescription, &_PreservedKey_IMEMode);
 
-    TF_PRESERVEDKEY preservedKeyDoubleSingleByte;
-    preservedKeyDoubleSingleByte.uVKey = VK_SPACE;
-    preservedKeyDoubleSingleByte.uModifiers = TF_MOD_SHIFT;
-    SetPreservedKey(Global::Sinstar3TsfGuidDoubleSingleBytePreserveKey, preservedKeyDoubleSingleByte, Global::DoubleSingleByteDescription, &_PreservedKey_DoubleSingleByte);
-
-    TF_PRESERVEDKEY preservedKeyPunctuation;
-    preservedKeyPunctuation.uVKey = VK_OEM_PERIOD;
-    preservedKeyPunctuation.uModifiers = TF_MOD_CONTROL;
-    SetPreservedKey(Global::Sinstar3TsfGuidPunctuationPreserveKey, preservedKeyPunctuation, Global::PunctuationDescription, &_PreservedKey_Punctuation);
-
     InitPreservedKey(&_PreservedKey_IMEMode, pThreadMgr, tfClientId);
-    InitPreservedKey(&_PreservedKey_DoubleSingleByte, pThreadMgr, tfClientId);
-    InitPreservedKey(&_PreservedKey_Punctuation, pThreadMgr, tfClientId);
 
     return;
 }
@@ -820,32 +794,6 @@ void CCompositionProcessorEngine::OnPreservedKey(REFGUID rguid, _Out_ BOOL *pIsE
 
         *pIsEaten = TRUE;
     }
-    else if (IsEqualGUID(rguid, _PreservedKey_DoubleSingleByte.Guid))
-    {
-        if (!CheckShiftKeyOnly(&_PreservedKey_DoubleSingleByte.TSFPreservedKeyTable))
-        {
-            *pIsEaten = FALSE;
-            return;
-        }
-        BOOL isDouble = FALSE;
-        CCompartment CompartmentDoubleSingleByte(pThreadMgr, tfClientId, Global::Sinstar3TsfGuidCompartmentDoubleSingleByte);
-        CompartmentDoubleSingleByte._GetCompartmentBOOL(isDouble);
-        CompartmentDoubleSingleByte._SetCompartmentBOOL(isDouble ? FALSE : TRUE);
-        *pIsEaten = TRUE;
-    }
-    else if (IsEqualGUID(rguid, _PreservedKey_Punctuation.Guid))
-    {
-        if (!CheckShiftKeyOnly(&_PreservedKey_Punctuation.TSFPreservedKeyTable))
-        {
-            *pIsEaten = FALSE;
-            return;
-        }
-        BOOL isPunctuation = FALSE;
-        CCompartment CompartmentPunctuation(pThreadMgr, tfClientId, Global::Sinstar3TsfGuidCompartmentPunctuation);
-        CompartmentPunctuation._GetCompartmentBOOL(isPunctuation);
-        CompartmentPunctuation._SetCompartmentBOOL(isPunctuation ? FALSE : TRUE);
-        *pIsEaten = TRUE;
-    }
     else
     {
         *pIsEaten = FALSE;
@@ -890,8 +838,6 @@ void CCompositionProcessorEngine::SetupLanguageBar(_In_ ITfThreadMgr *pThreadMgr
     _pCompartmentConversion = new (std::nothrow) CCompartment(pThreadMgr, tfClientId, GUID_COMPARTMENT_KEYBOARD_INPUTMODE_CONVERSION);
     _pCompartmentKeyboardOpenEventSink = new (std::nothrow) CCompartmentEventSink(CompartmentCallback, this);
     _pCompartmentConversionEventSink = new (std::nothrow) CCompartmentEventSink(CompartmentCallback, this);
-    _pCompartmentDoubleSingleByteEventSink = new (std::nothrow) CCompartmentEventSink(CompartmentCallback, this);
-    _pCompartmentPunctuationEventSink = new (std::nothrow) CCompartmentEventSink(CompartmentCallback, this);
 
     if (_pCompartmentKeyboardOpenEventSink)
     {
@@ -900,14 +846,6 @@ void CCompositionProcessorEngine::SetupLanguageBar(_In_ ITfThreadMgr *pThreadMgr
     if (_pCompartmentConversionEventSink)
     {
         _pCompartmentConversionEventSink->_Advise(pThreadMgr, GUID_COMPARTMENT_KEYBOARD_INPUTMODE_CONVERSION);
-    }
-    if (_pCompartmentDoubleSingleByteEventSink)
-    {
-        _pCompartmentDoubleSingleByteEventSink->_Advise(pThreadMgr, Global::Sinstar3TsfGuidCompartmentDoubleSingleByte);
-    }
-    if (_pCompartmentPunctuationEventSink)
-    {
-        _pCompartmentPunctuationEventSink->_Advise(pThreadMgr, Global::Sinstar3TsfGuidCompartmentPunctuation);
     }
 
     return;
@@ -1131,12 +1069,6 @@ void CCompositionProcessorEngine::InitializeSinstar3TsfCompartment(_In_ ITfThrea
     CCompartment CompartmentKeyboardOpen(pThreadMgr, tfClientId, GUID_COMPARTMENT_KEYBOARD_OPENCLOSE);
     CompartmentKeyboardOpen._SetCompartmentBOOL(TRUE);
 
-    CCompartment CompartmentDoubleSingleByte(pThreadMgr, tfClientId, Global::Sinstar3TsfGuidCompartmentDoubleSingleByte);
-    CompartmentDoubleSingleByte._SetCompartmentBOOL(FALSE);
-
-    CCompartment CompartmentPunctuation(pThreadMgr, tfClientId, Global::Sinstar3TsfGuidCompartmentPunctuation);
-    CompartmentPunctuation._SetCompartmentBOOL(TRUE);
-
     PrivateCompartmentsUpdated(pThreadMgr);
 }
 //+---------------------------------------------------------------------------
@@ -1161,17 +1093,7 @@ HRESULT CCompositionProcessorEngine::CompartmentCallback(_In_ void *pv, REFGUID 
         return E_FAIL;
     }
 
-    if (IsEqualGUID(guidCompartment, Global::Sinstar3TsfGuidCompartmentDoubleSingleByte) ||
-        IsEqualGUID(guidCompartment, Global::Sinstar3TsfGuidCompartmentPunctuation))
-    {
-        fakeThis->PrivateCompartmentsUpdated(pThreadMgr);
-    }
-    else if (IsEqualGUID(guidCompartment, GUID_COMPARTMENT_KEYBOARD_INPUTMODE_CONVERSION) ||
-        IsEqualGUID(guidCompartment, GUID_COMPARTMENT_KEYBOARD_INPUTMODE_SENTENCE))
-    {
-        fakeThis->ConversionModeCompartmentUpdated(pThreadMgr);
-    }
-    else if (IsEqualGUID(guidCompartment, GUID_COMPARTMENT_KEYBOARD_OPENCLOSE))
+    if (IsEqualGUID(guidCompartment, GUID_COMPARTMENT_KEYBOARD_OPENCLOSE))
     {
         fakeThis->KeyboardOpenCompartmentUpdated(pThreadMgr);
     }
@@ -1201,32 +1123,6 @@ void CCompositionProcessorEngine::ConversionModeCompartmentUpdated(_In_ ITfThrea
         return;
     }
 
-    BOOL isDouble = FALSE;
-    CCompartment CompartmentDoubleSingleByte(pThreadMgr, _tfClientId, Global::Sinstar3TsfGuidCompartmentDoubleSingleByte);
-    if (SUCCEEDED(CompartmentDoubleSingleByte._GetCompartmentBOOL(isDouble)))
-    {
-        if (!isDouble && (conversionMode & TF_CONVERSIONMODE_FULLSHAPE))
-        {
-            CompartmentDoubleSingleByte._SetCompartmentBOOL(TRUE);
-        }
-        else if (isDouble && !(conversionMode & TF_CONVERSIONMODE_FULLSHAPE))
-        {
-            CompartmentDoubleSingleByte._SetCompartmentBOOL(FALSE);
-        }
-    }
-    BOOL isPunctuation = FALSE;
-    CCompartment CompartmentPunctuation(pThreadMgr, _tfClientId, Global::Sinstar3TsfGuidCompartmentPunctuation);
-    if (SUCCEEDED(CompartmentPunctuation._GetCompartmentBOOL(isPunctuation)))
-    {
-        if (!isPunctuation && (conversionMode & TF_CONVERSIONMODE_SYMBOL))
-        {
-            CompartmentPunctuation._SetCompartmentBOOL(TRUE);
-        }
-        else if (isPunctuation && !(conversionMode & TF_CONVERSIONMODE_SYMBOL))
-        {
-            CompartmentPunctuation._SetCompartmentBOOL(FALSE);
-        }
-    }
 
     BOOL fOpen = FALSE;
     CCompartment CompartmentKeyboardOpen(pThreadMgr, _tfClientId, GUID_COMPARTMENT_KEYBOARD_OPENCLOSE);
@@ -1265,33 +1161,6 @@ void CCompositionProcessorEngine::PrivateCompartmentsUpdated(_In_ ITfThreadMgr *
 
     conversionModePrev = conversionMode;
 
-    BOOL isDouble = FALSE;
-    CCompartment CompartmentDoubleSingleByte(pThreadMgr, _tfClientId, Global::Sinstar3TsfGuidCompartmentDoubleSingleByte);
-    if (SUCCEEDED(CompartmentDoubleSingleByte._GetCompartmentBOOL(isDouble)))
-    {
-        if (!isDouble && (conversionMode & TF_CONVERSIONMODE_FULLSHAPE))
-        {
-            conversionMode &= ~TF_CONVERSIONMODE_FULLSHAPE;
-        }
-        else if (isDouble && !(conversionMode & TF_CONVERSIONMODE_FULLSHAPE))
-        {
-            conversionMode |= TF_CONVERSIONMODE_FULLSHAPE;
-        }
-    }
-
-    BOOL isPunctuation = FALSE;
-    CCompartment CompartmentPunctuation(pThreadMgr, _tfClientId, Global::Sinstar3TsfGuidCompartmentPunctuation);
-    if (SUCCEEDED(CompartmentPunctuation._GetCompartmentBOOL(isPunctuation)))
-    {
-        if (!isPunctuation && (conversionMode & TF_CONVERSIONMODE_SYMBOL))
-        {
-            conversionMode &= ~TF_CONVERSIONMODE_SYMBOL;
-        }
-        else if (isPunctuation && !(conversionMode & TF_CONVERSIONMODE_SYMBOL))
-        {
-            conversionMode |= TF_CONVERSIONMODE_SYMBOL;
-        }
-    }
 
     if (conversionMode != conversionModePrev)
     {

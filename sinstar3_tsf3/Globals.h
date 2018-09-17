@@ -113,8 +113,6 @@ extern HFONT defaultlFontHandle;  // Global font object we use everywhere
 extern const CLSID Sinstar3TsfCLSID;
 extern const CLSID Sinstar3TsfGuidProfile;
 extern const CLSID Sinstar3TsfGuidImeModePreserveKey;
-extern const CLSID Sinstar3TsfGuidDoubleSingleBytePreserveKey;
-extern const CLSID Sinstar3TsfGuidPunctuationPreserveKey;
 
 LRESULT CALLBACK ThreadKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam);
 BOOL CheckModifiers(UINT uModCurrent, UINT uMod);
@@ -125,18 +123,10 @@ extern BOOL IsShiftKeyDownOnly;
 extern BOOL IsControlKeyDownOnly;
 extern BOOL IsAltKeyDownOnly;
 
-extern const GUID Sinstar3TsfGuidCompartmentDoubleSingleByte;
-extern const GUID Sinstar3TsfGuidCompartmentPunctuation;
-
 extern const WCHAR FullWidthCharTable[];
 extern const struct _PUNCTUATION PunctuationTable[14];
 
 extern const GUID Sinstar3TsfGuidLangBarIMEMode;
-extern const GUID Sinstar3TsfGuidLangBarDoubleSingleByte;
-extern const GUID Sinstar3TsfGuidLangBarPunctuation;
-
-extern const GUID Sinstar3TsfGuidDisplayAttributeInput;
-extern const GUID Sinstar3TsfGuidDisplayAttributeConverted;
 
 extern const GUID Sinstar3TsfGuidCandUIElement;
 
@@ -148,15 +138,6 @@ extern const WCHAR ImeModeDescription[];
 extern const int ImeModeOnIcoIndex;
 extern const int ImeModeOffIcoIndex;
 
-extern const WCHAR DoubleSingleByteDescription[];
-extern const int DoubleSingleByteOnIcoIndex;
-extern const int DoubleSingleByteOffIcoIndex;
-
-extern const WCHAR PunctuationDescription[];
-extern const int PunctuationOnIcoIndex;
-extern const int PunctuationOffIcoIndex;
 
 extern const WCHAR LangbarImeModeDescription[];
-extern const WCHAR LangbarDoubleSingleByteDescription[];
-extern const WCHAR LangbarPunctuationDescription[];
 }

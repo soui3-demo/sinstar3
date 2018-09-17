@@ -211,11 +211,6 @@ STDAPI CSinstar3Tsf::Deactivate()
     CCompartment CompartmentKeyboardOpen(_pThreadMgr, _tfClientId, GUID_COMPARTMENT_KEYBOARD_OPENCLOSE);
     CompartmentKeyboardOpen._ClearCompartment();
 
-    CCompartment CompartmentDoubleSingleByte(_pThreadMgr, _tfClientId, Global::Sinstar3TsfGuidCompartmentDoubleSingleByte);
-    CompartmentDoubleSingleByte._ClearCompartment();
-
-    CCompartment CompartmentPunctuation(_pThreadMgr, _tfClientId, Global::Sinstar3TsfGuidCompartmentPunctuation);
-    CompartmentDoubleSingleByte._ClearCompartment();
 
     if (_pThreadMgr != nullptr)
     {

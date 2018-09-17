@@ -68,13 +68,6 @@ BOOL CSinstar3Tsf::_IsKeyEaten(_In_ ITfContext *pContext, UINT codeIn, _Out_ UIN
     CCompartment CompartmentKeyboardOpen(_pThreadMgr, _tfClientId, GUID_COMPARTMENT_KEYBOARD_OPENCLOSE);
     CompartmentKeyboardOpen._GetCompartmentBOOL(isOpen);
 
-    BOOL isDoubleSingleByte = FALSE;
-    CCompartment CompartmentDoubleSingleByte(_pThreadMgr, _tfClientId, Global::Sinstar3TsfGuidCompartmentDoubleSingleByte);
-    CompartmentDoubleSingleByte._GetCompartmentBOOL(isDoubleSingleByte);
-
-    BOOL isPunctuation = FALSE;
-    CCompartment CompartmentPunctuation(_pThreadMgr, _tfClientId, Global::Sinstar3TsfGuidCompartmentPunctuation);
-    CompartmentPunctuation._GetCompartmentBOOL(isPunctuation);
 
     if (pKeyState)
     {
@@ -108,12 +101,6 @@ BOOL CSinstar3Tsf::_IsKeyEaten(_In_ ITfContext *pContext, UINT codeIn, _Out_ UIN
         }
     }
 
-    // if the keyboard is closed, we don't eat keys, with the exception of the touch keyboard specials keys
-    if (!isOpen && !isDoubleSingleByte && !isPunctuation)
-    {
-        return isTouchKeyboardSpecialKeys;
-    }
-
     if (pwch)
     {
         *pwch = wch;
@@ -138,37 +125,6 @@ BOOL CSinstar3Tsf::_IsKeyEaten(_In_ ITfContext *pContext, UINT codeIn, _Out_ UIN
         }
     }
 
-    //
-    // Punctuation
-    //
-    if (pCompositionProcessorEngine->IsPunctuation(wch))
-    {
-        if ((_candidateMode == CANDIDATE_NONE) && isPunctuation)
-        {
-            if (pKeyState)
-            {
-                pKeyState->Category = CATEGORY_COMPOSING;
-                pKeyState->Function = FUNCTION_PUNCTUATION;
-            }
-            return TRUE;
-        }
-    }
-
-    //
-    // Double/Single byte
-    //
-    if (isDoubleSingleByte && pCompositionProcessorEngine->IsDoubleSingleByte(wch))
-    {
-        if (_candidateMode == CANDIDATE_NONE)
-        {
-            if (pKeyState)
-            {
-                pKeyState->Category = CATEGORY_COMPOSING;
-                pKeyState->Function = FUNCTION_DOUBLE_SINGLE_BYTE;
-            }
-            return TRUE;
-        }
-    }
 
     return isTouchKeyboardSpecialKeys;
 }

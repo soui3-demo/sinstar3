@@ -24,8 +24,6 @@
     <None Include="image\DoubleSingleByteOn.ico" />
     <None Include="image\ImeModeOff.ico" />
     <None Include="image\ImeModeOn.ico" />
-    <None Include="image\PunctuationOff.ico" />
-    <None Include="image\PunctuationOn.ico" />
     <None Include="image\Sinstar3_Tsf.ico" />
     <None Include="Sinstar3_Tsf.def" />
   </ItemGroup>

@@ -197,7 +197,7 @@ HRESULT CCompartment::_ClearCompartment()
 // ctor
 //----------------------------------------------------------------------------
 
-CCompartmentEventSink::CCompartmentEventSink(_In_ CESCALLBACK pfnCallback, _In_ void *pv)
+CCompartmentEventSink::CCompartmentEventSink(_In_ CESCALLBACK pfnCallback, _In_ void *pv) :_pCompartment(NULL)
 {
     _pfnCallback = pfnCallback;
     _pv = pv;
@@ -250,7 +250,11 @@ HRESULT CCompartmentEventSink::_Advise(_In_ IUnknown *punk, _In_ REFGUID guidCom
             hr = pSource->AdviseSink(IID_ITfCompartmentEventSink, this, &_dwCookie);
             pSource->Release();
         }
-    }
+	}
+	else
+	{
+		_pCompartment = NULL;
+	}
 
     pCompartmentMgr->Release();
 

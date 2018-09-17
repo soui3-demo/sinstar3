@@ -21,13 +21,6 @@ IDI_IME_MODE_ON         ICON                    "image\\ImeModeOn.ico"
 
 IDI_IME_MODE_OFF        ICON                    "image\\ImeModeOff.ico"
 
-IDI_DOUBLE_SINGLE_BYTE_ON ICON                    "image\\DoubleSingleByteOn.ico"
-
-IDI_DOUBLE_SINGLE_BYTE_OFF ICON                    "image\\DoubleSingleByteOff.ico"
-
-IDI_PUNCTUATION_ON      ICON                    "image\\PunctuationOn.ico"
-
-IDI_PUNCTUATION_OFF     ICON                    "image\\PunctuationOff.ico"
 
 
 /////////////////////////////////////////////////////////////////////////////
