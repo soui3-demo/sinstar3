@@ -58,9 +58,6 @@ void CSinstar3Tsf::_TerminateComposition(TfEditCookie ec, _In_ ITfContext *pCont
 
     if (_pComposition != nullptr)
     {
-        // remove the display attribute from the composition range.
-        _ClearCompositionDisplayAttributes(ec, pContext);
-
         if (FAILED(_pComposition->EndComposition(ec)))
         {
             // if we fail to EndComposition, then we need to close the reverse reading window.

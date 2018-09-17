@@ -17,12 +17,12 @@ class CCompositionProcessorEngine;
 const DWORD WM_CheckGlobalCompartment = WM_USER;
 LRESULT CALLBACK CSinstar3Tsf_WindowProc(HWND wndHandle, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-class CSinstar3Tsf : public ITfTextInputProcessorEx,
+class CSinstar3Tsf : public CUnknown,
+	public ITfTextInputProcessorEx,
     public ITfThreadMgrEventSink,
     public ITfTextEditSink,
     public ITfKeyEventSink,
     public ITfCompositionSink,
-    public ITfDisplayAttributeProvider,
     public ITfActiveLanguageProfileNotifySink,
     public ITfThreadFocusSink,
     public ITfFunctionProvider,
@@ -31,11 +31,6 @@ class CSinstar3Tsf : public ITfTextInputProcessorEx,
 public:
     CSinstar3Tsf();
     ~CSinstar3Tsf();
-
-    // IUnknown
-    STDMETHODIMP QueryInterface(REFIID riid, _Outptr_ void **ppvObj);
-    STDMETHODIMP_(ULONG) AddRef(void);
-    STDMETHODIMP_(ULONG) Release(void);
 
     // ITfTextInputProcessor
     STDMETHODIMP Activate(ITfThreadMgr *pThreadMgr, TfClientId tfClientId) {
@@ -65,10 +60,6 @@ public:
 
     // ITfCompositionSink
     STDMETHODIMP OnCompositionTerminated(TfEditCookie ecWrite, _In_ ITfComposition *pComposition);
-
-    // ITfDisplayAttributeProvider
-    STDMETHODIMP EnumDisplayAttributeInfo(__RPC__deref_out_opt IEnumTfDisplayAttributeInfo **ppEnum);
-    STDMETHODIMP GetDisplayAttributeInfo(__RPC__in REFGUID guidInfo, __RPC__deref_out_opt ITfDisplayAttributeInfo **ppInfo);
 
     // ITfActiveLanguageProfileNotifySink
     STDMETHODIMP OnActivated(_In_ REFCLSID clsid, _In_ REFGUID guidProfile, _In_ BOOL isActivated);
@@ -161,11 +152,6 @@ private:
     // function for the language property
     BOOL _SetCompositionLanguage(TfEditCookie ec, _In_ ITfContext *pContext);
 
-    // function for the display attribute
-    void _ClearCompositionDisplayAttributes(TfEditCookie ec, _In_ ITfContext *pContext);
-    BOOL _SetCompositionDisplayAttributes(TfEditCookie ec, _In_ ITfContext *pContext, TfGuidAtom gaDisplayAttribute);
-    BOOL _InitDisplayAttributeGuidAtom();
-
     BOOL _InitThreadMgrEventSink();
     void _UninitThreadMgrEventSink();
 
@@ -241,8 +227,19 @@ private:
 
     HWND _msgWndHandle; 
 
-    LONG _refCount;
-
     // Support the search integration
     ITfFnSearchCandidateProvider* _pITfFnSearchCandidateProvider;
+
+public:
+	IUNKNOWN_BEGIN(ITfTextInputProcessorEx)
+		IUNKNOWN_ADD_IID( ITfTextInputProcessor)
+		IUNKNOWN_ADD_IID( ITfThreadMgrEventSink)
+		IUNKNOWN_ADD_IID( ITfTextEditSink)
+		IUNKNOWN_ADD_IID( ITfKeyEventSink)
+		IUNKNOWN_ADD_IID( ITfCompositionSink)
+		IUNKNOWN_ADD_IID( ITfActiveLanguageProfileNotifySink)
+		IUNKNOWN_ADD_IID( ITfThreadFocusSink)
+		IUNKNOWN_ADD_IID( ITfFunctionProvider)
+		IUNKNOWN_ADD_IID( ITfFnGetPreferredTouchKeyboardLayout)
+	IUNKNOWN_END()
 };

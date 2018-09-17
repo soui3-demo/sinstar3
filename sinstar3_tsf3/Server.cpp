@@ -115,7 +115,7 @@ STDAPI CClassFactory::QueryInterface(REFIID riid, _Outptr_ void **ppvObj)
 STDAPI_(ULONG) CClassFactory::AddRef()
 {
     DllAddRef();
-    return (Global::dllRefCount + 1);
+    return (Global::dllRefCount);
 }
 
 //+---------------------------------------------------------------------------
@@ -127,7 +127,7 @@ STDAPI_(ULONG) CClassFactory::AddRef()
 STDAPI_(ULONG) CClassFactory::Release()
 {
     DllRelease();
-    return (Global::dllRefCount + 1);
+    return (Global::dllRefCount);
 }
 
 //+---------------------------------------------------------------------------

@@ -44,7 +44,6 @@ HRESULT CEnumTfCandidates::CreateInstance(REFIID riid, _Out_ void **ppvObj, _In_
 
 CEnumTfCandidates::CEnumTfCandidates(_In_ const CSampleImeArray<ITfCandidateString*> &rgelm, UINT currentNum)
 {
-    _refCount = 0;
     _rgelm = rgelm;
     _currentCandidateStrIndex = currentNum;
 }
@@ -53,47 +52,6 @@ CEnumTfCandidates::~CEnumTfCandidates()
 {
 }
 
-//
-// IUnknown methods
-//
-STDMETHODIMP CEnumTfCandidates::QueryInterface(REFIID riid, _Outptr_ void **ppvObj)
-{
-    if (ppvObj == nullptr)
-    {
-        return E_POINTER;
-    }
-    *ppvObj = nullptr;
-
-    if (IsEqualIID(riid, IID_IUnknown) || IsEqualIID(riid, __uuidof(IEnumTfCandidates)))
-    {
-        *ppvObj = (IEnumTfCandidates*)this;
-    }
-
-    if (*ppvObj == nullptr)
-    {
-        return E_NOINTERFACE;
-    }
-
-    AddRef();
-    return S_OK;
-}
-
-STDMETHODIMP_(ULONG) CEnumTfCandidates::AddRef()
-{
-    return (ULONG)InterlockedIncrement(&_refCount);
-}
-
-STDMETHODIMP_(ULONG) CEnumTfCandidates::Release()
-{
-    ULONG cRef = (ULONG)InterlockedDecrement(&_refCount);
-    if (0 < cRef)
-    {
-        return cRef;
-    }
-
-    delete this;
-    return 0;
-}
 
 
 //

@@ -227,8 +227,6 @@ HRESULT CSinstar3Tsf::_SetInputString(TfEditCookie ec, _In_ ITfContext *pContext
 
     _SetCompositionLanguage(ec, pContext);
 
-    _SetCompositionDisplayAttributes(ec, pContext, _gaDisplayAttributeInput);
-
     // update the selection, we'll make it an insertion point just past
     // the inserted text.
     ITfRange* pSelection = nullptr;

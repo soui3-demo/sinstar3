@@ -44,9 +44,7 @@
     <ClInclude Include="SearchCandidateProvider.h" />
     <ClInclude Include="DictionaryParser.h" />
     <ClInclude Include="DictionarySearch.h" />
-    <ClInclude Include="DisplayAttributeInfo.h" />
     <ClInclude Include="EditSession.h" />
-    <ClInclude Include="EnumDisplayAttributeInfo.h" />
     <ClInclude Include="File.h" />
     <ClInclude Include="FileMapping.h" />
     <ClInclude Include="GetTextExtentEditSession.h" />
@@ -82,13 +80,9 @@
     <ClCompile Include="SearchCandidateProvider.cpp" />
     <ClCompile Include="DictionaryParser.cpp" />
     <ClCompile Include="DictionarySearch.cpp" />
-    <ClCompile Include="DisplayAttribute.cpp" />
-    <ClCompile Include="DisplayAttributeInfo.cpp" />
-    <ClCompile Include="DisplayAttributeProvider.cpp" />
     <ClCompile Include="DllMain.cpp" />
     <ClCompile Include="EditSession.cpp" />
     <ClCompile Include="EndComposition.cpp" />
-    <ClCompile Include="EnumDisplayAttributeInfo.cpp" />
     <ClCompile Include="File.cpp" />
     <ClCompile Include="FileMapping.cpp" />
     <ClCompile Include="FunctionProviderSink.cpp" />
