@@ -7,7 +7,6 @@ CSinstar3Tsf *g_pCurTSF=NULL;
 STDAPI CSinstar3Tsf::OnEndEdit(ITfContext *pContext, TfEditCookie ecReadOnly, ITfEditRecord *pEditRecord)
 {
     BOOL fSelectionChanged;
-    IEnumTfRanges *pEnumTextChanges;
 	SLOGFMTI("ITfTextEditSink::OnEndEdit cookie:%u", ecReadOnly);
 
     //
@@ -45,26 +44,6 @@ STDAPI CSinstar3Tsf::OnEndEdit(ITfContext *pContext, TfEditCookie ecReadOnly, IT
         }
     }
 
-    // text modification?
-    if (pEditRecord->GetTextAndPropertyUpdates(TF_GTP_INCL_TEXT, NULL, 0, &pEnumTextChanges) == S_OK)
-    {
-		if(_IsComposing())
-		{
-			CComPtr<ITfRange> pStart,pEnd;
-			pContext->GetStart(ecReadOnly,&pStart);
-			pContext->GetEnd(ecReadOnly,&pEnd);
-			if(pStart && pEnd)
-			{
-				LONG lResult=1;
-				pEnd->CompareEnd(ecReadOnly,pStart,TF_ANCHOR_START,&lResult);
-				if(lResult==0)
-				{
-					_EndCompositionEx();
-				}
-			}
-		}
-       pEnumTextChanges->Release();
-    }
     return S_OK;
 }
 

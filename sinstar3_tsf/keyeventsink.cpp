@@ -10,27 +10,19 @@ STDAPI CSinstar3Tsf::OnSetFocus(BOOL fForeground)
 
 STDAPI CSinstar3Tsf::OnTestKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {
-	if (!m_pSinstar3 || _IsKeyboardDisabled()/* || !_IsKeyboardOpen()*/)
+	if (!m_pSinstar3 || _IsKeyboardDisabled())
 	{
 		*pfEaten = FALSE;
 		return S_OK;
 	}
 
-	m_pSinstar3->ProcessKeyStoke(pContext,(UINT)wParam,lParam, TRUE, pfEaten);
-
-	SLOGFMTI("OnTestKeyDown: wParam:%08x,lparam:%08x",(DWORD)wParam, (DWORD)lParam);
+	*pfEaten = TRUE;
     return S_OK;
 }
 
 STDAPI CSinstar3Tsf::OnTestKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {
-	if (!m_pSinstar3 || _IsKeyboardDisabled()/* || !_IsKeyboardOpen()*/)
-	{
-		*pfEaten = FALSE;
-		return S_OK;
-	}
-
-	m_pSinstar3->ProcessKeyStoke(pContext,(UINT)wParam, lParam,FALSE, pfEaten);
+	*pfEaten = FALSE;
 
 	return S_OK;
 }
@@ -40,28 +32,15 @@ STDAPI CSinstar3Tsf::OnKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM lPara
 {
 	HRESULT hr = E_FAIL;
 	SLOGFMTI("OnKeyDown: %08x %08x", (DWORD)wParam, (DWORD)lParam);
-	_bInKeyProc=TRUE;
-
-	OnTestKeyDown(pContext,wParam,lParam,pfEaten);
- 	if(*pfEaten)
-	{
-		m_pSinstar3->TranslateKey(pContext,(UINT)wParam, MapVirtualKey((UINT)wParam,0), TRUE, pfEaten);
-	}
-	_bInKeyProc=FALSE;
+	CEsKeyHandler *pEs = new CEsKeyHandler(this,pContext,wParam,lParam);
+	pContext->RequestEditSession(_tfClientId, pEs, TF_ES_ASYNCDONTCARE | TF_ES_READWRITE, &hr);
+	pEs->Release();
 	return S_OK;
 }
 
 STDAPI CSinstar3Tsf::OnKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {
-	SLOGFMTI("OnKeyUp: %08x %08x", (DWORD)wParam, (DWORD)lParam);
-	_bInKeyProc=TRUE;
-	OnTestKeyUp(pContext,wParam,lParam,pfEaten);
-	if(*pfEaten)
-	{
-		m_pSinstar3->TranslateKey(pContext,(UINT)wParam, MapVirtualKey((UINT)wParam,0), FALSE, pfEaten);
-	}
-	_bInKeyProc=FALSE;
-
+	*pfEaten = FALSE;
     return S_OK;
 }
 

@@ -8,6 +8,22 @@ CEditSessionBase::CEditSessionBase(CSinstar3Tsf *pTextService, ITfContext *pCont
 {
 }
 
+
+//////////////////////////////////////////////////////////////////////////
+STDMETHODIMP CEsKeyHandler::DoEditSession(TfEditCookie ec)
+{
+	BOOL fEaten = FALSE;
+	GetTextService()->_bInKeyProc = TRUE;
+	GetSinstar3()->ProcessKeyStoke(GetContext(),(UINT)_wParam,_lParam, TRUE, &fEaten);
+	if(fEaten)
+	{
+		GetSinstar3()->TranslateKey(GetContext(),(UINT)_wParam, MapVirtualKey((UINT)_wParam,0), TRUE, &fEaten);
+	}
+	GetTextService()->_bInKeyProc = FALSE;
+
+	return S_OK;
+}
+
 //////////////////////////////////////////////////////////////////////////
 CEsStartComposition::CEsStartComposition(CSinstar3Tsf *pTextService, ITfContext *pContext) 
 : CEditSessionBase(pTextService, pContext)
@@ -23,10 +39,6 @@ STDMETHODIMP CEsStartComposition::DoEditSession(TfEditCookie ec)
 	CComPtr<ITfContextComposition> pContextComposition;
 	CComPtr<ITfComposition> pComposition;
 	HRESULT hr = E_FAIL;
-
-	//正在输入过程中不能重新开始
-	if(_pTextService->IsCompositing())
-		return hr;
 
 	// A special interface is required to insert text at the selection
 	hr = _pContext->QueryInterface(IID_ITfInsertAtSelection, (void **)&pInsertAtSelection);
@@ -106,102 +118,22 @@ STDMETHODIMP CEsGetTextExtent::DoEditSession(TfEditCookie ec)
 {
 	SLOG_INFO("TfEditCookie:"<<ec);
 
-	ULONG uFatched=0;
 	CComPtr<ITfRange> pRange;
-	HRESULT hr;
-	RECT rc;
-	LONG cch=0;
-
-	if (!_pTextService->m_pSinstar3) return S_FALSE;
-
-
+	ISinstar * pSinstar3 = GetSinstar3();
+	if(!pSinstar3 || !_pTextService->_pComposition) return S_FALSE;
 
 	CComPtr<ITfRange> range;
 	if ( _pTextService->_pComposition->GetRange( &range) == S_OK && range != NULL)
 	{
-		RECT rcLast = { -1, -1, -1, -1};
-		int nLen=_pTextService->m_pSinstar3->GetCompositionSegmentEnd(_pTextService->m_pSinstar3->GetCompositionSegments()-1);
-
-		GetLastLineRect( ec, range, nLen, rcLast, TRUE);			
-		_pTextService->m_pSinstar3->OnSetCaretPosition( *(POINT*)&rcLast, rcLast.bottom - rcLast.top);			
-		SLOGFMTI("SetCaret Pos 1:%d,%d, height: %d",rcLast.left,rcLast.top, rcLast.bottom - rcLast.top);
+		BOOL fClip = FALSE;
+		RECT rc;
+		_pContextView->GetTextExt(ec,range,&rc,&fClip);
+		pSinstar3->OnSetCaretPosition( *(POINT*)&rc, rc.bottom - rc.top);			
+		SLOGFMTI("SetCaret pos:%d,%d, height: %d",rc.left,rc.top, rc.bottom - rc.top);
 	}
-
-	int nSeg=_pTextService->m_pSinstar3->GetCompositionSegments();
-	int nBegin=0;
-	memset(&rc,0xff,sizeof(RECT));
-	for(int i=0;i<nSeg;i++)
-	{
-		UINT uAttr=_pTextService->m_pSinstar3->GetCompositionSegmentAttr(i);
-		if(uAttr==RG_ATTR_TARGET_CONVERTED || uAttr==RG_ATTR_TARGET_NOTCONVERTED)
-		{
-			//_pTextService->_GetSegRange(ec,&pRange,nBegin,nBegin);
-			//hr=_pContextView->GetTextExt(ec, pRange, &rc, &fClipped);
-			int nEnd = _pTextService->m_pSinstar3->GetCompositionSegmentEnd(i);
-			_pTextService->_GetSegRange(ec,&pRange,nBegin, nEnd);
-			hr = GetLastLineRect( ec, pRange, nEnd-nBegin, rc, FALSE);
-			break;
-		}
-		nBegin=_pTextService->m_pSinstar3->GetCompositionSegmentEnd(i);
-	}
-	if(rc.bottom-rc.top>=1)
-	{//获得有效的候选位置
-		SLOGFMTI("SetCaret Pos 2:%d,%d, height: %d",rc.left, rc.top, rc.bottom - rc.top);
-		_pTextService->m_pSinstar3->OnSetFocusSegmentPosition(*(POINT*)&rc,rc.bottom-rc.top);
-	}else if(rc.left==-1 && rc.top==-1)
-	{
-		SLOGFMTI("SetCaret Pos 3:%d,%d, height: %d",rc.left, rc.top, 0);
-		_pTextService->m_pSinstar3->OnSetFocusSegmentPosition(*(POINT*)&rc,0);
-	}		
 
 	return S_OK;
 }
-
-BOOL CEsGetTextExtent::GetLastLineRect(TfEditCookie ec, ITfRange* range, int nLen, RECT& rcLast, BOOL bUseSavedPos)
-{
-	RECT rt = { 0, 0, 20, 20 };
-
-	{
-
-		_pTextService->ShowCandidateWindow();
-
-		RECT rc;
-		BOOL fClipped;
-		HRESULT hr = _pContextView->GetTextExt( ec, range, &rc, &fClipped);
-		if ( hr == S_OK)
-		{
-			SLOGFMTI("GetTextExt, 0, %d, %d, %d, %d", rc.left, rc.top, rc.right, rc.bottom);
-			rcLast = rc;
-		}
-
-		for ( int i = 1; i < nLen; i++)
-		{
-			LONG cch;
-			if ( range->ShiftStart( ec, 1, &cch, NULL) == S_OK)
-			{
-				if ( _pContextView->GetTextExt( ec, range, &rc, &fClipped) == S_OK)
-				{
-					SLOGFMTI("GetTextExt, %d, %d, %d, %d, %d", i, rc.left, rc.top, rc.right, rc.bottom);
-
-					if ( rc.bottom > rcLast.bottom)
-					{
-						rcLast = rc;
-					}
-
-					if ( rc.left < rcLast.left)
-					{
-						rcLast = rc;
-					}
-				}
-			}
-		}
-	}
-
-
-	return TRUE;
-}
-
-
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -391,10 +323,7 @@ STDMETHODIMP CEsUpdateResultAndComp::DoEditSession(TfEditCookie ec)
 
 	BOOL fEmpty=TRUE;
 
-	if(!_pTextService->_IsComposing())
-	{
-		_pTextService->_StartComposition(_pContext);
-	}
+	SASSERT(_pTextService->_IsComposing());
 	CComPtr<ITfComposition> pCompostion=_pTextService->GetITfComposition();
 	//将当前数据上屏
 	pCompostion->GetRange(&pRangeComposition);

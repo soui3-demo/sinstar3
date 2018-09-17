@@ -23,19 +23,6 @@ public:
     CSinstar3Tsf();
     virtual ~CSinstar3Tsf();
 
-    // IUnknown
-	IUNKNOWN_BEGIN2(ITfTextInputProcessor)
-		IUNKNOWN_ADD_IID2(ITfThreadMgrEventSink)
-		IUNKNOWN_ADD_IID2(ITfThreadFocusSink)
-		IUNKNOWN_ADD_IID2(ITfTextEditSink)
-		IUNKNOWN_ADD_IID2(ITfKeyEventSink)
-		IUNKNOWN_ADD_IID2(ITfDisplayAttributeProvider)
-		IUNKNOWN_ADD_IID2(ITfCompositionSink)
-		IUNKNOWN_ADD_IID2(ITfTextLayoutSink)
-		IUNKNOWN_ADD_IID2(ITfFnConfigure)
-		IUNKNOWN_ADD_IID2(ITfFunction)
-		IUNKNOWN_ADD_IID2(ITfCompartmentEventSink)
-	IUNKNOWN_END()
 
     // ITfTextInputProcessor
     STDMETHODIMP Activate(ITfThreadMgr *pThreadMgr, TfClientId tfClientId);
@@ -62,8 +49,8 @@ public:
     // ITfKeyEventSink
     STDMETHODIMP OnSetFocus(BOOL fForeground);
     STDMETHODIMP OnTestKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten);
+	STDMETHODIMP OnTestKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten);
     STDMETHODIMP OnKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten);
-    STDMETHODIMP OnTestKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten);
     STDMETHODIMP OnKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten);
 	STDMETHODIMP OnPreservedKey(ITfContext *pic, REFGUID rguid, BOOL *pfEaten);
     // ITfCompositionSink
@@ -101,7 +88,6 @@ public:
 
 
     ITfThreadMgr *_GetThreadMgr() { return _pThreadMgr; }
-    TfClientId _GetClientId() { return _tfClientId; }
 
     // utility function for compartment
     BOOL _IsKeyboardDisabled();
@@ -178,12 +164,12 @@ public:
 	ISinstar*   m_pSinstar3;
 	BOOL		_bHasFocus;
 	BOOL _bGetLayoutChangeMsg;
-	DWORD		_dwLastLayoutChangeTime;
 	BOOL		_bInKeyProc;
 
     // the current composition object.
     CComPtr<ITfComposition> _pComposition;
 	TfEditCookie _ec;
+	BOOL         _bCompsiting;
 
 	// guidatom for the display attibute.
 	TfGuidAtom _gaDisplayAttributeInput;
@@ -195,12 +181,23 @@ public:
 	// 标志是否在一个可编辑的文档内
 	BOOL _bInEditDocument;	
 
-	BOOL _bUseCursorPos;
-
-	BOOL _bUseMSMethod;
-
 	BOOL _bPosSaved;
 
 	RECT _rtStart;
+
+public:
+	IUNKNOWN_BEGIN2(ITfTextInputProcessor)
+		IUNKNOWN_ADD_IID2(ITfThreadMgrEventSink)
+		IUNKNOWN_ADD_IID2(ITfThreadFocusSink)
+		IUNKNOWN_ADD_IID2(ITfTextEditSink)
+		IUNKNOWN_ADD_IID2(ITfKeyEventSink)
+		IUNKNOWN_ADD_IID2(ITfDisplayAttributeProvider)
+		IUNKNOWN_ADD_IID2(ITfCompositionSink)
+		IUNKNOWN_ADD_IID2(ITfTextLayoutSink)
+		IUNKNOWN_ADD_IID2(ITfFnConfigure)
+		IUNKNOWN_ADD_IID2(ITfFunction)
+		IUNKNOWN_ADD_IID2(ITfCompartmentEventSink)
+	IUNKNOWN_END()
+
 };
 

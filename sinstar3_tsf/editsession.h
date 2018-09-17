@@ -9,16 +9,39 @@ public:
 	virtual ~CEditSessionBase(){}
 	
     virtual STDMETHODIMP DoEditSession(TfEditCookie ec) = 0;
-public:
-	IUNKNOWN_BEGIN2(ITfEditSession)
-	IUNKNOWN_END()
 
+	CSinstar3Tsf * GetTextService(){ return _pTextService;};
+	ITfContext * GetContext() {return _pContext;}
+	ISinstar * GetSinstar3() {
+		return _pTextService->m_pSinstar3;
+	}
 protected:
     CComPtr<ITfContext> _pContext;
     CComPtr<CSinstar3Tsf> _pTextService;
 
+public:
+	IUNKNOWN_BEGIN2(ITfEditSession)
+	IUNKNOWN_END()
 };
 
+/////////////////////////////////////////////////////////////////////////////////////
+class CEsKeyHandler : public CEditSessionBase
+{
+public:
+	CEsKeyHandler(CSinstar3Tsf *pTextService, ITfContext *pContext,WPARAM wParam, LPARAM lParam)
+		:CEditSessionBase(pTextService,pContext)
+		,_wParam(wParam)
+		,_lParam(lParam)
+	{
+
+	}
+
+	STDMETHODIMP DoEditSession(TfEditCookie ec);
+
+private:
+	WPARAM _wParam;
+	LPARAM _lParam;
+};
 
 class CEsStartComposition : public CEditSessionBase
 {
@@ -45,9 +68,7 @@ public:
 	CEsGetTextExtent(CSinstar3Tsf *pTextService, ITfContext *pContext, ITfContextView *pContextView);
 
 	STDMETHODIMP DoEditSession(TfEditCookie ec);
-
 private:
-	BOOL GetLastLineRect( TfEditCookie ec, ITfRange* range, int nLen, RECT& rcLast, BOOL bUseSavedPos);
 
 	CComPtr<ITfContextView> _pContextView;
 };

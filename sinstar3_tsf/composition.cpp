@@ -12,20 +12,15 @@ BOOL CSinstar3Tsf::_IsComposing() const
 
 void CSinstar3Tsf::_StartComposition(ITfContext *pContext)
 {
-    CEsStartComposition *pStartCompositionEditSession;
-	SLOG_INFO("$$$$$_StartComposition");
+	if(IsCompositing()) return;
+	CEsStartComposition *pStartCompositionEditSession = new CEsStartComposition(this, pContext);
+	SLOG_INFO("pContext:"<<pContext);
 
+	_bCompsiting = TRUE;
 	_AdviseTextLayoutSink(pContext);
-    if (pStartCompositionEditSession = new CEsStartComposition(this, pContext))
-    {
-        HRESULT hr;
-        // A synchronous document write lock is required.
-        // the CEsStartComposition will do all the work when the
-        // CEsStartComposition::DoEditSession method is called by the context
-		HRESULT hrSession;
-		hr = pContext->RequestEditSession(_tfClientId, pStartCompositionEditSession, (_bInKeyProc?TF_ES_SYNC:TF_ES_ASYNCDONTCARE) | TF_ES_READWRITE, &hrSession);
-        pStartCompositionEditSession->Release();
-    }
+	HRESULT hr;
+	pContext->RequestEditSession(_tfClientId, pStartCompositionEditSession, TF_ES_SYNC | TF_ES_READWRITE, &hr);
+	pStartCompositionEditSession->Release();
 }
 
 BOOL CSinstar3Tsf::_SetCompositionDisplayAttributes(TfEditCookie ec, ITfContext *pContext,ITfRange *pRange, TF_DA_ATTR_INFO attr)
@@ -78,26 +73,28 @@ BOOL CSinstar3Tsf::_GetSegRange(TfEditCookie ec,ITfRange **pRange,int nLeft,int 
 STDAPI CSinstar3Tsf::OnCompositionTerminated(TfEditCookie ecWrite, ITfComposition *pComposition)
 {
 	SLOG_INFO("OnCompositionTerminated,TfEditCookie:"<<ecWrite<< " pComposition:"<<pComposition);
+	SASSERT(pComposition && pComposition == _pComposition);
+	ITfContext *pCtx=(ITfContext *)GetImeContext();
+//	_TerminateComposition(ecWrite,pCtx);
+	if ( pCtx != NULL)
 	{
-		SASSERT(pComposition && pComposition == _pComposition);
-		ITfContext *pCtx=(ITfContext *)GetImeContext();
-		_TerminateComposition(ecWrite,pCtx);
-		ReleaseImeContext(pCtx);
+		_UnadviseTextLayoutSink(pCtx);
 	}
+
+	ReleaseImeContext(pCtx);
+
 	return S_OK;
 }
 
 
 void CSinstar3Tsf::_EndComposition(ITfContext *pContext)
 {
-    CEsEndComposition *pEditSession;
+	if(!IsCompositing()) return;
+    CEsEndComposition *pEditSession = new CEsEndComposition(this, pContext);
     HRESULT hr;
-
-    if (pEditSession = new CEsEndComposition(this, pContext))
-    {
-        pContext->RequestEditSession(_tfClientId, pEditSession, (_bInKeyProc?TF_ES_SYNC:TF_ES_ASYNCDONTCARE) | TF_ES_READWRITE, &hr);
-        pEditSession->Release();
-    }
+	pContext->RequestEditSession(_tfClientId, pEditSession, (_bInKeyProc?TF_ES_SYNC:TF_ES_ASYNCDONTCARE) | TF_ES_READWRITE, &hr);
+	pEditSession->Release();
+	_bCompsiting = FALSE;
 }
 
 BOOL CSinstar3Tsf::_EndCompositionEx()

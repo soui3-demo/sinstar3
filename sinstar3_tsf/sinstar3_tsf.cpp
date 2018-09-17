@@ -29,29 +29,6 @@ HRESULT CSinstar3Tsf::CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **pp
     return hr;
 }
 
-PCTSTR pszAppList_Use_Cursor[] = 
-{
-	// IE Series
-	_T("iexplore.exe")
-};
-
-PCTSTR pszAppList_Use_Ms_Method[] = 
-{
-	// Adobe Series
-	_T("Photoshop.exe"),
-	_T("Illustrator.exe"),
-	_T("DreamWeaver.exe"),
-	_T("Flash.exe"),
-	_T("soffice.exe"),
-	_T("soffice.bin"),
-
-	// Kingsoft Series
-	_T("wps.exe"),	// Kingsoft Writer
-	_T("wpp.exe"),	// Kingsoft Presentation
-	_T("et.exe")	// Kingsoft SpreadSheet
-};
-
-
 //+---------------------------------------------------------------------------
 //
 // ctor
@@ -97,34 +74,9 @@ CSinstar3Tsf::CSinstar3Tsf()
 	_bInKeyProc=FALSE;
 	_bInEditDocument = FALSE;	
 	
-	_bUseCursorPos = FALSE;
-	_bUseMSMethod = FALSE;
 	_ec = 0;
 
-	TCHAR szFileName[MAX_PATH] = _T("");
-	GetModuleFileName( NULL, szFileName, ARRAYSIZE( szFileName));
-
-	PCTSTR pszPos = _tcsrchr( szFileName, _T('\\'));
-	if ( pszPos != NULL)
-	{
-		for ( size_t i = 0; i < ARRAYSIZE( pszAppList_Use_Cursor); i++)
-		{
-			if ( _tcsicmp( pszPos + 1, pszAppList_Use_Cursor[i]) == 0)
-			{
-				_bUseCursorPos = TRUE;
-				break;
-			}
-		}
-
-		for ( size_t i = 0; i < ARRAYSIZE( pszAppList_Use_Ms_Method); i++)
-		{
-			if ( _tcsicmp( pszPos + 1, pszAppList_Use_Ms_Method[i]) == 0)
-			{
-				_bUseMSMethod = TRUE;
-				break;
-			}
-		}
-	}
+	_bCompsiting = FALSE;
 
 	_bPosSaved = FALSE;
 }
@@ -145,25 +97,9 @@ STDAPI CSinstar3Tsf::Activate(ITfThreadMgr *pThreadMgr, TfClientId tfClientId)
 {
 	SLOGFMTI("Activate %p %d", pThreadMgr, (int)tfClientId);
 
-	SHORT sSt=GetKeyState(VK_KANA);
-	if(GetKeyState(VK_KANA)&0x01)
-	{//自动取消假名输入模式
-		INPUT input[2];
-		input[0].type=INPUT_KEYBOARD;
-		input[0].ki.wVk=VK_KANA;
-		input[0].ki.dwFlags=0;
-		input[1].type=INPUT_KEYBOARD;
-		input[1].ki.wVk=VK_KANA;
-		input[1].ki.dwFlags=KEYEVENTF_KEYUP;
-		BOOL bRet=SendInput(2,input,sizeof(INPUT));
-		_ASSERT(bRet);
-	}
-
 	_pThreadMgr = pThreadMgr;
     _pThreadMgr->AddRef();
     _tfClientId = tfClientId;	
-
-	_dwLastLayoutChangeTime = GetTickCount();
 
     //
     // Initialize ThreadMgrEventSink.
@@ -263,7 +199,7 @@ STDMETHODIMP CSinstar3Tsf::OnLayoutChange(ITfContext *pContext, TfLayoutCode lco
 			SLOGFMTI("TF_LC_CHANGE");
 			CEsGetTextExtent *pEditSession  = new CEsGetTextExtent(this, pContext, pContextView);
 			HRESULT hrSession;
-			pContext->RequestEditSession(_GetClientId(), pEditSession, TF_ES_SYNC | TF_ES_READ, &hrSession);
+			pContext->RequestEditSession(_tfClientId, pEditSession, TF_ES_SYNC | TF_ES_READ, &hrSession);
 			pEditSession->Release();
 		}
 
@@ -278,10 +214,6 @@ STDMETHODIMP CSinstar3Tsf::OnLayoutChange(ITfContext *pContext, TfLayoutCode lco
 	case TF_LC_CREATE:
 		{
 			SLOGFMTI("TF_LC_CREATE");
-			CEsGetTextExtent *pEditSession  = new CEsGetTextExtent(this, pContext, pContextView);
-			HRESULT hrSession;
-			HRESULT hr = pContext->RequestEditSession(_GetClientId(), pEditSession, TF_ES_SYNC | TF_ES_READ, &hrSession);
-			pEditSession->Release();
 		}
 		break;
 
@@ -314,51 +246,41 @@ BOOL CSinstar3Tsf::InputStringW(LPCWSTR pszBuf, int nLen) {
 
 BOOL CSinstar3Tsf::IsCompositing() const
 {
-	return _IsComposing();
+	return _bCompsiting;
 }
 
 
 HRESULT CSinstar3Tsf::_AdviseTextLayoutSink(ITfContext *pContext)
 {
-	HRESULT hr;
-	ITfSource *pSource = NULL;
+	if(_dwCookieTextLayoutSink != TF_INVALID_COOKIE)
+		return S_OK;
 
-	hr = E_FAIL;
+	CComPtr<ITfSource> pSource;
 
 	if (FAILED(pContext->QueryInterface(IID_ITfSource, (void **)&pSource)))
-		goto Exit;
+		return E_FAIL;
 
 	if (FAILED(pSource->AdviseSink(IID_ITfTextLayoutSink, (ITfTextLayoutSink *)this, &_dwCookieTextLayoutSink)))
-		goto Exit;
+		return E_FAIL;
 
-	hr = S_OK;
-
-Exit:
-	if (pSource != NULL)
-		pSource->Release();
-	return hr;
+	return S_OK;
 }
 
 HRESULT CSinstar3Tsf::_UnadviseTextLayoutSink(ITfContext *pContext)
 {
-	HRESULT hr;
-	ITfSource *pSource = NULL;
+	CComPtr<ITfSource> pSource;
 
-	hr = E_FAIL;
-	if(_dwCookieTextLayoutSink==TF_INVALID_COOKIE) goto Exit;
+	if(_dwCookieTextLayoutSink==TF_INVALID_COOKIE)
+		return S_FALSE;
 
 	if (FAILED(pContext->QueryInterface(IID_ITfSource, (void **)&pSource)))
-		goto Exit;
+		return E_FAIL;
 
 	if (FAILED(pSource->UnadviseSink(_dwCookieTextLayoutSink)))
-		goto Exit;
+		return E_FAIL;
 
-	hr = S_OK;
-
-Exit:
-	if (pSource != NULL)
-		pSource->Release();
-	return hr;
+	_dwCookieTextLayoutSink = TF_INVALID_COOKIE;
+	return S_OK;
 }
 
 void CSinstar3Tsf::StartComposition(LPVOID pImeContext)
@@ -395,7 +317,7 @@ LPVOID CSinstar3Tsf::GetImeContext()
 	if(!_pThreadMgr) return NULL;
 	HRESULT         hr;
 
-	if(IsCompositing())
+	if(_pComposition)
 	{
 		ITfRange *pRange;
 		ITfContext *pContext;
