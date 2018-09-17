@@ -17,7 +17,6 @@
 
 CEditSessionBase::CEditSessionBase(_In_ CSinstar3Tsf *pTextService, _In_ ITfContext *pContext)
 {
-    _refCount = 1;
     _pContext = pContext;
     _pContext->AddRef();
 
@@ -35,65 +34,4 @@ CEditSessionBase::~CEditSessionBase()
 {
     _pContext->Release();
     _pTextService->Release();
-}
-
-//+---------------------------------------------------------------------------
-//
-// QueryInterface
-//
-//----------------------------------------------------------------------------
-
-STDAPI CEditSessionBase::QueryInterface(REFIID riid, _Outptr_ void **ppvObj)
-{
-    if (ppvObj == nullptr)
-    {
-        return E_INVALIDARG;
-    }
-
-    *ppvObj = nullptr;
-
-    if (IsEqualIID(riid, IID_IUnknown) ||
-        IsEqualIID(riid, IID_ITfEditSession))
-    {
-        *ppvObj = (ITfLangBarItemButton *)this;
-    }
-
-    if (*ppvObj)
-    {
-        AddRef();
-        return S_OK;
-    }
-
-    return E_NOINTERFACE;
-}
-
-//+---------------------------------------------------------------------------
-//
-// AddRef
-//
-//----------------------------------------------------------------------------
-
-STDAPI_(ULONG) CEditSessionBase::AddRef(void)
-{
-    return ++_refCount;
-}
-
-//+---------------------------------------------------------------------------
-//
-// Release
-//
-//----------------------------------------------------------------------------
-
-STDAPI_(ULONG) CEditSessionBase::Release(void)
-{
-    LONG cr = --_refCount;
-
-    assert(_refCount >= 0);
-
-    if (_refCount == 0)
-    {
-        delete this;
-    }
-
-    return cr;
 }

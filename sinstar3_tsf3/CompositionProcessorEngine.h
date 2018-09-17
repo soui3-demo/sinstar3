@@ -168,8 +168,6 @@ private:
 
     // Language bar data
     CLangBarItemButton* _pLanguageBar_IMEMode;
-    CLangBarItemButton* _pLanguageBar_DoubleSingleByte;
-    CLangBarItemButton* _pLanguageBar_Punctuation;
 
     // Compartment
     CCompartment* _pCompartmentConversion;

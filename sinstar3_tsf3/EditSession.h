@@ -10,16 +10,11 @@
 
 class CSinstar3Tsf;
 
-class CEditSessionBase : public ITfEditSession
+class CEditSessionBase : public CUnknown, public ITfEditSession
 {
 public:
     CEditSessionBase(_In_ CSinstar3Tsf *pTextService, _In_ ITfContext *pContext);
     virtual ~CEditSessionBase();
-
-    // IUnknown
-    STDMETHODIMP QueryInterface(REFIID riid, _Outptr_ void **ppvObj);
-    STDMETHODIMP_(ULONG) AddRef(void);
-    STDMETHODIMP_(ULONG) Release(void);
 
     // ITfEditSession
     virtual STDMETHODIMP DoEditSession(TfEditCookie ec) = 0;
@@ -28,6 +23,7 @@ protected:
     ITfContext *_pContext;
     CSinstar3Tsf *_pTextService;
 
-private:
-    LONG _refCount;     // COM ref count
+public:
+	IUNKNOWN_BEGIN(ITfEditSession)
+	IUNKNOWN_END()
 };

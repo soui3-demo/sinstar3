@@ -10,17 +10,12 @@
 class CCompartment;
 class CCompartmentEventSink;
 
-class CLangBarItemButton : public ITfLangBarItemButton,
+class CLangBarItemButton : public CUnknown, public ITfLangBarItemButton,
     public ITfSource
 {
 public:
     CLangBarItemButton(REFGUID guidLangBar, LPCWSTR description, LPCWSTR tooltip, DWORD onIconIndex, DWORD offIconIndex, BOOL isSecureMode);
     ~CLangBarItemButton();
-
-    // IUnknown
-    STDMETHODIMP QueryInterface(REFIID riid, _Outptr_ void **ppvObj);
-    STDMETHODIMP_(ULONG) AddRef(void);
-    STDMETHODIMP_(ULONG) Release(void);
 
     // ITfLangBarItem
     STDMETHODIMP GetInfo(_Out_ TF_LANGBARITEMINFO *pInfo);
@@ -70,5 +65,9 @@ private:
     // The cookie for the sink to CLangBarItemButton.
     static const DWORD _cookie = 0;
 
-    LONG _refCount;
+public:
+	IUNKNOWN_BEGIN(ITfLangBarItemButton)
+		IUNKNOWN_ADD_IID(ITfLangBarItem)
+		IUNKNOWN_ADD_IID(ITfSource)
+	IUNKNOWN_END()
 };

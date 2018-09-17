@@ -14,80 +14,6 @@
 
 //+---------------------------------------------------------------------------
 //
-// CSinstar3Tsf::_UpdateLanguageBarOnSetFocus
-//
-//----------------------------------------------------------------------------
-
-void CSinstar3Tsf::_UpdateLanguageBarOnSetFocus(_In_ ITfDocumentMgr *pDocMgrFocus)
-{
-    BOOL needDisableButtons = FALSE;
-
-    if (!pDocMgrFocus) 
-    {
-        needDisableButtons = TRUE;
-    } 
-    else 
-    {
-        IEnumTfContexts* pEnumContext = nullptr;
-
-        if (FAILED(pDocMgrFocus->EnumContexts(&pEnumContext)) || !pEnumContext) 
-        {
-            needDisableButtons = TRUE;
-        } 
-        else 
-        {
-            ULONG fetched = 0;
-            ITfContext* pContext = nullptr;
-
-            if (FAILED(pEnumContext->Next(1, &pContext, &fetched)) || fetched != 1) 
-            {
-                needDisableButtons = TRUE;
-            }
-
-            if (!pContext) 
-            {
-                // context is not associated
-                needDisableButtons = TRUE;
-            } 
-            else 
-            {
-                pContext->Release();
-            }
-        }
-
-        if (pEnumContext) 
-        {
-            pEnumContext->Release();
-        }
-    }
-
-    CCompositionProcessorEngine* pCompositionProcessorEngine = nullptr;
-    pCompositionProcessorEngine = _pCompositionProcessorEngine;
-
-    pCompositionProcessorEngine->SetLanguageBarStatus(TF_LBI_STATUS_DISABLED, needDisableButtons);
-}
-
-//+---------------------------------------------------------------------------
-//
-// CCompositionProcessorEngine::SetLanguageBarStatus
-//
-//----------------------------------------------------------------------------
-
-VOID CCompositionProcessorEngine::SetLanguageBarStatus(DWORD status, BOOL isSet)
-{
-    if (_pLanguageBar_IMEMode) {
-        _pLanguageBar_IMEMode->SetStatus(status, isSet);
-    }
-    if (_pLanguageBar_DoubleSingleByte) {
-        _pLanguageBar_DoubleSingleByte->SetStatus(status, isSet);
-    }
-    if (_pLanguageBar_Punctuation) {
-        _pLanguageBar_Punctuation->SetStatus(status, isSet);
-    }
-}
-
-//+---------------------------------------------------------------------------
-//
 // CLangBarItemButton::ctor
 //
 //----------------------------------------------------------------------------
@@ -119,8 +45,6 @@ CLangBarItemButton::CLangBarItemButton(REFGUID guidLangBar, LPCWSTR description,
     _isAddedToLanguageBar = FALSE;
     _isSecureMode = isSecureMode;
     _status = 0;
-
-    _refCount = 1;
 
     // Initialize Tooltip
     _pTooltipText = nullptr;
@@ -192,73 +116,6 @@ void CLangBarItemButton::CleanUp()
         delete _pCompartmentEventSink;
         _pCompartmentEventSink = nullptr;
     }
-}
-
-//+---------------------------------------------------------------------------
-//
-// CLangBarItemButton::QueryInterface
-//
-//----------------------------------------------------------------------------
-
-STDAPI CLangBarItemButton::QueryInterface(REFIID riid, _Outptr_ void **ppvObj)
-{
-    if (ppvObj == nullptr)
-    {
-        return E_INVALIDARG;
-    }
-
-    *ppvObj = nullptr;
-
-    if (IsEqualIID(riid, IID_IUnknown) ||
-        IsEqualIID(riid, IID_ITfLangBarItem) ||
-        IsEqualIID(riid, IID_ITfLangBarItemButton))
-    {
-        *ppvObj = (ITfLangBarItemButton *)this;
-    }
-    else if (IsEqualIID(riid, IID_ITfSource))
-    {
-        *ppvObj = (ITfSource *)this;
-    }
-
-    if (*ppvObj)
-    {
-        AddRef();
-        return S_OK;
-    }
-
-    return E_NOINTERFACE;
-}
-
-
-//+---------------------------------------------------------------------------
-//
-// CLangBarItemButton::AddRef
-//
-//----------------------------------------------------------------------------
-
-STDAPI_(ULONG) CLangBarItemButton::AddRef()
-{
-    return ++_refCount;
-}
-
-//+---------------------------------------------------------------------------
-//
-// CLangBarItemButton::Release
-//
-//----------------------------------------------------------------------------
-
-STDAPI_(ULONG) CLangBarItemButton::Release()
-{
-    LONG cr = --_refCount;
-
-    assert(_refCount >= 0);
-
-    if (_refCount == 0)
-    {
-        delete this;
-    }
-
-    return cr;
 }
 
 //+---------------------------------------------------------------------------
