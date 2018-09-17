@@ -26,7 +26,7 @@ class CReadingLine;
 // 3rd party IME.
 //----------------------------------------------------------------------------
 
-class CCandidateListUIPresenter :public ILayoutListener,
+class CCandidateListUIPresenter :public ILayoutListener,public CUnknown,
     public ITfCandidateListUIElementBehavior,
     public ITfIntegratableCandidateListUIElement
 {
@@ -36,11 +36,6 @@ public:
         _In_ CCandidateRange *pIndexRange,
         BOOL hideWindow);
     virtual ~CCandidateListUIPresenter();
-
-    // IUnknown
-    STDMETHODIMP QueryInterface(REFIID riid, _Outptr_ void **ppvObj);
-    STDMETHODIMP_(ULONG) AddRef(void);
-    STDMETHODIMP_(ULONG) Release(void);
 
     // ITfUIElement
     STDMETHODIMP GetDescription(BSTR *pbstr);
@@ -137,5 +132,11 @@ private:
     DWORD _updatedFlags;
     DWORD _uiElementId;
     CSinstar3Tsf* _pTextService;
-    LONG _refCount;
+
+public:
+	IUNKNOWN_BEGIN(ITfCandidateListUIElementBehavior)
+		IUNKNOWN_ADD_IID(ITfUIElement)
+		IUNKNOWN_ADD_IID(ITfCandidateListUIElement)
+		IUNKNOWN_ADD_IID(ITfIntegratableCandidateListUIElement)
+	IUNKNOWN_END()
 };

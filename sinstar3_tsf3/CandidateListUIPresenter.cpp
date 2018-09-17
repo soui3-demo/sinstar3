@@ -338,7 +338,6 @@ CCandidateListUIPresenter::CCandidateListUIPresenter(_In_ CSinstar3Tsf *pTextSer
     _pTextService = pTextService;
     _pTextService->AddRef();
 
-    _refCount = 1;
 }
 
 //+---------------------------------------------------------------------------
@@ -353,83 +352,6 @@ CCandidateListUIPresenter::~CCandidateListUIPresenter()
     _pTextService->Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-// ITfCandidateListUIElement::IUnknown::QueryInterface
-//
-//----------------------------------------------------------------------------
-
-STDAPI CCandidateListUIPresenter::QueryInterface(REFIID riid, _Outptr_ void **ppvObj)
-{
-    if (m_layoutSink.QueryInterface(riid, ppvObj) == S_OK)
-    {
-        return S_OK;
-    }
-
-    if (ppvObj == nullptr)
-    {
-        return E_INVALIDARG;
-    }
-
-    *ppvObj = nullptr;
-
-    if (IsEqualIID(riid, IID_ITfUIElement) ||
-        IsEqualIID(riid, IID_ITfCandidateListUIElement))
-    {
-        *ppvObj = (ITfCandidateListUIElement*)this;
-    }
-    else if (IsEqualIID(riid, IID_IUnknown) || 
-        IsEqualIID(riid, IID_ITfCandidateListUIElementBehavior)) 
-    {
-        *ppvObj = (ITfCandidateListUIElementBehavior*)this;
-    }
-    else if (IsEqualIID(riid, __uuidof(ITfIntegratableCandidateListUIElement))) 
-    {
-        *ppvObj = (ITfIntegratableCandidateListUIElement*)this;
-    }
-
-    if (*ppvObj)
-    {
-        AddRef();
-        return S_OK;
-    }
-
-    return E_NOINTERFACE;
-}
-
-//+---------------------------------------------------------------------------
-//
-// ITfCandidateListUIElement::IUnknown::AddRef
-//
-//----------------------------------------------------------------------------
-
-STDAPI_(ULONG) CCandidateListUIPresenter::AddRef()
-{
-	m_layoutSink.AddRef();
-    return ++_refCount;
-}
-
-//+---------------------------------------------------------------------------
-//
-// ITfCandidateListUIElement::IUnknown::Release
-//
-//----------------------------------------------------------------------------
-
-STDAPI_(ULONG) CCandidateListUIPresenter::Release()
-{
-	m_layoutSink.Release();
-
-    LONG cr = --_refCount;
-
-    assert(_refCount >= 0);
-
-    if (_refCount == 0)
-    {
-        delete this;
-    }
-
-    return cr;
-}
 
 //+---------------------------------------------------------------------------
 //
