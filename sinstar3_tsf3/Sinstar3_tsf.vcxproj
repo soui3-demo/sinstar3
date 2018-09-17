@@ -20,8 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Dictionary\SampleIMESimplifiedQuanPin.txt" />
-    <None Include="image\DoubleSingleByteOff.ico" />
-    <None Include="image\DoubleSingleByteOn.ico" />
     <None Include="image\ImeModeOff.ico" />
     <None Include="image\ImeModeOn.ico" />
     <None Include="image\Sinstar3_Tsf.ico" />
