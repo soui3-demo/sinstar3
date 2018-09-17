@@ -136,12 +136,6 @@ protected:
 
     // HandleArrowKey
     HRESULT HandleKeyArrow(KeyHandlerEditSessionDTO dto);
-
-    // HandleKeyDoubleSingleByte
-    HRESULT HandleKeyDoubleSingleByte(KeyHandlerEditSessionDTO dto);
-
-    // HandleKeyCompositionPunctuation
-    HRESULT HandleKeyPunctuation(KeyHandlerEditSessionDTO dto);
 };
 
 class CKeyStateCandidate : public CKeyStateCategory

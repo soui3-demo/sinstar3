@@ -283,16 +283,6 @@ HRESULT CKeyStateComposing::HandleKeyArrow(KeyHandlerEditSessionDTO dto)
     return _pTextService->_HandleCompositionArrowKey(dto.ec, dto.pContext, dto.arrowKey);
 }
 
-HRESULT CKeyStateComposing::HandleKeyDoubleSingleByte(KeyHandlerEditSessionDTO dto)
-{
-    return _pTextService->_HandleCompositionDoubleSingleByte(dto.ec, dto.pContext, dto.wch);
-}
-
-HRESULT CKeyStateComposing::HandleKeyPunctuation(KeyHandlerEditSessionDTO dto)
-{
-    return _pTextService->_HandleCompositionPunctuation(dto.ec, dto.pContext, dto.wch);
-}
-
 /*
 class CKeyStateCandidate
 */

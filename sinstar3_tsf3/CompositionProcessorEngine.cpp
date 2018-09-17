@@ -319,11 +319,6 @@ void CCompositionProcessorEngine::GetReadingStrings(_Inout_ CSampleImeArray<CStr
         for (DWORD index = 0; index < _keystrokeBuffer.GetLength(); index++)
         {
             oneKeystroke.Set(_keystrokeBuffer.Get() + index, 1);
-
-            if (IsWildcard() && IsWildcardChar(*oneKeystroke.Get()))
-            {
-                _hasWildcardIncludedInKeystrokeBuffer = TRUE;
-            }
         }
     }
 
@@ -356,127 +351,6 @@ void CCompositionProcessorEngine::GetCandidateStringInConverted(CStringRange &se
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsPunctuation
-//
-//----------------------------------------------------------------------------
-
-BOOL CCompositionProcessorEngine::IsPunctuation(WCHAR wch)
-{
-    for (int i = 0; i < ARRAYSIZE(Global::PunctuationTable); i++)
-    {
-        if (Global::PunctuationTable[i]._Code == wch)
-        {
-            return TRUE;
-        }
-    }
-
-    for (UINT j = 0; j < _PunctuationPair.Count(); j++)
-    {
-        CPunctuationPair* pPuncPair = _PunctuationPair.GetAt(j);
-
-        if (pPuncPair->_punctuation._Code == wch)
-        {
-            return TRUE;
-        }
-    }
-
-    for (UINT k = 0; k < _PunctuationNestPair.Count(); k++)
-    {
-        CPunctuationNestPair* pPuncNestPair = _PunctuationNestPair.GetAt(k);
-
-        if (pPuncNestPair->_punctuation_begin._Code == wch)
-        {
-            return TRUE;
-        }
-        if (pPuncNestPair->_punctuation_end._Code == wch)
-        {
-            return TRUE;
-        }
-    }
-    return FALSE;
-}
-
-//+---------------------------------------------------------------------------
-//
-// GetPunctuationPair
-//
-//----------------------------------------------------------------------------
-
-WCHAR CCompositionProcessorEngine::GetPunctuation(WCHAR wch)
-{
-    for (int i = 0; i < ARRAYSIZE(Global::PunctuationTable); i++)
-    {
-        if (Global::PunctuationTable[i]._Code == wch)
-        {
-            return Global::PunctuationTable[i]._Punctuation;
-        }
-    }
-
-    for (UINT j = 0; j < _PunctuationPair.Count(); j++)
-    {
-        CPunctuationPair* pPuncPair = _PunctuationPair.GetAt(j);
-
-        if (pPuncPair->_punctuation._Code == wch)
-        {
-            if (! pPuncPair->_isPairToggle)
-            {
-                pPuncPair->_isPairToggle = TRUE;
-                return pPuncPair->_punctuation._Punctuation;
-            }
-            else
-            {
-                pPuncPair->_isPairToggle = FALSE;
-                return pPuncPair->_pairPunctuation;
-            }
-        }
-    }
-
-    for (UINT k = 0; k < _PunctuationNestPair.Count(); k++)
-    {
-        CPunctuationNestPair* pPuncNestPair = _PunctuationNestPair.GetAt(k);
-
-        if (pPuncNestPair->_punctuation_begin._Code == wch)
-        {
-            if (pPuncNestPair->_nestCount++ == 0)
-            {
-                return pPuncNestPair->_punctuation_begin._Punctuation;
-            }
-            else
-            {
-                return pPuncNestPair->_pairPunctuation_begin;
-            }
-        }
-        if (pPuncNestPair->_punctuation_end._Code == wch)
-        {
-            if (--pPuncNestPair->_nestCount == 0)
-            {
-                return pPuncNestPair->_punctuation_end._Punctuation;
-            }
-            else
-            {
-                return pPuncNestPair->_pairPunctuation_end;
-            }
-        }
-    }
-    return 0;
-}
-
-//+---------------------------------------------------------------------------
-//
-// IsDoubleSingleByte
-//
-//----------------------------------------------------------------------------
-
-BOOL CCompositionProcessorEngine::IsDoubleSingleByte(WCHAR wch)
-{
-    if (L' ' <= wch && wch <= L'~')
-    {
-        return TRUE;
-    }
-    return FALSE;
-}
 
 //+---------------------------------------------------------------------------
 //
@@ -1284,20 +1158,6 @@ BOOL CCompositionProcessorEngine::IsVirtualKeyNeed(UINT uCode, _In_reads_(1) WCH
         if (IsVirtualKeyKeystrokeComposition(uCode, pKeyState, FUNCTION_NONE))
         {
             return TRUE;
-        }
-        else if ((IsWildcard() && IsWildcardChar(*pwch) && !IsDisableWildcardAtFirst()) ||
-            (IsWildcard() && IsWildcardChar(*pwch) &&  IsDisableWildcardAtFirst() && _keystrokeBuffer.GetLength()))
-        {
-            if (pKeyState)
-            {
-                pKeyState->Category = CATEGORY_COMPOSING;
-                pKeyState->Function = FUNCTION_INPUT;
-            }
-            return TRUE;
-        }
-        else if (_hasWildcardIncludedInKeystrokeBuffer && uCode == VK_SPACE)
-        {
-            if (pKeyState) { pKeyState->Category = CATEGORY_COMPOSING; pKeyState->Function = FUNCTION_CONVERT_WILDCARD; } return TRUE;
         }
     }
 

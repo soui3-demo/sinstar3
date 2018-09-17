@@ -50,19 +50,6 @@ public:
     // Preserved key handler
     void OnPreservedKey(REFGUID rguid, _Out_ BOOL *pIsEaten, _In_ ITfThreadMgr *pThreadMgr, TfClientId tfClientId);
 
-    // Punctuation
-    BOOL IsPunctuation(WCHAR wch);
-    WCHAR GetPunctuation(WCHAR wch);
-
-    BOOL IsDoubleSingleByte(WCHAR wch);
-    BOOL IsWildcard() { return _isWildcard; }
-    BOOL IsDisableWildcardAtFirst() { return _isDisableWildcardAtFirst; }
-    BOOL IsWildcardChar(WCHAR wch) { return ((IsWildcardOneChar(wch) || IsWildcardAllChar(wch)) ? TRUE : FALSE); }
-    BOOL IsWildcardOneChar(WCHAR wch) { return (wch==L'?' ? TRUE : FALSE); }
-    BOOL IsWildcardAllChar(WCHAR wch) { return (wch==L'*' ? TRUE : FALSE); }
-    BOOL IsMakePhraseFromText() { return _hasMakePhraseFromText; }
-    BOOL IsKeystrokeSort() { return _isKeystrokeSort; }
-
     // Language bar control
     void SetLanguageBarStatus(DWORD status, BOOL isSet);
 

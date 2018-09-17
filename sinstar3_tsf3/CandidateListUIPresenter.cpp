@@ -102,15 +102,6 @@ HRESULT CSinstar3Tsf::_HandleCandidateWorker(TfEditCookie ec, _In_ ITfContext *p
 
     candidateString.Set(pCandidateString, candidateLen);
 
-    BOOL fMakePhraseFromText = _pCompositionProcessorEngine->IsMakePhraseFromText();
-    if (fMakePhraseFromText)
-    {
-        _pCompositionProcessorEngine->GetCandidateStringInConverted(candidateString, &candidatePhraseList);
-        LCID locale = _pCompositionProcessorEngine->GetLocale();
-
-        _pCandidateListUIPresenter->RemoveSpecificCandidateFromList(locale, candidatePhraseList, candidateString);
-    }
-
     // We have a candidate list if candidatePhraseList.Cnt is not 0
     // If we are showing reverse conversion, use CCandidateListUIPresenter
     CANDIDATE_MODE tempCandMode = CANDIDATE_NONE;
