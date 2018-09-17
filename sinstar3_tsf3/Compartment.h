@@ -33,16 +33,11 @@ private:
 
 typedef HRESULT (*CESCALLBACK)(void *pv, REFGUID guidCompartment);
 
-class CCompartmentEventSink : public ITfCompartmentEventSink
+class CCompartmentEventSink : public CUnknown, public ITfCompartmentEventSink
 {
 public:
     CCompartmentEventSink(_In_ CESCALLBACK pfnCallback, _In_ void *pv);
     ~CCompartmentEventSink();
-
-    // IUnknown
-    STDMETHODIMP QueryInterface(REFIID riid, _Outptr_ void **ppvObj);
-    STDMETHODIMP_(ULONG) AddRef(void);
-    STDMETHODIMP_(ULONG) Release(void);
 
     // ITfCompartmentEventSink
     STDMETHODIMP OnChange(_In_ REFGUID guid);
@@ -57,5 +52,7 @@ private:
     CESCALLBACK _pfnCallback;
     void *_pv;
 
-    LONG _refCount;
+public:
+	IUNKNOWN_BEGIN(ITfCompartmentEventSink)
+	IUNKNOWN_END()
 };

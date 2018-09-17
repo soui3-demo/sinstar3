@@ -21,8 +21,6 @@ CTfTextLayoutSink::CTfTextLayoutSink(_In_ CSinstar3Tsf *pTextService)
 
     _dwCookieTextLayoutSink = TF_INVALID_COOKIE;
 
-    _refCount = 1;
-
     DllAddRef();
 }
 
@@ -34,49 +32,6 @@ CTfTextLayoutSink::~CTfTextLayoutSink()
     }
 
     DllRelease();
-}
-
-STDAPI CTfTextLayoutSink::QueryInterface(REFIID riid, _Outptr_ void **ppvObj)
-{
-    if (ppvObj == nullptr)
-    {
-        return E_INVALIDARG;
-    }
-
-    *ppvObj = nullptr;
-
-    if (IsEqualIID(riid, IID_IUnknown) ||
-        IsEqualIID(riid, IID_ITfTextLayoutSink))
-    {
-        *ppvObj = (ITfTextLayoutSink *)this;
-    }
-
-    if (*ppvObj)
-    {
-        AddRef();
-        return S_OK;
-    }
-
-    return E_NOINTERFACE;
-}
-
-STDAPI_(ULONG) CTfTextLayoutSink::AddRef()
-{
-    return ++_refCount;
-}
-
-STDAPI_(ULONG) CTfTextLayoutSink::Release()
-{
-    LONG cr = --_refCount;
-
-    assert(_refCount >= 0);
-
-    if (_refCount == 0)
-    {
-        delete this;
-    }
-
-    return cr;
 }
 
 //+---------------------------------------------------------------------------

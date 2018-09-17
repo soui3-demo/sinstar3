@@ -1,7 +1,7 @@
 #pragma once
 
 
-#define IUNKNOWN_BEGIN(iid,cls ) \
+#define IUNKNOWN_BEGIN2(iid,cls ) \
 	STDMETHODIMP_(ULONG) AddRef(void)\
 	{\
 		return _AddRef();\
@@ -20,7 +20,7 @@
 			*ppvObj=(cls *)this;\
 		}\
 
-#define IUNKNOWN_ADD_IID(iid,cls) \
+#define IUNKNOWN_ADD_IID2(iid,cls) \
 	if(IsEqualIID(riid,iid))\
 		{\
 		*ppvObj=(cls *)this;\
@@ -35,11 +35,11 @@
 		return E_NOINTERFACE;\
 	}
 
-#define IUNKNOWN_BEGIN2(iface ) \
-IUNKNOWN_BEGIN(__uuidof(iface),iface)
+#define IUNKNOWN_BEGIN(iface ) \
+IUNKNOWN_BEGIN2(__uuidof(iface),iface)
 
-#define IUNKNOWN_ADD_IID2(iface) \
-IUNKNOWN_ADD_IID(__uuidof(iface),iface)
+#define IUNKNOWN_ADD_IID(iface) \
+IUNKNOWN_ADD_IID2(__uuidof(iface),iface)
 
 
 class CUnknown

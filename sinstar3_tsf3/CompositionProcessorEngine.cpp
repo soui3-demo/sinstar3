@@ -980,6 +980,7 @@ BOOL CCompositionProcessorEngine::SetupDictionaryFile()
 {	
     // Not yet registered
     // Register CFileMapping
+	/*
     WCHAR wszFileName[MAX_PATH] = {'\0'};
     DWORD cchA = GetModuleFileName(Global::dllInstanceHandle, wszFileName, ARRAYSIZE(wszFileName));
     size_t iDicFileNameLen = cchA + wcslen(TEXTSERVICE_DIC);
@@ -1001,6 +1002,7 @@ BOOL CCompositionProcessorEngine::SetupDictionaryFile()
             break;
         }
     }
+	*/
 
     // create CFileMapping object
     if (_pDictionaryFile == nullptr)
@@ -1011,7 +1013,7 @@ BOOL CCompositionProcessorEngine::SetupDictionaryFile()
             goto ErrorExit;
         }
     }
-    if (!(_pDictionaryFile)->CreateFile(pwszFileName, GENERIC_READ, OPEN_EXISTING, FILE_SHARE_READ))
+    if (!(_pDictionaryFile)->CreateFile(TEXTSERVICE_DIC, GENERIC_READ, OPEN_EXISTING, FILE_SHARE_READ))
     {
         goto ErrorExit;
     }
@@ -1022,13 +1024,13 @@ BOOL CCompositionProcessorEngine::SetupDictionaryFile()
         goto ErrorExit;
     }
 
-    delete []pwszFileName;
+    //delete []pwszFileName;
     return TRUE;
 ErrorExit:
-    if (pwszFileName)
-    {
-        delete []pwszFileName;
-    }
+    //if (pwszFileName)
+    //{
+    //    delete []pwszFileName;
+    //}
     return FALSE;
 }
 

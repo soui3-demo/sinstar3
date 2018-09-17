@@ -20,3 +20,5 @@
 #include "initguid.h"
 #include "msctf.h"
 #include "ctffunc.h"
+
+#include "../include/unknown.h"

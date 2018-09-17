@@ -9,16 +9,11 @@
 
 class CSinstar3Tsf;
 
-class CTfTextLayoutSink : public ITfTextLayoutSink
+class CTfTextLayoutSink : public CUnknown, public ITfTextLayoutSink
 {
 public:
     CTfTextLayoutSink(_In_ CSinstar3Tsf *pTextService);
     virtual ~CTfTextLayoutSink();
-
-    // IUnknown methods
-    STDMETHODIMP QueryInterface(REFIID riid, _Outptr_ void **ppvObj);
-    STDMETHODIMP_(ULONG) AddRef(void);
-    STDMETHODIMP_(ULONG) Release(void);
 
     // ITfTextLayoutSink
     STDMETHODIMP OnLayoutChange(_In_ ITfContext *pContext, TfLayoutCode lcode, _In_ ITfContextView *pContextView);
@@ -42,5 +37,7 @@ private:
     TfEditCookie _tfEditCookie;
     CSinstar3Tsf* _pTextService;
     DWORD _dwCookieTextLayoutSink;
-    LONG _refCount;
+public:
+	IUNKNOWN_BEGIN(ITfTextLayoutSink)
+	IUNKNOWN_END()
 };

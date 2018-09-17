@@ -6,8 +6,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved
 
 #include "Private.h"
-#include "Compartment.h"
 #include "Globals.h"
+#include "Compartment.h"
 
 //////////////////////////////////////////////////////////////////////
 //
@@ -201,7 +201,6 @@ CCompartmentEventSink::CCompartmentEventSink(_In_ CESCALLBACK pfnCallback, _In_ 
 {
     _pfnCallback = pfnCallback;
     _pv = pv;
-    _refCount = 1;
 }
 
 //+---------------------------------------------------------------------------
@@ -212,65 +211,6 @@ CCompartmentEventSink::~CCompartmentEventSink()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-// QueryInterface
-//
-//----------------------------------------------------------------------------
-
-STDAPI CCompartmentEventSink::QueryInterface(REFIID riid, _Outptr_ void **ppvObj)
-{
-    if (ppvObj == nullptr)
-        return E_INVALIDARG;
-
-    *ppvObj = nullptr;
-
-    if (IsEqualIID(riid, IID_IUnknown) ||
-        IsEqualIID(riid, IID_ITfCompartmentEventSink))
-    {
-        *ppvObj = (CCompartmentEventSink *)this;
-    }
-
-    if (*ppvObj)
-    {
-        AddRef();
-        return S_OK;
-    }
-
-    return E_NOINTERFACE;
-}
-
-
-//+---------------------------------------------------------------------------
-//
-// AddRef
-//
-//----------------------------------------------------------------------------
-
-STDAPI_(ULONG) CCompartmentEventSink::AddRef()
-{
-    return ++_refCount;
-}
-
-//+---------------------------------------------------------------------------
-//
-// Release
-//
-//----------------------------------------------------------------------------
-
-STDAPI_(ULONG) CCompartmentEventSink::Release()
-{
-    LONG cr = --_refCount;
-
-    assert(_refCount >= 0);
-
-    if (_refCount == 0)
-    {
-        delete this;
-    }
-
-    return cr;
-}
 
 //+---------------------------------------------------------------------------
 //

@@ -86,7 +86,6 @@ CSinstar3Tsf::CSinstar3Tsf()
 
     _pContext = NULL;
 
-    _refCount = 1;
 }
 
 //+---------------------------------------------------------------------------
@@ -103,112 +102,6 @@ CSinstar3Tsf::~CSinstar3Tsf()
         _pCandidateListUIPresenter = nullptr;
     }
     DllRelease();
-}
-
-//+---------------------------------------------------------------------------
-//
-// QueryInterface
-//
-//----------------------------------------------------------------------------
-
-STDAPI CSinstar3Tsf::QueryInterface(REFIID riid, _Outptr_ void **ppvObj)
-{
-    if (ppvObj == nullptr)
-    {
-        return E_INVALIDARG;
-    }
-
-    *ppvObj = nullptr;
-
-    if (IsEqualIID(riid, IID_IUnknown) ||
-        IsEqualIID(riid, IID_ITfTextInputProcessor))
-    {
-        *ppvObj = (ITfTextInputProcessor *)this;
-    }
-    else if (IsEqualIID(riid, IID_ITfTextInputProcessorEx))
-    {
-        *ppvObj = (ITfTextInputProcessorEx *)this;
-    }
-    else if (IsEqualIID(riid, IID_ITfThreadMgrEventSink))
-    {
-        *ppvObj = (ITfThreadMgrEventSink *)this;
-    }
-    else if (IsEqualIID(riid, IID_ITfTextEditSink))
-    {
-        *ppvObj = (ITfTextEditSink *)this;
-    }
-    else if (IsEqualIID(riid, IID_ITfKeyEventSink))
-    {
-        *ppvObj = (ITfKeyEventSink *)this;
-    }
-    else if (IsEqualIID(riid, IID_ITfActiveLanguageProfileNotifySink))
-    {
-        *ppvObj = (ITfActiveLanguageProfileNotifySink *)this;
-    }
-    else if (IsEqualIID(riid, IID_ITfCompositionSink))
-    {
-        *ppvObj = (ITfKeyEventSink *)this;
-    }
-    else if (IsEqualIID(riid, IID_ITfDisplayAttributeProvider))
-    {
-        *ppvObj = (ITfDisplayAttributeProvider *)this;
-    }
-    else if (IsEqualIID(riid, IID_ITfThreadFocusSink))
-    {
-        *ppvObj = (ITfThreadFocusSink *)this;
-    }
-    else if (IsEqualIID(riid, IID_ITfFunctionProvider))
-    {
-        *ppvObj = (ITfFunctionProvider *)this;
-    }
-    else if (IsEqualIID(riid, IID_ITfFunction))
-    {
-        *ppvObj = (ITfFunction *)this;
-    }
-    else if (IsEqualIID(riid, IID_ITfFnGetPreferredTouchKeyboardLayout))
-    {
-        *ppvObj = (ITfFnGetPreferredTouchKeyboardLayout *)this;
-    }
-
-    if (*ppvObj)
-    {
-        AddRef();
-        return S_OK;
-    }
-
-    return E_NOINTERFACE;
-}
-
-
-//+---------------------------------------------------------------------------
-//
-// AddRef
-//
-//----------------------------------------------------------------------------
-
-STDAPI_(ULONG) CSinstar3Tsf::AddRef()
-{
-    return ++_refCount;
-}
-
-//+---------------------------------------------------------------------------
-//
-// Release
-//
-//----------------------------------------------------------------------------
-
-STDAPI_(ULONG) CSinstar3Tsf::Release()
-{
-    LONG cr = --_refCount;
-
-    assert(_refCount >= 0);
-
-    if (_refCount == 0)
-    {
-        delete this;
-    }
-
-    return cr;
 }
 
 //+---------------------------------------------------------------------------
