@@ -26,7 +26,8 @@ class CReadingLine;
 // 3rd party IME.
 //----------------------------------------------------------------------------
 
-class CCandidateListUIPresenter :public ILayoutListener,public CUnknown,
+class CCandidateListUIPresenter :public CUnknown,
+	public ILayoutListener,
     public ITfCandidateListUIElementBehavior,
     public ITfIntegratableCandidateListUIElement
 {

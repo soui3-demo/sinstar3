@@ -28,7 +28,6 @@ CCandidateWindow::CCandidateWindow(_In_ CANDWNDCALLBACK pfnCallback, _In_ void *
     _pfnCallback = pfnCallback;
     _pObj = pv;
 
-    _pShadowWnd = nullptr;
 
     _cyRow = CANDWND_ROW_WIDTH;
     _cxTitle = 0;
@@ -51,7 +50,6 @@ CCandidateWindow::CCandidateWindow(_In_ CANDWNDCALLBACK pfnCallback, _In_ void *
 CCandidateWindow::~CCandidateWindow()
 {
     _ClearList();
-    _DeleteShadowWnd();
     _DeleteVScrollBarWnd();
 }
 
@@ -73,11 +71,6 @@ BOOL CCandidateWindow::_Create(ATOM atom, _In_ UINT wndWidth, _In_opt_ HWND pare
         goto Exit;
     }
 
-    ret = _CreateBackGroundShadowWindow();
-    if (FALSE == ret)
-    {
-        goto Exit;
-    }
 
     ret = _CreateVScrollWindow();
     if (FALSE == ret)
@@ -106,24 +99,6 @@ BOOL CCandidateWindow::_CreateMainWindow(ATOM atom, _In_opt_ HWND parentWndHandl
     return TRUE;
 }
 
-BOOL CCandidateWindow::_CreateBackGroundShadowWindow()
-{
-    _pShadowWnd = new (std::nothrow) CShadowWindow(this);
-    if (_pShadowWnd == nullptr)
-    {
-        return FALSE;
-    }
-
-    if (!_pShadowWnd->_Create(Global::AtomShadowWindow,
-        WS_EX_TOPMOST | WS_EX_TOOLWINDOW | WS_EX_LAYERED,
-        WS_DISABLED | WS_POPUP, this))
-    {
-        _DeleteShadowWnd();
-        return FALSE;
-    }
-
-    return TRUE;
-}
 
 BOOL CCandidateWindow::_CreateVScrollWindow()
 {
@@ -135,7 +110,6 @@ BOOL CCandidateWindow::_CreateVScrollWindow()
 
     if (_pVScrollBarWnd == nullptr)
     {
-        _DeleteShadowWnd();
         goto Exit;
     }
 
@@ -144,7 +118,6 @@ BOOL CCandidateWindow::_CreateVScrollWindow()
     if (!_pVScrollBarWnd->_Create(Global::AtomScrollBarWindow, WS_EX_TOPMOST | WS_EX_TOOLWINDOW, WS_CHILD, this))
     {
         _DeleteVScrollBarWnd();
-        _DeleteShadowWnd();
         goto Exit;
     }
     
@@ -194,10 +167,6 @@ void CCandidateWindow::_Move(int x, int y)
 
 void CCandidateWindow::_Show(BOOL isShowWnd)
 {
-    if (_pShadowWnd)
-    {
-        _pShadowWnd->_Show(isShowWnd);
-    }
     CBaseWindow::_Show(isShowWnd);
 }
 
@@ -249,20 +218,9 @@ LRESULT CALLBACK CCandidateWindow::_WindowProcCallback(_In_ HWND wndHandle, UINT
             }
         }
         return 0;
-
-    case WM_DESTROY:
-        _DeleteShadowWnd();
-        return 0;
-
     case WM_WINDOWPOSCHANGED:
         {
             WINDOWPOS* pWndPos = (WINDOWPOS*)lParam;
-
-            // move shadow
-            if (_pShadowWnd)
-            {
-                _pShadowWnd->_OnOwnerWndMoved((pWndPos->flags & SWP_NOSIZE) == 0);
-            }
 
             // move v-scroll
             if (_pVScrollBarWnd)
@@ -278,23 +236,6 @@ LRESULT CALLBACK CCandidateWindow::_WindowProcCallback(_In_ HWND wndHandle, UINT
         {
             WINDOWPOS* pWndPos = (WINDOWPOS*)lParam;
 
-            // show/hide shadow
-            if (_pShadowWnd)
-            {
-                if ((pWndPos->flags & SWP_HIDEWINDOW) != 0)
-                {
-                    _pShadowWnd->_Show(FALSE);
-                }
-
-                // don't go behaind of shadow
-                if (((pWndPos->flags & SWP_NOZORDER) == 0) && (pWndPos->hwndInsertAfter == _pShadowWnd->_GetWnd()))
-                {
-                    pWndPos->flags |= SWP_NOZORDER;
-                }
-
-                _pShadowWnd->_OnOwnerWndMoved((pWndPos->flags & SWP_NOSIZE) == 0);
-            }
-
             // show/hide v-scroll
             if (_pVScrollBarWnd)
             {
@@ -309,12 +250,6 @@ LRESULT CALLBACK CCandidateWindow::_WindowProcCallback(_In_ HWND wndHandle, UINT
         break;
 
     case WM_SHOWWINDOW:
-        // show/hide shadow
-        if (_pShadowWnd)
-        {
-            _pShadowWnd->_Show((BOOL)wParam);
-        }
-
         // show/hide v-scroll
         if (_pVScrollBarWnd)
         {
@@ -1346,14 +1281,6 @@ HRESULT CCandidateWindow::_AdjustPageIndex(_Inout_ UINT & currentPage, _Inout_ U
 
 Exit:
     return hr;
-}
-void CCandidateWindow::_DeleteShadowWnd()
-{
-    if (nullptr != _pShadowWnd)
-    {
-        delete _pShadowWnd;
-        _pShadowWnd = nullptr;
-    }
 }
 
 void CCandidateWindow::_DeleteVScrollBarWnd()

@@ -10,7 +10,6 @@
 
 #include "private.h"
 #include "BaseWindow.h"
-#include "ShadowWindow.h"
 #include "ScrollBarWindow.h"
 #include "Sinstar3TsfBaseStructure.h"
 
@@ -80,13 +79,11 @@ private:
     void _FireMessageToLightDismiss(_In_ HWND wndHandle, _In_ WINDOWPOS *pWndPos);
 
     BOOL _CreateMainWindow(ATOM atom, _In_opt_ HWND parentWndHandle);
-    BOOL _CreateBackGroundShadowWindow();
     BOOL _CreateVScrollWindow();
 
     HRESULT _AdjustPageIndex(_Inout_ UINT & currentPage, _Inout_ UINT & currentPageIndex);
 
     void _ResizeWindow();
-    void _DeleteShadowWnd();
     void _DeleteVScrollBarWnd();
 
     friend COLORREF _AdjustTextColor(_In_ COLORREF crColor, _In_ COLORREF crBkColor);
@@ -110,7 +107,6 @@ private:
     CANDWNDCALLBACK _pfnCallback;
     void* _pObj;
 
-    CShadowWindow* _pShadowWnd;
     CScrollBarWindow* _pVScrollBarWnd;
 
     BOOL _dontAdjustOnEmptyItemPage;

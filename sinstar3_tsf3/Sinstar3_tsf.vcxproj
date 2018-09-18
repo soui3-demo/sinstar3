@@ -47,7 +47,6 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Sinstar3_Tsf.h" />
     <ClInclude Include="ScrollBarWindow.h" />
-    <ClInclude Include="ShadowWindow.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TfInputProcessorProfile.h" />
     <ClInclude Include="TfTextLayoutSink.h" />
@@ -81,7 +80,6 @@
     <ClCompile Include="RegKey.cpp" />
     <ClCompile Include="ScrollBarWindow.cpp" />
     <ClCompile Include="Server.cpp" />
-    <ClCompile Include="ShadowWindow.cpp" />
     <ClCompile Include="StartComposition.cpp" />
     <ClCompile Include="Sinstar3_Tsf.cpp" />
     <ClCompile Include="TextEditSink.cpp" />
