@@ -29,3 +29,11 @@ iscore
 *.log
 Debug15
 Release15
+/ipch
+/lib
+/data
+/新建文件夹
+/sinstar3.VC.db
+/sinstar3_tsf.VC.db
+/sinstar3_tsf.VC.VC.opendb
+/sinstar3_tsf3/sinstar3_tsf3.VC.db

@@ -188,7 +188,6 @@ BOOL CCompositionProcessorEngine::SetupLanguageProfile(LANGID langid, REFGUID gu
 
     SetupPreserved(pThreadMgr, tfClientId);	
 	InitializeSinstar3TsfCompartment(pThreadMgr, tfClientId);
-    SetupPunctuationPair();
     SetupLanguageBar(pThreadMgr, tfClientId, isSecureMode);
     SetupKeystroke();
     SetupConfiguration();
@@ -632,36 +631,6 @@ VOID CCompositionProcessorEngine::SetLanguageBarStatus(DWORD status, BOOL isSet)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// SetupPunctuationPair
-//
-//----------------------------------------------------------------------------
-
-void CCompositionProcessorEngine::SetupPunctuationPair()
-{
-    // Punctuation pair
-    const int pair_count = 2;
-    CPunctuationPair punc_quotation_mark(L'"', 0x201C, 0x201D);
-    CPunctuationPair punc_apostrophe(L'\'', 0x2018, 0x2019);
-
-    CPunctuationPair puncPairs[pair_count] = {
-        punc_quotation_mark,
-        punc_apostrophe,
-    };
-
-    for (int i = 0; i < pair_count; ++i)
-    {
-        CPunctuationPair *pPuncPair = _PunctuationPair.Append();
-        *pPuncPair = puncPairs[i];
-    }
-
-    // Punctuation nest pair
-    CPunctuationNestPair punc_angle_bracket(L'<', 0x300A, 0x3008, L'>', 0x300B, 0x3009);
-
-    CPunctuationNestPair* pPuncNestPair = _PunctuationNestPair.Append();
-    *pPuncNestPair = punc_angle_bracket;
-}
 
 void CCompositionProcessorEngine::InitializeSinstar3TsfCompartment(_In_ ITfThreadMgr *pThreadMgr, TfClientId tfClientId)
 {

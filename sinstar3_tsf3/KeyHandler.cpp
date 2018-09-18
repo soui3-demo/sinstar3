@@ -177,7 +177,7 @@ HRESULT CSinstar3Tsf::_HandleCompositionInputWorker(_In_ CCompositionProcessorEn
     //
     std::wstring str = pCompositionProcessorEngine->GetReadingStrings();
 
-	hr = _AddComposingAndChar(ec, pContext, str);
+	//hr = _AddComposingAndChar(ec, pContext, str);
 
     //
     // Get candidate string from composition processor engine

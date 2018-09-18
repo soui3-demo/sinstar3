@@ -76,7 +76,6 @@ private:
     void SetupConfiguration();
     void SetupLanguageBar(_In_ ITfThreadMgr *pThreadMgr, TfClientId tfClientId, BOOL isSecureMode);
     void SetKeystrokeTable(_Inout_ CSampleImeArray<_KEYSTROKE> *pKeystroke);
-    void SetupPunctuationPair();
     void CreateLanguageBarButton(DWORD dwEnable, GUID guidLangBar, _In_z_ LPCWSTR pwszDescriptionValue, _In_z_ LPCWSTR pwszTooltipValue, DWORD dwOnIconIndex, DWORD dwOffIconIndex, _Outptr_result_maybenull_ CLangBarItemButton **ppLangBarItemButton, BOOL isSecureMode);
     void SetInitialCandidateListRange();
     void SetDefaultCandidateTextFont();
@@ -137,10 +136,6 @@ private:
     };
 
     XPreservedKey _PreservedKey_IMEMode;
-
-    // Punctuation data
-    CSampleImeArray<CPunctuationPair> _PunctuationPair;
-    CSampleImeArray<CPunctuationNestPair> _PunctuationNestPair;
 
     // Language bar data
     CLangBarItemButton* _pLanguageBar_IMEMode;
