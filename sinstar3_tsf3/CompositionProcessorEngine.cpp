@@ -287,17 +287,6 @@ void CCompositionProcessorEngine::GetCandidateList(_Inout_ CSampleImeArray<CCand
 	}
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetCandidateStringInConverted
-//
-//----------------------------------------------------------------------------
-
-void CCompositionProcessorEngine::GetCandidateStringInConverted(CStringRange &searchString, _In_ CSampleImeArray<CCandidateListItem> *pCandidateList)
-{
-
-}
-
 
 //+---------------------------------------------------------------------------
 //

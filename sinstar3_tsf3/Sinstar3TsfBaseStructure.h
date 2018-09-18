@@ -204,27 +204,6 @@ private:
     CSampleImeArray<DWORD> _CandidateListIndexRange;
 };
 
-class CStringRange
-{
-public:
-    CStringRange();
-    ~CStringRange();
-
-    const WCHAR *Get() const;
-    const DWORD_PTR GetLength() const;
-    void Clear();
-    void Set(const WCHAR *pwch, DWORD_PTR dwLength);
-    void Set(CStringRange &sr);
-    CStringRange& operator=(const CStringRange& sr);
-    void CharNext(_Inout_ CStringRange* pCharNext);
-    static int Compare(LCID locale, _In_ CStringRange* pString1, _In_ CStringRange* pString2);
-    static BOOL WildcardCompare(LCID locale, _In_ CStringRange* stringWithWildcard, _In_ CStringRange* targetString);
-
-protected:
-    DWORD_PTR _stringBufLen;         // Length is in character count.
-    const WCHAR *_pStringBuf;    // Buffer which is not add zero terminate.
-};
-
 #include <string>
 //---------------------------------------------------------------------
 // CCandidateListItem
