@@ -105,9 +105,6 @@ CCompositionProcessorEngine::CCompositionProcessorEngine()
 
     _pCompartmentConversion = nullptr;
     _pCompartmentKeyboardOpenEventSink = nullptr;
-    _pCompartmentConversionEventSink = nullptr;
-
-    _hasWildcardIncludedInKeystrokeBuffer = FALSE;
 
     _isWildcard = FALSE;
     _isDisableWildcardAtFirst = FALSE;
@@ -147,13 +144,6 @@ CCompositionProcessorEngine::~CCompositionProcessorEngine()
         delete _pCompartmentKeyboardOpenEventSink;
         _pCompartmentKeyboardOpenEventSink = nullptr;
     }
-    if (_pCompartmentConversionEventSink)
-    {
-        _pCompartmentConversionEventSink->_Unadvise();
-        delete _pCompartmentConversionEventSink;
-        _pCompartmentConversionEventSink = nullptr;
-    }
-
 }
 
 //+---------------------------------------------------------------------------
@@ -296,29 +286,12 @@ void CCompositionProcessorEngine::GetCandidateList(_Inout_ CSampleImeArray<CCand
 
 void CCompositionProcessorEngine::SetupKeystroke()
 {
-    SetKeystrokeTable(&_KeystrokeComposition);
+	for (int i = 0; i < 26; i++)
+	{
+		_KeystrokeComposition.Append(_keystrokeTable[i]);
+	}
+
     return;
-}
-
-//+---------------------------------------------------------------------------
-//
-// SetKeystrokeTable
-//
-//----------------------------------------------------------------------------
-
-void CCompositionProcessorEngine::SetKeystrokeTable(_Inout_ CSampleImeArray<_KEYSTROKE> *pKeystroke)
-{
-    for (int i = 0; i < 26; i++)
-    {
-        _KEYSTROKE* pKS = nullptr;
-
-        pKS = pKeystroke->Append();
-        if (!pKS)
-        {
-            break;
-        }
-        *pKS = _keystrokeTable[i];
-    }
 }
 
 //+---------------------------------------------------------------------------
@@ -499,15 +472,10 @@ void CCompositionProcessorEngine::SetupLanguageBar(_In_ ITfThreadMgr *pThreadMgr
 
     _pCompartmentConversion = new (std::nothrow) CCompartment(pThreadMgr, tfClientId, GUID_COMPARTMENT_KEYBOARD_INPUTMODE_CONVERSION);
     _pCompartmentKeyboardOpenEventSink = new (std::nothrow) CCompartmentEventSink(CompartmentCallback, this);
-    _pCompartmentConversionEventSink = new (std::nothrow) CCompartmentEventSink(CompartmentCallback, this);
 
     if (_pCompartmentKeyboardOpenEventSink)
     {
         _pCompartmentKeyboardOpenEventSink->_Advise(pThreadMgr, GUID_COMPARTMENT_KEYBOARD_OPENCLOSE);
-    }
-    if (_pCompartmentConversionEventSink)
-    {
-        _pCompartmentConversionEventSink->_Advise(pThreadMgr, GUID_COMPARTMENT_KEYBOARD_INPUTMODE_CONVERSION);
     }
 
     return;
@@ -990,20 +958,14 @@ void CCompositionProcessorEngine::SetInitialCandidateListRange()
 {
     for (DWORD i = 1; i <= 10; i++)
     {
-        DWORD* pNewIndexRange = nullptr;
-
-        pNewIndexRange = _candidateListIndexRange.Append();
-        if (pNewIndexRange != nullptr)
-        {
-            if (i != 10)
-            {
-                *pNewIndexRange = i;
-            }
-            else
-            {
-                *pNewIndexRange = 0;
-            }
-        }
+		if (i != 10)
+		{
+			_candidateListIndexRange.Append(i);
+		}
+		else
+		{
+			_candidateListIndexRange.Append(0);
+		}
     }
 }
 
@@ -1073,14 +1035,6 @@ BOOL CCompositionProcessorEngine::IsVirtualKeyNeed(UINT uCode, _In_reads_(1) WCH
         if (IsVirtualKeyKeystrokeCandidate(uCode, pKeyState, candidateMode, &isRetCode, &_KeystrokeCandidate))
         {
             return isRetCode;
-        }
-
-        if (hasCandidateWithWildcard)
-        {
-            if (IsVirtualKeyKeystrokeCandidate(uCode, pKeyState, candidateMode, &isRetCode, &_KeystrokeCandidateWildcard))
-            {
-                return isRetCode;
-            }
         }
 
         // Candidate list could not handle key. We can try to restart the composition.
@@ -1368,37 +1322,8 @@ BOOL CCompositionProcessorEngine::IsKeystrokeRange(UINT uCode, _Out_ _KEYSTROKE_
 
     if (_candidateListIndexRange.IsRange(uCode))
     {
-        if (candidateMode == CANDIDATE_PHRASE)
-        {
-            // Candidate phrase could specify modifier
-            if ((GetCandidateListPhraseModifier() == 0 && Global::ModifiersValue == 0) ||
-                (GetCandidateListPhraseModifier() != 0 && Global::CheckModifiers(Global::ModifiersValue, GetCandidateListPhraseModifier())))
-            {
-                pKeyState->Category = CATEGORY_PHRASE; pKeyState->Function = FUNCTION_SELECT_BY_NUMBER;
-                return TRUE;
-            }
-            else
-            {
-                pKeyState->Category = CATEGORY_INVOKE_COMPOSITION_EDIT_SESSION; pKeyState->Function = FUNCTION_FINALIZE_TEXTSTORE_AND_INPUT;
-                return FALSE;
-            }
-        }
-        else if (candidateMode == CANDIDATE_WITH_NEXT_COMPOSITION)
-        {
-            // Candidate phrase could specify modifier
-            if ((GetCandidateListPhraseModifier() == 0 && Global::ModifiersValue == 0) ||
-                (GetCandidateListPhraseModifier() != 0 && Global::CheckModifiers(Global::ModifiersValue, GetCandidateListPhraseModifier())))
-            {
-                pKeyState->Category = CATEGORY_CANDIDATE; pKeyState->Function = FUNCTION_SELECT_BY_NUMBER;
-                return TRUE;
-            }
-            // else next composition
-        }
-        else if (candidateMode != CANDIDATE_NONE)
-        {
-            pKeyState->Category = CATEGORY_CANDIDATE; pKeyState->Function = FUNCTION_SELECT_BY_NUMBER;
-            return TRUE;
-        }
+		pKeyState->Category = CATEGORY_CANDIDATE; pKeyState->Function = FUNCTION_SELECT_BY_NUMBER;
+		return TRUE;
     }
     return FALSE;
 }

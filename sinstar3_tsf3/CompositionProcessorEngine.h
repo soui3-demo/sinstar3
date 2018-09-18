@@ -74,7 +74,6 @@ private:
     void SetupPreserved(_In_ ITfThreadMgr *pThreadMgr, TfClientId tfClientId);
     void SetupConfiguration();
     void SetupLanguageBar(_In_ ITfThreadMgr *pThreadMgr, TfClientId tfClientId, BOOL isSecureMode);
-    void SetKeystrokeTable(_Inout_ CSampleImeArray<_KEYSTROKE> *pKeystroke);
     void CreateLanguageBarButton(DWORD dwEnable, GUID guidLangBar, _In_z_ LPCWSTR pwszDescriptionValue, _In_z_ LPCWSTR pwszTooltipValue, DWORD dwOnIconIndex, DWORD dwOffIconIndex, _Outptr_result_maybenull_ CLangBarItemButton **ppLangBarItemButton, BOOL isSecureMode);
     void SetInitialCandidateListRange();
     void SetDefaultCandidateTextFont();
@@ -108,17 +107,12 @@ private:
 
     std::wstring _keystrokeBuffer;
 
-    BOOL _hasWildcardIncludedInKeystrokeBuffer;
-
     LANGID _langid;
     GUID _guidProfile;
     TfClientId  _tfClientId;
 
     CSampleImeArray<_KEYSTROKE> _KeystrokeComposition;
     CSampleImeArray<_KEYSTROKE> _KeystrokeCandidate;
-    CSampleImeArray<_KEYSTROKE> _KeystrokeCandidateWildcard;
-    CSampleImeArray<_KEYSTROKE> _KeystrokeCandidateSymbol;
-    CSampleImeArray<_KEYSTROKE> _KeystrokeSymbol;
 
     // Preserved key data
     class XPreservedKey
@@ -141,7 +135,6 @@ private:
 
     // Compartment
     CCompartment* _pCompartmentConversion;
-    CCompartmentEventSink* _pCompartmentConversionEventSink;
     CCompartmentEventSink* _pCompartmentKeyboardOpenEventSink;
 
     // Configuration data
