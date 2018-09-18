@@ -40,10 +40,10 @@ public:
     void RemoveVirtualKey(DWORD_PTR dwIndex);
     void PurgeVirtualKey();
 
-    DWORD_PTR GetVirtualKeyLength() { return _keystrokeBuffer.GetLength(); }
+    DWORD_PTR GetVirtualKeyLength() { return _keystrokeBuffer.length(); }
     WCHAR GetVirtualKey(DWORD_PTR dwIndex);
 
-    void GetReadingStrings(_Inout_ CSampleImeArray<CStringRange> *pReadingStrings, _Out_ BOOL *pIsWildcardIncluded);
+    std::wstring GetReadingStrings();
     void GetCandidateList(_Inout_ CSampleImeArray<CCandidateListItem> *pCandidateList, BOOL isIncrementalWordSearch, BOOL isWildcardSearch);
     void GetCandidateStringInConverted(CStringRange &searchString, _In_ CSampleImeArray<CCandidateListItem> *pCandidateList);
 
@@ -108,7 +108,7 @@ private:
     };
     _KEYSTROKE _keystrokeTable[26];
 
-    CStringRange _keystrokeBuffer;
+    std::wstring _keystrokeBuffer;
 
     BOOL _hasWildcardIncludedInKeystrokeBuffer;
 

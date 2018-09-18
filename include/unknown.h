@@ -22,17 +22,17 @@
 
 #define IUNKNOWN_ADD_IID2(iid,cls) \
 	if(IsEqualIID(riid,iid))\
-		{\
+	{\
 		*ppvObj=(cls *)this;\
-		}\
+	}\
 
 #define IUNKNOWN_END() \
 	if (*ppvObj)\
-		{\
-		_AddRef();\
+	{\
+		AddRef();\
 		return S_OK;\
-		}\
-		return E_NOINTERFACE;\
+	}\
+	return E_NOINTERFACE;\
 	}
 
 #define IUNKNOWN_BEGIN(iface ) \
@@ -55,12 +55,12 @@ public:
 	virtual void OnFinalRelease(){}
 
 protected:
-	ULONG _AddRef(void)
+	STDMETHODIMP_(ULONG) _AddRef(void)
 	{
 		return (ULONG)InterlockedIncrement(&m_cRef);
 	}
 
-	ULONG _Release(void)
+	STDMETHODIMP_(ULONG) _Release(void)
 	{
 		LONG ret = InterlockedDecrement(&m_cRef);
 		if(ret == 0)
@@ -71,6 +71,9 @@ protected:
 		return ret;
 	}
 
+	LONG GetRef() const {
+		return m_cRef;
+	}
 private:
 	volatile LONG m_cRef;
 };

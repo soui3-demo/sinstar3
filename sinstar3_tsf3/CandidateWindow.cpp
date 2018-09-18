@@ -748,30 +748,21 @@ void CCandidateWindow::_SetScrollInfo(_In_ int nMax, _In_ int nPage)
 //
 //----------------------------------------------------------------------------
 
-DWORD CCandidateWindow::_GetCandidateString(_In_ int iIndex, _Outptr_result_maybenull_z_ const WCHAR **ppwchCandidateString)
+std::wstring CCandidateWindow::_GetCandidateString(_In_ int iIndex)
 {
-    CCandidateListItem* pItemList = nullptr;
-
     if (iIndex < 0 )
     {
-        *ppwchCandidateString = nullptr;
-        return 0;
+        return L"";
     }
 
     UINT index = static_cast<UINT>(iIndex);
 	
 	if (index >= _candidateList.Count())
     {
-        *ppwchCandidateString = nullptr;
-        return 0;
+		return L"";
     }
 
-    pItemList = _candidateList.GetAt(iIndex);
-    if (ppwchCandidateString)
-    {
-        *ppwchCandidateString = pItemList->str.c_str();
-    }
-    return (DWORD)pItemList->str.length();
+    return _candidateList.GetAt(iIndex)->str;
 }
 
 //+---------------------------------------------------------------------------
@@ -780,22 +771,17 @@ DWORD CCandidateWindow::_GetCandidateString(_In_ int iIndex, _Outptr_result_mayb
 //
 //----------------------------------------------------------------------------
 
-DWORD CCandidateWindow::_GetSelectedCandidateString(_Outptr_result_maybenull_ const WCHAR **ppwchCandidateString)
+std::wstring CCandidateWindow::_GetSelectedCandidateString()
 {
     CCandidateListItem* pItemList = nullptr;
 
     if (_currentSelection >= _candidateList.Count())
     {
-        *ppwchCandidateString = nullptr;
-        return 0;
+        return L"";
     }
 
     pItemList = _candidateList.GetAt(_currentSelection);
-    if (ppwchCandidateString)
-    {
-        *ppwchCandidateString = pItemList->str.c_str();
-    }
-    return (DWORD)pItemList->str.length();
+	return pItemList->str;
 }
 
 //+---------------------------------------------------------------------------

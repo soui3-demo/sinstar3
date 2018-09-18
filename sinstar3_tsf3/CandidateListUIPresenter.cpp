@@ -31,30 +31,22 @@ const int MOVETO_BOTTOM = -1;
 HRESULT CSinstar3Tsf::_HandleCandidateFinalize(TfEditCookie ec, _In_ ITfContext *pContext)
 {
     HRESULT hr = S_OK;
-    DWORD_PTR candidateLen = 0;
-    const WCHAR* pCandidateString = nullptr;
-    CStringRange candidateString;
-
     if (nullptr == _pCandidateListUIPresenter)
     {
-        goto NoPresenter;
+		return hr;
     }
 
-    candidateLen = _pCandidateListUIPresenter->_GetSelectedCandidateString(&pCandidateString);
+    std::wstring str = _pCandidateListUIPresenter->_GetSelectedCandidateString();
 
-    candidateString.Set(pCandidateString, candidateLen);
-
-    if (candidateLen)
+    if (str.length())
     {
-        hr = _AddComposingAndChar(ec, pContext, &candidateString);
+        hr = _AddComposingAndChar(ec, pContext, str);
 
         if (FAILED(hr))
         {
             return hr;
         }
     }
-
-NoPresenter:
 
     _HandleComplete(ec, pContext);
 
@@ -80,33 +72,26 @@ HRESULT CSinstar3Tsf::_HandleCandidateConvert(TfEditCookie ec, _In_ ITfContext *
 
 HRESULT CSinstar3Tsf::_HandleCandidateWorker(TfEditCookie ec, _In_ ITfContext *pContext)
 {
+	std::wstring str;
     HRESULT hrReturn = E_FAIL;
-    DWORD_PTR candidateLen = 0;
-    const WCHAR* pCandidateString = nullptr;
-    BSTR pbstr = nullptr;
-    CStringRange candidateString;
-    CSampleImeArray<CCandidateListItem> candidatePhraseList;
-
     if (nullptr == _pCandidateListUIPresenter)
     {
         hrReturn = S_OK;
         goto Exit;
     }
 
-    candidateLen = _pCandidateListUIPresenter->_GetSelectedCandidateString(&pCandidateString);
-    if (0 == candidateLen)
+    str = _pCandidateListUIPresenter->_GetSelectedCandidateString();
+    if (str.empty())
     {
         hrReturn = S_FALSE;
         goto Exit;
     }
 
-    candidateString.Set(pCandidateString, candidateLen);
-
     // We have a candidate list if candidatePhraseList.Cnt is not 0
     // If we are showing reverse conversion, use CCandidateListUIPresenter
     CANDIDATE_MODE tempCandMode = CANDIDATE_NONE;
     CCandidateListUIPresenter* pTempCandListUIPresenter = nullptr;
-    if (candidatePhraseList.Count())
+    if (str.length())
     {
         tempCandMode = CANDIDATE_WITH_NEXT_COMPOSITION;
 
@@ -143,12 +128,13 @@ HRESULT CSinstar3Tsf::_HandleCandidateWorker(TfEditCookie ec, _In_ ITfContext *p
     // set up candidate list if it is being shown
     if (SUCCEEDED(hrStartCandidateList))
     {
+		/*
         pTempCandListUIPresenter->_SetTextColor(RGB(0, 0x80, 0), GetSysColor(COLOR_WINDOW));    // Text color is green
         pTempCandListUIPresenter->_SetFillColor((HBRUSH)(COLOR_WINDOW+1));    // Background color is window
-        pTempCandListUIPresenter->_SetText(&candidatePhraseList, FALSE);
+        pTempCandListUIPresenter->_SetText(str, FALSE);
 
         // Add composing character
-        hrReturn = _AddComposingAndChar(ec, pContext, &candidateString);
+        hrReturn = _AddComposingAndChar(ec, pContext, str);
 
         // close candidate list
         if (_pCandidateListUIPresenter)
@@ -169,17 +155,12 @@ HRESULT CSinstar3Tsf::_HandleCandidateWorker(TfEditCookie ec, _In_ ITfContext *p
             _candidateMode = tempCandMode;
             _isCandidateWithWildcard = FALSE;
         }
+		*/
     }
     else
     {
         hrReturn = _HandleCandidateFinalize(ec, pContext);
     }
-
-    if (pbstr)
-    {
-        SysFreeString(pbstr);
-    }
-
 Exit:
     return hrReturn;
 }
@@ -235,17 +216,12 @@ HRESULT CSinstar3Tsf::_HandlePhraseFinalize(TfEditCookie ec, _In_ ITfContext *pC
 {
     HRESULT hr = S_OK;
 
-    DWORD phraseLen = 0;
-    const WCHAR* pPhraseString = nullptr;
+    std::wstring str = _pCandidateListUIPresenter->_GetSelectedCandidateString();
 
-    phraseLen = (DWORD)_pCandidateListUIPresenter->_GetSelectedCandidateString(&pPhraseString);
 
-    CStringRange phraseString;
-    phraseString.Set(pPhraseString, phraseLen);
-
-    if (phraseLen)
+    if (str.length())
     {
-        if ((hr = _AddCharAndFinalize(ec, pContext, &phraseString)) != S_OK)
+        if ((hr = _AddCharAndFinalize(ec, pContext, str)) != S_OK)
         {
             return hr;
         }
@@ -507,12 +483,10 @@ STDAPI CCandidateListUIPresenter::GetString(UINT uIndex, BSTR *pbstr)
         return E_FAIL;
     }
 
-    DWORD candidateLen = 0;
-    const WCHAR* pCandidateString = nullptr;
 
-    candidateLen = _pCandidateWnd->_GetCandidateString(uIndex, &pCandidateString);
+    std::wstring str = _pCandidateWnd->_GetCandidateString(uIndex);
 
-    *pbstr = (candidateLen == 0) ? nullptr : SysAllocStringLen(pCandidateString, candidateLen);
+    *pbstr = (str.empty()) ? nullptr : SysAllocStringLen(str.c_str(), str.length());
 
     return S_OK;
 }
@@ -813,9 +787,9 @@ void CCandidateListUIPresenter::_SetFillColor(HBRUSH hBrush)
 //
 //----------------------------------------------------------------------------
 
-DWORD_PTR CCandidateListUIPresenter::_GetSelectedCandidateString(_Outptr_result_maybenull_ const WCHAR **ppwchCandidateString)
+std::wstring CCandidateListUIPresenter::_GetSelectedCandidateString()
 {
-    return _pCandidateWnd->_GetSelectedCandidateString(ppwchCandidateString);
+    return _pCandidateWnd->_GetSelectedCandidateString();
 }
 
 //+---------------------------------------------------------------------------

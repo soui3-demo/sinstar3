@@ -170,22 +170,14 @@ Exit:
 HRESULT CSinstar3Tsf::_HandleCompositionInputWorker(_In_ CCompositionProcessorEngine *pCompositionProcessorEngine, TfEditCookie ec, _In_ ITfContext *pContext)
 {
     HRESULT hr = S_OK;
-    CSampleImeArray<CStringRange> readingStrings;
     BOOL isWildcardIncluded = TRUE;
 
     //
     // Get reading string from composition processor engine
     //
-    pCompositionProcessorEngine->GetReadingStrings(&readingStrings, &isWildcardIncluded);
+    std::wstring str = pCompositionProcessorEngine->GetReadingStrings();
 
-    for (UINT index = 0; index < readingStrings.Count(); index++)
-    {
-        hr = _AddComposingAndChar(ec, pContext, readingStrings.GetAt(index));
-        if (FAILED(hr))
-        {
-            return hr;
-        }
-    }
+	hr = _AddComposingAndChar(ec, pContext, str);
 
     //
     // Get candidate string from composition processor engine
@@ -207,7 +199,7 @@ HRESULT CSinstar3Tsf::_HandleCompositionInputWorker(_In_ CCompositionProcessorEn
     {
         _pCandidateListUIPresenter->_ClearList();
     }
-    else if (readingStrings.Count() && isWildcardIncluded)
+    else if (str.length())
     {
         hr = _CreateAndStartCandidate(pCompositionProcessorEngine, ec, pContext);
         if (SUCCEEDED(hr))
@@ -284,18 +276,14 @@ HRESULT CSinstar3Tsf::_HandleCompositionFinalize(TfEditCookie ec, _In_ ITfContex
     if (isCandidateList && _pCandidateListUIPresenter)
     {
         // Finalize selected candidate string from CCandidateListUIPresenter
-        DWORD_PTR candidateLen = 0;
-        const WCHAR *pCandidateString = nullptr;
+		std::wstring str 
+         = _pCandidateListUIPresenter->_GetSelectedCandidateString();
 
-        candidateLen = _pCandidateListUIPresenter->_GetSelectedCandidateString(&pCandidateString);
 
-        CStringRange candidateString;
-        candidateString.Set(pCandidateString, candidateLen);
-
-        if (candidateLen)
+        if (str.length())
         {
             // Finalize character
-            hr = _AddCharAndFinalize(ec, pContext, &candidateString);
+            hr = _AddCharAndFinalize(ec, pContext, str);
             if (FAILED(hr))
             {
                 return hr;
