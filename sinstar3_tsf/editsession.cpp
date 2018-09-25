@@ -71,6 +71,13 @@ STDMETHODIMP CEsStartComposition::DoEditSession(TfEditCookie ec)
 	// class can know now it is in the composition stage.
 	_pTextService->OnStartComposition(ec,pComposition);
 
+	//trigger layout changed
+	CComPtr<ITfContextView> pCtxView;
+	hr = _pContext->GetActiveView(&pCtxView);
+	if(SUCCEEDED(hr))
+	{
+		_pTextService->OnLayoutChange(_pContext,TF_LC_CHANGE,pCtxView);
+	}
 	return S_OK;
 }
 
@@ -100,6 +107,7 @@ STDMETHODIMP CEsEndComposition::DoEditSession(TfEditCookie ec)
 		pRange->Collapse(ec,TF_ANCHOR_END);
 		_pContext->SetSelection(ec,1,&sel);
 	}
+
 	pComposition->EndComposition(ec);
 	_pTextService->_TerminateComposition(ec,_pContext);
 	return S_OK;

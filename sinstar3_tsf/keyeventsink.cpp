@@ -40,14 +40,15 @@ STDAPI CSinstar3Tsf::OnKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM lPara
 
 STDAPI CSinstar3Tsf::OnKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {
+	SLOGFMTI("");
 	*pfEaten = FALSE;
     return S_OK;
 }
 
 STDAPI CSinstar3Tsf::OnPreservedKey(ITfContext *pic, REFGUID rguid, BOOL *pfEaten)
 {
-	SLOGFMTI("OnPreservedKey");
-	*pfEaten=m_pSinstar3->OnHotkey(pic,rguid);
+	SLOGFMTI("");
+	*pfEaten = FALSE;
 	return S_OK;
 }
 

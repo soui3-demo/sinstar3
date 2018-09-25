@@ -37,6 +37,21 @@ const GUID GUID_TFCAT_TIPCAP_SYSTRAYSUPPORT =
 
 #endif
 
+static const GUID SupportCategoriesWin8Later[] = {
+	GUID_TFCAT_TIP_KEYBOARD,
+	GUID_TFCAT_DISPLAYATTRIBUTEPROVIDER,
+	GUID_TFCAT_TIPCAP_INPUTMODECOMPARTMENT,
+	GUID_TFCAT_TIPCAP_IMMERSIVESUPPORT, 
+	GUID_TFCAT_TIPCAP_SYSTRAYSUPPORT,
+};
+
+static const GUID SupportCategories[] = {
+	GUID_TFCAT_TIP_KEYBOARD,
+	GUID_TFCAT_DISPLAYATTRIBUTEPROVIDER,
+	GUID_TFCAT_TIPCAP_INPUTMODECOMPARTMENT,
+};
+
+
 static bool IsWin8orLater()
 {
 	DWORD dwRet;
@@ -79,6 +94,11 @@ BOOL RegisterProfiles()
 	LONG cchIconFile = (LONG)wcslen(achIconFile);
 
 	HKL hKLSinstar3 = GetKeyboardLayoutFromFileName(SINSTAR3_IME_FILE_NAME);
+
+	hKLSinstar3 = 0;
+
+	WCHAR szName[]=L"∆Ù≥Ã ‰»Î∑®TSF2";
+
 	if (IsWin8orLater())
 	{
 		CComPtr<ITfInputProcessorProfileMgr> pInputProcessorProfileMgr;
@@ -90,8 +110,8 @@ BOOL RegisterProfiles()
 			c_clsidSinstar3TSF,
 			TEXTSERVICE_LANGID,
 			c_guidProfile,
-			PRODUCT_WNAMEVER,
-			(ULONG)wcslen(PRODUCT_WNAMEVER),
+			szName,
+			(ULONG)wcslen(szName),
 			achIconFile,
 			cchIconFile,
 			TEXTSERVICE_ICON_INDEX,
@@ -115,8 +135,8 @@ BOOL RegisterProfiles()
 			c_clsidSinstar3TSF,
 			TEXTSERVICE_LANGID,
 			c_guidProfile,
-			PRODUCT_WNAMEVER,
-			(ULONG)wcslen(PRODUCT_WNAMEVER),
+			szName,
+			(ULONG)wcslen(szName),
 			achIconFile,
 			cchIconFile,
 			TEXTSERVICE_ICON_INDEX);
@@ -170,23 +190,22 @@ BOOL RegisterCategories()
     if (hr != S_OK)
         return FALSE;
 
-    //
-    // register this text service to GUID_TFCAT_TIP_KEYBOARD category.
-    //
-	if (SUCCEEDED(hr)) hr = pCategoryMgr->RegisterCategory(c_clsidSinstar3TSF,
-                                        GUID_TFCAT_TIP_KEYBOARD, 
-                                        c_clsidSinstar3TSF);
-
-    //
-    // register this text service to GUID_TFCAT_DISPLAYATTRIBUTEPROVIDER category.
-    //
-	if (SUCCEEDED(hr)) hr = pCategoryMgr->RegisterCategory(c_clsidSinstar3TSF,
-                                        GUID_TFCAT_DISPLAYATTRIBUTEPROVIDER, 
-                                        c_clsidSinstar3TSF);
-	if (IsWin8orLater())
+	if(IsWin8orLater())
 	{
-		if(SUCCEEDED(hr)) hr = pCategoryMgr->RegisterCategory(c_clsidSinstar3TSF, GUID_TFCAT_TIPCAP_IMMERSIVESUPPORT, c_clsidSinstar3TSF);
-		if(SUCCEEDED(hr)) hr = pCategoryMgr->RegisterCategory(c_clsidSinstar3TSF, GUID_TFCAT_TIPCAP_SYSTRAYSUPPORT, c_clsidSinstar3TSF);
+		for(int i=0;i<ARRAYSIZE(SupportCategoriesWin8Later);i++)
+		{
+			pCategoryMgr->RegisterCategory(c_clsidSinstar3TSF,
+				SupportCategories[i], 
+				c_clsidSinstar3TSF);
+		}
+	}else
+	{
+		for(int i=0;i<ARRAYSIZE(SupportCategories);i++)
+		{
+			pCategoryMgr->RegisterCategory(c_clsidSinstar3TSF,
+				SupportCategories[i], 
+				c_clsidSinstar3TSF);
+		}
 	}
 
     pCategoryMgr->Release();
@@ -210,19 +229,23 @@ void UnregisterCategories()
     if (hr != S_OK)
         return;
 
-    //
-    // unregister this text service from GUID_TFCAT_TIP_KEYBOARD category.
-    //
-    pCategoryMgr->UnregisterCategory(c_clsidSinstar3TSF,
-                                     GUID_TFCAT_TIP_KEYBOARD, 
-                                     c_clsidSinstar3TSF);
-
-    //
-    // unregister this text service from GUID_TFCAT_DISPLAYATTRIBUTEPROVIDER category.
-    //
-    pCategoryMgr->UnregisterCategory(c_clsidSinstar3TSF,
-                                     GUID_TFCAT_DISPLAYATTRIBUTEPROVIDER, 
-                                     c_clsidSinstar3TSF);
+	if(IsWin8orLater())
+	{
+		for(int i=0;i<ARRAYSIZE(SupportCategoriesWin8Later);i++)
+		{
+			pCategoryMgr->UnregisterCategory(c_clsidSinstar3TSF,
+				SupportCategories[i], 
+				c_clsidSinstar3TSF);
+		}
+	}else
+	{
+		for(int i=0;i<ARRAYSIZE(SupportCategories);i++)
+		{
+			pCategoryMgr->UnregisterCategory(c_clsidSinstar3TSF,
+				SupportCategories[i], 
+				c_clsidSinstar3TSF);
+		}
+	}
 
     pCategoryMgr->Release();
     return;
