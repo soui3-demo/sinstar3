@@ -57,13 +57,14 @@ bool ClientImpl::ClearComposition()
 {
 	if (!_Active())
 		return false;
+	return true;
 }
 
 void ClientImpl::UpdateInputPosition(RECT const& rc)
 {
 	if (!_Active())
 		return;
-
+	return;
 }
 
 void ClientImpl::FocusIn()
