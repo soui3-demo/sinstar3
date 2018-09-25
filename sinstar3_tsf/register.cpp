@@ -16,6 +16,7 @@
 #include <imm.h>
 #pragma comment(lib,"imm32.lib")
 #define CLSID_STRLEN 38  // strlen("{xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx}")
+#include "../helper/helper.h"
 
 static const TCHAR KInfoKeyPrefix[] = TEXT("CLSID\\");
 static const TCHAR KInProcSvr32[] = TEXT("InProcServer32");
@@ -25,6 +26,13 @@ static const TCHAR KTextServiceModel[] = TEXT("Apartment");
 #define TEXTSERVICE_ICON_INDEX  0
 #define	SINSTAR3_IME_FILE_NAME	_T("sinstar3_ime.ime")
 
+static bool IsWin8orLater()
+{
+	DWORD dwRet;
+	Helper_PEVersion(_T("kernel32.dll"), &dwRet, NULL, NULL);
+	BYTE *pbyVer = (BYTE*)&dwRet;
+	return pbyVer[3] > 6 || (pbyVer[3]==6 && pbyVer[2]>1);
+}
 
 static HKL GetKeyboardLayoutFromFileName(LPCTSTR pszImeName)
 {
@@ -54,43 +62,62 @@ static HKL GetKeyboardLayoutFromFileName(LPCTSTR pszImeName)
 
 BOOL RegisterProfiles()
 {
-	HRESULT hr = S_FALSE;
-
-	ITfInputProcessorProfileMgr *pITfInputProcessorProfileMgr = NULL;
-	hr = CoCreateInstance(CLSID_TF_InputProcessorProfiles, NULL, CLSCTX_INPROC_SERVER,
-		IID_ITfInputProcessorProfileMgr, (void**)&pITfInputProcessorProfileMgr);
-	if (FAILED(hr))
-	{
-		return FALSE;
-	}
-
-	WCHAR achIconFile[MAX_PATH] = {'\0'};
+	HRESULT hr;
+	WCHAR achIconFile[MAX_PATH] = { '\0' };
 	GetModuleFileNameW(theModule->GetModule(), achIconFile, ARRAYSIZE(achIconFile));
-	LONG cchA = wcslen(achIconFile);
+	LONG cchIconFile = (LONG)wcslen(achIconFile);
 
-	HKL hKLSinstar3=GetKeyboardLayoutFromFileName( SINSTAR3_IME_FILE_NAME);
-
-	hr = pITfInputProcessorProfileMgr->RegisterProfile(c_clsidSinstar3TSF,
-		TEXTSERVICE_LANGID, 
-		c_guidProfile, 
-		PRODUCT_WNAMEVER,
-		(ULONG)wcslen(PRODUCT_WNAMEVER),
-		achIconFile,
-		cchA,
-		(UINT)0, hKLSinstar3, 0, TRUE, 0);
-
-	if (FAILED(hr))
+	HKL hKLSinstar3 = GetKeyboardLayoutFromFileName(SINSTAR3_IME_FILE_NAME);
+	if (IsWin8orLater())
 	{
-		goto Exit;
-	}
+		CComPtr<ITfInputProcessorProfileMgr> pInputProcessorProfileMgr;
+		hr = pInputProcessorProfileMgr.CoCreateInstance(CLSID_TF_InputProcessorProfiles, NULL, CLSCTX_ALL);
+		if (FAILED(hr))
+			return FALSE;
 
-Exit:
-	if (pITfInputProcessorProfileMgr)
+		hr = pInputProcessorProfileMgr->RegisterProfile(
+			c_clsidSinstar3TSF,
+			TEXTSERVICE_LANGID,
+			c_guidProfile,
+			PRODUCT_WNAMEVER,
+			(ULONG)wcslen(PRODUCT_WNAMEVER),
+			achIconFile,
+			cchIconFile,
+			TEXTSERVICE_ICON_INDEX,
+			hKLSinstar3,
+			0,
+			TRUE,
+			0);
+	}
+	else
 	{
-		pITfInputProcessorProfileMgr->Release();
-	}
+		CComPtr<ITfInputProcessorProfiles> pInputProcessorProfiles;
+		hr = pInputProcessorProfiles.CoCreateInstance(CLSID_TF_InputProcessorProfiles, NULL, CLSCTX_INPROC_SERVER);
+		if (FAILED(hr))
+			return FALSE;
 
-	return (hr == S_OK);
+		hr = pInputProcessorProfiles->Register(c_clsidSinstar3TSF);
+		if (FAILED(hr))
+			return FALSE;
+
+		hr = pInputProcessorProfiles->AddLanguageProfile(
+			c_clsidSinstar3TSF,
+			TEXTSERVICE_LANGID,
+			c_guidProfile,
+			PRODUCT_WNAMEVER,
+			(ULONG)wcslen(PRODUCT_WNAMEVER),
+			achIconFile,
+			cchIconFile,
+			TEXTSERVICE_ICON_INDEX);
+		if (FAILED(hr))
+			return FALSE;
+
+		hr = pInputProcessorProfiles->SubstituteKeyboardLayout(
+			c_clsidSinstar3TSF, TEXTSERVICE_LANGID, c_guidProfile, hKLSinstar3);
+		if (FAILED(hr))
+			return FALSE;
+	}
+	return TRUE;
 }
 
 
@@ -135,17 +162,21 @@ BOOL RegisterCategories()
     //
     // register this text service to GUID_TFCAT_TIP_KEYBOARD category.
     //
-    hr = pCategoryMgr->RegisterCategory(c_clsidSinstar3TSF,
+	if (SUCCEEDED(hr)) hr = pCategoryMgr->RegisterCategory(c_clsidSinstar3TSF,
                                         GUID_TFCAT_TIP_KEYBOARD, 
                                         c_clsidSinstar3TSF);
 
     //
     // register this text service to GUID_TFCAT_DISPLAYATTRIBUTEPROVIDER category.
     //
-    hr = pCategoryMgr->RegisterCategory(c_clsidSinstar3TSF,
+	if (SUCCEEDED(hr)) hr = pCategoryMgr->RegisterCategory(c_clsidSinstar3TSF,
                                         GUID_TFCAT_DISPLAYATTRIBUTEPROVIDER, 
                                         c_clsidSinstar3TSF);
-
+	if (IsWin8orLater())
+	{
+		if(SUCCEEDED(hr)) hr = pCategoryMgr->RegisterCategory(c_clsidSinstar3TSF, GUID_TFCAT_TIPCAP_IMMERSIVESUPPORT, c_clsidSinstar3TSF);
+		if(SUCCEEDED(hr)) hr = pCategoryMgr->RegisterCategory(c_clsidSinstar3TSF, GUID_TFCAT_TIPCAP_SYSTRAYSUPPORT, c_clsidSinstar3TSF);
+	}
 
     pCategoryMgr->Release();
     return (hr == S_OK);
