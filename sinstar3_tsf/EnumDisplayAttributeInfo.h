@@ -29,7 +29,7 @@ public:
     ~CEnumDisplayAttributeInfo();
 
     // IUnknown
-	IUNKNOWN_BEGIN2(IEnumTfDisplayAttributeInfo)
+	IUNKNOWN_BEGIN(IEnumTfDisplayAttributeInfo)
 	IUNKNOWN_END()
 
     // IEnumTfDisplayAttributeInfo

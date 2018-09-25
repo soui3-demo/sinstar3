@@ -59,7 +59,6 @@ public:
 
 
 private:
-	//void _UpdateOwner();
 	HWND _GetActiveWnd();
 	HRESULT _UpdateUIElement();
 

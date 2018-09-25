@@ -261,7 +261,6 @@ void CCandidateList::Destroy()
 
 UIStyle & CCandidateList::style()
 {
-	//return _ui->style();
 	return _style;
 }
 

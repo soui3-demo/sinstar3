@@ -31,7 +31,7 @@ public:
     ~CDisplayAttributeInfo();
 
     // IUnknown
-	IUNKNOWN_BEGIN2(ITfDisplayAttributeInfo)
+	IUNKNOWN_BEGIN(ITfDisplayAttributeInfo)
 	IUNKNOWN_END()
 
     // ITfDisplayAttributeInfo

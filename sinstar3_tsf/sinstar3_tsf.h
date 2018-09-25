@@ -3,7 +3,7 @@
 #include <Ctffunc.h>
 
 class CSinstar3Tsf : public CUnknown,
-					 public ITfTextInputProcessor,
+					 public ITfTextInputProcessorEx,
                      public ITfThreadMgrEventSink,
 					 public ITfThreadFocusSink,
                      public ITfTextEditSink,
@@ -27,6 +27,9 @@ public:
     // ITfTextInputProcessor
     STDMETHODIMP Activate(ITfThreadMgr *pThreadMgr, TfClientId tfClientId);
     STDMETHODIMP Deactivate();
+
+	/* ITfTextInputProcessorEx */
+	STDMETHODIMP ActivateEx(ITfThreadMgr *pThreadMgr, TfClientId tfClientId, DWORD dwFlags);
 
     // ITfThreadMgrEventSink
     STDMETHODIMP OnInitDocumentMgr(ITfDocumentMgr *pDocMgr);
@@ -142,11 +145,9 @@ private:
 	BOOL _InitThreadCompartment();
 	void _UninitThreadCompartment();
 
-    // utility function for KeyEventSink
-    BOOL _IsKeyEaten(ITfContext *pContext, WPARAM wParam, LPARAM lParam);
-
     ITfThreadMgr *_pThreadMgr;
     TfClientId _tfClientId;
+	DWORD		_dwActivateFlag;
 
     // The cookie of ThreadMgrEventSink
     DWORD _dwThreadMgrEventSinkCookie;
@@ -186,17 +187,18 @@ public:
 	RECT _rtStart;
 
 public:
-	IUNKNOWN_BEGIN2(ITfTextInputProcessor)
-		IUNKNOWN_ADD_IID2(ITfThreadMgrEventSink)
-		IUNKNOWN_ADD_IID2(ITfThreadFocusSink)
-		IUNKNOWN_ADD_IID2(ITfTextEditSink)
-		IUNKNOWN_ADD_IID2(ITfKeyEventSink)
-		IUNKNOWN_ADD_IID2(ITfDisplayAttributeProvider)
-		IUNKNOWN_ADD_IID2(ITfCompositionSink)
-		IUNKNOWN_ADD_IID2(ITfTextLayoutSink)
-		IUNKNOWN_ADD_IID2(ITfFnConfigure)
-		IUNKNOWN_ADD_IID2(ITfFunction)
-		IUNKNOWN_ADD_IID2(ITfCompartmentEventSink)
+	IUNKNOWN_BEGIN(ITfTextInputProcessorEx)
+		IUNKNOWN_ADD_IID(ITfTextInputProcessor)
+		IUNKNOWN_ADD_IID(ITfThreadMgrEventSink)
+		IUNKNOWN_ADD_IID(ITfThreadFocusSink)
+		IUNKNOWN_ADD_IID(ITfTextEditSink)
+		IUNKNOWN_ADD_IID(ITfKeyEventSink)
+		IUNKNOWN_ADD_IID(ITfDisplayAttributeProvider)
+		IUNKNOWN_ADD_IID(ITfCompositionSink)
+		IUNKNOWN_ADD_IID(ITfTextLayoutSink)
+		IUNKNOWN_ADD_IID(ITfFnConfigure)
+		IUNKNOWN_ADD_IID(ITfFunction)
+		IUNKNOWN_ADD_IID(ITfCompartmentEventSink)
 	IUNKNOWN_END()
 
 };

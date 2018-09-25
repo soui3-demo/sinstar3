@@ -20,7 +20,7 @@ protected:
     CComPtr<CSinstar3Tsf> _pTextService;
 
 public:
-	IUNKNOWN_BEGIN2(ITfEditSession)
+	IUNKNOWN_BEGIN(ITfEditSession)
 	IUNKNOWN_END()
 };
 

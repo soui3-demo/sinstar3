@@ -93,57 +93,63 @@ CSinstar3Tsf::~CSinstar3Tsf()
     theModule->Release();
 }
 
-STDAPI CSinstar3Tsf::Activate(ITfThreadMgr *pThreadMgr, TfClientId tfClientId)
+STDAPI CSinstar3Tsf::ActivateEx(ITfThreadMgr *pThreadMgr, TfClientId tfClientId, DWORD dwFlags)
 {
 	SLOGFMTI("Activate %p %d", pThreadMgr, (int)tfClientId);
 
 	_pThreadMgr = pThreadMgr;
-    _pThreadMgr->AddRef();
-    _tfClientId = tfClientId;	
-
-    //
-    // Initialize ThreadMgrEventSink.
-    //
-    if (!_InitThreadMgrEventSink())
-        goto ExitError;	
-
-    // 
-    //  If there is the focus document manager already,
-    //  advise the TextEditSink.
-    // 
-    ITfDocumentMgr *pDocMgrFocus;
-    if ((_pThreadMgr->GetFocus(&pDocMgrFocus) == S_OK) &&
-        (pDocMgrFocus != NULL))
-    {
-        _bInEditDocument = _InitTextEditSink(pDocMgrFocus);
-        pDocMgrFocus->Release();
-    }
+	_pThreadMgr->AddRef();
+	_tfClientId = tfClientId;
+	_dwActivateFlag = dwFlags;
 
 	//
-    // Initialize KeyEventSink
-    //
-    if (!_InitKeyEventSink())
-        goto ExitError;
+	// Initialize ThreadMgrEventSink.
+	//
+	if (!_InitThreadMgrEventSink())
+		goto ExitError;
+
+	// 
+	//  If there is the focus document manager already,
+	//  advise the TextEditSink.
+	// 
+	ITfDocumentMgr *pDocMgrFocus;
+	if ((_pThreadMgr->GetFocus(&pDocMgrFocus) == S_OK) &&
+		(pDocMgrFocus != NULL))
+	{
+		_bInEditDocument = _InitTextEditSink(pDocMgrFocus);
+		pDocMgrFocus->Release();
+	}
+
+	//
+	// Initialize KeyEventSink
+	//
+	if (!_InitKeyEventSink())
+		goto ExitError;
 	//
 	// Initialize display guid atom
 	//
 	if (!_InitDisplayAttributeGuidAtom())
-		goto ExitError;	
+		goto ExitError;
 
-	if ( !_InitThreadCompartment())
+	if (!_InitThreadCompartment())
 		goto ExitError;
 
 	OnSetThreadFocus();
 
-	if(!_InitSinstar3())
- 		goto ExitError;
+	if (!_InitSinstar3())
+		goto ExitError;
 
-	
+
 	return S_OK;
 
 ExitError:
-    Deactivate(); // cleanup any half-finished init
-    return E_FAIL;
+	Deactivate(); // cleanup any half-finished init
+	return E_FAIL;
+}
+
+STDAPI CSinstar3Tsf::Activate(ITfThreadMgr *pThreadMgr, TfClientId tfClientId)
+{
+	return ActivateEx(pThreadMgr, tfClientId,0);
 }
 
 //+---------------------------------------------------------------------------
