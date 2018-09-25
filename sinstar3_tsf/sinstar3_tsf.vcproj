@@ -64,9 +64,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="souid.lib"
+				AdditionalDependencies="helperd.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(SOUIPATH)\bin"
+				AdditionalLibraryDirectories="$(SOUIPATH)\bin;..\lib"
 				ModuleDefinitionFile="sinstar3_tsf.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -141,9 +141,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="souid.lib"
+				AdditionalDependencies="helperd.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(SOUIPATH)\bin64"
+				AdditionalLibraryDirectories="..\lib\x64"
 				ModuleDefinitionFile="sinstar3_tsf.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -218,9 +218,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="soui.lib"
+				AdditionalDependencies="helper.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(SOUIPATH)\bin"
+				AdditionalLibraryDirectories="$(SOUIPATH)\bin;..\lib"
 				ModuleDefinitionFile="sinstar3_tsf.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -297,7 +297,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="helper.lib"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="..\lib\x64"
 				ModuleDefinitionFile="sinstar3_tsf.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
