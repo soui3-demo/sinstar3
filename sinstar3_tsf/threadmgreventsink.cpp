@@ -114,7 +114,7 @@ STDAPI CSinstar3Tsf::OnPopContext(ITfContext *pContext)
 
 BOOL CSinstar3Tsf::_InitThreadMgrEventSink()
 {
-    CComPtr<ITfSource> pSource;
+    SOUI::SComPtr<ITfSource> pSource;
 
     if (_pThreadMgr->QueryInterface(IID_ITfSource, (void **)&pSource) != S_OK)
         return FALSE;

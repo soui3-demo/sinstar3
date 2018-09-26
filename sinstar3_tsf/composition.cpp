@@ -66,8 +66,8 @@ BOOL CSinstar3Tsf::_EndCompositionEx()
 {
 	if(!_IsComposing()) return FALSE;
 	HRESULT hr;
-	CComPtr<ITfRange> pRange;
-	CComPtr<ITfContext> pCtx;
+	SOUI::SComPtr<ITfRange> pRange;
+	SOUI::SComPtr<ITfContext> pCtx;
 	hr=_pComposition->GetRange(&pRange);
 	if(pRange)
 	{

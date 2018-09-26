@@ -343,36 +343,3 @@ STDAPI CSinstar3Tsf::OnChange(REFGUID rguidCompartment)
 
     return S_OK;
 }
-
-void CSinstar3Tsf::ShowCandidateWindow()
-{
-	assert( _pThreadMgr != NULL);
-
-	HRESULT hr = S_OK;
-	ITfCompartmentMgr *pCompMgr = NULL; 
-
-	ITfContext *pContext = (ITfContext *)GetImeContext();
-	if ( pContext != NULL)
-	{
-		hr = pContext->QueryInterface(IID_ITfCompartmentMgr, (void **)&pCompMgr);
-		if ( SUCCEEDED(hr) && pCompMgr != NULL)
-		{
-			ITfCompartment *pCompartment = NULL;
-			hr = pCompMgr->GetCompartment( GUID_COMPARTMENT_MSCANDIDATEUI_WINDOW, &pCompartment);
-			if ( SUCCEEDED(hr) && pCompartment != NULL)
-			{
-				VARIANT var;
-				var.vt = VT_I4;
-				var.lVal = 1;
-
-				hr = pCompartment->SetValue( _tfClientId, &var);
-
-				pCompartment->Release();
-			}
-
-			pCompMgr->Release();
-		}
-
-		ReleaseImeContext( pContext);
-	}
-}

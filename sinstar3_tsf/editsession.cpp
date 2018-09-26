@@ -30,28 +30,28 @@ CEsStartComposition::CEsStartComposition(CSinstar3Tsf *pTextService, ITfContext 
 STDMETHODIMP CEsStartComposition::DoEditSession(TfEditCookie ec)
 {
 	SLOG_INFO("TfEditCookie:"<<ec);
-	CComPtr<ITfInsertAtSelection> pInsertAtSelection;
-	CComPtr<ITfRange> pRangeInsert;
-	CComPtr<ITfContextComposition> pContextComposition;
-	CComPtr<ITfComposition> pComposition;
+	SOUI::SComPtr<ITfInsertAtSelection> pInsertAtSelection;
+	SOUI::SComPtr<ITfRange> pRangeInsert;
+	SOUI::SComPtr<ITfContextComposition> pContextComposition;
+	SOUI::SComPtr<ITfComposition> pComposition;
 	HRESULT hr = E_FAIL;
 
 	// A special interface is required to insert text at the selection
 	hr = _pContext->QueryInterface(IID_ITfInsertAtSelection, (void **)&pInsertAtSelection);
-	ASSERT_HR(hr);
+	SASSERT_HR(hr);
 
 	// insert the text
 	hr = pInsertAtSelection->InsertTextAtSelection(ec, TF_IAS_QUERYONLY, NULL, 0, &pRangeInsert);
-	ASSERT_HR(hr);
+	SASSERT_HR(hr);
 
 	// get an interface on the context to deal with compositions
 	hr = _pContext->QueryInterface(IID_ITfContextComposition, (void **)&pContextComposition);
-	ASSERT_HR(hr);
+	SASSERT_HR(hr);
 
 	// start the new composition
 	hr = pContextComposition->StartComposition(ec, pRangeInsert, _pTextService, &pComposition);
-	ASSERT_HR(hr);
-	ASSERT_RET(pComposition, return E_FAIL);
+	SASSERT_HR(hr);
+	SASSERT_RET(pComposition, return E_FAIL);
 
 	// 
 	//  set selection to the adjusted range
@@ -68,7 +68,7 @@ STDMETHODIMP CEsStartComposition::DoEditSession(TfEditCookie ec)
 	_pTextService->OnStartComposition(ec,pComposition);
 
 	//trigger layout changed
-	CComPtr<ITfContextView> pCtxView;
+	SOUI::SComPtr<ITfContextView> pCtxView;
 	hr = _pContext->GetActiveView(&pCtxView);
 	if(SUCCEEDED(hr))
 	{
@@ -93,7 +93,7 @@ STDMETHODIMP CEsEndComposition::DoEditSession(TfEditCookie ec)
 		SLOG_WARN("CEditSessionEndComposition::DoEditSession not in compositing");
 		return E_FAIL;
 	}
-	CComPtr<ITfRange> pRange;
+	SOUI::SComPtr<ITfRange> pRange;
 	if ( pComposition->GetRange( &pRange) == S_OK && pRange != NULL)
 	{
 		TF_SELECTION sel={0};
@@ -105,7 +105,7 @@ STDMETHODIMP CEsEndComposition::DoEditSession(TfEditCookie ec)
 	}
 
 	//trigger layout changed
-	CComPtr<ITfContextView> pCtxView;
+	SOUI::SComPtr<ITfContextView> pCtxView;
 	HRESULT hr = _pContext->GetActiveView(&pCtxView);
 	if (SUCCEEDED(hr))
 	{
@@ -130,12 +130,12 @@ STDMETHODIMP CEsGetTextExtent::DoEditSession(TfEditCookie ec)
 {
 	SLOG_INFO("TfEditCookie:"<<ec);
 
-	CComPtr<ITfRange> pRange;
+	SOUI::SComPtr<ITfRange> pRange;
 	ISinstar * pSinstar3 = GetSinstar3();
-	CComPtr<ITfComposition> pComposition = _pTextService->GetITfComposition();
+	SOUI::SComPtr<ITfComposition> pComposition = _pTextService->GetITfComposition();
 	if(!pSinstar3 || !pComposition) return S_FALSE;
 
-	CComPtr<ITfRange> range;
+	SOUI::SComPtr<ITfRange> range;
 	if ( pComposition->GetRange( &range) == S_OK && range != NULL)
 	{
 		BOOL fClip = FALSE;
@@ -174,9 +174,9 @@ STDMETHODIMP CEsChangeComposition::DoEditSession(TfEditCookie ec)
 {
 	SLOG_INFO("TfEditCookie:"<<ec);
 
-	CComPtr<ITfRange> pRangeComposition;
-	CComPtr<ITfRange> pRangeSel;
-	CComPtr<ITfComposition> pComposition = _pTextService->GetITfComposition();
+	SOUI::SComPtr<ITfRange> pRangeComposition;
+	SOUI::SComPtr<ITfRange> pRangeSel;
+	SOUI::SComPtr<ITfComposition> pComposition = _pTextService->GetITfComposition();
 
 	SASSERT(pComposition);
 
@@ -249,7 +249,7 @@ STDMETHODIMP CEsMoveCaret::DoEditSession(TfEditCookie ec)
 {
 	SLOG_INFO("TfEditCookie:"<<ec);
 
-	CComPtr<ITfRange> pRangeComposition;
+	SOUI::SComPtr<ITfRange> pRangeComposition;
 	TF_SELECTION tfSelection;
 	ULONG cFetched;
 	BOOL fCovered;
@@ -329,14 +329,14 @@ STDMETHODIMP CEsUpdateResultAndComp::DoEditSession(TfEditCookie ec)
 {
 	SLOG_INFO("TfEditCookie:"<<ec);
 
-	CComPtr<ITfRange> pRangeComposition;
-	CComPtr<ITfProperty> pDisplayAttributeProperty;
+	SOUI::SComPtr<ITfRange> pRangeComposition;
+	SOUI::SComPtr<ITfProperty> pDisplayAttributeProperty;
 
 
 	BOOL fEmpty=TRUE;
 
 	SASSERT(_pTextService->_IsComposing());
-	CComPtr<ITfComposition> pCompostion=_pTextService->GetITfComposition();
+	SOUI::SComPtr<ITfComposition> pCompostion=_pTextService->GetITfComposition();
 	//将当前数据上屏
 	pCompostion->GetRange(&pRangeComposition);
 	if(!pRangeComposition)

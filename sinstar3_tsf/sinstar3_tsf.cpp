@@ -160,7 +160,7 @@ STDAPI CSinstar3Tsf::Deactivate()
 	//确保输入过程结束
 	if(_IsComposing())
 	{
-		_ASSERT(_pThreadMgr);
+		SASSERT(_pThreadMgr);
 		ITfContext *pCtx=(ITfContext *)GetImeContext();
 		if(pCtx) 
 			EndComposition(pCtx);
@@ -254,7 +254,7 @@ HRESULT CSinstar3Tsf::_AdviseTextLayoutSink(ITfContext *pContext)
 	if(_dwCookieTextLayoutSink != TF_INVALID_COOKIE)
 		return S_OK;
 
-	CComPtr<ITfSource> pSource;
+	SOUI::SComPtr<ITfSource> pSource;
 
 	if (FAILED(pContext->QueryInterface(IID_ITfSource, (void **)&pSource)))
 		return E_FAIL;
@@ -267,7 +267,7 @@ HRESULT CSinstar3Tsf::_AdviseTextLayoutSink(ITfContext *pContext)
 
 HRESULT CSinstar3Tsf::_UnadviseTextLayoutSink(ITfContext *pContext)
 {
-	CComPtr<ITfSource> pSource;
+	SOUI::SComPtr<ITfSource> pSource;
 
 	if(_dwCookieTextLayoutSink==TF_INVALID_COOKIE)
 		return S_FALSE;

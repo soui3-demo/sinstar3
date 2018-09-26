@@ -16,8 +16,8 @@ public:
 		return _pTextService->m_pSinstar3;
 	}
 protected:
-    CComPtr<ITfContext> _pContext;
-    CComPtr<CSinstar3Tsf> _pTextService;
+    SOUI::SComPtr<ITfContext> _pContext;
+    SOUI::SComPtr<CSinstar3Tsf> _pTextService;
 
 public:
 	IUNKNOWN_BEGIN(ITfEditSession)
@@ -70,7 +70,7 @@ public:
 	STDMETHODIMP DoEditSession(TfEditCookie ec);
 private:
 
-	CComPtr<ITfContextView> _pContextView;
+	SOUI::SComPtr<ITfContextView> _pContextView;
 };
 
 
@@ -98,7 +98,7 @@ public:
 	// ITfEditSession
 	STDMETHODIMP DoEditSession(TfEditCookie ec);
 private:
-	CComPtr<ITfComposition> m_pComposition;
+	SOUI::SComPtr<ITfComposition> m_pComposition;
 	int m_nPos;
 	BOOL m_bSet;
 };

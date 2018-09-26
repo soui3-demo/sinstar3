@@ -101,9 +101,7 @@ public:
 	int  _MoveCaretPos(ITfContext *pContext,int nPos,BOOL bSet);
 	BOOL _IsComposing() const;
 	BOOL _GetSegRange(TfEditCookie ec,ITfRange **pRange,int nLeft,int nRight);
-	
-	void ShowCandidateWindow();
-	
+		
 private:
 
 	BOOL _InitSinstar3();
@@ -145,7 +143,7 @@ private:
     ITfContext   *_pTextEditSinkContext;
     DWORD _dwTextEditSinkCookie;
 
-	CComPtr<ITfComposition> _pComposition;
+	SOUI::SComPtr<ITfComposition> _pComposition;
 	DWORD _dwCookieTextLayoutSink; // Cookie for ITfContextKeyEventSink
 
 	// 标志是否在一个可编辑的文档内

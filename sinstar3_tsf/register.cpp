@@ -99,7 +99,7 @@ BOOL RegisterProfiles()
 
 	if (IsWin8orLater())
 	{
-		CComPtr<ITfInputProcessorProfileMgr> pInputProcessorProfileMgr;
+		SOUI::SComPtr<ITfInputProcessorProfileMgr> pInputProcessorProfileMgr;
 		hr = pInputProcessorProfileMgr.CoCreateInstance(CLSID_TF_InputProcessorProfiles, NULL, CLSCTX_ALL);
 		if (FAILED(hr))
 			return FALSE;
@@ -120,7 +120,7 @@ BOOL RegisterProfiles()
 	}
 	else
 	{
-		CComPtr<ITfInputProcessorProfiles> pInputProcessorProfiles;
+		SOUI::SComPtr<ITfInputProcessorProfiles> pInputProcessorProfiles;
 		hr = pInputProcessorProfiles.CoCreateInstance(CLSID_TF_InputProcessorProfiles, NULL, CLSCTX_INPROC_SERVER);
 		if (FAILED(hr))
 			return FALSE;
