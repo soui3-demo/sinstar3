@@ -23,36 +23,6 @@ void CSinstar3Tsf::_StartComposition(ITfContext *pContext)
 	pStartCompositionEditSession->Release();
 }
 
-BOOL CSinstar3Tsf::_SetCompositionDisplayAttributes(TfEditCookie ec, ITfContext *pContext,ITfRange *pRange, TF_DA_ATTR_INFO attr)
-{
-	ITfProperty *pDisplayAttributeProperty;
-	HRESULT hr;
-
-	hr = E_FAIL;
-
-	// get our the display attribute property
-	if (pContext->GetProperty(GUID_PROP_ATTRIBUTE, &pDisplayAttributeProperty) == S_OK)
-	{
-		VARIANT var;
-		// set the value over the range
-		// the application will use this guid atom to lookup the acutal rendering information
-		var.vt = VT_I4; // set a TfGuidAtom
-		switch(attr)
-		{
-		case TF_ATTR_INPUT:var.lVal=_gaDisplayAttributeInput;break;
-		case TF_ATTR_CONVERTED:var.lVal=_gaDisplayAttributeConverted;break;
-		case TF_ATTR_TARGET_CONVERTED:var.lVal=_gaDisplayAttributeTargetConverted;break;
-		default:var.lVal=_gaDisplayAttributeInput;break;
-		}
-
-		hr = pDisplayAttributeProperty->SetValue(ec, pRange, &var);
-
-		pDisplayAttributeProperty->Release();
-	}
-
-	return (hr == S_OK);	
-}
-
 BOOL CSinstar3Tsf::_GetSegRange(TfEditCookie ec,ITfRange **pRange,int nLeft,int nRight)
 {
 	LONG cch=0;
@@ -149,8 +119,6 @@ int  CSinstar3Tsf::_MoveCaretPos(ITfContext *pContext,int nPos,BOOL bSet)
 
 void CSinstar3Tsf::_TerminateComposition(TfEditCookie ecWrite,ITfContext *pCtx)
 {
-	_ClearCompositionDisplayAttributes(ecWrite,pCtx);
-
 	if ( pCtx != NULL)
 	{
 		_UnadviseTextLayoutSink(pCtx);

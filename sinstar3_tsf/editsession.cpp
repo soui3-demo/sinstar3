@@ -225,10 +225,7 @@ STDMETHODIMP CEsChangeComposition::DoEditSession(TfEditCookie ec)
 	// the inserted text.
 	pRangeSel->Collapse(ec, TF_ANCHOR_END);
 	_pContext->SetSelection(ec, 1, &tfSelection);
-	//
-	// set the display attribute to the composition range.
-	//
-	_pTextService->UpdateCompAttr(_pContext,ec,pRangeComposition);
+
 	if(_pTextService->m_pSinstar3) _pTextService->m_pSinstar3->OnCompositionChanged();
 
 	return S_OK;
@@ -380,8 +377,6 @@ STDMETHODIMP CEsUpdateResultAndComp::DoEditSession(TfEditCookie ec)
 		tfSelection.range->Collapse(ec,TF_ANCHOR_END);
 		_pContext->SetSelection(ec,1,&tfSelection);
 		tfSelection.range->Release();
-
-		_pTextService->UpdateCompAttr(_pContext,ec,pRangeComposition);
 
 		if(_pTextService->m_pSinstar3) _pTextService->m_pSinstar3->OnCompositionChanged();
 	}else

@@ -126,11 +126,6 @@ STDAPI CSinstar3Tsf::ActivateEx(ITfThreadMgr *pThreadMgr, TfClientId tfClientId,
 	//
 	if (!_InitKeyEventSink())
 		goto ExitError;
-	//
-	// Initialize display guid atom
-	//
-	if (!_InitDisplayAttributeGuidAtom())
-		goto ExitError;
 
 	if (!_InitThreadCompartment())
 		goto ExitError;
@@ -365,32 +360,6 @@ BOOL   CSinstar3Tsf::ReleaseImeContext(LPVOID lpImeContext)
 	return TRUE;
 }
 
-BOOL CSinstar3Tsf::_InitDisplayAttributeGuidAtom()
-{
-	ITfCategoryMgr *pCategoryMgr;
-	HRESULT hr;
-
-	if (CoCreateInstance(CLSID_TF_CategoryMgr,
-		NULL, 
-		CLSCTX_INPROC_SERVER, 
-		IID_ITfCategoryMgr, 
-		(void**)&pCategoryMgr) != S_OK)
-	{
-		return FALSE;
-	}
-
-	// register the display attribute for input text.
-	hr = pCategoryMgr->RegisterGUID(c_guidDisplayAttributeInput, &_gaDisplayAttributeInput);
-	// register the display attribute for the converted text.
-	hr = pCategoryMgr->RegisterGUID(c_guidDisplayAttributeConverted, &_gaDisplayAttributeConverted);
-	// register the display attribute for the target converted text.
-	hr = pCategoryMgr->RegisterGUID(c_guidDisplayAttributeTargetConverted, &_gaDisplayAttributeTargetConverted);
-
-	pCategoryMgr->Release();
-
-	return (hr == S_OK);
-}
-
 CLogStateListener g_LogListener;
 
 BOOL CSinstar3Tsf::_InitSinstar3()
@@ -419,50 +388,6 @@ BOOL CSinstar3Tsf::_UninitSinstar3()
 	return TRUE;
 }
 
-void CSinstar3Tsf::UpdateCompAttr(ITfContext *pContext,TfEditCookie ec,ITfRange *pRangeComposition)
-{
-	//做一个简单的处理，当range为空时Core中的数据可能和TSF中的数据不一致
-	BOOL bEmpty=FALSE;
-	if(!pRangeComposition) return;
-	if(pRangeComposition->IsEmpty(ec,&bEmpty)==S_OK && bEmpty) return;
-
-	pRangeComposition->Collapse(ec,TF_ANCHOR_START);
-	int nSegs=m_pSinstar3->GetCompositionSegments();
-	int nBegin=0;
-	for(int i=0;i<nSegs;i++)
-	{
-		LONG cch=0;
-		int nEnd=m_pSinstar3->GetCompositionSegmentEnd(i);
-		pRangeComposition->ShiftEnd(ec,nEnd-nBegin,&cch,NULL);
-		_SetCompositionDisplayAttributes(ec, pContext, pRangeComposition,(TF_DA_ATTR_INFO)m_pSinstar3->GetCompositionSegmentAttr(i));
-		nBegin=nEnd;
-		pRangeComposition->Collapse(ec,TF_ANCHOR_END);
-	}
-}
-
-//+---------------------------------------------------------------------------
-//
-// _ClearCompositionDisplayAttributes
-//
-//----------------------------------------------------------------------------
-
-void CSinstar3Tsf::_ClearCompositionDisplayAttributes(TfEditCookie ec, ITfContext *pContext)
-{
-	CComPtr<ITfRange> pRangeComposition;
-	CComPtr<ITfProperty> pDisplayAttributeProperty;
-
-	if(!pContext) return;
-	// get the compositon range.
-	if (!_pComposition || _pComposition->GetRange(&pRangeComposition) != S_OK)
-		return;
-
-	// get our the display attribute property
-	if (pContext->GetProperty(GUID_PROP_ATTRIBUTE, &pDisplayAttributeProperty) == S_OK)
-	{
-		// clear the value over the range
-		pDisplayAttributeProperty->Clear(ec, pRangeComposition);
-	}
-}
 
 BOOL CSinstar3Tsf::SetOpenStatus(LPVOID lpImeContext,BOOL bOpen)
 {

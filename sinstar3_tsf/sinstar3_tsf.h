@@ -9,7 +9,6 @@ class CSinstar3Tsf : public CUnknown,
                      public ITfTextEditSink,
                      public ITfKeyEventSink,
                      public ITfCompositionSink,
-					 public ITfDisplayAttributeProvider,
 					 public ITfTextLayoutSink,
 					 public ITfFnConfigure,
 					 public ITfCompartmentEventSink,
@@ -44,10 +43,6 @@ public:
 
     // ITfTextEditSink
     STDMETHODIMP OnEndEdit(ITfContext *pContext, TfEditCookie ecReadOnly, ITfEditRecord *pEditRecord);
-
-	// ITfDisplayAttributeProvider
-	STDMETHODIMP EnumDisplayAttributeInfo(IEnumTfDisplayAttributeInfo **ppEnum);
-	STDMETHODIMP GetDisplayAttributeInfo(REFGUID guidInfo, ITfDisplayAttributeInfo **ppInfo);
 
     // ITfKeyEventSink
     STDMETHODIMP OnSetFocus(BOOL fForeground);
@@ -105,12 +100,8 @@ public:
 	void _TerminateComposition(TfEditCookie ecWrite,ITfContext *pContext);
 	int  _MoveCaretPos(ITfContext *pContext,int nPos,BOOL bSet);
 	BOOL _IsComposing() const;
-	BOOL _SetCompositionDisplayAttributes(TfEditCookie ec, ITfContext *pContext,ITfRange *pRange, TF_DA_ATTR_INFO attr);
 	BOOL _GetSegRange(TfEditCookie ec,ITfRange **pRange,int nLeft,int nRight);
 	
-	void UpdateCompAttr(ITfContext *pContext,TfEditCookie ec,ITfRange *pRangeComposition);
-	void _ClearCompositionDisplayAttributes(TfEditCookie ec, ITfContext *pContext);
-
 	void ShowCandidateWindow();
 	
 private:
@@ -129,7 +120,6 @@ private:
     BOOL _InitKeyEventSink();
     void _UninitKeyEventSink();
 
-	BOOL _InitDisplayAttributeGuidAtom();
 
 	// 
 	HRESULT _AdviseTextLayoutSink(ITfContext *pContext);
@@ -156,6 +146,12 @@ private:
     DWORD _dwTextEditSinkCookie;
 
 	CComPtr<ITfComposition> _pComposition;
+	DWORD _dwCookieTextLayoutSink; // Cookie for ITfContextKeyEventSink
+
+	// 标志是否在一个可编辑的文档内
+	BOOL _bInEditDocument;	
+	BOOL _bKeyDownTested;
+	BOOL _bKeyUpTested;
 
 public:
 	ISinstar*   m_pSinstar3;
@@ -166,18 +162,6 @@ public:
 	TfEditCookie _ec;
 	BOOL         _bCompsiting;
 
-	// guidatom for the display attibute.
-	TfGuidAtom _gaDisplayAttributeInput;
-	TfGuidAtom _gaDisplayAttributeConverted;
-	TfGuidAtom _gaDisplayAttributeTargetConverted;
-
-	DWORD _dwCookieTextLayoutSink; // Cookie for ITfContextKeyEventSink
-
-	// 标志是否在一个可编辑的文档内
-	BOOL _bInEditDocument;	
-	BOOL _bKeyDownTested;
-	BOOL _bKeyUpTested;
-
 public:
 	IUNKNOWN_BEGIN(ITfTextInputProcessorEx)
 		IUNKNOWN_ADD_IID(ITfTextInputProcessor)
@@ -185,7 +169,6 @@ public:
 		IUNKNOWN_ADD_IID(ITfThreadFocusSink)
 		IUNKNOWN_ADD_IID(ITfTextEditSink)
 		IUNKNOWN_ADD_IID(ITfKeyEventSink)
-		IUNKNOWN_ADD_IID(ITfDisplayAttributeProvider)
 		IUNKNOWN_ADD_IID(ITfCompositionSink)
 		IUNKNOWN_ADD_IID(ITfTextLayoutSink)
 		IUNKNOWN_ADD_IID(ITfFnConfigure)
