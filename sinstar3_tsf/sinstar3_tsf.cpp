@@ -78,7 +78,6 @@ CSinstar3Tsf::CSinstar3Tsf()
 
 	_bCompsiting = FALSE;
 
-	_bPosSaved = FALSE;
 }
 
 //+---------------------------------------------------------------------------
@@ -102,6 +101,8 @@ STDAPI CSinstar3Tsf::ActivateEx(ITfThreadMgr *pThreadMgr, TfClientId tfClientId,
 	_tfClientId = tfClientId;
 	_dwActivateFlag = dwFlags;
 
+	_bKeyDownTested = FALSE;
+	_bKeyUpTested = FALSE;
 	//
 	// Initialize ThreadMgrEventSink.
 	//
@@ -190,7 +191,6 @@ STDAPI CSinstar3Tsf::Deactivate()
 
     _tfClientId = TF_CLIENTID_NULL;
 	_bInEditDocument = FALSE;
-	_bPosSaved = FALSE;
 
     return S_OK;
 }

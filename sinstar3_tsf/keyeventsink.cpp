@@ -15,8 +15,13 @@ STDAPI CSinstar3Tsf::OnTestKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM l
 		*pfEaten = FALSE;
 		return S_OK;
 	}
-	m_pSinstar3->ProcessKeyStoke(pContext, (UINT)wParam, lParam, TRUE, pfEaten);
 
+	_bKeyDownTested = TRUE;
+	m_pSinstar3->ProcessKeyStoke(pContext, (UINT)wParam, lParam, TRUE, pfEaten);
+	if (!(*pfEaten))
+	{
+		_bKeyDownTested = FALSE;
+	}
     return S_OK;
 }
 
@@ -27,8 +32,12 @@ STDAPI CSinstar3Tsf::OnTestKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lPa
 		*pfEaten = FALSE;
 		return S_OK;
 	}
+	_bKeyUpTested = TRUE;
 	m_pSinstar3->ProcessKeyStoke(pContext, (UINT)wParam, lParam, FALSE, pfEaten);
-
+	if (!(*pfEaten))
+	{
+		_bKeyUpTested = FALSE;
+	}
 	return S_OK;
 }
 
@@ -37,6 +46,11 @@ STDAPI CSinstar3Tsf::OnKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM lPara
 {
 	HRESULT hr = E_FAIL;
 	SLOGFMTI("OnKeyDown: %08x %08x", (DWORD)wParam, (DWORD)lParam);
+	if (!_bKeyDownTested)
+	{
+		OnTestKeyDown(pContext, wParam, lParam, pfEaten);
+		if (!(*pfEaten)) return S_OK;
+	}
 	CEsKeyHandler *pEs = new CEsKeyHandler(this, pContext, wParam, lParam);
 	hr =  pContext->RequestEditSession(_tfClientId, pEs, TF_ES_ASYNCDONTCARE | TF_ES_READWRITE, &hr);
 	pEs->Release();
@@ -44,13 +58,22 @@ STDAPI CSinstar3Tsf::OnKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM lPara
 	{
 		*pfEaten = TRUE;
 	}
+	_bKeyDownTested = FALSE;
 	return hr;
 }
 
 STDAPI CSinstar3Tsf::OnKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {
 	SLOGFMTI("");
-	*pfEaten = FALSE;
+	if (!_bKeyUpTested)
+	{
+		OnTestKeyUp(pContext, wParam, lParam, pfEaten);
+		_bKeyUpTested = FALSE;
+	}
+	else
+	{
+		*pfEaten = FALSE;
+	}
     return S_OK;
 }
 

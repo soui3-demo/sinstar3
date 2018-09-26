@@ -369,8 +369,6 @@ STDMETHODIMP CEsUpdateResultAndComp::DoEditSession(TfEditCookie ec)
 	//²åÈëÐÂµÄ±àÂë
 	if(m_pszCompStr)
 	{
-		_pTextService->_bPosSaved = FALSE;
-
 		POINT pt={-1,-1};
 		_pTextService->m_pSinstar3->OnSetFocusSegmentPosition(pt,0);
 		pRangeComposition->SetText(ec,0,m_pszCompStr,m_nCompStrLen);

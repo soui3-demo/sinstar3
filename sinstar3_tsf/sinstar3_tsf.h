@@ -175,10 +175,8 @@ public:
 
 	// 标志是否在一个可编辑的文档内
 	BOOL _bInEditDocument;	
-
-	BOOL _bPosSaved;
-
-	RECT _rtStart;
+	BOOL _bKeyDownTested;
+	BOOL _bKeyUpTested;
 
 public:
 	IUNKNOWN_BEGIN(ITfTextInputProcessorEx)
