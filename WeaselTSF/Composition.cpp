@@ -8,17 +8,13 @@
 class CStartCompositionEditSession: public CEditSession
 {
 public:
-	CStartCompositionEditSession(com_ptr<WeaselTSF> pTextService, com_ptr<ITfContext> pContext, BOOL fCUASWorkaroundEnabled)
+	CStartCompositionEditSession(com_ptr<WeaselTSF> pTextService, com_ptr<ITfContext> pContext)
 		: CEditSession(pTextService, pContext)
 	{
-		_fCUASWorkaroundEnabled = fCUASWorkaroundEnabled;
 	}
 
 	/* ITfEditSession */
 	STDMETHODIMP DoEditSession(TfEditCookie ec);
-
-private:
-	BOOL _fCUASWorkaroundEnabled;
 };
 
 STDAPI CStartCompositionEditSession::DoEditSession(TfEditCookie ec)
@@ -67,10 +63,10 @@ STDAPI CStartCompositionEditSession::DoEditSession(TfEditCookie ec)
 	return hr;
 }
 
-void WeaselTSF::_StartComposition(com_ptr<ITfContext> pContext, BOOL fCUASWorkaroundEnabled)
+void WeaselTSF::_StartComposition(com_ptr<ITfContext> pContext)
 {
 	com_ptr<CStartCompositionEditSession> pStartCompositionEditSession;
-	pStartCompositionEditSession.Attach(new CStartCompositionEditSession(this, pContext, fCUASWorkaroundEnabled));
+	pStartCompositionEditSession.Attach(new CStartCompositionEditSession(this, pContext));
 	_cand->StartUI();
 	if (pStartCompositionEditSession != nullptr)
 	{

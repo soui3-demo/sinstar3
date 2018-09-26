@@ -22,14 +22,14 @@ STDAPI WeaselTSF::DoEditSession(TfEditCookie ec)
 			// For auto-selecting, commit and preedit can both exist.
 			// Commit and close the original composition first.
 			if (!_IsComposing()) {
-				_StartComposition(_pEditSessionContext, _fCUASWorkaroundEnabled && !config.inline_preedit);
+				_StartComposition(_pEditSessionContext);
 			}
 			_InsertText(_pEditSessionContext, commit);
 			_EndComposition(_pEditSessionContext, false);
 		}
 		if (_status.composing && !_IsComposing())
 		{
-			_StartComposition(_pEditSessionContext, _fCUASWorkaroundEnabled && !config.inline_preedit);
+			_StartComposition(_pEditSessionContext);
 		}
 		else if (!_status.composing && _IsComposing())
 		{

@@ -89,7 +89,7 @@ private:
     HRESULT _SetKeyboardOpen(BOOL fOpen);
 
 	/* Composition */
-	void _StartComposition(com_ptr<ITfContext> pContext, BOOL fCUASWorkaroundEnabled);
+	void _StartComposition(com_ptr<ITfContext> pContext);
 	void _EndComposition(com_ptr<ITfContext> pContext, BOOL clear);
 	BOOL _ShowInlinePreedit(com_ptr<ITfContext> pContext, const std::shared_ptr<weasel::Context> context);
 	void _UpdateComposition(com_ptr<ITfContext> pContext);
