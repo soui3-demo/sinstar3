@@ -359,10 +359,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\HotKeyMgr.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\ImeMgr.cpp"
 				>
 			</File>
@@ -434,10 +430,6 @@
 			</File>
 			<File
 				RelativePath="..\core_loader\core_loader.h"
-				>
-			</File>
-			<File
-				RelativePath=".\HotKeyMgr.h"
 				>
 			</File>
 			<File

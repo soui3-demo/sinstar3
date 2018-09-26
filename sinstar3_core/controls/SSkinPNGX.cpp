@@ -11,7 +11,7 @@ namespace SOUI
 HRESULT SSkinPNGX::OnAttrDelay(const SStringW &strValue,BOOL bLoading)
 {
 	SStringWList strDelays;
-	int nSegs = SplitString(strValue,L',',strDelays);
+	int nSegs = (int)SplitString(strValue,L',',strDelays);
 	m_nDelays.RemoveAll();
 	for(int i=0;i<nSegs;i++)
 	{
@@ -36,7 +36,7 @@ int SSkinPNGX::LoadFromMemory(LPVOID pBits,size_t szData)
 
 int SSkinPNGX::GetStates()
 {
-	return m_nDelays.GetCount();
+	return (int)m_nDelays.GetCount();
 }
 
 SIZE SSkinPNGX::GetSkinSize()
@@ -48,9 +48,9 @@ SIZE SSkinPNGX::GetSkinSize()
 		szSkin.cy = m_pngx->Height();
 
 		if(m_bVert)
-			szSkin.cy/=m_nDelays.GetCount();
+			szSkin.cy/=(int)m_nDelays.GetCount();
 		else
-			szSkin.cx/=m_nDelays.GetCount();
+			szSkin.cx/=(int)m_nDelays.GetCount();
 	}
 	return szSkin;
 }
