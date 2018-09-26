@@ -132,10 +132,11 @@ STDMETHODIMP CEsGetTextExtent::DoEditSession(TfEditCookie ec)
 
 	CComPtr<ITfRange> pRange;
 	ISinstar * pSinstar3 = GetSinstar3();
-	if(!pSinstar3 || !_pTextService->_pComposition) return S_FALSE;
+	CComPtr<ITfComposition> pComposition = _pTextService->GetITfComposition();
+	if(!pSinstar3 || !pComposition) return S_FALSE;
 
 	CComPtr<ITfRange> range;
-	if ( _pTextService->_pComposition->GetRange( &range) == S_OK && range != NULL)
+	if ( pComposition->GetRange( &range) == S_OK && range != NULL)
 	{
 		BOOL fClip = FALSE;
 		RECT rc;
@@ -173,10 +174,12 @@ STDMETHODIMP CEsChangeComposition::DoEditSession(TfEditCookie ec)
 {
 	SLOG_INFO("TfEditCookie:"<<ec);
 
-	if(!_pTextService->IsCompositing()) 
-		_pTextService->_StartComposition(_pContext);
 	CComPtr<ITfRange> pRangeComposition;
 	CComPtr<ITfRange> pRangeSel;
+	CComPtr<ITfComposition> pComposition = _pTextService->GetITfComposition();
+
+	SASSERT(pComposition);
+
 	TF_SELECTION tfSelection;
 	ULONG cFetched;
 	BOOL fCovered;
@@ -187,7 +190,7 @@ STDMETHODIMP CEsChangeComposition::DoEditSession(TfEditCookie ec)
 	pRangeSel.Attach(tfSelection.range);
 
 	// is the insertion point covered by a composition?
-	if (_pTextService->_pComposition->GetRange(&pRangeComposition) == S_OK)
+	if (pComposition->GetRange(&pRangeComposition) == S_OK)
 	{
 		fCovered = IsRangeCovered(ec, pRangeSel, pRangeComposition);
 		if(fCovered)

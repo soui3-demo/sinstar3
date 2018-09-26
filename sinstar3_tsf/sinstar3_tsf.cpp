@@ -169,8 +169,6 @@ STDAPI CSinstar3Tsf::Deactivate()
 		ITfContext *pCtx=(ITfContext *)GetImeContext();
 		if(pCtx) 
 			EndComposition(pCtx);
-		else if(m_pSinstar3)
-			m_pSinstar3->OnCompositionTerminated();
 		ReleaseImeContext(pCtx);
 	}
 	if (_pThreadMgr)

@@ -155,14 +155,14 @@ private:
     ITfContext   *_pTextEditSinkContext;
     DWORD _dwTextEditSinkCookie;
 
+	CComPtr<ITfComposition> _pComposition;
+
 public:
 	ISinstar*   m_pSinstar3;
 	BOOL		_bHasFocus;
-	BOOL _bGetLayoutChangeMsg;
 	BOOL		_bInKeyProc;
 
     // the current composition object.
-    CComPtr<ITfComposition> _pComposition;
 	TfEditCookie _ec;
 	BOOL         _bCompsiting;
 

@@ -76,11 +76,6 @@ STDAPI CSinstar3Tsf::OnCompositionTerminated(TfEditCookie ecWrite, ITfCompositio
 	SASSERT(pComposition && pComposition == _pComposition);
 	ITfContext *pCtx=(ITfContext *)GetImeContext();
 	_TerminateComposition(ecWrite,pCtx);
-	if ( pCtx != NULL)
-	{
-		_UnadviseTextLayoutSink(pCtx);
-	}
-
 	ReleaseImeContext(pCtx);
 
 	return S_OK;
@@ -89,12 +84,12 @@ STDAPI CSinstar3Tsf::OnCompositionTerminated(TfEditCookie ecWrite, ITfCompositio
 
 void CSinstar3Tsf::_EndComposition(ITfContext *pContext)
 {
+	SLOG_INFO("_EndComposition IsCompositing()="<<IsCompositing());
 	if(!IsCompositing()) return;
     CEsEndComposition *pEditSession = new CEsEndComposition(this, pContext);
     HRESULT hr;
 	pContext->RequestEditSession(_tfClientId, pEditSession, (_bInKeyProc?TF_ES_SYNC:TF_ES_ASYNCDONTCARE) | TF_ES_READWRITE, &hr);
 	pEditSession->Release();
-	_bCompsiting = FALSE;
 }
 
 BOOL CSinstar3Tsf::_EndCompositionEx()
@@ -163,4 +158,6 @@ void CSinstar3Tsf::_TerminateComposition(TfEditCookie ecWrite,ITfContext *pCtx)
 	if(m_pSinstar3) m_pSinstar3->OnCompositionTerminated();
 
 	_pComposition = NULL;
+	_bCompsiting = FALSE;
+	SLOG_INFO("_pComposition = NULL, _bCompsiting = FALSE");
 }
