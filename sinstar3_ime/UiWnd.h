@@ -1,13 +1,11 @@
 #pragma once
 #include "simplewnd.h"
-#include "HotKeyMgr.h"
 #include "CompWndInline.h"
 
 #define  UICLASSNAME _T("sinstar3_uiwnd")
 
 class CUiWnd :
 	public CSimpleWnd,
-	public CHotKeyMgr,
 	public ITextService
 {
 public:
@@ -40,14 +38,8 @@ public:
 	BOOL   ReleaseImeContext(LPVOID lpImeContext);
 	void  SetConversionMode(EInputMethod mode);
 	EInputMethod GetConversionMode();
-	BOOL  RegisterIMEHotKey(REFGUID guidHotKey,LPCWSTR pszName,const PRESERVEDKEY *pKey);
-	BOOL  UnregisterIMEHotKey(REFGUID guidHotKey,const PRESERVEDKEY *pKey);
 	BOOL SetOpenStatus(LPVOID lpImeContext,BOOL bOpen);
 	BOOL GetOpenStatus(LPVOID lpImeContext) const;
-#ifdef ENABLE_LANGUAGEBAR
-	BOOL GetLanguageBarItemMgr(ITfLangBarItemMgr **ppLangBarMgr,GUID *pGuidTIP);
-#endif//ENABLE_LANGUAGEBAR
-	LRESULT DoWildRequest(WPARAM wParam,LPARAM lParam){return E_NOTIMPL;}
 
 	ISinstar* m_pSinstar3;
 	CImeContext *m_pCurContext;

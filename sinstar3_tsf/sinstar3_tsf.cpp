@@ -367,13 +367,6 @@ BOOL   CSinstar3Tsf::ReleaseImeContext(LPVOID lpImeContext)
 	return TRUE;
 }
 
-BOOL CSinstar3Tsf::GetLanguageBarItemMgr(ITfLangBarItemMgr **ppLangBarMgr,GUID *pclsidTIP)
-{
-	if(!_pThreadMgr) return NULL;
-	*pclsidTIP=c_clsidSinstar3TSF;
-	return SUCCEEDED(_pThreadMgr->QueryInterface(IID_ITfLangBarItemMgr,(void **)ppLangBarMgr));
-}
-
 BOOL CSinstar3Tsf::_InitDisplayAttributeGuidAtom()
 {
 	ITfCategoryMgr *pCategoryMgr;
@@ -471,38 +464,6 @@ void CSinstar3Tsf::_ClearCompositionDisplayAttributes(TfEditCookie ec, ITfContex
 		// clear the value over the range
 		pDisplayAttributeProperty->Clear(ec, pRangeComposition);
 	}
-}
-
-BOOL CSinstar3Tsf::RegisterIMEHotKey(REFGUID guidHotKey,LPCWSTR pszName,const PRESERVEDKEY *pKey)
-{
-	ITfKeystrokeMgr *pKeystrokeMgr;
-	HRESULT hr;
-	const TF_PRESERVEDKEY *pKeyTF=(const TF_PRESERVEDKEY*)pKey;
-
-	if (_pThreadMgr->QueryInterface(IID_ITfKeystrokeMgr, (void **)&pKeystrokeMgr) != S_OK)
-		return FALSE;
-
-	hr = pKeystrokeMgr->PreserveKey(_tfClientId, 
-		guidHotKey,
-		pKeyTF,
-		pszName,
-		pszName?(ULONG)wcslen(pszName):0);
-	pKeystrokeMgr->Release();
-
-	return (hr == S_OK);
-}
-
-BOOL CSinstar3Tsf::UnregisterIMEHotKey(REFGUID guidHotKey,const PRESERVEDKEY *pKey)
-{
-	ITfKeystrokeMgr *pKeystrokeMgr;
-
-	if (_pThreadMgr->QueryInterface(IID_ITfKeystrokeMgr, (void **)&pKeystrokeMgr) != S_OK)
-		return FALSE;
-
-	const TF_PRESERVEDKEY *pKeyTF=(const TF_PRESERVEDKEY*)pKey;
-	pKeystrokeMgr->UnpreserveKey(guidHotKey, pKeyTF);
-	pKeystrokeMgr->Release();
-	return TRUE;
 }
 
 BOOL CSinstar3Tsf::SetOpenStatus(LPVOID lpImeContext,BOOL bOpen)

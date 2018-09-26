@@ -28,13 +28,6 @@
 #define TF_MOD_IGNORE_ALL_MODIFIER         0x0400
 #endif//TF_MOD_ALT
 
-//热键定义，同TSF的TF_PRESERVEDKEY定义
-struct PRESERVEDKEY
-{
-	UINT uVKey;
-	UINT uModifiers;
-};
-
 // 输入模式
 enum EInputMethod
 {
@@ -61,12 +54,6 @@ interface ITextService
 	virtual BOOL   ReleaseImeContext(LPVOID lpImeContext)=NULL;
 	virtual void  SetConversionMode(EInputMethod mode)=NULL;
 	virtual EInputMethod GetConversionMode()=NULL;
-	virtual BOOL  RegisterIMEHotKey(REFGUID guidHotKey,LPCWSTR pszName,const PRESERVEDKEY *pKey)=NULL;
-	virtual BOOL  UnregisterIMEHotKey(REFGUID guidHotKey,const PRESERVEDKEY *pKey)=NULL;
 	virtual BOOL SetOpenStatus(LPVOID lpImeContext,BOOL bOpen)=NULL;
 	virtual BOOL GetOpenStatus(LPVOID lpImeContext) const =NULL;
-	virtual LRESULT DoWildRequest(WPARAM wParam,LPARAM lParam)=NULL;
-#ifdef ENABLE_LANGUAGEBAR
-	virtual BOOL GetLanguageBarItemMgr(ITfLangBarItemMgr **ppLangBarMgr,GUID *pGuidTIP)=NULL;
-#endif//ENABLE_LANGUAGEBAR
 };

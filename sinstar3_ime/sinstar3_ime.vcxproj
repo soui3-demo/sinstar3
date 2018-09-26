@@ -199,7 +199,6 @@
     <ClCompile Include="CompStrEx.cpp" />
     <ClCompile Include="CompWndInline.cpp" />
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="HotKeyMgr.cpp" />
     <ClCompile Include="ImeMgr.cpp" />
     <ClCompile Include="ImeModule.cpp" />
     <ClCompile Include="imm_sinstar3.cpp" />
@@ -225,7 +224,6 @@
     <ClInclude Include="..\include\version.h" />
     <ClInclude Include="CompStrEx.h" />
     <ClInclude Include="CompWndInline.h" />
-    <ClInclude Include="HotKeyMgr.h" />
     <ClInclude Include="imeContext.h" />
     <ClInclude Include="ImeMgr.h" />
     <ClInclude Include="ImeModule.h" />

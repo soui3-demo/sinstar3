@@ -75,7 +75,7 @@ STDAPI CSinstar3Tsf::OnCompositionTerminated(TfEditCookie ecWrite, ITfCompositio
 	SLOG_INFO("OnCompositionTerminated,TfEditCookie:"<<ecWrite<< " pComposition:"<<pComposition);
 	SASSERT(pComposition && pComposition == _pComposition);
 	ITfContext *pCtx=(ITfContext *)GetImeContext();
-//	_TerminateComposition(ecWrite,pCtx);
+	_TerminateComposition(ecWrite,pCtx);
 	if ( pCtx != NULL)
 	{
 		_UnadviseTextLayoutSink(pCtx);
@@ -160,7 +160,7 @@ void CSinstar3Tsf::_TerminateComposition(TfEditCookie ecWrite,ITfContext *pCtx)
 	{
 		_UnadviseTextLayoutSink(pCtx);
 	}
-	//if(m_pSinstar3) m_pSinstar3->OnCompositionTerminated();
+	if(m_pSinstar3) m_pSinstar3->OnCompositionTerminated();
 
 	_pComposition = NULL;
 	_bPosSaved = FALSE;

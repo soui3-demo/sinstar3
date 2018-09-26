@@ -237,16 +237,6 @@ EInputMethod CUiWnd::GetConversionMode()
 	return eInputMode;
 }
 
-BOOL  CUiWnd::RegisterIMEHotKey(REFGUID guidHotKey,LPCWSTR pszName,const PRESERVEDKEY *pKey)
-{
-	return CHotKeyMgr::RegisterHotKey(guidHotKey,pKey);
-}
-
-BOOL  CUiWnd::UnregisterIMEHotKey(REFGUID guidHotKey,const PRESERVEDKEY *pKey)
-{
-	return CHotKeyMgr::UnregisterHotKey(guidHotKey,pKey);
-}
-
 BOOL CUiWnd::SetOpenStatus(LPVOID lpImeContext,BOOL bOpen)
 {
 	if(!lpImeContext) return FALSE;
@@ -258,90 +248,3 @@ BOOL CUiWnd::GetOpenStatus(LPVOID lpImeContext) const
 	if(!lpImeContext) return FALSE;
 	return ImmGetOpenStatus(((CImeContext *)lpImeContext)->_hIMC);
 }
-
-#ifdef ENABLE_LANGUAGEBAR
-
-HMODULE GetMsctfModule()
-{
-	static HMODULE hModMsctf = ::LoadLibrary (_T("msctf.dll"));
-	return hModMsctf;
-}
-
-BOOL _QueryLangBarItemMgr(ITfLangBarItemMgr **pLangBarMgr)
-{
-	if(theModule->GetSysInfoFlags()&IME_SYSINFO_WINLOGON) return FALSE;
-	BOOL bRet=FALSE;
-	HMODULE hModMsctf=GetMsctfModule();
-	if(hModMsctf)
-	{
-		typedef HRESULT (WINAPI *PTF_CREATELANGBARITEMMGR)(ITfLangBarItemMgr**);
-		PTF_CREATELANGBARITEMMGR pfnCreateLangBarItemMgr = (PTF_CREATELANGBARITEMMGR)::GetProcAddress (hModMsctf, "TF_CreateLangBarItemMgr");
-
-		if(pfnCreateLangBarItemMgr)
-		{
-			HRESULT hr=pfnCreateLangBarItemMgr(pLangBarMgr);
-			bRet=SUCCEEDED(hr);
-		}
-	}
-
-	return bRet;
-}
-
-BOOL _QueryITfThreadMgr(ITfThreadMgr** ppITfThreadMgr)
-{
-	typedef HRESULT (WINAPI *PTF_CREATETHREADMGR)(ITfThreadMgr**);
-
-	return FALSE;
-	if(theModule->GetSysInfoFlags()&IME_SYSINFO_WINLOGON) return FALSE;
-
-	HRESULT	hResult;
-
-	HMODULE hMSCTF=GetMsctfModule();
-
-	if(0 == hMSCTF)
-	{
-		return FALSE;
-	}
-
-	static PTF_CREATETHREADMGR s_pfnCreateThreadMgr;
-
-	if(0 == s_pfnCreateThreadMgr)
-	{
-		s_pfnCreateThreadMgr = (PTF_CREATETHREADMGR)::GetProcAddress (hMSCTF, "TF_CreateThreadMgr");
-
-		if(0 == s_pfnCreateThreadMgr)
-		{
-			return FALSE;
-		}
-	}
-
-	hResult = s_pfnCreateThreadMgr(ppITfThreadMgr);
-
-	return (SUCCEEDED (hResult)) ;
-}
-
-BOOL CUiWnd::GetLanguageBarItemMgr(ITfLangBarItemMgr **ppLangBarMgr,GUID *pGuidTIP)
-{
-	ITfLangBarItemMgr *pLangBarItemMgr=NULL;
-	OSVERSIONINFO ver={sizeof(ver),0};
-	GetVersionEx(&ver);
-	if(ver.dwMajorVersion==5 && ver.dwMinorVersion==1)//XP
-	{//XP下判断是否打开高级文字服务
-		HKEY hKey=0;
-		if(ERROR_SUCCESS==RegOpenKeyEx(HKEY_CURRENT_USER,_T("Software\\Microsoft\\CTF"),0,KEY_READ,&hKey) && hKey)
-		{
-			DWORD dwEnable=0;
-			DWORD dwSize=sizeof(DWORD);
-			RegQueryValueEx(hKey,_T("Disable Thread Input Manager"),NULL,NULL,(LPBYTE)&dwEnable,&dwSize);
-			RegCloseKey(hKey);
-			if(dwEnable==1) return FALSE;
-		}
-	}
-	if(!_QueryLangBarItemMgr(ppLangBarMgr))
-		return FALSE;
-
-	*pGuidTIP=c_clsidSinstar3TSF;
-	return TRUE;
-}
-
-#endif//ENABLE_LANGUAGEBAR
