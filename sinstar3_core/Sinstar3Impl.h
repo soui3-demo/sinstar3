@@ -47,7 +47,7 @@ public:
 	virtual LRESULT OnWildMessage(WPARAM wParam,LPARAM lParam);
 
 public:
-	IUNKNOWN_BEGIN2(IUnknown)
+	IUNKNOWN_BEGIN(IUnknown)
 	IUNKNOWN_END()
 public:
 	virtual int GetID() const {	return SENDER_SINSTSR3;}

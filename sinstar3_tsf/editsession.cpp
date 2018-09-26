@@ -14,11 +14,7 @@ STDMETHODIMP CEsKeyHandler::DoEditSession(TfEditCookie ec)
 {
 	BOOL fEaten = FALSE;
 	GetTextService()->_bInKeyProc = TRUE;
-	GetSinstar3()->ProcessKeyStoke(GetContext(),(UINT)_wParam,_lParam, TRUE, &fEaten);
-	if(fEaten)
-	{
-		GetSinstar3()->TranslateKey(GetContext(),(UINT)_wParam, MapVirtualKey((UINT)_wParam,0), TRUE, &fEaten);
-	}
+	GetSinstar3()->TranslateKey(GetContext(),(UINT)_wParam, MapVirtualKey((UINT)_wParam,0), TRUE, &fEaten);
 	GetTextService()->_bInKeyProc = FALSE;
 
 	return S_OK;
@@ -106,6 +102,14 @@ STDMETHODIMP CEsEndComposition::DoEditSession(TfEditCookie ec)
 		sel.range=pRange;
 		pRange->Collapse(ec,TF_ANCHOR_END);
 		_pContext->SetSelection(ec,1,&sel);
+	}
+
+	//trigger layout changed
+	CComPtr<ITfContextView> pCtxView;
+	HRESULT hr = _pContext->GetActiveView(&pCtxView);
+	if (SUCCEEDED(hr))
+	{
+		_pTextService->OnLayoutChange(_pContext, TF_LC_CHANGE, pCtxView);
 	}
 
 	pComposition->EndComposition(ec);

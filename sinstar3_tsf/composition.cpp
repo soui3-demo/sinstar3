@@ -160,7 +160,7 @@ void CSinstar3Tsf::_TerminateComposition(TfEditCookie ecWrite,ITfContext *pCtx)
 	{
 		_UnadviseTextLayoutSink(pCtx);
 	}
-	if(m_pSinstar3) m_pSinstar3->OnCompositionTerminated();
+	//if(m_pSinstar3) m_pSinstar3->OnCompositionTerminated();
 
 	_pComposition = NULL;
 	_bPosSaved = FALSE;
