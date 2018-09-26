@@ -38,13 +38,10 @@ public:
 	virtual int  GetCompositionSegments();
 	virtual int  GetCompositionSegmentEnd(int iSeg);
 	virtual int	 GetCompositionSegmentAttr(int iSeg);
-	virtual BOOL OnHotkey(LPVOID lpImeContext,REFGUID guidHotKey);
 	virtual void OnOpenStatusChanged(BOOL bOpen);
 	virtual void OnConversionModeChanged(EInputMethod uMode);
 	virtual void ShowHelp();
 	virtual EInputMethod GetDefInputMode();
-	virtual BOOL ShowCompWnd();
-	virtual LRESULT OnWildMessage(WPARAM wParam,LPARAM lParam);
 
 public:
 	IUNKNOWN_BEGIN(IUnknown)

@@ -178,6 +178,7 @@ namespace SOUI {
 		{
 			m_pZoominWnd->DestroyWindow();
 		}
+		__super::OnDestroy();
 	}
 }
 

@@ -136,23 +136,10 @@ LRESULT CUiWnd::WindowProc(UINT uMsg,WPARAM wParam,LPARAM lParam)
 	case WM_IME_SETCONTEXT:
 		return OnSetContext((BOOL)wParam,lParam);
 	case WM_IME_STARTCOMPOSITION:
-		if(m_pSinstar3 && m_pSinstar3->ShowCompWnd())
-		{
-			m_wndComp.m_bValid=TRUE;
-			m_wndComp.ShowWindow(SW_SHOWNOACTIVATE);
-		}
 		return 0;
 	case WM_IME_COMPOSITION:
-		if(m_wndComp.m_bValid)
-		{
-			m_wndComp.SendMessage(UM_UPDATECONTEXT,(WPARAM)hIMC,0);
-			OnImeNotify(IMN_SETCOMPOSITIONWINDOW,0);
-		}
 		return 0;
 	case WM_IME_ENDCOMPOSITION:
-		m_wndComp.ShowWindow(SW_HIDE);
-		m_wndComp.SendMessage(UM_UPDATECONTEXT,(WPARAM)hIMC,0);//Çå¿ÕÊý¾Ý
-		m_wndComp.m_bValid=FALSE;
 		return 0;
 	}
 
@@ -223,12 +210,10 @@ LRESULT CUiWnd::OnImeNotify(WPARAM wParam,LPARAM lParam)
 	{
 	case IMN_OPENSTATUSWINDOW:
 		if(m_pSinstar3) m_pSinstar3->OnSetFocus(TRUE);
-		m_wndComp.ShowWindow(m_wndComp.m_bValid ? SW_SHOWNOACTIVATE : SW_HIDE);
 		SLOGFMTI("IMN_OPENSTATUSWINDOW");
 		break;
 	case IMN_CLOSESTATUSWINDOW:
 		if(m_pSinstar3) m_pSinstar3->OnSetFocus(FALSE);
-		if(m_wndComp.m_bValid) m_wndComp.ShowWindow(SW_HIDE);
 		SLOGFMTI("IMN_CLOSESTATUSWINDOW");
 		break;
 	case IMN_OPENCANDIDATE:
@@ -259,14 +244,6 @@ LRESULT CUiWnd::OnImeNotify(WPARAM wParam,LPARAM lParam)
 				if(pCompStr)
 				{
 					POINT pt=GetAbsPos(lpIMC->hWnd,lpIMC->cfCompForm.dwStyle,lpIMC->cfCompForm.ptCurrentPos,lpIMC->cfCompForm.rcArea);
-					if(m_wndComp.m_bValid)
-					{
-						ScreenToClient(lpIMC->hWnd,&pt);
-						m_wndComp.MoveCompWindow(hIMC,pt);
-						RECT rc;
-						m_wndComp.GetLastLineRect(&rc);
-						pt.x=rc.left,pt.y=rc.top;
-					}else
 					{		
 						IMECHARPOSITION charPos={sizeof(charPos),pCompStr->GetTargetPos(),0};
 						COMPOSITIONFORM compForm={0};
@@ -300,11 +277,6 @@ LRESULT CUiWnd::OnImeNotify(WPARAM wParam,LPARAM lParam)
 					if(pCompStr->GetTargetPos()!=-1)
 					{
 						POINT pt;
-						if(m_wndComp.m_bValid)
-						{
-							m_wndComp.SendMessage(UM_GETCANDPOS,(WPARAM)lpIMC->hWnd,(LPARAM)&pt);
-							ClientToScreen(lpIMC->hWnd,&pt);
-						}else
 						{
 
 							IMECHARPOSITION charPos={sizeof(charPos),0};
@@ -332,10 +304,6 @@ LRESULT CUiWnd::OnImeNotify(WPARAM wParam,LPARAM lParam)
 			LPINPUTCONTEXT lpIMC=(LPINPUTCONTEXT)ImmLockIMC(hIMC);
 			if(lpIMC)
 			{
-				if(m_fntComp) DeleteObject(m_fntComp);
-				m_fntComp=0;
-
-				
 				LOGFONT lf;
 				
 				if(!ImmRequestMessage(hIMC,IMR_COMPOSITIONFONT,(LPARAM)&lf))
@@ -343,7 +311,6 @@ LRESULT CUiWnd::OnImeNotify(WPARAM wParam,LPARAM lParam)
 					memcpy(&lf,&lpIMC->lfFont.W,sizeof(LOGFONT));
 				}
 				m_fntComp=CreateFontIndirectW(&lf);
-				m_wndComp.SendMessage(WM_SETFONT,(WPARAM)m_fntComp,0);
 				
 				IMECHARPOSITION charPos={sizeof(charPos),0,0};
 				if(ImmRequestMessage(hIMC,IMR_QUERYCHARPOSITION,(LPARAM)&charPos) 
@@ -420,7 +387,6 @@ LRESULT CUiWnd::OnCreate()
 
 	SLOGFMTI("CUiWnd::OnCreate,hWnd:%p",m_hWnd);
 	_InitSinstar3();
-	m_wndComp.Create(WS_EX_TOOLWINDOW|WS_EX_LAYERED|WS_EX_NOACTIVATE,WS_POPUP|WS_DISABLED,m_hWnd,0,theModule->GetModule());
 	PostMessage(WM_IME_NOTIFY,IMN_SETCONVERSIONMODE,0);
 	return 0;
 }
@@ -430,7 +396,6 @@ LRESULT CUiWnd::OnDestroy()
 	SLOGFMTI("CUiWnd::OnDestroy");
 	_UninitSinstar3();
 	AttachToIMC(FALSE);
-	m_wndComp.Destroy();
 	return 0;
 }
 

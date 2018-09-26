@@ -205,12 +205,6 @@ int CSinstar3Impl::GetCompositionSegmentAttr(int iSeg)
 	return 0;
 }
 
-BOOL CSinstar3Impl::OnHotkey(LPVOID lpImeContext,REFGUID guidHotKey)
-{
-
-	return FALSE;
-}
-
 void CSinstar3Impl::OnOpenStatusChanged(BOOL bOpen)
 {
 	m_pStatusWnd->Show(bOpen && !g_SettingsUI->bHideStatus);
@@ -230,15 +224,6 @@ EInputMethod CSinstar3Impl::GetDefInputMode()
 	return FullNative;
 }
 
-BOOL CSinstar3Impl::ShowCompWnd()
-{
-	return FALSE;
-}
-
-LRESULT CSinstar3Impl::OnWildMessage(WPARAM wParam,LPARAM lParam)
-{
-	return E_NOTIMPL;
-}
 
 LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 {

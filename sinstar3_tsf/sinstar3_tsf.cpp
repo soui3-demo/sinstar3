@@ -240,6 +240,21 @@ STDMETHODIMP CSinstar3Tsf::GetDisplayName(BSTR* pbstrName)
 //ITextService
 
 BOOL CSinstar3Tsf::InputStringW(LPCWSTR pszBuf, int nLen) {
+	if(IsCompositing())
+	{
+		return FALSE;
+	}else 
+	{
+		LPVOID pCtx = GetImeContext();
+		if(pCtx)
+		{
+			StartComposition(pCtx);
+			UpdateResultAndCompositionStringW(pCtx,pszBuf,nLen,NULL,0);
+			EndComposition(pCtx);
+			ReleaseImeContext(pCtx);
+			return TRUE;
+		}
+	}
 	return FALSE;
 }
 

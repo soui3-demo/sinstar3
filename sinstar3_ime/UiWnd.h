@@ -1,6 +1,5 @@
 #pragma once
 #include "simplewnd.h"
-#include "CompWndInline.h"
 
 #define  UICLASSNAME _T("sinstar3_uiwnd")
 
@@ -48,7 +47,6 @@ public:
 	int        m_nFontHei;
 	HFONT		m_fntComp;
 	BOOL		m_bActivate;
-	CCompWndInline m_wndComp;//在notepad中使用的Inline窗口
 private:
 	BOOL _InitSinstar3();
 	BOOL _UninitSinstar3();

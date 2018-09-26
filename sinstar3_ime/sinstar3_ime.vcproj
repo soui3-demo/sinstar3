@@ -347,10 +347,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\CompWndInline.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\core_loader\core_loader.cpp"
 				>
 			</File>
@@ -422,10 +418,6 @@
 			>
 			<File
 				RelativePath=".\CompStrEx.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CompWndInline.h"
 				>
 			</File>
 			<File

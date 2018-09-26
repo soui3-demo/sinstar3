@@ -17,13 +17,10 @@ interface ISinstar : public IUnknown
 	virtual int  GetCompositionSegments()=NULL;
 	virtual int  GetCompositionSegmentEnd(int iSeg)=NULL;
 	virtual int	 GetCompositionSegmentAttr(int iSeg)=NULL;
-	virtual BOOL OnHotkey(LPVOID lpImeContext,REFGUID guidHotKey)=NULL;
 	virtual void OnOpenStatusChanged(BOOL bOpen)=NULL;
 	virtual void OnConversionModeChanged(EInputMethod uMode)=NULL;
 	virtual void ShowHelp()=NULL;
 	virtual EInputMethod GetDefInputMode() = NULL;
-	virtual BOOL ShowCompWnd() = NULL;
-	virtual LRESULT OnWildMessage(WPARAM wParam,LPARAM lParam)=NULL;
 };
 
 namespace SOUI
