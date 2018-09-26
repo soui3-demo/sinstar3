@@ -22,7 +22,12 @@ STDAPI CSinstar3Tsf::OnTestKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM l
 
 STDAPI CSinstar3Tsf::OnTestKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {
-	*pfEaten = FALSE;
+	if (!m_pSinstar3 || _IsKeyboardDisabled())
+	{
+		*pfEaten = FALSE;
+		return S_OK;
+	}
+	m_pSinstar3->ProcessKeyStoke(pContext, (UINT)wParam, lParam, FALSE, pfEaten);
 
 	return S_OK;
 }
