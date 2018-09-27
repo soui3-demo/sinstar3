@@ -193,11 +193,8 @@
     <ClCompile Include="ClassFactory.cpp" />
     <ClCompile Include="compartment.cpp" />
     <ClCompile Include="composition.cpp" />
-    <ClCompile Include="DisplayAttributeInfo.cpp" />
-    <ClCompile Include="DisplayAttributeProvider.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="editsession.cpp" />
-    <ClCompile Include="EnumDisplayAttributeInfo.cpp" />
     <ClCompile Include="globals.cpp" />
     <ClCompile Include="keyeventsink.cpp" />
     <ClCompile Include="register.cpp" />
@@ -217,9 +214,7 @@
     <ClInclude Include="..\include\module_ref.h" />
     <ClInclude Include="..\include\sinstar3_guids.h" />
     <ClInclude Include="ClassFactory.h" />
-    <ClInclude Include="DisplayAttributeInfo.h" />
     <ClInclude Include="editsession.h" />
-    <ClInclude Include="EnumDisplayAttributeInfo.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="sinstar3_tsf.h" />
