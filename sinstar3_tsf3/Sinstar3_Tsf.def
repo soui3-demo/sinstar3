@@ -1,7 +1,0 @@
-LIBRARY Sinstar3Tsf.dll
-
-EXPORTS
-        DllGetClassObject    PRIVATE
-        DllCanUnloadNow      PRIVATE
-        DllRegisterServer    PRIVATE
-        DllUnregisterServer  PRIVATE
