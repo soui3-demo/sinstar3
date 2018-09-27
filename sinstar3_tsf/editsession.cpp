@@ -113,7 +113,7 @@ STDMETHODIMP CEsEndComposition::DoEditSession(TfEditCookie ec)
 	}
 
 	pComposition->EndComposition(ec);
-	_pTextService->_TerminateComposition(ec,_pContext);
+	_pTextService->_TerminateComposition(ec,_pContext,false);
 	return S_OK;
 }
 

@@ -45,7 +45,7 @@ STDAPI CSinstar3Tsf::OnCompositionTerminated(TfEditCookie ecWrite, ITfCompositio
 	SLOG_INFO("OnCompositionTerminated,TfEditCookie:"<<ecWrite<< " pComposition:"<<pComposition);
 	SASSERT(pComposition && pComposition == _pComposition);
 	ITfContext *pCtx=(ITfContext *)GetImeContext();
-	_TerminateComposition(ecWrite,pCtx);
+	_TerminateComposition(ecWrite,pCtx,true);
 	ReleaseImeContext(pCtx);
 
 	return S_OK;
@@ -117,13 +117,13 @@ int  CSinstar3Tsf::_MoveCaretPos(ITfContext *pContext,int nPos,BOOL bSet)
 }
 
 
-void CSinstar3Tsf::_TerminateComposition(TfEditCookie ecWrite,ITfContext *pCtx)
+void CSinstar3Tsf::_TerminateComposition(TfEditCookie ecWrite,ITfContext *pCtx, bool bClearCtx)
 {
 	if ( pCtx != NULL)
 	{
 		_UnadviseTextLayoutSink(pCtx);
 	}
-	if(m_pSinstar3) m_pSinstar3->OnCompositionTerminated();
+	if(m_pSinstar3) m_pSinstar3->OnCompositionTerminated(bClearCtx);
 
 	_pComposition = NULL;
 	_bCompsiting = FALSE;

@@ -2,8 +2,6 @@
 #include "sinstar3_tsf.h"
 #include "editsession.h"
 
-CSinstar3Tsf *g_pCurTSF=NULL;
-
 STDAPI CSinstar3Tsf::OnEndEdit(ITfContext *pContext, TfEditCookie ecReadOnly, ITfEditRecord *pEditRecord)
 {
     BOOL fSelectionChanged;

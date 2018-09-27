@@ -29,7 +29,7 @@ public:
 	virtual void OnIMESelect(BOOL bSelect);
 	virtual void OnCompositionStarted();
 	virtual void OnCompositionChanged();
-	virtual void OnCompositionTerminated();
+	virtual void OnCompositionTerminated(bool bClearCtx);
 	virtual void OnSetCaretPosition(POINT pt,int nHei);
 	virtual void OnSetFocusSegmentPosition(POINT pt,int nHei);
 	virtual void ProcessKeyStoke(LPVOID lpImeContext,UINT vkCode,LPARAM lParam,BOOL bKeyDown,BOOL *pbEaten);

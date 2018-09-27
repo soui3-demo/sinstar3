@@ -144,10 +144,10 @@ void CSinstar3Impl::OnCompositionChanged()
 {
 }
 
-void CSinstar3Impl::OnCompositionTerminated()
+void CSinstar3Impl::OnCompositionTerminated(bool bClearCtx)
 {
 	SLOG_INFO("");
-	//m_inputState.ClearContext(CPC_ALL);
+	if(bClearCtx) m_inputState.ClearContext(CPC_ALL);
 }
 
 void CSinstar3Impl::OnSetFocus(BOOL bFocus)
