@@ -53,6 +53,10 @@ STDMETHODIMP CEsStartComposition::DoEditSession(TfEditCookie ec)
 	SASSERT_HR(hr);
 	SASSERT_RET(pComposition, return E_FAIL);
 
+	// insert a dummy blank
+	pRangeInsert->SetText(ec, TF_ST_CORRECTION, L" ", 1);
+	pRangeInsert->Collapse(ec, TF_ANCHOR_START);
+
 	// 
 	//  set selection to the adjusted range
 	// 
@@ -87,15 +91,18 @@ CEsEndComposition::CEsEndComposition(CSinstar3Tsf *pTextService, ITfContext *pCo
 STDMETHODIMP CEsEndComposition::DoEditSession(TfEditCookie ec)
 {
 	SLOG_INFO("TfEditCookie:"<<ec);
-	ITfComposition * pComposition = _pTextService->GetITfComposition();
+	SOUI::SComPtr<ITfComposition>  pComposition = _pTextService->GetITfComposition();
 	if(!pComposition)
 	{
 		SLOG_WARN("CEditSessionEndComposition::DoEditSession not in compositing");
 		return E_FAIL;
 	}
+
 	SOUI::SComPtr<ITfRange> pRange;
 	if ( pComposition->GetRange( &pRange) == S_OK && pRange != NULL)
 	{
+		//clear dummy blank
+		pRange->SetText(ec, 0, L"", 0);
 		TF_SELECTION sel={0};
 		sel.style.ase = TF_AE_NONE;
 		sel.style.fInterimChar = FALSE;
