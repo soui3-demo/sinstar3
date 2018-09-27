@@ -136,27 +136,6 @@ void CUiWnd::EndComposition(LPVOID lpImeContext)
 	m_bCompositing = FALSE;
 }
 
-int  CUiWnd::MoveCaretPos(LPVOID lpImeContext,int nPos,BOOL bSet)
-{
-	if (!lpImeContext) return 0;
-	CImeContext *pCtx=(CImeContext *)lpImeContext;
-	CCompStrEx *pCompStr=(CCompStrEx *)ImmLockIMCC(pCtx->_lpContext->hCompStr);
-	int nRet=0;
-	if(pCompStr)
-	{
-		DWORD dwOldPos=pCompStr->dwCursorPos;
-		pCompStr->MoveCaret(nPos,bSet);
-		nRet=pCompStr->dwCursorPos;
-		if(dwOldPos != pCompStr->dwCursorPos)	//需要GCS_COMPREAD|GCS_COMP,否则在word中不能显示
-		{
-			pCtx->GenerateMessage(WM_IME_COMPOSITION,0,GCS_CURSORPOS|GCS_COMPREAD|GCS_COMP);
-			pCtx->GenerateMessage(WM_IME_NOTIFY,IMN_CHANGECANDIDATE,0);
-			if(m_pSinstar3) m_pSinstar3->OnCompositionChanged();
-		}
-	}
-	ImmUnlockIMCC(pCtx->_lpContext->hCompStr);
-	return nRet;
-}
 
 LPVOID CUiWnd::GetImeContext()
 {

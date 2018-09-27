@@ -102,21 +102,6 @@ void CSinstar3Tsf::_UpdateResultAndCompositionStringW(ITfContext * pContext,cons
 	}
 }
 
-int  CSinstar3Tsf::_MoveCaretPos(ITfContext *pContext,int nPos,BOOL bSet)
-{
-	if(!_IsComposing()) return 0;
-	CEsMoveCaret *pEditSession;
-	HRESULT hr;
-
-	if (pEditSession = new CEsMoveCaret(this, pContext,nPos,bSet,_pComposition))
-	{
-		pContext->RequestEditSession(_tfClientId, pEditSession, TF_ES_ASYNCDONTCARE | TF_ES_READWRITE, &hr);
-		pEditSession->Release();
-	}
-	return 1;
-}
-
-
 void CSinstar3Tsf::_TerminateComposition(TfEditCookie ecWrite,ITfContext *pCtx, bool bClearCtx)
 {
 	if ( pCtx != NULL)

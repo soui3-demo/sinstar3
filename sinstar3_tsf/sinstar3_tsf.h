@@ -72,7 +72,6 @@ public:
 	void ReplaceSelCompositionW(LPVOID pImeContext,int nLeft,int nRight,const WCHAR* wszComp,int nLen);
 	void UpdateResultAndCompositionStringW(LPVOID lpImeContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen);
 	void EndComposition(LPVOID pImeContext);
-	int  MoveCaretPos(LPVOID lpImeContext,int nPos,BOOL bSet);
 	LPVOID GetImeContext();
 	BOOL   ReleaseImeContext(LPVOID lpImeContext);
 	EInputMethod GetConversionMode();
@@ -98,7 +97,6 @@ public:
 	void _EndComposition(ITfContext *pContext);
 	BOOL _EndCompositionEx();
 	void _TerminateComposition(TfEditCookie ecWrite,ITfContext *pContext,bool bClearCtx);
-	int  _MoveCaretPos(ITfContext *pContext,int nPos,BOOL bSet);
 	BOOL _IsComposing() const;
 	BOOL _GetSegRange(TfEditCookie ec,ITfRange **pRange,int nLeft,int nRight);
 		

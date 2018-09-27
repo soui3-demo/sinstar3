@@ -319,11 +319,6 @@ void CSinstar3Tsf::UpdateResultAndCompositionStringW(LPVOID lpImeContext,const W
 	_UpdateResultAndCompositionStringW((ITfContext*)lpImeContext,wszResultStr,nResStrLen,wszCompStr,nCompStrLen);
 }
 
-int  CSinstar3Tsf::MoveCaretPos(LPVOID lpImeContext,int nPos,BOOL bSet)
-{
-	return _MoveCaretPos((ITfContext*)lpImeContext,nPos,bSet);
-}
-
 
 LPVOID CSinstar3Tsf::GetImeContext()
 {

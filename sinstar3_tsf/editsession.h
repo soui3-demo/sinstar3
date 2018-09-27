@@ -90,20 +90,6 @@ private:
 };
 
 
-class CEsMoveCaret:public CEditSessionBase
-{
-public:
-	CEsMoveCaret(CSinstar3Tsf *pTextService, ITfContext *pContext,int nPos,BOOL bSet,ITfComposition *pComposition);
-
-	// ITfEditSession
-	STDMETHODIMP DoEditSession(TfEditCookie ec);
-private:
-	SOUI::SComPtr<ITfComposition> m_pComposition;
-	int m_nPos;
-	BOOL m_bSet;
-};
-
-
 class CEsUpdateResultAndComp:public CEditSessionBase
 {
 public:

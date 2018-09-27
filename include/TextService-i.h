@@ -49,7 +49,6 @@ interface ITextService
 	virtual void ReplaceSelCompositionW(LPVOID lpImeContext,int nLeft,int nRight,const WCHAR *wszComp,int nLen)=NULL;
 	virtual void UpdateResultAndCompositionStringW(LPVOID lpImeContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen)=NULL;
 	virtual void EndComposition(LPVOID lpImeContext)=NULL;
-	virtual int  MoveCaretPos(LPVOID lpImeContext,int nPos,BOOL bSet)=NULL;
 	virtual LPVOID GetImeContext()=NULL;
 	virtual BOOL   ReleaseImeContext(LPVOID lpImeContext)=NULL;
 	virtual void  SetConversionMode(EInputMethod mode)=NULL;

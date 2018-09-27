@@ -231,60 +231,6 @@ STDMETHODIMP CEsChangeComposition::DoEditSession(TfEditCookie ec)
 	return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////
-CEsMoveCaret::CEsMoveCaret(CSinstar3Tsf *pTextService, 
-											 ITfContext *pContext,
-											 int nPos,
-											 BOOL bSet,
-											 ITfComposition *pComposition) 
-											 : CEditSessionBase(pTextService, pContext)
-											 ,m_pComposition(pComposition)
-											 ,m_nPos(nPos)
-											 ,m_bSet(bSet)
-{
-}
-
-
-STDMETHODIMP CEsMoveCaret::DoEditSession(TfEditCookie ec)
-{
-	SLOG_INFO("TfEditCookie:"<<ec);
-
-	SOUI::SComPtr<ITfRange> pRangeComposition;
-	TF_SELECTION tfSelection;
-	ULONG cFetched;
-	BOOL fCovered;
-
-	// first, test where a keystroke would go in the document if an insert is done
-	if (_pContext->GetSelection(ec, TF_DEFAULT_SELECTION, 1, &tfSelection, &cFetched) != S_OK || cFetched != 1)
-		return S_FALSE;
-
-	// is the insertion point covered by a composition?
-	if (m_pComposition->GetRange(&pRangeComposition) == S_OK)
-	{
-		fCovered = IsRangeCovered(ec, tfSelection.range, pRangeComposition);
-		if(fCovered)
-		{
-			LONG cch=0;
-			if(m_bSet)
-			{
-				tfSelection.range->ShiftStartToRange(ec,pRangeComposition,TF_ANCHOR_START);
-				tfSelection.range->ShiftStart(ec,m_nPos,&cch,NULL);
-			}else
-			{
-				tfSelection.range->ShiftStart(ec,m_nPos,&cch,NULL);
-			}
-			tfSelection.range->Collapse(ec,TF_ANCHOR_START);
-		}
-
-		if (!fCovered)
-		{
-			return S_OK;
-		}
-	}
-	_pContext->SetSelection(ec, 1, &tfSelection);
-	if(_pTextService->m_pSinstar3) _pTextService->m_pSinstar3->OnCompositionChanged();
-	return S_OK;
-}
 
 //////////////////////////////////////////////////////////////////////////
 CEsUpdateResultAndComp::CEsUpdateResultAndComp(CSinstar3Tsf *pTextService, 
