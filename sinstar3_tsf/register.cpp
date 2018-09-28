@@ -13,7 +13,6 @@ static const WCHAR RegInfo_Prefix_CLSID[] = L"CLSID\\";
 static const WCHAR RegInfo_Key_InProSvr32[] = L"InProcServer32";
 static const WCHAR RegInfo_Key_ThreadModel[] = L"ThreadingModel";
 #define TEXTSERVICE_MODEL        L"Apartment"
-static const WCHAR TEXTSERVICE_DESC[] = L"Æô³ÌÎå±ÊTSF";
 
 #define CLSID_STRLEN 38
 #define TEXTSERVICE_ICON_INDEX  0
@@ -88,7 +87,7 @@ BOOL RegisterProfiles()
     cchA = cchA >= MAX_PATH ? (MAX_PATH - 1) : cchA;
     achIconFile[cchA] = '\0';
 
-    ULONG lenOfDesc = (ULONG)wcslen(TEXTSERVICE_DESC);
+    ULONG lenOfDesc = (ULONG)wcslen(PRODUCT_WNAMEVER);
 
 	HKL hKLSinstar3 = GetKeyboardLayoutFromFileName(SINSTAR3_IME_FILE_NAME);
 
@@ -104,11 +103,11 @@ BOOL RegisterProfiles()
 		hr = pInputProcessorProfileMgr->RegisterProfile(c_clsidSinstar3TSF,
 			TEXTSERVICE_LANGID,
 			c_guidProfile,
-			TEXTSERVICE_DESC,
+			PRODUCT_WNAMEVER,
 			lenOfDesc,
 			achIconFile,
 			cchA,
-			(UINT)0, NULL, 0, TRUE, 0);
+			(UINT)TEXTSERVICE_ICON_INDEX, NULL, 0, TRUE, 0);
 	}
 	else
 	{
@@ -125,11 +124,11 @@ BOOL RegisterProfiles()
 			c_clsidSinstar3TSF,
 			TEXTSERVICE_LANGID,
 			c_guidProfile,
-			TEXTSERVICE_DESC,
+			PRODUCT_WNAMEVER,
 			lenOfDesc,
 			achIconFile,
 			cchA,
-			(UINT)0);
+			(UINT)TEXTSERVICE_ICON_INDEX);
 		if (FAILED(hr))
 			return FALSE;
 
@@ -334,7 +333,7 @@ BOOL RegisterServer()
 
     if (RegCreateKeyEx(HKEY_CLASSES_ROOT, achIMEKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &regKeyHandle, &copiedStringLen) == ERROR_SUCCESS)
     {
-        if (RegSetValueEx(regKeyHandle, NULL, 0, REG_SZ, (const BYTE *)TEXTSERVICE_DESC, (_countof(TEXTSERVICE_DESC))*sizeof(WCHAR)) != ERROR_SUCCESS)
+        if (RegSetValueEx(regKeyHandle, NULL, 0, REG_SZ, (const BYTE *)PRODUCT_WNAMEVER, (_countof(PRODUCT_WNAMEVER))*sizeof(WCHAR)) != ERROR_SUCCESS)
         {
             goto Exit;
         }
