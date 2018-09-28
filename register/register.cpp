@@ -210,12 +210,17 @@ BOOL Sinstar_Uninstall(LPCTSTR pszIme)
 
 	//delete reg
 	CRegKey reg;
-	LONG ret = reg.Open(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\SetoutSoft"), KEY_WRITE | KEY_WOW64_64KEY);
+	LONG ret = reg.Open(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\SetoutSoft"), KEY_WRITE |KEY_READ | KEY_WOW64_64KEY);
 	if (ret != ERROR_SUCCESS)
 	{
 		MessageBox(GetActiveWindow(), _T("打开注册表失败"), _T("uninstall"), MB_OK | MB_ICONSTOP);
 		return 0;
 	}
+
+	TCHAR szClient[MAX_PATH];
+	ULONG uSize = MAX_PATH;
+	reg.QueryStringValue(_T("path_client"),szClient,&uSize);
+
 	reg.RecurseDeleteKey(_T("sinstar3"));
 	reg.Close();
 	ret = reg.Open(HKEY_CURRENT_USER, _T("SOFTWARE\\SetoutSoft"), KEY_WRITE | KEY_WOW64_64KEY);
@@ -225,6 +230,14 @@ BOOL Sinstar_Uninstall(LPCTSTR pszIme)
 		reg.Close();
 	}
 
+	//unreg tsf module
+	_stprintf(szPath,_T("%s\\program\\sinstar3_tsf.dll"),szClient);
+	CallRegsvr32(szPath,FALSE);
+	if (Is64OS())
+	{
+		_stprintf(szPath,_T("%s\\program\\x64\\sinstar3_tsf.dll"),szClient);
+		CallRegsvr32(szPath,FALSE);
+	}
 
 	//退出服务器
 	HANDLE hMapData = OpenFileMapping(FILE_MAP_READ | FILE_MAP_WRITE, FALSE, NAME_MAPFILE);
@@ -369,7 +382,23 @@ BOOL Sinstar_Install(LPCTSTR pszImeName)
 		return 0;
 	}
 
-	//step7:修改配置文件属性
+	//step7: reg tsf module
+	_stprintf(szPath1,_T("%s\\program\\sinstar3_tsf.dll"),g_szPath);
+	if (0 != CallRegsvr32(szPath1, TRUE))
+	{
+		MessageBox(GetActiveWindow(), _T("注册TSF 32bit 失败"), _T("install"), MB_OK | MB_ICONSTOP);
+		return 0;
+	}
+	if(Is64OS())
+	{
+		_stprintf(szPath1,_T("%s\\program\\x64\\sinstar3_tsf.dll"),g_szPath);
+		if (0 != CallRegsvr32(szPath1, TRUE))
+		{
+			MessageBox(GetActiveWindow(), _T("注册TSF 64bit 失败"), _T("install"), MB_OK | MB_ICONSTOP);
+			return 0;
+		}
+	}
+	//step8:修改配置文件属性
 	_stprintf(szPath1,_T("%s\\data\\config.ini"),g_szPath);
 	Helper_SetFileACL(szPath1);
 	Helper_SetFileACLEx(szSvrData,TRUE);
