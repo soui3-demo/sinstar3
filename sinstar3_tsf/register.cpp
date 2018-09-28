@@ -6,6 +6,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved
 #include "stdafx.h"
 #include "../helper/helper.h"
+#include <imm.h>
+#pragma comment(lib,"imm32.lib")
 
 static const WCHAR RegInfo_Prefix_CLSID[] = L"CLSID\\";
 static const WCHAR RegInfo_Key_InProSvr32[] = L"InProcServer32";
@@ -15,8 +17,6 @@ static const WCHAR TEXTSERVICE_DESC[] = L"Æô³ÌÎå±ÊTSF";
 
 #define CLSID_STRLEN 38
 
-#if _MSC_VER < 1600
-
 /* For Windows 8 */
 const GUID GUID_TFCAT_TIPCAP_IMMERSIVESUPPORT =
 { 0x13A016DF, 0x560B, 0x46CD, { 0x94, 0x7A, 0x4C, 0x3A, 0xF1, 0xE0, 0xE3, 0x5D } };
@@ -24,8 +24,8 @@ const GUID GUID_TFCAT_TIPCAP_IMMERSIVESUPPORT =
 const GUID GUID_TFCAT_TIPCAP_SYSTRAYSUPPORT =
 { 0x25504FB4, 0x7BAB, 0x4BC1, { 0x9C, 0x69, 0xCF, 0x81, 0x89, 0x0F, 0x0E, 0xF5 } };
 
-#endif
-
+#define nullptr NULL
+#define _Out_writes_(x)
 
 static const GUID SupportCategoriesWin8Later[] = {
 	GUID_TFCAT_TIP_KEYBOARD,
@@ -79,7 +79,7 @@ BOOL RegisterProfiles()
 {
     HRESULT hr = S_FALSE;
 
-    ITfInputProcessorProfileMgr *pITfInputProcessorProfileMgr = NULL;
+    ITfInputProcessorProfileMgr *pITfInputProcessorProfileMgr = nullptr;
     hr = CoCreateInstance(CLSID_TF_InputProcessorProfiles, NULL, CLSCTX_INPROC_SERVER,
         IID_ITfInputProcessorProfileMgr, (void**)&pITfInputProcessorProfileMgr);
     if (FAILED(hr))
@@ -131,7 +131,7 @@ void UnregisterProfiles()
 {
     HRESULT hr = S_OK;
 
-    ITfInputProcessorProfileMgr *pITfInputProcessorProfileMgr = NULL;
+    ITfInputProcessorProfileMgr *pITfInputProcessorProfileMgr = nullptr;
     hr = CoCreateInstance(CLSID_TF_InputProcessorProfiles, NULL, CLSCTX_INPROC_SERVER,
         IID_ITfInputProcessorProfileMgr, (void**)&pITfInputProcessorProfileMgr);
     if (FAILED(hr))
@@ -162,7 +162,7 @@ Exit:
 
 BOOL RegisterCategories()
 {
-    ITfCategoryMgr* pCategoryMgr = NULL;
+    ITfCategoryMgr* pCategoryMgr = nullptr;
     HRESULT hr = S_OK;
 
     hr = CoCreateInstance(CLSID_TF_CategoryMgr, NULL, CLSCTX_INPROC_SERVER, IID_ITfCategoryMgr, (void**)&pCategoryMgr);
@@ -171,11 +171,19 @@ BOOL RegisterCategories()
         return FALSE;
     }
 
-    for each(GUID guid in SupportCategories)
-    {
-        hr = pCategoryMgr->RegisterCategory(c_clsidSinstar3TSF, guid, c_clsidSinstar3TSF);
-    }
-
+	if(IsWin8orLater())
+	{
+		for each(GUID guid in SupportCategoriesWin8Later)
+		{
+			hr = pCategoryMgr->RegisterCategory(c_clsidSinstar3TSF, guid, c_clsidSinstar3TSF);
+		}
+	}else
+	{
+		for each(GUID guid in SupportCategories)
+		{
+			hr = pCategoryMgr->RegisterCategory(c_clsidSinstar3TSF, guid, c_clsidSinstar3TSF);
+		}
+	}
     pCategoryMgr->Release();
 
     return (hr == S_OK);
@@ -198,11 +206,20 @@ void UnregisterCategories()
         return;
     }
 
-    for each(GUID guid in SupportCategories)
-    {
-        pCategoryMgr->UnregisterCategory(c_clsidSinstar3TSF, guid, c_clsidSinstar3TSF);
-    }
-  
+	if(IsWin8orLater())
+	{
+		for each(GUID guid in SupportCategoriesWin8Later)
+		{
+			hr = pCategoryMgr->UnregisterCategory(c_clsidSinstar3TSF, guid, c_clsidSinstar3TSF);
+		}
+	}else
+	{
+		for each(GUID guid in SupportCategories)
+		{
+			hr = pCategoryMgr->UnregisterCategory(c_clsidSinstar3TSF, guid, c_clsidSinstar3TSF);
+		}
+	}
+
     pCategoryMgr->Release();
 
     return;
@@ -216,9 +233,9 @@ void UnregisterCategories()
 // specified key has subkeys
 //----------------------------------------------------------------------------
 
-LONG RecurseDeleteKey( HKEY hParentKey, LPCTSTR lpszKey)
+LONG RecurseDeleteKey(_In_ HKEY hParentKey, _In_ LPCTSTR lpszKey)
 {
-    HKEY regKeyHandle = NULL;
+    HKEY regKeyHandle = nullptr;
     LONG res = 0;
     FILETIME time;
     WCHAR stringBuffer[256] = {'\0'};
@@ -256,7 +273,7 @@ const BYTE GuidSymbols[] = {
 
 const WCHAR HexDigits[] = L"0123456789ABCDEF";
 
-BOOL CLSIDToString(REFGUID refGUID, WCHAR *pCLSIDString)
+BOOL CLSIDToString(REFGUID refGUID, _Out_writes_(39) WCHAR *pCLSIDString)
 {
 	WCHAR* pTemp = pCLSIDString;
 	const BYTE* pBytes = (const BYTE *)&refGUID;
@@ -281,12 +298,11 @@ BOOL CLSIDToString(REFGUID refGUID, WCHAR *pCLSIDString)
 
 	return TRUE;
 }
-
 BOOL RegisterServer()
 {
     DWORD copiedStringLen = 0;
-    HKEY regKeyHandle = NULL;
-    HKEY regSubkeyHandle = NULL;
+    HKEY regKeyHandle = nullptr;
+    HKEY regSubkeyHandle = nullptr;
     BOOL ret = FALSE;
     WCHAR achIMEKey[ARRAYSIZE(RegInfo_Prefix_CLSID) + CLSID_STRLEN] = {'\0'};
     WCHAR achFileName[MAX_PATH] = {'\0'};
@@ -327,12 +343,12 @@ Exit:
     if (regSubkeyHandle)
     {
         RegCloseKey(regSubkeyHandle);
-        regSubkeyHandle = NULL;
+        regSubkeyHandle = nullptr;
     }
     if (regKeyHandle)
     {
         RegCloseKey(regKeyHandle);
-        regKeyHandle = NULL;
+        regKeyHandle = nullptr;
     }
 
     return ret;
