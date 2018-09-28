@@ -425,10 +425,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\IMEMan.h"
-				>
-			</File>
-			<File
 				RelativePath="..\include\module_ref.h"
 				>
 			</File>

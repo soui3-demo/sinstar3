@@ -16,7 +16,10 @@ static const WCHAR RegInfo_Key_ThreadModel[] = L"ThreadingModel";
 static const WCHAR TEXTSERVICE_DESC[] = L"Æô³ÌÎå±ÊTSF";
 
 #define CLSID_STRLEN 38
+#define TEXTSERVICE_ICON_INDEX  0
+#define	SINSTAR3_IME_FILE_NAME	_T("sinstar3_ime.ime")
 
+#if _MSC_VER < 1600
 /* For Windows 8 */
 const GUID GUID_TFCAT_TIPCAP_IMMERSIVESUPPORT =
 { 0x13A016DF, 0x560B, 0x46CD, { 0x94, 0x7A, 0x4C, 0x3A, 0xF1, 0xE0, 0xE3, 0x5D } };
@@ -24,8 +27,8 @@ const GUID GUID_TFCAT_TIPCAP_IMMERSIVESUPPORT =
 const GUID GUID_TFCAT_TIPCAP_SYSTRAYSUPPORT =
 { 0x25504FB4, 0x7BAB, 0x4BC1, { 0x9C, 0x69, 0xCF, 0x81, 0x89, 0x0F, 0x0E, 0xF5 } };
 
-#define nullptr NULL
-#define _Out_writes_(x)
+#endif
+
 
 static const GUID SupportCategoriesWin8Later[] = {
 	GUID_TFCAT_TIP_KEYBOARD,
@@ -79,14 +82,6 @@ BOOL RegisterProfiles()
 {
     HRESULT hr = S_FALSE;
 
-    ITfInputProcessorProfileMgr *pITfInputProcessorProfileMgr = nullptr;
-    hr = CoCreateInstance(CLSID_TF_InputProcessorProfiles, NULL, CLSCTX_INPROC_SERVER,
-        IID_ITfInputProcessorProfileMgr, (void**)&pITfInputProcessorProfileMgr);
-    if (FAILED(hr))
-    {
-        return FALSE;
-    }
-
     WCHAR achIconFile[MAX_PATH] = {'\0'};
     DWORD cchA = 0;
     cchA = GetModuleFileName(theModule->GetModule(), achIconFile, MAX_PATH);
@@ -94,31 +89,54 @@ BOOL RegisterProfiles()
     achIconFile[cchA] = '\0';
 
     ULONG lenOfDesc = (ULONG)wcslen(TEXTSERVICE_DESC);
-    if (hr != S_OK)
-    {
-        goto Exit;
-    }
-    hr = pITfInputProcessorProfileMgr->RegisterProfile(c_clsidSinstar3TSF,
-        TEXTSERVICE_LANGID,
-        c_guidProfile,
-        TEXTSERVICE_DESC,
-        lenOfDesc,
-        achIconFile,
-        cchA,
-        (UINT)0, NULL, 0, TRUE, 0);
 
-    if (FAILED(hr))
-    {
-        goto Exit;
-    }
+	HKL hKLSinstar3 = GetKeyboardLayoutFromFileName(SINSTAR3_IME_FILE_NAME);
 
-Exit:
-    if (pITfInputProcessorProfileMgr)
-    {
-        pITfInputProcessorProfileMgr->Release();
-    }
+	hKLSinstar3 = 0;
 
-    return (hr == S_OK);
+	if (IsWin8orLater())
+	{
+		SOUI::SComPtr<ITfInputProcessorProfileMgr> pInputProcessorProfileMgr;
+		hr = pInputProcessorProfileMgr.CoCreateInstance(CLSID_TF_InputProcessorProfiles, NULL, CLSCTX_ALL);
+		if (FAILED(hr))
+			return FALSE;
+
+		hr = pInputProcessorProfileMgr->RegisterProfile(c_clsidSinstar3TSF,
+			TEXTSERVICE_LANGID,
+			c_guidProfile,
+			TEXTSERVICE_DESC,
+			lenOfDesc,
+			achIconFile,
+			cchA,
+			(UINT)0, NULL, 0, TRUE, 0);
+	}
+	else
+	{
+		SOUI::SComPtr<ITfInputProcessorProfiles> pInputProcessorProfiles;
+		hr = pInputProcessorProfiles.CoCreateInstance(CLSID_TF_InputProcessorProfiles, NULL, CLSCTX_INPROC_SERVER);
+		if (FAILED(hr))
+			return FALSE;
+
+		hr = pInputProcessorProfiles->Register(c_clsidSinstar3TSF);
+		if (FAILED(hr))
+			return FALSE;
+
+		hr = pInputProcessorProfiles->AddLanguageProfile(
+			c_clsidSinstar3TSF,
+			TEXTSERVICE_LANGID,
+			c_guidProfile,
+			TEXTSERVICE_DESC,
+			lenOfDesc,
+			achIconFile,
+			cchA,
+			(UINT)0);
+		if (FAILED(hr))
+			return FALSE;
+
+		hr = pInputProcessorProfiles->SubstituteKeyboardLayout(
+			c_clsidSinstar3TSF, TEXTSERVICE_LANGID, c_guidProfile, hKLSinstar3);
+	}
+	return SUCCEEDED(hr);
 }
 
 //+---------------------------------------------------------------------------
@@ -131,7 +149,7 @@ void UnregisterProfiles()
 {
     HRESULT hr = S_OK;
 
-    ITfInputProcessorProfileMgr *pITfInputProcessorProfileMgr = nullptr;
+    ITfInputProcessorProfileMgr *pITfInputProcessorProfileMgr = NULL;
     hr = CoCreateInstance(CLSID_TF_InputProcessorProfiles, NULL, CLSCTX_INPROC_SERVER,
         IID_ITfInputProcessorProfileMgr, (void**)&pITfInputProcessorProfileMgr);
     if (FAILED(hr))
@@ -162,7 +180,7 @@ Exit:
 
 BOOL RegisterCategories()
 {
-    ITfCategoryMgr* pCategoryMgr = nullptr;
+    ITfCategoryMgr* pCategoryMgr = NULL;
     HRESULT hr = S_OK;
 
     hr = CoCreateInstance(CLSID_TF_CategoryMgr, NULL, CLSCTX_INPROC_SERVER, IID_ITfCategoryMgr, (void**)&pCategoryMgr);
@@ -235,7 +253,7 @@ void UnregisterCategories()
 
 LONG RecurseDeleteKey(_In_ HKEY hParentKey, _In_ LPCTSTR lpszKey)
 {
-    HKEY regKeyHandle = nullptr;
+    HKEY regKeyHandle = NULL;
     LONG res = 0;
     FILETIME time;
     WCHAR stringBuffer[256] = {'\0'};
@@ -273,7 +291,7 @@ const BYTE GuidSymbols[] = {
 
 const WCHAR HexDigits[] = L"0123456789ABCDEF";
 
-BOOL CLSIDToString(REFGUID refGUID, _Out_writes_(39) WCHAR *pCLSIDString)
+BOOL CLSIDToString(REFGUID refGUID, WCHAR *pCLSIDString)
 {
 	WCHAR* pTemp = pCLSIDString;
 	const BYTE* pBytes = (const BYTE *)&refGUID;
@@ -301,8 +319,8 @@ BOOL CLSIDToString(REFGUID refGUID, _Out_writes_(39) WCHAR *pCLSIDString)
 BOOL RegisterServer()
 {
     DWORD copiedStringLen = 0;
-    HKEY regKeyHandle = nullptr;
-    HKEY regSubkeyHandle = nullptr;
+    HKEY regKeyHandle = NULL;
+    HKEY regSubkeyHandle = NULL;
     BOOL ret = FALSE;
     WCHAR achIMEKey[ARRAYSIZE(RegInfo_Prefix_CLSID) + CLSID_STRLEN] = {'\0'};
     WCHAR achFileName[MAX_PATH] = {'\0'};
@@ -343,12 +361,12 @@ Exit:
     if (regSubkeyHandle)
     {
         RegCloseKey(regSubkeyHandle);
-        regSubkeyHandle = nullptr;
+        regSubkeyHandle = NULL;
     }
     if (regKeyHandle)
     {
         RegCloseKey(regKeyHandle);
-        regKeyHandle = nullptr;
+        regKeyHandle = NULL;
     }
 
     return ret;
