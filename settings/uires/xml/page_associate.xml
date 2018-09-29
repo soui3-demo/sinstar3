@@ -36,10 +36,7 @@
       <text text="词组预测长度："/>
       <window size="-1,-1" class="edit_border" trackMouseEvent="1" layout="hbox" gravity="center">
         <edit size="40dp,25dp" name="edit_predict_phrase_maxlength" margin-x="0" margin-y="0" notifyChange="1" readonly="1"/>
-        <spinButton size="20dp,-2" max="8" min="2" value="4" buddy="edit_predict_phrase_maxlength" name="spin_predict_phrase_maxlength">
-          <button name="btn_up"/>
-          <button name="btn_down"/>
-        </spinButton>
+        <spinButton size="20dp,-2" max="8" min="2" value="4" buddy="edit_predict_phrase_maxlength" name="spin_predict_phrase_maxlength"/>
       </window>
     </window>
 
@@ -47,10 +44,7 @@
       <text text="词组联想深度："/>
       <window size="-1,-1" class="edit_border" trackMouseEvent="1" layout="hbox" gravity="center">
         <edit size="40dp,25dp" name="edit_phrase_ast_deepness_max" margin-x="0" margin-y="0" notifyChange="1" readonly="1"/>
-        <spinButton size="20dp,-2" max="5" min="-1" value="4" buddy="edit_phrase_ast_deepness_max" name="spin_phrase_ast_deepness_max">
-          <button name="btn_up"/>
-          <button name="btn_down"/>
-        </spinButton>
+        <spinButton size="20dp,-2" max="5" min="-1" value="4" buddy="edit_phrase_ast_deepness_max" name="spin_phrase_ast_deepness_max"/>
       </window>
     </window>
     <window extend_top="10" layout="hbox" gravity="center">

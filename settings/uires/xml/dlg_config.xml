@@ -22,7 +22,7 @@
         <imgbtn size="-1,-1" skin="_skin.sys.btn.close" name="btn_close" id="2" animate="1" tip="@string/btn_close"/>
       </caption>
       <tabctrlex size="-2,0" weight="1" text-x="22" tabPos="10" align="left" clipClient="1" tabInterSize="0" tabWidth="120" tabskin="nav_config_tab" colorBkgnd="#f3f6fa"  tabHeight="32" drawFocusRect="0" show="1" curSel="0">
-        <socrollviewStyle sbArrowSize="0" sbSkin="skin.scrollbar" updateInterval="0"  colorBkgnd="#f2f2f2" colorBorder="#c6c6c6"/>
+        <socrollviewStyle sbArrowSize="0" sbSkin="skin.scrollbar" scrollSpeed="100" updateInterval="0"  colorBkgnd="#f2f2f2" colorBorder="#c6c6c6"/>
         <pages>
           <pageex title="@string/cfg_habit" tip="@string/cfg_habit"  size="-2,-1">
             <include src="layout:page_habit"/>
