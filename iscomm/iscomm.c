@@ -1,6 +1,10 @@
 #ifndef _CRT_SECURE_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
 #endif 
+#ifndef _CRT_NON_CONFORMING_SWPRINTFS
+#define _CRT_NON_CONFORMING_SWPRINTFS
+#endif
+
 #include <windows.h>
 #include <assert.h>
 #include <stdio.h>
@@ -125,35 +129,10 @@ PMSGDATA ISComm_OnSeverNotify(HWND hWnd,WPARAM wParam,LPARAM lParam)
 
 BOOL ISComm_OpenServer()
 {
-	TCHAR szCmd[500];
-	STARTUPINFO         si={0};    
-	PROCESS_INFORMATION pi;         
-	DWORD dwWaitRet=1;
-	//HWND  hWndActive=GetActiveWindow();
-	//查询任务栏窗口句柄，确保系统已经成功启动。
 	HWND  hWndShell=FindWindow(_T("Shell_TrayWnd"),NULL);
 	if(s_szSvrPath[0]==0) return FALSE;
 	if(!hWndShell) return FALSE;
-	si.cb  = sizeof(si);  
-	si.dwFlags = STARTF_USESHOWWINDOW; 
-	si.wShowWindow  = SW_HIDE;
-	_stprintf(szCmd, _T("%s hide"), s_szSvrPath);
-	//以后台启动方式创建服务器进程
-	if(!CreateProcess(NULL, szCmd,NULL,NULL,FALSE,CREATE_NEW_PROCESS_GROUP,NULL,NULL,&si,&pi))
-	{
-		return FALSE;
-	}
-	//等待服务器初始化完成
-	dwWaitRet=WaitForInputIdle(pi.hProcess, 10000); 
-	CloseHandle(pi.hProcess);
-	CloseHandle(pi.hThread);
-	//恢复当前活动窗口
-	//SetForegroundWindow(hWndActive);
-	if(dwWaitRet!=0)
-	{
-		return FALSE;
-	}
-	return TRUE;
+	return (int)ShellExecute(NULL,_T("open"),s_szSvrPath,NULL,NULL,SW_HIDE)>32;
 }
 
 //生成一个保证不会被重复的客户ID
@@ -740,7 +719,7 @@ DWORD ISComm_QueryPhraseGroup()
 
 DWORD ISComm_EnablePhraseGroup(LPCSTR pszGroupName, char bEnable)
 {
-	int nLen = strlen(pszGroupName);
+	int nLen = (int)strlen(pszGroupName);
 	COMFILE cf = CF_Init(s_byBuf, MAX_BUF_ACK, 0, 0);
 	CF_WriteChar(&cf, bEnable);
 	CF_Write(&cf, &nLen, sizeof(int));
@@ -760,7 +739,7 @@ DWORD ISComm_ExportUserLib(LPCSTR pszUserLibUtf8)
 
 DWORD ISComm_InstallComp(LPCSTR pszCompNameUtf8, char bApplyNow)
 {
-	int nLen = strlen(pszCompNameUtf8);
+	int nLen = (int)strlen(pszCompNameUtf8);
 	COMFILE cf = CF_Init(s_byBuf, MAX_BUF_ACK, 0, 0);
 	CF_WriteChar(&cf, bApplyNow);
 	CF_Write(&cf, &nLen, sizeof(int));
@@ -777,7 +756,7 @@ DWORD ISComm_Flm_List()
 DWORD ISComm_Flm_Open(LPCSTR pszFlmUtf8)
 {
 	short nLen = pszFlmUtf8?(short)strlen(pszFlmUtf8):0;
-	return ISComm_SendMsg(CT_FLM_OPEN,pszFlmUtf8,nLen,0);
+	return ISComm_SendMsg(CT_FLM_OPEN,(const LPVOID)pszFlmUtf8,nLen,0);
 }
 
 DWORD ISComm_Flm_GetInfo()
@@ -787,7 +766,7 @@ DWORD ISComm_Flm_GetInfo()
 
 DWORD ISComm_Flm_EnableGroup(LPCSTR pszGroup,char bEnable)
 {
-	int nLen = strlen(pszGroup);
+	int nLen = (int)strlen(pszGroup);
 	COMFILE cf = CF_Init(s_byBuf, MAX_BUF_ACK, 0, 0);
 	CF_WriteChar(&cf, bEnable);
 	CF_Write(&cf, &nLen, sizeof(int));

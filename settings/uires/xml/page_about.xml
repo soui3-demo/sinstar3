@@ -22,6 +22,17 @@
     <text text="将会受到所在地区的最大可能的民事或刑事诉讼"/>
     <text text="包括但不限于以上 "/>
     <text text="2002-2018（C）启程 All right is reserved."/>
+    <text text="合作开发：ID008"/>
+    <text text="后台支持：李平"/>
+    <text text="测试：晴天"/>
+    <window layout="hbox">
+      <text text="本产品基于开源UI框架"/>
+      <link href="https://github.com/soui2/soui" text="SOUI"/>
+    </window>
+    <window layout="vbox" gravity="center">
+      <text text="QQ群"/>
+      <qrctrl size="200,200" text="http://qm.qq.com/cgi-bin/qm/qr?k=wGMykx8zDb_42F9cYi0iLSPq2Pk-4k0y"/>
+    </window>
   </window>
 
   <window size="-2,-1" layout="hbox" gravity="center" extend_top="20">
