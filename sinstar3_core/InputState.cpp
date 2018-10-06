@@ -2262,6 +2262,8 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 	{
 		if(lpbKeyState[VK_CAPITAL]&0x01)
 		{
+			ClearContext(CPC_ALL);
+			InputEnd();
 			InputHide(FALSE);
 		}
 		return FALSE;
