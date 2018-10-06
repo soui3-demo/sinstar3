@@ -49,8 +49,56 @@ BOOL Helper_SetFileACL(LPCTSTR pszPath)
 
 }
 
-LPCWSTR LOW_INTEGRITY_SDDL_SACL_W = L"S:(ML;;NW;;;LW)";
-#define LABEL_SECURITY_INFORMATION (0x00000010L)
+#ifndef SDDL_ALL_APP_PACKAGES
+#define SDDL_ALL_APP_PACKAGES TEXT("AC")
+#endif
+
+#define LOW_INTEGRITY_SDDL_SACL      SDDL_SACL             \
+	SDDL_DELIMINATOR      \
+	SDDL_ACE_BEGIN        \
+	SDDL_MANDATORY_LABEL  \
+	SDDL_SEPERATOR        \
+	SDDL_SEPERATOR        \
+	SDDL_NO_WRITE_UP      \
+	SDDL_SEPERATOR        \
+	SDDL_SEPERATOR        \
+	SDDL_SEPERATOR        \
+	SDDL_ML_LOW           \
+	SDDL_ACE_END
+
+#define LOCAL_SYSTEM_FILE_ACCESS     SDDL_ACE_BEGIN        \
+	SDDL_ACCESS_ALLOWED   \
+	SDDL_SEPERATOR        \
+	SDDL_SEPERATOR        \
+	SDDL_FILE_ALL         \
+	SDDL_SEPERATOR        \
+	SDDL_SEPERATOR        \
+	SDDL_SEPERATOR        \
+	SDDL_LOCAL_SYSTEM     \
+	SDDL_ACE_END
+
+#define EVERYONE_FILE_ACCESS         SDDL_ACE_BEGIN        \
+	SDDL_ACCESS_ALLOWED   \
+	SDDL_SEPERATOR        \
+	SDDL_SEPERATOR        \
+	SDDL_FILE_ALL         \
+	SDDL_SEPERATOR        \
+	SDDL_SEPERATOR        \
+	SDDL_SEPERATOR        \
+	SDDL_EVERYONE         \
+	SDDL_ACE_END
+
+#define ALL_APP_PACKAGES_FILE_ACCESS SDDL_ACE_BEGIN        \
+	SDDL_ACCESS_ALLOWED   \
+	SDDL_SEPERATOR        \
+	SDDL_SEPERATOR        \
+	SDDL_FILE_ALL         \
+	SDDL_SEPERATOR        \
+	SDDL_SEPERATOR        \
+	SDDL_SEPERATOR        \
+	SDDL_ALL_APP_PACKAGES \
+	SDDL_ACE_END
+
 BOOL Helper_SetObjectToLowIntegrity(HANDLE hObject, SE_OBJECT_TYPE type)
 {
 	BOOL bRet = FALSE;
@@ -59,8 +107,21 @@ BOOL Helper_SetObjectToLowIntegrity(HANDLE hObject, SE_OBJECT_TYPE type)
 	PACL pSacl = NULL;
 	BOOL fSaclPresent = FALSE;
 	BOOL fSaclDefaulted = FALSE;
-	if (ConvertStringSecurityDescriptorToSecurityDescriptorW(
-		LOW_INTEGRITY_SDDL_SACL_W, SDDL_REVISION_1, &pSD, NULL))
+
+	LPCTSTR pszDesc = Helper_IsWin8orLater()
+		? LOW_INTEGRITY_SDDL_SACL
+		SDDL_DACL
+		SDDL_DELIMINATOR
+		LOCAL_SYSTEM_FILE_ACCESS
+		EVERYONE_FILE_ACCESS
+		ALL_APP_PACKAGES_FILE_ACCESS
+		: LOW_INTEGRITY_SDDL_SACL
+		SDDL_DACL
+		SDDL_DELIMINATOR
+		LOCAL_SYSTEM_FILE_ACCESS
+		EVERYONE_FILE_ACCESS;
+
+	if(ConvertStringSecurityDescriptorToSecurityDescriptor(pszDesc,SDDL_REVISION_1,&pSD,NULL))
 	{
 		if (GetSecurityDescriptorSacl(
 			pSD, &fSaclPresent, &pSacl, &fSaclDefaulted))
@@ -74,6 +135,41 @@ BOOL Helper_SetObjectToLowIntegrity(HANDLE hObject, SE_OBJECT_TYPE type)
 	}
 
 	return bRet;
+}
+
+
+SECURITY_ATTRIBUTES Helper_BuildLowIntegritySA()
+{
+	SECURITY_ATTRIBUTES sa;
+	PSECURITY_DESCRIPTOR pSD = NULL;
+	LPCTSTR pszDesc = Helper_IsWin8orLater()
+		? LOW_INTEGRITY_SDDL_SACL
+		SDDL_DACL
+		SDDL_DELIMINATOR
+		LOCAL_SYSTEM_FILE_ACCESS
+		EVERYONE_FILE_ACCESS
+		ALL_APP_PACKAGES_FILE_ACCESS
+		: LOW_INTEGRITY_SDDL_SACL
+		SDDL_DACL
+		SDDL_DELIMINATOR
+		LOCAL_SYSTEM_FILE_ACCESS
+		EVERYONE_FILE_ACCESS;
+
+	ConvertStringSecurityDescriptorToSecurityDescriptor(pszDesc,SDDL_REVISION_1,&pSD,NULL);
+	sa.nLength = sizeof(sa);
+	sa.lpSecurityDescriptor = pSD;
+	sa.bInheritHandle = TRUE;
+	return sa;
+}
+
+
+void Helper_FreeSa(SECURITY_ATTRIBUTES *psa)
+{
+	if(psa->lpSecurityDescriptor)
+	{
+		LocalFree(psa->lpSecurityDescriptor);
+	}
+	psa->lpSecurityDescriptor = NULL;
 }
 
 BOOL Helper_SetFileACLEx(LPCTSTR pszPath, BOOL bSubFile)
@@ -246,6 +342,15 @@ BOOL Helper_PEVersion(LPCTSTR pszFileName, DWORD *pdwVer, TCHAR *pszName, TCHAR 
 	return bRet;
 }
 
+
+bool Helper_IsWin8orLater()
+{
+	DWORD dwRet;
+	Helper_PEVersion(_T("kernel32.dll"), &dwRet, NULL, NULL);
+	BYTE *pbyVer = (BYTE*)&dwRet;
+	return pbyVer[3] > 6 || (pbyVer[3]==6 && pbyVer[2]>1);
+}
+
 //滑过空格及制表符
 static char * StrSkipSpace(const char *pszBuf)
 {
@@ -309,7 +414,7 @@ DWORD Helper_GetProfileSectionString(
 	LPCSTR p=lpSectionData;
 	if(p)
 	{
-		int nKeyLen=strlen(lpKeyName);
+		int nKeyLen=(int)strlen(lpKeyName);
 		while(*p)
 		{
 			if(strncmp(lpKeyName,p,nKeyLen)==0)
@@ -319,7 +424,7 @@ DWORD Helper_GetProfileSectionString(
 				{
 					UINT nLen=0;
 					p=StrSkipSpace(p+1);
-					nLen=strlen(p);
+					nLen=(UINT)strlen(p);
 					if(nLen>=nSize) return nSize-2;
 					strcpy(lpReturnedString,p);
 					return nLen;
@@ -332,7 +437,7 @@ DWORD Helper_GetProfileSectionString(
 		strcpy(lpReturnedString,lpDefault);
 	else
 		strcpy(lpReturnedString,"");
-	return strlen(lpReturnedString);
+	return (int)strlen(lpReturnedString);
 }
 
 int Helper_GetProfileSectionInt( 

@@ -63,38 +63,39 @@ namespace SOUI
 
 	CMyData::CMyData(const SStringT & strDataPath):m_tmInputSpan(0), m_cInputCount(0)
 	{
-		m_reg.Create(HKEY_CURRENT_USER,L"Software\\Setoutsoft\\sinstar3",NULL,REG_OPTION_NON_VOLATILE,KEY_WRITE|KEY_READ|KEY_WOW64_64KEY,0,NULL);
-
 		m_compInfo.cWild = 'z';
 		m_compInfo.strCompName = _T("╪сть...");
+		m_ptStatus = 
+		m_ptInput = 
+		m_ptSpchar =CPoint(-1, -1);
 
-		TCHAR szSkin[MAX_PATH]={0};
+		CRegKey		reg;
+		if(ERROR_SUCCESS == reg.Create(HKEY_CURRENT_USER,L"Software\\Setoutsoft\\sinstar3",NULL,REG_OPTION_NON_VOLATILE,KEY_READ|KEY_WOW64_64KEY,0,NULL))
 		{
-			ULONG nSize = MAX_PATH;
-			if (ERROR_SUCCESS == m_reg.QueryStringValue(_T("skin"), szSkin, &nSize))
-				m_strSkin = szSkin;
+			TCHAR szSkin[MAX_PATH]={0};
+			{
+				ULONG nSize = MAX_PATH;
+				if (ERROR_SUCCESS == reg.QueryStringValue(_T("skin"), szSkin, &nSize))
+					m_strSkin = szSkin;
+			}
+			{
+				ULONG nSize = MAX_PATH;
+				if (ERROR_SUCCESS == reg.QueryStringValue(_T("debugSkin"), szSkin, &nSize))
+					m_strDebugSkin = szSkin;
+			}
+
+			DWORD dwPos=-1;
+			if (ERROR_SUCCESS == reg.QueryDWORDValue(_T("status_pos"), dwPos))
+				m_ptStatus = CPoint(GET_X_LPARAM(dwPos), GET_Y_LPARAM(dwPos));
+
+			if (ERROR_SUCCESS == reg.QueryDWORDValue(_T("input_pos"), dwPos))
+				m_ptInput = CPoint(GET_X_LPARAM(dwPos), GET_Y_LPARAM(dwPos));
+
+			if (ERROR_SUCCESS == reg.QueryDWORDValue(_T("spchar_pos"), dwPos))
+				m_ptSpchar = CPoint(GET_X_LPARAM(dwPos), GET_Y_LPARAM(dwPos));
 		}
-		{
-			ULONG nSize = MAX_PATH;
-			if (ERROR_SUCCESS == m_reg.QueryStringValue(_T("debugSkin"), szSkin, &nSize))
-				m_strDebugSkin = szSkin;
-		}
 
-		DWORD dwPos=-1;
-		if (ERROR_SUCCESS == m_reg.QueryDWORDValue(_T("status_pos"), dwPos))
-			m_ptStatus = CPoint(GET_X_LPARAM(dwPos), GET_Y_LPARAM(dwPos));
-		else
-			m_ptStatus = CPoint(-1, -1);
 
-		if (ERROR_SUCCESS == m_reg.QueryDWORDValue(_T("input_pos"), dwPos))
-			m_ptInput = CPoint(GET_X_LPARAM(dwPos), GET_Y_LPARAM(dwPos));
-		else
-			m_ptInput = CPoint(-1, -1);
-
-		if (ERROR_SUCCESS == m_reg.QueryDWORDValue(_T("spchar_pos"), dwPos))
-			m_ptSpchar = CPoint(GET_X_LPARAM(dwPos), GET_Y_LPARAM(dwPos));
-		else
-			m_ptSpchar = CPoint(-1, -1);
 
 		CRegKey keySvr;
 		if(ERROR_SUCCESS == keySvr.Open(HKEY_LOCAL_MACHINE,L"Software\\Setoutsoft\\sinstar3",KEY_READ|KEY_WOW64_64KEY))
@@ -118,11 +119,15 @@ namespace SOUI
 
 	CMyData::~CMyData()
 	{
-		m_reg.SetDWORDValue(_T("status_pos"),MAKELPARAM(m_ptStatus.x,m_ptStatus.y));
-		m_reg.SetDWORDValue(_T("input_pos"), MAKELPARAM(m_ptInput.x, m_ptInput.y));
-		m_reg.SetDWORDValue(_T("spchar_pos"), MAKELPARAM(m_ptSpchar.x, m_ptSpchar.y));
-		m_reg.SetStringValue(_T("skin"),m_strSkin);
-		m_reg.Close();
+		CRegKey		m_reg;
+		if(ERROR_SUCCESS == m_reg.Create(HKEY_CURRENT_USER,L"Software\\Setoutsoft\\sinstar3",NULL,REG_OPTION_NON_VOLATILE,KEY_WRITE|KEY_WOW64_64KEY,0,NULL))
+		{
+			m_reg.SetDWORDValue(_T("status_pos"),MAKELPARAM(m_ptStatus.x,m_ptStatus.y));
+			m_reg.SetDWORDValue(_T("input_pos"), MAKELPARAM(m_ptInput.x, m_ptInput.y));
+			m_reg.SetDWORDValue(_T("spchar_pos"), MAKELPARAM(m_ptSpchar.x, m_ptSpchar.y));
+			m_reg.SetStringValue(_T("skin"),m_strSkin);
+			m_reg.Close();
+		}
 	}
 
 	SStringW CMyData::getFontFile(const SStringW & strFace) const

@@ -15,6 +15,8 @@ BOOL Helper_SetFileACL(LPCTSTR pszPath);
 BOOL Helper_SetFileACLEx(LPCTSTR pszPath, BOOL bSubFile);
 BOOL Helper_SetObjectToLowIntegrity(HANDLE hObject, SE_OBJECT_TYPE type);
 
+SECURITY_ATTRIBUTES Helper_BuildLowIntegritySA();
+void Helper_FreeSa(SECURITY_ATTRIBUTES *psa);
 
 void Helper_TraceW(wchar_t * pszFormat,...);
 void Helper_TraceA(char * pszFormat,...);
@@ -27,6 +29,8 @@ BOOL Helper_ParseIniLine(LPCSTR pszLine, LPSTR pszKey, LPSTR pszData);
 void Helper_VersionString(DWORD dwVer,TCHAR *pszBuf);
 
 BOOL Helper_PEVersion(LPCTSTR pszFileName, DWORD *pdwVer, TCHAR *pszName, TCHAR *pszDesc);
+
+bool Helper_IsWin8orLater();
 
 BOOL Helper_ParseIniLine(LPCSTR pszLine,LPSTR pszKey,LPSTR pszData);
 void Helper_WriteProfileSection(LPCSTR pszSection,LPCSTR pszKeys,LPCSTR pszIniFile);

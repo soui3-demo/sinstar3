@@ -41,15 +41,6 @@ static const GUID SupportCategories[] = {
 	GUID_TFCAT_TIPCAP_INPUTMODECOMPARTMENT,
 };
 
-
-static bool IsWin8orLater()
-{
-	DWORD dwRet;
-	Helper_PEVersion(_T("kernel32.dll"), &dwRet, NULL, NULL);
-	BYTE *pbyVer = (BYTE*)&dwRet;
-	return pbyVer[3] > 6 || (pbyVer[3]==6 && pbyVer[2]>1);
-}
-
 static HKL GetKeyboardLayoutFromFileName(LPCTSTR pszImeName)
 {
 	HKL hRet = 0;
@@ -93,7 +84,7 @@ BOOL RegisterProfiles()
 
 	hKLSinstar3 = 0;
 
-	if (IsWin8orLater())
+	if (Helper_IsWin8orLater())
 	{
 		SOUI::SComPtr<ITfInputProcessorProfileMgr> pInputProcessorProfileMgr;
 		hr = pInputProcessorProfileMgr.CoCreateInstance(CLSID_TF_InputProcessorProfiles, NULL, CLSCTX_ALL);
@@ -188,7 +179,7 @@ BOOL RegisterCategories()
         return FALSE;
     }
 
-	if(IsWin8orLater())
+	if(Helper_IsWin8orLater())
 	{
 		for each(GUID guid in SupportCategoriesWin8Later)
 		{
@@ -223,7 +214,7 @@ void UnregisterCategories()
         return;
     }
 
-	if(IsWin8orLater())
+	if(Helper_IsWin8orLater())
 	{
 		for each(GUID guid in SupportCategoriesWin8Later)
 		{

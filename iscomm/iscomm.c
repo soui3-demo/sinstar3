@@ -164,12 +164,12 @@ BOOL ISComm_Login(HWND hWnd)
 	if(!s_hWndServer)
 	{
 		LPBYTE pBuf=NULL;
-		s_hMutexReq=OpenMutex(MUTEX_ALL_ACCESS,FALSE,NAME_REQ_SYNCOMMUTEX);
+		s_hMutexReq=OpenMutex(SYNCHRONIZE,FALSE,NAME_REQ_SYNCOMMUTEX);
 		if(!s_hMutexReq)
 		{
 			if(!ISComm_OpenServer()) return FALSE;
 			for(;;) {//wait for server ready
-				s_hMutexReq = OpenMutex(MUTEX_ALL_ACCESS, FALSE, NAME_REQ_SYNCOMMUTEX);
+				s_hMutexReq = OpenMutex(SYNCHRONIZE, FALSE, NAME_REQ_SYNCOMMUTEX);
 				if (s_hMutexReq) break;
 				Sleep(10);
 			} 
