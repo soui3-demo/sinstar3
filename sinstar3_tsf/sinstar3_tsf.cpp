@@ -145,19 +145,16 @@ ExitError:
 
 HWND CSinstar3Tsf::GetActiveWnd()
 {
+	HWND hWnd = NULL;
 	SOUI::SComPtr<ITfDocumentMgr> pDocumentMgr;
 	SOUI::SComPtr<ITfContext> pContext;
 	SOUI::SComPtr<ITfContextView> pContextView;
 	
-	HWND hWnd = NULL;
-
-	if (_pThreadMgr != NULL
-		&& SUCCEEDED(_pThreadMgr->GetFocus(&pDocumentMgr))
-		&& SUCCEEDED(pDocumentMgr->GetTop(&pContext))
-		&& SUCCEEDED(pContext->GetActiveView(&pContextView)))
-	{
-		pContextView->GetWnd(&hWnd);
-	}
+	if(!_pThreadMgr) return NULL;
+	HRESULT hr = _pThreadMgr->GetFocus(&pDocumentMgr);
+	if(hr == S_OK) hr = pDocumentMgr->GetTop(&pContext);
+	if(hr == S_OK) hr = pContext->GetActiveView(&pContextView);
+	if(hr == S_OK) hr = pContextView->GetWnd(&hWnd);
 
 	if (hWnd == NULL) hWnd = ::GetFocus();
 	return hWnd;

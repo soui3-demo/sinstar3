@@ -22,6 +22,7 @@ namespace SOUI
 		:CImeWnd(pEvtSets,UIRES.LAYOUT.wnd_status_bar)
 		, m_pCmdListener(pListener)
 		,m_anchorMode(AMH_NULL|AMV_NULL)
+,		 m_hParent(NULL)
 	{
 	}
 
@@ -32,6 +33,7 @@ namespace SOUI
 
 	HWND CStatusWnd::Create(LPCTSTR pszWndName,HWND hParentWnd)
 	{
+		m_hParent = hParentWnd;
 		HWND hWnd = __super::Create(pszWndName, hParentWnd);
 		if(hWnd)
 		{
@@ -516,7 +518,7 @@ namespace SOUI
 		CPoint pt;
 		GetCursorPos(&pt);
 		SMenuEx menu;
-		BOOL bLoad = menu.LoadMenu(UIRES.smenu.context);
+		BOOL bLoad = menu.LoadMenu(UIRES.smenu.context,m_hParent);
 		m_skinManager.ClearMap();
 		SLOG_INFO("before trackpopupmenu");
 		int nRet = menu.TrackPopupMenu(TPM_LEFTALIGN | TPM_BOTTOMALIGN | TPM_RETURNCMD, pt.x, pt.y, m_hWnd);

@@ -110,6 +110,7 @@ namespace SOUI
 		ICmdListener     *  m_pCmdListener;
 
 		int					m_anchorMode;
+		HWND				m_hParent;
 	};
 
 }
