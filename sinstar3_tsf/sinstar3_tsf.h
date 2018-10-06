@@ -30,6 +30,8 @@ public:
 	/* ITfTextInputProcessorEx */
 	STDMETHODIMP ActivateEx(ITfThreadMgr *pThreadMgr, TfClientId tfClientId, DWORD dwFlags);
 
+	HWND GetActiveWnd();
+
     // ITfThreadMgrEventSink
     STDMETHODIMP OnInitDocumentMgr(ITfDocumentMgr *pDocMgr);
     STDMETHODIMP OnUninitDocumentMgr(ITfDocumentMgr *pDocMgr);

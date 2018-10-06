@@ -30,9 +30,9 @@ namespace SOUI
 	}
 
 
-	HWND CStatusWnd::Create(LPCTSTR pszWndName)
+	HWND CStatusWnd::Create(LPCTSTR pszWndName,HWND hParentWnd)
 	{
-		HWND hWnd = __super::Create(pszWndName);
+		HWND hWnd = __super::Create(pszWndName, hParentWnd);
 		if(hWnd)
 		{
 			CPoint pt = CDataCenter::getSingletonPtr()->GetData().m_ptStatus;

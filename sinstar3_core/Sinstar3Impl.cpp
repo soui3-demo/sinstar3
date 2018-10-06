@@ -24,7 +24,7 @@ public:
 
 const TCHAR * KSinstar3WndName = _T("sinstar3_msg_recv_20180801");
 
-CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr)
+CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr, HWND hParentWnd)
 :m_pTxtSvr(pTxtSvr)
 ,m_pInputWnd(NULL)
 ,m_pStatusWnd(NULL)
@@ -39,10 +39,10 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr)
 	addEvent(EVENTID(EventSetSkin));
 
  	m_pInputWnd = new CInputWnd(this,m_inputState.GetInputContext(),this);
-	m_pInputWnd->Create(_T("Sinstar3_Input"));
+	m_pInputWnd->Create(_T("Sinstar3_Input"), hParentWnd);
 
 	m_pStatusWnd = new CStatusWnd(this,this);
-	m_pStatusWnd->Create(_T("Sinstar3_Status"));
+	m_pStatusWnd->Create(_T("Sinstar3_Status"), hParentWnd);
 	m_inputState.SetInputListener(this);
 	
 	m_pInputWnd->SetAnchorPosition(CDataCenter::getSingleton().GetData().m_ptInput);

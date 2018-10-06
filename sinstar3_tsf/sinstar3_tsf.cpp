@@ -143,6 +143,26 @@ ExitError:
 	return E_FAIL;
 }
 
+HWND CSinstar3Tsf::GetActiveWnd()
+{
+	SOUI::SComPtr<ITfDocumentMgr> pDocumentMgr;
+	SOUI::SComPtr<ITfContext> pContext;
+	SOUI::SComPtr<ITfContextView> pContextView;
+	
+	HWND hWnd = NULL;
+
+	if (_pThreadMgr != NULL
+		&& SUCCEEDED(_pThreadMgr->GetFocus(&pDocumentMgr))
+		&& SUCCEEDED(pDocumentMgr->GetTop(&pContext))
+		&& SUCCEEDED(pContext->GetActiveView(&pContextView)))
+	{
+		pContextView->GetWnd(&hWnd);
+	}
+
+	if (hWnd == NULL) hWnd = ::GetFocus();
+	return hWnd;
+}
+
 STDAPI CSinstar3Tsf::Activate(ITfThreadMgr *pThreadMgr, TfClientId tfClientId)
 {
 	return ActivateEx(pThreadMgr, tfClientId,0);
@@ -374,7 +394,7 @@ CLogStateListener g_LogListener;
 
 BOOL CSinstar3Tsf::_InitSinstar3()
 {
-	m_pSinstar3=CCoreLoader::GetInstance().Sinstar3_Create(this);
+	m_pSinstar3=CCoreLoader::GetInstance().Sinstar3_Create(this,GetActiveWnd());
 
 	HostInfo hostInfo={&g_LogListener};
 	CCoreLoader::GetInstance().Sinstar3_SetHostInfo(&hostInfo);

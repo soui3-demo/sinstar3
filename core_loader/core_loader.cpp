@@ -31,7 +31,7 @@ void CCoreLoader::SetCorePath(LPCTSTR pszPath)
 	_tcscat(m_szPath, _T("\\sinstar3_core.dll"));
 }
 
-ISinstar *CCoreLoader::Sinstar3_Create(ITextService *pTxtSvr)
+ISinstar *CCoreLoader::Sinstar3_Create(ITextService *pTxtSvr,HWND hParentWnd)
 {
 	CAutoLock lock(&m_cs);
 	BOOL bLoad=FALSE;
@@ -64,7 +64,7 @@ ISinstar *CCoreLoader::Sinstar3_Create(ITextService *pTxtSvr)
 		if(bLoad) FreeLibrary(hCoreModule);
 		return NULL;
 	}
-	ISinstar *pRet = funCreate(pTxtSvr);
+	ISinstar *pRet = funCreate(pTxtSvr, hParentWnd);
 	return pRet;
 }
 

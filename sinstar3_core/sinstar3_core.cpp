@@ -16,9 +16,9 @@ int				g_nRefCount = 0;	//ref count
 #pragma data_seg()
 
 
-EXTERN_C SINSTAR3_API  ISinstar* Sinstar3_Create(ITextService* pTxtSvr)
+EXTERN_C SINSTAR3_API  ISinstar* Sinstar3_Create(ITextService* pTxtSvr,HWND hParentWnd)
 {
-	CSinstar3Impl*  pRet= new CSinstar3Impl(pTxtSvr);
+	CSinstar3Impl*  pRet= new CSinstar3Impl(pTxtSvr, hParentWnd);
 	return pRet;
 }
 

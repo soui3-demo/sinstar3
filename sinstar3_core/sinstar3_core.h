@@ -11,7 +11,7 @@
 #endif
 
 
-EXTERN_C SINSTAR3_API  ISinstar* Sinstar3_Create(ITextService* pTxtSvr);
+EXTERN_C SINSTAR3_API  ISinstar* Sinstar3_Create(ITextService* pTxtSvr,HWND hParentWnd);
 
 EXTERN_C SINSTAR3_API  void Sinstar3_Delete(ISinstar* pSinstar3);
 

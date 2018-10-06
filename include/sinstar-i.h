@@ -39,7 +39,7 @@ struct HostInfo
 	ILogStateListener *pLogStateListener;
 };
 
-typedef ISinstar *(*FUN_Sinstar3_Create)(ITextService *);
+typedef ISinstar *(*FUN_Sinstar3_Create)(ITextService *, HWND);
 typedef void (*FUN_Sinstar3_Delete)(ISinstar*);
 typedef BOOL (*FUN_Sinstar3_Config)(HWND);
 typedef HRESULT (*FUN_Sinstar3_CanUnloadNow)();

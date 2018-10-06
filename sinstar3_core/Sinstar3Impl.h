@@ -23,7 +23,7 @@ class CSinstar3Impl:
 {
 	friend class CCmdHandler;// CCmdHandler need access this private members.
 public:
-	CSinstar3Impl(ITextService *pTxtSvr);
+	CSinstar3Impl(ITextService *pTxtSvr,HWND hParentWnd=NULL);
 	virtual ~CSinstar3Impl(void);
 
 	virtual void OnIMESelect(BOOL bSelect);
