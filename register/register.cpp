@@ -473,13 +473,11 @@ BOOL Sinstar_Install(LPCTSTR pszImeName)
 	_stprintf(szPath1,_T("%s\\data\\config.ini"),g_szPath);
 	Helper_SetFileACL(szPath1);
 	Helper_SetFileACLEx(szSvrData,TRUE);
-	MessageBox(GetActiveWindow(), _T("安装成功！"), _T("install"), MB_OK | MB_ICONINFORMATION);
 
-	
-	WCHAR userName[] = { LR"(ALL APPLICATION PACKAGES)" };
-	DWORD dc = AddAceToObjectsSecurityDescriptor(g_szPath, SE_OBJECT_TYPE::SE_FILE_OBJECT, userName, TRUSTEE_IS_NAME,
+	DWORD dc = AddAceToObjectsSecurityDescriptor(g_szPath, SE_FILE_OBJECT, _T("(ALL APPLICATION PACKAGES)"), TRUSTEE_IS_NAME,
 		WRITE_DAC | GENERIC_EXECUTE | GENERIC_READ, SET_ACCESS, SUB_CONTAINERS_AND_OBJECTS_INHERIT);
 
+	MessageBox(GetActiveWindow(), _T("安装成功！"), _T("install"), MB_OK | MB_ICONINFORMATION);
 
 	return TRUE;
 }
