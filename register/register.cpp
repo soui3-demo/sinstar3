@@ -474,8 +474,9 @@ BOOL Sinstar_Install(LPCTSTR pszImeName)
 	Helper_SetFileACL(szPath1);
 	Helper_SetFileACLEx(szSvrData,TRUE);
 
-	DWORD dc = AddAceToObjectsSecurityDescriptor(g_szPath, SE_FILE_OBJECT, _T("(ALL APPLICATION PACKAGES)"), TRUSTEE_IS_NAME,
-		WRITE_DAC | GENERIC_EXECUTE | GENERIC_READ, SET_ACCESS, SUB_CONTAINERS_AND_OBJECTS_INHERIT);
+	TCHAR szUser[]=_T("ALL APPLICATION PACKAGES");
+	DWORD dc = AddAceToObjectsSecurityDescriptor(g_szPath, SE_FILE_OBJECT, szUser, TRUSTEE_IS_NAME,
+		WRITE_DAC | GENERIC_ALL, SET_ACCESS, SUB_CONTAINERS_AND_OBJECTS_INHERIT);
 
 	MessageBox(GetActiveWindow(), _T("安装成功！"), _T("install"), MB_OK | MB_ICONINFORMATION);
 
