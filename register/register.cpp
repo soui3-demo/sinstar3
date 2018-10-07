@@ -16,6 +16,10 @@
 #include "../include/version.h"
 #include "../include/reg.h"
 
+#include <accctrl.h>
+#include <aclapi.h>
+
+
 #define MAX_STRLEN		100
 
 #define NAME_MAPFILE _T("_setoutsoft comm map file")
@@ -280,6 +284,73 @@ BOOL MyCopyFile(LPCTSTR pszSour,LPCTSTR pszDest)
 	return nRet==0;
 }
 
+DWORD AddAceToObjectsSecurityDescriptor(
+	LPTSTR pszObjName,          // name of object
+	SE_OBJECT_TYPE ObjectType,  // type of object
+	LPTSTR pszTrustee,          // trustee for new ACE
+	TRUSTEE_FORM TrusteeForm,   // format of trustee structure
+	DWORD dwAccessRights,       // access mask for new ACE
+	ACCESS_MODE AccessMode,     // type of ACE
+	DWORD dwInheritance         // inheritance flags for new ACE
+)
+{
+	DWORD dwRes = 0;
+	PACL pOldDACL = NULL, pNewDACL = NULL;
+	PSECURITY_DESCRIPTOR pSD = NULL;
+	EXPLICIT_ACCESS ea;
+
+	if (NULL == pszObjName)
+		return ERROR_INVALID_PARAMETER;
+
+	// Get a pointer to the existing DACL.
+
+	dwRes = GetNamedSecurityInfo(pszObjName, ObjectType,
+		DACL_SECURITY_INFORMATION,
+		NULL, NULL, &pOldDACL, NULL, &pSD);
+	if (ERROR_SUCCESS != dwRes) {
+		printf("GetNamedSecurityInfo Error %u\n", dwRes);
+		goto Cleanup;
+	}
+
+	// Initialize an EXPLICIT_ACCESS structure for the new ACE. 
+
+	ZeroMemory(&ea, sizeof(EXPLICIT_ACCESS));
+	ea.grfAccessPermissions = dwAccessRights;
+	ea.grfAccessMode = AccessMode;
+	ea.grfInheritance = dwInheritance;
+	ea.Trustee.TrusteeForm = TrusteeForm;
+	ea.Trustee.ptstrName = pszTrustee;
+
+	// Create a new ACL that merges the new ACE
+	// into the existing DACL.
+
+	dwRes = SetEntriesInAcl(1, &ea, pOldDACL, &pNewDACL);
+	if (ERROR_SUCCESS != dwRes) {
+		printf("SetEntriesInAcl Error %u\n", dwRes);
+		goto Cleanup;
+	}
+
+	// Attach the new ACL as the object's DACL.
+
+	dwRes = SetNamedSecurityInfo(pszObjName, ObjectType,
+		DACL_SECURITY_INFORMATION,
+		NULL, NULL, pNewDACL, NULL);
+	if (ERROR_SUCCESS != dwRes) {
+		printf("SetNamedSecurityInfo Error %u\n", dwRes);
+		goto Cleanup;
+	}
+
+Cleanup:
+
+	if (pSD != NULL)
+		LocalFree((HLOCAL)pSD);
+	if (pNewDACL != NULL)
+		LocalFree((HLOCAL)pNewDACL);
+
+	return dwRes;
+}
+
+
 BOOL Sinstar_Install(LPCTSTR pszImeName)
 {
 	TCHAR szSysPath[MAX_PATH];
@@ -403,6 +474,13 @@ BOOL Sinstar_Install(LPCTSTR pszImeName)
 	Helper_SetFileACL(szPath1);
 	Helper_SetFileACLEx(szSvrData,TRUE);
 	MessageBox(GetActiveWindow(), _T("安装成功！"), _T("install"), MB_OK | MB_ICONINFORMATION);
+
+	
+	WCHAR userName[] = { LR"(ALL APPLICATION PACKAGES)" };
+	DWORD dc = AddAceToObjectsSecurityDescriptor(g_szPath, SE_OBJECT_TYPE::SE_FILE_OBJECT, userName, TRUSTEE_IS_NAME,
+		WRITE_DAC | GENERIC_EXECUTE | GENERIC_READ, SET_ACCESS, SUB_CONTAINERS_AND_OBJECTS_INHERIT);
+
+
 	return TRUE;
 }
 
