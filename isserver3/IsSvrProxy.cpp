@@ -279,7 +279,7 @@ LRESULT CIsSvrProxy::OnTrayNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 	case WM_RBUTTONUP:
 		{
 			SMenuEx tmenuex;
-			if (tmenuex.LoadMenu(UIRES.smenu.menu_context))
+			if (tmenuex.LoadMenu(UIRES.smenu.context_tray))
 			{
 				POINT pt;
 				GetCursorPos(&pt);

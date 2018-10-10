@@ -348,7 +348,7 @@ static DWORD GetKernelVer()
 
 LRESULT CWorker::OnDataReport(UINT uMsg, WPARAM wp, LPARAM lp)
 {
-	CRegKey reg;
+	::CRegKey reg;
 	LONG ret = reg.Open(HKEY_CURRENT_USER, _T("SOFTWARE\\SetoutSoft\\sinstar3"), KEY_READ | KEY_WOW64_64KEY);
 	TCHAR szUerID[100] = { 0 };
 	if (ret == ERROR_SUCCESS)
@@ -400,7 +400,7 @@ LRESULT CWorker::OnDataReport(UINT uMsg, WPARAM wp, LPARAM lp)
 		}
 		_tcscat(szUerID, _T("_"));
 		_tcscat(szUerID, strOsVer);
-		CRegKey reg;
+		::CRegKey reg;
 		LONG ret = reg.Open(HKEY_CURRENT_USER, _T("SOFTWARE\\SetoutSoft\\sinstar3"), KEY_READ|KEY_WRITE | KEY_WOW64_64KEY);
 		if (ret == ERROR_SUCCESS)
 		{

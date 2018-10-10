@@ -7,22 +7,50 @@
     <file name="dlg_keymap" path="xml\dlg_keymap.xml"/>
     <file name="wnd_build_index_prog" path="xml\wnd_build_index_prog.xml"/>
     <file name="dlg_update_info" path="xml\dlg_update_info.xml"/>
+    <file name="wnd_composition" path="xml\wnd_composition.xml"/>
+    <file name="wnd_status_bar" path="xml\wnd_status_bar.xml"/>
+    <file name="wnd_tip" path="xml\wnd_tip.xml"/>
+    <file name="wnd_spchar" path="xml\wnd_spchar.xml"/>
   </LAYOUT>
-  
+
   <values>
-  	<file name="string" path="values\string.xml"/>
-  	<file name="color" path="values\color.xml"/>
-  	<file name="skin" path="values\skin.xml"/>
+    <file name="string" path="values\string.xml"/>
+    <file name="color" path="values\color.xml"/>
+    <file name="skin" path="values\skin.xml"/>
+    <file name="dim" path="values\dim.xml"/>
   </values>
 
+  <IMG>
+    <file name="logo_32" path="image\logo_32.png"/>
+    <file name="png_charmode" path="image\charmode.png"/>
+    <file name="png_charmode_full" path="image\charmode_full.png"/>
+    <file name="png_charmode_half" path="image\charmode_half.png"/>
+    <file name="png_status_open" path="image\status_open.png"/>
+    <file name="png_status_close" path="image\status_close.png"/>
+    <file name="png_composition" path="image\composition.png"/>
+    <file name="btn_extend" path="image\btn_extend.png"/>
+    <file name="btn_shrink" path="image\btn_shrink.png"/>
+    <file name="btn_makeword" path="image\btn_makeword.png"/>
+    <file name="btn_prevpage" path="image\btn_prevpage.png"/>
+    <file name="btn_nextpage" path="image\btn_nextpage.png"/>
+    <file name="btn_query" path="image\btn_query.png"/>
+    <file name="btn_record_enable" path="image\btn_record_enable.png"/>
+    <file name="btn_record_disable" path="image\btn_record_disable.png"/>
+    <file name="btn_sound_enable" path="image\btn_sound_enable.png"/>
+    <file name="btn_sound_disable" path="image\btn_sound_disable.png"/>
+    <file name="png_lines" path="image\lines.png"/>
+    <file name="btn_english_enable" path="image\btn_english_enable.png"/>
+    <file name="btn_english_disable" path="image\btn_english_disable.png"/>
+  </IMG>
   <ICON>
+    <file name="ICON_SINSTAR3"  path="icon\sinstar3.ico"/>
     <file name="ICON_LOGO"  path="icon\logo.ico"/>
     <file name="ICON_LOGO1" path="icon\logo1.ico"/>
     <file name="ICON_LOGO2" path="icon\logo2.ico"/>
     <file name="ICON_LOGO3" path="icon\logo3.ico"/>
-    <file name="ICON_LOGO4" path="icon\logo4.ico"/>
-  </ICON>
+    <file name="ICON_LOGO4" path="icon\logo4.ico"/>  </ICON>
   <smenu>
-    <file name="menu_context" path="smenu\context.xml"/>
+    <file name="context_tray" path="smenu\context_tray.xml"/>
+    <file name="context_status" path="smenu\context_status.xml"/>
   </smenu>
 </resource>
