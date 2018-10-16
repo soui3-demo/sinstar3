@@ -2,7 +2,6 @@
 #include "SkinMananger.h"
 #include <helper/SMenu.h>
 #include <helper/mybuffer.h>
-#include "../SouiEnv.h"
 
 CSkinMananger::CSkinMananger()
 {

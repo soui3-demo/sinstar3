@@ -57,10 +57,9 @@ int CSkinMananger::InitSkinMenu(SMenuEx *hMenu, const SStringT &strSkinPath, int
 SOUI::SStringT CSkinMananger::ExtractSkinInfo(SStringT strSkinPath)
 {
 	IResProvider *pResProvider = NULL;
-	{
-		CCurrentDirSet curDirSet(CSouiEnv::getSingletonPtr()->SouiDllDir());
-		CSouiEnv::getSingleton().theComMgr()->CreateResProvider_ZIP((IObjRef**)&pResProvider);
-	}
+	SComMgr comMgr;
+	comMgr.CreateResProvider_ZIP((IObjRef**)&pResProvider);
+
 	ZIPRES_PARAM param;
 	param.ZipFile(NULL, strSkinPath);
 	pResProvider->Init((WPARAM)&param,0);

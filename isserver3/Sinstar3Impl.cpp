@@ -3,7 +3,6 @@
 #include "Utils.h"
 #include <initguid.h>
 #include "ui/SkinMananger.h"
-#include "SouiEnv.h"
 
 class CAutoContext
 {
@@ -573,14 +572,14 @@ void CSinstar3Impl::Broadcast(UINT uCmd, LPVOID pData, DWORD nLen)
 	SendMessage(WM_COPYDATA, (WPARAM)m_hWnd, (LPARAM)&cds);
 
 	SLOG_INFO("broadcast, nLen:" << nLen);
-	HWND hFind = FindWindowEx(HWND_MESSAGE, NULL, SINSTART3_WNDCLASS, KSinstar3WndName);
+	HWND hFind = FindWindowEx(HWND_MESSAGE, NULL, NULL, KSinstar3WndName);
 	while (hFind)
 	{
 		if (hFind != m_hWnd)
 		{
 			::SendMessage(hFind, WM_COPYDATA, (WPARAM)m_hWnd, (LPARAM)&cds);
 		}
-		hFind = FindWindowEx(HWND_MESSAGE, hFind, SINSTART3_WNDCLASS, KSinstar3WndName);
+		hFind = FindWindowEx(HWND_MESSAGE, hFind, NULL, KSinstar3WndName);
 	}
 }
 

@@ -1,5 +1,19 @@
 #pragma once
 
+#define CISIZE_BASE		164		//基本编码信息数据量
+
+#define MAX_SENTLEN		50		//语句最大长度
+#define MAX_WORDLEN		30		//词组最大长度
+#define MAX_COMPLEN		20		//系统支持的最大码长
+
+#define RATE_USERDEF	0xFF	//自定义编码使用的词频
+#define RATE_FORECAST	0xFE	//智能预测得到的词使用的词频
+#define RATE_GBK		0xFD	//GBK flag
+#define RATE_USERCMD	0xFC	//Command ID
+#define RATE_MIXSP		0xFB	//简拼词组
+#define RATE_WILD		0xFA	//万能键查询结果
+#define RATE_ASSOCIATE	0xF9	//联想重码
+
 enum{
 	SENDER_SINSTSR3	= 100,
 	SENDER_SKINMANAGER,

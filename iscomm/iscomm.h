@@ -4,18 +4,19 @@
 #include "commfile.h"
 
 //输入之星通讯使用的内存文件映射的名称
-#define NAME_REQ_MAPFILE	_T("_sinstar2 req map file")	//客户端向服务器发送请求的数据通道
+#define NAME_REQ_MAPFILE	_T("_sinstar3 req map file")	//客户端向服务器发送请求的数据通道
 #define MAX_BUF_REQ_MAP		1<<12						//4K						
 #define MAX_BUF_REQ			(MAX_BUF_REQ_MAP)									
-#define NAME_ACK_MAPFILE	_T("_sinstar2 ack map file")	//服务器向客户端发送指示的数据通道
+#define NAME_ACK_MAPFILE	_T("_sinstar3 ack map file")	//服务器向客户端发送指示的数据通道
 #define MAX_BUF_ACK_MAP		1<<15						//32K
 #define MAX_BUF_ACK			((MAX_BUF_ACK_MAP)-sizeof(HWND))
 
 //输入之星通讯使用的同步事件名称,客户端通过申请lock该Mutex来保证能够获得数据写入权限，以防止多个客户端同时写入
-#define NAME_REQ_SYNCOMMUTEX	_T("_sinstar2 req synchronization mutex")
+#define NAME_REQ_SYNCOMMUTEX	_T("_sinstar3 req synchronization mutex")
 
-#define MSG_NAME_SINSTAR2		_T("_sinstar2 communicate msg")	//通讯时使用的消息名称，取代老版本固定的消息ID，方便服务器返回数据
+#define MSG_NAME_SINSTAR3		_T("_sinstar3 communicate msg")	//通讯时使用的消息名称，取代老版本固定的消息ID，方便服务器返回数据
 
+#define SVR_PROXY_NAME			TEXT("_sinstar3_svr_proxy_window_{AC7451C1-3528-42E4-ADF8-E35F3CF24646}")
 
 #pragma pack(push,1)
 

@@ -56,7 +56,7 @@ void ISComm_FreeImeFlagData(IMEFLAGDATA * pData)
 }
 
 const UINT ISComm_GetCommMsgID(){
-	if(s_uMsgID==0) s_uMsgID=RegisterWindowMessage(MSG_NAME_SINSTAR2);
+	if(s_uMsgID==0) s_uMsgID=RegisterWindowMessage(MSG_NAME_SINSTAR3);
 	return s_uMsgID;
 }
 
@@ -129,10 +129,8 @@ PMSGDATA ISComm_OnSeverNotify(HWND hWnd,WPARAM wParam,LPARAM lParam)
 
 BOOL ISComm_OpenServer()
 {
-	HWND  hWndShell=FindWindow(_T("Shell_TrayWnd"),NULL);
-	if(s_szSvrPath[0]==0) return FALSE;
-	if(!hWndShell) return FALSE;
-	return (int)ShellExecute(NULL,_T("open"),s_szSvrPath,NULL,NULL,SW_HIDE)>32;
+	s_hWndServer = FindWindow(NULL, SVR_PROXY_NAME);
+	return s_hWndServer != 0;
 }
 
 //生成一个保证不会被重复的客户ID
@@ -168,11 +166,7 @@ BOOL ISComm_Login(HWND hWnd)
 		if(!s_hMutexReq)
 		{
 			if(!ISComm_OpenServer()) return FALSE;
-			for(;;) {//wait for server ready
-				s_hMutexReq = OpenMutex(SYNCHRONIZE, FALSE, NAME_REQ_SYNCOMMUTEX);
-				if (s_hMutexReq) break;
-				Sleep(10);
-			} 
+			s_hMutexReq = OpenMutex(SYNCHRONIZE, FALSE, NAME_REQ_SYNCOMMUTEX);
 		}
 		//打开双向通讯数据通道
 
