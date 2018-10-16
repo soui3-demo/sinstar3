@@ -171,6 +171,7 @@ void CSettingsUI::Load(LPCTSTR pszIniFile)
 	bHideStatus=GetPrivateProfileInt(KSession,_T("HideStatus"),0,pszIniFile);
 	bInputBig5=GetPrivateProfileInt(KSession,_T("InputBig5"),0,pszIniFile);
 	bFilterGbk = GetPrivateProfileInt(KSession, _T("FilterGbk"), 0, pszIniFile);
+	GetPrivateProfileString(KSession, _T("skin"), _T(""), szSkin,MAX_PATH, pszIniFile);
 }
 
 void CSettingsUI::Save(LPCTSTR pszIniFile)
@@ -184,4 +185,5 @@ void CSettingsUI::Save(LPCTSTR pszIniFile)
 	WritePrivateProfileInt(KSession,_T("HideStatus"),bHideStatus,pszIniFile);
 	WritePrivateProfileInt(KSession,_T("InputBig5"),bInputBig5,pszIniFile);
 	WritePrivateProfileInt(KSession, _T("FilterGbk"), bFilterGbk, pszIniFile);
+	WritePrivateProfileString(KSession, _T("skin"), szSkin, pszIniFile);
 }
