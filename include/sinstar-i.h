@@ -23,24 +23,7 @@ interface ISinstar : public IUnknown
 	virtual EInputMethod GetDefInputMode() = NULL;
 };
 
-namespace SOUI
-{
-	struct ILog4zManager;
-}
-
-interface ILogStateListener
-{
-	virtual void OnLogMgrReady(SOUI::ILog4zManager *)=0;
-	virtual void OnLogMgrFree()=0;
-};
-
-struct HostInfo
-{
-	ILogStateListener *pLogStateListener;
-};
-
 typedef ISinstar *(*FUN_Sinstar3_Create)(ITextService *, HWND);
 typedef void (*FUN_Sinstar3_Delete)(ISinstar*);
 typedef BOOL (*FUN_Sinstar3_Config)(HWND);
 typedef HRESULT (*FUN_Sinstar3_CanUnloadNow)();
-typedef void (*FUN_Sinstar3_SetHostInfo)(HostInfo *pHostInfo);

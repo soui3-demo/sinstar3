@@ -387,14 +387,9 @@ BOOL   CSinstar3Tsf::ReleaseImeContext(LPVOID lpImeContext)
 	return TRUE;
 }
 
-CLogStateListener g_LogListener;
-
 BOOL CSinstar3Tsf::_InitSinstar3()
 {
 	m_pSinstar3=CCoreLoader::GetInstance().Sinstar3_Create(this,GetActiveWnd());
-
-	HostInfo hostInfo={&g_LogListener};
-	CCoreLoader::GetInstance().Sinstar3_SetHostInfo(&hostInfo);
 
 	if(!m_pSinstar3) return FALSE;
  	m_pSinstar3->OnIMESelect(_bHasFocus);

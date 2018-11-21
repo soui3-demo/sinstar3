@@ -19,15 +19,11 @@ EXTERN_C SINSTAR3_API HRESULT Sinstar3_CanUnloadNow();
 
 EXTERN_C SINSTAR3_API BOOL Sinstar3_Config(HWND hWnd);
 
-EXTERN_C SINSTAR3_API void Sinstar3_SetHostInfo(HostInfo *pHostInfo);
-
 class CSinstar3Core :public CModuleRef
 {
 public:
 	CSinstar3Core(HINSTANCE hInst);
 	~CSinstar3Core();
-
-	void SetLogStateListener(ILogStateListener *pListener);
 
 	SOUI::SStringT GetDataPath() const {return m_strDataPath;}
 	SOUI::SStringT GetSettingPath() const;
@@ -37,7 +33,6 @@ protected:
 
 	virtual void OnFinalRelease();
 
-	ILogStateListener * m_pLogStateListener;
 	SOUI::SStringT m_strDataPath;
 	SOUI::SStringT m_strConfigIni;
 	HANDLE m_hMutex;

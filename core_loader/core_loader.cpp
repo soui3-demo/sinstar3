@@ -96,20 +96,6 @@ BOOL CCoreLoader::Sinstar3_OpenConfig(HWND hParent)
 	return bRet;
 }
 
-
-void CCoreLoader::Sinstar3_SetHostInfo(HostInfo *pHostInfo)
-{
-	CAutoLock lock(&m_cs);
-
-	HMODULE	hCoreModule=LoadLibrary(m_szPath);
-	if(!hCoreModule) return;
-	BOOL bRet=FALSE;
-	FUN_Sinstar3_SetHostInfo funSetHostInfo=(FUN_Sinstar3_SetHostInfo)GetProcAddress(hCoreModule,"Sinstar3_SetHostInfo");
-	if(funSetHostInfo) funSetHostInfo(pHostInfo);
-	FreeLibrary(hCoreModule);
-
-}
-
 CCoreLoader & CCoreLoader::GetInstance()
 {
 	static CCoreLoader thiz;

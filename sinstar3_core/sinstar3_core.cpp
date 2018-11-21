@@ -37,13 +37,7 @@ EXTERN_C SINSTAR3_API BOOL Sinstar3_Config(HWND hWnd)
 	return FALSE;
 }
 
-
-EXTERN_C SINSTAR3_API void Sinstar3_SetHostInfo(HostInfo *pHostInfo)
-{
-	theModule->SetLogStateListener(pHostInfo->pLogStateListener);
-}
-
-CSinstar3Core::CSinstar3Core(HINSTANCE hInst):CModuleRef(hInst),m_pLogStateListener(NULL), m_hMutex(0), m_hSettingFileMap(NULL)
+CSinstar3Core::CSinstar3Core(HINSTANCE hInst):CModuleRef(hInst), m_hMutex(0), m_hSettingFileMap(NULL)
 {
 	m_hMutex = CreateMutex(NULL, FALSE, SINSTAR3_MUTEX);
 	TCHAR szPath[MAX_PATH];
@@ -96,26 +90,10 @@ void CSinstar3Core::OnInit()
 {
 	CMinidump::Enable();
 	new CSouiEnv(GetModule(),GetDataPath());
-	if(m_pLogStateListener)
-	{
-		m_pLogStateListener->OnLogMgrReady(CSouiEnv::getSingleton().theApp()->GetLogManager());
-	}
 }
 
 void CSinstar3Core::OnFinalRelease()
 {
-	if(m_pLogStateListener)
-	{
-		m_pLogStateListener->OnLogMgrFree();
-	}
 	delete CSouiEnv::getSingletonPtr();
 }
 
-void CSinstar3Core::SetLogStateListener(ILogStateListener *pListener)
-{
-	m_pLogStateListener = pListener;
-	if(CSouiEnv::getSingletonPtr())
-	{
-		m_pLogStateListener->OnLogMgrReady(CSouiEnv::getSingleton().theApp()->GetLogManager());
-	}
-}
