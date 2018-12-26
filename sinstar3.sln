@@ -35,6 +35,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "soui", "..\soui.git\SOUI\so
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sinstar3_tsf", "sinstar3_tsf\sinstar3_tsf.vcxproj", "{4893E464-3664-442B-8BFB-6D13679EAB23}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ipcobject", "ipcobject\ipcobject.vcxproj", "{EC5EB644-E950-3BA5-951D-044B93329902}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -201,6 +203,16 @@ Global
 		{4893E464-3664-442B-8BFB-6D13679EAB23}.Release|Win32.Build.0 = Release|Win32
 		{4893E464-3664-442B-8BFB-6D13679EAB23}.Release|x64.ActiveCfg = Release|x64
 		{4893E464-3664-442B-8BFB-6D13679EAB23}.Release|x64.Build.0 = Release|x64
+		{EC5EB644-E950-3BA5-951D-044B93329902}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{EC5EB644-E950-3BA5-951D-044B93329902}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{EC5EB644-E950-3BA5-951D-044B93329902}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EC5EB644-E950-3BA5-951D-044B93329902}.Debug|Win32.Build.0 = Debug|Win32
+		{EC5EB644-E950-3BA5-951D-044B93329902}.Debug|x64.ActiveCfg = Debug|x64
+		{EC5EB644-E950-3BA5-951D-044B93329902}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{EC5EB644-E950-3BA5-951D-044B93329902}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{EC5EB644-E950-3BA5-951D-044B93329902}.Release|Win32.ActiveCfg = Release|Win32
+		{EC5EB644-E950-3BA5-951D-044B93329902}.Release|Win32.Build.0 = Release|Win32
+		{EC5EB644-E950-3BA5-951D-044B93329902}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
