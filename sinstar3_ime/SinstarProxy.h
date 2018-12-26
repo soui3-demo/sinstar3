@@ -8,7 +8,7 @@
 class CSinstarProxy : public ISinstar, public CUnknown, public SIpcObject
 {
 public:
-	CSinstarProxy(HWND hSvr,HWND hClient,ITextService *pTxtService);
+	CSinstarProxy(HWND hClient,ITextService *pTxtService);
 	~CSinstarProxy();
 
 public:

@@ -38,6 +38,5 @@
 #define LOG_FILTER "sinstar3_ime"
 #include <helper/slog-def.h>
 
-#include "../core_loader/core_loader.h"
 #include "ImeModule.h"
 

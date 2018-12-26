@@ -195,7 +195,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\core_loader\core_loader.cpp" />
     <ClCompile Include="CompStrEx.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="ImeMgr.cpp" />
@@ -217,7 +216,6 @@
     <None Include="sinstar3_ime.def" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\core_loader\core_loader.h" />
     <ClInclude Include="..\include\sinstar-i.h" />
     <ClInclude Include="..\include\sinstar3_guids.h" />
     <ClInclude Include="..\include\TextService-i.h" />

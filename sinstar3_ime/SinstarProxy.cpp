@@ -1,11 +1,12 @@
 #include "stdafx.h"
 #include "SinstarProxy.h"
 
-CSinstarProxy::CSinstarProxy(HWND hSvr,HWND hClient, ITextService *pTxtService)
-	:m_hSvr(hSvr)
+CSinstarProxy::CSinstarProxy(HWND hClient, ITextService *pTxtService)
+	:m_hSvr(NULL)
 	,m_hClient(hClient)
 	,m_pTxtService(pTxtService)
 {
+	m_hSvr = FindWindow(NULL, SINSTAR3_SERVER_HWND);
 	SASSERT(m_hSvr);
 	SASSERT(m_hClient);
 }

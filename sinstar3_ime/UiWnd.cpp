@@ -1,6 +1,7 @@
 #include "StdAfx.h"
 #include "UiWnd.h"
 #include "CompStrEx.h"
+#include "SinstarProxy.h"
 
 #define HEI_LINEMARGIN	3
 #define TIMERID_CHKDEFIME	200
@@ -357,7 +358,7 @@ LRESULT CUiWnd::OnSetContext(BOOL bActivate,LPARAM lParam)
 
 BOOL CUiWnd::_InitSinstar3()
 {
-	m_pSinstar3=CCoreLoader::GetInstance().Sinstar3_Create(this);
+	m_pSinstar3= new CSinstarProxy(m_hWnd,this);
 	if(!m_pSinstar3) return FALSE;
 	m_pSinstar3->OnIMESelect(m_bActivate);
 	HIMC hIMC=(HIMC)GetWindowLongPtr(m_hWnd,IMMGWLP_IMC);
@@ -370,7 +371,7 @@ BOOL CUiWnd::_UninitSinstar3()
 	if(m_pSinstar3)
 	{
 		m_pSinstar3->OnIMESelect(FALSE);
-		CCoreLoader::GetInstance().Sinstar3_Delete(m_pSinstar3);
+		delete m_pSinstar3;
 		m_pSinstar3=NULL;
 	}
 	return TRUE;
