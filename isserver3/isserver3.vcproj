@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="utilitiesd.lib souid.lib helperd.lib"
+				AdditionalDependencies="utilitiesd.lib souid.lib helperd.lib iscommd.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(SOUIPATH)\bin&quot;;&quot;$(SolutionDir)lib&quot;"
 				GenerateDebugInformation="true"
@@ -189,7 +189,27 @@
 				>
 			</File>
 			<File
+				RelativePath=".\CmdHandler.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\dataCenter\DataCenter.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\WinHttp\HttpClient.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ui\ImeWnd.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\InputState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ui\InputWnd.cpp"
 				>
 			</File>
 			<File
@@ -209,11 +229,111 @@
 				>
 			</File>
 			<File
-				RelativePath=".\SChatEdit.cpp"
+				RelativePath=".\controls\SApngPlayer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SCandView.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SCaption2.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SChatEdit.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SCompBackground.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SEnglishCand.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\dataCenter\Settings.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SFlagView.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ShellExecuteMonitor.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Sinstar3Impl.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ui\SkinAwareWnd.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ui\SkinMananger.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SLineComp.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SLineSkin.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SMutexView.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ui\SpCharWnd.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SPhraseCand.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SSentView.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SSkinAPNG.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SSkinPNGX.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SSpellView.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SStatusBackground.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ui\StatusWnd.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\stdafx.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ui\STipWnd.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SToggle2.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ui\SToolsMgr.cpp"
 				>
 			</File>
 			<File
@@ -226,6 +346,10 @@
 			</File>
 			<File
 				RelativePath=".\UpdateInfoDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Utils.cpp"
 				>
 			</File>
 			<File
@@ -251,7 +375,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\CmdHandler.h"
+				>
+			</File>
+			<File
 				RelativePath=".\WinHttp\Common.h"
+				>
+			</File>
+			<File
+				RelativePath=".\dataCenter\DataCenter.h"
 				>
 			</File>
 			<File
@@ -260,6 +392,22 @@
 			</File>
 			<File
 				RelativePath=".\WinHttp\IHttpInterface.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ui\ImeWnd.h"
+				>
+			</File>
+			<File
+				RelativePath=".\inputContext.h"
+				>
+			</File>
+			<File
+				RelativePath=".\InputState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ui\InputWnd.h"
 				>
 			</File>
 			<File
@@ -279,11 +427,115 @@
 				>
 			</File>
 			<File
-				RelativePath=".\SChatEdit.h"
+				RelativePath=".\controls\SAniImgFrame.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SApngPlayer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SCandView.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SCaption2.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SChatEdit.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SCompBackground.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SEnglishCand.h"
+				>
+			</File>
+			<File
+				RelativePath=".\dataCenter\Settings.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SFlagView.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ShellExecuteMonitor.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Sinstar3Impl.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ui\SkinAwareWnd.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ui\SkinMananger.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SLineComp.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SLineSkin.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SMutexView.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ui\SpCharWnd.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SPhraseCand.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SSentView.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SSkinAPNG.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SSkinPNGX.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SSpellView.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SStatusBackground.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ui\StatusWnd.h"
 				>
 			</File>
 			<File
 				RelativePath=".\stdafx.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ui\STipWnd.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SToggle2.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ui\SToolsMgr.h"
 				>
 			</File>
 			<File
@@ -296,6 +548,10 @@
 			</File>
 			<File
 				RelativePath=".\UpdateInfoDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Utils.h"
 				>
 			</File>
 			<File

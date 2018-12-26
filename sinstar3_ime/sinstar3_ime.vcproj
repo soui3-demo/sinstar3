@@ -44,7 +44,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(SOUIPATH)\SOUI\include;$(SOUIPATH)\utilities\include;$(SOUIPATH)\config"
+				AdditionalIncludeDirectories="&quot;$(SOUIPATH)\SOUI\include&quot;;&quot;$(SOUIPATH)\utilities\include&quot;;&quot;$(SOUIPATH)\config&quot;;..\ipcobject\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;SINSTAR3_IME_EXPORTS;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -65,9 +65,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="souid.lib"
+				AdditionalDependencies="ipcobjectd.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(SOUIPATH)\bin"
+				AdditionalLibraryDirectories="&quot;$(SOUIPATH)\bin&quot;;..\lib"
 				ModuleDefinitionFile="sinstar3_ime.def"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
@@ -144,7 +144,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="souid.lib"
+				AdditionalDependencies="ipcobjectd.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(SOUIPATH)\bin64"
 				ModuleDefinitionFile="sinstar3_ime.def"
@@ -203,7 +203,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="$(SOUIPATH)\SOUI\include;$(SOUIPATH)\utilities\include;$(SOUIPATH)\config"
+				AdditionalIncludeDirectories="&quot;$(SOUIPATH)\SOUI\include&quot;;&quot;$(SOUIPATH)\utilities\include&quot;;&quot;$(SOUIPATH)\config&quot;;..\ipcobject\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;SINSTAR3_IME_EXPORTS"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
@@ -222,7 +222,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="soui.lib"
+				AdditionalDependencies="ipcobject.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(SOUIPATH)\bin"
 				ModuleDefinitionFile="sinstar3_ime.def"
@@ -301,7 +301,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="soui.lib"
+				AdditionalDependencies="ipcobject.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(SOUIPATH)\bin64"
 				ModuleDefinitionFile="sinstar3_ime.def"
@@ -347,10 +347,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\core_loader\core_loader.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\dllmain.cpp"
 				>
 			</File>
@@ -380,6 +376,10 @@
 			</File>
 			<File
 				RelativePath=".\sinstar3_ime.def"
+				>
+			</File>
+			<File
+				RelativePath=".\SinstarProxy.cpp"
 				>
 			</File>
 			<File
@@ -421,10 +421,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\core_loader\core_loader.h"
-				>
-			</File>
-			<File
 				RelativePath=".\imeContext.h"
 				>
 			</File>
@@ -458,6 +454,10 @@
 			</File>
 			<File
 				RelativePath="..\include\sinstar3_guids.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SinstarProxy.h"
 				>
 			</File>
 			<File
