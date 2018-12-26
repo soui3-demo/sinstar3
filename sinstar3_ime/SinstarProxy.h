@@ -58,7 +58,7 @@ protected:
 		FUN_HANDLER(Param_GetConversionMode, OnGetConversionMode)
 		FUN_HANDLER(Param_SetOpenStatus, OnSetOpenStatus)
 		FUN_HANDLER(Param_GetOpenStatus, OnGetOpenStatus)
-		FUN_END
+	FUN_END
 public:
 	IUNKNOWN_BEGIN(IUnknown)
 	IUNKNOWN_END()

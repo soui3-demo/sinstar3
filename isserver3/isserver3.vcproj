@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;&quot;$(SOUIPATH)\config&quot;;&quot;$(SOUIPATH)\components&quot;;&quot;$(SOUIPATH)\SOUI\include&quot;;&quot;$(SOUIPATH)\utilities\include&quot;;&quot;$(SolutionDir)include&quot;"
+				AdditionalIncludeDirectories=".;&quot;$(SOUIPATH)\config&quot;;&quot;$(SOUIPATH)\components&quot;;&quot;$(SOUIPATH)\SOUI\include&quot;;&quot;$(SOUIPATH)\utilities\include&quot;;&quot;$(SolutionDir)include&quot;;&quot;$(SolutionDir)ipcobject\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -337,6 +337,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\TextServiceProxy.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ThreadObject.cpp"
 				>
 			</File>
@@ -536,6 +540,10 @@
 			</File>
 			<File
 				RelativePath=".\ui\SToolsMgr.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TextServiceProxy.h"
 				>
 			</File>
 			<File

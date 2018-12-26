@@ -9,11 +9,13 @@ CSinstarProxy::CSinstarProxy(HWND hClient, ITextService *pTxtService)
 	m_hSvr = FindWindow(NULL, SINSTAR3_SERVER_HWND);
 	SASSERT(m_hSvr);
 	SASSERT(m_hClient);
+	Login(m_hSvr);
 }
 
 
 CSinstarProxy::~CSinstarProxy()
 {
+	Logout(m_hSvr);
 }
 
 void CSinstarProxy::CallFun(FunParams_Base * param)
