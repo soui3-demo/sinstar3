@@ -99,3 +99,27 @@ std::string toString() const\
 	ss <<#p1":"<< p1<<" "#p2":"<< p2<<" "#p3":"<< p3<<" "#p4":"<< p4; \
 	return ss.str();\
 }
+
+/////////////////////////////////////////////////////////////////////////
+template<typename P1, typename P2, typename P3, typename P4, typename P5>
+void toParamStream(CParamStream &  ps, P1 &p1, P2 & p2, P3 & p3, P4 & p4, P5 &p5)
+{
+	ps << p1 << p2 << p3 << p4 <<p5;
+}
+template<typename P1, typename P2, typename P3, typename P4, typename P5>
+void fromParamStream(CParamStream &  ps, P1 & p1, P2 &p2, P3 & p3, P4 & p4, P5 &p5)
+{
+	ps >> p1 >> p2 >> p3 >> p4>>p5;
+}
+
+#define PARAMS5(type,p1,p2,p3,p4,p5) \
+void ToStream4##type(CParamStream &  ps){ toParamStream(ps,p1,p2,p3,p4,p5);}\
+void FromStream4##type(CParamStream &  ps){fromParamStream(ps,p1,p2,p3,p4,p5);}\
+
+#define TOSTR5(p1,p2,p3,p4,p5)\
+std::string toString() const\
+{\
+	std::stringstream ss; \
+	ss <<#p1":"<< p1<<" "#p2":"<< p2<<" "#p3":"<< p3<<" "#p4":"<< p4<<" "#p5":"<<p5; \
+	return ss.str();\
+}
