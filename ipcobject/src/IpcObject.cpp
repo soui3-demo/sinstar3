@@ -1,86 +1,14 @@
 #include "stdafx.h"
 #include "IpcObject.h"
+#include <assert.h>
 
-SIpcObject::SIpcObject()
+SIpcServer::SIpcServer()
 {
 }
 
-SIpcObject::~SIpcObject(void)
+SIpcServer::~SIpcServer(void)
 {
-	Uninit();
-}	
-
-LRESULT SIpcObject::OnClientMsg(UINT uMsg,WPARAM wp,LPARAM lp)
-{
-	if (wp == FUN_ID_LOGIN)
-		return OnLogin((HWND)lp);
-	else if (wp == FUN_ID_LOGOUT)
-		return OnLogout((HWND)lp);
-	return HandleFunction((HWND)lp,(UINT)wp);
-}
-
-
-LRESULT SIpcObject::HandleFunction(HWND hClient, UINT uMsgID)
-{
-	if (m_mapClients.find(hClient) == m_mapClients.end())
-		return 0;
-	ClientData *pData = m_mapClients[hClient];
-	CParamStream ps(pData->pBuf, false);
-	return pData->pClient->HandleFun(this,uMsgID, ps);
-}
-
-LRESULT SIpcObject::OnLogin(HWND hClient)
-{
-	if (m_mapClients.find(hClient) != m_mapClients.end()) return 0;
-
-	ClientData * pClient = new ClientData;
-
-	HRESULT hr = CreateIpcClient(hClient, &pClient->pClient);
-	if (hr != S_OK || !pClient->pClient) goto error;
-	
-	pClient->pBuf = new CShareMemBuffer;
-	TCHAR szName[100];
-	GetMemMapFileByObjectID(hClient, szName);
-	if (!pClient->pBuf->OpenMemFile(szName, 1 << 12))
-	{
-		goto error;
-	}
-	m_mapClients[hClient] = pClient;
-	return 1;
-error:
-	delete pClient;
-	return 0;
-}
-
-LRESULT SIpcObject::OnLogout(HWND hClient)
-{
-	if (m_mapClients.find(hClient) == m_mapClients.end())
-		return 0;
-
-	ClientData *pClient = m_mapClients[hClient];
-	delete pClient;
-	m_mapClients.erase(hClient);
-	return 1;
-}
-
-void SIpcObject::GetMemMapFileByObjectID(HWND hWnd,TCHAR *szName)
-{
-	_stprintf(szName,_T("ipc_client_%08x"),(DWORD)hWnd);
-}
-
-int SIpcObject::Init(HWND hWnd,UINT uBufSize)
-{
-	TCHAR szName[100];
-	GetMemMapFileByObjectID(hWnd,szName);
-	m_buffer.OpenMemFile(szName, uBufSize);
-	return 0;
-}
-
-
-void SIpcObject::Uninit()
-{
-	m_buffer.Close();
-	std::map<HWND, ClientData *>::iterator it = m_mapClients.begin();
+	std::map<HWND, SIpcConnection *>::iterator it = m_mapClients.begin();
 	while (it != m_mapClients.end())
 	{
 		delete it->second;
@@ -89,38 +17,143 @@ void SIpcObject::Uninit()
 	m_mapClients.clear();
 }
 
-BOOL SIpcObject::ProcessWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lResult)
+BOOL SIpcServer::ProcessWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lResult)
 {
-	if(UM_CALL_FUN != uMsg) return FALSE;
+	if (UM_CALL_FUN != uMsg) return FALSE;
 	lResult = OnClientMsg(uMsg, wParam, lParam);
 	return TRUE;
 }
 
-LRESULT SIpcObject::Login(HWND hSvr)
+LRESULT SIpcServer::OnClientMsg(UINT uMsg,WPARAM wp,LPARAM lp)
 {
-	LRESULT lRet = ::SendMessage(hSvr,UM_CALL_FUN, FUN_ID_LOGIN, (LPARAM)GetIpcObjectID());
-	if (lRet == 0) return 0;
-	OnLogin(hSvr);
+	if (wp == FUN_ID_CONNECT)
+		return OnConnect((HWND)lp);
+	else if (wp == FUN_ID_DISCONNECT)
+		return OnDisconnect((HWND)lp);
+	HWND hClient = (HWND)lp;
+	std::map<HWND, SIpcConnection*>::iterator it = m_mapClients.find(hClient);
+	if (it == m_mapClients.end())
+		return 0;
+	CParamStream ps(it->second->GetRemoteBuffer(), false);
+	return it->second->HandleFun(wp, ps);
+}
+
+LRESULT SIpcServer::OnConnect(HWND hClient)
+{
+	if (m_mapClients.find(hClient) != m_mapClients.end()) return 0;
+
+	SIpcConnection * pConnection=NULL;
+	HRESULT hr = CreateConnection(&pConnection);
+	if (hr != S_OK || !pConnection) goto error;
+	pConnection->SetLocalId(GetSvrId(), GetBufSize());
+	pConnection->SetRemoteId(hClient);
+
+	m_mapClients[hClient] = pConnection;
+	return 1;
+error:
+	delete pConnection;
+	return 0;
+}
+
+LRESULT SIpcServer::OnDisconnect(HWND hClient)
+{
+	if (m_mapClients.find(hClient) == m_mapClients.end())
+		return 0;
+
+	SIpcConnection *pClient = m_mapClients[hClient];
+	delete pClient;
+	m_mapClients.erase(hClient);
+	return 1;
+}
+
+//////////////////////////////////////////////////////////////
+SIpcConnection::SIpcConnection():m_hLocalId(NULL),m_hRemoteId(NULL)
+{
+}
+
+LRESULT SIpcConnection::ConnectTo(HWND hRemote)
+{
+	if (m_hRemoteId != NULL)
+		return 1;
+	assert(m_hLocalId != NULL);
+
+	LRESULT lRet = ::SendMessage(hRemote,UM_CALL_FUN, FUN_ID_CONNECT, (LPARAM)GetLocalID());
+	if (lRet == 0)
+	{
+		return 0;
+	}
+	TCHAR szName[100];
+	GetMemMapFileByObjectID(hRemote, szName);
+	m_RemoteBuf.OpenMemFile(szName, 0);
+	m_hRemoteId = hRemote;
 	return lRet;
 }
 
-LRESULT SIpcObject::Logout(HWND hSvr)
+LRESULT SIpcConnection::Disconnect()
 {
-	LRESULT lRet = ::SendMessage(hSvr, UM_CALL_FUN, FUN_ID_LOGOUT, (LPARAM)GetIpcObjectID());
-	if (lRet == 0) return 0;
-	OnLogout(hSvr);
-	return lRet;
+	if (m_hRemoteId == NULL)
+		return 1;
+	assert(m_hRemoteId != NULL);
+	::SendMessage(m_hRemoteId, UM_CALL_FUN, FUN_ID_DISCONNECT, (LPARAM)GetLocalID());
+	m_hRemoteId = NULL;
+	m_RemoteBuf.Close();
+	return 0;
 }
 
-LRESULT SIpcObject::CallFun(HWND hSvr, FunParams_Base * pParam)
+LRESULT SIpcConnection::CallFun(FunParams_Base * pParam)
 {
-	CParamStream ps(GetBuffer(), true);
+	if (m_hRemoteId == NULL)
+		return 0;
+
+	CParamStream ps(GetLocalBuffer(), true);
 	pParam->ToStream4Input(ps);
-	LRESULT lRet = SendMessage(hSvr,UM_CALL_FUN, pParam->GetID(), (LPARAM)GetIpcObjectID());
+	LRESULT lRet = SendMessage(m_hRemoteId,UM_CALL_FUN, pParam->GetID(), (LPARAM)GetLocalID());
 	if (lRet != 0)
 	{
-		CParamStream ps2(GetBuffer(), false);
+		CParamStream ps2(GetLocalBuffer(), false);
 		pParam->FromStream4Output(ps2);
 	}
 	return lRet;
+}
+
+BOOL SIpcConnection::SetRemoteId(HWND hRemote)
+{
+	assert(m_hRemoteId == NULL);
+	TCHAR szName[100];
+	GetMemMapFileByObjectID(hRemote, szName);
+	if (!m_RemoteBuf.OpenMemFile(szName))
+	{
+		return FALSE;
+	}
+	m_hRemoteId = hRemote;
+	return TRUE;
+}
+
+BOOL SIpcConnection::SetLocalId(HWND hLocal,UINT uBufSize)
+{
+	assert(m_hLocalId == NULL);
+	TCHAR szName[100];
+	GetMemMapFileByObjectID(hLocal, szName);
+	if (!m_localBuf.OpenMemFile(szName, uBufSize))
+	{
+		return FALSE;
+	}
+	m_hLocalId = hLocal;
+	return TRUE;
+}
+
+
+BOOL SIpcConnection::ProcessWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lResult)
+{
+	if (UM_CALL_FUN != uMsg)
+	{
+		return FALSE;
+	}
+	HWND hRemote = (HWND)lParam;
+	if (hRemote != m_hRemoteId)
+	{
+		return FALSE;
+	}
+	CParamStream ps(GetRemoteBuffer(), false);
+	return HandleFun(wParam, ps);
 }

@@ -28,7 +28,7 @@ CShareMemBuffer::~CShareMemBuffer()
 BOOL CShareMemBuffer::OpenMemFile(LPCTSTR pszName,DWORD dwMaximumSize)
 {
 	if(m_hMap) return FALSE;
-	m_hMap=::CreateFileMapping(INVALID_HANDLE_VALUE,NULL,PAGE_READWRITE,0,dwMaximumSize+sizeof(DWORD)*2,pszName);
+	m_hMap = ::CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, dwMaximumSize + sizeof(DWORD) * 2, pszName);
 	if(!m_hMap)	return FALSE;
 	BOOL bOpenExist = GetLastError() == ERROR_ALREADY_EXISTS;
 	m_pBuffer=(LPBYTE)::MapViewOfFile(m_hMap,FILE_MAP_ALL_ACCESS,0,0,0);//map whole file
@@ -38,7 +38,7 @@ BOOL CShareMemBuffer::OpenMemFile(LPCTSTR pszName,DWORD dwMaximumSize)
 		m_hMap=0;
 		return FALSE;
 	}
-	if (!bOpenExist)
+	if (dwMaximumSize != 0 && !bOpenExist)
 	{
 		GetBufferSizeRef() = dwMaximumSize;
 		StartWrite();

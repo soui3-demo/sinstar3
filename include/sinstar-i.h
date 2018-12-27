@@ -23,7 +23,3 @@ interface ISinstar : public IUnknown
 	virtual EInputMethod GetDefInputMode() = NULL;
 };
 
-typedef ISinstar *(*FUN_Sinstar3_Create)(ITextService *, HWND);
-typedef void (*FUN_Sinstar3_Delete)(ISinstar*);
-typedef BOOL (*FUN_Sinstar3_Config)(HWND);
-typedef HRESULT (*FUN_Sinstar3_CanUnloadNow)();

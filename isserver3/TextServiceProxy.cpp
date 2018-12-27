@@ -1,69 +1,85 @@
 #include "stdafx.h"
 #include "TextServiceProxy.h"
 
-CTextServiceProxy::CTextServiceProxy(void)
+
+HWND CServerObject::GetSvrId()
 {
+	return m_hSvr;
 }
 
-CTextServiceProxy::~CTextServiceProxy(void)
-{
+HRESULT CServerObject::CreateConnection(SIpcConnection ** ppConnection) const {
+	*ppConnection = new CSvrConnection(NULL);//todo.
+	return S_OK;
 }
 
-BOOL CTextServiceProxy::InputStringW(LPCWSTR pszBuf, int nLen)
+/////////////////////////////////////////////////////////////////////////////
+
+
+BOOL CSvrConnection::InputStringW(LPCWSTR pszBuf, int nLen)
 {
+	Param_InputStringW param;
+	param.buf = wstring(pszBuf, nLen);
+	CallFun(&param);
+	return param.bRet;
 }
 
-BOOL CTextServiceProxy::IsCompositing() const
-{
-
-}
-
-void CTextServiceProxy::StartComposition(LPVOID lpImeContext)
-{
-
-}
-
-void CTextServiceProxy::ReplaceSelCompositionW(LPVOID lpImeContext,int nLeft,int nRight,const WCHAR *wszComp,int nLen)
-{
-
-}
-
-void CTextServiceProxy::UpdateResultAndCompositionStringW(LPVOID lpImeContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen)
+BOOL CSvrConnection::IsCompositing() const
 {
 
 }
 
-void CTextServiceProxy::EndComposition(LPVOID lpImeContext)
+void CSvrConnection::StartComposition(LPVOID lpImeContext)
 {
 
 }
 
-LPVOID CTextServiceProxy::GetImeContext()
+void CSvrConnection::ReplaceSelCompositionW(LPVOID lpImeContext,int nLeft,int nRight,const WCHAR *wszComp,int nLen)
 {
 
 }
 
-BOOL CTextServiceProxy::ReleaseImeContext(LPVOID lpImeContext)
+void CSvrConnection::UpdateResultAndCompositionStringW(LPVOID lpImeContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen)
 {
 
 }
 
-void CTextServiceProxy::SetConversionMode(EInputMethod mode)
+void CSvrConnection::EndComposition(LPVOID lpImeContext)
 {
 
 }
 
-EInputMethod CTextServiceProxy::GetConversionMode()
+LPVOID CSvrConnection::GetImeContext()
 {
 
 }
 
-BOOL CTextServiceProxy::SetOpenStatus(LPVOID lpImeContext,BOOL bOpen)
+BOOL CSvrConnection::ReleaseImeContext(LPVOID lpImeContext)
 {
 
 }
 
-BOOL CTextServiceProxy::GetOpenStatus(LPVOID lpImeContext) const
+void CSvrConnection::SetConversionMode(EInputMethod mode)
 {
 
+}
+
+EInputMethod CSvrConnection::GetConversionMode()
+{
+
+}
+
+BOOL CSvrConnection::SetOpenStatus(LPVOID lpImeContext,BOOL bOpen)
+{
+
+}
+
+BOOL CSvrConnection::GetOpenStatus(LPVOID lpImeContext) const
+{
+
+}
+
+LRESULT CSvrConnection::OnImeSelect(Param_OnImeSelect & param)
+{
+	m_pSinstar->OnIMESelect(param.bSelect);
+	return LRESULT(1);
 }

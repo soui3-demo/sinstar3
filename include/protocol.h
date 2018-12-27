@@ -286,9 +286,11 @@ struct Param_GetDefInputMode : FunParams_Base
 struct Param_InputStringW : FunParams_Base
 {
 	wstring buf;
+	BOOL bRet;
 	FUNID(ITextService_InputStringW)
 		PARAMS1(Input,buf)
-		TOSTR1(buf)
+		PARAMS1(Output,bRet)
+		TOSTR2(buf,bRet)
 };
 
 struct Param_IsCompositing : FunParams_Base

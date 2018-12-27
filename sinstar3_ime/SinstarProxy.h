@@ -6,26 +6,25 @@
 #include "../include/protocol.h"
 #include <unknown\obj-ref-impl.hpp>
 
-class CTextServiceProxy : public SOUI::TObjRefImpl<IIpcClient>
+class CClientConnection : public SOUI::TObjRefImpl<SIpcConnection>
 {
 public:
-	CTextServiceProxy(HWND hClient, ITextService * pTxtService) 
-		:m_hClient(hClient)
-		,m_pTxtService(pTxtService) 
+	CClientConnection(ITextService * pTxtService) 
+		:m_pTxtService(pTxtService) 
 	{}
 protected:
-	LRESULT OnInputStringW(SIpcObject *pIpcObj, Param_InputStringW &param);
-	LRESULT OnIsCompositing(SIpcObject *pIpcObj, Param_IsCompositing &param);
-	LRESULT OnStartComposition(SIpcObject *pIpcObj, Param_StartComposition &param);
-	LRESULT OnReplaceSelCompositionW(SIpcObject *pIpcObj, Param_ReplaceSelCompositionW &param);
-	LRESULT OnUpdateResultAndCompositionStringW(SIpcObject *pIpcObj, Param_UpdateResultAndCompositionStringW &param);
-	LRESULT OnEndComposition(SIpcObject *pIpcObj, Param_EndComposition &param);
-	LRESULT OnGetImeContext(SIpcObject *pIpcObj, Param_GetImeContext &param);
-	LRESULT OnReleaseImeContext(SIpcObject *pIpcObj, Param_ReleaseImeContext &param);
-	LRESULT OnSetConversionMode(SIpcObject *pIpcObj, Param_SetConversionMode &param);
-	LRESULT OnGetConversionMode(SIpcObject *pIpcObj, Param_GetConversionMode &param);
-	LRESULT OnSetOpenStatus(SIpcObject *pIpcObj, Param_SetOpenStatus &param);
-	LRESULT OnGetOpenStatus(SIpcObject *pIpcObj, Param_GetOpenStatus &param);
+	LRESULT OnInputStringW( Param_InputStringW &param);
+	LRESULT OnIsCompositing( Param_IsCompositing &param);
+	LRESULT OnStartComposition( Param_StartComposition &param);
+	LRESULT OnReplaceSelCompositionW( Param_ReplaceSelCompositionW &param);
+	LRESULT OnUpdateResultAndCompositionStringW( Param_UpdateResultAndCompositionStringW &param);
+	LRESULT OnEndComposition( Param_EndComposition &param);
+	LRESULT OnGetImeContext( Param_GetImeContext &param);
+	LRESULT OnReleaseImeContext( Param_ReleaseImeContext &param);
+	LRESULT OnSetConversionMode( Param_SetConversionMode &param);
+	LRESULT OnGetConversionMode( Param_GetConversionMode &param);
+	LRESULT OnSetOpenStatus( Param_SetOpenStatus &param);
+	LRESULT OnGetOpenStatus( Param_GetOpenStatus &param);
 
 	FUN_BEGIN
 		FUN_HANDLER(Param_InputStringW, OnInputStringW)
@@ -43,12 +42,10 @@ protected:
 	FUN_END
 
 private:
-	HWND	m_hClient;
 	ITextService * m_pTxtService;
-
 };
 
-class CSinstarProxy : public ISinstar, public CUnknown, public SIpcObject
+class CSinstarProxy : public ISinstar, public CUnknown
 {
 public:
 	CSinstarProxy(HWND hClient,ITextService *pTxtService);
@@ -73,22 +70,12 @@ public:
 	virtual void ShowHelp() override;
 	virtual EInputMethod GetDefInputMode() override;
 
-protected:
-	virtual HWND GetIpcObjectID() override;
-	virtual HRESULT CreateIpcClient(HWND hClient, IIpcClient **ppClient) const
-	{
-		*ppClient = new CTextServiceProxy(hClient, m_pTxtService);
-		return S_OK;
-	}
 public:
 	IUNKNOWN_BEGIN(IUnknown)
 	IUNKNOWN_END()
 
 private:
-	void CallFun(FunParams_Base * param);
-private:
-	HWND m_hSvr;
-	HWND m_hClient;
 	ITextService * m_pTxtService;
+	CClientConnection	m_conn;
 };
 

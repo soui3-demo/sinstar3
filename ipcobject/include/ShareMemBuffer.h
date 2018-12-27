@@ -14,7 +14,7 @@ class CShareMemBuffer
 public:
 	CShareMemBuffer();
 	virtual ~CShareMemBuffer();
-	BOOL OpenMemFile(LPCTSTR pszName,DWORD dwMaximumSize);
+	BOOL OpenMemFile(LPCTSTR pszName,DWORD dwMaximumSize=0);
 	void Close();
 
 	DWORD GetBufferSize() const { return *(DWORD*)m_pBuffer; }
