@@ -144,74 +144,74 @@ EInputMethod CSinstarProxy::GetDefInputMode()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-LRESULT CClientConnection::OnInputStringW( Param_InputStringW & param)
+void CClientConnection::OnInputStringW( Param_InputStringW & param)
 {
 	m_pTxtService->InputStringW(param.buf.c_str(), param.buf.length());
-	return LRESULT(1);
+
 }
 
-LRESULT CClientConnection::OnIsCompositing( Param_IsCompositing & param)
+void CClientConnection::OnIsCompositing( Param_IsCompositing & param)
 {
 	param.bRet = m_pTxtService->IsCompositing();
-	return LRESULT(1);
+
 }
 
-LRESULT CClientConnection::OnStartComposition( Param_StartComposition & param)
+void CClientConnection::OnStartComposition( Param_StartComposition & param)
 {
 	m_pTxtService->StartComposition(param.lpImeContext);
-	return LRESULT(1);
+
 }
 
-LRESULT CClientConnection::OnReplaceSelCompositionW( Param_ReplaceSelCompositionW & param)
+void CClientConnection::OnReplaceSelCompositionW( Param_ReplaceSelCompositionW & param)
 {
 	m_pTxtService->ReplaceSelCompositionW(param.lpImeContext, param.nLeft, param.nRight, param.buf.c_str(), param.buf.length());
-	return LRESULT(1);
+
 }
 
-LRESULT CClientConnection::OnUpdateResultAndCompositionStringW( Param_UpdateResultAndCompositionStringW & param)
+void CClientConnection::OnUpdateResultAndCompositionStringW( Param_UpdateResultAndCompositionStringW & param)
 {
 	m_pTxtService->UpdateResultAndCompositionStringW(param.lpImeContext, param.resultStr.c_str(), param.resultStr.length(), param.compStr.c_str(), param.compStr.length());
-	return LRESULT(1);
+
 }
 
-LRESULT CClientConnection::OnEndComposition( Param_EndComposition & param)
+void CClientConnection::OnEndComposition( Param_EndComposition & param)
 {
 	m_pTxtService->EndComposition(param.lpImeContext);
-	return LRESULT(1);
+
 }
 
-LRESULT CClientConnection::OnGetImeContext( Param_GetImeContext & param)
+void CClientConnection::OnGetImeContext( Param_GetImeContext & param)
 {
 	param.lpImeContext = m_pTxtService->GetImeContext();
-	return LRESULT(1);
+
 }
 
-LRESULT CClientConnection::OnReleaseImeContext( Param_ReleaseImeContext & param)
+void CClientConnection::OnReleaseImeContext( Param_ReleaseImeContext & param)
 {
 	m_pTxtService->ReleaseImeContext(param.lpImeContext);
-	return LRESULT(1);
+
 }
 
-LRESULT CClientConnection::OnSetConversionMode( Param_SetConversionMode & param)
+void CClientConnection::OnSetConversionMode( Param_SetConversionMode & param)
 {
 	m_pTxtService->SetConversionMode(param.mode);
-	return LRESULT(1);
+
 }
 
-LRESULT CClientConnection::OnGetConversionMode( Param_GetConversionMode & param)
+void CClientConnection::OnGetConversionMode( Param_GetConversionMode & param)
 {
 	param.mode = m_pTxtService->GetConversionMode();
-	return LRESULT(1);
+
 }
 
-LRESULT CClientConnection::OnSetOpenStatus( Param_SetOpenStatus & param)
+void CClientConnection::OnSetOpenStatus( Param_SetOpenStatus & param)
 {
 	param.bRet = m_pTxtService->SetOpenStatus(param.lpImeContext, param.bOpen);
-	return LRESULT(1);
+
 }
 
-LRESULT CClientConnection::OnGetOpenStatus( Param_GetOpenStatus & param)
+void CClientConnection::OnGetOpenStatus( Param_GetOpenStatus & param)
 {
 	param.bOpen = m_pTxtService->GetOpenStatus(param.lpImeContext);
-	return LRESULT(1);
+
 }

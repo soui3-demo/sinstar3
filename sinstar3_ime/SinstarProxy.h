@@ -13,18 +13,18 @@ public:
 		:m_pTxtService(pTxtService) 
 	{}
 protected:
-	LRESULT OnInputStringW( Param_InputStringW &param);
-	LRESULT OnIsCompositing( Param_IsCompositing &param);
-	LRESULT OnStartComposition( Param_StartComposition &param);
-	LRESULT OnReplaceSelCompositionW( Param_ReplaceSelCompositionW &param);
-	LRESULT OnUpdateResultAndCompositionStringW( Param_UpdateResultAndCompositionStringW &param);
-	LRESULT OnEndComposition( Param_EndComposition &param);
-	LRESULT OnGetImeContext( Param_GetImeContext &param);
-	LRESULT OnReleaseImeContext( Param_ReleaseImeContext &param);
-	LRESULT OnSetConversionMode( Param_SetConversionMode &param);
-	LRESULT OnGetConversionMode( Param_GetConversionMode &param);
-	LRESULT OnSetOpenStatus( Param_SetOpenStatus &param);
-	LRESULT OnGetOpenStatus( Param_GetOpenStatus &param);
+	void OnInputStringW( Param_InputStringW &param);
+	void OnIsCompositing( Param_IsCompositing &param);
+	void OnStartComposition( Param_StartComposition &param);
+	void OnReplaceSelCompositionW( Param_ReplaceSelCompositionW &param);
+	void OnUpdateResultAndCompositionStringW( Param_UpdateResultAndCompositionStringW &param);
+	void OnEndComposition( Param_EndComposition &param);
+	void OnGetImeContext( Param_GetImeContext &param);
+	void OnReleaseImeContext( Param_ReleaseImeContext &param);
+	void OnSetConversionMode( Param_SetConversionMode &param);
+	void OnGetConversionMode( Param_GetConversionMode &param);
+	void OnSetOpenStatus( Param_SetOpenStatus &param);
+	void OnGetOpenStatus( Param_GetOpenStatus &param);
 
 	FUN_BEGIN
 		FUN_HANDLER(Param_InputStringW, OnInputStringW)

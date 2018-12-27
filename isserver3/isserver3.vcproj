@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="utilitiesd.lib souid.lib helperd.lib iscommd.lib"
+				AdditionalDependencies="utilitiesd.lib souid.lib helperd.lib iscommd.lib ipcobjectd.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(SOUIPATH)\bin&quot;;&quot;$(SolutionDir)lib&quot;"
 				GenerateDebugInformation="true"

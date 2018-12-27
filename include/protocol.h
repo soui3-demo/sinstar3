@@ -344,9 +344,11 @@ struct Param_GetImeContext : FunParams_Base
 struct Param_ReleaseImeContext : FunParams_Base
 {
 	LPVOID lpImeContext;
+	BOOL bRet;
 	FUNID(ITextService_ReleaseImeContext)
-		PARAMS1(Iutput, lpImeContext)
-		TOSTR1(lpImeContext)
+		PARAMS1(Input, lpImeContext)
+		PARAMS1(Output,bRet)
+		TOSTR2(lpImeContext,bRet)
 };
 
 struct Param_SetConversionMode : FunParams_Base

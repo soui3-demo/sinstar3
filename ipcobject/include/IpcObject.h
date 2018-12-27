@@ -18,8 +18,7 @@ struct FunParams_Base
 };
 
 #define FUN_BEGIN \
-LRESULT HandleFun(UINT uMsg, CParamStream &ps){ \
-	LRESULT nRet = 0;\
+bool HandleFun(UINT uMsg, CParamStream &ps){ \
 	bool bHandled = false; \
 
 #define FUN_HANDLER(x,fun) \
@@ -27,14 +26,14 @@ LRESULT HandleFun(UINT uMsg, CParamStream &ps){ \
 	{\
 		x param; \
 		param.FromStream4Input(ps);\
-		nRet = fun(param); \
+		fun(param); \
 		CParamStream psOut(ps.GetBuffer(),true);\
 		param.ToStream4Output(psOut);\
 		bHandled = true;\
 	}
 
 #define FUN_END \
-	return nRet; \
+	return bHandled; \
 }
 
 enum {
@@ -57,7 +56,7 @@ public:
 
 	BOOL SetLocalId(HWND hLocal, UINT uBufSize);
 
-	LRESULT CallFun(FunParams_Base * pParam);
+	LRESULT CallFun(FunParams_Base * pParam) const;
 public:
 	CShareMemBuffer * GetLocalBuffer() { return &m_localBuf; }
 	CShareMemBuffer * GetRemoteBuffer() { return &m_RemoteBuf; }
@@ -68,16 +67,11 @@ public:
 	}
 
 protected:
-
-	HWND GetLocalID() {
-		return m_hLocalId;
-	}
-
-	virtual LRESULT HandleFun(UINT uFunID, CParamStream & ps) = 0;
+	virtual bool HandleFun(UINT uFunID, CParamStream & ps) = 0;
 
 protected:
 	HWND	m_hLocalId;
-	CShareMemBuffer	m_localBuf;
+	mutable CShareMemBuffer	m_localBuf;
 	HWND	m_hRemoteId;
 	CShareMemBuffer	m_RemoteBuf;
 };
@@ -99,7 +93,9 @@ protected:
 protected:
 	virtual UINT GetBufSize() const { return 1 << 12; }
 	virtual HWND GetSvrId() = 0;
-	virtual HRESULT CreateConnection(SIpcConnection ** ppConnection) const = 0;
+	virtual HRESULT CreateConnection(SIpcConnection ** ppConnection) const {
+		return E_NOTIMPL;
+	}
 
 	std::map<HWND, SIpcConnection *> m_mapClients;
 };

@@ -42,20 +42,40 @@ public:
 
 
 protected:
-	LRESULT OnImeSelect(Param_OnImeSelect & param);
+	void HandleOnImeSelect(Param_OnImeSelect & param);
+	void HandleOnCompositionStarted(Param_OnCompositionStarted &param);
+	void HandleOnCompositionChanged(Param_OnCompositionChanged &param);
+	void HandleOnCompositionTerminated(Param_OnCompositionTerminated &param);
+	void HandleOnSetCaretPosition(Param_OnSetCaretPosition &param);
+	void HandleOnSetFocusSegmentPosition(Param_OnSetFocusSegmentPosition &param);
+	void HandleProcessKeyStoke(Param_ProcessKeyStoke &param);
+	void HandleTranslateKey(Param_TranslateKey &param);
+	void HandleOnSetFocus(Param_OnSetFocus &param);
+	void HandleGetCompositionSegments(Param_GetCompositionSegments &param);
+	void HandleGetCompositionSegmentEnd(Param_GetCompositionSegmentEnd &param);
+	void HandleGetCompositionSegmentAttr(Param_GetCompositionSegmentAttr &param);
+	void HandleOnOpenStatusChanged(Param_OnOpenStatusChanged &param);
+	void HandleOnConversionModeChanged(Param_OnConversionModeChanged &param);
+	void HandleShowHelp(Param_ShowHelp &param);
+	void HandleGetDefInputMode(Param_GetDefInputMode &param);
+
 	FUN_BEGIN
-		FUN_HANDLER(Param_OnImeSelect, OnImeSelect)
-		//FUN_HANDLER(Param_IsCompositing, OnIsCompositing)
-		//FUN_HANDLER(Param_StartComposition, OnStartComposition)
-		//FUN_HANDLER(Param_ReplaceSelCompositionW, OnReplaceSelCompositionW)
-		//FUN_HANDLER(Param_UpdateResultAndCompositionStringW, OnUpdateResultAndCompositionStringW)
-		//FUN_HANDLER(Param_EndComposition, OnEndComposition)
-		//FUN_HANDLER(Param_GetImeContext, OnGetImeContext)
-		//FUN_HANDLER(Param_ReleaseImeContext, OnReleaseImeContext)
-		//FUN_HANDLER(Param_SetConversionMode, OnSetConversionMode)
-		//FUN_HANDLER(Param_GetConversionMode, OnGetConversionMode)
-		//FUN_HANDLER(Param_SetOpenStatus, OnSetOpenStatus)
-		//FUN_HANDLER(Param_GetOpenStatus, OnGetOpenStatus)
+		FUN_HANDLER(Param_OnImeSelect, HandleOnImeSelect)
+		FUN_HANDLER(Param_OnCompositionStarted, HandleOnCompositionStarted)
+		FUN_HANDLER(Param_OnCompositionChanged, HandleOnCompositionChanged)
+		FUN_HANDLER(Param_OnCompositionTerminated, HandleOnCompositionTerminated)
+		FUN_HANDLER(Param_OnSetCaretPosition, HandleOnSetCaretPosition)
+		FUN_HANDLER(Param_OnSetFocusSegmentPosition, HandleOnSetFocusSegmentPosition)
+		FUN_HANDLER(Param_ProcessKeyStoke, HandleProcessKeyStoke)
+		FUN_HANDLER(Param_TranslateKey, HandleTranslateKey)
+		FUN_HANDLER(Param_OnSetFocus, HandleOnSetFocus)
+		FUN_HANDLER(Param_GetCompositionSegments, HandleGetCompositionSegments)
+		FUN_HANDLER(Param_GetCompositionSegmentEnd, HandleGetCompositionSegmentEnd)
+		FUN_HANDLER(Param_GetCompositionSegmentAttr, HandleGetCompositionSegmentAttr)
+		FUN_HANDLER(Param_OnOpenStatusChanged, HandleOnOpenStatusChanged)
+		FUN_HANDLER(Param_OnConversionModeChanged, HandleOnConversionModeChanged)
+		FUN_HANDLER(Param_ShowHelp, HandleShowHelp)
+		FUN_HANDLER(Param_GetDefInputMode, HandleGetDefInputMode)
 	FUN_END
 private:
 	ISinstar	*m_pSinstar;
@@ -73,7 +93,4 @@ protected:
 	virtual HRESULT CreateConnection(SIpcConnection ** ppConnection) const override;
 private:
 	HWND m_hSvr;
-
-
-
 };

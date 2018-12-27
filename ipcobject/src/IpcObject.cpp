@@ -35,7 +35,7 @@ LRESULT SIpcServer::OnClientMsg(UINT uMsg,WPARAM wp,LPARAM lp)
 	if (it == m_mapClients.end())
 		return 0;
 	CParamStream ps(it->second->GetRemoteBuffer(), false);
-	return it->second->HandleFun(wp, ps);
+	return it->second->HandleFun(wp, ps)?1:0;
 }
 
 LRESULT SIpcServer::OnConnect(HWND hClient)
@@ -77,7 +77,7 @@ LRESULT SIpcConnection::ConnectTo(HWND hRemote)
 		return 1;
 	assert(m_hLocalId != NULL);
 
-	LRESULT lRet = ::SendMessage(hRemote,UM_CALL_FUN, FUN_ID_CONNECT, (LPARAM)GetLocalID());
+	LRESULT lRet = ::SendMessage(hRemote,UM_CALL_FUN, FUN_ID_CONNECT, (LPARAM)m_hLocalId);
 	if (lRet == 0)
 	{
 		return 0;
@@ -94,23 +94,23 @@ LRESULT SIpcConnection::Disconnect()
 	if (m_hRemoteId == NULL)
 		return 1;
 	assert(m_hRemoteId != NULL);
-	::SendMessage(m_hRemoteId, UM_CALL_FUN, FUN_ID_DISCONNECT, (LPARAM)GetLocalID());
+	::SendMessage(m_hRemoteId, UM_CALL_FUN, FUN_ID_DISCONNECT, (LPARAM)m_hLocalId);
 	m_hRemoteId = NULL;
 	m_RemoteBuf.Close();
 	return 0;
 }
 
-LRESULT SIpcConnection::CallFun(FunParams_Base * pParam)
+LRESULT SIpcConnection::CallFun(FunParams_Base * pParam) const
 {
 	if (m_hRemoteId == NULL)
 		return 0;
 
-	CParamStream ps(GetLocalBuffer(), true);
+	CParamStream ps(&m_localBuf, true);
 	pParam->ToStream4Input(ps);
-	LRESULT lRet = SendMessage(m_hRemoteId,UM_CALL_FUN, pParam->GetID(), (LPARAM)GetLocalID());
+	LRESULT lRet = SendMessage(m_hRemoteId,UM_CALL_FUN, pParam->GetID(), (LPARAM)m_hLocalId);
 	if (lRet != 0)
 	{
-		CParamStream ps2(GetLocalBuffer(), false);
+		CParamStream ps2(&m_localBuf, false);
 		pParam->FromStream4Output(ps2);
 	}
 	return lRet;
@@ -155,5 +155,6 @@ BOOL SIpcConnection::ProcessWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, L
 		return FALSE;
 	}
 	CParamStream ps(GetRemoteBuffer(), false);
-	return HandleFun(wParam, ps);
+	lResult = HandleFun(wParam, ps)?1:0;
+	return TRUE;
 }
