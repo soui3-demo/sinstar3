@@ -134,6 +134,7 @@
     <ClCompile Include="Minidump.cpp" />
     <ClCompile Include="ShellExecuteMonitor.cpp" />
     <ClCompile Include="Sinstar3Impl.cpp" />
+    <ClCompile Include="TextServiceProxy.cpp" />
     <ClCompile Include="ui\ImeWnd.cpp" />
     <ClCompile Include="ui\InputWnd.cpp" />
     <ClCompile Include="ui\SkinAwareWnd.cpp" />
@@ -189,6 +190,7 @@
     <ClInclude Include="Minidump.h" />
     <ClInclude Include="ShellExecuteMonitor.h" />
     <ClInclude Include="Sinstar3Impl.h" />
+    <ClInclude Include="TextServiceProxy.h" />
     <ClInclude Include="ui\ImeWnd.h" />
     <ClInclude Include="ui\InputWnd.h" />
     <ClInclude Include="ui\SkinAwareWnd.h" />

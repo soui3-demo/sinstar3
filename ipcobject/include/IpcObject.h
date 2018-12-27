@@ -5,6 +5,7 @@
 
 #include "paramstream.hpp"
 #include <map>
+#include <unknown/obj-ref-i.h>
 
 struct FunParams_Base
 {
@@ -17,7 +18,7 @@ struct FunParams_Base
 };
 
 #define FUN_BEGIN \
-LRESULT HandleFun(HWND hClient,UINT uMsg, CParamStream &ps){ \
+LRESULT HandleFun(SIpcObject* pIpcObj,UINT uMsg, CParamStream &ps){ \
 	LRESULT nRet = 0;\
 	bool bHandled = false; \
 
@@ -26,7 +27,7 @@ LRESULT HandleFun(HWND hClient,UINT uMsg, CParamStream &ps){ \
 	{\
 		x param; \
 		param.FromStream4Input(ps);\
-		nRet = fun(hClient,param); \
+		nRet = fun(pIpcObj,param); \
 		CParamStream psOut(ps.GetBuffer(),true);\
 		param.ToStream4Output(psOut);\
 		bHandled = true;\
@@ -40,6 +41,12 @@ enum {
 	FUN_ID_LOGIN = 100,
 	FUN_ID_LOGOUT,
 	FUN_ID_START,
+};
+
+class SIpcObject;
+struct IIpcClient : IObjRef
+{
+	virtual LRESULT HandleFun(SIpcObject *pIpcObj,UINT uFunID, CParamStream & ps) = 0;
 };
 
 class SIpcObject
@@ -67,15 +74,9 @@ public:
 
 protected:
 	virtual HWND GetIpcObjectID() = 0;
-
-	virtual LRESULT HandleReq(HWND hClient, UINT uMsgID) {
-		return HandleFunction(hClient, uMsgID);
+	virtual HRESULT CreateIpcClient(HWND hClient, IIpcClient ** ppClient) const {
+		return E_NOTIMPL;
 	}
-
-	virtual LRESULT HandleFun(HWND hClient, UINT uMsgID, CParamStream & ps) {
-		return 0;
-	}
-
 
 	LRESULT HandleFunction(HWND hClient, UINT uMsgID);
 	LRESULT OnLogin(HWND hClient);
@@ -83,8 +84,18 @@ protected:
 	LRESULT OnClientMsg(UINT uMsg,WPARAM wp,LPARAM lp);
 
 	CShareMemBuffer	m_buffer;
+	struct ClientData {
+		ClientData():pClient(NULL),pBuf(NULL){}
+		~ClientData()
+		{
+			if (pBuf) delete pBuf;
+			if (pClient) pClient->Release();
+		}
 
-	std::map<HWND, CShareMemBuffer*> m_mapClients;
+		IIpcClient		* pClient;
+		CShareMemBuffer * pBuf;
+	};
+	std::map<HWND, ClientData *> m_mapClients;
 
 };
 

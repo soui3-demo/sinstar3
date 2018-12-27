@@ -16,7 +16,7 @@ LRESULT SIpcObject::OnClientMsg(UINT uMsg,WPARAM wp,LPARAM lp)
 		return OnLogin((HWND)lp);
 	else if (wp == FUN_ID_LOGOUT)
 		return OnLogout((HWND)lp);
-	return HandleReq((HWND)lp,(UINT)wp);
+	return HandleFunction((HWND)lp,(UINT)wp);
 }
 
 
@@ -24,25 +24,32 @@ LRESULT SIpcObject::HandleFunction(HWND hClient, UINT uMsgID)
 {
 	if (m_mapClients.find(hClient) == m_mapClients.end())
 		return 0;
-	CShareMemBuffer *pData = m_mapClients[hClient];
-	CParamStream ps(pData, false);
-	return HandleFun(hClient, uMsgID, ps);
+	ClientData *pData = m_mapClients[hClient];
+	CParamStream ps(pData->pBuf, false);
+	return pData->pClient->HandleFun(this,uMsgID, ps);
 }
 
 LRESULT SIpcObject::OnLogin(HWND hClient)
 {
 	if (m_mapClients.find(hClient) != m_mapClients.end()) return 0;
 
-	CShareMemBuffer *pMemMapFile = new CShareMemBuffer;
+	ClientData * pClient = new ClientData;
+
+	HRESULT hr = CreateIpcClient(hClient, &pClient->pClient);
+	if (hr != S_OK || !pClient->pClient) goto error;
+	
+	pClient->pBuf = new CShareMemBuffer;
 	TCHAR szName[100];
 	GetMemMapFileByObjectID(hClient, szName);
-	if (!pMemMapFile->OpenMemFile(szName, 1 << 12))
+	if (!pClient->pBuf->OpenMemFile(szName, 1 << 12))
 	{
-		delete pMemMapFile;
-		return 0;
+		goto error;
 	}
-	m_mapClients[hClient] = pMemMapFile;
+	m_mapClients[hClient] = pClient;
 	return 1;
+error:
+	delete pClient;
+	return 0;
 }
 
 LRESULT SIpcObject::OnLogout(HWND hClient)
@@ -50,8 +57,8 @@ LRESULT SIpcObject::OnLogout(HWND hClient)
 	if (m_mapClients.find(hClient) == m_mapClients.end())
 		return 0;
 
-	CShareMemBuffer *pMemMapFile = m_mapClients[hClient];
-	delete pMemMapFile;
+	ClientData *pClient = m_mapClients[hClient];
+	delete pClient;
 	m_mapClients.erase(hClient);
 	return 1;
 }
@@ -73,7 +80,7 @@ int SIpcObject::Init(HWND hWnd,UINT uBufSize)
 void SIpcObject::Uninit()
 {
 	m_buffer.Close();
-	std::map<HWND, CShareMemBuffer*>::iterator it = m_mapClients.begin();
+	std::map<HWND, ClientData *>::iterator it = m_mapClients.begin();
 	while (it != m_mapClients.end())
 	{
 		delete it->second;

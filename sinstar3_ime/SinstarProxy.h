@@ -4,6 +4,49 @@
 #include "../include/unknown.h"
 #include "../ipcobject/include/IpcObject.h"
 #include "../include/protocol.h"
+#include <unknown\obj-ref-impl.hpp>
+
+class CTextServiceProxy : public SOUI::TObjRefImpl<IIpcClient>
+{
+public:
+	CTextServiceProxy(HWND hClient, ITextService * pTxtService) 
+		:m_hClient(hClient)
+		,m_pTxtService(pTxtService) 
+	{}
+protected:
+	LRESULT OnInputStringW(SIpcObject *pIpcObj, Param_InputStringW &param);
+	LRESULT OnIsCompositing(SIpcObject *pIpcObj, Param_IsCompositing &param);
+	LRESULT OnStartComposition(SIpcObject *pIpcObj, Param_StartComposition &param);
+	LRESULT OnReplaceSelCompositionW(SIpcObject *pIpcObj, Param_ReplaceSelCompositionW &param);
+	LRESULT OnUpdateResultAndCompositionStringW(SIpcObject *pIpcObj, Param_UpdateResultAndCompositionStringW &param);
+	LRESULT OnEndComposition(SIpcObject *pIpcObj, Param_EndComposition &param);
+	LRESULT OnGetImeContext(SIpcObject *pIpcObj, Param_GetImeContext &param);
+	LRESULT OnReleaseImeContext(SIpcObject *pIpcObj, Param_ReleaseImeContext &param);
+	LRESULT OnSetConversionMode(SIpcObject *pIpcObj, Param_SetConversionMode &param);
+	LRESULT OnGetConversionMode(SIpcObject *pIpcObj, Param_GetConversionMode &param);
+	LRESULT OnSetOpenStatus(SIpcObject *pIpcObj, Param_SetOpenStatus &param);
+	LRESULT OnGetOpenStatus(SIpcObject *pIpcObj, Param_GetOpenStatus &param);
+
+	FUN_BEGIN
+		FUN_HANDLER(Param_InputStringW, OnInputStringW)
+		FUN_HANDLER(Param_IsCompositing, OnIsCompositing)
+		FUN_HANDLER(Param_StartComposition, OnStartComposition)
+		FUN_HANDLER(Param_ReplaceSelCompositionW, OnReplaceSelCompositionW)
+		FUN_HANDLER(Param_UpdateResultAndCompositionStringW, OnUpdateResultAndCompositionStringW)
+		FUN_HANDLER(Param_EndComposition, OnEndComposition)
+		FUN_HANDLER(Param_GetImeContext, OnGetImeContext)
+		FUN_HANDLER(Param_ReleaseImeContext, OnReleaseImeContext)
+		FUN_HANDLER(Param_SetConversionMode, OnSetConversionMode)
+		FUN_HANDLER(Param_GetConversionMode, OnGetConversionMode)
+		FUN_HANDLER(Param_SetOpenStatus, OnSetOpenStatus)
+		FUN_HANDLER(Param_GetOpenStatus, OnGetOpenStatus)
+	FUN_END
+
+private:
+	HWND	m_hClient;
+	ITextService * m_pTxtService;
+
+};
 
 class CSinstarProxy : public ISinstar, public CUnknown, public SIpcObject
 {
@@ -32,33 +75,11 @@ public:
 
 protected:
 	virtual HWND GetIpcObjectID() override;
-protected:
-	LRESULT OnInputStringW(HWND hClient, Param_InputStringW &param);
-	LRESULT OnIsCompositing(HWND hClient, Param_IsCompositing &param);
-	LRESULT OnStartComposition(HWND hClient, Param_StartComposition &param);
-	LRESULT OnReplaceSelCompositionW(HWND hClient, Param_ReplaceSelCompositionW &param);
-	LRESULT OnUpdateResultAndCompositionStringW(HWND hClient, Param_UpdateResultAndCompositionStringW &param);
-	LRESULT OnEndComposition(HWND hClient, Param_EndComposition &param);
-	LRESULT OnGetImeContext(HWND hClient, Param_GetImeContext &param);
-	LRESULT OnReleaseImeContext(HWND hClient, Param_ReleaseImeContext &param);
-	LRESULT OnSetConversionMode(HWND hClient, Param_SetConversionMode &param);
-	LRESULT OnGetConversionMode(HWND hClient, Param_GetConversionMode &param);
-	LRESULT OnSetOpenStatus(HWND hClient, Param_SetOpenStatus &param);
-	LRESULT OnGetOpenStatus(HWND hClient, Param_GetOpenStatus &param);
-	FUN_BEGIN
-		FUN_HANDLER(Param_InputStringW, OnInputStringW)
-		FUN_HANDLER(Param_IsCompositing,OnIsCompositing)
-		FUN_HANDLER(Param_StartComposition,OnStartComposition)
-		FUN_HANDLER(Param_ReplaceSelCompositionW, OnReplaceSelCompositionW)
-		FUN_HANDLER(Param_UpdateResultAndCompositionStringW,OnUpdateResultAndCompositionStringW)
-		FUN_HANDLER(Param_EndComposition,OnEndComposition)
-		FUN_HANDLER(Param_GetImeContext, OnGetImeContext)
-		FUN_HANDLER(Param_ReleaseImeContext, OnReleaseImeContext)
-		FUN_HANDLER(Param_SetConversionMode, OnSetConversionMode)
-		FUN_HANDLER(Param_GetConversionMode, OnGetConversionMode)
-		FUN_HANDLER(Param_SetOpenStatus, OnSetOpenStatus)
-		FUN_HANDLER(Param_GetOpenStatus, OnGetOpenStatus)
-	FUN_END
+	virtual HRESULT CreateIpcClient(HWND hClient, IIpcClient **ppClient) const
+	{
+		*ppClient = new CTextServiceProxy(hClient, m_pTxtService);
+		return S_OK;
+	}
 public:
 	IUNKNOWN_BEGIN(IUnknown)
 	IUNKNOWN_END()

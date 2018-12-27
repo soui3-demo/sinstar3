@@ -157,73 +157,73 @@ EInputMethod CSinstarProxy::GetDefInputMode()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-LRESULT CSinstarProxy::OnInputStringW(HWND hClient, Param_InputStringW & param)
+LRESULT CTextServiceProxy::OnInputStringW(SIpcObject *pIpcObj, Param_InputStringW & param)
 {
 	m_pTxtService->InputStringW(param.buf.c_str(), param.buf.length());
 	return LRESULT(1);
 }
 
-LRESULT CSinstarProxy::OnIsCompositing(HWND hClient, Param_IsCompositing & param)
+LRESULT CTextServiceProxy::OnIsCompositing(SIpcObject *pIpcObj, Param_IsCompositing & param)
 {
 	param.bRet = m_pTxtService->IsCompositing();
 	return LRESULT(1);
 }
 
-LRESULT CSinstarProxy::OnStartComposition(HWND hClient, Param_StartComposition & param)
+LRESULT CTextServiceProxy::OnStartComposition(SIpcObject *pIpcObj, Param_StartComposition & param)
 {
 	m_pTxtService->StartComposition(param.lpImeContext);
 	return LRESULT(1);
 }
 
-LRESULT CSinstarProxy::OnReplaceSelCompositionW(HWND hClient, Param_ReplaceSelCompositionW & param)
+LRESULT CTextServiceProxy::OnReplaceSelCompositionW(SIpcObject *pIpcObj, Param_ReplaceSelCompositionW & param)
 {
 	m_pTxtService->ReplaceSelCompositionW(param.lpImeContext, param.nLeft, param.nRight, param.buf.c_str(), param.buf.length());
 	return LRESULT(1);
 }
 
-LRESULT CSinstarProxy::OnUpdateResultAndCompositionStringW(HWND hClient, Param_UpdateResultAndCompositionStringW & param)
+LRESULT CTextServiceProxy::OnUpdateResultAndCompositionStringW(SIpcObject *pIpcObj, Param_UpdateResultAndCompositionStringW & param)
 {
 	m_pTxtService->UpdateResultAndCompositionStringW(param.lpImeContext, param.resultStr.c_str(), param.resultStr.length(), param.compStr.c_str(), param.compStr.length());
 	return LRESULT(1);
 }
 
-LRESULT CSinstarProxy::OnEndComposition(HWND hClient, Param_EndComposition & param)
+LRESULT CTextServiceProxy::OnEndComposition(SIpcObject *pIpcObj, Param_EndComposition & param)
 {
 	m_pTxtService->EndComposition(param.lpImeContext);
 	return LRESULT(1);
 }
 
-LRESULT CSinstarProxy::OnGetImeContext(HWND hClient, Param_GetImeContext & param)
+LRESULT CTextServiceProxy::OnGetImeContext(SIpcObject *pIpcObj, Param_GetImeContext & param)
 {
 	param.lpImeContext = m_pTxtService->GetImeContext();
 	return LRESULT(1);
 }
 
-LRESULT CSinstarProxy::OnReleaseImeContext(HWND hClient, Param_ReleaseImeContext & param)
+LRESULT CTextServiceProxy::OnReleaseImeContext(SIpcObject *pIpcObj, Param_ReleaseImeContext & param)
 {
 	m_pTxtService->ReleaseImeContext(param.lpImeContext);
 	return LRESULT(1);
 }
 
-LRESULT CSinstarProxy::OnSetConversionMode(HWND hClient, Param_SetConversionMode & param)
+LRESULT CTextServiceProxy::OnSetConversionMode(SIpcObject *pIpcObj, Param_SetConversionMode & param)
 {
 	m_pTxtService->SetConversionMode(param.mode);
 	return LRESULT(1);
 }
 
-LRESULT CSinstarProxy::OnGetConversionMode(HWND hClient, Param_GetConversionMode & param)
+LRESULT CTextServiceProxy::OnGetConversionMode(SIpcObject *pIpcObj, Param_GetConversionMode & param)
 {
 	param.mode = m_pTxtService->GetConversionMode();
 	return LRESULT(1);
 }
 
-LRESULT CSinstarProxy::OnSetOpenStatus(HWND hClient, Param_SetOpenStatus & param)
+LRESULT CTextServiceProxy::OnSetOpenStatus(SIpcObject *pIpcObj, Param_SetOpenStatus & param)
 {
 	param.bRet = m_pTxtService->SetOpenStatus(param.lpImeContext, param.bOpen);
 	return LRESULT(1);
 }
 
-LRESULT CSinstarProxy::OnGetOpenStatus(HWND hClient, Param_GetOpenStatus & param)
+LRESULT CTextServiceProxy::OnGetOpenStatus(SIpcObject *pIpcObj, Param_GetOpenStatus & param)
 {
 	param.bOpen = m_pTxtService->GetOpenStatus(param.lpImeContext);
 	return LRESULT(1);
