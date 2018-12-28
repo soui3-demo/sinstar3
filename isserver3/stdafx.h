@@ -70,6 +70,8 @@ using namespace SOUI;
 #include "controls/SSkinAPNG.h"
 #include "controls/SSkinPNGX.h"
 #include "controls/SLineSkin.h"
+#include "controls/SQrCtrl.h"
+#include "controls/STabCtrlEx.h"
 
 #include "dataCenter/datacenter.h"
 #include "dataCenter/Settings.h"

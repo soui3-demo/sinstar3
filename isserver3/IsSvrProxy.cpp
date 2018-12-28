@@ -8,6 +8,7 @@
 #include <helper/STime.h>
 #include <process.h>
 #include "UpdateInfoDlg.h"
+#include "settings/ConfigDlg.h"
 
 #define TIMERID_DELAY_EXIT	200
 #define SPAN_DELAY_EXIT		5000
@@ -343,6 +344,12 @@ void CIsSvrProxy::OnMenuAbout(UINT uNotifyCode, int nID, HWND wndCtl)
 void CIsSvrProxy::OnMenuAutoExit(UINT uNotifyCode, int nID, HWND wndCtl)
 {
 	m_pCore->SetAutoQuit(!m_pCore->IsAutoQuit());
+}
+
+void CIsSvrProxy::OnMenuSettings(UINT uNotifyCode, int nID, HWND wndCtl)
+{
+	CConfigDlg config;
+	config.DoModal();
 }
 
 

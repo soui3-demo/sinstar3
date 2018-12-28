@@ -6,4 +6,5 @@
   <menuItem text="关于..." name="menu_about" id="100" />
   <menuItem text="自动退出" name="menu_auto" id="101"/>
   <menuItem text="强制退出" name="menu_exit" id="102"/>
+  <menuItem text="settings" name="menu_settings" id="103"/>
 </menuRoot>

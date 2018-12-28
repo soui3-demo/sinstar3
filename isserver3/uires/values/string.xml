@@ -6,4 +6,19 @@
     <prog value="prog"/>
     <update value="update"/>
     <new_ver_found value="发现新版本"/>
+    
+    <title_config value="系统设置"/>
+    <btn_close value="关闭"/>
+    <cfg_habit value="使用习惯"/>
+    <cfg_hotkey value="快捷键"/>
+    <cfg_associate value="联想"/>
+    <cfg_candidate value="重码"/>
+    <cfg_misc value="其它"/>
+    <cfg_about value="关于"/>
+    <cfg_tts value="TTS"/>
+    <cfg_pinyin value="启程拼音"/>
+    <cfg_about_title value="关于启程输入法"/>
+    <cfg_phraselib value="词库管理"/>
+    <cfg_celib value="外文词库"/>
+
   </string>

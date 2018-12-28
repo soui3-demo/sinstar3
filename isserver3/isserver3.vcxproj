@@ -105,6 +105,7 @@
     <ClCompile Include="Base64.cpp" />
     <ClCompile Include="BuildIndexProgWnd.cpp" />
     <ClCompile Include="CmdHandler.cpp" />
+    <ClCompile Include="controls\QR_Encode.cpp" />
     <ClCompile Include="controls\SApngPlayer.cpp" />
     <ClCompile Include="controls\SCandView.cpp" />
     <ClCompile Include="controls\SCaption2.cpp" />
@@ -116,11 +117,13 @@
     <ClCompile Include="controls\SLineSkin.cpp" />
     <ClCompile Include="controls\SMutexView.cpp" />
     <ClCompile Include="controls\SPhraseCand.cpp" />
+    <ClCompile Include="controls\SQrCtrl.cpp" />
     <ClCompile Include="controls\SSentView.cpp" />
     <ClCompile Include="controls\SSkinAPNG.cpp" />
     <ClCompile Include="controls\SSkinPNGX.cpp" />
     <ClCompile Include="controls\SSpellView.cpp" />
     <ClCompile Include="controls\SStatusBackground.cpp" />
+    <ClCompile Include="controls\STabCtrlEx.cpp" />
     <ClCompile Include="controls\SToggle2.cpp" />
     <ClCompile Include="dataCenter\DataCenter.cpp" />
     <ClCompile Include="dataCenter\Settings.cpp" />
@@ -132,6 +135,8 @@
     <ClCompile Include="AboutDlg.cpp" />
     <ClCompile Include="KeyMapDlg.cpp" />
     <ClCompile Include="Minidump.cpp" />
+    <ClCompile Include="settings\AddBlurDlg.cpp" />
+    <ClCompile Include="settings\ConfigDlg.cpp" />
     <ClCompile Include="ShellExecuteMonitor.cpp" />
     <ClCompile Include="Sinstar3Impl.cpp" />
     <ClCompile Include="TextServiceProxy.cpp" />
@@ -161,6 +166,7 @@
     <ClInclude Include="Base64.h" />
     <ClInclude Include="BuildIndexProgWnd.h" />
     <ClInclude Include="CmdHandler.h" />
+    <ClInclude Include="controls\QR_Encode.h" />
     <ClInclude Include="controls\SAniImgFrame.h" />
     <ClInclude Include="controls\SApngPlayer.h" />
     <ClInclude Include="controls\SCandView.h" />
@@ -173,11 +179,13 @@
     <ClInclude Include="controls\SLineSkin.h" />
     <ClInclude Include="controls\SMutexView.h" />
     <ClInclude Include="controls\SPhraseCand.h" />
+    <ClInclude Include="controls\SQrCtrl.h" />
     <ClInclude Include="controls\SSentView.h" />
     <ClInclude Include="controls\SSkinAPNG.h" />
     <ClInclude Include="controls\SSkinPNGX.h" />
     <ClInclude Include="controls\SSpellView.h" />
     <ClInclude Include="controls\SStatusBackground.h" />
+    <ClInclude Include="controls\STabCtrlEx.h" />
     <ClInclude Include="controls\SToggle2.h" />
     <ClInclude Include="dataCenter\DataCenter.h" />
     <ClInclude Include="dataCenter\Settings.h" />
@@ -188,6 +196,8 @@
     <ClInclude Include="AboutDlg.h" />
     <ClInclude Include="KeyMapDlg.h" />
     <ClInclude Include="Minidump.h" />
+    <ClInclude Include="settings\AddBlurDlg.h" />
+    <ClInclude Include="settings\ConfigDlg.h" />
     <ClInclude Include="ShellExecuteMonitor.h" />
     <ClInclude Include="Sinstar3Impl.h" />
     <ClInclude Include="TextServiceProxy.h" />
