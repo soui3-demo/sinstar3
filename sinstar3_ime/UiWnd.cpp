@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "UiWnd.h"
 #include "CompStrEx.h"
-
+#include "../helper/helper.h"
 #define HEI_LINEMARGIN	3
 #define TIMERID_CHKDEFIME	200
 
@@ -365,6 +365,8 @@ LRESULT CUiWnd::OnSetContext(BOOL bActivate,LPARAM lParam)
 BOOL CUiWnd::_InitSinstar3()
 {
 	m_pSinstar3 = new CSinstarProxy(this);
+	Helper_ChangeWindowMessageFilter(UM_CALL_FUN, MSGFLT_ADD);
+
 	m_pSinstar3->Init(m_hWnd, theModule->GetSvrPath());
 
 	if(!m_pSinstar3) return FALSE;

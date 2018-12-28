@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "sinstar3_tsf.h"
 #include "editsession.h"
-
+#include "../helper/helper.h"
 #define TIMERID_CHKDEFIME 100
 
 
@@ -392,6 +392,8 @@ BOOL   CSinstar3Tsf::ReleaseImeContext(LPVOID lpImeContext)
 BOOL CSinstar3Tsf::_InitSinstar3()
 {
 	m_pSinstar3 = new CSinstarProxy(this);
+	Helper_ChangeWindowMessageFilter(UM_CALL_FUN, MSGFLT_ADD);
+
 	m_pSinstar3->Init(m_hWnd, theModule->GetSvrPath());
 
 	m_pSinstar3->OnIMESelect(_bHasFocus);
