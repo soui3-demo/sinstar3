@@ -47,6 +47,7 @@ class SIpcConnection : IObjRef
 	friend class SIpcServer;
 public:
 	SIpcConnection();
+	virtual ~SIpcConnection() {}
 
 	LRESULT ConnectTo(HWND hRemote);
 
@@ -63,7 +64,8 @@ public:
 	BOOL ProcessWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lResult);
 
 	static void GetMemMapFileByObjectID(HWND hWnd, TCHAR *szName) {
-		_stprintf(szName, _T("ipc_client_%08x"), (DWORD)hWnd);
+		LPARAM tmp = (LPARAM)hWnd;
+		_stprintf(szName, _T("ipc_client_%08x"), (DWORD)(tmp&0xffffffff));
 	}
 
 protected:

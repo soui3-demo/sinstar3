@@ -43,7 +43,7 @@ basic_ostream<char, _Traits>& operator<<(
 template<>
 inline CParamStream & CParamStream::operator<<(const string & str)
 {
-	int nSize = str.size();
+	int nSize = (int)str.size();
 	GetBuffer()->Write((const BYTE*)&nSize, sizeof(int));
 	GetBuffer()->Write((const BYTE*)str.c_str(), nSize);
 	return *this;
@@ -64,7 +64,7 @@ inline CParamStream & CParamStream::operator >> (string & str)
 template<>
 inline CParamStream & CParamStream::operator<<(const wstring & str)
 {
-	int nSize = str.size();
+	int nSize = (int)str.size();
 	GetBuffer()->Write((const BYTE*)&nSize, sizeof(int));
 	GetBuffer()->Write((const BYTE*)str.c_str(), nSize*sizeof(wchar_t));
 	return *this;
@@ -87,7 +87,7 @@ basic_ostream<char, _Traits>& operator<<(
 	const wstring & value)
 {
 	char szBuf[500];
-	int nRet = WideCharToMultiByte(CP_ACP, 0, value.c_str(), value.size(), szBuf, 500, NULL, NULL);
+	int nRet = WideCharToMultiByte(CP_ACP, 0, value.c_str(), (int)value.size(), szBuf, 500, NULL, NULL);
 	szBuf[nRet] = 0;
 	_Ostr << szBuf;
 	return _Ostr;
@@ -97,8 +97,8 @@ basic_ostream<char, _Traits>& operator<<(
 template<>
 inline CParamStream & CParamStream::operator<<(const POINT & pt)
 {
-	GetBuffer()->Write((const BYTE*)(int)&pt.x, sizeof(int));
-	GetBuffer()->Write((const BYTE*)(int)&pt.y, sizeof(int));
+	GetBuffer()->Write((const BYTE*)&pt.x, sizeof(int));
+	GetBuffer()->Write((const BYTE*)&pt.y, sizeof(int));
 	return *this;
 }
 template<>

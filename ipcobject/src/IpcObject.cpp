@@ -35,7 +35,7 @@ LRESULT SIpcServer::OnClientMsg(UINT uMsg,WPARAM wp,LPARAM lp)
 	if (it == m_mapClients.end())
 		return 0;
 	CParamStream ps(it->second->GetRemoteBuffer(), false);
-	return it->second->HandleFun(wp, ps)?1:0;
+	return it->second->HandleFun((UINT)wp, ps)?1:0;
 }
 
 LRESULT SIpcServer::OnConnect(HWND hClient)
@@ -155,6 +155,6 @@ BOOL SIpcConnection::ProcessWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, L
 		return FALSE;
 	}
 	CParamStream ps(GetRemoteBuffer(), false);
-	lResult = HandleFun(wParam, ps)?1:0;
+	lResult = HandleFun((UINT)wParam, ps)?1:0;
 	return TRUE;
 }

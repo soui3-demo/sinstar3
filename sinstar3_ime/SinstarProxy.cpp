@@ -151,7 +151,7 @@ EInputMethod CSinstarProxy::GetDefInputMode()
 ////////////////////////////////////////////////////////////////////////////////
 void CClientConnection::OnInputStringW( Param_InputStringW & param)
 {
-	m_pTxtService->InputStringW(param.buf.c_str(), param.buf.length());
+	m_pTxtService->InputStringW(param.buf.c_str(), (int)param.buf.length());
 
 }
 
@@ -169,13 +169,13 @@ void CClientConnection::OnStartComposition( Param_StartComposition & param)
 
 void CClientConnection::OnReplaceSelCompositionW( Param_ReplaceSelCompositionW & param)
 {
-	m_pTxtService->ReplaceSelCompositionW(param.lpImeContext, param.nLeft, param.nRight, param.buf.c_str(), param.buf.length());
+	m_pTxtService->ReplaceSelCompositionW(param.lpImeContext, param.nLeft, param.nRight, param.buf.c_str(), (int)param.buf.length());
 
 }
 
 void CClientConnection::OnUpdateResultAndCompositionStringW( Param_UpdateResultAndCompositionStringW & param)
 {
-	m_pTxtService->UpdateResultAndCompositionStringW(param.lpImeContext, param.resultStr.c_str(), param.resultStr.length(), param.compStr.c_str(), param.compStr.length());
+	m_pTxtService->UpdateResultAndCompositionStringW(param.lpImeContext, param.resultStr.c_str(), (int)param.resultStr.length(), param.compStr.c_str(), (int)param.compStr.length());
 
 }
 
