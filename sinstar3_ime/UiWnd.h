@@ -2,7 +2,7 @@
 #include "simplewnd.h"
 
 #define  UICLASSNAME _T("sinstar3_uiwnd")
-#include "SinstarProxy.h"
+#include "../sinstar3_proxy/SinstarProxy.h"
 
 class CUiWnd :
 	public CSimpleWnd,

@@ -1,7 +1,6 @@
 #include "StdAfx.h"
 #include "UiWnd.h"
 #include "CompStrEx.h"
-#include "SinstarProxy.h"
 
 #define HEI_LINEMARGIN	3
 #define TIMERID_CHKDEFIME	200
