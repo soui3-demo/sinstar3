@@ -232,6 +232,10 @@
     <Xml Include="uires\xml\dlg_keymap.xml" />
     <Xml Include="uires\xml\dlg_update_info.xml" />
     <Xml Include="uires\xml\wnd_build_index_prog.xml" />
+    <Xml Include="uires\xml\wnd_composition.xml" />
+    <Xml Include="uires\xml\wnd_spchar.xml" />
+    <Xml Include="uires\xml\wnd_status_bar.xml" />
+    <Xml Include="uires\xml\wnd_tip.xml" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="uires\icon\logo.ico" />
