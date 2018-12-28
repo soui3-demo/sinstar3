@@ -110,7 +110,7 @@ BOOL CSvrConnection::GetOpenStatus(LPVOID lpImeContext) const
 void CSvrConnection::HandleCreate(Param_Create & param)
 {
 	SASSERT(!m_pSinstar);
-	m_pSinstar = new CSinstar3Impl(this, param.hOwner);
+	m_pSinstar.Attach(new CSinstar3Impl(this, param.hOwner));
 }
 
 void CSvrConnection::HandleDestroy(Param_Destroy & param)
