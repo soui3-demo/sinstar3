@@ -48,9 +48,13 @@ private:
 class CSinstarProxy : public ISinstar, public CUnknown
 {
 public:
-	CSinstarProxy(HWND hClient,ITextService *pTxtService);
+	CSinstarProxy(HWND hClient, ITextService *pTxtService);
 	~CSinstarProxy();
 
+	BOOL ProcessWindowMessage(HWND hWnd, UINT uMsg, WPARAM wp, LPARAM lp, LRESULT &result)
+	{
+		return m_conn.ProcessWindowMessage(hWnd, uMsg, wp, lp, result);
+	}
 public:
 	// Í¨¹ý ISinstar ¼Ì³Ð
 	virtual void OnIMESelect(BOOL bSelect) override;

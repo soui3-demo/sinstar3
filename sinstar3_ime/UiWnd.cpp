@@ -142,6 +142,13 @@ LRESULT CUiWnd::WindowProc(UINT uMsg,WPARAM wParam,LPARAM lParam)
 		return 0;
 	case WM_IME_ENDCOMPOSITION:
 		return 0;
+	default:
+		{
+			LRESULT result;
+			BOOL bHandled = m_pSinstar3->ProcessWindowMessage(m_hWnd, uMsg, wParam, lParam, result);
+			if (bHandled) return result;
+		}
+		break;
 	}
 
 	return __super::WindowProc(uMsg,wParam,lParam);

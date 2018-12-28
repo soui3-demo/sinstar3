@@ -2,6 +2,7 @@
 #include "simplewnd.h"
 
 #define  UICLASSNAME _T("sinstar3_uiwnd")
+#include "SinstarProxy.h"
 
 class CUiWnd :
 	public CSimpleWnd,
@@ -39,7 +40,7 @@ public:
 	BOOL SetOpenStatus(LPVOID lpImeContext,BOOL bOpen);
 	BOOL GetOpenStatus(LPVOID lpImeContext) const;
 
-	ISinstar* m_pSinstar3;
+	CSinstarProxy * m_pSinstar3;
 	CImeContext *m_pCurContext;
 	BOOL		m_bCompositing;
 
