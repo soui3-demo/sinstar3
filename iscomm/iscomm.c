@@ -127,10 +127,9 @@ PMSGDATA ISComm_OnSeverNotify(HWND hWnd,WPARAM wParam,LPARAM lParam)
 	return s_pDataAck;
 }
 
-BOOL ISComm_OpenServer()
+void ISComm_SetServerHwnd(HWND hSvrWnd)
 {
-	s_hWndServer = FindWindow(NULL, SVR_PROXY_NAME);
-	return s_hWndServer != 0;
+	s_hWndServer = hSvrWnd;
 }
 
 //生成一个保证不会被重复的客户ID
@@ -158,28 +157,21 @@ HANDLE ISComm_GenerateClientID(DWORD *pdwID)
 //----------------------------------------------
 BOOL ISComm_Login(HWND hWnd)
 {
-
-	if(!s_hWndServer)
+	if(hWnd && s_hWndServer)
 	{
-		LPBYTE pBuf=NULL;
-		s_hMutexReq=OpenMutex(SYNCHRONIZE,FALSE,NAME_REQ_SYNCOMMUTEX);
-		if(!s_hMutexReq)
+		if (s_uCount == 0)
 		{
-			if(!ISComm_OpenServer()) return FALSE;
+			LPBYTE pBuf = NULL;
 			s_hMutexReq = OpenMutex(SYNCHRONIZE, FALSE, NAME_REQ_SYNCOMMUTEX);
+			//打开双向通讯数据通道
+			s_hMapDataReq = OpenFileMapping(FILE_MAP_READ | FILE_MAP_WRITE, FALSE, NAME_REQ_MAPFILE);
+			s_pDataReq = (PMSGDATA)MapViewOfFile(s_hMapDataReq, FILE_MAP_READ | FILE_MAP_WRITE, 0, 0, 0);
+
+			s_hMapDataAck = OpenFileMapping(FILE_MAP_READ, FALSE, NAME_ACK_MAPFILE);
+			pBuf = (LPBYTE)MapViewOfFile(s_hMapDataAck, FILE_MAP_READ, 0, 0, 0);
+			memcpy(&s_hWndServer, pBuf, sizeof(DWORD));
+			s_pDataAck = (PMSGDATA)(pBuf + sizeof(DWORD));
 		}
-		//打开双向通讯数据通道
-
-		s_hMapDataReq=OpenFileMapping(FILE_MAP_READ|FILE_MAP_WRITE,FALSE,NAME_REQ_MAPFILE);
-		s_pDataReq=(PMSGDATA)MapViewOfFile(s_hMapDataReq,FILE_MAP_READ|FILE_MAP_WRITE,0,0,0);
-
-		s_hMapDataAck=OpenFileMapping(FILE_MAP_READ,FALSE,NAME_ACK_MAPFILE);
-		pBuf=(LPBYTE)MapViewOfFile(s_hMapDataAck,FILE_MAP_READ,0,0,0);
-		memcpy(&s_hWndServer,pBuf,sizeof(DWORD));
-		s_pDataAck=(PMSGDATA)(pBuf+sizeof(DWORD));
-	}
-	if(hWnd)
-	{
 		if(ISComm_SendMsg(CT_LOGIN,NULL,0,hWnd)!=ISACK_SUCCESS)
 		{
 			return FALSE;

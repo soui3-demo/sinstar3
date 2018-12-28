@@ -133,6 +133,8 @@ DWORD ISComm_SendMsg(DWORD dwType,const LPVOID pData,short sSize,HWND hWnd);
 DWORD ISComm_PostMsg(DWORD dwType,const LPVOID pData,short sSize,HWND hWnd);
 PMSGDATA ISComm_GetData();
 
+void ISComm_SetServerHwnd(HWND hSvrWnd);
+
 BOOL ISComm_Login(HWND hWnd);
 void  ISComm_Logout(HWND hWnd);
 

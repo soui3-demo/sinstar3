@@ -61,24 +61,6 @@ int  CUtils::GB2GIB5(LPCTSTR szBuf, int nBufLen, TCHAR *szBig5, int nOutLen)
 	return LCMapString(wLCID, LCMAP_TRADITIONAL_CHINESE, szBuf, nBufLen*sizeof(TCHAR), szBig5, nOutLen * sizeof(TCHAR));
 }
 
-typedef BOOL(WINAPI *FunChangeMsgFilter)(UINT, DWORD);
-
-BOOL CUtils::ChangeWindowMessageFilter(UINT message, DWORD dwFlag)
-{
-	HMODULE hUser32 = GetModuleHandle(_T("user32.dll"));
-	if (hUser32)
-	{
-		FunChangeMsgFilter fMsgFilter = (FunChangeMsgFilter)GetProcAddress(hUser32, "ChangeWindowMessageFilter");
-		if (!fMsgFilter) return FALSE;
-		return fMsgFilter(message, dwFlag);
-	}
-	else
-	{
-		return FALSE;
-	}
-}
-
-
 BOOL CUtils::CmdExecute(BYTE * pszBuf)
 {
 	UINT_PTR uRet = FALSE;
