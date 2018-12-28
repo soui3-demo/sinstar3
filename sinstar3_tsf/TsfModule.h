@@ -6,10 +6,10 @@ class CClassFactory;
 class CTsfModule : public CModuleRef
 {
 public:
-	CTsfModule(HINSTANCE hInst, LPCTSTR pszDataPath);
+	CTsfModule(HINSTANCE hInst, LPCTSTR pszSvrPath);
 	~CTsfModule(void);
 
-	LPCTSTR GetDataPath() const{return m_szDataPath;}
+	LPCTSTR GetSvrPath() const{return m_szSvrPath;}
 
 	virtual void OnInit();
 
@@ -22,7 +22,7 @@ protected:
 
 	CClassFactory *m_classFactory;
 
-	TCHAR	m_szDataPath[MAX_PATH];
+	TCHAR	m_szSvrPath[MAX_PATH];
 };
 
 

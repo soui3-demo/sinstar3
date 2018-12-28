@@ -364,7 +364,9 @@ LRESULT CUiWnd::OnSetContext(BOOL bActivate,LPARAM lParam)
 
 BOOL CUiWnd::_InitSinstar3()
 {
-	m_pSinstar3= new CSinstarProxy(m_hWnd,this);
+	m_pSinstar3 = new CSinstarProxy(this);
+	m_pSinstar3->Init(m_hWnd, theModule->GetSvrPath());
+
 	if(!m_pSinstar3) return FALSE;
 	m_pSinstar3->OnIMESelect(m_bActivate);
 	HIMC hIMC=(HIMC)GetWindowLongPtr(m_hWnd,IMMGWLP_IMC);

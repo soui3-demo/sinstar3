@@ -391,7 +391,8 @@ BOOL   CSinstar3Tsf::ReleaseImeContext(LPVOID lpImeContext)
 
 BOOL CSinstar3Tsf::_InitSinstar3()
 {
-	m_pSinstar3 = new CSinstarProxy(m_hWnd, this);
+	m_pSinstar3 = new CSinstarProxy(this);
+	m_pSinstar3->Init(m_hWnd, theModule->GetSvrPath());
 
 	m_pSinstar3->OnIMESelect(_bHasFocus);
  	m_pSinstar3->OnSetFocus(_bHasFocus && _bInEditDocument);

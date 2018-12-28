@@ -21,7 +21,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
 			if(ret == ERROR_SUCCESS)
 			{
 				ULONG len = MAX_PATH;
-				reg.QueryStringValue(_T("path_client"),szPath,&len);
+				reg.QueryStringValue(_T("path_svr"),szPath,&len);
 				reg.Close();
 			}
 			theModule = new CTsfModule(hInstance,szPath);

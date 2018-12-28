@@ -48,8 +48,10 @@ private:
 class CSinstarProxy : public ISinstar, public CUnknown
 {
 public:
-	CSinstarProxy(HWND hClient, ITextService *pTxtService);
+	CSinstarProxy(ITextService *pTxtService);
 	~CSinstarProxy();
+
+	BOOL Init(HWND hClient,  LPCTSTR pszSvrPath);
 
 	BOOL ProcessWindowMessage(HWND hWnd, UINT uMsg, WPARAM wp, LPARAM lp, LRESULT &result)
 	{

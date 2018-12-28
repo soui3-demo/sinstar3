@@ -4,10 +4,10 @@
 #include "sinstar3_tsf.h"
 #include "../sinstar3_proxy/SimpleWnd.h"
 
-CTsfModule::CTsfModule(HINSTANCE hInst, LPCTSTR pszDataPath):CModuleRef(hInst),m_classFactory(NULL)
+CTsfModule::CTsfModule(HINSTANCE hInst, LPCTSTR pszSvrPath):CModuleRef(hInst),m_classFactory(NULL)
 {
 	CSimpleWnd::RegisterWndClass(hInst);
-	_tcscpy(m_szDataPath,pszDataPath);
+	_tcscpy(m_szSvrPath, pszSvrPath);
 }
 
 CTsfModule::~CTsfModule(void)

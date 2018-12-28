@@ -4,15 +4,15 @@
 class CImeModule : public CModuleRef
 {
 public:
-	CImeModule(HINSTANCE hInst, LPCTSTR pszDataPath);
+	CImeModule(HINSTANCE hInst, LPCTSTR pszSvrPath);
 	~CImeModule(void);
 
-	LPCTSTR GetDataPath() const{return m_szDataPath;}
+	LPCTSTR GetSvrPath() const{return m_szSvrPath;}
 
 	DWORD GetSysInfoFlags() const {return m_dwSystemInfoFlags;}
 	void SetSysInfoFlags(DWORD dwFlags){m_dwSystemInfoFlags = dwFlags;}
 protected:
-	TCHAR m_szDataPath[MAX_PATH];
+	TCHAR m_szSvrPath[MAX_PATH];
 	DWORD m_dwSystemInfoFlags;
 };
 

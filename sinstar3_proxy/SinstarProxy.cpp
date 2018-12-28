@@ -1,16 +1,10 @@
 #include "stdafx.h"
 #include "SinstarProxy.h"
+#include <shellapi.h>
 
-CSinstarProxy::CSinstarProxy(HWND hClient, ITextService *pTxtService):m_conn(pTxtService)
+CSinstarProxy::CSinstarProxy(ITextService *pTxtService):m_conn(pTxtService)
 {
-	m_conn.SetLocalId(hClient,1<<12);
-	HWND hSvr = FindWindow(NULL, SINSTAR3_SERVER_HWND);
-	SASSERT(hSvr);
 
-	m_conn.ConnectTo(hSvr);
-	Param_Create param;
-	param.hOwner = GetActiveWindow();
-	m_conn.CallFun(&param);
 }
 
 
@@ -19,6 +13,39 @@ CSinstarProxy::~CSinstarProxy()
 	Param_Destroy param;
 	m_conn.CallFun(&param);
 	m_conn.Disconnect();
+}
+
+BOOL CSinstarProxy::Init(HWND hClient, LPCTSTR pszSvrPath)
+{
+	m_conn.SetLocalId(hClient, 1 << 12);
+	HWND hSvr = FindWindow(NULL, SINSTAR3_SERVER_HWND);
+	if (!hSvr)
+	{
+		SHELLEXECUTEINFO ShExecInfo = { 0 };
+		ShExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
+		ShExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
+		ShExecInfo.hwnd = NULL;
+		ShExecInfo.lpVerb = _T("open");
+		ShExecInfo.lpFile = pszSvrPath;
+		ShExecInfo.lpParameters = NULL;
+		ShExecInfo.lpDirectory = NULL;
+		ShExecInfo.nShow = SW_HIDE;
+		ShExecInfo.hInstApp = NULL;
+		if (!::ShellExecuteEx(&ShExecInfo))
+			return FALSE;
+		SASSERT(ShExecInfo.hProcess);
+		WaitForInputIdle(ShExecInfo.hProcess, 1000);
+		CloseHandle(ShExecInfo.hProcess);
+
+		hSvr = FindWindow(NULL, SINSTAR3_SERVER_HWND);
+	}
+	SASSERT(hSvr);
+
+	m_conn.ConnectTo(hSvr);
+	Param_Create param;
+	param.hOwner = GetActiveWindow();
+	m_conn.CallFun(&param);
+	return TRUE;
 }
 
 void CSinstarProxy::OnIMESelect(BOOL bSelect)
