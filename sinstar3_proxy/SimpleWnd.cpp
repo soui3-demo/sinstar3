@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+#include "stdafx.h"
 #include "SimpleWnd.h"
 
 CSimpleWnd::CSimpleWnd(void)
@@ -57,14 +57,14 @@ LRESULT CSimpleWnd::WindowProc(UINT uMsg,WPARAM wParam,LPARAM lParam)
 
 void CSimpleWnd::Attach(HWND hWnd)
 {
-	_ASSERT(GetWindowLongPtr(hWnd,GWLP_USERDATA)==0 && m_hWnd==NULL);
+	assert(GetWindowLongPtr(hWnd,GWLP_USERDATA)==0 && m_hWnd==NULL);
 	SetWindowLongPtr(hWnd,GWLP_USERDATA,(LONG_PTR)this);
 	m_hWnd=hWnd;
 }
 
 void CSimpleWnd::Detatch()
 {
-	_ASSERT(m_hWnd);
+	assert(m_hWnd);
 	SetWindowLongPtr(m_hWnd,GWLP_USERDATA,NULL);
 	m_hWnd=0;
 }

@@ -1,6 +1,10 @@
 #pragma once
 
 #include <Ctffunc.h>
+#include "../sinstar3_proxy/SimpleWnd.h"
+#include "../sinstar3_proxy/SinstarProxy.h"
+
+#define  UICLASSNAME _T("sinstar3_tsfwnd")
 
 class CSinstar3Tsf : public CUnknown,
 					 public ITfTextInputProcessorEx,
@@ -12,7 +16,8 @@ class CSinstar3Tsf : public CUnknown,
 					 public ITfTextLayoutSink,
 					 public ITfFnConfigure,
 					 public ITfCompartmentEventSink,
-					 public ITextService
+					 public ITextService,
+					 public CSimpleWnd
 {
 public:
 	// CClassFactory factory callback
@@ -152,7 +157,7 @@ private:
 	BOOL _bKeyUpTested;
 
 public:
-	ISinstar*   m_pSinstar3;
+	CSinstarProxy*   m_pSinstar3;
 	BOOL		_bHasFocus;
 	BOOL		_bInKeyProc;
 

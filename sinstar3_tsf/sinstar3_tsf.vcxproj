@@ -89,7 +89,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SOUIPATH)\SOUI\include;$(SOUIPATH)\utilities\include;$(SOUIPATH)\config;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SOUIPATH)\SOUI\include;$(SOUIPATH)\utilities\include;$(SOUIPATH)\config;..\ipcobject\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SINSTAR3_TSF_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -99,7 +99,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>souid.lib;utilitiesd.lib;helperd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>helperd.lib;ipcobjectd.lib;sinstar3_proxyd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SOUIPATH)\bin;..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>sinstar3_tsf.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -117,7 +117,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SOUIPATH)\SOUI\include;$(SOUIPATH)\utilities\include;$(SOUIPATH)\config;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SOUIPATH)\SOUI\include;$(SOUIPATH)\utilities\include;$(SOUIPATH)\config;..\ipcobject\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SINSTAR3_TSF_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -127,7 +127,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>souid.lib;utilitiesd.lib;helperd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>helperd.lib;ipcobjectd.lib;sinstar3_proxyd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SOUIPATH)\bin64;..\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>sinstar3_tsf.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -143,7 +143,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(SOUIPATH)\SOUI\include;$(SOUIPATH)\utilities\include;$(SOUIPATH)\config;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SOUIPATH)\SOUI\include;$(SOUIPATH)\utilities\include;$(SOUIPATH)\config;..\ipcobject\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SINSTAR3_TSF_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -152,7 +152,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>soui.lib;utilities.lib;helper.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>helper.lib;ipcobject.lib;sinstar3_proxy.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SOUIPATH)\bin;..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>sinstar3_tsf.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -169,7 +169,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(SOUIPATH)\SOUI\include;$(SOUIPATH)\utilities\include;$(SOUIPATH)\config;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SOUIPATH)\SOUI\include;$(SOUIPATH)\utilities\include;$(SOUIPATH)\config;..\ipcobject\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SINSTAR3_TSF_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -184,12 +184,11 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX64</TargetMachine>
-      <AdditionalDependencies>soui.lib;utilities.lib;helper.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>helper.lib;ipcobject.lib;sinstar3_proxy.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SOUIPATH)\bin64;..\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\core_loader\core_loader.cpp" />
     <ClCompile Include="ClassFactory.cpp" />
     <ClCompile Include="compartment.cpp" />
     <ClCompile Include="composition.cpp" />
@@ -210,7 +209,6 @@
     <None Include="sinstar3_tsf.def" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\core_loader\core_loader.h" />
     <ClInclude Include="..\include\module_ref.h" />
     <ClInclude Include="..\include\sinstar3_guids.h" />
     <ClInclude Include="ClassFactory.h" />

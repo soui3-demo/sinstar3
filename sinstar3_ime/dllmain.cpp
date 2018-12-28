@@ -1,6 +1,5 @@
 // dllmain.cpp : 定义 DLL 应用程序的入口点。
 #include "stdafx.h"
-#include "uiwnd.h"
 #include <ShlObj.h>
 #include "ImeModule.h"
 #include "ImeMgr.h"
@@ -35,14 +34,12 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 			}
 			theModule = new CImeModule(hModule,szPath);
 		}
-		CUiWnd::RegisterClass(hModule);
 		break;
 	case DLL_THREAD_ATTACH:
 		break;
 	case DLL_THREAD_DETACH:
 		break;
 	case DLL_PROCESS_DETACH:
-		CUiWnd::UnregisterClass(hModule);
 		delete theModule;
 		break;
 	}

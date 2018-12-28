@@ -5,6 +5,7 @@
 #define TIMERID_CHKDEFIME 100
 
 
+
 /* static */
 HRESULT CSinstar3Tsf::CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj)
 {
@@ -39,6 +40,7 @@ CSinstar3Tsf::CSinstar3Tsf()
 {
     theModule->AddRef();
 
+	Create(0, WS_POPUP, HWND_MESSAGE, 0, theModule->GetModule());
     //
     // Initialize the thread manager pointer.
     //
@@ -88,6 +90,7 @@ CSinstar3Tsf::CSinstar3Tsf()
 
 CSinstar3Tsf::~CSinstar3Tsf()
 {
+	Destroy();
 	Deactivate();
     theModule->Release();
 }
@@ -242,7 +245,6 @@ STDMETHODIMP CSinstar3Tsf::OnLayoutChange(ITfContext *pContext, TfLayoutCode lco
 
 STDMETHODIMP CSinstar3Tsf::Show(	HWND hwndParent,LANGID langid,REFGUID rguidProfile)
 {
-	CCoreLoader::GetInstance().Sinstar3_OpenConfig(hwndParent);
 	return S_OK;
 }
 
@@ -389,10 +391,9 @@ BOOL   CSinstar3Tsf::ReleaseImeContext(LPVOID lpImeContext)
 
 BOOL CSinstar3Tsf::_InitSinstar3()
 {
-	m_pSinstar3=CCoreLoader::GetInstance().Sinstar3_Create(this,GetActiveWnd());
+	m_pSinstar3 = new CSinstarProxy(m_hWnd, this);
 
-	if(!m_pSinstar3) return FALSE;
- 	m_pSinstar3->OnIMESelect(_bHasFocus);
+	m_pSinstar3->OnIMESelect(_bHasFocus);
  	m_pSinstar3->OnSetFocus(_bHasFocus && _bInEditDocument);
  	OnChange(GUID_COMPARTMENT_KEYBOARD_OPENCLOSE);
  	OnChange(GUID_COMPARTMENT_KEYBOARD_INPUTMODE_CONVERSION);
@@ -404,7 +405,7 @@ BOOL CSinstar3Tsf::_UninitSinstar3()
 	if(m_pSinstar3)
 	{
 		m_pSinstar3->OnIMESelect(FALSE);
-		CCoreLoader::GetInstance().Sinstar3_Delete(m_pSinstar3);
+		delete m_pSinstar3;
 		m_pSinstar3=NULL;
 	}
 	return TRUE;

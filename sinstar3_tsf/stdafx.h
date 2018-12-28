@@ -15,7 +15,6 @@
 #include <msctf.h>
 #include <atl.mini/SComCli.h>
 
-#include "../core_loader/core_loader.h"
 #include "../include/unknown.h"
 #include "../include/reg.h"
 #include "../include/version.h"

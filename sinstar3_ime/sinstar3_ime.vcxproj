@@ -202,7 +202,6 @@
     <ClCompile Include="imm_sinstar3.cpp" />
     <ClCompile Include="imm_unimp.cpp" />
     <ClCompile Include="mem_dc.cpp" />
-    <ClCompile Include="SimpleWnd.cpp" />
     <ClCompile Include="stdafx.cpp">
       <ShowIncludes Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ShowIncludes>
       <ShowIncludes Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ShowIncludes>
@@ -226,7 +225,6 @@
     <ClInclude Include="Imm.h" />
     <ClInclude Include="mem_dc.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="SimpleWnd.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="UiWnd.h" />

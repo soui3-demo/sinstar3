@@ -381,6 +381,7 @@ echo #include "stdafx.h"&gt;&gt;stdafx.h.cpp</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="SimpleWnd.cpp" />
     <ClCompile Include="SinstarProxy.cpp" />
     <ClCompile Include="stdafx.h.cpp">
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(NOINHERIT)</ForcedIncludeFiles>
@@ -398,6 +399,7 @@ echo #include "stdafx.h"&gt;&gt;stdafx.h.cpp</Command>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="SimpleWnd.h" />
     <ClInclude Include="SinstarProxy.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
