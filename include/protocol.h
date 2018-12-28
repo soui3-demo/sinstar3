@@ -122,7 +122,9 @@ basic_ostream<char, _Traits>& operator<<(
 }
 
 enum {
-	ISinstar_OnImeSelect=FUN_ID_START,
+	ISinstar_Create = FUN_ID_START,
+	ISinstar_Destroy,
+	ISinstar_OnImeSelect,
 	ISinstar_OnCompositionStarted,
 	ISinstar_OnCompositionChanged,
 	ISinstar_OnCompositionTerminated,
@@ -151,6 +153,19 @@ enum {
 	ITextService_GetConversionMode,
 	ITextService_SetOpenStatus,
 	ITextService_GetOpenStatus,
+};
+
+struct Param_Create : FunParams_Base
+{
+	HWND hOwner;
+	FUNID(ISinstar_Create)
+		PARAMS1(Input, hOwner)
+		TOSTR1(hOwner)
+};
+
+struct Param_Destroy : FunParams_Base
+{
+	FUNID(ISinstar_Destroy)
 };
 
 struct Param_OnImeSelect : FunParams_Base

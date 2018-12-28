@@ -8,11 +8,16 @@ CSinstarProxy::CSinstarProxy(HWND hClient, ITextService *pTxtService):m_conn(pTx
 	SASSERT(hSvr);
 
 	m_conn.ConnectTo(hSvr);
+	Param_Create param;
+	param.hOwner = GetActiveWindow();
+	m_conn.CallFun(&param);
 }
 
 
 CSinstarProxy::~CSinstarProxy()
 {
+	Param_Destroy param;
+	m_conn.CallFun(&param);
 	m_conn.Disconnect();
 }
 

@@ -8,13 +8,9 @@
 
 class CSvrConnection : public ITextService, public SOUI::TObjRefImpl<SIpcConnection> {
 public:
-	CSvrConnection::CSvrConnection(ISinstar	*pSinstar):m_pSinstar(pSinstar)
-	{
-	}
+	CSvrConnection::CSvrConnection();
 
-	CSvrConnection::~CSvrConnection(void)
-	{
-	}
+	CSvrConnection::~CSvrConnection(void);
 public:
 	virtual BOOL InputStringW(LPCWSTR pszBuf, int nLen);
 
@@ -42,6 +38,8 @@ public:
 
 
 protected:
+	void HandleCreate(Param_Create &param);
+	void HandleDestroy(Param_Destroy &param);
 	void HandleOnImeSelect(Param_OnImeSelect & param);
 	void HandleOnCompositionStarted(Param_OnCompositionStarted &param);
 	void HandleOnCompositionChanged(Param_OnCompositionChanged &param);
@@ -60,6 +58,8 @@ protected:
 	void HandleGetDefInputMode(Param_GetDefInputMode &param);
 
 	FUN_BEGIN
+		FUN_HANDLER(Param_Create,HandleCreate)
+		FUN_HANDLER(Param_Destroy, HandleDestroy)
 		FUN_HANDLER(Param_OnImeSelect, HandleOnImeSelect)
 		FUN_HANDLER(Param_OnCompositionStarted, HandleOnCompositionStarted)
 		FUN_HANDLER(Param_OnCompositionChanged, HandleOnCompositionChanged)
@@ -78,19 +78,5 @@ protected:
 		FUN_HANDLER(Param_GetDefInputMode, HandleGetDefInputMode)
 	FUN_END
 private:
-	ISinstar	*m_pSinstar;
-};
-
-class CServerObject: public SIpcServer
-{
-public:
-	CServerObject(HWND hSvr) :m_hSvr(hSvr) {}
-	~CServerObject(void) {}
-
-protected:
-	// Í¨¹ý SIpcServer ¼Ì³Ð
-	virtual HWND GetSvrId() override;
-	virtual HRESULT CreateConnection(SIpcConnection ** ppConnection) const override;
-private:
-	HWND m_hSvr;
+	SComPtr<ISinstar>	m_pSinstar;
 };

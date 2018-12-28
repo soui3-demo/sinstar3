@@ -16,8 +16,6 @@
 
 #define MSG_NAME_SINSTAR3		_T("_sinstar3 communicate msg")	//通讯时使用的消息名称，取代老版本固定的消息ID，方便服务器返回数据
 
-#define SVR_PROXY_NAME			TEXT("_sinstar3_svr_proxy_window_{AC7451C1-3528-42E4-ADF8-E35F3CF24646}")
-
 #pragma pack(push,1)
 
 typedef struct tagMSGDATA{

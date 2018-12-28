@@ -1,19 +1,15 @@
 #include "stdafx.h"
 #include "TextServiceProxy.h"
+#include "Sinstar3Impl.h"
 
 
-HWND CServerObject::GetSvrId()
+CSvrConnection::CSvrConnection()
 {
-	return m_hSvr;
 }
 
-HRESULT CServerObject::CreateConnection(SIpcConnection ** ppConnection) const {
-	*ppConnection = new CSvrConnection(NULL);//todo.
-	return S_OK;
+CSvrConnection::~CSvrConnection(void)
+{
 }
-
-/////////////////////////////////////////////////////////////////////////////
-
 
 BOOL CSvrConnection::InputStringW(LPCWSTR pszBuf, int nLen)
 {
@@ -110,8 +106,19 @@ BOOL CSvrConnection::GetOpenStatus(LPVOID lpImeContext) const
 	return param.bOpen;
 }
 
-
 //////////////////////////////////////////////////////////////////////////
+void CSvrConnection::HandleCreate(Param_Create & param)
+{
+	SASSERT(!m_pSinstar);
+	m_pSinstar = new CSinstar3Impl(this, param.hOwner);
+}
+
+void CSvrConnection::HandleDestroy(Param_Destroy & param)
+{
+	SASSERT(m_pSinstar);
+	m_pSinstar = NULL;
+}
+
 void CSvrConnection::HandleOnImeSelect(Param_OnImeSelect & param)
 {
 	m_pSinstar->OnIMESelect(param.bSelect);

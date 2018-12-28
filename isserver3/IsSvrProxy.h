@@ -6,6 +6,7 @@
 #include <iscore-i.h>
 #include "AboutDlg.h"
 #include "ThreadObject.h"
+#include "TextServiceProxy.h"
 
 typedef IServerCore * (*funIscore_Create)();
 typedef void(*funIscore_Destroy)(IServerCore* pCore);
@@ -21,11 +22,22 @@ class CIsSvrProxy : public CSimpleWnd
 	, public IUiMsgHandler
 	, public IKeyMapListener
 	, public IUpdateIntervalObserver
+	, public SIpcServer
 {
 	friend class CWorker;
 public:
 	CIsSvrProxy(const SStringT & strDataPath);
 	~CIsSvrProxy();
+
+protected:
+	virtual HWND GetSvrId() const {
+		return m_hWnd;
+	}
+	virtual HRESULT CreateConnection(SIpcConnection ** ppConnection) const
+	{
+		*ppConnection = new CSvrConnection();
+		return S_OK;
+	}
 
 protected:
 	virtual void OnKeyMapFree(CKeyMapDlg *pWnd);
@@ -86,6 +98,7 @@ protected:
 		MESSAGE_HANDLER_EX(UM_TRAYNOTIFY, OnTrayNotify)
 		CHAIN_MSG_MAP_MEMBER(m_trayIcon)
 		CHAIN_MSG_MAP(CSimpleWnd)
+		CHAIN_MSG_MAP(SIpcServer)
 		REFLECT_NOTIFICATIONS_EX()
 	END_MSG_MAP()
 

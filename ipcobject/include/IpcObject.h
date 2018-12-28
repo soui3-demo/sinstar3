@@ -92,10 +92,8 @@ protected:
 
 protected:
 	virtual UINT GetBufSize() const { return 1 << 12; }
-	virtual HWND GetSvrId() = 0;
-	virtual HRESULT CreateConnection(SIpcConnection ** ppConnection) const {
-		return E_NOTIMPL;
-	}
+	virtual HWND GetSvrId() const = 0;
+	virtual HRESULT CreateConnection(SIpcConnection ** ppConnection) const = 0;
 
 	std::map<HWND, SIpcConnection *> m_mapClients;
 };
