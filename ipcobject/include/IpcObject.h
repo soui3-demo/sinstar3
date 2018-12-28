@@ -63,10 +63,7 @@ public:
 	CShareMemBuffer * GetRemoteBuffer() { return &m_RemoteBuf; }
 	BOOL ProcessWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lResult);
 
-	static void GetMemMapFileByObjectID(HWND hWnd, TCHAR *szName) {
-		LPARAM tmp = (LPARAM)hWnd;
-		_stprintf(szName, _T("ipc_client_%08x"), (DWORD)(tmp&0xffffffff));
-	}
+	static void GetMemMapFileByObjectID(HWND hWnd, TCHAR *szName);
 
 protected:
 	virtual bool HandleFun(UINT uFunID, CParamStream & ps) = 0;

@@ -158,3 +158,9 @@ BOOL SIpcConnection::ProcessWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, L
 	lResult = HandleFun((UINT)wParam, ps)?1:0;
 	return TRUE;
 }
+
+void SIpcConnection::GetMemMapFileByObjectID(HWND hWnd, TCHAR *szName)
+{
+	LPARAM tmp = (LPARAM)hWnd;
+	_stprintf(szName, _T("ipc_client_%08x"), (DWORD)(tmp&0xffffffff));
+}

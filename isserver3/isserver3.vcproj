@@ -181,6 +181,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\settings\AddBlurDlg.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Base64.cpp"
 				>
 			</File>
@@ -190,6 +194,10 @@
 			</File>
 			<File
 				RelativePath=".\CmdHandler.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\settings\ConfigDlg.cpp"
 				>
 			</File>
 			<File
@@ -226,6 +234,10 @@
 			</File>
 			<File
 				RelativePath=".\Minidump.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\QR_Encode.cpp"
 				>
 			</File>
 			<File
@@ -297,6 +309,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\controls\SQrCtrl.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\controls\SSentView.cpp"
 				>
 			</File>
@@ -314,6 +330,10 @@
 			</File>
 			<File
 				RelativePath=".\controls\SStatusBackground.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\STabCtrlEx.cpp"
 				>
 			</File>
 			<File
@@ -371,6 +391,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\settings\AddBlurDlg.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Base64.h"
 				>
 			</File>
@@ -384,6 +408,10 @@
 			</File>
 			<File
 				RelativePath=".\WinHttp\Common.h"
+				>
+			</File>
+			<File
+				RelativePath=".\settings\ConfigDlg.h"
 				>
 			</File>
 			<File
@@ -424,6 +452,10 @@
 			</File>
 			<File
 				RelativePath=".\Minidump.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\QR_Encode.h"
 				>
 			</File>
 			<File
@@ -503,6 +535,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\controls\SQrCtrl.h"
+				>
+			</File>
+			<File
 				RelativePath=".\controls\SSentView.h"
 				>
 			</File>
@@ -520,6 +556,10 @@
 			</File>
 			<File
 				RelativePath=".\controls\SStatusBackground.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\STabCtrlEx.h"
 				>
 			</File>
 			<File

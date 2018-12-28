@@ -44,7 +44,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(SOUIPATH)\SOUI\include;$(SOUIPATH)\utilities\include;$(SOUIPATH)\config"
+				AdditionalIncludeDirectories="&quot;$(SOUIPATH)\SOUI\include&quot;;&quot;$(SOUIPATH)\utilities\include&quot;;&quot;$(SOUIPATH)\config&quot;;..\ipcobject\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;SINSTAR3_TSF_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -64,7 +64,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="helperd.lib"
+				AdditionalDependencies="helperd.lib ipcobjectd.lib sinstar3_proxyd.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(SOUIPATH)\bin;..\lib"
 				ModuleDefinitionFile="sinstar3_tsf.def"
@@ -121,7 +121,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(SOUIPATH)\SOUI\include;$(SOUIPATH)\utilities\include;$(SOUIPATH)\config"
+				AdditionalIncludeDirectories="&quot;$(SOUIPATH)\SOUI\include&quot;;&quot;$(SOUIPATH)\utilities\include&quot;;&quot;$(SOUIPATH)\config&quot;;..\ipcobject\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;SINSTAR3_TSF_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -141,7 +141,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="helperd.lib"
+				AdditionalDependencies="helperd.lib ipcobjectd.lib sinstar3_proxyd.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\lib\x64"
 				ModuleDefinitionFile="sinstar3_tsf.def"
@@ -199,7 +199,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="$(SOUIPATH)\SOUI\include;$(SOUIPATH)\utilities\include;$(SOUIPATH)\config"
+				AdditionalIncludeDirectories="&quot;$(SOUIPATH)\SOUI\include&quot;;&quot;$(SOUIPATH)\utilities\include&quot;;&quot;$(SOUIPATH)\config&quot;;..\ipcobject\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;SINSTAR3_TSF_EXPORTS"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
@@ -218,7 +218,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="helper.lib"
+				AdditionalDependencies="helper.lib ipcobject.lib sinstar3_proxy.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(SOUIPATH)\bin;..\lib"
 				ModuleDefinitionFile="sinstar3_tsf.def"
@@ -278,7 +278,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="$(SOUIPATH)\SOUI\include;$(SOUIPATH)\utilities\include;$(SOUIPATH)\config"
+				AdditionalIncludeDirectories="&quot;$(SOUIPATH)\SOUI\include&quot;;&quot;$(SOUIPATH)\utilities\include&quot;;&quot;$(SOUIPATH)\config&quot;;..\ipcobject\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;SINSTAR3_TSF_EXPORTS"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
@@ -297,7 +297,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="helper.lib"
+				AdditionalDependencies="helper.lib ipcobject.lib sinstar3_proxy.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\lib\x64"
 				ModuleDefinitionFile="sinstar3_tsf.def"
@@ -348,10 +348,6 @@
 			</File>
 			<File
 				RelativePath=".\composition.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\core_loader\core_loader.cpp"
 				>
 			</File>
 			<File
@@ -410,10 +406,6 @@
 			>
 			<File
 				RelativePath=".\ClassFactory.h"
-				>
-			</File>
-			<File
-				RelativePath="..\core_loader\core_loader.h"
 				>
 			</File>
 			<File

@@ -12,6 +12,6 @@ include($$(SOUIPATH)/demo_com.pri)
 PRECOMPILED_HEADER = stdafx.h
 
 # Input
-HEADERS += sinstarproxy.h
+HEADERS += sinstarproxy.h simplewnd.h
 
-SOURCES += sinstarproxy.cpp
+SOURCES += sinstarproxy.cpp simplewnd.cpp
