@@ -4,7 +4,7 @@
   width="600"
   height="400"
   resizable="0"
-  wndType="appMain"
+  wndType="normal"
   translucent="1"
   sendWheel2Hover="1">
   <style>

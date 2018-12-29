@@ -15,8 +15,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "skins", "skins\skins.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iscomm", "iscomm\iscomm.vcxproj", "{016B6ACF-5766-4D73-8A9C-280998E814CC}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "settings", "settings\settings.vcxproj", "{3C7C291F-FF79-4F72-9BA9-10F7DBE943C6}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "helper", "helper\helper.vcxproj", "{223D1DB1-C67B-4B54-BEE8-B60F24D7E8CE}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "isserver3", "isserver3\isserver3.vcxproj", "{72EB3283-11E0-4274-8D6C-27E413F23CA4}"
@@ -109,17 +107,6 @@ Global
 		{016B6ACF-5766-4D73-8A9C-280998E814CC}.Release|Win32.Build.0 = Release|Win32
 		{016B6ACF-5766-4D73-8A9C-280998E814CC}.Release|x64.ActiveCfg = Release|x64
 		{016B6ACF-5766-4D73-8A9C-280998E814CC}.Release|x64.Build.0 = Release|x64
-		{3C7C291F-FF79-4F72-9BA9-10F7DBE943C6}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{3C7C291F-FF79-4F72-9BA9-10F7DBE943C6}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{3C7C291F-FF79-4F72-9BA9-10F7DBE943C6}.Debug|Win32.ActiveCfg = Debug|Win32
-		{3C7C291F-FF79-4F72-9BA9-10F7DBE943C6}.Debug|Win32.Build.0 = Debug|Win32
-		{3C7C291F-FF79-4F72-9BA9-10F7DBE943C6}.Debug|x64.ActiveCfg = Debug|Win32
-		{3C7C291F-FF79-4F72-9BA9-10F7DBE943C6}.Debug|x64.Build.0 = Debug|Win32
-		{3C7C291F-FF79-4F72-9BA9-10F7DBE943C6}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{3C7C291F-FF79-4F72-9BA9-10F7DBE943C6}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{3C7C291F-FF79-4F72-9BA9-10F7DBE943C6}.Release|Win32.ActiveCfg = Release|Win32
-		{3C7C291F-FF79-4F72-9BA9-10F7DBE943C6}.Release|Win32.Build.0 = Release|Win32
-		{3C7C291F-FF79-4F72-9BA9-10F7DBE943C6}.Release|x64.ActiveCfg = Release|Win32
 		{223D1DB1-C67B-4B54-BEE8-B60F24D7E8CE}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
 		{223D1DB1-C67B-4B54-BEE8-B60F24D7E8CE}.Debug|Mixed Platforms.Build.0 = Debug|Win32
 		{223D1DB1-C67B-4B54-BEE8-B60F24D7E8CE}.Debug|Win32.ActiveCfg = Debug|Win32

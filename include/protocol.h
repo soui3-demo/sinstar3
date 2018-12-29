@@ -235,7 +235,7 @@ struct Param_OnSetFocus : FunParams_Base
 {
 	BOOL bFocus;
 	FUNID(ISinstar_OnSetFocus)
-		PARAMS1(Iutput, bFocus)
+		PARAMS1(Input, bFocus)
 		TOSTR1(bFocus)
 };
 
