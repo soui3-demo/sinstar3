@@ -100,16 +100,6 @@ namespace SOUI
 				m_ptSpchar = CPoint(GET_X_LPARAM(dwPos), GET_Y_LPARAM(dwPos));
 		}
 
-
-
-		CRegKey keySvr;
-		if(ERROR_SUCCESS == keySvr.Open(HKEY_LOCAL_MACHINE,L"Software\\Setoutsoft\\sinstar3",KEY_READ|KEY_WOW64_64KEY))
-		{
-			TCHAR szSvrPath[MAX_PATH]={0};
-			ULONG nSize = MAX_PATH;
-			keySvr.QueryStringValue(_T("path_svr"),szSvrPath,&nSize);
-			ISComm_SetSvrPath(szSvrPath);
-		}
 		pugi::xml_document fontMap;
 		if (fontMap.load_file(strDataPath + _T("\\data\\fontmap.xml")))
 		{

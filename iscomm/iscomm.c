@@ -26,8 +26,6 @@ static UINT    s_uMsgID=0;			//通讯消息ID
 
 static UINT		s_uCount=0;			//访问计数
 
-static TCHAR	s_szSvrPath[MAX_PATH]={0};	//服务器路径
-
 DWORD ISComm_UpdateUserDefData(int nType, LPCSTR pszFilename)
 {
 	short sOffset = 0;
@@ -42,11 +40,6 @@ DWORD ISComm_UpdateUserDefData(int nType, LPCSTR pszFilename)
 DWORD ISComm_FatctUserDefFileName(int nType)
 {
 	return ISComm_SendMsg(CT_DATA_FILENAME, &nType, sizeof(int), 0);
-}
-
-void ISComm_SetSvrPath(LPCTSTR pszPath)
-{
-	_tcscpy(s_szSvrPath,pszPath);
 }
 
 void ISComm_FreeImeFlagData(IMEFLAGDATA * pData)
@@ -72,7 +65,6 @@ void ClearComm()
 		CloseHandle(s_hMapDataAck);
 		CloseHandle(s_hMutexReq);
 
-		s_hWndServer=NULL;
 		s_pDataReq=NULL;
 		s_hMapDataReq=0;
 		s_hMutexReq=0;

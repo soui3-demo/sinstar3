@@ -120,8 +120,6 @@ extern "C"{
 BOOL ISComm_GetDataPathW(LPWSTR pszDataPath,int nLength);
 BOOL ISComm_GetDataPathA(LPSTR pszDataPath, int nLength);
 
-void ISComm_SetSvrPath(LPCTSTR pszPath);
-
 void ISComm_FreeImeFlagData(IMEFLAGDATA *pData);
 
 const UINT ISComm_GetCommMsgID();
