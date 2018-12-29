@@ -29,16 +29,16 @@ public:
 	//ITextService
 	BOOL InputStringW(LPCWSTR pszBuf, int nLen);
 	BOOL IsCompositing() const;
-	void StartComposition(LPVOID lpImeContext);
-	void ReplaceSelCompositionW(LPVOID lpImeContext,int nLeft,int nRight,const WCHAR *wszComp,int nLen);
-	void UpdateResultAndCompositionStringW(LPVOID lpImeContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen);
-	void EndComposition(LPVOID lpImeContext);
-	LPVOID GetImeContext();
-	BOOL   ReleaseImeContext(LPVOID lpImeContext);
+	void StartComposition(UINT64 imeContext);
+	void ReplaceSelCompositionW(UINT64 imeContext,int nLeft,int nRight,const WCHAR *wszComp,int nLen);
+	void UpdateResultAndCompositionStringW(UINT64 imeContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen);
+	void EndComposition(UINT64 imeContext);
+	UINT64 GetImeContext();
+	BOOL   ReleaseImeContext(UINT64 imeContext);
 	void  SetConversionMode(EInputMethod mode);
 	EInputMethod GetConversionMode();
-	BOOL SetOpenStatus(LPVOID lpImeContext,BOOL bOpen);
-	BOOL GetOpenStatus(LPVOID lpImeContext) const;
+	BOOL SetOpenStatus(UINT64 imeContext,BOOL bOpen);
+	BOOL GetOpenStatus(UINT64 imeContext) const;
 
 	CSinstarProxy * m_pSinstar3;
 	CImeContext *m_pCurContext;

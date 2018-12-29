@@ -44,9 +44,10 @@ STDAPI CSinstar3Tsf::OnCompositionTerminated(TfEditCookie ecWrite, ITfCompositio
 {
 	SLOG_INFO("OnCompositionTerminated,TfEditCookie:"<<ecWrite<< " pComposition:"<<pComposition);
 	SASSERT(pComposition && pComposition == _pComposition);
-	ITfContext *pCtx=(ITfContext *)GetImeContext();
+	UINT64 nCtx = GetImeContext();
+	ITfContext *pCtx=(ITfContext *)nCtx;
 	_TerminateComposition(ecWrite,pCtx,true);
-	ReleaseImeContext(pCtx);
+	ReleaseImeContext(nCtx);
 
 	return S_OK;
 }

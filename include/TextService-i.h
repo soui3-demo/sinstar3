@@ -40,19 +40,19 @@ interface ITextService
 {
 	virtual BOOL InputStringW(LPCWSTR pszBuf, int nLen) = NULL;
 	virtual BOOL IsCompositing() const =NULL;
-	virtual void StartComposition(LPVOID lpImeContext)=NULL;
+	virtual void StartComposition(UINT64 imeContext)=NULL;
 
 	//使用指定数据替换当前编码串
 	// nLeft,nRight: [-1,-1]:在当前光标位置插入
 	//				 [0,-1]:替换全部内容
 	//				 [left,right]:替换该范围，都不能为负值
-	virtual void ReplaceSelCompositionW(LPVOID lpImeContext,int nLeft,int nRight,const WCHAR *wszComp,int nLen)=NULL;
-	virtual void UpdateResultAndCompositionStringW(LPVOID lpImeContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen)=NULL;
-	virtual void EndComposition(LPVOID lpImeContext)=NULL;
-	virtual LPVOID GetImeContext()=NULL;
-	virtual BOOL   ReleaseImeContext(LPVOID lpImeContext)=NULL;
+	virtual void ReplaceSelCompositionW(UINT64 imeContext,int nLeft,int nRight,const WCHAR *wszComp,int nLen)=NULL;
+	virtual void UpdateResultAndCompositionStringW(UINT64 imeContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen)=NULL;
+	virtual void EndComposition(UINT64 imeContext)=NULL;
+	virtual UINT64 GetImeContext()=NULL;
+	virtual BOOL   ReleaseImeContext(UINT64 imeContext)=NULL;
 	virtual void  SetConversionMode(EInputMethod mode)=NULL;
 	virtual EInputMethod GetConversionMode()=NULL;
-	virtual BOOL SetOpenStatus(LPVOID lpImeContext,BOOL bOpen)=NULL;
-	virtual BOOL GetOpenStatus(LPVOID lpImeContext) const =NULL;
+	virtual BOOL SetOpenStatus(UINT64 imeContext,BOOL bOpen)=NULL;
+	virtual BOOL GetOpenStatus(UINT64 imeContext) const =NULL;
 };

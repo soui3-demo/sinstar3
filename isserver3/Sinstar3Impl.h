@@ -32,8 +32,8 @@ public:
 	virtual void OnCompositionTerminated(bool bClearCtx);
 	virtual void OnSetCaretPosition(POINT pt,int nHei);
 	virtual void OnSetFocusSegmentPosition(POINT pt,int nHei);
-	virtual void ProcessKeyStoke(LPVOID lpImeContext,UINT vkCode,LPARAM lParam,BOOL bKeyDown,BOOL *pbEaten);
-	virtual void TranslateKey(LPVOID lpImeContext,UINT vkCode,UINT uScanCode,BOOL bKeyDown,BOOL *pbEaten);
+	virtual void ProcessKeyStoke(UINT64 imeContext,UINT vkCode,LPARAM lParam,BOOL bKeyDown,BOOL *pbEaten);
+	virtual void TranslateKey(UINT64 imeContext,UINT vkCode,UINT uScanCode,BOOL bKeyDown,BOOL *pbEaten);
 	virtual void OnSetFocus(BOOL bFocus);
 	virtual int  GetCompositionSegments();
 	virtual int  GetCompositionSegmentEnd(int iSeg);
@@ -100,7 +100,7 @@ private:
 	CSpCharWnd      *m_pSpcharWnd;
 	CInputState		m_inputState;
 
-	void			*m_pCurImeContext;
+	UINT64			m_curImeContext;
 
 	CCmdHandler	    m_cmdHandler;
 

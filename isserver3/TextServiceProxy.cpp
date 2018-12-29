@@ -27,50 +27,50 @@ BOOL CSvrConnection::IsCompositing() const
 }
 
 
-void CSvrConnection::StartComposition(LPVOID lpImeContext)
+void CSvrConnection::StartComposition(UINT64 imeContext)
 {
 	Param_StartComposition param;
-	param.lpImeContext = lpImeContext;
+	param.lpImeContext = imeContext;
 	CallFun(&param);
 }
 
-void CSvrConnection::ReplaceSelCompositionW(LPVOID lpImeContext,int nLeft,int nRight,const WCHAR *wszComp,int nLen)
+void CSvrConnection::ReplaceSelCompositionW(UINT64 imeContext,int nLeft,int nRight,const WCHAR *wszComp,int nLen)
 {
 	Param_ReplaceSelCompositionW param;
-	param.lpImeContext = lpImeContext;
+	param.lpImeContext = imeContext;
 	param.nLeft = nLeft;
 	param.nRight = nRight;
 	param.buf = wstring(wszComp,nLen);
 	CallFun(&param);
 }
 
-void CSvrConnection::UpdateResultAndCompositionStringW(LPVOID lpImeContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen)
+void CSvrConnection::UpdateResultAndCompositionStringW(UINT64 imeContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen)
 {
 	Param_UpdateResultAndCompositionStringW param;
-	param.lpImeContext = lpImeContext;
+	param.lpImeContext = imeContext;
 	param.resultStr = wstring(wszResultStr,nResStrLen);
 	param.compStr = wstring(wszCompStr,nCompStrLen);
 	CallFun(&param);
 }
 
-void CSvrConnection::EndComposition(LPVOID lpImeContext)
+void CSvrConnection::EndComposition(UINT64 imeContext)
 {
 	Param_EndComposition param;
-	param.lpImeContext = lpImeContext;
+	param.lpImeContext = imeContext;
 	CallFun(&param);
 }
 
-LPVOID CSvrConnection::GetImeContext()
+UINT64 CSvrConnection::GetImeContext()
 {
 	Param_GetImeContext param;
 	CallFun(&param);
 	return param.lpImeContext;
 }
 
-BOOL CSvrConnection::ReleaseImeContext(LPVOID lpImeContext)
+BOOL CSvrConnection::ReleaseImeContext(UINT64 imeContext)
 {
 	Param_ReleaseImeContext param;
-	param.lpImeContext =lpImeContext;
+	param.lpImeContext =imeContext;
 	CallFun(&param);
 	return param.bRet;
 }
@@ -89,19 +89,19 @@ EInputMethod CSvrConnection::GetConversionMode()
 	return param.mode;
 }
 
-BOOL CSvrConnection::SetOpenStatus(LPVOID lpImeContext,BOOL bOpen)
+BOOL CSvrConnection::SetOpenStatus(UINT64 imeContext,BOOL bOpen)
 {
 	Param_SetOpenStatus param;
-	param.lpImeContext = lpImeContext;
+	param.lpImeContext = imeContext;
 	param.bOpen = bOpen;
 	CallFun(&param);
 	return param.bRet;
 }
 
-BOOL CSvrConnection::GetOpenStatus(LPVOID lpImeContext) const
+BOOL CSvrConnection::GetOpenStatus(UINT64 imeContext) const
 {
 	Param_GetOpenStatus param;
-	param.lpImeContext = lpImeContext;
+	param.lpImeContext = imeContext;
 	CallFun(&param);
 	return param.bOpen;
 }

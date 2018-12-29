@@ -13,29 +13,13 @@ using namespace std;
 #define SINSTAR3_SERVER_HWND _T("sinstar3_server_wnd_{85B55CBC-7D48-4860-BA88-0BE4B073A94F}")
 
 //////////////////////////////////////////////////////////////////
-template<>
-inline CParamStream & CParamStream::operator<<(const LPVOID & value)
-{
-	__int64 tmp = (__int64)value;
-	GetBuffer()->Write((const BYTE*)&tmp, sizeof(tmp));
-	return *this;
-}
-template<>
-inline CParamStream & CParamStream::operator >> (LPVOID & value)
-{
-	__int64 tmp = 0;
-	GetBuffer()->Read((BYTE*)&tmp, sizeof(tmp));
-	value = (LPVOID)tmp;
-	return *this;
-}
-
 template<class _Traits> inline
 basic_ostream<char, _Traits>& operator<<(
 	basic_ostream<char, _Traits>& _Ostr,
-	const LPVOID & value)
+	const UINT64 & value)
 {
 	char szBuf[50];
-	sprintf(szBuf, "0x%p", value);
+	sprintf(szBuf, "0x%i64u", value);
 	_Ostr << szBuf;
 	return _Ostr;
 }
@@ -213,7 +197,7 @@ struct Param_OnSetFocusSegmentPosition : FunParams_Base
 };
 
 struct Param_ProcessKeyStoke : FunParams_Base {
-	LPVOID lpImeContext; UINT vkCode; LPARAM lParam; BOOL bKeyDown; 
+	UINT64 lpImeContext; UINT vkCode; LPARAM lParam; BOOL bKeyDown; 
 	BOOL bEaten;
 	FUNID(ISinstar_ProcessKeyStoke)
 	TOSTR5(lpImeContext, vkCode, lParam, bKeyDown, bEaten)
@@ -223,7 +207,7 @@ struct Param_ProcessKeyStoke : FunParams_Base {
 
 struct Param_TranslateKey : FunParams_Base
 {
-	LPVOID lpImeContext; UINT vkCode; UINT uScanCode; BOOL bKeyDown; 
+	UINT64 lpImeContext; UINT vkCode; UINT uScanCode; BOOL bKeyDown; 
 	BOOL bEaten;
 	FUNID(ISinstar_TranslateKey)
 	PARAMS4(Input, lpImeContext, vkCode, uScanCode, bKeyDown)
@@ -318,7 +302,7 @@ struct Param_IsCompositing : FunParams_Base
 
 struct Param_StartComposition : FunParams_Base
 {
-	LPVOID lpImeContext;
+	UINT64 lpImeContext;
 	FUNID(ITextService_StartComposition)
 		PARAMS1(Input,lpImeContext)
 		TOSTR1(lpImeContext)
@@ -326,7 +310,7 @@ struct Param_StartComposition : FunParams_Base
 
 struct Param_ReplaceSelCompositionW : FunParams_Base
 {
-	LPVOID lpImeContext; int nLeft; int nRight; wstring buf;
+	UINT64 lpImeContext; int nLeft; int nRight; wstring buf;
 	FUNID(ITextService_ReplaceSelCompositionW)
 		PARAMS4(Input,lpImeContext,nLeft,nRight,buf)
 		TOSTR4(lpImeContext, nLeft, nRight, buf)
@@ -334,7 +318,7 @@ struct Param_ReplaceSelCompositionW : FunParams_Base
 
 struct Param_UpdateResultAndCompositionStringW : FunParams_Base
 {
-	LPVOID lpImeContext; wstring resultStr; wstring compStr;
+	UINT64 lpImeContext; wstring resultStr; wstring compStr;
 	FUNID(ITextService_UpdateResultAndCompositionStringW)
 		PARAMS3(Input, lpImeContext, resultStr, compStr)
 		TOSTR3(lpImeContext, resultStr, compStr)
@@ -342,7 +326,7 @@ struct Param_UpdateResultAndCompositionStringW : FunParams_Base
 
 struct Param_EndComposition : FunParams_Base
 {
-	LPVOID lpImeContext;
+	UINT64 lpImeContext;
 	FUNID(ITextService_EndComposition)
 		PARAMS1(Input,lpImeContext)
 		TOSTR1(lpImeContext)
@@ -350,7 +334,7 @@ struct Param_EndComposition : FunParams_Base
 
 struct Param_GetImeContext : FunParams_Base
 {
-	LPVOID lpImeContext;
+	UINT64 lpImeContext;
 	FUNID(ITextService_GetImeContext)
 		PARAMS1(Output,lpImeContext)
 		TOSTR1(lpImeContext)
@@ -358,7 +342,7 @@ struct Param_GetImeContext : FunParams_Base
 
 struct Param_ReleaseImeContext : FunParams_Base
 {
-	LPVOID lpImeContext;
+	UINT64 lpImeContext;
 	BOOL bRet;
 	FUNID(ITextService_ReleaseImeContext)
 		PARAMS1(Input, lpImeContext)
@@ -384,7 +368,7 @@ struct Param_GetConversionMode : FunParams_Base
 
 struct Param_SetOpenStatus : FunParams_Base
 {
-	LPVOID lpImeContext;
+	UINT64 lpImeContext;
 	BOOL bOpen;
 	BOOL bRet;
 	FUNID(ITextService_SetOpenStatus)
@@ -395,7 +379,7 @@ struct Param_SetOpenStatus : FunParams_Base
 
 struct Param_GetOpenStatus : FunParams_Base
 {
-	LPVOID lpImeContext;
+	UINT64 lpImeContext;
 	BOOL bOpen;
 	FUNID(ITextService_GetOpenStatus)
 		PARAMS1(Input, lpImeContext)

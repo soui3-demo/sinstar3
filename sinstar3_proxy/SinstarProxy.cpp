@@ -90,10 +90,10 @@ void CSinstarProxy::OnSetFocusSegmentPosition(POINT pt, int nHei)
 	m_conn.CallFun(&param);
 }
 
-void CSinstarProxy::ProcessKeyStoke(LPVOID lpImeContext, UINT vkCode, LPARAM lParam, BOOL bKeyDown, BOOL * pbEaten)
+void CSinstarProxy::ProcessKeyStoke(UINT64 imeContext, UINT vkCode, LPARAM lParam, BOOL bKeyDown, BOOL * pbEaten)
 {
 	Param_ProcessKeyStoke param;
-	param.lpImeContext = lpImeContext;
+	param.lpImeContext = imeContext;
 	param.vkCode = vkCode;
 	param.lParam = lParam;
 	param.bKeyDown = bKeyDown;
@@ -102,10 +102,10 @@ void CSinstarProxy::ProcessKeyStoke(LPVOID lpImeContext, UINT vkCode, LPARAM lPa
 	*pbEaten = param.bEaten;
 }
 
-void CSinstarProxy::TranslateKey(LPVOID lpImeContext, UINT vkCode, UINT uScanCode, BOOL bKeyDown, BOOL * pbEaten)
+void CSinstarProxy::TranslateKey(UINT64 imeContext, UINT vkCode, UINT uScanCode, BOOL bKeyDown, BOOL * pbEaten)
 {
 	Param_TranslateKey param;
-	param.lpImeContext = lpImeContext;
+	param.lpImeContext = imeContext;
 	param.vkCode = vkCode;
 	param.uScanCode = uScanCode;
 	param.bKeyDown = bKeyDown;
@@ -214,7 +214,7 @@ void CClientConnection::OnEndComposition( Param_EndComposition & param)
 
 void CClientConnection::OnGetImeContext( Param_GetImeContext & param)
 {
-	param.lpImeContext = m_pTxtService->GetImeContext();
+	param.lpImeContext = (UINT64)m_pTxtService->GetImeContext();
 
 }
 

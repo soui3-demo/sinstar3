@@ -15,8 +15,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iscomm", "iscomm\iscomm.vcp
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CompBuilder", "CompBuilder\CompBuilder.vcproj", "{13C135A7-8B18-4746-8495-672D8F286B92}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "settings", "settings\settings.vcproj", "{359C9646-EE46-459B-A2E2-4295771431CA}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FindCaller", "FindCaller\FindCaller.vcproj", "{57D17CAC-20CB-4F1A-8408-BB0181AF1695}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FindCallerUI", "FindCallerUI\FindCallerUI.vcproj", "{49C492B3-B2D6-4048-BFB1-AB89D334C42E}"
@@ -117,16 +115,6 @@ Global
 		{13C135A7-8B18-4746-8495-672D8F286B92}.Release|Win32.ActiveCfg = Release|Win32
 		{13C135A7-8B18-4746-8495-672D8F286B92}.Release|Win32.Build.0 = Release|Win32
 		{13C135A7-8B18-4746-8495-672D8F286B92}.Release|x64.ActiveCfg = Release|Win32
-		{359C9646-EE46-459B-A2E2-4295771431CA}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{359C9646-EE46-459B-A2E2-4295771431CA}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{359C9646-EE46-459B-A2E2-4295771431CA}.Debug|Win32.ActiveCfg = Debug|Win32
-		{359C9646-EE46-459B-A2E2-4295771431CA}.Debug|Win32.Build.0 = Debug|Win32
-		{359C9646-EE46-459B-A2E2-4295771431CA}.Debug|x64.ActiveCfg = Debug|Win32
-		{359C9646-EE46-459B-A2E2-4295771431CA}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{359C9646-EE46-459B-A2E2-4295771431CA}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{359C9646-EE46-459B-A2E2-4295771431CA}.Release|Win32.ActiveCfg = Release|Win32
-		{359C9646-EE46-459B-A2E2-4295771431CA}.Release|Win32.Build.0 = Release|Win32
-		{359C9646-EE46-459B-A2E2-4295771431CA}.Release|x64.ActiveCfg = Release|Win32
 		{57D17CAC-20CB-4F1A-8408-BB0181AF1695}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
 		{57D17CAC-20CB-4F1A-8408-BB0181AF1695}.Debug|Mixed Platforms.Build.0 = Debug|Win32
 		{57D17CAC-20CB-4F1A-8408-BB0181AF1695}.Debug|Win32.ActiveCfg = Debug|Win32

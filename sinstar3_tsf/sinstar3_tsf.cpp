@@ -181,10 +181,10 @@ STDAPI CSinstar3Tsf::Deactivate()
 	if(_IsComposing())
 	{
 		SASSERT(_pThreadMgr);
-		ITfContext *pCtx=(ITfContext *)GetImeContext();
-		if(pCtx) 
-			EndComposition(pCtx);
-		ReleaseImeContext(pCtx);
+		UINT64 nCtx = GetImeContext();
+		if(nCtx) 
+			EndComposition(nCtx);
+		ReleaseImeContext(nCtx);
 	}
 	if (_pThreadMgr)
 	{
@@ -264,13 +264,13 @@ BOOL CSinstar3Tsf::InputStringW(LPCWSTR pszBuf, int nLen) {
 		return FALSE;
 	}else 
 	{
-		LPVOID pCtx = GetImeContext();
-		if(pCtx)
+		UINT64 nCtx = GetImeContext();
+		if(nCtx)
 		{
-			StartComposition(pCtx);
-			UpdateResultAndCompositionStringW(pCtx,pszBuf,nLen,NULL,0);
-			EndComposition(pCtx);
-			ReleaseImeContext(pCtx);
+			StartComposition(nCtx);
+			UpdateResultAndCompositionStringW(nCtx,pszBuf,nLen,NULL,0);
+			EndComposition(nCtx);
+			ReleaseImeContext(nCtx);
 			return TRUE;
 		}
 	}
@@ -316,30 +316,30 @@ HRESULT CSinstar3Tsf::_UnadviseTextLayoutSink(ITfContext *pContext)
 	return S_OK;
 }
 
-void CSinstar3Tsf::StartComposition(LPVOID pImeContext)
+void CSinstar3Tsf::StartComposition(UINT64 imeContext)
 {
-	_StartComposition((ITfContext*)pImeContext);
+	_StartComposition((ITfContext*)imeContext);
 }
 
 
-void CSinstar3Tsf::EndComposition(LPVOID pImeContext)
+void CSinstar3Tsf::EndComposition(UINT64 imeContext)
 {
-	_EndComposition((ITfContext*)pImeContext);
+	_EndComposition((ITfContext*)imeContext);
 }
 
 
-void CSinstar3Tsf::ReplaceSelCompositionW(LPVOID pImeContext,int nLeft,int nRight,const WCHAR* wszComp,int nLen)
+void CSinstar3Tsf::ReplaceSelCompositionW(UINT64 imeContext,int nLeft,int nRight,const WCHAR* wszComp,int nLen)
 {
-	_ChangeComposition((ITfContext*)pImeContext,nLeft,nRight,NULL,0);
+	_ChangeComposition((ITfContext*)imeContext,nLeft,nRight,NULL,0);
 }
 
-void CSinstar3Tsf::UpdateResultAndCompositionStringW(LPVOID lpImeContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen)
+void CSinstar3Tsf::UpdateResultAndCompositionStringW(UINT64 imeContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen)
 {
-	_UpdateResultAndCompositionStringW((ITfContext*)lpImeContext,wszResultStr,nResStrLen,wszCompStr,nCompStrLen);
+	_UpdateResultAndCompositionStringW((ITfContext*)imeContext,wszResultStr,nResStrLen,wszCompStr,nCompStrLen);
 }
 
 
-LPVOID CSinstar3Tsf::GetImeContext()
+UINT64 CSinstar3Tsf::GetImeContext()
 {
 
 	if(!_pThreadMgr) return NULL;
@@ -354,7 +354,7 @@ LPVOID CSinstar3Tsf::GetImeContext()
 		{
 			hr=pRange->GetContext(&pContext);
 			pRange->Release();
-			if(SUCCEEDED(hr)&&pContext)	return pContext;
+			if(SUCCEEDED(hr)&&pContext)	return (UINT64)pContext;
 		}
 	}else
 	{
@@ -367,17 +367,17 @@ LPVOID CSinstar3Tsf::GetImeContext()
 			pFocusDoc->Release();
 			if(SUCCEEDED(hr))
 			{
-				return pContext;
+				return (UINT64)pContext;
 			}
 		}
 	}
 	return NULL;
 }
 
-BOOL   CSinstar3Tsf::ReleaseImeContext(LPVOID lpImeContext)
+BOOL   CSinstar3Tsf::ReleaseImeContext(UINT64 imeContext)
 {
-	if(!lpImeContext) return FALSE;
-	ITfContext *pContext=(ITfContext*)lpImeContext;
+	if(!imeContext) return FALSE;
+	ITfContext *pContext=(ITfContext*)imeContext;
 	try
 	{
 		pContext->Release();
@@ -415,12 +415,12 @@ BOOL CSinstar3Tsf::_UninitSinstar3()
 }
 
 
-BOOL CSinstar3Tsf::SetOpenStatus(LPVOID lpImeContext,BOOL bOpen)
+BOOL CSinstar3Tsf::SetOpenStatus(UINT64 imeContext,BOOL bOpen)
 {
 	return _SetKeyboardOpen(bOpen);
 }
 
-BOOL CSinstar3Tsf::GetOpenStatus(LPVOID lpImeContext) const
+BOOL CSinstar3Tsf::GetOpenStatus(UINT64 imeContext) const
 {
 	return _IsKeyboardOpen();
 }

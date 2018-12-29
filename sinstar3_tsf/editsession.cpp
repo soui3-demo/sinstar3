@@ -14,7 +14,7 @@ STDMETHODIMP CEsKeyHandler::DoEditSession(TfEditCookie ec)
 {
 	BOOL fEaten = FALSE;
 	GetTextService()->_bInKeyProc = TRUE;
-	GetSinstar3()->TranslateKey(GetContext(),(UINT)_wParam, MapVirtualKey((UINT)_wParam,0), TRUE, &fEaten);
+	GetSinstar3()->TranslateKey((UINT64)GetContext(),(UINT)_wParam, MapVirtualKey((UINT)_wParam,0), TRUE, &fEaten);
 	GetTextService()->_bInKeyProc = FALSE;
 
 	return S_OK;

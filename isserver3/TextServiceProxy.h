@@ -16,25 +16,25 @@ public:
 
 	virtual BOOL IsCompositing() const;
 
-	virtual void StartComposition(LPVOID lpImeContext);
+	virtual void StartComposition(UINT64 imeContext);
 
-	virtual void ReplaceSelCompositionW(LPVOID lpImeContext, int nLeft, int nRight, const WCHAR *wszComp, int nLen);
+	virtual void ReplaceSelCompositionW(UINT64 imeContext, int nLeft, int nRight, const WCHAR *wszComp, int nLen);
 
-	virtual void UpdateResultAndCompositionStringW(LPVOID lpImeContext, const WCHAR *wszResultStr, int nResStrLen, const WCHAR *wszCompStr, int nCompStrLen);
+	virtual void UpdateResultAndCompositionStringW(UINT64 imeContext, const WCHAR *wszResultStr, int nResStrLen, const WCHAR *wszCompStr, int nCompStrLen);
 
-	virtual void EndComposition(LPVOID lpImeContext);
+	virtual void EndComposition(UINT64 imeContext);
 
-	virtual LPVOID GetImeContext();
+	virtual UINT64 GetImeContext();
 
-	virtual BOOL ReleaseImeContext(LPVOID lpImeContext);
+	virtual BOOL ReleaseImeContext(UINT64 imeContext);
 
 	virtual void SetConversionMode(EInputMethod mode);
 
 	virtual EInputMethod GetConversionMode();
 
-	virtual BOOL SetOpenStatus(LPVOID lpImeContext, BOOL bOpen);
+	virtual BOOL SetOpenStatus(UINT64 imeContext, BOOL bOpen);
 
-	virtual BOOL GetOpenStatus(LPVOID lpImeContext) const;
+	virtual BOOL GetOpenStatus(UINT64 imeContext) const;
 
 
 protected:

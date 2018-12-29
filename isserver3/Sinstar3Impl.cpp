@@ -7,18 +7,18 @@
 class CAutoContext
 {
 public:
-	CAutoContext(void ** ppCtx, void * pValue)
+	CAutoContext(UINT64 * pCtx, UINT64 value)
 	{
-		m_ppCtx = ppCtx;
-		*m_ppCtx = pValue;		
+		m_pCtx = pCtx;
+		*pCtx = value;		
 	}
 
 	~CAutoContext()
 	{
-		*m_ppCtx = NULL;
+		*m_pCtx = NULL;
 	}
 
-	void ** m_ppCtx;
+	UINT64 * m_pCtx;
 };
 
 const TCHAR * KSinstar3WndName = _T("sinstar3_msg_recv_20180801");
@@ -29,7 +29,7 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr, HWND hParentWnd)
 ,m_pStatusWnd(NULL)
 ,m_pTipWnd(NULL)
 , m_pSpcharWnd(NULL)
-,m_pCurImeContext(NULL)
+,m_curImeContext(NULL)
 , m_cmdHandler(this)
 {
 	addEvent(EVENTID(EventSvrNotify));
@@ -85,15 +85,15 @@ CSinstar3Impl::~CSinstar3Impl(void)
 }
 
 
-void CSinstar3Impl:: ProcessKeyStoke(LPVOID lpImeContext,UINT vkCode,LPARAM lParam,BOOL bKeyDown,BOOL *pbEaten)
+void CSinstar3Impl:: ProcessKeyStoke(UINT64 imeContext,UINT vkCode,LPARAM lParam,BOOL bKeyDown,BOOL *pbEaten)
 {
-	CAutoContext autoCtx(&m_pCurImeContext,lpImeContext);
+	CAutoContext autoCtx(&m_curImeContext,imeContext);
 	BYTE byKeyState[256];
 	GetKeyboardState(byKeyState);
 	*pbEaten = m_inputState.TestKeyDown(vkCode,lParam,byKeyState);
 }
 
-void CSinstar3Impl:: TranslateKey(LPVOID lpImeContext,UINT vkCode,UINT uScanCode,BOOL bKeyDown,BOOL *pbEaten)
+void CSinstar3Impl:: TranslateKey(UINT64 imeContext,UINT vkCode,UINT uScanCode,BOOL bKeyDown,BOOL *pbEaten)
 {
 	if(!bKeyDown)
 	{
@@ -101,7 +101,7 @@ void CSinstar3Impl:: TranslateKey(LPVOID lpImeContext,UINT vkCode,UINT uScanCode
 		return;
 	}
 
-	CAutoContext autoCtx(&m_pCurImeContext,lpImeContext);
+	CAutoContext autoCtx(&m_curImeContext,imeContext);
 
 	*pbEaten = TRUE;
 
@@ -147,7 +147,7 @@ void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 	SLOG_INFO("GetThreadID="<<GetCurrentThreadId()<<" focus="<<bFocus);
 
 	BOOL bOpen = FALSE;
-	LPVOID pImeCtx = m_pTxtSvr->GetImeContext();
+	UINT64 pImeCtx = m_pTxtSvr->GetImeContext();
 	if (pImeCtx)
 	{
 		bOpen = m_pTxtSvr->GetOpenStatus(pImeCtx);
@@ -283,7 +283,7 @@ LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 	}
 	else if (wp == NT_SERVEREXIT)
 	{
-		LPVOID pImeCtx = m_pTxtSvr->GetImeContext();
+		UINT64 pImeCtx = m_pTxtSvr->GetImeContext();
 		if (pImeCtx)
 		{
 			m_pTxtSvr->SetOpenStatus(pImeCtx, FALSE);
@@ -358,15 +358,15 @@ HWND CSinstar3Impl::GetHwnd() const
 
 void CSinstar3Impl::OnInputStart()
 {
-	if(!m_pCurImeContext) return;
-	m_pTxtSvr->StartComposition(m_pCurImeContext);
+	if(!m_curImeContext) return;
+	m_pTxtSvr->StartComposition(m_curImeContext);
 }
 
 
 void CSinstar3Impl::OnInputEnd()
 {
-	if(!m_pCurImeContext) return;
-	m_pTxtSvr->EndComposition(m_pCurImeContext);
+	if(!m_curImeContext) return;
+	m_pTxtSvr->EndComposition(m_curImeContext);
 }
 
 BOOL CSinstar3Impl::GoNextCandidatePage()
@@ -391,14 +391,14 @@ void CSinstar3Impl::CloseInputWnd(BOOL bDelay)
 
 BOOL CSinstar3Impl::SetOpenStatus(BOOL bOpen)
 {
-	SASSERT(m_pCurImeContext);
-	return m_pTxtSvr->SetOpenStatus(m_pCurImeContext,bOpen);
+	SASSERT(m_curImeContext);
+	return m_pTxtSvr->SetOpenStatus(m_curImeContext,bOpen);
 }
 
 BOOL CSinstar3Impl::GetOpenStatus() const
 {
-	SASSERT(m_pCurImeContext);
-	return m_pTxtSvr->GetOpenStatus(m_pCurImeContext);
+	SASSERT(m_curImeContext);
+	return m_pTxtSvr->GetOpenStatus(m_curImeContext);
 }
 
 void CSinstar3Impl::OnCommand(WORD cmd, LPARAM lp)
@@ -582,10 +582,10 @@ void CSinstar3Impl::Broadcast(UINT uCmd, LPVOID pData, DWORD nLen)
 
 void CSinstar3Impl::OnInputResult(const SStringT & strResult,const SStringT & strComp/*=SStringT() */)
 {
-	if(!m_pCurImeContext) return;
+	if(!m_curImeContext) return;
 	SStringW strResultW = S_CT2W(strResult);
 	SStringW strCompW = S_CT2W(strComp);
-	m_pTxtSvr->UpdateResultAndCompositionStringW(m_pCurImeContext,strResult,strResult.GetLength(),strCompW,strCompW.GetLength());
+	m_pTxtSvr->UpdateResultAndCompositionStringW(m_curImeContext,strResult,strResult.GetLength(),strCompW,strCompW.GetLength());
 }
 
 void CSinstar3Impl::OpenInputWnd()
