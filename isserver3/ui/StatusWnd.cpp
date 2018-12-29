@@ -639,7 +639,7 @@ namespace SOUI
 
 	void CStatusWnd::OnHelpClick()
 	{
-		SStringT path= SStringT().Format(_T("%s\\data\\sinstar3.chm>main"), CDataCenter::getSingletonPtr()->GetDataPath());
+		SStringT path= SStringT().Format(_T("%s\\data\\sinstar3.chm"), CDataCenter::getSingletonPtr()->GetDataPath());
 		HtmlHelp(NULL, path, HH_DISPLAY_TOPIC, 0);
 	}
 
