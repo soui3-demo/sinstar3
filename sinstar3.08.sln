@@ -27,6 +27,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ipcobject", "ipcobject\ipco
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sinstar3_proxy", "sinstar3_proxy\sinstar3_proxy.vcproj", "{72550488-BEC8-46F2-8F31-6C4D3DF1A749}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "soui", "..\soui.git\SOUI\soui.vcproj", "{3142EB88-0071-3141-8E39-42365457AF03}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -179,6 +181,16 @@ Global
 		{72550488-BEC8-46F2-8F31-6C4D3DF1A749}.Release|Win32.Build.0 = Release|Win32
 		{72550488-BEC8-46F2-8F31-6C4D3DF1A749}.Release|x64.ActiveCfg = Release|x64
 		{72550488-BEC8-46F2-8F31-6C4D3DF1A749}.Release|x64.Build.0 = Release|x64
+		{3142EB88-0071-3141-8E39-42365457AF03}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{3142EB88-0071-3141-8E39-42365457AF03}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{3142EB88-0071-3141-8E39-42365457AF03}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3142EB88-0071-3141-8E39-42365457AF03}.Debug|Win32.Build.0 = Debug|Win32
+		{3142EB88-0071-3141-8E39-42365457AF03}.Debug|x64.ActiveCfg = Debug|Win32
+		{3142EB88-0071-3141-8E39-42365457AF03}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{3142EB88-0071-3141-8E39-42365457AF03}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{3142EB88-0071-3141-8E39-42365457AF03}.Release|Win32.ActiveCfg = Release|Win32
+		{3142EB88-0071-3141-8E39-42365457AF03}.Release|Win32.Build.0 = Release|Win32
+		{3142EB88-0071-3141-8E39-42365457AF03}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

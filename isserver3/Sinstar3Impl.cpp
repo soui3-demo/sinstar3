@@ -430,6 +430,8 @@ void CSinstar3Impl::OnInputDelayHide()
 	m_inputState.ClearContext(CPC_ALL&~CPC_INPUT);
 }
 
+extern SComMgr2 * g_ComMgr2;
+
 BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 {
 	SLOG_INFO("skin:" << strSkin);
@@ -445,8 +447,7 @@ BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 		{//¼ÓÔØÍâ²¿Æ¤·ô
 			SLOG_INFO("step2, prepare for load skin");
 			CAutoRefPtr<IResProvider> pResProvider;
-			SComMgr comMgr;
-			comMgr.CreateResProvider_ZIP((IObjRef**)&pResProvider);
+			g_ComMgr2->CreateResProvider_ZIP((IObjRef**)&pResProvider);
 			ZIPRES_PARAM param;
 			param.ZipFile(GETRENDERFACTORY, strSkin);
 			if (!pResProvider->Init((WPARAM)&param, 0))

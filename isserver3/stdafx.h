@@ -34,7 +34,7 @@
 #include <control/souictrls.h>
 #include <res.mgr/sobjdefattr.h>
 #include <event/NotifyCenter.h>
-#include <com-cfg.h>
+#include <commgr2.h>
 
 #include <resprovider-zip/zipresprovider-param.h>
 
