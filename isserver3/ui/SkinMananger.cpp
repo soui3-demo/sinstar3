@@ -56,8 +56,7 @@ int CSkinMananger::InitSkinMenu(SMenuEx *hMenu, const SStringT &strSkinPath, int
 SOUI::SStringT CSkinMananger::ExtractSkinInfo(SStringT strSkinPath)
 {
 	IResProvider *pResProvider = NULL;
-	SComMgr comMgr;
-	comMgr.CreateResProvider_ZIP((IObjRef**)&pResProvider);
+	g_ComMgr2->CreateResProvider_ZIP((IObjRef**)&pResProvider);
 	ZIPRES_PARAM param;
 	param.ZipFile(NULL, strSkinPath);
 	pResProvider->Init((WPARAM)&param,0);
