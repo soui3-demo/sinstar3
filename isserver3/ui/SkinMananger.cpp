@@ -15,6 +15,7 @@ int CSkinMananger::InitSkinMenu(HMENU hMenu, const SStringT &strSkinPath, int nS
 {
 	WIN32_FIND_DATA findData;
 	HANDLE hFind = FindFirstFile(strSkinPath + _T("\\*.*"), &findData);
+	SMenu smenu(hMenu);
 	if (hFind != INVALID_HANDLE_VALUE)
 	{		
 		do {
@@ -22,7 +23,7 @@ int CSkinMananger::InitSkinMenu(HMENU hMenu, const SStringT &strSkinPath, int nS
 			{
 				if (_tcscmp(findData.cFileName, _T(".")) != 0 && _tcscmp(findData.cFileName, _T("..")) != 0)
 				{					
-					if (AppendMenu(hMenu,MF_STRING, ++nStartId, findData.cFileName))
+					if (smenu.AppendMenu(MF_STRING , ++nStartId, findData.cFileName))
 					{
 						int nItems = ::GetMenuItemCount(hMenu);
 						HMENU hSubMenu = GetSubMenu(hMenu, nItems-1);
@@ -41,7 +42,7 @@ int CSkinMananger::InitSkinMenu(HMENU hMenu, const SStringT &strSkinPath, int nS
 					m_mapSkin[nStartId] = strFullPath;
 					SStringT strDesc = ExtractSkinInfo(strFullPath);
 
-					BOOL bInsertSucess=AppendMenu(hMenu, MF_STRING, nStartId, strDesc);
+					BOOL bInsertSucess= smenu.AppendMenu( MF_STRING , nStartId, strDesc);
 					
 					if (bInsertSucess&&(strFullPath == strCurSkin))
 					{

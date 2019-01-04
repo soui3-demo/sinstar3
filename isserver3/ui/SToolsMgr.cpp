@@ -16,6 +16,7 @@ int SToolsMgr::InitToolMenu(HMENU hMenu, const SStringT &strToolPath, int nStart
 {
 	WIN32_FIND_DATA findData;
 	HANDLE hFind = FindFirstFile(strToolPath + _T("\\*.exe"), &findData);
+	SMenu smenu(hMenu);
 	if (hFind != INVALID_HANDLE_VALUE)
 	{
 		do {
@@ -23,13 +24,13 @@ int SToolsMgr::InitToolMenu(HMENU hMenu, const SStringT &strToolPath, int nStart
 			{
 				if (nStartId == R.id.menu_tool_base)
 				{
-					DeleteMenu(hMenu,nStartId, MF_BYCOMMAND);
+					smenu.DeleteMenu(nStartId, MF_BYCOMMAND);
 				}
 				nStartId++;
 				SStringT strFullPath = strToolPath + _T("\\") + findData.cFileName;
 				m_mapTool[nStartId] = strFullPath;
 				SStringT strDesc = ExtractToolInfo(strFullPath);
-				AppendMenu(hMenu, MF_STRING, nStartId, strDesc);
+				smenu.AppendMenu(MF_STRING, nStartId, strDesc);
 			}
 		} while (FindNextFile(hFind, &findData));
 		FindClose(hFind);

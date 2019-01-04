@@ -138,14 +138,14 @@ namespace SOUI
 
 	void CStatusWnd::OnInitMenuPopup(HMENU menuPopup, UINT nIndex, BOOL bSysMenu)
 	{
-		
+		SMenu smenuPopup(menuPopup);
 		switch (::GetMenuContextHelpId(menuPopup))
 		{
 		case 100:
 		{//main menu
-			CheckMenuItem(menuPopup,R.id.follow_caret, MF_BYCOMMAND | g_SettingsUI->bMouseFollow ? MF_CHECKED : 0);
-			CheckMenuItem(menuPopup, R.id.hide_statusbar, MF_BYCOMMAND | g_SettingsUI->bHideStatus ? MF_CHECKED : 0);
-			CheckMenuItem(menuPopup, R.id.input_big5, MF_BYCOMMAND | g_SettingsUI->bInputBig5 ? MF_CHECKED : 0);
+			smenuPopup.CheckMenuItem(R.id.follow_caret, MF_BYCOMMAND | g_SettingsUI->bMouseFollow ? MF_CHECKED : 0);
+			smenuPopup.CheckMenuItem(R.id.hide_statusbar, MF_BYCOMMAND | g_SettingsUI->bHideStatus ? MF_CHECKED : 0);
+			smenuPopup.CheckMenuItem(R.id.input_big5, MF_BYCOMMAND | g_SettingsUI->bInputBig5 ? MF_CHECKED : 0);
 			break;
 		}
 		case 2:
@@ -153,7 +153,7 @@ namespace SOUI
 			SStringT strCurSkin = CDataCenter::getSingletonPtr()->GetData().m_strSkin;
 			if (strCurSkin.IsEmpty())
 			{
-				CheckMenuItem(menuPopup, R.id.skin_def, MF_BYCOMMAND|MF_CHECKED);
+				smenuPopup.CheckMenuItem(R.id.skin_def, MF_BYCOMMAND|MF_CHECKED);
 			}
 			m_skinManager.InitSkinMenu(menuPopup, CDataCenter::getSingletonPtr()->GetDataPath() + _T("\\skins"), R.id.skin_def, strCurSkin);
 			break;
@@ -168,7 +168,7 @@ namespace SOUI
 				SStringA strText = SStringA().Format("%s[%s]", comps[i].strName, comps[i].strType);
 				UINT flag = MF_STRING;
 				if (iSelComp == i) flag |= MF_CHECKED;
-				AppendMenu(menuPopup, flag, idStart + i+1, S_CA2T(strText));
+				smenuPopup.AppendMenu( flag, idStart + i+1, S_CA2T(strText));
 			}
 			break;
 		}
@@ -176,17 +176,17 @@ namespace SOUI
 		{
 			BOOL bCe2 = 0, bCe3 = 0, bCa4 = 0;
 			ISComm_Bldsp_Get(&bCe2, &bCe3, &bCa4);
-			CheckMenuItem(menuPopup, R.id.spell_one,MF_BYCOMMAND | (g_SettingsG->bBlendSpWord ? MF_CHECKED : 0));
-			CheckMenuItem(menuPopup,R.id.spell_two, MF_BYCOMMAND | (bCe2 ? MF_CHECKED : 0));
-			CheckMenuItem(menuPopup,R.id.spell_three, MF_BYCOMMAND | (bCe3 ? MF_CHECKED : 0));
-			CheckMenuItem(menuPopup,R.id.spell_all, MF_BYCOMMAND | (bCa4 ? MF_CHECKED : 0));
-			CheckMenuItem(menuPopup,R.id.userdef, MF_BYCOMMAND | (g_SettingsG->bBlendUD ? MF_CHECKED : 0));
+			smenuPopup.CheckMenuItem(R.id.spell_one,MF_BYCOMMAND | (g_SettingsG->bBlendSpWord ? MF_CHECKED : 0));
+			smenuPopup.CheckMenuItem(R.id.spell_two, MF_BYCOMMAND | (bCe2 ? MF_CHECKED : 0));
+			smenuPopup.CheckMenuItem(R.id.spell_three, MF_BYCOMMAND | (bCe3 ? MF_CHECKED : 0));
+			smenuPopup.CheckMenuItem(R.id.spell_all, MF_BYCOMMAND | (bCa4 ? MF_CHECKED : 0));
+			smenuPopup.CheckMenuItem(R.id.userdef, MF_BYCOMMAND | (g_SettingsG->bBlendUD ? MF_CHECKED : 0));
 
 			break;
 		}
 		case 6://svr data manager
 		{
-			CheckMenuItem(menuPopup,R.id.svr_showicon, MF_BYCOMMAND | ISComm_SvrTray_Get() ? MF_CHECKED : 0);
+			smenuPopup.CheckMenuItem(R.id.svr_showicon, MF_BYCOMMAND | ISComm_SvrTray_Get() ? MF_CHECKED : 0);
 			break;
 		}
 		case 7://tools
@@ -518,8 +518,8 @@ namespace SOUI
 	{
 		CPoint pt;
 		GetCursorPos(&pt);
-		SMenuEx menu;
-		BOOL bLoad = menu.LoadMenu(UIRES.smenu.context_status,m_hParent);
+		SMenu menu;
+		BOOL bLoad = menu.LoadMenu(UIRES.smenu.context_status);
 		m_skinManager.ClearMap();
 		SLOG_INFO("before trackpopupmenu");
 		int nRet = menu.TrackPopupMenu(TPM_LEFTALIGN | TPM_BOTTOMALIGN | TPM_RETURNCMD, pt.x, pt.y, m_hWnd);
