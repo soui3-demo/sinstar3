@@ -4,9 +4,9 @@
 #include "KeyMapDlg.h"
 #include "BuildIndexProgWnd.h"
 #include <iscore-i.h>
-#include "AboutDlg.h"
 #include "ThreadObject.h"
 #include "TextServiceProxy.h"
+#include "settings/ConfigDlg.h"
 
 typedef IServerCore * (*funIscore_Create)();
 typedef void(*funIscore_Destroy)(IServerCore* pCore);
@@ -35,7 +35,7 @@ protected:
 	}
 	virtual HRESULT CreateConnection(SIpcConnection ** ppConnection) const
 	{
-		*ppConnection = new CSvrConnection();
+		*ppConnection = new CSvrConnection(m_hWnd);
 		return S_OK;
 	}
 
@@ -79,7 +79,6 @@ protected:
 	void OnTimer(UINT_PTR uID);
 
 	void OnMenuExit(UINT uNotifyCode, int nID, HWND wndCtl);
-	void OnMenuAbout(UINT uNotifyCode, int nID, HWND wndCtl);
 	void OnMenuAutoExit(UINT uNotifyCode, int nID, HWND wndCtl);
 	void OnMenuSettings(UINT uNotifyCode, int nID, HWND wndCtl);
 
@@ -93,7 +92,6 @@ protected:
 		MESSAGE_HANDLER_EX(m_uMsgTaskbarCreated,OnTaskbarCreated)
 		MESSAGE_HANDLER_EX(UM_CHECK_UPDATE_RESULT,OnCheckUpdateResult)
 		MESSAGE_RANGE_HANDLER_EX(UM_BUILD_INDEX_PROG0, UM_IMPORT_USER_LIB,OnBuildIndexProg)
-		COMMAND_ID_HANDLER_EX(R.id.menu_about, OnMenuAbout)
 		COMMAND_ID_HANDLER_EX(R.id.menu_exit, OnMenuExit)
 		COMMAND_ID_HANDLER_EX(R.id.menu_settings,OnMenuSettings)
 		if(m_pCore) CHAIN_MSG_MAP_MEMBER(*m_pCore)

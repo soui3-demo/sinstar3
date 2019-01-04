@@ -23,7 +23,7 @@ public:
 
 const TCHAR * KSinstar3WndName = _T("sinstar3_msg_recv_20180801");
 
-CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr, HWND hParentWnd)
+CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HWND hSvr, HWND hParentWnd)
 :m_pTxtSvr(pTxtSvr)
 ,m_pInputWnd(NULL)
 ,m_pStatusWnd(NULL)
@@ -31,6 +31,7 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr, HWND hParentWnd)
 , m_pSpcharWnd(NULL)
 ,m_curImeContext(NULL)
 , m_cmdHandler(this)
+, m_hSvr(hSvr)
 {
 	addEvent(EVENTID(EventSvrNotify));
 	addEvent(EVENTID(EventSetSkin));
@@ -521,7 +522,8 @@ BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 
 void CSinstar3Impl::OpenConfig()
 {
-	OnCommand(CMD_OPENCONFIG, 0);
+	SASSERT(m_hSvr);
+	::SendMessage(m_hSvr, WM_COMMAND, R.id.menu_settings, 0);
 }
 
 void CSinstar3Impl::OpenSpchar()

@@ -309,7 +309,7 @@ void CCmdHandler::OnSyncUI(LPARAM lp)
 
 void CCmdHandler::OnOpenConfig(LPARAM lp)
 {
-	//ShellExecute(NULL, _T("open"), theModule->GetSettingPath(),NULL,NULL,SW_SHOWDEFAULT);
+	m_pSinstar3->OpenConfig();
 }
 
 LRESULT CCmdHandler::OnProcessExit(UINT uMsg, WPARAM wp, LPARAM lp)

@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "IsSvrProxy.h"
 #include <helper\smenuex.h>
-#include "AboutDlg.h"
 #include "KeyMapDlg.h"
 #include "../helper/helper.h"
 #include "../include/reg.h"
@@ -49,6 +48,15 @@ CIsSvrProxy::~CIsSvrProxy()
 	if (m_pBuildIndexProg) m_pBuildIndexProg->DestroyWindow();
 }
 
+static SStringT GetVersionInfo(DWORD &dwVer)
+{
+	TCHAR szFileName[MAX_PATH];
+	GetModuleFileName(NULL, szFileName, MAX_PATH);
+	TCHAR szDesc[200];
+	Helper_PEVersion(szFileName, &dwVer, NULL, szDesc);
+	return SStringT(szDesc);
+}
+
 int CIsSvrProxy::OnCreate(LPCREATESTRUCT pCS)
 {
 	m_hCoreModule = LoadLibrary(_T("iscore.dll"));
@@ -84,7 +92,7 @@ int CIsSvrProxy::OnCreate(LPCREATESTRUCT pCS)
 	else
 	{
 		DWORD dwVer = 0;
-		SStringT strTip = CAboutDlg::GetVersionInfo(dwVer);
+		SStringT strTip = GetVersionInfo(dwVer);
 		strTip += _T("\n°æ±¾:");
 		TCHAR szVer[100];
 		Helper_VersionString(dwVer, szVer);
@@ -266,7 +274,7 @@ int CIsSvrProxy::TtsGetTokensInfo(bool bCh, wchar_t token[][MAX_TOKEN_NAME_LENGH
 DWORD CIsSvrProxy::OnQueryVersion() const
 {
 	DWORD dwVer;
-	CAboutDlg::GetVersionInfo(dwVer);
+	GetVersionInfo(dwVer);
 	return dwVer;
 }
 
@@ -332,15 +340,6 @@ void CIsSvrProxy::OnMenuExit(UINT uNotifyCode, int nID, HWND wndCtl)
 	PostQuitMessage(0);
 }
 
-void CIsSvrProxy::OnMenuAbout(UINT uNotifyCode, int nID, HWND wndCtl)
-{
-	CAboutDlg aboutDlg(this);
-	if (ID_CHECK_UPDATE_NOW == aboutDlg.DoModal())
-	{
-		CheckUpdate(TRUE);
-	}
-}
-
 void CIsSvrProxy::OnMenuAutoExit(UINT uNotifyCode, int nID, HWND wndCtl)
 {
 	m_pCore->SetAutoQuit(!m_pCore->IsAutoQuit());
@@ -348,8 +347,11 @@ void CIsSvrProxy::OnMenuAutoExit(UINT uNotifyCode, int nID, HWND wndCtl)
 
 void CIsSvrProxy::OnMenuSettings(UINT uNotifyCode, int nID, HWND wndCtl)
 {
-	CConfigDlg config;
-	config.DoModal();
+	CConfigDlg config(this);
+	if (ID_CHECK_UPDATE_NOW == config.DoModal(m_hWnd))
+	{
+		CheckUpdate(TRUE);
+	}
 }
 
 

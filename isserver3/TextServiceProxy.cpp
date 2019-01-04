@@ -3,7 +3,7 @@
 #include "Sinstar3Impl.h"
 
 
-CSvrConnection::CSvrConnection()
+CSvrConnection::CSvrConnection(HWND hSvr):m_hSvr(hSvr)
 {
 }
 
@@ -110,7 +110,7 @@ BOOL CSvrConnection::GetOpenStatus(UINT64 imeContext) const
 void CSvrConnection::HandleCreate(Param_Create & param)
 {
 	SASSERT(!m_pSinstar);
-	m_pSinstar.Attach(new CSinstar3Impl(this, param.hOwner));
+	m_pSinstar.Attach(new CSinstar3Impl(this, m_hSvr,param.hOwner));
 }
 
 void CSvrConnection::HandleDestroy(Param_Destroy & param)

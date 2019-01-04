@@ -1,15 +1,24 @@
 #pragma once
 
+#define ID_CHECK_UPDATE_NOW	 100
+
 namespace SOUI
 {
 	class CBlurListAdapter;
 
+	struct IUpdateIntervalObserver {
+		virtual int GetUpdateInterval() const = 0;
+		virtual void OnUpdateIntervalChanged(int nInterval) = 0;
+	};
+
 	class CConfigDlg: public SHostDialog
 	{
 	public:
-		CConfigDlg();
+		CConfigDlg(IUpdateIntervalObserver *pObserver);
 		~CConfigDlg(void);		
 
+	private:
+		IUpdateIntervalObserver * m_pObserver;
 	protected:
 		void FindAndSetCheck(int id, BOOL bcheck);
 		void FindAndSetText(int id, LPCTSTR text);
@@ -94,7 +103,15 @@ namespace SOUI
 
 		void OnSpinValue2String(EventArgs *e);
 
+		void OnUpdateNow();
+		void OnAutoUpdateClick();
+		void OnCbUpdateIntervalSelChange(EventArgs *e);
+
 		EVENT_MAP_BEGIN()
+			EVENT_ID_HANDLER(R.id.cbx_update_interval, EventCBSelChange::EventID, OnCbUpdateIntervalSelChange)
+			EVENT_ID_COMMAND(R.id.chk_auto_update, OnAutoUpdateClick)
+			EVENT_ID_COMMAND(R.id.btn_update_now, OnUpdateNow)
+
 			EVENT_ID_COMMAND(R.id.btn_add_blur,OnAddBlur)
 			EVENT_ID_COMMAND(R.id.btn_del_blur, OnDelBlur)
 			EVENT_ID_COMMAND(R.id.btn_export_user_phrase, OnExportUserLib)
@@ -139,10 +156,7 @@ namespace SOUI
 		int OnCreate(LPCREATESTRUCT lpCreateStruct);
 		void OnDestroy();
 
-		LRESULT OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp);
-
 		BEGIN_MSG_MAP_EX(CConfigDlg)
-			MESSAGE_HANDLER_EX(ISComm_GetCommMsgID(), OnSvrNotify)
 			MSG_WM_CREATE(OnCreate)
 			MSG_WM_DESTROY(OnDestroy)
 			CHAIN_MSG_MAP(SHostWnd)

@@ -5,17 +5,30 @@
       <text inset="5,5,5,5">@string/cfg_about_title</text>
       <hr width="-2" height="1"></hr>
     </window>
-    <window size="-1,-1" layout="hbox" extend_top="10">
-      <text text="输入法版本:"/>
-      <text name="txt_ver"/>
-    </window>
     <window size="-1,-1" layout="hbox">
-      <text text="服务器版本:"/>
+      <text text="版本:"/>
       <text name="txt_svr_ver"/>
     </window>
     <window size="-1,-1" layout="hbox">
       <text text="编译时间:"/>
       <text name="txt_build_time"/>
+    </window>
+    <check name="chk_auto_update" text="启用自动更新" extend_top="10"/>
+    <window size="-1,-1" layout="hbox" extend_top="10" gravity="center">
+      <text text="检查更新周期:"/>
+      <combobox name="cbx_update_interval" size="60,25">
+        <liststyle colorBkgnd="#ffffff"/>
+        <items>
+          <item text="周"/>
+          <item text="月"/>
+          <item text="季"/>
+        </items>
+      </combobox>
+      <button name="btn_update_now" text="立即检查" padding="10,5,10,5" extend_left="5"/>
+    </window>
+    <window size="-1,-1" layout="hbox" extend_top="10">
+      <text text="官网:"/>
+      <link href="http://soime.cn" text="http://soime.cn"/>
     </window>
     <text text="警告：计算机软件受著作权和国际公约保护"/>
     <text text="未经授权擅自用于商业用途"/>

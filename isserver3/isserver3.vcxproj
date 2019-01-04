@@ -132,7 +132,6 @@
       <ShowIncludes Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ShowIncludes>
     </ClCompile>
     <ClCompile Include="IsSvrProxy.cpp" />
-    <ClCompile Include="AboutDlg.cpp" />
     <ClCompile Include="KeyMapDlg.cpp" />
     <ClCompile Include="Minidump.cpp" />
     <ClCompile Include="settings\AddBlurDlg.cpp" />
@@ -193,7 +192,6 @@
     <ClInclude Include="inputContext.h" />
     <ClInclude Include="InputState.h" />
     <ClInclude Include="IsSvrProxy.h" />
-    <ClInclude Include="AboutDlg.h" />
     <ClInclude Include="KeyMapDlg.h" />
     <ClInclude Include="Minidump.h" />
     <ClInclude Include="settings\AddBlurDlg.h" />
@@ -238,9 +236,20 @@
     <Xml Include="uires\values\color.xml" />
     <Xml Include="uires\values\skin.xml" />
     <Xml Include="uires\values\string.xml" />
-    <Xml Include="uires\xml\dlg_about.xml" />
+    <Xml Include="uires\xml\dlg_addblur.xml" />
+    <Xml Include="uires\xml\dlg_config.xml" />
     <Xml Include="uires\xml\dlg_keymap.xml" />
     <Xml Include="uires\xml\dlg_update_info.xml" />
+    <Xml Include="uires\xml\page_about.xml" />
+    <Xml Include="uires\xml\page_associate.xml" />
+    <Xml Include="uires\xml\page_candidate.xml" />
+    <Xml Include="uires\xml\page_celib.xml" />
+    <Xml Include="uires\xml\page_habit.xml" />
+    <Xml Include="uires\xml\page_hotkey.xml" />
+    <Xml Include="uires\xml\page_misc.xml" />
+    <Xml Include="uires\xml\page_phraselib.xml" />
+    <Xml Include="uires\xml\page_pinyin.xml" />
+    <Xml Include="uires\xml\page_tts.xml" />
     <Xml Include="uires\xml\wnd_build_index_prog.xml" />
     <Xml Include="uires\xml\wnd_composition.xml" />
     <Xml Include="uires\xml\wnd_spchar.xml" />

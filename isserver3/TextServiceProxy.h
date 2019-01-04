@@ -8,7 +8,7 @@
 
 class CSvrConnection : public ITextService, public SOUI::TObjRefImpl<SIpcConnection> {
 public:
-	CSvrConnection::CSvrConnection();
+	CSvrConnection::CSvrConnection(HWND hSvr);
 
 	CSvrConnection::~CSvrConnection(void);
 public:
@@ -79,4 +79,5 @@ protected:
 	FUN_END
 private:
 	SComPtr<ISinstar>	m_pSinstar;
+	HWND				m_hSvr;
 };

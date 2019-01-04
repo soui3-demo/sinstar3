@@ -3,7 +3,6 @@
     <file name="XML_INIT" path="uidef\init.xml"/>
   </UIDEF>
   <LAYOUT>
-    <file name="dlg_about" path="xml\dlg_about.xml"/>
     <file name="dlg_keymap" path="xml\dlg_keymap.xml"/>
     <file name="wnd_build_index_prog" path="xml\wnd_build_index_prog.xml"/>
     <file name="dlg_update_info" path="xml\dlg_update_info.xml"/>
