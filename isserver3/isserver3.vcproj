@@ -73,6 +73,7 @@
 			/>
 			<Tool
 				Name="VCManifestTool"
+				AdditionalManifestFiles="DeclareDPIAware.manifest"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -150,6 +151,7 @@
 			/>
 			<Tool
 				Name="VCManifestTool"
+				AdditionalManifestFiles="DeclareDPIAware.manifest"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -354,6 +356,10 @@
 			</File>
 			<File
 				RelativePath=".\TextServiceProxy.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ThreadObject.cpp"
 				>
 			</File>
 			<File
@@ -576,6 +582,10 @@
 			</File>
 			<File
 				RelativePath=".\TextServiceProxy.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ThreadObject.h"
 				>
 			</File>
 			<File
