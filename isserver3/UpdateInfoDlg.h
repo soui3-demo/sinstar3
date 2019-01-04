@@ -1,20 +1,11 @@
 #pragma once
 
-struct CheckUpdateResult {
-	SStringW strUrl;
-	SStringW strInfo;
-	SStringW strNewUpdateUrl;
-	DWORD	 dwClientVer;
-	DWORD	 dwServerVer;
-
-	DWORD    dwClientCurVer;
-	DWORD	 dwServerCurVer;
-};
+#include "global_def.h"
 
 class CUpdateInfoDlg : public SHostDialog
 {
 public:
-	CUpdateInfoDlg(CheckUpdateResult * pResult);
+	CUpdateInfoDlg(EventCheckUpdateResult * pResult);
 	~CUpdateInfoDlg();
 
 protected:
@@ -25,6 +16,6 @@ protected:
 	END_MSG_MAP()
 
 private:
-	CheckUpdateResult * m_pResult;
+	EventCheckUpdateResult * m_pResult;
 };
 

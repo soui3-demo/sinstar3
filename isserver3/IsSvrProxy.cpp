@@ -8,6 +8,7 @@
 #include <process.h>
 #include "UpdateInfoDlg.h"
 #include "settings/ConfigDlg.h"
+#include "worker.h"
 
 #define TIMERID_DELAY_EXIT	200
 #define SPAN_DELAY_EXIT		5000
@@ -30,7 +31,6 @@ static void DoSomething()
 
 CIsSvrProxy::CIsSvrProxy(const SStringT & strDataPath)
 	:m_strDataPath(strDataPath)
-	, m_worker(strDataPath)
 	,m_hCoreModule(NULL)
 	,m_pCore(NULL)
 	,m_funIsCore_Create(NULL)
@@ -247,28 +247,28 @@ void CIsSvrProxy::OnShowKeyMap(IDataBlock * pCompData, LPCSTR pszName, LPCSTR ps
 
 int CIsSvrProxy::TtsGetSpeed()
 {
-	return m_worker.GetSpeed();
+	return CWorker::getSingletonPtr()->GetSpeed();
 }
 
 int CIsSvrProxy::TtsGetVoice(bool bCh)
 {
-	return m_worker.GetVoice(bCh);
+	return CWorker::getSingletonPtr()->GetVoice(bCh);
 }
 
 void CIsSvrProxy::TtsSetSpeed(int nSpeed) {
-	m_worker.SetSpeed(nSpeed);
+	CWorker::getSingletonPtr()->SetSpeed(nSpeed);
 }
 
 void CIsSvrProxy::TtsSpeakText(const wchar_t* pText, int nLen, bool bChinese) {
-	m_worker.SpeakWText(pText, nLen, bChinese);
+	CWorker::getSingletonPtr()->SpeakWText(pText, nLen, bChinese);
 }
 
 void CIsSvrProxy::TtsSetVoice(bool bCh, int iToken) {
-	m_worker.SetVoice(bCh, iToken);
+	CWorker::getSingletonPtr()->SetVoice(bCh, iToken);
 }
 
 int CIsSvrProxy::TtsGetTokensInfo(bool bCh, wchar_t token[][MAX_TOKEN_NAME_LENGHT], int nBufSize) { 
-	return m_worker.GetTokensInfo(bCh, token, nBufSize);
+	return CWorker::getSingletonPtr()->GetTokensInfo(bCh, token, nBufSize);
 }
 
 DWORD CIsSvrProxy::OnQueryVersion() const
@@ -325,7 +325,8 @@ void CIsSvrProxy::OnTimer(UINT_PTR uID)
 	}
 	else if (uID == TIMERID_DATA_REPORT)
 	{
-		m_worker.PostMessage(UM_FUN_DATA_REPORT);
+		
+		CWorker::getSingletonPtr()->ReportUserInfo();
 		KillTimer(uID);
 		CSimpleWnd::SetTimer(uID, SPAN_DATA_REPORT2, NULL);
 	}
@@ -377,17 +378,16 @@ void CIsSvrProxy::CheckUpdate(BOOL bManual)
 	sprintf(szDate, "%d-%d-%d", timeToday.GetMonth(), timeToday.GetDay(), timeToday.GetYear());
 	WritePrivateProfileStringA("update", "date", szDate, szConfig);
 
-	m_worker.PostMessage(UM_FUN_CHECK_UPDATE, bManual,(LPARAM)this);
+	CWorker::getSingletonPtr()->CheckUpdate(szConfig, bManual);
 }
 
 
-LRESULT CIsSvrProxy::OnCheckUpdateResult(UINT uMsg, WPARAM wp, LPARAM lp)
+void CIsSvrProxy::OnCheckUpdateResult(EventArgs *e)
 {
-	BOOL bManual = (BOOL)wp;
-	CheckUpdateResult *pResult = (CheckUpdateResult*)lp;
+	EventCheckUpdateResult *e2  = sobj_cast<EventCheckUpdateResult>(e);
 	char szConfig[MAX_PATH];
 	m_pCore->GetConfigIni(szConfig, MAX_PATH);
-	WritePrivateProfileStringA("update", "url", S_CW2A(pResult->strNewUpdateUrl), szConfig);
+	WritePrivateProfileStringA("update", "url", S_CW2A(e2->strNewUpdateUrl), szConfig);
 
 	CRegKey reg;
 	LONG ret = reg.Open(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\SetoutSoft\\sinstar3"), KEY_READ | KEY_WOW64_64KEY);
@@ -398,27 +398,21 @@ LRESULT CIsSvrProxy::OnCheckUpdateResult(UINT uMsg, WPARAM wp, LPARAM lp)
 		reg.QueryStringValue(_T("path_client"), szClientPath, &len);
 		reg.Close();
 
-		SStringT strClient = szClientPath;
-		strClient += _T("\\program\\sinstar3_core.dll");
 		TCHAR szSvrPath[MAX_PATH];
 		GetModuleFileName(NULL, szSvrPath, MAX_PATH);
-		DWORD dwVerSvr = 0, dwVerClient = 0;
+		DWORD dwVerSvr = 0;
 		Helper_PEVersion(szSvrPath, &dwVerSvr, NULL, NULL);
-		Helper_PEVersion(strClient, &dwVerClient, NULL, NULL);
 
-		if (pResult->dwClientVer > dwVerClient || pResult->dwServerVer > dwVerSvr)
+		if (e2->dwNewVer > dwVerSvr)
 		{//found new ver
-			pResult->dwClientCurVer = dwVerClient;
-			pResult->dwServerCurVer = dwVerSvr;
+			e2->dwCurVer = dwVerSvr;
 
-			CUpdateInfoDlg updateDlg(pResult);
+			CUpdateInfoDlg updateDlg(e2);
 			updateDlg.DoModal(GetDesktopWindow());
 		}
-		else if (bManual)
+		else if (e2->bManual)
 		{
 			SMessageBox(GetDesktopWindow(), _T("没有发现新版本!"), _T("提示"), MB_OK | MB_ICONINFORMATION);
 		}
 	}
-	delete pResult;
-	return 0;
 }

@@ -25,6 +25,7 @@ enum{
 	EVENT_DRAGMOVE,
 	EVENT_SETSKIN,
 	EVENT_SVRNOTIFY,
+	EVENT_CHECK_UPDATE_RESULT,
 };
 
 namespace SOUI
@@ -45,6 +46,21 @@ namespace SOUI
 	public:
 		EventSetSkin(SObject *pSender):TplEventArgs<EventSetSkin>(pSender){}
 		enum{EventID=EVENT_SETSKIN};
+	};
+
+	class EventCheckUpdateResult : public TplEventArgs<EventCheckUpdateResult>
+	{
+		SOUI_CLASS_NAME(EventCheckUpdateResult,L"on_check_update_result")
+	public:
+		EventCheckUpdateResult(SObject *pSender):TplEventArgs<EventCheckUpdateResult>(pSender){}
+		enum{EventID=EVENT_CHECK_UPDATE_RESULT};
+
+		bool	bManual;
+		SStringW strUrl;
+		SStringW strInfo;
+		SStringW strNewUpdateUrl;
+		DWORD	 dwNewVer;
+		DWORD    dwCurVer;
 	};
 
 }

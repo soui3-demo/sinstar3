@@ -9,28 +9,14 @@ translucent="1"
       <text pos="|0,|0" offset="-0.5,-0.5">@string/new_ver_found</text>
       <imgbtn pos ="-0,|0" offset="-1,-0.5" name="btn_close" skin="_skin.sys.btn.close"  id="IDCANCEL" tip="close" animate="1"/>
     </caption>
-    <window size="-2,-1" layout="hbox">
-      <window size="0,-1" weight="1" layout="vbox">
-        <text text="服务器"/>
-        <window layout="hbox">
-          <text text="当前版本:"/>
-          <text name="txt_svr_ver_cur"/>
-        </window>
-        <window layout="hbox">
-          <text text="发现版本:"/>
-          <text name="txt_svr_ver_new"/>
-        </window>
+    <window size="-2,-1" layout="vbox">
+      <window layout="hbox">
+        <text text="当前版本:"/>
+        <text name="txt_ver_cur"/>
       </window>
-      <window size="0,-1" weight="1" layout="vbox">
-        <text text="输入法接口"/>
-        <window layout="hbox">
-          <text text="当前版本:"/>
-          <text name="txt_client_ver_cur"/>
-        </window>
-        <window layout="hbox">
-          <text text="发现版本:"/>
-          <text name="txt_client_ver_new"/>
-        </window>
+      <window layout="hbox">
+        <text text="发现版本:"/>
+        <text name="txt_ver_new"/>
       </window>
     </window>
     <window size="-2,-1" extend_top="10" layout="hbox">

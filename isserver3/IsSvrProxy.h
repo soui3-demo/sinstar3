@@ -1,6 +1,5 @@
 #pragma once
 #include "trayIcon.h"
-#include "worker.h"
 #include "KeyMapDlg.h"
 #include "BuildIndexProgWnd.h"
 #include <iscore-i.h>
@@ -16,13 +15,13 @@ typedef void(*funIscore_Destroy)(IServerCore* pCore);
 #define UM_BUILD_INDEX_PROG2	(WM_USER+2002)
 #define UM_IMPORT_USER_LIB		(WM_USER+2003)
 
-#define UM_CHECK_UPDATE_RESULT  (WM_USER+2010)
 
 class CIsSvrProxy : public CSimpleWnd
 	, public IUiMsgHandler
 	, public IKeyMapListener
 	, public IUpdateIntervalObserver
 	, public SIpcServer
+	, public TAutoEventMapReg<CIsSvrProxy>
 {
 	friend class CWorker;
 public:
@@ -67,6 +66,13 @@ protected:
 	virtual int TtsGetTokensInfo(bool bCh, wchar_t token[][MAX_TOKEN_NAME_LENGHT], int nBufSize);
 
 	virtual DWORD OnQueryVersion() const;
+
+protected:
+	void OnCheckUpdateResult(EventArgs *e);
+	EVENT_MAP_BEGIN()
+		EVENT_HANDLER(EventCheckUpdateResult::EventID,OnCheckUpdateResult)
+	EVENT_MAP_BREAK()
+
 protected:
 	void _OnBuildIndexProg(int indexMode, PROGTYPE uType, unsigned int dwData);
 	int OnCreate(LPCREATESTRUCT pCS);
@@ -74,7 +80,6 @@ protected:
 	LRESULT OnTrayNotify(UINT uMsg, WPARAM wp, LPARAM lp);
 	LRESULT OnTaskbarCreated(UINT uMsg, WPARAM wp, LPARAM lp);
 	LRESULT OnBuildIndexProg(UINT uMsg, WPARAM wp, LPARAM lp);
-	LRESULT OnCheckUpdateResult(UINT uMsg, WPARAM wp, LPARAM lp);
 
 	void OnTimer(UINT_PTR uID);
 
@@ -84,13 +89,11 @@ protected:
 
 	void CheckUpdate(BOOL bManual);
 	
-
 	BEGIN_MSG_MAP_EX(CIsSvrProxy)
 		MSG_WM_CREATE(OnCreate)
 		MSG_WM_DESTROY(OnDestroy)
 		MSG_WM_TIMER(OnTimer)
 		MESSAGE_HANDLER_EX(m_uMsgTaskbarCreated,OnTaskbarCreated)
-		MESSAGE_HANDLER_EX(UM_CHECK_UPDATE_RESULT,OnCheckUpdateResult)
 		MESSAGE_RANGE_HANDLER_EX(UM_BUILD_INDEX_PROG0, UM_IMPORT_USER_LIB,OnBuildIndexProg)
 		COMMAND_ID_HANDLER_EX(R.id.menu_exit, OnMenuExit)
 		COMMAND_ID_HANDLER_EX(R.id.menu_settings,OnMenuSettings)
@@ -101,7 +104,6 @@ protected:
 		CHAIN_MSG_MAP(SIpcServer)
 		REFLECT_NOTIFICATIONS_EX()
 	END_MSG_MAP()
-
 private:
 	int			m_nUpdateInterval;
 
@@ -114,7 +116,6 @@ private:
 	SStringT	m_strDataPath;
 
 	CTrayIcon	m_trayIcon;
-	CWorker		m_worker;
 	UINT	    m_uMsgTaskbarCreated;
 
 	CKeyMapDlg *  m_pKeyMapDlg;

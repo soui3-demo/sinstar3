@@ -9,6 +9,8 @@
 #include "UpdateInfoDlg.h"
 #include "IsSvrProxy.h"
 #include "../helper/helper.h"
+#include <helper/SFunctor.hpp>
+
 #include "Base64.h"
 #pragma warning(disable:4995)
 #define ASSERT SASSERT
@@ -16,6 +18,8 @@
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
+template<>
+CWorker * SSingleton<CWorker>::ms_Singleton = NULL;
 
 const TCHAR * KConfigIni = _T("config.ini");
 const TCHAR * KTtsEntry = _T("tts");
@@ -23,29 +27,32 @@ const TCHAR * KTtsSpeed = _T("speed");
 const TCHAR * KTtsChVoice = _T("ChVoice");
 const TCHAR * KTtsEnVoice = _T("EnVoice");
 
-CWorker::CWorker(LPCTSTR pszDataPath):m_bInitOK(FALSE), m_CurVoice(VOICE_NULL)
+CWorker::CWorker(LPCTSTR pszDataPath):m_bTtsOK(FALSE), m_CurVoice(VOICE_NULL)
 {
+	SNotifyCenter::getSingletonPtr()->addEvent(EVENTID(EventCheckUpdateResult));
+
 	m_strConfigIni = pszDataPath;
 	m_strConfigIni += _T("\\");
 	m_strConfigIni += KConfigIni;
-	BeginThread();
+
+	g_ComMgr2->CreateTaskLoop((IObjRef**)&m_pTaskLoop);
+	m_pTaskLoop->start("isserver3_worker",ITaskLoop::Low);
+	STaskHelper::post(m_pTaskLoop,this,&CWorker::_Init,true);
 }
 
 CWorker::~CWorker()
 {
-	StopThread();
-	::PostMessage(m_hWnd, WM_QUIT, 0, 0);// quit get message.
-	JonThread();
+	STaskHelper::post(m_pTaskLoop,this,&CWorker::_Uninit,true);
+	m_pTaskLoop->stop();
+	m_pTaskLoop = NULL;
 }
 
 //*****************************************
 //	初始化TTS引擎，成功返回TRUE,失败返回FALSE
 //******************************************
-BOOL CWorker::Init()
+void CWorker::_Init()
 {
 	CoInitialize(NULL);
-	HWND hWnd = Create(_T("sinstar3_server_tts_host"), WS_POPUP, 0, 0, 0, 0, 0, HWND_MESSAGE, NULL);
-	ASSERT(hWnd);
 
 	try
 	{
@@ -62,7 +69,6 @@ BOOL CWorker::Init()
 			if (hr != S_OK) break;
 			hr = cpSpCategory->EnumTokens(L"Language=9", NULL, &m_cpEnTokens);
 			if (hr != S_OK) break;
-			m_bInitOK = TRUE;
 
 			m_iChVoice = GetPrivateProfileInt(KTtsEntry, KTtsChVoice, 0, m_strConfigIni);
 			m_iEnVoice = GetPrivateProfileInt(KTtsEntry, KTtsEnVoice, 0, m_strConfigIni);
@@ -72,22 +78,26 @@ BOOL CWorker::Init()
 			_SetVoice(TRUE, m_iChVoice);
 			_SetVoice(FALSE, m_iEnVoice);
 
-			SetMsgOwner(SPEI_END_INPUT_STREAM, m_hWnd, UM_TTS_FINISH);
+			m_bTtsOK = TRUE;
 		} while (0);
 
-		if (!m_bInitOK)
+		if (!m_bTtsOK)
 		{
-			Uninit();
+			m_cpVoiceEn = NULL;
+			m_cpVoiceCh = NULL;
+			m_cpChTokens = NULL;
+			m_cpEnTokens = NULL;
 		}
-		return m_bInitOK;
 	}catch(...)
 	{
-		Uninit();
-		return FALSE;
+		m_cpVoiceEn = NULL;
+		m_cpVoiceCh = NULL;
+		m_cpChTokens = NULL;
+		m_cpEnTokens = NULL;
 	}
 }
 
-void CWorker::Uninit()
+void CWorker::_Uninit()
 {
 	WritePrivateProfileString(KTtsEntry, KTtsSpeed, SStringT().Format(_T("%d"),m_nSpeed),m_strConfigIni);
 	WritePrivateProfileString(KTtsEntry, KTtsChVoice, SStringT().Format(_T("%d"), m_iChVoice), m_strConfigIni);
@@ -97,30 +107,33 @@ void CWorker::Uninit()
 	m_cpVoiceCh = NULL;
 	m_cpChTokens = NULL;
 	m_cpEnTokens = NULL;
-
-	DestroyWindow();
+	m_bTtsOK = FALSE;
 	CoUninitialize();
 }
 
-void CWorker::SpeakWText(const WCHAR * pwcText,int nLen,BOOL bCh)
+void CWorker::SpeakWText(const WCHAR * pwcText,int nLen,bool bCh)
 {
 	if (nLen == -1) nLen = wcslen(pwcText);
-	SStringW *pStr = new SStringW(pwcText,nLen);
-	::PostMessage(m_hWnd, UM_FUN_SPEAK, bCh, (LPARAM)pStr);
+	std::wstring buf(pwcText,nLen);
+	STaskHelper::post(m_pTaskLoop,this,&CWorker::_SpeakText,buf,bCh,false);
 }
 
-void CWorker::_SpeakText(WPARAM wp, LPARAM lp)
+void CWorker::_SpeakText(const std::wstring &buf,bool bCh)
 {
-	BOOL bCh = (BOOL)wp;
-	SStringW *pStr = (SStringW*)lp;
-	if (IsTTSBusy())
+	if (_IsTTSBusy())
 		_Stop();
 	m_CurVoice = bCh ? VOICE_CH : VOICE_EN;
-	HRESULT	hr = (m_CurVoice == VOICE_CH ? m_cpVoiceCh : m_cpVoiceEn)->Speak((*pStr), SPF_ASYNC | SPF_IS_NOT_XML, 0);
-	delete pStr;
+	try
+	{
+		HRESULT	hr = (m_CurVoice == VOICE_CH ? m_cpVoiceCh : m_cpVoiceEn)->Speak(buf.c_str(), SPF_IS_NOT_XML, 0);
+	}
+	catch (...)
+	{
+		SLOG_WARN("tts throw error!");
+	}
 }
 
-void CWorker::SpeakText(LPCSTR pszText,int nLen,BOOL bCh)
+void CWorker::SpeakText(LPCSTR pszText,int nLen,bool bCh)
 {
 	if(nLen==-1) nLen=strlen(pszText);
 	SStringA strA(pszText, nLen);
@@ -129,9 +142,9 @@ void CWorker::SpeakText(LPCSTR pszText,int nLen,BOOL bCh)
 }
 
 
-BOOL CWorker::IsTTSBusy()
+BOOL CWorker::_IsTTSBusy()
 {
-	ASSERT(m_bInitOK);
+	ASSERT(m_bTtsOK);
 	if(m_CurVoice==VOICE_NULL) return FALSE;
 	SPVOICESTATUS  spVoiceStatus;
 	(m_CurVoice==VOICE_CH?m_cpVoiceCh:m_cpVoiceEn)->GetStatus(&spVoiceStatus,NULL);
@@ -140,67 +153,72 @@ BOOL CWorker::IsTTSBusy()
 }
 
 
-int CWorker::GetVoice(BOOL bCh)
+int CWorker::GetVoice(bool bCh)
 {
-	return bCh?m_iChVoice:m_iEnVoice;
+	int nVoices = 0;
+	STaskHelper::post(m_pTaskLoop,this,&CWorker::_GetVoice,bCh,nVoices,true);
+	return nVoices;
 }
 
 
-void CWorker::SetVoice(BOOL bCh, int nToken)
+void CWorker::_GetVoice(bool bCh,int &nVoice)
 {
-	::PostMessage(m_hWnd, UM_FUN_SETVOICE, (WPARAM)bCh, (LPARAM)nToken);
+	nVoice =  bCh?m_iChVoice:m_iEnVoice;
 }
 
-BOOL CWorker::_SetVoice(WPARAM wp, LPARAM lp)
+void CWorker::SetVoice(bool bCh, int iToken)
 {
-	BOOL bCh = (BOOL)wp;
-	int nToken = (int)lp;
-	if (m_bInitOK) return FALSE;
+	STaskHelper::post(m_pTaskLoop,this,&CWorker::_SetVoice,bCh,iToken,false);
+}
+
+void CWorker::_SetVoice(bool bCh, int iToken)
+{
+	if (m_bTtsOK) return;
 
 	
 	SComPtr<IEnumSpObjectTokens> pTokens = bCh ? m_cpChTokens : m_cpEnTokens;
 	ISpObjectToken* pToken = NULL;
 	ULONG count;
 	HRESULT hr = pTokens->GetCount(&count);
-	if (nToken < 0 || nToken >= count)
-		return FALSE;
+	if (iToken < 0 || iToken >= count)
+		return;
 
-	hr = pTokens->Item(nToken, &pToken);
+	hr = pTokens->Item(iToken, &pToken);
 	if (hr != S_OK) 
-		return FALSE;
+		return;
 	if (bCh)
 	{
 		hr = m_cpVoiceCh->SetVoice(pToken);
-		m_iChVoice = nToken;
+		m_iChVoice = iToken;
 	}
 	else
 	{
 		hr = m_cpVoiceEn->SetVoice(pToken);
-		m_iEnVoice = nToken;
+		m_iEnVoice = iToken;
 	}
 	pToken->Release();
-	return TRUE;
 }
 
-int CWorker::GetTokensInfo(bool bCh, wchar_t token[][MAX_TOKEN_NAME_LENGHT], int nBufSize)
+ULONG CWorker::GetTokensInfo(bool bCh, wchar_t token[][MAX_TOKEN_NAME_LENGHT], int nBufSize)
 {
-	return ::SendMessage(m_hWnd, UM_FUN_GETTOKENINFO, MAKEWPARAM(bCh,nBufSize), (LPARAM)token);
+	ULONG nRet = 0;
+	STaskHelper::post(m_pTaskLoop,this,&CWorker::_GetTokensInfo,bCh,token,nBufSize,nRet,true);
+	return nRet;
 }
 
-int CWorker::_GetTokensInfo(WPARAM wp,LPARAM lp)
+void CWorker::_GetTokensInfo(bool bCh, wchar_t token[][MAX_TOKEN_NAME_LENGHT], int nBufSize, ULONG &count)
 {
-	BOOL bCh = LOWORD(wp);
-	int nBufSize = HIWORD(wp);
-
-	wchar_t(*token)[MAX_TOKEN_NAME_LENGHT] = (wchar_t(*)[MAX_TOKEN_NAME_LENGHT])lp;
-
-	if(!m_bInitOK) return 0;
-	ULONG  count;
+	if(!m_bTtsOK)
+		return;
 	SComPtr<IEnumSpObjectTokens> pTokens=bCh?m_cpChTokens:m_cpEnTokens;
 	HRESULT hr=pTokens->GetCount(&count);
-	if (token == NULL) return count;
-	if(count==0) return 0;
-	if (nBufSize < count) return 0;
+	if (token == NULL) return;
+	if(count==0) return;
+	if (nBufSize < count) 
+	{
+		count = -1;
+		return;
+	}
 
 	for(int i=0;i<(int)count;i++)
 	{
@@ -211,13 +229,12 @@ int CWorker::_GetTokensInfo(WPARAM wp,LPARAM lp)
 		pToken->Release();
 		wcscpy(token[i], dstrDesc);
 	}
-	return count;
 }
 
 
 void CWorker::Stop()
 {
-	::PostMessage(m_hWnd, UM_FUN_STOP, 0, 0);
+	STaskHelper::post(m_pTaskLoop,this,&CWorker::_Stop,false);
 }
 
 void CWorker::_Stop()
@@ -229,114 +246,62 @@ void CWorker::_Stop()
 }
 
 
-void CWorker::SetMsgOwner(ULONGLONG ullEvent, HWND hWnd, UINT uMsg)
-{
-	_ASSERT(m_bInitOK);
-	m_cpVoiceCh->SetInterest( ullEvent,ullEvent );
-	m_cpVoiceCh->SetNotifyWindowMessage( hWnd, uMsg, 0, 0 );
-	m_cpVoiceEn->SetInterest( ullEvent,ullEvent );
-	m_cpVoiceEn->SetNotifyWindowMessage( hWnd, uMsg, 1, 0 );
-}
-
 int CWorker::GetSpeed()
 {
-	return m_nSpeed;
+	int nSpeed=0;
+	STaskHelper::post(m_pTaskLoop,this,&CWorker::_GetSpeed,nSpeed,true);
+	return nSpeed;
+}
+
+void CWorker::_GetSpeed(int &nSpeed)
+{
+	nSpeed = m_nSpeed;
 }
 
 void CWorker::SetSpeed(int nSpeed)
 {
-	PostMessage(UM_FUN_SETSPEED, (WPARAM)nSpeed, 0);
+	STaskHelper::post(m_pTaskLoop,this,&CWorker::_SetSpeed,nSpeed,false);
 }
 
-void CWorker::_SetSpeed(WPARAM lp)
+void CWorker::_SetSpeed(int nSpeed)
 {
-	if(!m_bInitOK) return;
-	int nSpeed = (int)lp;
+	if(!m_bTtsOK) return;
 	m_cpVoiceEn->SetRate(nSpeed);
 	m_cpVoiceCh->SetRate(nSpeed);
 }
 
 
-UINT CWorker::Run(LPARAM lp)
+void CWorker::CheckUpdate(const std::string &szConfig,bool bManual)
 {
-	if (!Init())
-		return -1;
-	
-	MSG msg;
-	while (!IsStoped())
-	{
-		if (GetMessage(&msg, 0, 0, 0))
-		{
-			DispatchMessage(&msg);
-		}
-	}
-	Uninit();
-	return 0;
+	STaskHelper::post(m_pTaskLoop,this,&CWorker::_CheckUpdate,szConfig,bManual,false);
 }
 
-LRESULT CWorker::OnTTSMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
+void CWorker::_CheckUpdate(const std::string &szConfig,bool bManual)
 {
-	LRESULT lRet= 1;
-	switch (uMsg)
-	{
-	case UM_TTS_FINISH:
-		STRACEA("UM_TTS_FINISH");
-		break;
-	case UM_FUN_SPEAK:
-		_SpeakText(wParam, lParam);
-		break;
-	case UM_FUN_STOP:
-		_Stop();
-		break;
-	case UM_FUN_SETVOICE:
-		_SetVoice(wParam, lParam);
-		break;
-	case UM_FUN_SETSPEED:
-		_SetSpeed(wParam);
-		break;
-	case UM_FUN_GETTOKENINFO:
-		lRet = _GetTokensInfo(wParam, lParam);
-		break;
-	default:
-		break;
-	}
-	return lRet;
-}
-
-LRESULT CWorker::OnCheckUpdate(UINT uMsg, WPARAM wp, LPARAM lp)
-{
-	BOOL bManual = (BOOL)wp;
-	
-	CIsSvrProxy *pSvrProxy = (CIsSvrProxy*)lp;
-
 	CWinHttp  winHttp;
-	char szConfig[MAX_PATH];
-	pSvrProxy->m_pCore->GetConfigIni(szConfig, MAX_PATH);
 	char szUrl[500];
-	GetPrivateProfileStringA("update", "url", "http://soime.cm/sinstar3_update.xml", szUrl, 500, szConfig);
+	GetPrivateProfileStringA("update", "url", "http://soime.cm/sinstar3_update.xml", szUrl, 500, szConfig.c_str());
 	string strHtml = winHttp.Request(szUrl, Hr_Get);
 	pugi::xml_document doc;
 	if (doc.load_buffer(strHtml.c_str(), strHtml.length()))
 	{
+		EventCheckUpdateResult * pEvt = new EventCheckUpdateResult(NULL);
+		pEvt->bManual = bManual;
+
 		pugi::xml_node update = doc.root().child(L"update");
-		CheckUpdateResult *result = new CheckUpdateResult;
-		result->strUrl = update.attribute(L"url").as_string();
-		result->strNewUpdateUrl = update.attribute(L"newUpdateUrl").as_string();
-		result->strInfo = update.child_value();
+		pEvt->strUrl = update.attribute(L"url").as_string();
+		pEvt->strNewUpdateUrl = update.attribute(L"newUpdateUrl").as_string();
+		pEvt->strInfo = update.child_value();
 
-		SStringW strVerClient = update.attribute(L"version_client").as_string();
-		SStringW strVerServer = update.attribute(L"version_server").as_string();
+		SStringW strVerNew = update.attribute(L"version_new").as_string();
 		int a = 0, b = 0, c = 0, d = 0;
-		sscanf(S_CW2A(strVerClient), "%d.%d.%d.%d", &a, &b, &c, &d);
-		result->dwClientVer = MAKELONG(MAKEWORD(d, c), MAKEWORD(b, a));
-		a = b = c = d = 0;
-		sscanf(S_CW2A(strVerServer), "%d.%d.%d.%d", &a, &b, &c, &d);
-		result->dwServerVer = MAKELONG(MAKEWORD(d, c), MAKEWORD(b, a));
+		sscanf(S_CW2A(strVerNew), "%d.%d.%d.%d", &a, &b, &c, &d);
+		pEvt->dwNewVer = MAKELONG(MAKEWORD(d, c), MAKEWORD(b, a));
 
-		pSvrProxy->PostMessage(UM_CHECK_UPDATE_RESULT, bManual, (LPARAM)result);
+		SNotifyCenter::getSingletonPtr()->FireEventAsync(pEvt);
+		pEvt->Release();
 	}
 
-	return 0;
 }
 
 static DWORD GetKernelVer()
@@ -346,7 +311,13 @@ static DWORD GetKernelVer()
 	return dwRet;
 }
 
-LRESULT CWorker::OnDataReport(UINT uMsg, WPARAM wp, LPARAM lp)
+
+void CWorker::ReportUserInfo()
+{
+	STaskHelper::post(m_pTaskLoop,this,&CWorker::_ReportUserInfo,false);
+}
+
+void CWorker::_ReportUserInfo()
 {
 	::CRegKey reg;
 	LONG ret = reg.Open(HKEY_CURRENT_USER, _T("SOFTWARE\\SetoutSoft\\sinstar3"), KEY_READ | KEY_WOW64_64KEY);
@@ -427,6 +398,4 @@ LRESULT CWorker::OnDataReport(UINT uMsg, WPARAM wp, LPARAM lp)
 	CWinHttp  winHttp;
 	string strResp = winHttp.Request(url.c_str(), Hr_Get);
 	SLOG_INFO("data report result:" << strResp.c_str());
-
-	return 0;
 }
