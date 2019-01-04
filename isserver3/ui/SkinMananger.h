@@ -8,7 +8,7 @@ public:
 	~CSkinMananger(void);
 
 	void ClearMap(){m_mapSkin.RemoveAll();}
-	int InitSkinMenu(SMenuEx * hMenu, const SStringT & strSkinPath, int nStartId, const SStringT & strCurSkin);
+	int InitSkinMenu(HMENU hmenu, const SStringT & strSkinPath, int nStartId, const SStringT & strCurSkin);
 	SStringT ExtractSkinInfo(SStringT strSkinPath);
 	SStringT SkinPathFromID(int nSkinID) const;
 

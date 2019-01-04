@@ -6,7 +6,7 @@ public:
 	~SToolsMgr();
 
 	void ClearMap() { m_mapTool.RemoveAll(); }
-	int InitToolMenu(SMenuEx * hMenu, const SStringT & strToolPath, int nStartId);
+	int InitToolMenu(HMENU hMenu, const SStringT & strToolPath, int nStartId);
 	SStringT ExtractToolInfo(SStringT strToolPath);
 	SStringT ToolPathFromID(int nToolID) const;
 

@@ -35,7 +35,7 @@
 #include <res.mgr/sobjdefattr.h>
 #include <event/NotifyCenter.h>
 #include <commgr2.h>
-
+#include <helper/SMenu.h>
 #include <resprovider-zip/zipresprovider-param.h>
 
 #include "resource.h"
@@ -77,5 +77,4 @@ using namespace SOUI;
 #include "dataCenter/Settings.h"
 
 
-
-//#include "sinstar3_core.h"
+extern SComMgr2 * g_ComMgr2;

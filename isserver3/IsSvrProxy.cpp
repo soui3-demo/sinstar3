@@ -279,14 +279,14 @@ LRESULT CIsSvrProxy::OnTrayNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 		break;
 	case WM_RBUTTONUP:
 		{
-			SMenuEx tmenuex;
-			if (tmenuex.LoadMenu(UIRES.smenu.context_tray))
+			SMenu menu;
+			if (menu.LoadMenu(UIRES.smenu.context_tray))
 			{
 				POINT pt;
 				GetCursorPos(&pt);
 				SetForegroundWindow(m_hWnd);
-				tmenuex.CheckMenuItem(R.id.menu_auto, MF_BYCOMMAND | (m_pCore->IsAutoQuit()?MF_CHECKED:0));
-				tmenuex.TrackPopupMenu(0, pt.x, pt.y, m_hWnd);
+				::CheckMenuItem(menu.m_hMenu,R.id.menu_auto, MF_BYCOMMAND | (m_pCore->IsAutoQuit()?MF_CHECKED:0));
+				menu.TrackPopupMenu(0, pt.x, pt.y, m_hWnd);
 				PostMessage(WM_NULL);
 			}
 		}

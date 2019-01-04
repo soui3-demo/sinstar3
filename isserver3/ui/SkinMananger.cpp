@@ -11,7 +11,7 @@ CSkinMananger::~CSkinMananger(void)
 {
 }
 
-int CSkinMananger::InitSkinMenu(SMenuEx *hMenu, const SStringT &strSkinPath, int nStartId, const SStringT &strCurSkin)
+int CSkinMananger::InitSkinMenu(HMENU hMenu, const SStringT &strSkinPath, int nStartId, const SStringT &strCurSkin)
 {
 	WIN32_FIND_DATA findData;
 	HANDLE hFind = FindFirstFile(strSkinPath + _T("\\*.*"), &findData);
@@ -22,9 +22,11 @@ int CSkinMananger::InitSkinMenu(SMenuEx *hMenu, const SStringT &strSkinPath, int
 			{
 				if (_tcscmp(findData.cFileName, _T(".")) != 0 && _tcscmp(findData.cFileName, _T("..")) != 0)
 				{					
-					if (hMenu->InsertMenu(-1, MF_POPUP| MF_BYCOMMAND, ++nStartId, findData.cFileName))
+					if (AppendMenu(hMenu,MF_STRING, ++nStartId, findData.cFileName))
 					{
-						nStartId = InitSkinMenu(hMenu->GetSubMenu(nStartId), strSkinPath + _T("\\") + findData.cFileName, nStartId, strCurSkin);
+						int nItems = ::GetMenuItemCount(hMenu);
+						HMENU hSubMenu = GetSubMenu(hMenu, nItems-1);
+						nStartId = InitSkinMenu(hSubMenu, strSkinPath + _T("\\") + findData.cFileName, nStartId, strCurSkin);
 					}
 				}
 			}
@@ -39,11 +41,11 @@ int CSkinMananger::InitSkinMenu(SMenuEx *hMenu, const SStringT &strSkinPath, int
 					m_mapSkin[nStartId] = strFullPath;
 					SStringT strDesc = ExtractSkinInfo(strFullPath);
 
-					BOOL bInsertSucess=hMenu->InsertMenu(-1, MF_BYPOSITION, nStartId, strDesc);
+					BOOL bInsertSucess=AppendMenu(hMenu, MF_STRING, nStartId, strDesc);
 					
 					if (bInsertSucess&&(strFullPath == strCurSkin))
 					{
-						hMenu->CheckMenuItem(nStartId, MF_BYCOMMAND | MF_CHECKED);
+						CheckMenuItem(hMenu,nStartId, MF_BYCOMMAND | MF_CHECKED);
 					}
 				}
 			}

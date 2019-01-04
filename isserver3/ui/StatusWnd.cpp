@@ -136,15 +136,16 @@ namespace SOUI
 		OnMenuClick();
 	}
 
-	void CStatusWnd::OnInitMenuPopup(SMenuEx* menuPopup, UINT nIndex)
+	void CStatusWnd::OnInitMenuPopup(HMENU menuPopup, UINT nIndex, BOOL bSysMenu)
 	{
-		switch (menuPopup->GetContextHelpId())
+		
+		switch (::GetMenuContextHelpId(menuPopup))
 		{
 		case 100:
 		{//main menu
-			menuPopup->CheckMenuItem(R.id.follow_caret, MF_BYCOMMAND | g_SettingsUI->bMouseFollow ? MF_CHECKED : 0);
-			menuPopup->CheckMenuItem(R.id.hide_statusbar, MF_BYCOMMAND | g_SettingsUI->bHideStatus ? MF_CHECKED : 0);
-			menuPopup->CheckMenuItem(R.id.input_big5, MF_BYCOMMAND | g_SettingsUI->bInputBig5 ? MF_CHECKED : 0);
+			CheckMenuItem(menuPopup,R.id.follow_caret, MF_BYCOMMAND | g_SettingsUI->bMouseFollow ? MF_CHECKED : 0);
+			CheckMenuItem(menuPopup, R.id.hide_statusbar, MF_BYCOMMAND | g_SettingsUI->bHideStatus ? MF_CHECKED : 0);
+			CheckMenuItem(menuPopup, R.id.input_big5, MF_BYCOMMAND | g_SettingsUI->bInputBig5 ? MF_CHECKED : 0);
 			break;
 		}
 		case 2:
@@ -152,7 +153,7 @@ namespace SOUI
 			SStringT strCurSkin = CDataCenter::getSingletonPtr()->GetData().m_strSkin;
 			if (strCurSkin.IsEmpty())
 			{
-				menuPopup->CheckMenuItem(R.id.skin_def, MF_BYCOMMAND|MF_CHECKED);
+				CheckMenuItem(menuPopup, R.id.skin_def, MF_BYCOMMAND|MF_CHECKED);
 			}
 			m_skinManager.InitSkinMenu(menuPopup, CDataCenter::getSingletonPtr()->GetDataPath() + _T("\\skins"), R.id.skin_def, strCurSkin);
 			break;
@@ -165,9 +166,9 @@ namespace SOUI
 			for (int i = 0; i < (int)comps.GetCount(); i++)
 			{
 				SStringA strText = SStringA().Format("%s[%s]", comps[i].strName, comps[i].strType);
-				UINT flag = MF_BYPOSITION;
+				UINT flag = MF_STRING;
 				if (iSelComp == i) flag |= MF_CHECKED;
-				menuPopup->InsertMenu(-1, flag, idStart + i+1, S_CA2T(strText));
+				AppendMenu(menuPopup, flag, idStart + i+1, S_CA2T(strText));
 			}
 			break;
 		}
@@ -175,17 +176,17 @@ namespace SOUI
 		{
 			BOOL bCe2 = 0, bCe3 = 0, bCa4 = 0;
 			ISComm_Bldsp_Get(&bCe2, &bCe3, &bCa4);
-			menuPopup->CheckMenuItem(R.id.spell_one,MF_BYCOMMAND | (g_SettingsG->bBlendSpWord ? MF_CHECKED : 0));
-			menuPopup->CheckMenuItem(R.id.spell_two, MF_BYCOMMAND | (bCe2 ? MF_CHECKED : 0));
-			menuPopup->CheckMenuItem(R.id.spell_three, MF_BYCOMMAND | (bCe3 ? MF_CHECKED : 0));
-			menuPopup->CheckMenuItem(R.id.spell_all, MF_BYCOMMAND | (bCa4 ? MF_CHECKED : 0));
-			menuPopup->CheckMenuItem(R.id.userdef, MF_BYCOMMAND | (g_SettingsG->bBlendUD ? MF_CHECKED : 0));
+			CheckMenuItem(menuPopup, R.id.spell_one,MF_BYCOMMAND | (g_SettingsG->bBlendSpWord ? MF_CHECKED : 0));
+			CheckMenuItem(menuPopup,R.id.spell_two, MF_BYCOMMAND | (bCe2 ? MF_CHECKED : 0));
+			CheckMenuItem(menuPopup,R.id.spell_three, MF_BYCOMMAND | (bCe3 ? MF_CHECKED : 0));
+			CheckMenuItem(menuPopup,R.id.spell_all, MF_BYCOMMAND | (bCa4 ? MF_CHECKED : 0));
+			CheckMenuItem(menuPopup,R.id.userdef, MF_BYCOMMAND | (g_SettingsG->bBlendUD ? MF_CHECKED : 0));
 
 			break;
 		}
 		case 6://svr data manager
 		{
-			menuPopup->CheckMenuItem(R.id.svr_showicon, MF_BYCOMMAND | ISComm_SvrTray_Get() ? MF_CHECKED : 0);
+			CheckMenuItem(menuPopup,R.id.svr_showicon, MF_BYCOMMAND | ISComm_SvrTray_Get() ? MF_CHECKED : 0);
 			break;
 		}
 		case 7://tools
