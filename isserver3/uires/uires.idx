@@ -3,26 +3,27 @@
     <file name="XML_INIT" path="uidef\init.xml"/>
   </UIDEF>
   <LAYOUT>
-    <file name="dlg_keymap" path="xml\dlg_keymap.xml"/>
-    <file name="wnd_build_index_prog" path="xml\wnd_build_index_prog.xml"/>
-    <file name="dlg_update_info" path="xml\dlg_update_info.xml"/>
-    <file name="wnd_composition" path="xml\wnd_composition.xml"/>
-    <file name="wnd_status_bar" path="xml\wnd_status_bar.xml"/>
-    <file name="wnd_tip" path="xml\wnd_tip.xml"/>
-    <file name="wnd_spchar" path="xml\wnd_spchar.xml"/>
+    <file name="dlg_keymap" path="layout\server\dlg_keymap.xml"/>
+    <file name="wnd_build_index_prog" path="layout\server\wnd_build_index_prog.xml"/>
+    <file name="dlg_update_info" path="layout\server\dlg_update_info.xml"/>
+    
+    <file name="wnd_composition" path="layout\ime\wnd_composition.xml"/>
+    <file name="wnd_status_bar" path="layout\ime\wnd_status_bar.xml"/>
+    <file name="wnd_tip" path="layout\ime\wnd_tip.xml"/>
+    <file name="wnd_spchar" path="layout\ime\wnd_spchar.xml"/>
 
-    <file name="dlg_addblur" path="xml\dlg_addblur.xml"/>
-    <file name="dlg_config" path="xml\dlg_config.xml"/>
-    <file name="page_about" path="xml\page_about.xml"/>
-    <file name="page_misc" path="xml\page_misc.xml"/>
-    <file name="page_phraselib" path="xml\page_phraselib.xml"/>
-    <file name="page_pinyin" path="xml\page_pinyin.xml"/>
-    <file name="page_tts" path="xml\page_tts.xml"/>
-    <file name="page_candidate" path="xml\page_candidate.xml"/>
-    <file name="page_associate" path="xml\page_associate.xml"/>
-    <file name="page_hotkey" path="xml\page_hotkey.xml"/>
-    <file name="page_habit" path="xml\page_habit.xml"/>
-    <file name="page_celib" path="xml\page_celib.xml"/>
+    <file name="dlg_addblur" path="layout\settings\dlg_addblur.xml"/>
+    <file name="dlg_config" path="layout\settings\dlg_config.xml"/>
+    <file name="page_about" path="layout\settings\page_about.xml"/>
+    <file name="page_misc" path="layout\settings\page_misc.xml"/>
+    <file name="page_phraselib" path="layout\settings\page_phraselib.xml"/>
+    <file name="page_pinyin" path="layout\settings\page_pinyin.xml"/>
+    <file name="page_tts" path="layout\settings\page_tts.xml"/>
+    <file name="page_candidate" path="layout\settings\page_candidate.xml"/>
+    <file name="page_associate" path="layout\settings\page_associate.xml"/>
+    <file name="page_hotkey" path="layout\settings\page_hotkey.xml"/>
+    <file name="page_habit" path="layout\settings\page_habit.xml"/>
+    <file name="page_celib" path="layout\settings\page_celib.xml"/>
   </LAYOUT>
 
   <values>

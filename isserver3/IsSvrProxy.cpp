@@ -320,7 +320,7 @@ void CIsSvrProxy::OnTimer(UINT_PTR uID)
 	else if (uID == TIMERID_CHECK_UPDATE)
 	{
 		CSimpleWnd::KillTimer(uID);
-		CheckUpdate(FALSE);
+		CheckUpdate(false);
 	}
 	else if (uID == TIMERID_DATA_REPORT)
 	{
@@ -350,12 +350,12 @@ void CIsSvrProxy::OnMenuSettings(UINT uNotifyCode, int nID, HWND wndCtl)
 	CConfigDlg config(this);
 	if (ID_CHECK_UPDATE_NOW == config.DoModal(m_hWnd))
 	{
-		CheckUpdate(TRUE);
+		CheckUpdate(true);
 	}
 }
 
 
-void CIsSvrProxy::CheckUpdate(BOOL bManual)
+void CIsSvrProxy::CheckUpdate(bool bManual)
 {
 	char szConfig[MAX_PATH];
 	char szDate[100];

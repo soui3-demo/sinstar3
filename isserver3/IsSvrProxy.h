@@ -86,7 +86,7 @@ protected:
 	void OnMenuAutoExit(UINT uNotifyCode, int nID, HWND wndCtl);
 	void OnMenuSettings(UINT uNotifyCode, int nID, HWND wndCtl);
 
-	void CheckUpdate(BOOL bManual);
+	void CheckUpdate(bool bManual);
 	
 	BEGIN_MSG_MAP_EX(CIsSvrProxy)
 		MSG_WM_CREATE(OnCreate)
