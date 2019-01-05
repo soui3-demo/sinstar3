@@ -1,13 +1,12 @@
 #include "stdafx.h"
 #include "IsSvrProxy.h"
-#include <helper\smenuex.h>
-#include "KeyMapDlg.h"
+#include <helper/smenuex.h>
+#include <helper/STime.h>
+#include "settings/ConfigDlg.h"
+#include "ui/UpdateInfoDlg.h"
+#include "ui/KeyMapDlg.h"
 #include "../helper/helper.h"
 #include "../include/reg.h"
-#include <helper/STime.h>
-#include <process.h>
-#include "UpdateInfoDlg.h"
-#include "settings/ConfigDlg.h"
 #include "worker.h"
 
 #define TIMERID_DELAY_EXIT	200

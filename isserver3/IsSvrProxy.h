@@ -1,11 +1,10 @@
 #pragma once
-#include "trayIcon.h"
-#include "KeyMapDlg.h"
-#include "BuildIndexProgWnd.h"
-#include <iscore-i.h>
-#include "ThreadObject.h"
-#include "TextServiceProxy.h"
+#include "ui/trayIcon.h"
+#include "ui/KeyMapDlg.h"
+#include "ui/BuildIndexProgWnd.h"
+#include "ime/TextServiceProxy.h"
 #include "settings/ConfigDlg.h"
+#include <iscore-i.h>
 
 typedef IServerCore * (*funIscore_Create)();
 typedef void(*funIscore_Destroy)(IServerCore* pCore);

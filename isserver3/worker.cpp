@@ -6,7 +6,7 @@
 #include "worker.h"
 #include <sphelper.h>
 #include "WinHttp\HttpClient.h"
-#include "UpdateInfoDlg.h"
+#include "ui/UpdateInfoDlg.h"
 #include "IsSvrProxy.h"
 #include "../helper/helper.h"
 #include <helper/SFunctor.hpp>

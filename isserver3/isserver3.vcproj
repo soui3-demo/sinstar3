@@ -187,11 +187,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\BuildIndexProgWnd.cpp"
+				RelativePath=".\ui\BuildIndexProgWnd.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\CmdHandler.cpp"
+				RelativePath=".\ime\CmdHandler.cpp"
 				>
 			</File>
 			<File
@@ -207,15 +207,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ui\ImeWnd.cpp"
+				RelativePath=".\ime\ui\ImeWnd.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\InputState.cpp"
+				RelativePath=".\ime\InputState.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\ui\InputWnd.cpp"
+				RelativePath=".\ime\ui\InputWnd.cpp"
 				>
 			</File>
 			<File
@@ -227,7 +227,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\KeyMapDlg.cpp"
+				RelativePath=".\ui\KeyMapDlg.cpp"
 				>
 			</File>
 			<File
@@ -271,19 +271,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ShellExecuteMonitor.cpp"
+				RelativePath=".\ime\ShellExecuteMonitor.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Sinstar3Impl.cpp"
+				RelativePath=".\ime\Sinstar3Impl.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\ui\SkinAwareWnd.cpp"
+				RelativePath=".\ime\ui\SkinAwareWnd.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\ui\SkinMananger.cpp"
+				RelativePath=".\ime\ui\SkinMananger.cpp"
 				>
 			</File>
 			<File
@@ -299,7 +299,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ui\SpCharWnd.cpp"
+				RelativePath=".\ime\ui\SpCharWnd.cpp"
 				>
 			</File>
 			<File
@@ -335,7 +335,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ui\StatusWnd.cpp"
+				RelativePath=".\ime\ui\StatusWnd.cpp"
 				>
 			</File>
 			<File
@@ -343,7 +343,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ui\STipWnd.cpp"
+				RelativePath=".\ime\ui\STipWnd.cpp"
 				>
 			</File>
 			<File
@@ -351,27 +351,27 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ui\SToolsMgr.cpp"
+				RelativePath=".\ime\ui\SToolsMgr.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\TextServiceProxy.cpp"
+				RelativePath=".\ime\TextServiceProxy.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\ThreadObject.cpp"
+				RelativePath=".\ime\ThreadObject.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\TrayIcon.cpp"
+				RelativePath=".\ui\TrayIcon.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\UpdateInfoDlg.cpp"
+				RelativePath=".\ui\UpdateInfoDlg.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Utils.cpp"
+				RelativePath=".\ime\Utils.cpp"
 				>
 			</File>
 			<File
@@ -393,11 +393,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\BuildIndexProgWnd.h"
+				RelativePath=".\ui\BuildIndexProgWnd.h"
 				>
 			</File>
 			<File
-				RelativePath=".\CmdHandler.h"
+				RelativePath=".\ime\CmdHandler.h"
 				>
 			</File>
 			<File
@@ -425,19 +425,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ui\ImeWnd.h"
+				RelativePath=".\ime\ui\ImeWnd.h"
 				>
 			</File>
 			<File
-				RelativePath=".\inputContext.h"
+				RelativePath=".\ime\inputContext.h"
 				>
 			</File>
 			<File
-				RelativePath=".\InputState.h"
+				RelativePath=".\ime\InputState.h"
 				>
 			</File>
 			<File
-				RelativePath=".\ui\InputWnd.h"
+				RelativePath=".\ime\ui\InputWnd.h"
 				>
 			</File>
 			<File
@@ -445,7 +445,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\KeyMapDlg.h"
+				RelativePath=".\ui\KeyMapDlg.h"
 				>
 			</File>
 			<File
@@ -497,19 +497,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ShellExecuteMonitor.h"
+				RelativePath=".\ime\ShellExecuteMonitor.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Sinstar3Impl.h"
+				RelativePath=".\ime\Sinstar3Impl.h"
 				>
 			</File>
 			<File
-				RelativePath=".\ui\SkinAwareWnd.h"
+				RelativePath=".\ime\ui\SkinAwareWnd.h"
 				>
 			</File>
 			<File
-				RelativePath=".\ui\SkinMananger.h"
+				RelativePath=".\ime\ui\SkinMananger.h"
 				>
 			</File>
 			<File
@@ -525,7 +525,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ui\SpCharWnd.h"
+				RelativePath=".\ime\ui\SpCharWnd.h"
 				>
 			</File>
 			<File
@@ -561,7 +561,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ui\StatusWnd.h"
+				RelativePath=".\ime\ui\StatusWnd.h"
 				>
 			</File>
 			<File
@@ -569,7 +569,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ui\STipWnd.h"
+				RelativePath=".\ime\ui\STipWnd.h"
 				>
 			</File>
 			<File
@@ -577,27 +577,27 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ui\SToolsMgr.h"
+				RelativePath=".\ime\ui\SToolsMgr.h"
 				>
 			</File>
 			<File
-				RelativePath=".\TextServiceProxy.h"
+				RelativePath=".\ime\TextServiceProxy.h"
 				>
 			</File>
 			<File
-				RelativePath=".\ThreadObject.h"
+				RelativePath=".\ime\ThreadObject.h"
 				>
 			</File>
 			<File
-				RelativePath=".\TrayIcon.h"
+				RelativePath=".\ui\TrayIcon.h"
 				>
 			</File>
 			<File
-				RelativePath=".\UpdateInfoDlg.h"
+				RelativePath=".\ui\UpdateInfoDlg.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Utils.h"
+				RelativePath=".\ime\Utils.h"
 				>
 			</File>
 			<File

@@ -49,8 +49,8 @@ using namespace SOUI;
 
 #include "global_def.h"
 
-#include "inputContext.h"
-#include "CmdHandler.h"
+#include "ime/inputContext.h"
+#include "ime/CmdHandler.h"
 
 #include "controls/SChatEdit.h"
 #include "controls/SToggle2.h"
