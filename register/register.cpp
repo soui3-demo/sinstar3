@@ -23,7 +23,6 @@
 #define MAX_STRLEN		100
 
 #define NAME_MAPFILE _T("_setoutsoft comm map file")
-#define SINSTAR3_CORE	_T("sinstar3_core.dll")
 #define SINSTARE_IME	_T("sinstar3_ime")
 
 TCHAR g_szPath[MAX_PATH]={0};	//程序启动位置
@@ -48,12 +47,12 @@ BOOL Is64OS()
 } 
 
 
-void ShowCaller(LPCTSTR pszImeCore)
+void ShowCaller()
 {
 	TCHAR szPath[MAX_PATH];
 	STARTUPINFO si={sizeof(STARTUPINFO),0};
 	PROCESS_INFORMATION pi={0};
-	_stprintf(szPath,_T("%s\\program\\findcallerUI.exe %s"), g_szPath, pszImeCore);
+	_stprintf(szPath,_T("%s\\program\\findcallerUI.exe sinstar3_ime.ime|sinstar3_tsf.dll"), g_szPath);
 	if(CreateProcess(NULL,szPath,NULL,NULL,FALSE,0,NULL,NULL,&si,&pi))
 	{
 		CloseHandle(pi.hThread);
@@ -127,7 +126,7 @@ BOOL Sinstar_Update(LPCTSTR pszIme)
 		CloseHandle(hMutex);
 		if (MessageBox(GetActiveWindow(), _T("输入法正在使用，不能更新，查看哪些程序在使用吗？"), _T("提示"), MB_OKCANCEL | MB_ICONQUESTION) == IDOK)
 		{
-			ShowCaller(SINSTAR3_CORE);
+			ShowCaller();
 		}
 		return 0;
 	}
@@ -182,7 +181,7 @@ BOOL Sinstar_Uninstall(LPCTSTR pszIme)
 		CloseHandle(hMutex);
 		if (MessageBox(GetActiveWindow(), _T("输入法正在使用，不能卸载，查看哪些程序在使用吗？"), _T("提示"), MB_OKCANCEL | MB_ICONQUESTION) == IDOK)
 		{
-			ShowCaller(SINSTAR3_CORE);
+			ShowCaller();
 		}
 		return 0;
 	}
@@ -388,7 +387,7 @@ BOOL Sinstar_Install(LPCTSTR pszImeName)
 		CloseHandle(hMutex);
 		if (MessageBox(GetActiveWindow(), _T("输入法正在使用，不能安装，查看哪些程序在使用吗？"), _T("提示"), MB_OKCANCEL | MB_ICONQUESTION) == IDOK)
 		{
-			ShowCaller(SINSTAR3_CORE);
+			ShowCaller();
 		}
 		return 0;
 	}

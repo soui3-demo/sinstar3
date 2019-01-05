@@ -14,6 +14,7 @@ public:
 protected:
 	TCHAR m_szSvrPath[MAX_PATH];
 	DWORD m_dwSystemInfoFlags;
+	HANDLE m_hMutex;
 };
 
 extern CImeModule *theModule;

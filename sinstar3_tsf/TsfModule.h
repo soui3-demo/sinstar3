@@ -23,6 +23,8 @@ protected:
 	CClassFactory *m_classFactory;
 
 	TCHAR	m_szSvrPath[MAX_PATH];
+
+	HANDLE	m_hMutex;
 };
 
 

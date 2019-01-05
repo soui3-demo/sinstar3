@@ -5,9 +5,11 @@ CImeModule::CImeModule(HINSTANCE hInst, LPCTSTR pszSvrPath):CModuleRef(hInst),m_
 {
 	CUiWnd::RegisterClass(hInst);
 	_tcscpy(m_szSvrPath, pszSvrPath);
+	m_hMutex = CreateMutex(NULL, FALSE, SINSTAR3_MUTEX);
 }
 
 CImeModule::~CImeModule(void)
 {
+	CloseHandle(m_hMutex);
 	CUiWnd::UnregisterClass(GetModule());
 }
