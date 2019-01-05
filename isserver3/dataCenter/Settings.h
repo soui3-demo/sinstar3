@@ -83,7 +83,6 @@ public:
 	void Load(LPCTSTR pszIniFile);
 	void Save(LPCTSTR pszIniFile);
 
-	TCHAR   szSkin[MAX_PATH];
 	BOOL	bHideStatus;		// 当前状态栏隐藏状态
 	BOOL	bMouseFollow;		// 鼠标跟随开关
 	BOOL	bEnglish;			// 英文单词输入开关
