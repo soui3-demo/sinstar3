@@ -5,17 +5,17 @@ translucent="1"
 >
   <root skin="_skin.sys.wnd.bkgnd" cache="1" layout="vbox" padding="5,5,5,5">
     <caption size="-2,30" layout="hbox" gravity="center">
-      <window size="0,-1" layout="hbox" weight="1">
+      <caption size="0,-1" layout="hbox" weight="1" gravity="center">
         <icon size="-1,-1" src="ICON_LOGO:16"/>
         <text size="-1,-1" text="@string/keymap"/>
-      </window>
+      </caption>
       <window size="-1,-1" layout="hbox" gravity="center">
         <text name="txt_comp_name"/>
         <link name="link_comp_website"/>
       </window>
-      <window size="0,-1" weight="1" layout="vbox" gravity="right">
+      <caption size="0,-1" weight="1" layout="vbox" gravity="right" layout_gravity="top">
         <imgbtn pos ="-0,|0" offset="-1,-0.5" name="btn_close" skin="_skin.sys.btn.close"  id="IDCANCEL" tip="close" animate="1"/>
-      </window>
+      </caption>
     </caption>
     <img size="-2,0" weight="1" name="img_keymap"/>
   </root>
