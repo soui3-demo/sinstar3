@@ -32,13 +32,13 @@ public:
 	void CheckUpdate(const std::string &szConfig,bool bManual);
 	void ReportUserInfo();
 private:
-	void _GetVoice(bool bCh, int &nVoice);
-	void _GetSpeed(int &nSpeed);
+	void _GetVoice(bool bCh, int *nVoice);
+	void _SetVoice(bool bCh, int iToken);
+	void _GetSpeed(int *nSpeed);
 	void _SetSpeed(int nSpeed);
 	void _SpeakText(const std::wstring &buf,bool bCh);
 	void _Stop();
-	void _SetVoice(bool bCh, int iToken);
-	void _GetTokensInfo(bool bCh, wchar_t token[][MAX_TOKEN_NAME_LENGHT], int nBufSize, ULONG &nResult);
+	void _GetTokensInfo(bool bCh, wchar_t token[][MAX_TOKEN_NAME_LENGHT], int nBufSize, ULONG *nResult);
 	void _CheckUpdate(const std::string &szConfig,bool bManual);
 	void _ReportUserInfo();
 

@@ -123,14 +123,7 @@ void CWorker::_SpeakText(const std::wstring &buf,bool bCh)
 	if (_IsTTSBusy())
 		_Stop();
 	m_CurVoice = bCh ? VOICE_CH : VOICE_EN;
-	try
-	{
-		HRESULT	hr = (m_CurVoice == VOICE_CH ? m_cpVoiceCh : m_cpVoiceEn)->Speak(buf.c_str(), SPF_IS_NOT_XML, 0);
-	}
-	catch (...)
-	{
-		SLOG_WARN("tts throw error!");
-	}
+	HRESULT	hr = (m_CurVoice == VOICE_CH ? m_cpVoiceCh : m_cpVoiceEn)->Speak(buf.c_str(), SPF_IS_NOT_XML, 0);
 }
 
 void CWorker::SpeakText(LPCSTR pszText,int nLen,bool bCh)
@@ -156,14 +149,14 @@ BOOL CWorker::_IsTTSBusy()
 int CWorker::GetVoice(bool bCh)
 {
 	int nVoices = 0;
-	STaskHelper::post(m_pTaskLoop,this,&CWorker::_GetVoice,bCh,nVoices,true);
+	STaskHelper::post(m_pTaskLoop,this,&CWorker::_GetVoice,bCh,&nVoices,true);
 	return nVoices;
 }
 
 
-void CWorker::_GetVoice(bool bCh,int &nVoice)
+void CWorker::_GetVoice(bool bCh,int *nVoice)
 {
-	nVoice =  bCh?m_iChVoice:m_iEnVoice;
+	*nVoice =  bCh?m_iChVoice:m_iEnVoice;
 }
 
 void CWorker::SetVoice(bool bCh, int iToken)
@@ -202,25 +195,25 @@ void CWorker::_SetVoice(bool bCh, int iToken)
 ULONG CWorker::GetTokensInfo(bool bCh, wchar_t token[][MAX_TOKEN_NAME_LENGHT], int nBufSize)
 {
 	ULONG nRet = 0;
-	STaskHelper::post(m_pTaskLoop,this,&CWorker::_GetTokensInfo,bCh,token,nBufSize,nRet,true);
+	STaskHelper::post(m_pTaskLoop,this,&CWorker::_GetTokensInfo,bCh,token,nBufSize,&nRet,true);
 	return nRet;
 }
 
-void CWorker::_GetTokensInfo(bool bCh, wchar_t token[][MAX_TOKEN_NAME_LENGHT], int nBufSize, ULONG &count)
+void CWorker::_GetTokensInfo(bool bCh, wchar_t token[][MAX_TOKEN_NAME_LENGHT], int nBufSize, ULONG *count)
 {
 	if(!m_bTtsOK)
 		return;
 	SComPtr<IEnumSpObjectTokens> pTokens=bCh?m_cpChTokens:m_cpEnTokens;
-	HRESULT hr=pTokens->GetCount(&count);
+	HRESULT hr=pTokens->GetCount(count);
 	if (token == NULL) return;
-	if(count==0) return;
-	if (nBufSize < count) 
+	if(*count==0) return;
+	if (nBufSize < *count) 
 	{
-		count = -1;
+		*count = -1;
 		return;
 	}
 
-	for(int i=0;i<(int)count;i++)
+	for(int i=0;i<(int)(*count);i++)
 	{
 		ISpObjectToken * pToken;
 		hr=pTokens->Item(i,&pToken);
@@ -249,13 +242,13 @@ void CWorker::_Stop()
 int CWorker::GetSpeed()
 {
 	int nSpeed=0;
-	STaskHelper::post(m_pTaskLoop,this,&CWorker::_GetSpeed,nSpeed,true);
+	STaskHelper::post(m_pTaskLoop,this,&CWorker::_GetSpeed,&nSpeed,true);
 	return nSpeed;
 }
 
-void CWorker::_GetSpeed(int &nSpeed)
+void CWorker::_GetSpeed(int *nSpeed)
 {
-	nSpeed = m_nSpeed;
+	*nSpeed = m_nSpeed;
 }
 
 void CWorker::SetSpeed(int nSpeed)
