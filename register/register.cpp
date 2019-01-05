@@ -23,11 +23,36 @@
 #define MAX_STRLEN		100
 
 #define NAME_MAPFILE _T("_setoutsoft comm map file")
-#define SINSTARE_IME	_T("sinstar3_ime")
 
 TCHAR g_szPath[MAX_PATH]={0};	//程序启动位置
 HINSTANCE g_hInst = 0;
 
+const TCHAR * KFiles[]=
+{
+	_T("program\\isserver3.exe"),
+	_T("program\\sinstar3_ime.dll"),
+	_T("program\\x64\\sinstar3_ime.dll"),
+	_T("program\\sinstar3_tsf.dll"),
+	_T("program\\x64\\sinstar3_tsf.dll"),
+};
+
+struct CopyInfo{
+	TCHAR *pszSrc;
+	TCHAR *pszDest;
+	bool   bReg;
+};
+
+const CopyInfo KSrcX86Files[]=
+{
+	{_T("program\\sinstar3_ime.dll"),_T("sinstar3_ime.ime"),true},
+	{_T("program\\sinstar3_tsf.dll"),_T("sinstar3_tsf.dll"),true},
+};
+
+const CopyInfo KSrcX64Files[]=
+{
+	{_T("program\\x64\\sinstar3_ime.dll"),_T("sinstar3_ime.ime"),false},
+	{_T("program\\x64\\sinstar3_tsf.dll"),_T("sinstar3_tsf.dll"),true},
+};
 
 
 BOOL Is64OS()
@@ -114,7 +139,7 @@ BOOL GetSysWow64Dir(LPTSTR pszDir,int nLen)
 	return TRUE;
 }
 
-BOOL Sinstar_Update(LPCTSTR pszIme)
+BOOL Sinstar_Update(bool bSilent)
 {
 	TCHAR szPath1[MAX_PATH],szPath2[MAX_PATH],szSysPath[MAX_PATH],szSysWow64[MAX_PATH];
 	::GetSystemDirectory(szSysPath,MAX_PATH);
@@ -124,7 +149,7 @@ BOOL Sinstar_Update(LPCTSTR pszIme)
 	if(GetLastError()==ERROR_ALREADY_EXISTS)
 	{
 		CloseHandle(hMutex);
-		if (MessageBox(GetActiveWindow(), _T("输入法正在使用，不能更新，查看哪些程序在使用吗？"), _T("提示"), MB_OKCANCEL | MB_ICONQUESTION) == IDOK)
+		if (!bSilent && MessageBox(GetActiveWindow(), _T("输入法正在使用，不能更新，查看哪些程序在使用吗？"), _T("提示"), MB_OKCANCEL | MB_ICONQUESTION) == IDOK)
 		{
 			ShowCaller();
 		}
@@ -132,38 +157,50 @@ BOOL Sinstar_Update(LPCTSTR pszIme)
 	}
 	CloseHandle(hMutex);
 	
-	BOOL bCopied = FALSE;
+	BOOL bCopied = TRUE;
 	if (Is64OS())
 	{
-		_stprintf(szPath1, _T("%s\\program\\x64\\%s.dll"), g_szPath, pszIme);
-		_stprintf(szPath2, _T("%s\\%s.ime"), szSysPath, pszIme);
-		bCopied = CopyFile(szPath1, szPath2, FALSE);
-
-		if (bCopied)
+		//copy x64 files to system dir
+		for(int i=0;i<ARRAYSIZE(KSrcX64Files) && bCopied;i++)
 		{
-			_stprintf(szPath1, _T("%s\\program\\%s.dll"), g_szPath, pszIme);
-			_stprintf(szPath2, _T("%s\\%s.ime"), szSysPath, pszIme);
-			bCopied=CopyFile(szPath1, szPath2, FALSE);
+			_stprintf(szPath1, _T("%s\\%s"), g_szPath, KSrcX64Files[i].pszSrc);
+			_stprintf(szPath2, _T("%s\\%s"), szSysPath, KSrcX64Files[i].pszDest);
+			bCopied = CopyFile(szPath1, szPath2, FALSE);
+		}
+
+		//copy x86 files to wow64 dir.
+		for(int i=0;i<ARRAYSIZE(KSrcX86Files) && bCopied;i++)
+		{
+			_stprintf(szPath1, _T("%s\\%s"), g_szPath, KSrcX86Files[i].pszSrc);
+			_stprintf(szPath2, _T("%s\\%s"), szSysWow64, KSrcX86Files[i].pszDest);
+			bCopied = CopyFile(szPath1, szPath2, FALSE);
 		}
 	}
 	else
 	{
-		_stprintf(szPath1, _T("%s\\program\\%s.dll"), g_szPath, pszIme);
-		_stprintf(szPath2, _T("%s\\%s.ime"), szSysPath, pszIme);
-		bCopied = CopyFile(szPath1, szPath2, FALSE);
+		//copy x86 files to system dir
+		for(int i=0;i<ARRAYSIZE(KSrcX86Files) && bCopied;i++)
+		{
+			_stprintf(szPath1, _T("%s\\%s"), g_szPath, KSrcX86Files[i].pszSrc);
+			_stprintf(szPath2, _T("%s\\%s"), szSysPath, KSrcX86Files[i].pszDest);
+			bCopied = CopyFile(szPath1, szPath2, FALSE);
+		}
 	}
-	if (!bCopied)
+	if(!bSilent)
 	{
-		MessageBox(GetActiveWindow(), _T("Copy File Failed"), _T("update"), MB_OK);
-	}
-	else
-	{
-		MessageBox(GetActiveWindow(), _T("更新成功！"), _T("install"), MB_OK | MB_ICONINFORMATION);
+		if (!bCopied)
+		{
+			MessageBox(GetActiveWindow(), _T("Copy File Failed"), _T("update"), MB_OK);
+		}
+		else
+		{
+			MessageBox(GetActiveWindow(), _T("更新成功！"), _T("install"), MB_OK | MB_ICONINFORMATION);
+		}
 	}
 	return bCopied;
 }
 
-BOOL Sinstar_Uninstall(LPCTSTR pszIme)
+BOOL Sinstar_Uninstall()
 {
 	TCHAR szSysPath[MAX_PATH],sysWow64[MAX_PATH];
 	TCHAR szPath[MAX_PATH];
@@ -189,26 +226,43 @@ BOOL Sinstar_Uninstall(LPCTSTR pszIme)
 	if(MessageBox(GetActiveWindow(),_T("确定卸载吗？"),_T("提示"),MB_OKCANCEL|MB_ICONQUESTION)==IDCANCEL) 
 		return 0;
 
-
-	_stprintf(szPath,_T("%s\\%s.ime"),szSysPath,pszIme);
-	if (0 != CallRegsvr32(szPath, FALSE))
-	{
-		MessageBox(GetActiveWindow(), _T("卸载程序失败"), _T("提示"), MB_OK | MB_ICONSTOP);
-		return 0;
-	}
-
 	//删除输入法文件
 	if (Is64OS())
 	{
-		_stprintf(szPath, _T("%s\\%s.ime"), szSysPath, pszIme);
-		DeleteFile(szPath);
-		_stprintf(szPath, _T("%s\\%s.ime"), sysWow64, pszIme);
-		DeleteFile(szPath);
+		for(int i=0;i<ARRAYSIZE(KSrcX64Files);i++)
+		{
+			_stprintf(szPath, _T("%s\\%s.ime"), szSysPath, KSrcX64Files[i].pszDest);
+			if (KSrcX64Files[i].bReg && 0 != CallRegsvr32(szPath, FALSE))
+			{
+				MessageBox(GetActiveWindow(), _T("卸载程序失败"), _T("提示"), MB_OK | MB_ICONSTOP);
+				return 0;
+			}
+			DeleteFile(szPath);
+		}
+
+		for(int i=0;i<ARRAYSIZE(KSrcX86Files);i++)
+		{
+			_stprintf(szPath, _T("%s\\%s.ime"), sysWow64, KSrcX86Files[i].pszDest);
+			if (KSrcX86Files[i].bReg && 0 != CallRegsvr32(szPath, FALSE))
+			{
+				MessageBox(GetActiveWindow(), _T("卸载程序失败"), _T("提示"), MB_OK | MB_ICONSTOP);
+				return 0;
+			}
+			DeleteFile(szPath);
+		}
 	}
 	else
 	{
-		_stprintf(szPath, _T("%s\\%s.ime"), szSysPath, pszIme);
-		DeleteFile(szPath);
+		for(int i=0;i<ARRAYSIZE(KSrcX86Files);i++)
+		{
+			_stprintf(szPath, _T("%s\\%s.ime"), szSysPath, KSrcX86Files[i].pszDest);
+			if (KSrcX86Files[i].bReg && 0 != CallRegsvr32(szPath, FALSE))
+			{
+				MessageBox(GetActiveWindow(), _T("卸载程序失败"), _T("提示"), MB_OK | MB_ICONSTOP);
+				return 0;
+			}
+			DeleteFile(szPath);
+		}
 	}
 
 	//delete reg
@@ -231,15 +285,6 @@ BOOL Sinstar_Uninstall(LPCTSTR pszIme)
 	{
 		reg.RecurseDeleteKey(_T("sinstar3"));
 		reg.Close();
-	}
-
-	//unreg tsf module
-	_stprintf(szPath,_T("%s\\program\\sinstar3_tsf.dll"),szClient);
-	CallRegsvr32(szPath,FALSE);
-	if (Is64OS())
-	{
-		_stprintf(szPath,_T("%s\\program\\x64\\sinstar3_tsf.dll"),szClient);
-		CallRegsvr32(szPath,FALSE);
 	}
 
 	//退出服务器
@@ -350,37 +395,15 @@ Cleanup:
 }
 
 
-BOOL Sinstar_Install(LPCTSTR pszImeName)
+BOOL Sinstar_Install()
 {
 	TCHAR szSysPath[MAX_PATH];
-	TCHAR szPath1[300],szPath2[300];
 	TCHAR szSysWow64[MAX_PATH]={0};
 
 	GetSystemDirectory(szSysPath, MAX_PATH);
 	GetSysWow64Dir(szSysWow64, MAX_PATH);
 	
-	//step1:验证文件有效性
-	_stprintf(szPath1,_T("%s\\program\\%s.dll"),g_szPath, pszImeName);
-	if(GetFileAttributes(szPath1)==0xFFFFFFFF)
-	{
-		TCHAR szMsg[100];
-		_stprintf(szMsg,_T("输入法目录下没有找到输入法文件：%s"), pszImeName);
-		MessageBox(GetActiveWindow(),szMsg,_T("提示"),MB_OK|MB_ICONSTOP);
-		return FALSE;
-	}
-
-	TCHAR szSvrExe[256] = { 0 }, szSvrData[256] = { 0 };
-	_stprintf(szSvrExe, _T("%s\\program\\isserver3.exe"), g_szPath);
-	_stprintf(szSvrData,_T("%s\\server"),g_szPath);
-	if(GetFileAttributes(szSvrExe)==0xFFFFFFFF)
-	{
-		TCHAR szMsg[100];
-		_stprintf(szMsg,_T("服务器目录下没有找到isserver3.exe"));
-		MessageBox(GetActiveWindow(),szMsg,_T("提示"),MB_OK|MB_ICONSTOP);
-		return FALSE;
-	}
-	
-	//step2: check for running.
+	//step1: check for running.
 	HANDLE hMutex = CreateMutex(NULL, FALSE, SINSTAR3_MUTEX);
 	if (GetLastError() == ERROR_ALREADY_EXISTS)
 	{
@@ -389,10 +412,20 @@ BOOL Sinstar_Install(LPCTSTR pszImeName)
 		{
 			ShowCaller();
 		}
-		return 0;
+		return FALSE;
 	}
 	CloseHandle(hMutex);
 
+	//step2 copy files.
+	if(!Sinstar_Update(true))
+	{
+		MessageBox(GetActiveWindow(), _T("复制文件失败!"), _T("提示"), MB_OKCANCEL | MB_ICONSTOP);
+		return FALSE;
+	}
+
+	TCHAR szSvrExe[256] = { 0 }, szSvrData[256] = { 0 };
+	_stprintf(szSvrExe, _T("%s\\program\\isserver3.exe"), g_szPath);
+	_stprintf(szSvrData,_T("%s\\server"),g_szPath);
 
 	//step3: write reg
 	CRegKey reg;
@@ -413,64 +446,49 @@ BOOL Sinstar_Install(LPCTSTR pszImeName)
 		reg.Close();
 	}
 
-	//step4:修改2.x的服务器路径
-	_stprintf(szPath1, _T("%s\\sinstar2.ini"), szSysPath);
-	if (GetFileAttributes(szPath1) != INVALID_FILE_ATTRIBUTES)
-	{
-		WritePrivateProfileString(_T("server"), _T("exe"), szSvrExe, szPath1);
-		WritePrivateProfileString(_T("server"), _T("data"), szSvrData, szPath1);
-		if (Is64OS())
-		{
-			_stprintf(szPath1, _T("%s\\sinstar2.ini"), szSysWow64);
-			WritePrivateProfileString(_T("server"), _T("exe"), szSvrExe, szPath1);
-			WritePrivateProfileString(_T("server"), _T("data"), szSvrData, szPath1);
-		}
-	}
 
-	//step5: copy ime file
+	TCHAR szPath[1000];
+	//step6:安装输入法
 	if(Is64OS())
 	{
-		//复制64位版本到系统目录
-		_stprintf(szPath1,_T("%s\\program\\x64\\%s.dll"),g_szPath, pszImeName);
-		_stprintf(szPath2, _T("%s\\%s.ime"), szSysPath, pszImeName);
-		MyCopyFile(szPath1, szPath2);
-		//复制32位版本到wow64目录
-		_stprintf(szPath1,_T("%s\\program\\%s.dll"),g_szPath, pszImeName);
-		_stprintf(szPath2, _T("%s\\%s.ime"), szSysWow64, pszImeName);
-		MyCopyFile(szPath1, szPath2);
+		for(int i=0;i<ARRAYSIZE(KSrcX86Files);i++)
+		{
+			if(!KSrcX86Files[i].bReg) continue;
+			_stprintf(szPath,_T("%s\\%s"),szSysWow64,KSrcX86Files[i].pszDest);
+			if (0 != CallRegsvr32(szPath, TRUE))
+			{
+				MessageBox(GetActiveWindow(), _T("注册失败"), _T("install"), MB_OK | MB_ICONSTOP);
+				return FALSE;
+			}
+		}
+
+		for(int i=0;i<ARRAYSIZE(KSrcX64Files);i++)
+		{
+			if(!KSrcX64Files[i].bReg) continue;
+			_stprintf(szPath,_T("%s\\%s"),szSysPath,KSrcX64Files[i].pszDest);
+			if (0 != CallRegsvr32(szPath, TRUE))
+			{
+				MessageBox(GetActiveWindow(), _T("注册失败"), _T("install"), MB_OK | MB_ICONSTOP);
+				return FALSE;
+			}
+		}
 	}else
 	{
-		_stprintf(szPath1, _T("%s\\program\\%s.dll"), g_szPath, pszImeName);
-		_stprintf(szPath2, _T("%s\\%s.ime"), szSysPath, pszImeName);
-		MyCopyFile(szPath1, szPath2);
-	}
-	//step6:安装输入法
-	_stprintf(szPath1,_T("%s\\%s.ime"),szSysPath, pszImeName);
-	if (0 != CallRegsvr32(szPath1, TRUE))
-	{
-		MessageBox(GetActiveWindow(), _T("注册失败"), _T("install"), MB_OK | MB_ICONSTOP);
-		return 0;
-	}
-
-	//step7: reg tsf module
-	_stprintf(szPath1,_T("%s\\program\\sinstar3_tsf.dll"),g_szPath);
-	if (0 != CallRegsvr32(szPath1, TRUE))
-	{
-		MessageBox(GetActiveWindow(), _T("注册TSF 32bit 失败"), _T("install"), MB_OK | MB_ICONSTOP);
-		return 0;
-	}
-	if(Is64OS())
-	{
-		_stprintf(szPath1,_T("%s\\program\\x64\\sinstar3_tsf.dll"),g_szPath);
-		if (0 != CallRegsvr32(szPath1, TRUE))
+		for(int i=0;i<ARRAYSIZE(KSrcX86Files);i++)
 		{
-			MessageBox(GetActiveWindow(), _T("注册TSF 64bit 失败"), _T("install"), MB_OK | MB_ICONSTOP);
-			return 0;
+			if(!KSrcX86Files[i].bReg) continue;
+			_stprintf(szPath,_T("%s\\%s"),szSysPath,KSrcX86Files[i].pszDest);
+			if (0 != CallRegsvr32(szPath, TRUE))
+			{
+				MessageBox(GetActiveWindow(), _T("注册失败"), _T("install"), MB_OK | MB_ICONSTOP);
+				return FALSE;
+			}
 		}
 	}
+
 	//step8:修改配置文件属性
-	_stprintf(szPath1,_T("%s\\data\\config.ini"),g_szPath);
-	Helper_SetFileACL(szPath1);
+	_stprintf(szPath,_T("%s\\data\\config.ini"),g_szPath);
+	Helper_SetFileACL(szPath);
 	Helper_SetFileACLEx(szSvrData,TRUE);
 
 	TCHAR szUser[]=_T("ALL APPLICATION PACKAGES");
@@ -482,7 +500,7 @@ BOOL Sinstar_Install(LPCTSTR pszImeName)
 	return TRUE;
 }
 
-#define IME_NAME _T("sinstar3_ime")
+
 
 BOOL CALLBACK DlgProc_Option(
   HWND hwndDlg,  // handle to dialog box
@@ -501,6 +519,18 @@ BOOL CALLBACK DlgProc_Option(
 			SendMessage(hwndDlg, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
 			Helper_CenterWindow(hwndDlg,0);
 
+			for(int i=0;i<ARRAYSIZE(KFiles);i++)
+			{
+				TCHAR szBuf[1000];
+				_stprintf(szBuf,_T("%s\\%s"),g_szPath,KFiles[i]);
+				if(GetFileAttributes(szBuf)==INVALID_FILE_ATTRIBUTES)
+				{
+					_stprintf(szBuf,_T("安装目录文件[%s]没有找到，请保证安装包完整！"),KFiles[i]);
+					MessageBox(hwndDlg, szBuf, _T("错误"), MB_OK | MB_ICONSTOP);
+					PostQuitMessage(1);
+					return 0;
+				}
+			}
 			TCHAR szLicenseFile[MAX_PATH];
 			_stprintf(szLicenseFile, _T("%s\\license.txt"), g_szPath);
 			FILE *f = _tfopen(szLicenseFile, _T("rb"));
@@ -548,17 +578,17 @@ BOOL CALLBACK DlgProc_Option(
 				break;
 			case IDC_INSTALL:
 				{
-					EndDialog(hwndDlg,Sinstar_Install(IME_NAME));
+					EndDialog(hwndDlg,Sinstar_Install());
 				}
 				break;
 			case IDC_UNINSTALL:
 				{
-					EndDialog(hwndDlg,Sinstar_Uninstall(IME_NAME));
+					EndDialog(hwndDlg,Sinstar_Uninstall());
 				}
 				break;
 			case IDC_UPDATE:
 				{
-					EndDialog(hwndDlg,Sinstar_Update(IME_NAME));
+					EndDialog(hwndDlg,Sinstar_Update(false));
 				}
 				break;
 			case IDCANCEL:
