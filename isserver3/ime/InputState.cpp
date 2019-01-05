@@ -190,18 +190,23 @@ int CInputState::TestHotKey(UINT uVk, const BYTE * lpbKeyState) const
 			break;
 		}
 	}
-	if(iRet==-1 && m_ctx.sCandCount && ((uVk>='0' && uVk<='9')||(uVk>=VK_NUMPAD0 && uVk<=VK_NUMPAD9)))
-	{//number
-		if(lpbKeyState[VK_CONTROL] & 0x80)
-		{
-			iRet = (lpbKeyState[VK_SHIFT] & 0x80)?HKI_DelCandidate:HKI_AdjustRate;
-		}
-	}
-	else if (iRet == HKI_UDMode)
+	if(iRet != -1)
 	{
 		if (m_ctx.cComp > 0 || m_ctx.inState == INST_USERDEF)
 			iRet = -1;
+		if(IsTempSpell() && iRet == HKI_UDMode)
+			iRet = -1;
+	}else//iRet == -1
+	{
+		if(m_ctx.sCandCount && ((uVk>='0' && uVk<='9')||(uVk>=VK_NUMPAD0 && uVk<=VK_NUMPAD9)))
+		{//number
+			if(lpbKeyState[VK_CONTROL] & 0x80)
+			{
+				iRet = (lpbKeyState[VK_SHIFT] & 0x80)?HKI_DelCandidate:HKI_AdjustRate;
+			}
+		}
 	}
+
 	return iRet;
 }
 
@@ -2209,7 +2214,6 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 	static BOOL bPressShift=FALSE;
 	static BOOL bPressCtrl=FALSE;
 	BOOL bRet=FALSE;
-	if(!ISComm_IsSvrWorking()) return FALSE;
 	if ((lKeyData & 0x80000000) && (uKey != VK_SHIFT && uKey !=VK_CONTROL))
 		return FALSE;
 
@@ -2364,7 +2368,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 							}
 							InputUpdate();
 						}
-					}else if(g_SettingsG->compMode==IM_SHAPECODE)
+					}else if(g_SettingsG->compMode==IM_SHAPECODE && m_ctx.inState==INST_CODING)
 					{//五笔输入状态，进入临时拼音状态
 						ClearContext(CPC_ALL);
 						m_ctx.compMode=IM_SPELL;
