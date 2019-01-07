@@ -43,6 +43,7 @@ protected:
 protected:
 	virtual int GetUpdateInterval() const;
 	virtual void OnUpdateIntervalChanged(int nInterval);
+	virtual void OnUpdateNow();
 protected:
 	virtual void OnBuildShapePhraseIndex(PROGTYPE uType, unsigned int dwData);
 	virtual void OnBuildSpellPhraseIndex(PROGTYPE uType, unsigned int dwData) ;
@@ -88,6 +89,10 @@ protected:
 
 	void CheckUpdate(bool bManual);
 	
+	INT_PTR ShowModal(SHostDialog *pDlg);
+	
+	void Quit(int nCode);
+
 	BEGIN_MSG_MAP_EX(CIsSvrProxy)
 		MSG_WM_CREATE(OnCreate)
 		MSG_WM_DESTROY(OnDestroy)
@@ -120,5 +125,6 @@ private:
 	CKeyMapDlg *  m_pKeyMapDlg;
 	CBuildIndexProgWnd * m_pBuildIndexProg;
 
+	SHostDialog	* m_pCurModalDlg;
 };
 

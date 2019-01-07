@@ -259,7 +259,7 @@ namespace SOUI
 	};
 
 	CConfigDlg::CConfigDlg(IUpdateIntervalObserver *pObserver)
-		:SHostDialog(UIRES.LAYOUT.dlg_config)
+		:SHostWnd(UIRES.LAYOUT.dlg_config)
 		,m_pObserver(pObserver)
 	{
 	}
@@ -1151,7 +1151,8 @@ SWindow *pCtrl = FindChildByID(id);\
 
 	void CConfigDlg::OnUpdateNow()
 	{
-		EndDialog(ID_CHECK_UPDATE_NOW);
+		m_pObserver->OnUpdateNow();
+		DestroyWindow();
 	}
 
 	void CConfigDlg::OnAutoUpdateClick()
@@ -1189,4 +1190,11 @@ SWindow *pCtrl = FindChildByID(id);\
 			FindChildByID(R.id.chk_auto_update)->SetCheck(TRUE);
 		}
 	}
+
+	void CConfigDlg::OnFinalMessage(HWND hWnd)
+	{
+		__super::OnFinalMessage(hWnd);
+		delete this;
+	}
+
 }

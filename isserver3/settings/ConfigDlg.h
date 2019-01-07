@@ -9,14 +9,16 @@ namespace SOUI
 	struct IUpdateIntervalObserver {
 		virtual int GetUpdateInterval() const = 0;
 		virtual void OnUpdateIntervalChanged(int nInterval) = 0;
+		virtual void OnUpdateNow() = 0;
 	};
 
-	class CConfigDlg: public SHostDialog
+	class CConfigDlg: public SHostWnd
 	{
 	public:
 		CConfigDlg(IUpdateIntervalObserver *pObserver);
 		~CConfigDlg(void);		
 
+		virtual void OnFinalMessage(HWND hWnd);
 	private:
 		IUpdateIntervalObserver * m_pObserver;
 	protected:

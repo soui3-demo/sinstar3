@@ -36,6 +36,7 @@ CIsSvrProxy::CIsSvrProxy(const SStringT & strDataPath)
 	,m_funIsCore_Destroy(NULL)
 	, m_pKeyMapDlg(NULL)
 	, m_pBuildIndexProg(NULL)
+	, m_pCurModalDlg(NULL)
 {
 	m_uMsgTaskbarCreated = RegisterWindowMessage(TEXT("TaskbarCreated"));
 }
@@ -332,7 +333,7 @@ void CIsSvrProxy::OnTimer(UINT_PTR uID)
 {
 	if (uID == TIMERID_DELAY_EXIT)
 	{
-		PostQuitMessage(0);
+		Quit(0);
 	}
 	else if (uID == TIMERID_CHECK_UPDATE)
 	{
@@ -354,7 +355,7 @@ void CIsSvrProxy::OnTimer(UINT_PTR uID)
 
 void CIsSvrProxy::OnMenuExit(UINT uNotifyCode, int nID, HWND wndCtl)
 {
-	PostQuitMessage(0);
+	Quit(0);
 }
 
 void CIsSvrProxy::OnMenuAutoExit(UINT uNotifyCode, int nID, HWND wndCtl)
@@ -364,11 +365,14 @@ void CIsSvrProxy::OnMenuAutoExit(UINT uNotifyCode, int nID, HWND wndCtl)
 
 void CIsSvrProxy::OnMenuSettings(UINT uNotifyCode, int nID, HWND wndCtl)
 {
-	CConfigDlg config(this);
-	if (ID_CHECK_UPDATE_NOW == config.DoModal(m_hWnd))
-	{
-		CheckUpdate(true);
-	}
+	CConfigDlg * pConfig = new CConfigDlg(this);
+	pConfig->Create(NULL,WS_POPUP,0,0,0,0,0);
+	pConfig->ShowWindow(SW_SHOW);
+//   	CConfigDlg config(this);
+//   	if (ID_CHECK_UPDATE_NOW == ShowModal(&config))
+//   	{
+//   		CheckUpdate(true);
+//   	}
 }
 
 
@@ -424,11 +428,35 @@ void CIsSvrProxy::OnCheckUpdateResult(EventArgs *e)
 			e2->dwCurVer = dwVerSvr;
 
 			CUpdateInfoDlg updateDlg(e2);
-			updateDlg.DoModal(GetDesktopWindow());
+			ShowModal(&updateDlg);
 		}
 		else if (e2->bManual)
 		{
 			SMessageBox(GetDesktopWindow(), _T("没有发现新版本!"), _T("提示"), MB_OK | MB_ICONINFORMATION);
 		}
 	}
+}
+
+INT_PTR CIsSvrProxy::ShowModal(SHostDialog *pDlg)
+{
+	if(m_pCurModalDlg)
+	{
+		m_pCurModalDlg->EndDialog(-1);
+		m_pCurModalDlg = NULL;
+	}
+	m_pCurModalDlg = pDlg;
+	INT_PTR uRet = pDlg->DoModal(GetDesktopWindow());
+	m_pCurModalDlg=NULL;
+	return uRet;
+}
+
+void CIsSvrProxy::Quit(int nCode)
+{
+	if(m_pCurModalDlg) m_pCurModalDlg->EndDialog(-1);
+	PostQuitMessage(nCode);
+}
+
+void CIsSvrProxy::OnUpdateNow()
+{
+	CheckUpdate(true);
 }
