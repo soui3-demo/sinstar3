@@ -227,20 +227,37 @@ void CIsSvrProxy::OnUpdateIntervalChanged(int nInterval)
 }
 
 void CIsSvrProxy::OnShowKeyMap(IDataBlock * pCompData, LPCSTR pszName, LPCSTR pszUrl) {
-	SOUI::IBitmap *pBmp = SResLoadFromMemory::LoadImage(pCompData->GetData(), pCompData->GetLength());
-	if (pBmp)
+	CAutoRefPtr<IImgDecoderFactory> imgDecoder;
+	SComLoader comLoader;
+	comLoader.CreateInstance(_T("imgdecoder-gdip.dll"), (IObjRef**)&imgDecoder);
+	if (imgDecoder)
 	{
+		CAutoRefPtr<IImgX> imgX;
+		imgDecoder->CreateImgX(&imgX);
+		if (imgX->LoadFromMemory(pCompData->GetData(), pCompData->GetLength()) == 0)
+		{
+			SLOG_WARN("load key map image failed!");
+			return;
+		}
+		if (imgX->GetFrameCount() == 0)
+		{
+			SLOG_WARN("key map image has 0 frames!");
+			return;
+		}
+		CAutoRefPtr<IBitmap> pImg;
+		GETRENDERFACTORY->CreateBitmap(&pImg);
+		pImg->Init(imgX->GetFrame(0));
+
 		if (m_pKeyMapDlg)
 		{
 			m_pKeyMapDlg->DestroyWindow();
 		}
-		m_pKeyMapDlg = new CKeyMapDlg(pBmp, pszName, pszUrl);
+		m_pKeyMapDlg = new CKeyMapDlg(pImg, pszName, pszUrl);
 		m_pKeyMapDlg->SetListener(this);
 		m_pKeyMapDlg->Create(NULL, WS_POPUP | WS_VISIBLE, WS_EX_TOOLWINDOW | WS_EX_TOPMOST, 0, 0, 0, 0);
 		m_pKeyMapDlg->SendMessage(WM_INITDIALOG);
 		m_pKeyMapDlg->CenterWindow(GetDesktopWindow());
-		pBmp->Release();
-
+		imgDecoder = NULL;
 	}
 }
 
