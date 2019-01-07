@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "SinstarProxy.h"
 #include <shellapi.h>
+#include "../helper/helper.h"
 
 CSinstarProxy::CSinstarProxy(ITextService *pTxtService):m_conn(pTxtService)
 {
@@ -49,6 +50,18 @@ BOOL CSinstarProxy::Init(HWND hClient, LPCTSTR pszSvrPath)
 	m_conn.ConnectTo(hSvr);
 	Param_Create param;
 	param.hOwner = GetActiveWindow();
+
+	HMODULE hMod = GetModuleHandle(NULL);
+	if (hMod)
+	{
+		TCHAR szBuf[MAX_PATH];
+		GetModuleFileName(hMod, szBuf, MAX_PATH);
+		char szBufA[MAX_PATH];
+		GetModuleFileNameA(hMod, szBufA, MAX_PATH);
+		param.strHostPath = szBufA;
+		Helper_PEVersion(szBuf, &param.dwVer, NULL, NULL);
+	}
+
 	m_conn.CallFun(&param);
 	return TRUE;
 }

@@ -142,9 +142,11 @@ enum {
 struct Param_Create : FunParams_Base
 {
 	HWND hOwner;
+	string strHostPath;
+	DWORD  dwVer;
 	FUNID(ISinstar_Create)
-		PARAMS1(Input, hOwner)
-		TOSTR1(hOwner)
+		PARAMS3(Input, hOwner,strHostPath,dwVer)
+		TOSTR3(hOwner,strHostPath,dwVer)
 };
 
 struct Param_Destroy : FunParams_Base

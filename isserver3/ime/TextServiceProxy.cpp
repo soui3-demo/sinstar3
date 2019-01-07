@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "TextServiceProxy.h"
 #include "Sinstar3Impl.h"
-
+#include "../helper/helper.h"
 
 CSvrConnection::CSvrConnection(HWND hSvr):m_hSvr(hSvr)
 {
@@ -110,6 +110,9 @@ BOOL CSvrConnection::GetOpenStatus(UINT64 imeContext) const
 void CSvrConnection::HandleCreate(Param_Create & param)
 {
 	SASSERT(!m_pSinstar);
+	TCHAR szVer[100];
+	Helper_VersionString(param.dwVer, szVer);
+	SLOG_INFO("create connection, host:" << param.strHostPath.c_str() << " ver:" << szVer);
 	m_pSinstar.Attach(new CSinstar3Impl(this, m_hSvr,param.hOwner));
 }
 
