@@ -103,8 +103,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Base64.cpp" />
-    <ClCompile Include="BuildIndexProgWnd.cpp" />
-    <ClCompile Include="CmdHandler.cpp" />
     <ClCompile Include="controls\QR_Encode.cpp" />
     <ClCompile Include="controls\SApngPlayer.cpp" />
     <ClCompile Include="controls\SCandView.cpp" />
@@ -127,35 +125,37 @@
     <ClCompile Include="controls\SToggle2.cpp" />
     <ClCompile Include="dataCenter\DataCenter.cpp" />
     <ClCompile Include="dataCenter\Settings.cpp" />
-    <ClCompile Include="InputState.cpp" />
+    <ClCompile Include="ime\CmdHandler.cpp" />
+    <ClCompile Include="ime\InputState.cpp" />
+    <ClCompile Include="ime\ShellExecuteMonitor.cpp" />
+    <ClCompile Include="ime\Sinstar3Impl.cpp" />
+    <ClCompile Include="ime\TextServiceProxy.cpp" />
+    <ClCompile Include="ime\ThreadObject.cpp" />
+    <ClCompile Include="ime\ui\ImeWnd.cpp" />
+    <ClCompile Include="ime\ui\InputWnd.cpp" />
+    <ClCompile Include="ime\ui\SkinAwareWnd.cpp" />
+    <ClCompile Include="ime\ui\SkinMananger.cpp" />
+    <ClCompile Include="ime\ui\SpCharWnd.cpp" />
+    <ClCompile Include="ime\ui\StatusWnd.cpp" />
+    <ClCompile Include="ime\ui\STipWnd.cpp" />
+    <ClCompile Include="ime\ui\SToolsMgr.cpp" />
+    <ClCompile Include="ime\Utils.cpp" />
     <ClCompile Include="isserver3.cpp">
       <ShowIncludes Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ShowIncludes>
     </ClCompile>
     <ClCompile Include="IsSvrProxy.cpp" />
-    <ClCompile Include="KeyMapDlg.cpp" />
     <ClCompile Include="Minidump.cpp" />
     <ClCompile Include="settings\AddBlurDlg.cpp" />
     <ClCompile Include="settings\ConfigDlg.cpp" />
-    <ClCompile Include="ShellExecuteMonitor.cpp" />
-    <ClCompile Include="Sinstar3Impl.cpp" />
-    <ClCompile Include="TextServiceProxy.cpp" />
-    <ClCompile Include="ui\ImeWnd.cpp" />
-    <ClCompile Include="ui\InputWnd.cpp" />
-    <ClCompile Include="ui\SkinAwareWnd.cpp" />
-    <ClCompile Include="ui\SkinMananger.cpp" />
-    <ClCompile Include="ui\SpCharWnd.cpp" />
-    <ClCompile Include="ui\StatusWnd.cpp" />
-    <ClCompile Include="ui\STipWnd.cpp" />
-    <ClCompile Include="ui\SToolsMgr.cpp" />
-    <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="ui\BuildIndexProgWnd.cpp" />
+    <ClCompile Include="ui\KeyMapDlg.cpp" />
+    <ClCompile Include="ui\TrayIcon.cpp" />
+    <ClCompile Include="ui\UpdateInfoDlg.cpp" />
     <ClCompile Include="worker.cpp" />
-    <ClCompile Include="TrayIcon.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="ThreadObject.cpp" />
-    <ClCompile Include="UpdateInfoDlg.cpp" />
     <ClCompile Include="WinHttp\HttpClient.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -163,8 +163,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Base64.h" />
-    <ClInclude Include="BuildIndexProgWnd.h" />
-    <ClInclude Include="CmdHandler.h" />
     <ClInclude Include="controls\QR_Encode.h" />
     <ClInclude Include="controls\SAniImgFrame.h" />
     <ClInclude Include="controls\SApngPlayer.h" />
@@ -189,31 +187,33 @@
     <ClInclude Include="dataCenter\DataCenter.h" />
     <ClInclude Include="dataCenter\Settings.h" />
     <ClInclude Include="global_def.h" />
-    <ClInclude Include="inputContext.h" />
-    <ClInclude Include="InputState.h" />
+    <ClInclude Include="ime\CmdHandler.h" />
+    <ClInclude Include="ime\inputContext.h" />
+    <ClInclude Include="ime\InputState.h" />
+    <ClInclude Include="ime\ShellExecuteMonitor.h" />
+    <ClInclude Include="ime\Sinstar3Impl.h" />
+    <ClInclude Include="ime\TextServiceProxy.h" />
+    <ClInclude Include="ime\ThreadObject.h" />
+    <ClInclude Include="ime\ui\ImeWnd.h" />
+    <ClInclude Include="ime\ui\InputWnd.h" />
+    <ClInclude Include="ime\ui\SkinAwareWnd.h" />
+    <ClInclude Include="ime\ui\SkinMananger.h" />
+    <ClInclude Include="ime\ui\SpCharWnd.h" />
+    <ClInclude Include="ime\ui\StatusWnd.h" />
+    <ClInclude Include="ime\ui\STipWnd.h" />
+    <ClInclude Include="ime\ui\SToolsMgr.h" />
+    <ClInclude Include="ime\Utils.h" />
     <ClInclude Include="IsSvrProxy.h" />
-    <ClInclude Include="KeyMapDlg.h" />
     <ClInclude Include="Minidump.h" />
     <ClInclude Include="settings\AddBlurDlg.h" />
     <ClInclude Include="settings\ConfigDlg.h" />
-    <ClInclude Include="ShellExecuteMonitor.h" />
-    <ClInclude Include="Sinstar3Impl.h" />
-    <ClInclude Include="TextServiceProxy.h" />
-    <ClInclude Include="ui\ImeWnd.h" />
-    <ClInclude Include="ui\InputWnd.h" />
-    <ClInclude Include="ui\SkinAwareWnd.h" />
-    <ClInclude Include="ui\SkinMananger.h" />
-    <ClInclude Include="ui\SpCharWnd.h" />
-    <ClInclude Include="ui\StatusWnd.h" />
-    <ClInclude Include="ui\STipWnd.h" />
-    <ClInclude Include="ui\SToolsMgr.h" />
-    <ClInclude Include="Utils.h" />
+    <ClInclude Include="ui\BuildIndexProgWnd.h" />
+    <ClInclude Include="ui\KeyMapDlg.h" />
+    <ClInclude Include="ui\TrayIcon.h" />
+    <ClInclude Include="ui\UpdateInfoDlg.h" />
     <ClInclude Include="worker.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="TrayIcon.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="ThreadObject.h" />
-    <ClInclude Include="UpdateInfoDlg.h" />
     <ClInclude Include="WinHttp\Common.h" />
     <ClInclude Include="WinHttp\HttpClient.h" />
     <ClInclude Include="WinHttp\IHttpInterface.h" />
