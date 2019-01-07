@@ -36,11 +36,16 @@ BOOL CSinstarProxy::Init(HWND hClient, LPCTSTR pszSvrPath)
 		SASSERT(ShExecInfo.hProcess);
 		WaitForInputIdle(ShExecInfo.hProcess, 1000);
 		CloseHandle(ShExecInfo.hProcess);
-		Sleep(100);
-		hSvr = FindWindow(NULL, SINSTAR3_SERVER_HWND);
+		for (int i = 0; i < 100 && !hSvr; i++)
+		{
+			Sleep(10);
+			hSvr = FindWindow(NULL, SINSTAR3_SERVER_HWND);
+		}
 	}
-	SASSERT(hSvr);
-
+	if (!hSvr)
+	{
+		return FALSE;
+	}
 	m_conn.ConnectTo(hSvr);
 	Param_Create param;
 	param.hOwner = GetActiveWindow();

@@ -367,7 +367,12 @@ BOOL CUiWnd::_InitSinstar3()
 	m_pSinstar3 = new CSinstarProxy(this);
 	Helper_ChangeWindowMessageFilter(UM_CALL_FUN, MSGFLT_ADD);
 
-	m_pSinstar3->Init(m_hWnd, theModule->GetSvrPath());
+	if (!m_pSinstar3->Init(m_hWnd, theModule->GetSvrPath()))
+	{
+		delete m_pSinstar3;
+		m_pSinstar3 = NULL;
+		return FALSE;
+	}
 	m_pSinstar3->OnIMESelect(m_bActivate);
 	HIMC hIMC=(HIMC)GetWindowLongPtr(m_hWnd,IMMGWLP_IMC);
 	m_pSinstar3->OnSetFocus(hIMC!=0);
