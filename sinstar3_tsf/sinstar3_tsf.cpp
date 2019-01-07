@@ -414,6 +414,13 @@ BOOL CSinstar3Tsf::_UninitSinstar3()
 	return TRUE;
 }
 
+LRESULT CSinstar3Tsf::WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	LRESULT result;
+	BOOL bHandled = m_pSinstar3->ProcessWindowMessage(m_hWnd, uMsg, wParam, lParam, result);
+	if (bHandled) return result;
+	return __super::WindowProc(uMsg, wParam, lParam);
+}
 
 BOOL CSinstar3Tsf::SetOpenStatus(UINT64 imeContext,BOOL bOpen)
 {

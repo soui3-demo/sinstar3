@@ -106,7 +106,10 @@ public:
 	void _TerminateComposition(TfEditCookie ecWrite,ITfContext *pContext,bool bClearCtx);
 	BOOL _IsComposing() const;
 	BOOL _GetSegRange(TfEditCookie ec,ITfRange **pRange,int nLeft,int nRight);
-		
+
+protected:
+	virtual LRESULT WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
+	
 private:
 
 	BOOL _InitSinstar3();

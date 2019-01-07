@@ -419,7 +419,7 @@ BOOL Sinstar_Install()
 	//step2 copy files.
 	if(!Sinstar_Update(true))
 	{
-		MessageBox(GetActiveWindow(), _T("复制文件失败!"), _T("提示"), MB_OKCANCEL | MB_ICONSTOP);
+		MessageBox(GetActiveWindow(), _T("复制文件失败!"), _T("提示"), MB_OK | MB_ICONSTOP);
 		return FALSE;
 	}
 
