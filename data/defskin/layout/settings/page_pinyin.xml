@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<include>
+  <window size="-2,-1" layout="hbox" gravity="center">
+    <text inset="10,5,5,5">@string/cfg_pinyin</text>
+    <hr width="-2" height="1"></hr>
+  </window>
+  <window pos="88,[" layout="vbox">
+    <text text="模糊音设置"/>
+    <window size="-2,-1" layout="hbox">
+      <listview size="200dp,200dp" name="lv_blur">
+        <template itemHeight="30dp">
+          <group layout="hbox" gravity="center" colorHover="#e4f0fc" colorSelected="#e4e0ec" trackMouseEvent="1">
+            <text name="txt_blur_group" colorText="#222222"/>
+          </group>
+          <item layout="vbox" gravity="center" colorHover="#e4f0fc" colorSelected="#e4e0ec"  trackMouseEvent="1">
+            <text name="txt_blur_info"/>
+          </item>
+        </template>
+      </listview>
+      <window size="-1,-1" extend_left="10" layout="vbox">
+        <button padding="10,5,10,5" name="btn_add_blur" text="增加模糊音"/>
+        <button padding="10,5,10,5" name="btn_del_blur" text="删除模糊音" extend_top="10"/>
+        <check text="启用模糊音" name="chk_py_blur" extend_top="10"/>
+      </window>
+    </window>
+    <check text="简拼时z=zh,c=ch,s=sh" name="chk_jp_zcs" extend_top="10"/>
+  </window>
+</include>

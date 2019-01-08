@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu itemHeight="28" contextHelpId="100"
+          maxWidth="300" minWidth="150">
+  <item text="设置" name="menu_settings" id="103"/>
+  <item text="强制退出" name="menu_exit" id="102"/>
+  <item text="自动退出" name="menu_auto" id="101"/>
+</menu>
