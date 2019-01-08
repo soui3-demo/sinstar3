@@ -2,6 +2,7 @@
 #include "IsSvrProxy.h"
 #include <helper/smenuex.h>
 #include <helper/STime.h>
+#include <com-loader.hpp>
 #include "settings/ConfigDlg.h"
 #include "ui/UpdateInfoDlg.h"
 #include "ui/KeyMapDlg.h"
@@ -366,13 +367,8 @@ void CIsSvrProxy::OnMenuAutoExit(UINT uNotifyCode, int nID, HWND wndCtl)
 void CIsSvrProxy::OnMenuSettings(UINT uNotifyCode, int nID, HWND wndCtl)
 {
 	CConfigDlg * pConfig = new CConfigDlg(this);
-	pConfig->Create(NULL,WS_POPUP,0,0,0,0,0);
+	pConfig->Create(m_hWnd,WS_POPUP,0,0,0,0,0);
 	pConfig->ShowWindow(SW_SHOW);
-//   	CConfigDlg config(this);
-//   	if (ID_CHECK_UPDATE_NOW == ShowModal(&config))
-//   	{
-//   		CheckUpdate(true);
-//   	}
 }
 
 
