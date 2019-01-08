@@ -17,8 +17,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "register", "register\regist
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "helper", "helper\helper.vcproj", "{223D1DB1-C67B-4B54-BEE8-B60F24D7E8CE}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iscore", "iscore\iscore.vcproj", "{2CBFA93E-21BF-49C1-8583-A8DE1319DED9}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iscomm", "iscomm\iscomm.vcproj", "{A69CA2FD-05D2-4C27-B106-B2EF0BFCFA51}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CompBuilder", "CompBuilder\CompBuilder.vcproj", "{13C135A7-8B18-4746-8495-672D8F286B92}"
@@ -96,16 +94,6 @@ Global
 		{223D1DB1-C67B-4B54-BEE8-B60F24D7E8CE}.Release|Win32.Build.0 = Release|Win32
 		{223D1DB1-C67B-4B54-BEE8-B60F24D7E8CE}.Release|x64.ActiveCfg = Release|x64
 		{223D1DB1-C67B-4B54-BEE8-B60F24D7E8CE}.Release|x64.Build.0 = Release|x64
-		{2CBFA93E-21BF-49C1-8583-A8DE1319DED9}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{2CBFA93E-21BF-49C1-8583-A8DE1319DED9}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{2CBFA93E-21BF-49C1-8583-A8DE1319DED9}.Debug|Win32.ActiveCfg = Debug|Win32
-		{2CBFA93E-21BF-49C1-8583-A8DE1319DED9}.Debug|Win32.Build.0 = Debug|Win32
-		{2CBFA93E-21BF-49C1-8583-A8DE1319DED9}.Debug|x64.ActiveCfg = Debug|Win32
-		{2CBFA93E-21BF-49C1-8583-A8DE1319DED9}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{2CBFA93E-21BF-49C1-8583-A8DE1319DED9}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{2CBFA93E-21BF-49C1-8583-A8DE1319DED9}.Release|Win32.ActiveCfg = Release|Win32
-		{2CBFA93E-21BF-49C1-8583-A8DE1319DED9}.Release|Win32.Build.0 = Release|Win32
-		{2CBFA93E-21BF-49C1-8583-A8DE1319DED9}.Release|x64.ActiveCfg = Release|Win32
 		{A69CA2FD-05D2-4C27-B106-B2EF0BFCFA51}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
 		{A69CA2FD-05D2-4C27-B106-B2EF0BFCFA51}.Debug|Mixed Platforms.Build.0 = Debug|Win32
 		{A69CA2FD-05D2-4C27-B106-B2EF0BFCFA51}.Debug|Win32.ActiveCfg = Debug|Win32
