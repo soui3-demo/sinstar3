@@ -21,8 +21,8 @@
 template<>
 CWorker * SSingleton<CWorker>::ms_Singleton = NULL;
 
-const TCHAR * KConfigIni = _T("config.ini");
-const TCHAR * KTtsEntry = _T("tts");
+const TCHAR * KConfigIni = _T("\\server\\config.ini");
+const TCHAR * KTtsEntry = _T("TTS");
 const TCHAR * KTtsSpeed = _T("speed");
 const TCHAR * KTtsChVoice = _T("ChVoice");
 const TCHAR * KTtsEnVoice = _T("EnVoice");
@@ -32,7 +32,6 @@ CWorker::CWorker(LPCTSTR pszDataPath):m_bTtsOK(FALSE), m_CurVoice(VOICE_NULL)
 	SNotifyCenter::getSingletonPtr()->addEvent(EVENTID(EventCheckUpdateResult));
 
 	m_strConfigIni = pszDataPath;
-	m_strConfigIni += _T("\\");
 	m_strConfigIni += KConfigIni;
 
 	g_ComMgr2->CreateTaskLoop((IObjRef**)&m_pTaskLoop);
