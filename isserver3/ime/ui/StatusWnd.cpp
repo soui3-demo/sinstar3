@@ -139,62 +139,64 @@ namespace SOUI
 	void CStatusWnd::OnInitMenuPopup(HMENU menuPopup, UINT nIndex, BOOL bSysMenu)
 	{
 		SMenu smenuPopup(menuPopup);
+
 		switch (::GetMenuContextHelpId(menuPopup))
 		{
 		case 100:
-		{//main menu
-			smenuPopup.CheckMenuItem(R.id.follow_caret, MF_BYCOMMAND | g_SettingsUI->bMouseFollow ? MF_CHECKED : 0);
-			smenuPopup.CheckMenuItem(R.id.hide_statusbar, MF_BYCOMMAND | g_SettingsUI->bHideStatus ? MF_CHECKED : 0);
-			smenuPopup.CheckMenuItem(R.id.input_big5, MF_BYCOMMAND | g_SettingsUI->bInputBig5 ? MF_CHECKED : 0);
-			break;
-		}
+			{//main menu
+				smenuPopup.CheckMenuItem(R.id.follow_caret, MF_BYCOMMAND | g_SettingsUI->bMouseFollow ? MF_CHECKED : 0);
+				smenuPopup.CheckMenuItem(R.id.hide_statusbar, MF_BYCOMMAND | g_SettingsUI->bHideStatus ? MF_CHECKED : 0);
+				smenuPopup.CheckMenuItem(R.id.input_big5, MF_BYCOMMAND | g_SettingsUI->bInputBig5 ? MF_CHECKED : 0);
+				break;
+			}
 		case 2:
-		{//skin
-			SStringT strCurSkin = CDataCenter::getSingletonPtr()->GetData().m_strSkin;
-			if (strCurSkin.IsEmpty())
-			{
-				smenuPopup.CheckMenuItem(R.id.skin_def, MF_BYCOMMAND|MF_CHECKED);
+			{//skin
+				SStringT strCurSkin = CDataCenter::getSingletonPtr()->GetData().m_strSkin;
+				if (strCurSkin.IsEmpty())
+				{
+					smenuPopup.CheckMenuItem(R.id.skin_def, MF_BYCOMMAND|MF_CHECKED);
+				}
+				m_skinManager.InitSkinMenu(menuPopup, CDataCenter::getSingletonPtr()->GetDataPath() + _T("\\skins"), R.id.skin_def, strCurSkin);
+				break;
 			}
-			m_skinManager.InitSkinMenu(menuPopup, CDataCenter::getSingletonPtr()->GetDataPath() + _T("\\skins"), R.id.skin_def, strCurSkin);
-			break;
-		}
 		case 4://comp select
-		{
-			const SArray<CNameTypePair> &comps = CDataCenter::getSingleton().UpdateCompList();
-			int idStart = R.id.comp_install;
-			int iSelComp = CDataCenter::getSingleton().GetSelectCompIndex();
-			for (int i = 0; i < (int)comps.GetCount(); i++)
 			{
-				SStringA strText = SStringA().Format("%s[%s]", comps[i].strName, comps[i].strType);
-				UINT flag = MF_STRING;
-				if (iSelComp == i) flag |= MF_CHECKED;
-				smenuPopup.AppendMenu( flag, idStart + i+1, S_CA2T(strText));
+				const SArray<CNameTypePair> &comps = CDataCenter::getSingleton().UpdateCompList();
+				int idStart = R.id.comp_install;
+				int iSelComp = CDataCenter::getSingleton().GetSelectCompIndex();
+				for (int i = 0; i < (int)comps.GetCount(); i++)
+				{
+					SStringA strText = SStringA().Format("%s[%s]", comps[i].strName, comps[i].strType);
+					UINT flag = MF_STRING;
+					if (iSelComp == i) flag |= MF_CHECKED;
+					smenuPopup.AppendMenu( flag, idStart + i+1, S_CA2T(strText));
+				}
+				break;
 			}
-			break;
-		}
 		case 5://blend input
-		{
-			BOOL bCe2 = 0, bCe3 = 0, bCa4 = 0;
-			ISComm_Bldsp_Get(&bCe2, &bCe3, &bCa4);
-			smenuPopup.CheckMenuItem(R.id.spell_one,MF_BYCOMMAND | (g_SettingsG->bBlendSpWord ? MF_CHECKED : 0));
-			smenuPopup.CheckMenuItem(R.id.spell_two, MF_BYCOMMAND | (bCe2 ? MF_CHECKED : 0));
-			smenuPopup.CheckMenuItem(R.id.spell_three, MF_BYCOMMAND | (bCe3 ? MF_CHECKED : 0));
-			smenuPopup.CheckMenuItem(R.id.spell_all, MF_BYCOMMAND | (bCa4 ? MF_CHECKED : 0));
-			smenuPopup.CheckMenuItem(R.id.userdef, MF_BYCOMMAND | (g_SettingsG->bBlendUD ? MF_CHECKED : 0));
+			{
+				BOOL bCe2 = 0, bCe3 = 0, bCa4 = 0;
+				ISComm_Bldsp_Get(&bCe2, &bCe3, &bCa4);
+				smenuPopup.CheckMenuItem(R.id.spell_one,MF_BYCOMMAND | (g_SettingsG->bBlendSpWord ? MF_CHECKED : 0));
+				smenuPopup.CheckMenuItem(R.id.spell_two, MF_BYCOMMAND | (bCe2 ? MF_CHECKED : 0));
+				smenuPopup.CheckMenuItem(R.id.spell_three, MF_BYCOMMAND | (bCe3 ? MF_CHECKED : 0));
+				smenuPopup.CheckMenuItem(R.id.spell_all, MF_BYCOMMAND | (bCa4 ? MF_CHECKED : 0));
+				smenuPopup.CheckMenuItem(R.id.userdef, MF_BYCOMMAND | (g_SettingsG->bBlendUD ? MF_CHECKED : 0));
 
-			break;
-		}
+				break;
+			}
 		case 6://svr data manager
-		{
-			smenuPopup.CheckMenuItem(R.id.svr_showicon, MF_BYCOMMAND | ISComm_SvrTray_Get() ? MF_CHECKED : 0);
-			break;
-		}
+			{
+				smenuPopup.CheckMenuItem(R.id.svr_showicon, MF_BYCOMMAND | ISComm_SvrTray_Get() ? MF_CHECKED : 0);
+				break;
+			}
 		case 7://tools
 			{
 				m_toolManager.InitToolMenu(menuPopup, CDataCenter::getSingletonPtr()->GetDataPath() + _T("\\tools"), R.id.menu_tool_base);
 				break;
 			}
 		}
+		::SetMenuContextHelpId(menuPopup,::GetMenuContextHelpId(menuPopup)+10000);
 	}
 
 
