@@ -618,6 +618,10 @@
 				RelativePath=".\isserver3.rc"
 				>
 			</File>
+			<File
+				RelativePath=".\res\logo.ico"
+				>
+			</File>
 		</Filter>
 		<File
 			RelativePath=".\license.txt"
