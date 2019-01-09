@@ -100,6 +100,7 @@ protected:
 		MESSAGE_HANDLER_EX(m_uMsgTaskbarCreated,OnTaskbarCreated)
 		MESSAGE_RANGE_HANDLER_EX(UM_BUILD_INDEX_PROG0, UM_IMPORT_USER_LIB,OnBuildIndexProg)
 		COMMAND_ID_HANDLER_EX(R.id.menu_exit, OnMenuExit)
+		COMMAND_ID_HANDLER_EX(R.id.menu_auto,OnMenuAutoExit)
 		COMMAND_ID_HANDLER_EX(R.id.menu_settings,OnMenuSettings)
 		if(m_pCore) CHAIN_MSG_MAP_MEMBER(*m_pCore)
 		MESSAGE_HANDLER_EX(UM_TRAYNOTIFY, OnTrayNotify)
