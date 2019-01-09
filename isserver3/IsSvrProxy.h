@@ -86,12 +86,15 @@ protected:
 	void OnMenuExit(UINT uNotifyCode, int nID, HWND wndCtl);
 	void OnMenuAutoExit(UINT uNotifyCode, int nID, HWND wndCtl);
 	void OnMenuSettings(UINT uNotifyCode, int nID, HWND wndCtl);
+	void OnMenuAutoRun(UINT uNotifyCode, int nID, HWND wndCtl);
 
 	void CheckUpdate(bool bManual);
 	
 	INT_PTR ShowModal(SHostDialog *pDlg);
 	
 	void Quit(int nCode);
+	bool IsAutoRun() const;
+	bool SetAutoRun(bool bAutoRun) const;
 
 	BEGIN_MSG_MAP_EX(CIsSvrProxy)
 		MSG_WM_CREATE(OnCreate)
@@ -99,8 +102,11 @@ protected:
 		MSG_WM_TIMER(OnTimer)
 		MESSAGE_HANDLER_EX(m_uMsgTaskbarCreated,OnTaskbarCreated)
 		MESSAGE_RANGE_HANDLER_EX(UM_BUILD_INDEX_PROG0, UM_IMPORT_USER_LIB,OnBuildIndexProg)
-		COMMAND_ID_HANDLER_EX(R.id.menu_exit, OnMenuExit)
-		COMMAND_ID_HANDLER_EX(R.id.menu_settings,OnMenuSettings)
+		COMMAND_ID_HANDLER_EX(R.id.menu_force_exit, OnMenuExit)
+		COMMAND_ID_HANDLER_EX(R.id.menu_auto_exit, OnMenuAutoExit)
+		COMMAND_ID_HANDLER_EX(R.id.menu_settings, OnMenuSettings)
+		COMMAND_ID_HANDLER_EX(R.id.menu_auto_run, OnMenuAutoRun)
+
 		if(m_pCore) CHAIN_MSG_MAP_MEMBER(*m_pCore)
 		MESSAGE_HANDLER_EX(UM_TRAYNOTIFY, OnTrayNotify)
 		CHAIN_MSG_MAP_MEMBER(m_trayIcon)

@@ -2513,6 +2513,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 
 void CInputState::OnImeSelect(BOOL bSelect)
 {
+	SLOG_INFO("fOpen:" << bSelect);
 	m_fOpen = bSelect;
 }
 

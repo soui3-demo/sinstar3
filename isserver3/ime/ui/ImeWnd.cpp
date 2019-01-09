@@ -39,7 +39,7 @@ void CImeWnd::OnMouseMove(UINT nFlags, CPoint point)
 
 HWND CImeWnd::Create(LPCTSTR pszTitle,HWND hParent)
 {
-	return CSimpleWnd::Create(pszTitle,WS_POPUP|WS_DISABLED,WS_EX_TOOLWINDOW,0,0,0,0, hParent,NULL);
+	return CSimpleWnd::Create(pszTitle,WS_POPUP|WS_DISABLED,WS_EX_TOOLWINDOW|WS_EX_TOPMOST,0,0,0,0, hParent,NULL);
 }
 
 void CImeWnd::Show(BOOL bShow)

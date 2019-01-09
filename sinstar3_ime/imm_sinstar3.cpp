@@ -165,7 +165,7 @@ BOOL WINAPI ImeProcessKey(HIMC hIMC,UINT uVKey,LPARAM lKeyData,CONST LPBYTE lpbK
 	if((*ppUiWnd)->m_pSinstar3)
 	{
 		BOOL bKeyDown=(lKeyData&0x80000000)==0;
-		(*ppUiWnd)->m_pSinstar3->ProcessKeyStoke((UINT64)(&ctx),uVKey,lKeyData,bKeyDown,&bRet);
+		(*ppUiWnd)->m_pSinstar3->ProcessKeyStoke((UINT64)(&ctx),uVKey,lKeyData,bKeyDown, lpbKeyState,&bRet);
 	}
 	(*ppUiWnd)->m_pCurContext=NULL;
 	ImmUnlockIMCC(ctx._lpContext->hPrivate);
@@ -189,7 +189,7 @@ UINT WINAPI ImeToAsciiEx (UINT uVKey,UINT uScanCode,CONST LPBYTE lpbKeyState,LPD
 	if((*ppUiWnd)->m_pSinstar3)
 	{
 		BOOL bEaten = FALSE;
-		(*ppUiWnd)->m_pSinstar3->TranslateKey((UINT64)(&ctx), uVKey, uScanCode, bKeyDown, &bEaten);
+		(*ppUiWnd)->m_pSinstar3->TranslateKey((UINT64)(&ctx), uVKey, uScanCode, bKeyDown, lpbKeyState, &bEaten);
 		if (!bEaten) ctx._nMsgInBuf = 0;
 	}
 	(*ppUiWnd)->m_pCurContext=NULL;

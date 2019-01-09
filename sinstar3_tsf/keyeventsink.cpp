@@ -17,7 +17,10 @@ STDAPI CSinstar3Tsf::OnTestKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM l
 	}
 
 	_bKeyDownTested = TRUE;
-	m_pSinstar3->ProcessKeyStoke((UINT64)pContext, (UINT)wParam, lParam, TRUE, pfEaten);
+	BYTE byKeyState[256];
+	GetKeyboardState(byKeyState);
+
+	m_pSinstar3->ProcessKeyStoke((UINT64)pContext, (UINT)wParam, lParam, TRUE, byKeyState, pfEaten);
 	if (!(*pfEaten))
 	{
 		_bKeyDownTested = FALSE;
@@ -33,7 +36,10 @@ STDAPI CSinstar3Tsf::OnTestKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lPa
 		return S_OK;
 	}
 	_bKeyUpTested = TRUE;
-	m_pSinstar3->ProcessKeyStoke((UINT64)pContext, (UINT)wParam, lParam, FALSE, pfEaten);
+	BYTE byKeyState[256];
+	GetKeyboardState(byKeyState);
+
+	m_pSinstar3->ProcessKeyStoke((UINT64)pContext, (UINT)wParam, lParam, FALSE, byKeyState, pfEaten);
 	if (!(*pfEaten))
 	{
 		_bKeyUpTested = FALSE;

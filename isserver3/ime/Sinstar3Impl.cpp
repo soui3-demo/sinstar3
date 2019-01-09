@@ -23,7 +23,7 @@ public:
 
 const TCHAR * KSinstar3WndName = _T("sinstar3_msg_recv_20180801");
 
-CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HWND hSvr, HWND hParentWnd)
+CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HWND hSvr)
 :m_pTxtSvr(pTxtSvr)
 ,m_pInputWnd(NULL)
 ,m_pStatusWnd(NULL)
@@ -37,10 +37,10 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HWND hSvr, HWND hParentWnd)
 	addEvent(EVENTID(EventSetSkin));
 
  	m_pInputWnd = new CInputWnd(this,m_inputState.GetInputContext(),this);
-	m_pInputWnd->Create(_T("Sinstar3_Input"), hParentWnd);
+	m_pInputWnd->Create(_T("Sinstar3_Input"));
 
 	m_pStatusWnd = new CStatusWnd(this,this);
-	m_pStatusWnd->Create(_T("Sinstar3_Status"), hParentWnd);
+	m_pStatusWnd->Create(_T("Sinstar3_Status"));
 	m_inputState.SetInputListener(this);
 	
 	m_pInputWnd->SetAnchorPosition(CDataCenter::getSingleton().GetData().m_ptInput);
@@ -86,15 +86,13 @@ CSinstar3Impl::~CSinstar3Impl(void)
 }
 
 
-void CSinstar3Impl:: ProcessKeyStoke(UINT64 imeContext,UINT vkCode,LPARAM lParam,BOOL bKeyDown,BOOL *pbEaten)
+void CSinstar3Impl:: ProcessKeyStoke(UINT64 imeContext,UINT vkCode,LPARAM lParam,BOOL bKeyDown, BYTE byKeyState[256], BOOL *pbEaten)
 {
 	CAutoContext autoCtx(&m_curImeContext,imeContext);
-	BYTE byKeyState[256];
-	GetKeyboardState(byKeyState);
-	*pbEaten = m_inputState.TestKeyDown(vkCode,lParam,byKeyState);
+	*pbEaten = m_inputState.TestKeyDown(vkCode,lParam, byKeyState);
 }
 
-void CSinstar3Impl:: TranslateKey(UINT64 imeContext,UINT vkCode,UINT uScanCode,BOOL bKeyDown,BOOL *pbEaten)
+void CSinstar3Impl:: TranslateKey(UINT64 imeContext,UINT vkCode,UINT uScanCode,BOOL bKeyDown, BYTE byKeyState[256], BOOL *pbEaten)
 {
 	if(!bKeyDown)
 	{
@@ -106,9 +104,7 @@ void CSinstar3Impl:: TranslateKey(UINT64 imeContext,UINT vkCode,UINT uScanCode,B
 
 	*pbEaten = TRUE;
 
-	BYTE byKeyState[256];
-	GetKeyboardState(byKeyState);
-	if(m_inputState.HandleKeyDown(vkCode,uScanCode,byKeyState))
+	if(m_inputState.HandleKeyDown(vkCode,uScanCode, byKeyState))
 	{
 		m_pInputWnd->UpdateUI();
 	}

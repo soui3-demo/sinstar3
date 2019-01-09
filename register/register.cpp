@@ -50,7 +50,7 @@ const CopyInfo KSrcX86Files[]=
 
 const CopyInfo KSrcX64Files[]=
 {
-	{_T("program\\x64\\sinstar3_ime.dll"),_T("sinstar3_ime.ime"),false},
+	{_T("program\\x64\\sinstar3_ime.dll"),_T("sinstar3_ime.ime"),true},
 	{_T("program\\x64\\sinstar3_tsf.dll"),_T("sinstar3_tsf.dll"),true},
 };
 

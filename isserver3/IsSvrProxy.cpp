@@ -311,7 +311,8 @@ LRESULT CIsSvrProxy::OnTrayNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 				POINT pt;
 				GetCursorPos(&pt);
 				SetForegroundWindow(m_hWnd);
-				::CheckMenuItem(menu.m_hMenu,R.id.menu_auto, MF_BYCOMMAND | (m_pCore->IsAutoQuit()?MF_CHECKED:0));
+				::CheckMenuItem(menu.m_hMenu,R.id.menu_auto_exit, MF_BYCOMMAND | (m_pCore->IsAutoQuit()?MF_CHECKED:0));
+				::CheckMenuItem(menu.m_hMenu, R.id.menu_auto_run, MF_BYCOMMAND | (IsAutoRun() ? MF_CHECKED : 0));
 				menu.TrackPopupMenu(0, pt.x, pt.y, m_hWnd);
 				PostMessage(WM_NULL);
 			}
@@ -361,14 +362,26 @@ void CIsSvrProxy::OnMenuExit(UINT uNotifyCode, int nID, HWND wndCtl)
 
 void CIsSvrProxy::OnMenuAutoExit(UINT uNotifyCode, int nID, HWND wndCtl)
 {
-	m_pCore->SetAutoQuit(!m_pCore->IsAutoQuit());
+	bool bAutoExit = !m_pCore->IsAutoQuit();
+	m_pCore->SetAutoQuit(bAutoExit);
+	if (bAutoExit && IsAutoRun())
+	{
+		SetAutoRun(false);
+	}
 }
 
 void CIsSvrProxy::OnMenuSettings(UINT uNotifyCode, int nID, HWND wndCtl)
 {
 	CConfigDlg * pConfig = new CConfigDlg(this);
-	pConfig->Create(m_hWnd,WS_POPUP,0,0,0,0,0);
-	pConfig->ShowWindow(SW_SHOW);
+	pConfig->Create(m_hWnd,WS_POPUP,WS_EX_TOPMOST,0,0,0,0);
+	pConfig->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
+}
+
+void CIsSvrProxy::OnMenuAutoRun(UINT uNotifyCode, int nID, HWND wndCtl)
+{
+	BOOL bAutoRun = !IsAutoRun();
+	if (bAutoRun) m_pCore->SetAutoQuit(false);
+	SetAutoRun(bAutoRun);
 }
 
 
@@ -450,6 +463,51 @@ void CIsSvrProxy::Quit(int nCode)
 {
 	if(m_pCurModalDlg) m_pCurModalDlg->EndDialog(-1);
 	PostQuitMessage(nCode);
+}
+
+bool CIsSvrProxy::IsAutoRun() const
+{
+	CRegKey reg;
+	LONG ret = reg.Open(HKEY_CURRENT_USER, _T("Software\\Microsoft\\Windows\\CurrentVersion\\Run"), KEY_READ | KEY_WOW64_64KEY);
+	if (ret == ERROR_SUCCESS)
+	{
+		TCHAR szPath[MAX_PATH] = { 0 };
+		ULONG len = MAX_PATH;
+		ret = reg.QueryStringValue(_T("sinstar3_server"), szPath, &len);
+		reg.Close();
+		if (ret == ERROR_SUCCESS)
+		{
+			TCHAR szPathExe[MAX_PATH];
+			len = MAX_PATH;
+			GetModuleFileName(NULL, szPathExe, len);
+			if (_tcsicmp(szPath, szPathExe) == 0)
+				return true;
+		}
+	}
+	return false;
+}
+
+bool CIsSvrProxy::SetAutoRun(bool bAutoRun) const
+{
+	CRegKey reg;
+	LONG ret = reg.Open(HKEY_CURRENT_USER, _T("Software\\Microsoft\\Windows\\CurrentVersion\\Run"), KEY_READ | KEY_WRITE | KEY_WOW64_64KEY);
+	if (ret == ERROR_SUCCESS)
+	{
+		if (!bAutoRun)
+		{
+			reg.DeleteValue(_T("sinstar3_server"));
+		}
+		else
+		{
+			TCHAR szPathExe[MAX_PATH];
+			ULONG len = MAX_PATH;
+			GetModuleFileName(NULL, szPathExe, len);
+			reg.SetStringValue(_T("sinstar3_server"), szPathExe);
+		}
+		reg.Close();
+		return true;
+	}
+	return false;
 }
 
 void CIsSvrProxy::OnUpdateNow()

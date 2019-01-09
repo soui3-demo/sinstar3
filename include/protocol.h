@@ -141,12 +141,11 @@ enum {
 
 struct Param_Create : FunParams_Base
 {
-	HWND hOwner;
 	string strHostPath;
 	DWORD  dwVer;
 	FUNID(ISinstar_Create)
-		PARAMS3(Input, hOwner,strHostPath,dwVer)
-		TOSTR3(hOwner,strHostPath,dwVer)
+		PARAMS2(Input, strHostPath,dwVer)
+		TOSTR2(strHostPath,dwVer)
 };
 
 struct Param_Destroy : FunParams_Base
@@ -199,20 +198,22 @@ struct Param_OnSetFocusSegmentPosition : FunParams_Base
 };
 
 struct Param_ProcessKeyStoke : FunParams_Base {
-	UINT64 lpImeContext; UINT vkCode; LPARAM lParam; BOOL bKeyDown; 
+	UINT64 lpImeContext; UINT vkCode; DWORD lParam; BOOL bKeyDown; 
+	BYTE byKeyState[256];
 	BOOL bEaten;
 	FUNID(ISinstar_ProcessKeyStoke)
 	TOSTR5(lpImeContext, vkCode, lParam, bKeyDown, bEaten)
-	PARAMS4(Input, lpImeContext, vkCode, lParam, bKeyDown)
+	PARAMS5(Input, lpImeContext, vkCode, lParam, bKeyDown, byKeyState)
 	PARAMS1(Output,bEaten)
 };
 
 struct Param_TranslateKey : FunParams_Base
 {
 	UINT64 lpImeContext; UINT vkCode; UINT uScanCode; BOOL bKeyDown; 
+	BYTE byKeyState[256];
 	BOOL bEaten;
 	FUNID(ISinstar_TranslateKey)
-	PARAMS4(Input, lpImeContext, vkCode, uScanCode, bKeyDown)
+	PARAMS5(Input, lpImeContext, vkCode, uScanCode, bKeyDown, byKeyState)
 	PARAMS1(Output, bEaten)
 	TOSTR5(lpImeContext, vkCode, uScanCode, bKeyDown, bEaten)
 };
