@@ -39,7 +39,7 @@ void CImeWnd::OnMouseMove(UINT nFlags, CPoint point)
 
 HWND CImeWnd::Create(LPCTSTR pszTitle,HWND hParent)
 {
-	return CSimpleWnd::Create(pszTitle,WS_POPUP|WS_DISABLED,WS_EX_TOOLWINDOW|WS_EX_TOPMOST,0,0,0,0, hParent,NULL);
+	return CSimpleWnd::Create(pszTitle,WS_POPUP|WS_DISABLED,WS_EX_TOOLWINDOW|WS_EX_TOPMOST|WS_EX_NOACTIVATE,0,0,0,0, hParent,NULL);
 }
 
 void CImeWnd::Show(BOOL bShow)
@@ -48,7 +48,9 @@ void CImeWnd::Show(BOOL bShow)
 	if(bShow)
 		SetWindowPos(HWND_TOPMOST,0,0,0,0,SWP_NOSIZE|SWP_NOMOVE|SWP_NOACTIVATE|SWP_SHOWWINDOW);
 	else if(CSimpleWnd::IsWindowVisible())
+	{
 		ShowWindow(SW_HIDE);
+	}
 }
 
 LRESULT CImeWnd::OnMouseEvent(UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -101,5 +103,6 @@ SWND CImeWnd::OnSetSwndCapture(SWND swnd)
 	SLOG_INFO("m_canReleaseCapture:FALSE");
 	return ret;
 }
+
 
 }

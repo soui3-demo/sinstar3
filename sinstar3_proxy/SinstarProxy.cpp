@@ -49,6 +49,7 @@ BOOL CSinstarProxy::Init(HWND hClient, LPCTSTR pszSvrPath)
 	}
 	m_conn.ConnectTo(hSvr);
 	Param_Create param;
+	param.hOwner = (DWORD)GetActiveWindow();
 	HMODULE hMod = GetModuleHandle(NULL);
 	if (hMod)
 	{

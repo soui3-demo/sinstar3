@@ -23,7 +23,7 @@ public:
 
 const TCHAR * KSinstar3WndName = _T("sinstar3_msg_recv_20180801");
 
-CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HWND hSvr)
+CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HWND hSvr,HWND hOwner)
 :m_pTxtSvr(pTxtSvr)
 ,m_pInputWnd(NULL)
 ,m_pStatusWnd(NULL)
@@ -32,6 +32,7 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HWND hSvr)
 ,m_curImeContext(NULL)
 , m_cmdHandler(this)
 , m_hSvr(hSvr)
+, m_hOwner(hOwner)
 {
 	addEvent(EVENTID(EventSvrNotify));
 	addEvent(EVENTID(EventSetSkin));
@@ -528,7 +529,7 @@ void CSinstar3Impl::OpenSpchar()
 	{
 		m_pSpcharWnd = new CSpCharWnd(this,this);
 		m_pSpcharWnd->SetDestroyListener(this, IME_SPCHAR);
-		m_pSpcharWnd->Create(_T("SpcharWnd"), NULL);
+		m_pSpcharWnd->Create(_T("SpcharWnd"));
 	}
 	m_pSpcharWnd->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW | SWP_NOACTIVATE);
 }

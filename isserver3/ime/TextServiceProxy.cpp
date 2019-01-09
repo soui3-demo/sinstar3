@@ -113,7 +113,7 @@ void CSvrConnection::HandleCreate(Param_Create & param)
 	TCHAR szVer[100];
 	Helper_VersionString(param.dwVer, szVer);
 	SLOG_INFO("create connection, host:" << param.strHostPath.c_str() << " ver:" << szVer);
-	m_pSinstar.Attach(new CSinstar3Impl(this, m_hSvr));
+	m_pSinstar.Attach(new CSinstar3Impl(this, m_hSvr,(HWND)param.hOwner));
 }
 
 void CSvrConnection::HandleDestroy(Param_Destroy & param)

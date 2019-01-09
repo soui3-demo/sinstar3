@@ -23,7 +23,7 @@ class CSinstar3Impl:
 {
 	friend class CCmdHandler;// CCmdHandler need access this private members.
 public:
-	CSinstar3Impl(ITextService *pTxtSvr,HWND hSvr);
+	CSinstar3Impl(ITextService *pTxtSvr,HWND hSvr,HWND hOwner);
 	virtual ~CSinstar3Impl(void);
 
 	virtual void OnIMESelect(BOOL bSelect);
@@ -106,6 +106,7 @@ private:
 
 	SStringT		m_strLoadedFontFile;
 	HWND			m_hSvr;
+	HWND			m_hOwner;
 };
 
 
