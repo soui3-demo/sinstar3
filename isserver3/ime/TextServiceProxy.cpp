@@ -161,13 +161,11 @@ void CSvrConnection::HandleOnSetFocusSegmentPosition(Param_OnSetFocusSegmentPosi
 void CSvrConnection::HandleProcessKeyStoke(Param_ProcessKeyStoke &param)
 {
 	m_pSinstar->ProcessKeyStoke(param.lpImeContext,param.vkCode,param.lParam,param.bKeyDown, param.byKeyState,&param.bEaten);
-
 }
 
 void CSvrConnection::HandleTranslateKey(Param_TranslateKey &param)
 {
 	m_pSinstar->TranslateKey(param.lpImeContext,param.vkCode,param.uScanCode,param.bKeyDown, param.byKeyState,&param.bEaten);
-
 }
 
 void CSvrConnection::HandleOnSetFocus(Param_OnSetFocus &param)

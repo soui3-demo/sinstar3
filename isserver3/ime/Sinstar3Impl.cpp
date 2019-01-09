@@ -90,6 +90,7 @@ void CSinstar3Impl:: ProcessKeyStoke(UINT64 imeContext,UINT vkCode,LPARAM lParam
 {
 	CAutoContext autoCtx(&m_curImeContext,imeContext);
 	*pbEaten = m_inputState.TestKeyDown(vkCode,lParam, byKeyState);
+	SLOG_INFO("ProcessKeyStoke, code:" << vkCode << " bKeyDown:" << bKeyDown << " bEaten" << *pbEaten<<" fOpen:"<< m_inputState.m_fOpen);
 }
 
 void CSinstar3Impl:: TranslateKey(UINT64 imeContext,UINT vkCode,UINT uScanCode,BOOL bKeyDown, BYTE byKeyState[256], BOOL *pbEaten)
@@ -108,6 +109,7 @@ void CSinstar3Impl:: TranslateKey(UINT64 imeContext,UINT vkCode,UINT uScanCode,B
 	{
 		m_pInputWnd->UpdateUI();
 	}
+	SLOG_INFO("TranslateKey, code:" << vkCode << " bKeyDown:" << bKeyDown << " bEaten" << *pbEaten << " fOpen:" << m_inputState.m_fOpen);
 }
 
 void CSinstar3Impl::OnIMESelect(BOOL bSelect)
