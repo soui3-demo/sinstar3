@@ -44,7 +44,7 @@ struct CopyInfo{
 
 const CopyInfo KSrcX86Files[]=
 {
-	{_T("program\\sinstar3_ime.dll"),_T("sinstar3_ime.ime"),true},
+	{_T("program\\sinstar3_ime.dll"),_T("sinstar3_ime.ime"),false},
 	{_T("program\\sinstar3_tsf.dll"),_T("sinstar3_tsf.dll"),true},
 };
 
@@ -256,7 +256,7 @@ BOOL Sinstar_Uninstall()
 		for(int i=0;i<ARRAYSIZE(KSrcX86Files);i++)
 		{
 			_stprintf(szPath, _T("%s\\%s.ime"), szSysPath, KSrcX86Files[i].pszDest);
-			if (KSrcX86Files[i].bReg && 0 != CallRegsvr32(szPath, FALSE))
+			if (0 != CallRegsvr32(szPath, FALSE))
 			{
 				MessageBox(GetActiveWindow(), _T("Ð¶ÔØ³ÌÐòÊ§°Ü"), _T("ÌáÊ¾"), MB_OK | MB_ICONSTOP);
 				return 0;
@@ -476,7 +476,6 @@ BOOL Sinstar_Install()
 	{
 		for(int i=0;i<ARRAYSIZE(KSrcX86Files);i++)
 		{
-			if(!KSrcX86Files[i].bReg) continue;
 			_stprintf(szPath,_T("%s\\%s"),szSysPath,KSrcX86Files[i].pszDest);
 			if (0 != CallRegsvr32(szPath, TRUE))
 			{
