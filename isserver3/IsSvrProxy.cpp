@@ -373,7 +373,7 @@ void CIsSvrProxy::OnMenuAutoExit(UINT uNotifyCode, int nID, HWND wndCtl)
 void CIsSvrProxy::OnMenuSettings(UINT uNotifyCode, int nID, HWND wndCtl)
 {
 	CConfigDlg * pConfig = new CConfigDlg(this);
-	pConfig->Create(m_hWnd,WS_POPUP,0,0,0,0,0);
+	pConfig->Create(m_hWnd,WS_POPUP,WS_EX_TOPMOST,0,0,0,0);
 	pConfig->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
 }
 

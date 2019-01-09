@@ -65,8 +65,8 @@ public:
 	virtual void OnCompositionTerminated(bool bClearCtx) override;
 	virtual void OnSetCaretPosition(POINT pt, int nHei) override;
 	virtual void OnSetFocusSegmentPosition(POINT pt, int nHei) override;
-	virtual void ProcessKeyStoke(UINT64 imeContext, UINT vkCode, LPARAM lParam, BOOL bKeyDown, BOOL * pbEaten) override;
-	virtual void TranslateKey(UINT64 imeContext, UINT vkCode, UINT uScanCode, BOOL bKeyDown, BOOL * pbEaten) override;
+	virtual void ProcessKeyStoke(UINT64 imeContext, UINT vkCode, LPARAM lParam, BOOL bKeyDown, BYTE byKeyState[256], BOOL * pbEaten) override;
+	virtual void TranslateKey(UINT64 imeContext, UINT vkCode, UINT uScanCode, BOOL bKeyDown, BYTE byKeyState[256], BOOL * pbEaten) override;
 	virtual void OnSetFocus(BOOL bFocus) override;
 	virtual int GetCompositionSegments() override;
 	virtual int GetCompositionSegmentEnd(int iSeg) override;

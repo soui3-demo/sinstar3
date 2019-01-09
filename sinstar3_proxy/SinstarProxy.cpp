@@ -108,25 +108,27 @@ void CSinstarProxy::OnSetFocusSegmentPosition(POINT pt, int nHei)
 	m_conn.CallFun(&param);
 }
 
-void CSinstarProxy::ProcessKeyStoke(UINT64 imeContext, UINT vkCode, LPARAM lParam, BOOL bKeyDown, BOOL * pbEaten)
+void CSinstarProxy::ProcessKeyStoke(UINT64 imeContext, UINT vkCode, LPARAM lParam, BOOL bKeyDown, BYTE byKeyState[256], BOOL * pbEaten)
 {
 	Param_ProcessKeyStoke param;
 	param.lpImeContext = imeContext;
 	param.vkCode = vkCode;
 	param.lParam = lParam;
 	param.bKeyDown = bKeyDown;
+	memcpy(param.byKeyState, byKeyState, 256);
 	param.bEaten = false;
 	m_conn.CallFun(&param);
 	*pbEaten = param.bEaten;
 }
 
-void CSinstarProxy::TranslateKey(UINT64 imeContext, UINT vkCode, UINT uScanCode, BOOL bKeyDown, BOOL * pbEaten)
+void CSinstarProxy::TranslateKey(UINT64 imeContext, UINT vkCode, UINT uScanCode, BOOL bKeyDown, BYTE byKeyState[256], BOOL * pbEaten)
 {
 	Param_TranslateKey param;
 	param.lpImeContext = imeContext;
 	param.vkCode = vkCode;
 	param.uScanCode = uScanCode;
 	param.bKeyDown = bKeyDown;
+	memcpy(param.byKeyState, byKeyState, 256);
 	param.bEaten = false;
 	m_conn.CallFun(&param);
 	*pbEaten = param.bEaten;

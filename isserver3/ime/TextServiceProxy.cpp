@@ -113,7 +113,7 @@ void CSvrConnection::HandleCreate(Param_Create & param)
 	TCHAR szVer[100];
 	Helper_VersionString(param.dwVer, szVer);
 	SLOG_INFO("create connection, host:" << param.strHostPath.c_str() << " ver:" << szVer);
-	m_pSinstar.Attach(new CSinstar3Impl(this, m_hSvr,param.hOwner));
+	m_pSinstar.Attach(new CSinstar3Impl(this, m_hSvr));
 }
 
 void CSvrConnection::HandleDestroy(Param_Destroy & param)
@@ -160,13 +160,13 @@ void CSvrConnection::HandleOnSetFocusSegmentPosition(Param_OnSetFocusSegmentPosi
 
 void CSvrConnection::HandleProcessKeyStoke(Param_ProcessKeyStoke &param)
 {
-	m_pSinstar->ProcessKeyStoke(param.lpImeContext,param.vkCode,param.lParam,param.bKeyDown,&param.bEaten);
+	m_pSinstar->ProcessKeyStoke(param.lpImeContext,param.vkCode,param.lParam,param.bKeyDown, param.byKeyState,&param.bEaten);
 
 }
 
 void CSvrConnection::HandleTranslateKey(Param_TranslateKey &param)
 {
-	m_pSinstar->TranslateKey(param.lpImeContext,param.vkCode,param.uScanCode,param.bKeyDown,&param.bEaten);
+	m_pSinstar->TranslateKey(param.lpImeContext,param.vkCode,param.uScanCode,param.bKeyDown, param.byKeyState,&param.bEaten);
 
 }
 
