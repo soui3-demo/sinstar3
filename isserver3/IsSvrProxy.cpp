@@ -236,20 +236,12 @@ void CIsSvrProxy::OnShowKeyMap(IDataBlock * pCompData, LPCSTR pszName, LPCSTR ps
 	{
 		CAutoRefPtr<IImgX> imgX;
 		imgDecoder->CreateImgX(&imgX);
-		if (imgX->LoadFromMemory(pCompData->GetData(), pCompData->GetLength()) == 0)
-		{
-			SLOG_WARN("load key map image failed!");
-			return;
-		}
-		if (imgX->GetFrameCount() == 0)
-		{
-			SLOG_WARN("key map image has 0 frames!");
-			return;
-		}
 		CAutoRefPtr<IBitmap> pImg;
-		GETRENDERFACTORY->CreateBitmap(&pImg);
-		pImg->Init(imgX->GetFrame(0));
-
+		if (pCompData && imgX->LoadFromMemory(pCompData->GetData(), pCompData->GetLength()) >= 1)
+		{
+			GETRENDERFACTORY->CreateBitmap(&pImg);
+			pImg->Init(imgX->GetFrame(0));
+		}
 		if (m_pKeyMapDlg)
 		{
 			m_pKeyMapDlg->DestroyWindow();

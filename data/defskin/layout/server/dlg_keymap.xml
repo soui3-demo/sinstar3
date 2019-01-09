@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SOUI name="KeyMap" title="@string/title" bigIcon="ICON_LOGO:32" smallIcon="ICON_LOGO:16" width="600" height="40"  margin="5,5,5,5"  resizable="1" wndType="normal"
+<SOUI name="KeyMap" title="@string/title" bigIcon="ICON_LOGO:32" smallIcon="ICON_LOGO:16" width="600" height="200"  margin="5,5,5,5"  resizable="1" wndType="normal"
 appWnd="1"
 translucent="1"
 >
   <root skin="_skin.sys.wnd.bkgnd" cache="1" layout="vbox" padding="5,5,5,5">
     <caption size="-2,30" layout="hbox" gravity="center">
       <caption size="0,-1" layout="hbox" weight="1" gravity="center">
-        <icon size="-1,-1" src="ICON_LOGO:16"/>
         <text size="-1,-1" text="@string/keymap"/>
       </caption>
       <window size="-1,-1" layout="hbox" gravity="center">
@@ -17,6 +16,13 @@ translucent="1"
         <imgbtn pos ="-0,|0" offset="-1,-0.5" name="btn_close" skin="_skin.sys.btn.close"  id="IDCANCEL" tip="close" animate="1"/>
       </caption>
     </caption>
-    <img size="-2,0" weight="1" name="img_keymap"/>
+    <tabctrl size="-2,0" weight="1" tabHeight="0" name="tab_keymap">
+      <page>
+        <img size="-2,-2" name="img_keymap"/>
+      </page>
+      <page>
+        <text pos="|0,|0" offset="-0.5,-0.5" font="adding:10" text="当前码表中没有包含字根表数据" colorText="#ff0000"/>
+      </page>
+    </tabctrl>
   </root>
 </SOUI>
