@@ -5,7 +5,6 @@
   <item text="隐藏状态" name="hide_statusbar" id="101"/>
   <item text="光标跟随" name="follow_caret" id="102"/>
   <item text="输出繁体" name="input_big5" id="103"/>
-  <item text="特殊符号" name="open_spchar" id="104"/>
   <sep/>
   <item text="皮    肤" name="menu_skin" id="200" contextHelpId="2">
     <item text="皮肤目录" name="skin_mgr" id="201"/>

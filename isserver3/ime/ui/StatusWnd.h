@@ -37,7 +37,7 @@ namespace SOUI
 		CStatusWnd(SEventSet *pEvtSets, ICmdListener *pListener);
 		~CStatusWnd(void);
 
-		HWND Create(LPCTSTR pszWndName, HWND hParentWnd = NULL);
+		HWND Create(LPCTSTR pszWndName, HWND hOwner);
 
 		void UpdateCompInfo();
 		void UpdateToggleStatus(DWORD flags,BOOL bInit=FALSE);
@@ -110,7 +110,7 @@ namespace SOUI
 		ICmdListener     *  m_pCmdListener;
 
 		int					m_anchorMode;
-		HWND				m_hParent;
+		HWND				m_hOwner;
 	};
 
 }
