@@ -29,8 +29,6 @@ enum {
 	CMD_CHANGESKIN,
 	CMD_OPENSKINDIR,
 	CMD_OPENCONFIG,
-	CMD_OPENSPCHAR,
-	CMD_INPUTSPCHAR,
 	CMD_SHOWTIP,
 	CMD_EDITFILE,
 	CMD_EXECUTETOOL,
@@ -73,8 +71,6 @@ protected:
 	void OnHotkeyRecord(LPARAM lp);
 	void OnChangeSkin(LPARAM lp);
 	void OnOpenConfig(LPARAM lp);
-	void OnOpenSpchar(LPARAM lp);
-	void OnInputSpchar(LPARAM lp);
 	void OnOpenSkinDir(LPARAM lp);
 	void OnShowTip(LPARAM lp);
 	void OnStartProcess(LPARAM lp);
@@ -99,8 +95,6 @@ protected:
 		MSG_WM_COMMAND_EX(CMD_UPDATEMODE,OnUpdateMode)
 		MSG_WM_COMMAND_EX(CMD_CHANGESKIN,OnChangeSkin)
 		MSG_WM_COMMAND_EX(CMD_OPENCONFIG,OnOpenConfig)
-		MSG_WM_COMMAND_EX(CMD_OPENSPCHAR, OnOpenSpchar)
-		MSG_WM_COMMAND_EX(CMD_INPUTSPCHAR,OnInputSpchar)
 		MSG_WM_COMMAND_EX(CMD_OPENSKINDIR,OnOpenSkinDir)
 		MSG_WM_COMMAND_EX(CMD_SHOWTIP, OnShowTip)
 		MSG_WM_COMMAND_EX(CMD_EDITFILE,OnStartProcess)

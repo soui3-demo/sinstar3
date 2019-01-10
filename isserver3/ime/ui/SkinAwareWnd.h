@@ -9,7 +9,6 @@ namespace SOUI
 		IME_STATUS,
 		IME_CONFIG,
 		IME_TIP,
-		IME_SPCHAR,
 	};
 
 	class CSkinAwareWnd;

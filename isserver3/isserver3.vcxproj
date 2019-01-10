@@ -135,7 +135,6 @@
     <ClCompile Include="ime\ui\InputWnd.cpp" />
     <ClCompile Include="ime\ui\SkinAwareWnd.cpp" />
     <ClCompile Include="ime\ui\SkinMananger.cpp" />
-    <ClCompile Include="ime\ui\SpCharWnd.cpp" />
     <ClCompile Include="ime\ui\StatusWnd.cpp" />
     <ClCompile Include="ime\ui\STipWnd.cpp" />
     <ClCompile Include="ime\ui\SToolsMgr.cpp" />
@@ -198,7 +197,6 @@
     <ClInclude Include="ime\ui\InputWnd.h" />
     <ClInclude Include="ime\ui\SkinAwareWnd.h" />
     <ClInclude Include="ime\ui\SkinMananger.h" />
-    <ClInclude Include="ime\ui\SpCharWnd.h" />
     <ClInclude Include="ime\ui\StatusWnd.h" />
     <ClInclude Include="ime\ui\STipWnd.h" />
     <ClInclude Include="ime\ui\SToolsMgr.h" />

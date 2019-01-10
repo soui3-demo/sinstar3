@@ -28,7 +28,6 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HWND hSvr,HWND hOwner)
 ,m_pInputWnd(NULL)
 ,m_pStatusWnd(NULL)
 ,m_pTipWnd(NULL)
-, m_pSpcharWnd(NULL)
 ,m_curImeContext(NULL)
 , m_cmdHandler(this)
 , m_hSvr(hSvr)
@@ -65,12 +64,6 @@ CSinstar3Impl::~CSinstar3Impl(void)
 	{
 		m_pTipWnd->DestroyWindow();
 		m_pTipWnd = NULL;
-	}
-
-	if (m_pSpcharWnd)
-	{
-		m_pSpcharWnd->DestroyWindow();
-		m_pSpcharWnd = NULL;
 	}
 
 	SStringT strHotKeyFile = SStringT().Format(_T("%s\\data\\hotkey_%s.txt"), CDataCenter::getSingletonPtr()->GetDataPath(), CDataCenter::getSingleton().GetData().m_compInfo.strCompName);
@@ -166,16 +159,13 @@ void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 		else
 		{
 			m_pInputWnd->Show(FALSE, FALSE);
-			if (m_pSpcharWnd) m_pSpcharWnd->DestroyWindow();
 		}
 	}
 	else
 	{
 		if (m_pTxtSvr->IsCompositing())
 			m_inputState.InputEnd();
-		m_pInputWnd->Show(FALSE);
 		m_pStatusWnd->Show(FALSE);
-		if (m_pSpcharWnd) m_pSpcharWnd->DestroyWindow();
 		if (m_pTipWnd) m_pTipWnd->DestroyWindow();
 	}
 }
@@ -411,12 +401,7 @@ InputContext * CSinstar3Impl::GetInputContext()
 
 void CSinstar3Impl::OnSkinAwareWndDestroy(CSkinAwareWnd * pWnd)
 {
-	if (pWnd->GetWndType() == IME_SPCHAR)
-	{
-		delete pWnd;
-		m_pSpcharWnd = NULL;
-	}
-	else if (pWnd->GetWndType() == IME_TIP)
+	if (pWnd->GetWndType() == IME_TIP)
 	{
 		delete pWnd;
 		m_pTipWnd = NULL;
@@ -523,16 +508,6 @@ void CSinstar3Impl::OpenConfig()
 	::SendMessage(m_hSvr, WM_COMMAND, R.id.menu_settings, 0);
 }
 
-void CSinstar3Impl::OpenSpchar()
-{
-	if (m_pSpcharWnd == NULL)
-	{
-		m_pSpcharWnd = new CSpCharWnd(this,this);
-		m_pSpcharWnd->SetDestroyListener(this, IME_SPCHAR);
-		m_pSpcharWnd->Create(_T("SpcharWnd"));
-	}
-	m_pSpcharWnd->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW | SWP_NOACTIVATE);
-}
 
 void CSinstar3Impl::ShowTip(LPCTSTR pszTitle, LPCTSTR pszContent)
 {

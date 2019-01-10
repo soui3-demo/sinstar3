@@ -4,7 +4,6 @@
 #include "ui/InputWnd.h"
 #include "ui/StatusWnd.h"
 #include "ui/STipWnd.h"
-#include "ui/SpCharWnd.h"
 
 #include "InputState.h"
 #include "CmdHandler.h"
@@ -73,7 +72,6 @@ protected://IInputWndListener
 public:
 	BOOL ChangeSkin(const SStringT & strSkin);
 	void OpenConfig();
-	void OpenSpchar();
 	void ShowTip(LPCTSTR pszTitle, LPCTSTR pszContent);
 
 	void InputSpchar(LPCTSTR pszText);
@@ -97,7 +95,6 @@ private:
 	CInputWnd		*m_pInputWnd;
 	CStatusWnd		*m_pStatusWnd;
 	STipWnd			*m_pTipWnd;
-	CSpCharWnd      *m_pSpcharWnd;
 	CInputState		m_inputState;
 
 	UINT64			m_curImeContext;

@@ -258,17 +258,6 @@ void CCmdHandler::OnChangeSkin(LPARAM lp)
 	}
 }
 
-void CCmdHandler::OnOpenSpchar(LPARAM lp)
-{
-	m_pSinstar3->OpenSpchar();
-}
-
-void CCmdHandler::OnInputSpchar(LPARAM lp)
-{
-	LPCTSTR pszInput = (LPCTSTR)lp;
-	m_pSinstar3->InputSpchar(pszInput);
-}
-
 void CCmdHandler::OnOpenSkinDir(LPARAM lp)
 {
 	SStringT strPath = CDataCenter::getSingletonPtr()->GetDataPath() + _T("\\skins\\");

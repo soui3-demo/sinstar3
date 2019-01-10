@@ -617,10 +617,6 @@ namespace SOUI
 		{
 			OnHelpClick();
 		}
-		else if (nRet == R.id.open_spchar)
-		{
-			m_pCmdListener->OnCommand(CMD_OPENSPCHAR, 0);
-		}
 		else if (nRet >= R.id.memu_edit_userdef && nRet <=R.id.memu_edit_userjm)
 		{
 			int types[] = {
