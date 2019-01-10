@@ -84,6 +84,7 @@ public:
 
 	BOOL ProcessWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lResult);
 
+	void CheckConnectivity();
 protected:
 	LRESULT OnConnect(HWND hClient);
 	LRESULT OnDisconnect(HWND hClient);

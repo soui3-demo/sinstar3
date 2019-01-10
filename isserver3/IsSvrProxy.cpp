@@ -12,12 +12,16 @@
 
 #define TIMERID_DELAY_EXIT	200
 #define SPAN_DELAY_EXIT		5000
+
 #define TIMERID_CHECK_UPDATE 300
 #define SPAN_CHECK_UPDATE	1000
 
 #define TIMERID_DATA_REPORT 400
 #define SPAN_DATA_REPORT1	50
 #define SPAN_DATA_REPORT2	24*60*60*1000	//1 day
+
+#define TIMERID_CHECK_CLIENT 500
+#define SPAN_CHECK_CLIENT 50
 
 static void DoSomething()
 {
@@ -107,6 +111,7 @@ int CIsSvrProxy::OnCreate(LPCREATESTRUCT pCS)
 
 		CSimpleWnd::SetTimer(TIMERID_CHECK_UPDATE, SPAN_CHECK_UPDATE, NULL);
 		CSimpleWnd::SetTimer(TIMERID_DATA_REPORT, SPAN_DATA_REPORT1, NULL);
+		CSimpleWnd::SetTimer(TIMERID_CHECK_CLIENT,SPAN_CHECK_CLIENT,NULL);
 	}
 	return nRet;
 }
@@ -340,6 +345,9 @@ void CIsSvrProxy::OnTimer(UINT_PTR uID)
 		CWorker::getSingletonPtr()->ReportUserInfo();
 		KillTimer(uID);
 		CSimpleWnd::SetTimer(uID, SPAN_DATA_REPORT2, NULL);
+	}else if(uID == TIMERID_CHECK_CLIENT)
+	{
+		CheckConnectivity();
 	}
 	else
 	{

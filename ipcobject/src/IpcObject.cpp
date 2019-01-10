@@ -66,6 +66,22 @@ LRESULT SIpcServer::OnDisconnect(HWND hClient)
 	return 1;
 }
 
+void SIpcServer::CheckConnectivity()
+{
+	std::map<HWND, SIpcConnection *>::iterator it = m_mapClients.begin();
+	while(it != m_mapClients.end())
+	{
+		if(!::IsWindow(it->first))
+		{
+			delete it->second;
+			it = m_mapClients.erase(it);
+		}else
+		{
+			it++;
+		}
+	}
+}
+
 //////////////////////////////////////////////////////////////
 SIpcConnection::SIpcConnection():m_hLocalId(NULL),m_hRemoteId(NULL)
 {
