@@ -130,7 +130,6 @@
     <ClCompile Include="ime\ShellExecuteMonitor.cpp" />
     <ClCompile Include="ime\Sinstar3Impl.cpp" />
     <ClCompile Include="ime\TextServiceProxy.cpp" />
-    <ClCompile Include="ime\ThreadObject.cpp" />
     <ClCompile Include="ime\ui\ImeWnd.cpp" />
     <ClCompile Include="ime\ui\InputWnd.cpp" />
     <ClCompile Include="ime\ui\SkinAwareWnd.cpp" />
@@ -146,6 +145,7 @@
     <ClCompile Include="Minidump.cpp" />
     <ClCompile Include="settings\AddBlurDlg.cpp" />
     <ClCompile Include="settings\ConfigDlg.cpp" />
+    <ClCompile Include="ThreadObject.cpp" />
     <ClCompile Include="ui\BuildIndexProgWnd.cpp" />
     <ClCompile Include="ui\KeyMapDlg.cpp" />
     <ClCompile Include="ui\TrayIcon.cpp" />
@@ -192,7 +192,6 @@
     <ClInclude Include="ime\ShellExecuteMonitor.h" />
     <ClInclude Include="ime\Sinstar3Impl.h" />
     <ClInclude Include="ime\TextServiceProxy.h" />
-    <ClInclude Include="ime\ThreadObject.h" />
     <ClInclude Include="ime\ui\ImeWnd.h" />
     <ClInclude Include="ime\ui\InputWnd.h" />
     <ClInclude Include="ime\ui\SkinAwareWnd.h" />
@@ -205,6 +204,7 @@
     <ClInclude Include="Minidump.h" />
     <ClInclude Include="settings\AddBlurDlg.h" />
     <ClInclude Include="settings\ConfigDlg.h" />
+    <ClInclude Include="ThreadObject.h" />
     <ClInclude Include="ui\BuildIndexProgWnd.h" />
     <ClInclude Include="ui\KeyMapDlg.h" />
     <ClInclude Include="ui\TrayIcon.h" />

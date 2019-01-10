@@ -399,13 +399,24 @@ void CIsSvrProxy::CheckUpdate(bool bManual)
 	sprintf(szDate, "%d-%d-%d", timeToday.GetMonth(), timeToday.GetDay(), timeToday.GetYear());
 	WritePrivateProfileStringA("update", "date", szDate, szConfig);
 
-	CWorker::getSingletonPtr()->CheckUpdate(szConfig, bManual);
+	char szUri[500];
+	GetPrivateProfileStringA("update", "url", "http://soime.cm/sinstar3_update.xml", szUri, 500, szConfig);
+
+	CWorker::getSingletonPtr()->CheckUpdate(szUri, bManual);
 }
 
 
 void CIsSvrProxy::OnCheckUpdateResult(EventArgs *e)
 {
 	EventCheckUpdateResult *e2  = sobj_cast<EventCheckUpdateResult>(e);
+	if (!e2->bServerOK)
+	{
+		if (e2->bManual)
+		{
+			SMessageBox(GetDesktopWindow(), _T("升级服务器不可用!"), _T("提示"), MB_OK | MB_ICONINFORMATION);
+		}
+		return;
+	}
 	char szConfig[MAX_PATH];
 	m_pCore->GetConfigIni(szConfig, MAX_PATH);
 	WritePrivateProfileStringA("update", "url", S_CW2A(e2->strNewUpdateUrl), szConfig);

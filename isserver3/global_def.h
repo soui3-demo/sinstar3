@@ -54,7 +54,7 @@ namespace SOUI
 	public:
 		EventCheckUpdateResult(SObject *pSender):TplEventArgs<EventCheckUpdateResult>(pSender){}
 		enum{EventID=EVENT_CHECK_UPDATE_RESULT};
-
+		bool    bServerOK;
 		bool	bManual;
 		SStringW strUrl;
 		SStringW strInfo;

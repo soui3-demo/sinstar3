@@ -299,10 +299,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ime\ui\SpCharWnd.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\controls\SPhraseCand.cpp"
 				>
 			</File>
@@ -359,7 +355,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ime\ThreadObject.cpp"
+				RelativePath=".\ThreadObject.cpp"
 				>
 			</File>
 			<File
@@ -525,10 +521,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ime\ui\SpCharWnd.h"
-				>
-			</File>
-			<File
 				RelativePath=".\controls\SPhraseCand.h"
 				>
 			</File>
@@ -585,7 +577,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ime\ThreadObject.h"
+				RelativePath=".\ThreadObject.h"
 				>
 			</File>
 			<File
