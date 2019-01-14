@@ -9,11 +9,15 @@ CTsfModule::CTsfModule(HINSTANCE hInst, LPCTSTR pszSvrPath):CModuleRef(hInst),m_
 	CSimpleWnd::RegisterWndClass(hInst);
 	_tcscpy(m_szSvrPath, pszSvrPath);
 	m_hMutex = CreateMutex(NULL, FALSE, SINSTAR3_MUTEX);
+	if (!m_hMutex && GetLastError() == ERROR_ACCESS_DENIED)
+	{
+		m_hMutex = OpenMutex(SYNCHRONIZE, FALSE, SINSTAR3_MUTEX);
+	}
 }
 
 CTsfModule::~CTsfModule(void)
 {
-	CloseHandle(m_hMutex);
+	if(m_hMutex) CloseHandle(m_hMutex);
 	CSimpleWnd::UnregisterWndClass(GetModule());
 }
 

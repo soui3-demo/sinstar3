@@ -4,6 +4,7 @@
 
 #include "stdafx.h"
 #include "ShareMemBuffer.h"
+#include "../helper/helper.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -31,7 +32,11 @@ BOOL CShareMemBuffer::OpenMemFile(LPCTSTR pszName,DWORD dwMaximumSize)
 	m_hMap = ::CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, dwMaximumSize + sizeof(DWORD) * 2, pszName);
 	if(!m_hMap)	return FALSE;
 	BOOL bOpenExist = GetLastError() == ERROR_ALREADY_EXISTS;
-	m_pBuffer=(LPBYTE)::MapViewOfFile(m_hMap,FILE_MAP_ALL_ACCESS,0,0,0);//map whole file
+	if (!bOpenExist)
+	{
+		Helper_SetObjectToLowIntegrity(m_hMap, SE_KERNEL_OBJECT);//降低内核对象访问权限
+	}
+	m_pBuffer=(LPBYTE)::MapViewOfFile(m_hMap, FILE_MAP_READ | FILE_MAP_WRITE,0,0,0);//map whole file
 	if(!m_pBuffer)
 	{
 		::CloseHandle(m_hMap);
