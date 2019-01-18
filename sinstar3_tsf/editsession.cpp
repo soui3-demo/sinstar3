@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "editsession.h"
+#include <helper/SDpiHelper.hpp>
 
 //////////////////////////////////////////////////////////////////////////
 CEditSessionBase::CEditSessionBase(CSinstar3Tsf *pTextService, ITfContext *pContext)
@@ -134,6 +135,31 @@ CEsGetTextExtent::CEsGetTextExtent(CSinstar3Tsf *pTextService, ITfContext *pCont
 {
 }
 
+typedef enum PROCESS_DPI_AWARENESS {
+	PROCESS_DPI_UNAWARE = 0,
+	PROCESS_SYSTEM_DPI_AWARE = 1,
+	PROCESS_PER_MONITOR_DPI_AWARE = 2
+} PROCESS_DPI_AWARENESS;
+
+typedef HRESULT (__stdcall *FunGetProcessDpiAwareness)(
+	 HANDLE hprocess,
+	 PROCESS_DPI_AWARENESS *value);
+
+PROCESS_DPI_AWARENESS GetProcessDpiAwareness(HANDLE hProc)
+{
+	PROCESS_DPI_AWARENESS  dpiAware = PROCESS_SYSTEM_DPI_AWARE;
+	HMODULE hMod = LoadLibrary(_T("Shcore.dll"));
+	if (hMod)
+	{
+		FunGetProcessDpiAwareness fun = (FunGetProcessDpiAwareness)GetProcAddress(hMod, "GetProcessDpiAwareness");
+		if (fun)
+		{
+			fun(hProc, &dpiAware);
+		}
+		FreeLibrary(hMod);
+	}
+	return dpiAware;
+}
 
 STDMETHODIMP CEsGetTextExtent::DoEditSession(TfEditCookie ec)
 {
@@ -149,9 +175,21 @@ STDMETHODIMP CEsGetTextExtent::DoEditSession(TfEditCookie ec)
 	{
 		BOOL fClip = FALSE;
 		RECT rc;
-		_pContextView->GetTextExt(ec,range,&rc,&fClip);
-		pSinstar3->OnSetCaretPosition( *(POINT*)&rc, rc.bottom - rc.top);			
-		SLOGFMTI("SetCaret pos:%d,%d, height: %d",rc.left,rc.top, rc.bottom - rc.top);
+		_pContextView->GetTextExt(ec, range, &rc, &fClip);
+		POINT pt = { rc.left,rc.top };
+		int nHei = rc.bottom - rc.top;
+		if (PROCESS_DPI_UNAWARE == GetProcessDpiAwareness(NULL))
+		{
+			HWND hWnd;
+			_pContextView->GetWnd(&hWnd);
+			ScreenToClient(hWnd, &pt);
+			int nScale = SOUI::SDpiHelper::getScale(hWnd);
+			pt.x *= nScale / 100;
+			pt.y *= nScale / 100;
+			nHei *= nScale / 100;
+		}
+		pSinstar3->OnSetCaretPosition( pt, nHei);
+		SLOGFMTI("SetCaret pos:%d,%d, height: %d",pt.x,pt.y, nHei);
 	}
 
 	return S_OK;
