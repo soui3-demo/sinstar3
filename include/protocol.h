@@ -142,10 +142,11 @@ enum {
 struct Param_Create : FunParams_Base
 {
 	DWORD  hOwner;
+	bool   bDpiAware;
 	string strHostPath;
 	DWORD  dwVer;
 	FUNID(ISinstar_Create)
-		PARAMS3(Input, hOwner,strHostPath,dwVer)
+		PARAMS4(Input, hOwner,bDpiAware,strHostPath,dwVer)
 		TOSTR2(strHostPath,dwVer)
 };
 

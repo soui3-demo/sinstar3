@@ -391,6 +391,7 @@ BOOL   CSinstar3Tsf::ReleaseImeContext(UINT64 imeContext)
 
 BOOL CSinstar3Tsf::_InitSinstar3()
 {
+	SASSERT(!m_pSinstar3);
 	m_pSinstar3 = new CSinstarProxy(this);
 	Helper_ChangeWindowMessageFilter(UM_CALL_FUN, MSGFLT_ADD);
 
@@ -421,9 +422,12 @@ BOOL CSinstar3Tsf::_UninitSinstar3()
 
 LRESULT CSinstar3Tsf::WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	LRESULT result;
-	BOOL bHandled = m_pSinstar3->ProcessWindowMessage(m_hWnd, uMsg, wParam, lParam, result);
-	if (bHandled) return result;
+	LRESULT result = 0;
+	if(m_pSinstar3) 
+	{
+		BOOL bHandled = m_pSinstar3->ProcessWindowMessage(m_hWnd, uMsg, wParam, lParam, result);
+		if (bHandled) return result;
+	}
 	return __super::WindowProc(uMsg, wParam, lParam);
 }
 

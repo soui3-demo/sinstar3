@@ -37,6 +37,8 @@ namespace SOUI
 
 		int			m_cInputCount;
 		DWORD		m_tmInputSpan;
+
+		int			m_nScale;
 	private:
 		SMap<SStringW, SStringW> m_fontMap;
 	};

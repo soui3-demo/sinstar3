@@ -66,7 +66,7 @@ namespace SOUI
 		return m_path;
 	}
 
-	CMyData::CMyData(const SStringT & strDataPath):m_tmInputSpan(0), m_cInputCount(0)
+	CMyData::CMyData(const SStringT & strDataPath):m_tmInputSpan(0), m_cInputCount(0),m_nScale(100)
 	{
 		m_compInfo.cWild = 'z';
 		m_compInfo.strCompName = _T("╪сть...");

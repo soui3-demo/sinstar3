@@ -368,6 +368,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\paramhelper.hpp"
+				>
+			</File>
+			<File
 				RelativePath="include\paramstream.hpp"
 				>
 			</File>

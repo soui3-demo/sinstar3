@@ -3,6 +3,32 @@
 #include <shellapi.h>
 #include "../helper/helper.h"
 
+typedef enum PROCESS_DPI_AWARENESS {
+	PROCESS_DPI_UNAWARE = 0,
+	PROCESS_SYSTEM_DPI_AWARE = 1,
+	PROCESS_PER_MONITOR_DPI_AWARE = 2
+} PROCESS_DPI_AWARENESS;
+
+typedef HRESULT (__stdcall *FunGetProcessDpiAwareness)(
+	HANDLE hprocess,
+	PROCESS_DPI_AWARENESS *value);
+
+PROCESS_DPI_AWARENESS GetProcessDpiAwareness(HANDLE hProc)
+{
+	PROCESS_DPI_AWARENESS  dpiAware = PROCESS_SYSTEM_DPI_AWARE;
+	HMODULE hMod = LoadLibrary(_T("Shcore.dll"));
+	if (hMod)
+	{
+		FunGetProcessDpiAwareness fun = (FunGetProcessDpiAwareness)GetProcAddress(hMod, "GetProcessDpiAwareness");
+		if (fun)
+		{
+			fun(hProc, &dpiAware);
+		}
+		FreeLibrary(hMod);
+	}
+	return dpiAware;
+}
+
 CSinstarProxy::CSinstarProxy(ITextService *pTxtService):m_conn(pTxtService)
 {
 
@@ -47,10 +73,15 @@ BOOL CSinstarProxy::Init(HWND hClient, LPCTSTR pszSvrPath)
 	{
 		return FALSE;
 	}
-	m_conn.ConnectTo(hSvr);
+	if(m_conn.ConnectTo(hSvr) == 0)
+	{
+		return FALSE;
+	}
+
 	Param_Create param;
 	param.hOwner = (DWORD)GetActiveWindow();
 	HMODULE hMod = GetModuleHandle(NULL);
+	param.bDpiAware = PROCESS_DPI_UNAWARE != GetProcessDpiAwareness(NULL);
 	if (hMod)
 	{
 		TCHAR szBuf[MAX_PATH];

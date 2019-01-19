@@ -111,6 +111,7 @@ void CSvrConnection::HandleCreate(Param_Create & param)
 {
 	SASSERT(!m_pSinstar);
 	TCHAR szVer[100];
+	m_bDpiAware = param.bDpiAware;
 	Helper_VersionString(param.dwVer, szVer);
 	SLOG_INFO("create connection, host:" << param.strHostPath.c_str() << " ver:" << szVer);
 	m_pSinstar.Attach(new CSinstar3Impl(this, m_hSvr,(HWND)param.hOwner));
@@ -148,7 +149,16 @@ void CSvrConnection::HandleOnCompositionTerminated(Param_OnCompositionTerminated
 
 void CSvrConnection::HandleOnSetCaretPosition(Param_OnSetCaretPosition &param)
 {
-	m_pSinstar->OnSetCaretPosition(param.pt,param.nHei);
+	CPoint pt = param.pt;
+	int nHei = param.nHei;
+	if(!m_bDpiAware)
+	{
+		int nScale = CDataCenter::getSingletonPtr()->GetData().m_nScale;
+		pt.x = pt.x * nScale/100;
+		pt.y = pt.y * nScale/100;
+		nHei = nHei * nScale/100;
+	}
+	m_pSinstar->OnSetCaretPosition(pt,nHei);
 
 }
 

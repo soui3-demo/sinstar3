@@ -80,4 +80,5 @@ protected:
 private:
 	SComPtr<ISinstar>	m_pSinstar;
 	HWND				m_hSvr;
+	bool			    m_bDpiAware;
 };
