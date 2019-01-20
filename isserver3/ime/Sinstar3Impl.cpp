@@ -129,8 +129,16 @@ void CSinstar3Impl::OnCompositionChanged()
 
 void CSinstar3Impl::OnCompositionTerminated(bool bClearCtx)
 {
-	SLOG_INFO("");
-	if(bClearCtx) m_inputState.ClearContext(CPC_ALL);
+	SLOG_INFO("bClearCtx:"<<bClearCtx);
+	if(bClearCtx)
+	{
+		m_inputState.ClearContext(CPC_ALL);
+		if(g_SettingsG->compMode == IM_SHAPECODE &&	m_inputState.m_ctx.compMode == IM_SPELL)
+		{//temp spell mode.
+			m_inputState.m_ctx.compMode = IM_SHAPECODE;
+			m_inputState.StatusbarUpdate();
+		}
+	}
 }
 
 void CSinstar3Impl::OnSetFocus(BOOL bFocus)
