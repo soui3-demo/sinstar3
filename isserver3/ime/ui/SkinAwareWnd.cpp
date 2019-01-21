@@ -31,6 +31,7 @@ namespace SOUI{
 		cs.cx = 0;
 		cs.cy = 0;
 		OnRecreateUI(&cs);
+		e->bubbleUp = true;
 	}
 
 	HWND CSkinAwareWnd::Create(LPCTSTR pszTitle, HWND hParent)
