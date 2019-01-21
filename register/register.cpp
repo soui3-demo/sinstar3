@@ -21,8 +21,7 @@
 
 
 #define MAX_STRLEN		100
-
-#define NAME_MAPFILE _T("_setoutsoft comm map file")
+#define SINSTAR3_SERVER_HWND _T("sinstar3_server_wnd_{85B55CBC-7D48-4860-BA88-0BE4B073A94F}")
 
 TCHAR g_szPath[MAX_PATH]={0};	//程序启动位置
 HINSTANCE g_hInst = 0;
@@ -288,25 +287,18 @@ BOOL Sinstar_Uninstall()
 	}
 
 	//退出服务器
-	HANDLE hMapData = OpenFileMapping(FILE_MAP_READ | FILE_MAP_WRITE, FALSE, NAME_MAPFILE);
-	if (hMapData)
+	HWND hWndSvr = FindWindow(NULL, SINSTAR3_SERVER_HWND);
+	if (IsWindow(hWndSvr))
 	{
-		HWND hWndSvr = 0;
-		LPVOID pData = MapViewOfFile(hMapData, FILE_MAP_READ | FILE_MAP_WRITE, 0, 0, 0);
-		memcpy(&hWndSvr, pData, sizeof(HWND));
-		UnmapViewOfFile(pData);
-		CloseHandle(hMapData);
-		if (IsWindow(hWndSvr))
-		{
-			DWORD dwProcID = 0;
-			GetWindowThreadProcessId(hWndSvr, &dwProcID);
-			PostMessage(hWndSvr, WM_QUIT, 0, 0);
-			if (dwProcID != 0)
-				WaitForSingleObject((HANDLE)dwProcID, INFINITE);
-			else
-				Sleep(500);
-		}
+		DWORD dwProcID = 0;
+		GetWindowThreadProcessId(hWndSvr, &dwProcID);
+		PostMessage(hWndSvr, WM_QUIT, 0, 0);
+		if (dwProcID != 0)
+			WaitForSingleObject((HANDLE)dwProcID, INFINITE);
+		else
+			Sleep(500);
 	}
+
 	MessageBox(GetActiveWindow(), _T("卸载成功！"), _T("install"), MB_OK | MB_ICONINFORMATION);
 
 	return TRUE;

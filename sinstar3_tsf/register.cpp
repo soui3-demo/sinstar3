@@ -82,8 +82,6 @@ BOOL RegisterProfiles()
 
 	HKL hKLSinstar3 = GetKeyboardLayoutFromFileName(SINSTAR3_IME_FILE_NAME);
 
-	hKLSinstar3 = 0;
-
 	if (Helper_IsWin8orLater())
 	{
 		SOUI::SComPtr<ITfInputProcessorProfileMgr> pInputProcessorProfileMgr;
