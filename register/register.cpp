@@ -230,7 +230,7 @@ BOOL Sinstar_Uninstall()
 	{
 		for(int i=0;i<ARRAYSIZE(KSrcX64Files);i++)
 		{
-			_stprintf(szPath, _T("%s\\%s.ime"), szSysPath, KSrcX64Files[i].pszDest);
+			_stprintf(szPath, _T("%s\\%s"), szSysPath, KSrcX64Files[i].pszDest);
 			if (KSrcX64Files[i].bReg && 0 != CallRegsvr32(szPath, FALSE))
 			{
 				MessageBox(GetActiveWindow(), _T("Ð¶ÔØ³ÌÐòÊ§°Ü"), _T("ÌáÊ¾"), MB_OK | MB_ICONSTOP);
@@ -241,7 +241,7 @@ BOOL Sinstar_Uninstall()
 
 		for(int i=0;i<ARRAYSIZE(KSrcX86Files);i++)
 		{
-			_stprintf(szPath, _T("%s\\%s.ime"), sysWow64, KSrcX86Files[i].pszDest);
+			_stprintf(szPath, _T("%s\\%s"), sysWow64, KSrcX86Files[i].pszDest);
 			if (KSrcX86Files[i].bReg && 0 != CallRegsvr32(szPath, FALSE))
 			{
 				MessageBox(GetActiveWindow(), _T("Ð¶ÔØ³ÌÐòÊ§°Ü"), _T("ÌáÊ¾"), MB_OK | MB_ICONSTOP);
@@ -254,7 +254,7 @@ BOOL Sinstar_Uninstall()
 	{
 		for(int i=0;i<ARRAYSIZE(KSrcX86Files);i++)
 		{
-			_stprintf(szPath, _T("%s\\%s.ime"), szSysPath, KSrcX86Files[i].pszDest);
+			_stprintf(szPath, _T("%s\\%s"), szSysPath, KSrcX86Files[i].pszDest);
 			if (0 != CallRegsvr32(szPath, FALSE))
 			{
 				MessageBox(GetActiveWindow(), _T("Ð¶ÔØ³ÌÐòÊ§°Ü"), _T("ÌáÊ¾"), MB_OK | MB_ICONSTOP);
