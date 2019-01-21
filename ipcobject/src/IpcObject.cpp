@@ -45,13 +45,15 @@ LRESULT SIpcServer::OnConnect(HWND hClient)
 	SIpcConnection * pConnection=NULL;
 	HRESULT hr = CreateConnection(&pConnection);
 	if (hr != S_OK || !pConnection) goto error;
-	pConnection->SetLocalId(GetSvrId(), GetBufSize());
-	pConnection->SetRemoteId(hClient);
+	if(!pConnection->SetLocalId(GetSvrId(), GetBufSize()))
+		goto error;
+	if(!pConnection->SetRemoteId(hClient))
+		goto error;
 
 	m_mapClients[hClient] = pConnection;
 	return 1;
 error:
-	delete pConnection;
+	if(pConnection) delete pConnection;
 	return 0;
 }
 
