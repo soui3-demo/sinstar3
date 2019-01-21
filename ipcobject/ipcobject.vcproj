@@ -49,7 +49,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="2"
-				AdditionalIncludeDirectories=".,.,include,.,$(SOUIPATH)/utilities/include,$(SOUIPATH)/soui/include,$(SOUIPATH)/components,$(SOUIPATH)/config,..\..\work\soui.git\tools\mkspecs\win32-msvc2008"
+				AdditionalIncludeDirectories=".;include;..\include;&quot;$(SOUIPATH)/utilities/include&quot;;&quot;$(SOUIPATH)/soui/include&quot;;&quot;$(SOUIPATH)/components&quot;;&quot;$(SOUIPATH)/config&quot;;&quot;..\..\work\soui.git\tools\mkspecs\win32-msvc2008&quot;"
 				PreprocessorDefinitions="_WINDOWS,UNICODE,WIN32,QT_NO_DYNAMIC_CAST,NDEBUG"
 				GeneratePreprocessedFile="0"
 				ExceptionHandling="1"
@@ -130,7 +130,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="2"
-				AdditionalIncludeDirectories=".,.,include,.,$(SOUIPATH)/utilities/include,$(SOUIPATH)/soui/include,$(SOUIPATH)/components,$(SOUIPATH)/config,..\..\work\soui.git\tools\mkspecs\win32-msvc2008"
+				AdditionalIncludeDirectories=".;include;..\include;&quot;$(SOUIPATH)/utilities/include&quot;;&quot;$(SOUIPATH)/soui/include&quot;;&quot;$(SOUIPATH)/components&quot;;&quot;$(SOUIPATH)/config&quot;;&quot;..\..\work\soui.git\tools\mkspecs\win32-msvc2008&quot;"
 				PreprocessorDefinitions="_WINDOWS,UNICODE,WIN32,QT_NO_DYNAMIC_CAST,NDEBUG"
 				GeneratePreprocessedFile="0"
 				ExceptionHandling="1"
@@ -210,7 +210,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="4"
-				AdditionalIncludeDirectories=".,.,include,.,$(SOUIPATH)/utilities/include,$(SOUIPATH)/soui/include,$(SOUIPATH)/components,$(SOUIPATH)/config,..\..\work\soui.git\tools\mkspecs\win32-msvc2008"
+				AdditionalIncludeDirectories=".;include;..\include;&quot;$(SOUIPATH)/utilities/include&quot;;&quot;$(SOUIPATH)/soui/include&quot;;&quot;$(SOUIPATH)/components&quot;;&quot;$(SOUIPATH)/config&quot;;&quot;..\..\work\soui.git\tools\mkspecs\win32-msvc2008&quot;"
 				PreprocessorDefinitions="_WINDOWS,UNICODE,WIN32,QT_NO_DYNAMIC_CAST"
 				GeneratePreprocessedFile="0"
 				ExceptionHandling="1"
@@ -291,7 +291,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="4"
-				AdditionalIncludeDirectories=".,.,include,.,$(SOUIPATH)/utilities/include,$(SOUIPATH)/soui/include,$(SOUIPATH)/components,$(SOUIPATH)/config,..\..\work\soui.git\tools\mkspecs\win32-msvc2008"
+				AdditionalIncludeDirectories=".;include;..\include;&quot;$(SOUIPATH)/utilities/include&quot;;&quot;$(SOUIPATH)/soui/include&quot;;&quot;$(SOUIPATH)/components&quot;;&quot;$(SOUIPATH)/config&quot;;&quot;..\..\work\soui.git\tools\mkspecs\win32-msvc2008&quot;"
 				PreprocessorDefinitions="_WINDOWS,UNICODE,WIN32,QT_NO_DYNAMIC_CAST"
 				GeneratePreprocessedFile="0"
 				ExceptionHandling="1"
@@ -354,6 +354,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\SecurityAttribute.cpp"
+				>
+			</File>
+			<File
 				RelativePath="src\ShareMemBuffer.cpp"
 				>
 			</File>
@@ -373,6 +377,10 @@
 			</File>
 			<File
 				RelativePath="include\paramstream.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\include\SecurityAttribute.h"
 				>
 			</File>
 			<File

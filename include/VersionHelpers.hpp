@@ -36,7 +36,7 @@ enum eVerShort
 
 struct WinVersion
 {
-	eVerShort ver = WinUnsupported;
+	eVerShort ver;
 	RTL_OSVERSIONINFOEXW native;
 };
 

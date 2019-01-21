@@ -96,7 +96,7 @@ BOOL RegisterProfiles()
 			lenOfDesc,
 			achIconFile,
 			cchA,
-			(UINT)TEXTSERVICE_ICON_INDEX, NULL, 0, TRUE, 0);
+			(UINT)TEXTSERVICE_ICON_INDEX, hKLSinstar3, 0, TRUE, 0);
 	}
 	else
 	{
