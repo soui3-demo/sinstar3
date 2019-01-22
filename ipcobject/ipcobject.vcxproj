@@ -100,7 +100,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.;.;include;.;$(SOUIPATH)/utilities/include;$(SOUIPATH)/soui/include;$(SOUIPATH)/components;$(SOUIPATH)/config;..\..\soui.git\tools\mkspecs\win32-msvc2015;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;include;..\include;$(SOUIPATH)/utilities/include;$(SOUIPATH)/soui/include;$(SOUIPATH)/components;$(SOUIPATH)/config;..\..\soui.git\tools\mkspecs\win32-msvc2015;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-w44456 -w44457 -w44458 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -137,7 +137,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.;.;include;.;$(SOUIPATH)/utilities/include;$(SOUIPATH)/soui/include;$(SOUIPATH)/components;$(SOUIPATH)/config;..\..\soui.git\tools\mkspecs\win32-msvc2015;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;include;..\include;$(SOUIPATH)/utilities/include;$(SOUIPATH)/soui/include;$(SOUIPATH)/components;$(SOUIPATH)/config;..\..\soui.git\tools\mkspecs\win32-msvc2015;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-w44456 -w44457 -w44458 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
