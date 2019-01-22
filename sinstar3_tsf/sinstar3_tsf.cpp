@@ -341,51 +341,47 @@ void CSinstar3Tsf::UpdateResultAndCompositionStringW(UINT64 imeContext,const WCH
 
 UINT64 CSinstar3Tsf::GetImeContext()
 {
-
 	if(!_pThreadMgr) return NULL;
 	HRESULT         hr;
 
+	UINT64 imeCtx = 0;
 	if(_pComposition)
 	{
-		ITfRange *pRange;
-		ITfContext *pContext;
+		SOUI::SComPtr<ITfRange> pRange;
 		hr=_pComposition->GetRange(&pRange);
 		if(SUCCEEDED(hr) && pRange)
 		{
+			ITfContext * pContext=NULL;
 			hr=pRange->GetContext(&pContext);
-			pRange->Release();
-			if(SUCCEEDED(hr)&&pContext)	return (UINT64)pContext;
+			if(SUCCEEDED(hr) && pContext)	
+			{
+				imeCtx = (UINT64)pContext;
+			}
 		}
 	}else
 	{
-		ITfDocumentMgr  *pFocusDoc;
+		SOUI::SComPtr<ITfDocumentMgr>  pFocusDoc;
 		hr = _pThreadMgr->GetFocus(&pFocusDoc);
-		if(SUCCEEDED(hr) && pFocusDoc != NULL)
+		if(SUCCEEDED(hr) && pFocusDoc)
 		{
-			ITfContext *pContext;
+			ITfContext *pContext=NULL;
 			hr = pFocusDoc->GetTop(&pContext);
-			pFocusDoc->Release();
-			if(SUCCEEDED(hr))
+			if(SUCCEEDED(hr) && pContext)
 			{
-				return (UINT64)pContext;
+				imeCtx = (UINT64)pContext;
 			}
 		}
 	}
-	return NULL;
+	SLOG_INFO("CSinstar3Tsf::GetImeContext, imeCtx:"<<imeCtx);
+	return imeCtx;
 }
 
 BOOL   CSinstar3Tsf::ReleaseImeContext(UINT64 imeContext)
 {
 	if(!imeContext) return FALSE;
+	SLOG_INFO("CSinstar3Tsf::ReleaseImeContext, imeCtx:"<<imeContext);
 	ITfContext *pContext=(ITfContext*)imeContext;
-	try
-	{
-		pContext->Release();
-	}
-	catch (...)
-	{
-		
-	}
+	pContext->Release();
 	return TRUE;
 }
 

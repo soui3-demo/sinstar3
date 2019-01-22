@@ -173,7 +173,15 @@ void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 	{
 		if (m_pTxtSvr->IsCompositing())
 			m_inputState.InputEnd();
+		m_inputState.ClearContext(CPC_ALL);
+		if(g_SettingsG->compMode == IM_SHAPECODE &&	m_inputState.m_ctx.compMode == IM_SPELL)
+		{//temp spell mode.
+			m_inputState.m_ctx.compMode = IM_SHAPECODE;
+			m_inputState.StatusbarUpdate();
+		}
+
 		m_pStatusWnd->Show(FALSE);
+		m_pInputWnd->Show(FALSE);
 		if (m_pTipWnd) m_pTipWnd->DestroyWindow();
 	}
 }

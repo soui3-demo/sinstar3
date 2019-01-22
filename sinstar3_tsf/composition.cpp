@@ -42,13 +42,15 @@ BOOL CSinstar3Tsf::_GetSegRange(TfEditCookie ec,ITfRange **pRange,int nLeft,int 
 
 STDAPI CSinstar3Tsf::OnCompositionTerminated(TfEditCookie ecWrite, ITfComposition *pComposition)
 {
-	SLOG_INFO("OnCompositionTerminated,TfEditCookie:"<<ecWrite<< " pComposition:"<<pComposition);
-	SASSERT(pComposition && pComposition == _pComposition);
-	UINT64 nCtx = GetImeContext();
-	ITfContext *pCtx=(ITfContext *)nCtx;
-	_TerminateComposition(ecWrite,pCtx,true);
-	ReleaseImeContext(nCtx);
+	SLOG_INFO("CSinstar3Tsf::OnCompositionTerminated,TfEditCookie:"<<ecWrite<< " pComposition:"<<pComposition);
+	if(pComposition && pComposition == _pComposition)
+	{
+		UINT64 nCtx = GetImeContext();
+		ITfContext *pCtx=(ITfContext *)nCtx;
+		_TerminateComposition(ecWrite,pCtx,true);
+		ReleaseImeContext(nCtx);
 
+	}
 	return S_OK;
 }
 
