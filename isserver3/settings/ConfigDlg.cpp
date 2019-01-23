@@ -438,10 +438,11 @@ namespace SOUI
 
 	void CConfigDlg::InitPageAbout()
 	{
-		SStringT strPath = SApplication::getSingleton().GetAppDir();
+		TCHAR szPath[1000];
+		GetModuleFileName(NULL, szPath, 1000);
 
 		WIN32_FIND_DATA wfd;
-		HANDLE h=FindFirstFile(strPath, &wfd);
+		HANDLE h=FindFirstFile(szPath, &wfd);
 		FindClose(h);
 		FILETIME lft;
 		FileTimeToLocalFileTime(&wfd.ftLastWriteTime,&lft);
