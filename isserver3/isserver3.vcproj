@@ -614,6 +614,10 @@
 				RelativePath=".\res\logo.ico"
 				>
 			</File>
+			<File
+				RelativePath=".\res\version.rc2"
+				>
+			</File>
 		</Filter>
 		<File
 			RelativePath=".\license.txt"
