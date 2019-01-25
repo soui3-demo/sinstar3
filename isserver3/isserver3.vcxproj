@@ -227,6 +227,7 @@
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building SoUI Resource</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\res\soui_res.rc2;%(Outputs)</Outputs>
     </CustomBuild>
+    <None Include="res\version.rc2" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="uires\smenu\context.xml" />
@@ -255,6 +256,7 @@
     <Xml Include="uires\xml\wnd_tip.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\logo.ico" />
     <Image Include="uires\icon\logo.ico" />
     <Image Include="uires\icon\logo1.ico" />
     <Image Include="uires\icon\logo2.ico" />

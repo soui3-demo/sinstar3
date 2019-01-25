@@ -5,27 +5,26 @@
 VS_VERSION_INFO VERSIONINFO
  FILEVERSION VERSION_INT
  PRODUCTVERSION VERSION_INT
- FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
- FILEFLAGS 0x1L
+	FILEFLAGS 0x1L
 #else
- FILEFLAGS 0x0L
+	FILEFLAGS 0x0L
 #endif
- FILEOS 0x4L
- FILETYPE 0x3L
- FILESUBTYPE 0xbL
-BEGIN
-    BLOCK "StringFileInfo"
+	FILEOS 0x4L
+	FILETYPE 0x1L
+	FILESUBTYPE 0x0L
+	BEGIN
+BLOCK "StringFileInfo"
     BEGIN
         BLOCK "080404b0"
         BEGIN
-            VALUE "CompanyName", "SetoutSoft"
-            VALUE "FileDescription", PRODUCT_TSF
+            VALUE "CompanyName", "启程软件"
+            VALUE "FileDescription", "启程输入法后台服务"
             VALUE "FileVersion", VERSION_STR
-            VALUE "InternalName", "sinstar3"
+            VALUE "InternalName", "isserver3"
             VALUE "LegalCopyright", COPYRIGHT_STR
-            VALUE "OriginalFilename", "sinstar3_tsf.dll"
-            VALUE "ProductName", PRODUCT_TSF
+            VALUE "OriginalFilename", "isserver3.exe"
+            VALUE "ProductName", "启程输入法后台服务"
             VALUE "ProductVersion", VERSION_STR
         END
     END

@@ -6,15 +6,16 @@
 // 要改变版本号，只需要对这4个字段进行修改。
 //
 
+#define COPYRIGHT_STR "Copy right (C) 2003-2019"
 #define _sinstar3_ime_version_a		3
 #define _sinstar3_ime_version_b		0
-#define _sinstar3_ime_version_c		0
+#define _sinstar3_ime_version_c		2
 #define _sinstar3_ime_version_d		1
 
 #define _sinstar3_ime_name			启程输入法
 #define _sinstar3_ime				启程输入法IME模块
-#define _sinstar3_tsf				       启程输入法TSF模块
-#define _sinstar3_mutex                       sinstar3_mutex_40AC2365-F592-4BE3-8B41-04A6B5337BFB
+#define _sinstar3_tsf				启程输入法TSF模块
+#define _sinstar3_mutex             sinstar3_mutex_40AC2365-F592-4BE3-8B41-04A6B5337BFB
 
 
 #define _sinstar3_ime_string(a)		#a
@@ -55,3 +56,4 @@
 #define _sinstar3_wstr_name_version(n,a,b)		L#n L#a L"." L#b
 #define sinstar3_wstr_name_version(n,a,b)		_sinstar3_wstr_name_version(n,a,b)
 #define PRODUCT_WNAMEVER		sinstar3_wstr_name_version( _sinstar3_ime_name,_sinstar3_ime_version_a, _sinstar3_ime_version_b)
+

@@ -23,8 +23,8 @@ BEGIN
             VALUE "FileDescription", PRODUCT_IME
             VALUE "FileVersion", VERSION_STR
             VALUE "InternalName", "sinstar3"
-            VALUE "LegalCopyright", "Copyright (C) 2003-2017"
-            VALUE "OriginalFilename", "sinstar3_ime.ime"
+            VALUE "LegalCopyright", COPYRIGHT_STR
+            VALUE "OriginalFilename", "sinstar3_ime.dll"
             VALUE "ProductName", PRODUCT_IME
             VALUE "ProductVersion", VERSION_STR
         END
