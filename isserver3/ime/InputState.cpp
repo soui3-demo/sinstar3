@@ -152,7 +152,14 @@ BOOL KeyIn_IsCoding(InputContext * lpCntxtPriv)
 	return bOpen;
 }
 
-CInputState::CInputState(void):m_pListener(NULL),m_fOpen(FALSE), m_bUpdateTips(TRUE)
+CInputState::CInputState(void)
+	:m_pListener(NULL)
+	,m_fOpen(FALSE)
+	,m_bUpdateTips(TRUE)
+	,m_bPressOther(FALSE)
+	,m_bPressShift(FALSE)
+	,m_bPressCtrl(FALSE)
+
 {
 	memset(&m_ctx,0,sizeof(InputContext));
 	ClearContext(CPC_ALL);
@@ -2210,9 +2217,6 @@ BOOL CInputState::KeyIn_Line_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 
 BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState)
 {
-	static BOOL bPressOther = FALSE;
-	static BOOL bPressShift=FALSE;
-	static BOOL bPressCtrl=FALSE;
 	BOOL bRet=FALSE;
 	if ((lKeyData & 0x80000000) && (uKey != VK_SHIFT && uKey !=VK_CONTROL))
 		return FALSE;
@@ -2258,7 +2262,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 				break;
 			}
 		}
-		bPressOther = TRUE;
+		m_bPressOther = TRUE;
 		if(bRet) return TRUE;
 	}
 
@@ -2273,17 +2277,17 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 		return FALSE;
 	}else if(uKey==VK_SHIFT)
 	{
-		if(bPressCtrl)
+		if(m_bPressCtrl)
 		{
-			bPressOther=TRUE;
+			m_bPressOther=TRUE;
 			return FALSE;
 		}
 		if(lKeyData & 0x80000000)//弹起SHIFT键
 		{
-			if(!bPressOther && bPressShift)//右SHIFT键按下后没有按下其它键，表示使用快捷关闭功能
+			if(!m_bPressOther && m_bPressShift)//右SHIFT键按下后没有按下其它键，表示使用快捷关闭功能
 			{
 				BYTE byKey=(BYTE)(lKeyData>>16);
-				bPressShift=FALSE; 
+				m_bPressShift=FALSE; 
 				if(!(lpbKeyState[VK_SPACE]&0x80) &&
 					g_SettingsG->bySwitchKey==byKey)
 				{ //check the scan code
@@ -2312,27 +2316,27 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 				}
 			}else//还原状态
 			{
-				bPressShift=FALSE;
-				bPressOther=FALSE;
+				m_bPressShift=FALSE;
+				m_bPressOther=FALSE;
 			}	
 		}else
 		{//按下SHIFT键，初始化状态
-			bPressShift=TRUE;
-			bPressOther=FALSE;
+			m_bPressShift=TRUE;
+			m_bPressOther=FALSE;
 		}
 	}else if(uKey==VK_CONTROL)
 	{
 		if(!m_pListener->GetOpenStatus())
 			return FALSE;
-		if(bPressShift)
+		if(m_bPressShift)
 		{
-			bPressOther=TRUE;
+			m_bPressOther=TRUE;
 			return FALSE;
 		}
 		if(lKeyData & 0x80000000)//弹起Ctrl键
 		{
 			BYTE byKey=(BYTE)(lKeyData>>24);
-			if(!bPressOther && bPressCtrl)//Ctrl键按下后没有按下其它键，表示使用快捷关闭功能
+			if(!m_bPressOther && m_bPressCtrl)//Ctrl键按下后没有按下其它键，表示使用快捷关闭功能
 			{
 				if(g_SettingsG->byTempSpellKey==byKey)
 				{//临时拼音｜拼音辅助
@@ -2426,20 +2430,20 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 						}
 					}
 				}
-				bPressCtrl=FALSE; 
+				m_bPressCtrl=FALSE; 
 			}else//还原状态
 			{
-				bPressCtrl=FALSE;
-				bPressOther=FALSE;
+				m_bPressCtrl=FALSE;
+				m_bPressOther=FALSE;
 			}		
 		}else
 		{//按下Ctrl键，初始化状态
-			bPressCtrl=TRUE;
-			bPressOther=FALSE;
+			m_bPressCtrl=TRUE;
+			m_bPressOther=FALSE;
 		}
 	}else if(!(lpbKeyState[VK_CAPITAL]&0x01)) 
 	{
-		bPressOther=TRUE;
+		m_bPressOther=TRUE;
 		if(m_pListener->GetOpenStatus())
 		{
 			if(lpbKeyState[VK_CONTROL]&0x80 && lpbKeyState[VK_SHIFT]&0x80)

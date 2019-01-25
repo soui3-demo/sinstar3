@@ -106,4 +106,8 @@ private:
 
 	DWORD			 m_tmInputStart;
 	DWORD			 m_tmInputEnd;
+
+	BOOL m_bPressOther;
+	BOOL m_bPressShift;
+	BOOL m_bPressCtrl;
 };

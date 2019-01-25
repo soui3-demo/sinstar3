@@ -28,6 +28,7 @@ namespace SOUI
 		BOOL GoPrevCandidatePage();
 		short SelectCandidate(short iCand);
 		void OnFlmInfo(PFLMINFO pFlmInfo);
+		void SetOwner(HWND hOwner);
 	protected:
 		virtual void OnSetSkin(EventArgs * e);
 		virtual int OnRecreateUI(LPCREATESTRUCT lpCreateStruct);
@@ -78,6 +79,7 @@ namespace SOUI
 
 		BOOL			m_bFollowCaret;
 		CPoint			m_ptAnchor;
+		HWND			m_hOwner;
 	};
 
 }

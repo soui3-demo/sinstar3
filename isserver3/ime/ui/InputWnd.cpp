@@ -16,6 +16,7 @@ namespace SOUI
 		,m_bShow(FALSE)
 		, m_bDraging(FALSE)
 		, m_bFollowCaret(TRUE)
+		, m_hOwner(NULL)
 	{
 	}
 
@@ -55,16 +56,24 @@ namespace SOUI
 		CPoint pos = pt - CDataCenter::getSingleton().GetData().m_ptSkinOffset;
 		CRect rcWnd = GetClientRect();
 		
-		CRect rcWorkArea;
-		SystemParametersInfo(SPI_GETWORKAREA, 0, &rcWorkArea, 0);
+		HMONITOR hMonitor = MonitorFromWindow(m_hOwner, MONITOR_DEFAULTTONEAREST);
+		MONITORINFO info = { sizeof(info),0 };
+		GetMonitorInfo(hMonitor, &info);
+		CRect rcWorkArea = info.rcWork;
+		if (pos.x + rcWnd.Width() > rcWorkArea.right)
+		{
+			pos.x = rcWorkArea.right - rcWnd.Width();
+		}
 		if (pos.y + m_nCaretHeight + SIZE_BELOW + rcWnd.Height() > rcWorkArea.bottom)
 		{
-			SetWindowPos(HWND_TOPMOST, pos.x, pt.y - rcWnd.Height() - SIZE_BELOW, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
+			pos.y = pt.y - rcWnd.Height() - SIZE_BELOW;
 		}
 		else
 		{
-			SetWindowPos(HWND_TOPMOST,pos.x,pos.y + m_nCaretHeight + SIZE_BELOW,0,0,SWP_NOSIZE|SWP_NOACTIVATE);
+			pos.y = pos.y + m_nCaretHeight + SIZE_BELOW;
 		}
+		SetWindowPos(HWND_TOPMOST, pos.x, pos.y , 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
+
 		if(m_bShow && !IsWindowVisible())
 		{
 			CImeWnd::Show(TRUE);
@@ -503,6 +512,11 @@ namespace SOUI
 	void CInputWnd::OnFlmInfo(PFLMINFO pFlmInfo)
 	{
 		SDispatchMessage(UM_FLMINFO, 0, (LPARAM)pFlmInfo);
+	}
+
+	void CInputWnd::SetOwner(HWND hOwner)
+	{
+		m_hOwner = hOwner;
 	}
 
 	void CInputWnd::OnSetSkin(EventArgs * e)
