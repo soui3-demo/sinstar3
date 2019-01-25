@@ -461,8 +461,10 @@ namespace SOUI
 			CRect rcWnd;
 			CSimpleWnd::GetWindowRect(&rcWnd);
 
-			CRect rcWorkArea;
-			SystemParametersInfo(SPI_GETWORKAREA, 0, &rcWorkArea, 0);
+			HMONITOR hMonitor = MonitorFromWindow(m_hOwner, MONITOR_DEFAULTTONEAREST);
+			MONITORINFO info = { sizeof(info),0 };
+			GetMonitorInfo(hMonitor, &info);
+			CRect rcWorkArea = info.rcWork;
 
 			m_ptAnchor.x = rcWorkArea.left + (rcWorkArea.Width() - rcWnd.Width()) / 2;
 			m_ptAnchor.y = rcWorkArea.bottom - rcWnd.Height();
