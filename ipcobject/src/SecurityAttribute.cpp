@@ -56,6 +56,10 @@
 
 	void SecurityAttribute::_Init()
 	{
+		sa.nLength = sizeof(SECURITY_ATTRIBUTES);
+		sa.lpSecurityDescriptor = NULL;
+		sa.bInheritHandle = TRUE;
+
 		// Privileges for UWP and IE protected mode
 		// https://stackoverflow.com/questions/39138674/accessing-named-pipe-servers-from-within-ie-epm-bho
 		if (IsWindowsVistaOrGreater())
@@ -73,16 +77,21 @@
 				                        LOCAL_SYSTEM_FILE_ACCESS
 				                        EVERYONE_FILE_ACCESS,
 				SDDL_REVISION_1,
-				&pd,
+				&sa.lpSecurityDescriptor,
 				NULL);
 		}
 
-		sa.nLength = sizeof(SECURITY_ATTRIBUTES);
-		sa.lpSecurityDescriptor = pd;
-		sa.bInheritHandle = TRUE;
 	}
 
 	SECURITY_ATTRIBUTES *SecurityAttribute::get_attr()
 	{
 		return &sa;
+	}
+
+	SecurityAttribute::~SecurityAttribute()
+	{
+		if(sa.lpSecurityDescriptor)
+		{
+			LocalFree(sa.lpSecurityDescriptor);
+		}
 	}

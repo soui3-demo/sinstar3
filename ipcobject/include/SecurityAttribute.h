@@ -4,10 +4,10 @@
 
 	class SecurityAttribute {
 	private:
-		PSECURITY_DESCRIPTOR pd;
 		SECURITY_ATTRIBUTES sa;
 		void _Init();
 	public:
-		SecurityAttribute() : pd(NULL) { _Init(); }
+		SecurityAttribute(){ _Init(); }
+		~SecurityAttribute();
 		SECURITY_ATTRIBUTES *get_attr();
 	};

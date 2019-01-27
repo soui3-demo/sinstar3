@@ -38,58 +38,57 @@ struct WinVersion
 {
 	eVerShort ver;
 	RTL_OSVERSIONINFOEXW native;
+
+	WinVersion()
+	{
+		native.dwOSVersionInfoSize = sizeof(native);
+		fnRtlGetVersion RtlGetVersion = (fnRtlGetVersion)GetProcAddress(GetModuleHandleW(L"ntdll.dll"), "RtlGetVersion");
+		if (RtlGetVersion)
+			RtlGetVersion(&native);
+
+		if (native.dwMajorVersion != 0)
+		{
+			DWORD fullver = (native.dwMajorVersion << 8) | native.dwMinorVersion;
+			switch (fullver)
+			{
+			case _WIN32_WINNT_WIN10:
+				if (native.dwBuildNumber >= 16299)
+					ver = Win10FC;
+				else if (native.dwBuildNumber >= 15063)
+					ver = Win10CU;
+				else if (native.dwBuildNumber >= 14393)
+					ver = Win10AU;
+				else if (native.dwBuildNumber >= 10586)
+					ver = Win10;
+				break;
+
+			case _WIN32_WINNT_WINBLUE:
+				ver = Win8Point1;
+				break;
+
+			case _WIN32_WINNT_WIN8:
+				ver = Win8;
+				break;
+
+			case _WIN32_WINNT_WIN7:
+				ver = Win7;
+				break;
+
+			case _WIN32_WINNT_WINXP:
+				ver = WinXP;
+				break;
+
+			default:
+				ver = WinUnsupported;
+			}
+		}
+	}
 };
 
 inline WinVersion& WinVer()
 {
 	static WinVersion g_WinVer;
 	return g_WinVer;
-}
-
-inline void InitVersion()
-{
-	WinVersion& g_WinVer = WinVer();
-	g_WinVer.native.dwOSVersionInfoSize = sizeof(g_WinVer.native);
-	fnRtlGetVersion RtlGetVersion = (fnRtlGetVersion)GetProcAddress(GetModuleHandleW(L"ntdll.dll"), "RtlGetVersion");
-	if (RtlGetVersion)
-		RtlGetVersion(&g_WinVer.native);
-
-	if (g_WinVer.native.dwMajorVersion != 0)
-	{
-		DWORD fullver = (g_WinVer.native.dwMajorVersion << 8) | g_WinVer.native.dwMinorVersion;
-		switch (fullver)
-		{
-		case _WIN32_WINNT_WIN10:
-			if (g_WinVer.native.dwBuildNumber >= 16299)
-				g_WinVer.ver = Win10FC;
-			else if (g_WinVer.native.dwBuildNumber >= 15063)
-				g_WinVer.ver = Win10CU;
-			else if (g_WinVer.native.dwBuildNumber >= 14393)
-				g_WinVer.ver = Win10AU;
-			else if (g_WinVer.native.dwBuildNumber >= 10586)
-				g_WinVer.ver = Win10;
-			break;
-
-		case _WIN32_WINNT_WINBLUE:
-			g_WinVer.ver = Win8Point1;
-			break;
-
-		case _WIN32_WINNT_WIN8:
-			g_WinVer.ver = Win8;
-			break;
-
-		case _WIN32_WINNT_WIN7:
-			g_WinVer.ver = Win7;
-			break;
-
-		case _WIN32_WINNT_WINXP:
-			g_WinVer.ver = WinXP;
-			break;
-
-		default:
-			g_WinVer.ver = WinUnsupported;
-		}
-	}
 }
 
 
