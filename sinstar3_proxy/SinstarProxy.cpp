@@ -44,7 +44,6 @@ CSinstarProxy::~CSinstarProxy()
 
 BOOL CSinstarProxy::Init(HWND hClient, LPCTSTR pszSvrPath)
 {
-	m_conn.SetLocalId(hClient, 1 << 12);
 	HWND hSvr = FindWindow(NULL, SINSTAR3_SERVER_HWND);
 	if (!hSvr)
 	{
@@ -73,7 +72,7 @@ BOOL CSinstarProxy::Init(HWND hClient, LPCTSTR pszSvrPath)
 	{
 		return FALSE;
 	}
-	if(m_conn.ConnectTo(hSvr) == 0)
+	if(m_conn.ConnectTo(hClient,hSvr) != 0)
 	{
 		return FALSE;
 	}

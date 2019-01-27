@@ -47,7 +47,7 @@ LRESULT SIpcServer::OnConnect(HWND hClient)
 	if (hr != S_OK || !pConnection) goto error;
 	if(!pConnection->SetLocalId(GetSvrId(), GetBufSize()))
 		goto error;
-	if(!pConnection->SetRemoteId(hClient))
+	if(!pConnection->SetRemoteId(hClient,GetBufSize()))
 		goto error;
 
 	m_mapClients[hClient] = pConnection;
@@ -89,32 +89,34 @@ SIpcConnection::SIpcConnection():m_hLocalId(NULL),m_hRemoteId(NULL)
 {
 }
 
-LRESULT SIpcConnection::ConnectTo(HWND hRemote)
+LRESULT SIpcConnection::ConnectTo(HWND hLocal,HWND hRemote)
 {
-	if (m_hRemoteId != NULL)
+	if (m_hLocalId != NULL)
 		return 1;
-	assert(m_hLocalId != NULL);
+	if (m_hRemoteId != NULL)
+		return 2;
 
-	LRESULT lRet = ::SendMessage(hRemote,UM_CALL_FUN, FUN_ID_CONNECT, (LPARAM)m_hLocalId);
+	LRESULT lRet = ::SendMessage(hRemote,UM_CALL_FUN, FUN_ID_CONNECT, (LPARAM)hLocal);
 	if (lRet == 0)
 	{
 		return 0;
 	}
-	TCHAR szName[100];
-	GetMemMapFileByObjectID(hRemote, szName);
-	m_RemoteBuf.OpenMemFile(szName, 0);
-	m_hRemoteId = hRemote;
-	return lRet;
+	SetLocalId(hLocal,0);
+	SetRemoteId(hRemote,0);
+	return lRet==1?0:3;
 }
 
 LRESULT SIpcConnection::Disconnect()
 {
-	if (m_hRemoteId == NULL)
+	if (m_hLocalId == NULL)
 		return 1;
-	assert(m_hRemoteId != NULL);
+	if (m_hRemoteId == NULL)
+		return 2;
 	::SendMessage(m_hRemoteId, UM_CALL_FUN, FUN_ID_DISCONNECT, (LPARAM)m_hLocalId);
 	m_hRemoteId = NULL;
 	m_RemoteBuf.Close();
+	m_hLocalId = NULL;
+	m_localBuf.Close();
 	return 0;
 }
 
@@ -134,12 +136,12 @@ LRESULT SIpcConnection::CallFun(FunParams_Base * pParam) const
 	return lRet;
 }
 
-BOOL SIpcConnection::SetRemoteId(HWND hRemote)
+BOOL SIpcConnection::SetRemoteId(HWND hRemote, UINT uBufSize)
 {
 	assert(m_hRemoteId == NULL);
 	TCHAR szName[100];
 	GetMemMapFileByObjectID(hRemote, szName);
-	if (!m_RemoteBuf.OpenMemFile(szName))
+	if (!m_RemoteBuf.OpenMemFile(szName,uBufSize))
 	{
 		return FALSE;
 	}

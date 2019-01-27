@@ -36,8 +36,9 @@ BOOL CShareMemBuffer::OpenMemFile(LPCTSTR pszName,DWORD dwMaximumSize)
 	}
 	else
 	{
-		SecurityAttribute sa;
-		m_hMap = ::CreateFileMapping(INVALID_HANDLE_VALUE, sa.get_attr(), PAGE_READWRITE, 0, dwMaximumSize + sizeof(DWORD) * 2, pszName);
+		SECURITY_ATTRIBUTES sa = Helper_BuildLowIntegritySA();
+		m_hMap = ::CreateFileMapping(INVALID_HANDLE_VALUE, &sa, PAGE_READWRITE, 0, dwMaximumSize + sizeof(DWORD) * 2, pszName);
+		Helper_FreeSa(&sa);
 	}
 	if (!m_hMap)	return FALSE;
 	m_pBuffer=(LPBYTE)::MapViewOfFile(m_hMap, FILE_MAP_READ | FILE_MAP_WRITE,0,0,0);//map whole file

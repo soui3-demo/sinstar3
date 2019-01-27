@@ -176,7 +176,7 @@ BOOL CWorker::_SetVoice(WPARAM wp, LPARAM lp)
 	ISpObjectToken* pToken = NULL;
 	ULONG count;
 	HRESULT hr = pTokens->GetCount(&count);
-	if (nToken < 0 || nToken >= count)
+	if (nToken < 0 || nToken >= (int)count)
 		return FALSE;
 
 	hr = pTokens->Item(nToken, &pToken);

@@ -49,13 +49,10 @@ public:
 	SIpcConnection();
 	virtual ~SIpcConnection() {}
 
-	LRESULT ConnectTo(HWND hRemote);
+	LRESULT ConnectTo(HWND hLocal,HWND hRemote);
 
 	LRESULT Disconnect();
 
-	BOOL SetRemoteId(HWND hRemote);
-
-	BOOL SetLocalId(HWND hLocal, UINT uBufSize);
 
 	LRESULT CallFun(FunParams_Base * pParam) const;
 public:
@@ -66,6 +63,9 @@ public:
 	static void GetMemMapFileByObjectID(HWND hWnd, TCHAR *szName);
 
 protected:
+	BOOL SetRemoteId(HWND hRemote, UINT uBufSize);
+	BOOL SetLocalId(HWND hLocal, UINT uBufSize);
+
 	virtual bool HandleFun(UINT uFunID, CParamStream & ps) = 0;
 
 protected:
