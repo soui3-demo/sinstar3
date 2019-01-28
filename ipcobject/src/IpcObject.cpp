@@ -11,7 +11,7 @@ SIpcServer::~SIpcServer(void)
 	std::map<HWND, SIpcConnection *>::iterator it = m_mapClients.begin();
 	while (it != m_mapClients.end())
 	{
-		delete it->second;
+		it->second->Release();
 		it++;
 	}
 	m_mapClients.clear();
@@ -45,15 +45,15 @@ LRESULT SIpcServer::OnConnect(HWND hClient)
 	SIpcConnection * pConnection=NULL;
 	HRESULT hr = CreateConnection(&pConnection);
 	if (hr != S_OK || !pConnection) goto error;
-	if(!pConnection->SetLocalId(GetSvrId(), GetBufSize()))
+	if (!pConnection->OpenShareBuffer(GetSvrId(), hClient, GetBufSize()))
 		goto error;
-	if(!pConnection->SetRemoteId(hClient,GetBufSize()))
-		goto error;
-
 	m_mapClients[hClient] = pConnection;
 	return 1;
 error:
-	if(pConnection) delete pConnection;
+	if (pConnection)
+	{
+		pConnection->Release();
+	}
 	return 0;
 }
 
@@ -101,8 +101,7 @@ LRESULT SIpcConnection::ConnectTo(HWND hLocal,HWND hRemote)
 	{
 		return 0;
 	}
-	SetLocalId(hLocal,0);
-	SetRemoteId(hRemote,0);
+	OpenShareBuffer(hLocal, hRemote, 0);
 	return lRet==1?0:3;
 }
 
@@ -136,32 +135,29 @@ LRESULT SIpcConnection::CallFun(FunParams_Base * pParam) const
 	return lRet;
 }
 
-BOOL SIpcConnection::SetRemoteId(HWND hRemote, UINT uBufSize)
+BOOL SIpcConnection::OpenShareBuffer(HWND hLocal, HWND hRemote, DWORD uBufSize)
 {
 	assert(m_hRemoteId == NULL);
-	TCHAR szName[100];
-	GetMemMapFileByObjectID(hRemote, szName);
-	if (!m_RemoteBuf.OpenMemFile(szName,uBufSize))
-	{
-		return FALSE;
-	}
-	m_hRemoteId = hRemote;
-	return TRUE;
-}
-
-BOOL SIpcConnection::SetLocalId(HWND hLocal,UINT uBufSize)
-{
 	assert(m_hLocalId == NULL);
-	TCHAR szName[100];
-	GetMemMapFileByObjectID(hLocal, szName);
+	
+	TCHAR szName[MAX_PATH];
+	GetMemMapFileByObjectID(hLocal,hRemote, szName);
 	if (!m_localBuf.OpenMemFile(szName, uBufSize))
 	{
 		return FALSE;
 	}
 	m_hLocalId = hLocal;
+
+	GetMemMapFileByObjectID(hRemote,hLocal, szName);
+
+	if (!m_RemoteBuf.OpenMemFile(szName, uBufSize))
+	{
+		return FALSE;
+	}
+	m_hRemoteId = hRemote;
+
 	return TRUE;
 }
-
 
 BOOL SIpcConnection::ProcessWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lResult)
 {
@@ -179,8 +175,7 @@ BOOL SIpcConnection::ProcessWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, L
 	return TRUE;
 }
 
-void SIpcConnection::GetMemMapFileByObjectID(HWND hWnd, TCHAR *szName)
+void SIpcConnection::GetMemMapFileByObjectID(HWND hFrom, HWND hTo, TCHAR szName[MAX_PATH])
 {
-	LPARAM tmp = (LPARAM)hWnd;
-	_stprintf(szName, _T("ipc_client_%08x"), (DWORD)(tmp&0xffffffff));
+	_stprintf(szName, _T("sistart3_share_buffer_8085395F-E2FA-4F96-8BD0-FE5D7412CD22_%08x_2_%08x"), (DWORD)(((LPARAM)hFrom)&0xffffffff), (DWORD)(((LPARAM)hTo) & 0xffffffff));
 }
