@@ -2,8 +2,6 @@
 
 #define KSettingINI L"config.ini"
 
-#define KFileMapName_GlobalSetting _T("sinstar3_filemap_global_settings_{F2048A3E-14D9-43EA-93B4-F27DC0BA2CDA}")
-
 enum HotKeyIndex{
 	HKI_CharMode = 0,	// 标点模式切换
 	HKI_Query,			// 查询热键
