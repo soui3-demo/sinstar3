@@ -23,6 +23,7 @@
     <mclistview class="edit_border"/>
     <group  padding="10,10,10,15"/>
     <hotkey class="edit_border"  padding="5,0,5,0"/>
+    <link class="cls_btn_weblink"/>
     <candidate colorIndex="@color/cand_index" colorCand="@color/cand_text" colorComp="@color/cand_comp" colorWild="@color/cand_wild"/>    
   </objattr>
 </UIDEF>
