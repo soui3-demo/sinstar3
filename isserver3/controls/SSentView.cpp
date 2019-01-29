@@ -42,6 +42,13 @@ namespace SOUI
 		{
 			rc.DeflateRect((rc.Width() - szTxt.cx)/2, 0);
 		}
+		if(uFormat & DT_VCENTER)
+		{
+			rc.DeflateRect(0,(rc.Height() - szTxt.cy)/2);
+		}else if(uFormat & DT_BOTTOM)
+		{
+			rc.top = rc.bottom - szTxt.cy;
+		}
 		COLORREF crDef = pRT->GetTextColor();
 
 		CRect range1(0, 0, m_nHeaderCount, 1);

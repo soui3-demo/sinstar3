@@ -27,6 +27,17 @@ namespace SOUI
 
 
 		CRect rcClient = GetClientRect();
+		CSize szText ;
+		pRT->MeasureText(_T("A"),1,&szText);
+		szText.cy +=1;//for underline.
+		if(GetTextAlign()&DT_VCENTER)
+		{
+			rcClient.DeflateRect(0,(rcClient.Height()-szText.cy)/2);
+		}else if(GetTextAlign()&DT_BOTTOM)
+		{
+			rcClient.top = rcClient.bottom - szText.cy;
+		}
+
 		CPoint pt = rcClient.TopLeft();
 
 		POINT pts[2];
@@ -123,6 +134,7 @@ namespace SOUI
 				i++;
 			}
 		}
+		szRet.cy +=1; //for underline
 
 		return szRet;
 	}
