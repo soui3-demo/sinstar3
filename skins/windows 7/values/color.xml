@@ -10,7 +10,7 @@
   <associate_english_prefix value="#808080"/>
   <temp_spell_flag value="rgb(255,0,0)"/>
   <configborder value="#fecc01"/>
-  <cand_first value="rgb(255,0,0)"/>
+  <cand_first value="rgb(255,255,255)"/>
   <cand_index value="rgb(128,128,128)"/>
   <cand_text value="rgb(0,0,0)"/>
   <cand_comp value="rgb(0,0,128)"/>
