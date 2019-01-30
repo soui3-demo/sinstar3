@@ -11,13 +11,19 @@
 
   <associate_english_prefix value="#808080"/>
   <temp_spell_flag value="rgb(255,0,0)"/>
-  <cand_first value="rgb(255,0,0)"/>
-  <cand_index value="rgb(128,128,128)"/>
+  <cand_first value="rgb(255,255,255)"/>
+  <cand_index value="rgb(0,0,0)"/>
   <cand_text value="rgb(0,0,0)"/>
   <cand_comp value="rgb(0,0,128)"/>
   <cand_wild value="rgb(255,0,0)"/>
   <cand_phonetic value="rgb(0,0,255)"/>
   
+  <cand_user_def value="rgb(0,0,255)"/>
+ <cand_user_cmd value="rgb(0,0,255)"/>
+ <cand_forecast value="rgb(128,0,64)"/>
+ <cand_blend_py value="rgb(255,255,255)"/>
+ <cand_gbk value="rgb(0,255,0)"/>
+
   <sent_input value="rgb(255,0,0)"/>
   <sent_left value="rgb(0,0,255)"/>
   <sent_right value="rgb(0,0,0)"/>
