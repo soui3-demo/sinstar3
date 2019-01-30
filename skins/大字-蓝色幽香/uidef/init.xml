@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <UIDEF>
   <desc author="砚边独步" name="大字-蓝色幽香" version="1.0" />
-  <font face="微软雅黑" size="29"/>
+  <font face="微软雅黑" size="28"/>
 
   <color src="values:color"/>
   <dim src="values:dim"/>

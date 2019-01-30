@@ -27,9 +27,17 @@
   <sent_left value="rgb(255,128,64)"/>
   <sent_right value="rgb(0,0,0)"/>
   <sent_inactive value="rgb(0,64,128)"/>
+  
   <comp_umode_prefix value="rgb(255,0,0)"/>
   <comp_auto_complete value="rgb(88,88,88"/>
   <tip_comp value="#808080"/>
   <tip_cand value="#808080"/>
+  
+   <spell value="rgb(0,0,255)"/>
+  <spell_result value="rgb(0,0,0)"/>
+  <spell_caret value="rgb(255,0,0)"/>
+  <spell_edit value="rgb(255,0,0)"/>
+
+
 </color> 
  

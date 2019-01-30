@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
   <dim>
     <input_margin_left value="20"/>
-    <input_margin_top value="12"/>
-    <input_margin_right value="120"/>
-    <input_margin_bottom value="30"/>
+    <input_margin_top value="0"/>
+    <input_margin_right value="150"/>
+    <input_margin_bottom value="0"/>
 
     <input_padding_left value="20"/>
-    <input_padding_top value="12"/>
+    <input_padding_top value="13"/>
     <input_padding_right value="120"/>
     <input_padding_bottom value="30"/>
 

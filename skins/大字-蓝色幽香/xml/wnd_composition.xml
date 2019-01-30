@@ -39,7 +39,7 @@
           </mutexView>
           <mutexView size="-1,-2" name="comp_spell" layout="hbox">
             <text size="-1,-2" text="t:" name="txt_temp_spell_flag" colorText="@color/temp_spell_flag" padding_right="@dim/interval_comp_prefix" display="0"/>
-            <spellView size="-1,-2" name="txt_comps"/>
+            <spellView size="-1,-2" name="txt_comps"  colorSpell="@color/spell" colorResult="@color/spell_result" colorCaret="@color/spell_caret" colorEdit="@color/spell_edit"/>
             <text size="-1,-2" name="txt_tip" colorText="@color/gray" extend_left="@dim/interval_comp"/>
           </mutexView>
           <mutexView size="-1,-2" name="comp_umode"  layout="hbox">
@@ -56,7 +56,7 @@
             <text size="-1,-2" name="txt_auto_complete" colorText="@color/comp_auto_complete"/>
           </mutexView>
           <mutexView size="-1,-2" name="comp_sent" layout="hbox" gravity="center">
-            <sentView name="stv_sent" colorText="@color/sent_right" colorInput="@color/sent_input" colorSelected="@color/sent_left"/>
+            <sentView name="stv_sent" colorRemain="@color/sent_right" colorInactive="@color/sent_inactive" colorInput="@color/sent_input" colorSelected="@color/sent_left"/>
           </mutexView>
         </window>
         <window size="-1,0" weight="1" layout="hbox" tip="candidate window" gravity="center">
