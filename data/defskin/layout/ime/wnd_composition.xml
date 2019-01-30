@@ -23,7 +23,7 @@
         </mutexView>
         <mutexView size="-1,-2" name="comp_spell" layout="hbox">
           <text size="-1,-2" text="t:" name="txt_temp_spell_flag" colorText="@color/temp_spell_flag" padding_right="@dim/interval_comp_prefix" display="0"/>
-          <spellView size="-1,-2" name="txt_comps"/>
+          <spellView size="-1,-2" name="txt_comps" colorSpell="@color/spell" colorResult="@color/spell_result" colorCaret="@color/spell_caret" colorEdit="@color/spell_edit"/>
           <text size="-1,-2" name="txt_tip" colorText="@color/gray" extend_left="@dim/interval_comp"/>
         </mutexView>
         <mutexView size="-1,-2" name="comp_umode" layout="hbox">
@@ -47,11 +47,11 @@
         <mutexView size="-1,-1" layout="hbox" name="cand_normal">
           <imgbtn size="-1,-1" display="0" skin="btn_prevpage" name="btn_prevpage"/>
           <window size="-1,-1" layout="hbox" name="cand_container">
-            <candidate size="-1,-1" index="1:" shadowColor="#cccccc" shadowOffset="2,2" colorIndex="@color/cand_first" colorCand="@color/cand_text" colorComp="@color/cand_comp" colorWild="@color/cand_wild"/>
-            <candidate size="-1,-1" extend_left="@dim/interval_cand" index="2:" />
-            <candidate size="-1,-1" extend_left="@dim/interval_cand" index="3:" />
-            <candidate size="-1,-1" extend_left="@dim/interval_cand" index="4:" />
-            <candidate size="-1,-1" extend_left="@dim/interval_cand" index="5:" />
+            <candidate size="-1,-1" index="1:" font="style:StrokeAndFill,blurStyle:solid,blurRadius:1" colorIndex="@color/cand_first" colorCand="@color/cand_text" colorComp="@color/cand_comp" colorWild="@color/cand_wild"/>
+            <candidate size="-1,-1" extend_left="@dim/interval_cand" index="2:"  colorComp="@color/cand_comp" colorWild="@color/cand_wild"/>
+            <candidate size="-1,-1" extend_left="@dim/interval_cand" index="3:"  colorComp="@color/cand_comp" colorWild="@color/cand_wild"/>
+            <candidate size="-1,-1" extend_left="@dim/interval_cand" index="4:"  colorComp="@color/cand_comp" colorWild="@color/cand_wild"/>
+            <candidate size="-1,-1" extend_left="@dim/interval_cand" index="5:"  colorComp="@color/cand_comp" colorWild="@color/cand_wild"/>
           </window>
           <imgbtn size="-1,-1" display="0" skin="btn_nextpage" name="btn_nextpage"/>
         </mutexView>

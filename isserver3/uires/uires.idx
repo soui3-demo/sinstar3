@@ -56,7 +56,7 @@
     <file name="SYS_SCROLLBAR" path="image\scrollbar.png"/>
   </IMG>
   <ICON>
-    <file name="ICON_LOGO"  path="icon\logo.ico"/>
+    <file name="ICON_LOGO" path="icon\logo.ico"/>
     <file name="ICON_LOGO1" path="icon\logo1.ico"/>
     <file name="ICON_LOGO2" path="icon\logo2.ico"/>
     <file name="ICON_LOGO3" path="icon\logo3.ico"/>

@@ -25,5 +25,10 @@
   <comp_auto_complete value="rgb(88,88,88"/>
   <tip_comp value="#808080"/>
   <tip_cand value="#808080"/>
+  
+  <spell value="rgb(0,0,128)"/>
+  <spell_result value="rgb(0,0,0)"/>
+  <spell_caret value="rgb(0,0,255)"/>
+  <spell_edit value="rgb(0,0,255)"/>
 </color> 
  
