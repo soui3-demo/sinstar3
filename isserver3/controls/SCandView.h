@@ -24,7 +24,12 @@ namespace SOUI
 			ATTR_STRINGT(L"cand", m_strCand, TRUE)
 			ATTR_STRINGT(L"comp", m_strComp, TRUE)
 			ATTR_COLOR(L"colorIndex", m_crIndex, TRUE)
-			ATTR_COLOR(L"colorCand", m_crCand, TRUE)
+			ATTR_COLOR(L"colorCand", m_crCand[CAND_NORMAL], TRUE)
+			ATTR_COLOR(L"colorCandGbk", m_crCand[CAND_GBK], TRUE)
+			ATTR_COLOR(L"colorCandForecast", m_crCand[CAND_FORECAST], TRUE)
+			ATTR_COLOR(L"colorCandUserDef", m_crCand[CAND_USERDEF], TRUE)
+			ATTR_COLOR(L"colorCandBlendPY", m_crCand[CAND_BLENDPY], TRUE)
+			ATTR_COLOR(L"colorCandUserCmd",m_crCand[CAND_USERCMD],TRUE)
 			ATTR_COLOR(L"colorComp", m_crComp, TRUE)
 			ATTR_COLOR(L"colorWild", m_crWild, TRUE)
 			ATTR_COLOR(L"shadowColor", m_crShadow, TRUE)
@@ -37,8 +42,18 @@ namespace SOUI
 		SStringT m_strCand;
 		SStringT m_strComp;
 
+		enum {
+			CAND_NORMAL=0,//normal candidate
+			CAND_GBK,	  //gbk candidate
+			CAND_FORECAST, //forecast candidate
+			CAND_USERDEF, //user defined candidate
+			CAND_USERCMD, //user command candidate
+			CAND_BLENDPY, //pinyin candidate
+
+			CAND_COUNT,
+		};
 		COLORREF m_crIndex;
-		COLORREF m_crCand;
+		COLORREF m_crCand[CAND_COUNT];
 		COLORREF m_crComp;
 		COLORREF m_crWild;
 

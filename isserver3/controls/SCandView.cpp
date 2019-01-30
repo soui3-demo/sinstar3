@@ -5,6 +5,10 @@ namespace SOUI
 {
 	SCandView::SCandView(void):m_byRate(0),m_cWild(0), m_crShadow(CR_INVALID), m_ptShadowOffset(1,1)
 	{
+		m_crCand[CAND_NORMAL] = RGBA(0, 0, 0, 255);
+		m_crCand[CAND_GBK] = m_crCand[CAND_FORECAST] = 
+			m_crCand[CAND_BLENDPY] = m_crCand[CAND_USERDEF] = 
+			m_crCand[CAND_USERCMD] = CR_INVALID;
 		m_bDisplay=0;
 	}
 
@@ -33,7 +37,28 @@ namespace SOUI
 			pRT->TextOut(pt2.x, pt2.y, m_strCand, m_strCand.GetLength());
 			pRT->SetTextColor(crOld);
 		}
-		pRT->SetTextColor(m_crCand);
+
+		COLORREF crCand = CR_INVALID;
+		switch (m_byRate)
+		{
+		case RATE_GBK:
+			crCand = m_crCand[CAND_GBK];
+			break;
+		case RATE_FORECAST:
+			crCand = m_crCand[CAND_FORECAST];
+			break;
+		case RATE_MIXSP:
+			crCand = m_crCand[CAND_BLENDPY];
+			break;
+		case RATE_USERDEF:
+		case RATE_USERCMD:
+			crCand = m_crCand[CAND_USERDEF];
+			break;
+		default:
+			crCand = m_crCand[CAND_NORMAL];
+			break;
+		}
+		pRT->SetTextColor(crCand);
 		pRT->TextOut(pt.x,pt.y,m_strCand,m_strCand.GetLength());
 		pRT->MeasureText(m_strCand,m_strCand.GetLength(),&szBlock);
 		pt.x += szBlock.cx;
