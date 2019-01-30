@@ -15,6 +15,19 @@
     <pngx name="ani_demo" src="img:ani_demo" delay="30[5],50[3],80[3]" vert="1"/>
   </skin>
 
+  <style>
+    <class name="cls_cand_first"  colorIndex="@color/cand_index" colorCand="@color/cand_first" colorComp="@color/cand_comp" colorWild="@color/cand_wild"/>
+    <class name="cls_cand"   colorIndex="@color/cand_index" 
+	    colorCand="@color/cand_text" 
+	    colorCandUserDef="@color/cand_user_def" 
+	    colorCandUserCmd="@color/cand_user_cmd"  
+	    colorCandForecast="@color/cand_forecast"  
+	    colorCandBlendPy="@color/cand_blend_py"  
+	    colorCandGbk="@color/cand_gbk"  
+	    colorComp="@color/cand_comp" 
+	    colorWild="@color/cand_wild"/>
+  </style>
+  
   <root>
     <comp_bg size="-1,-1" skin="bg_composition" cache="1" padding="@dim/input_padding_left,@dim/input_padding_top,@dim/input_padding_right,@dim/input_padding_bottom">
       <apngPlayer pos="|0,|0,@100,@100" offset="-0.5,-0.5" skin="ani_demo"/>
@@ -49,13 +62,13 @@
         <window size="-1,0" weight="1" layout="hbox" tip="candidate window" gravity="center">
           <mutexView size="-1,-1" layout="hbox" name="cand_normal">
             <imgbtn size="-1,-1" display="0" skin="btn_prevpage" name="btn_prevpage"/>
-            <window size="-1,-1" layout="hbox" name="cand_container">
-              <candidate size="-1,-1" index="1:" shadowColor="#cccccc" shadowOffset="2,2" colorIndex="@color/cand_first" colorCand="@color/cand_text" colorComp="@color/cand_comp" colorWild="@color/cand_wild"/>
-              <candidate size="-1,-1" extend_left="@dim/interval_cand" index="2:" />
-              <candidate size="-1,-1" extend_left="@dim/interval_cand" index="3:" />
-              <candidate size="-1,-1" extend_left="@dim/interval_cand" index="4:" />
-              <candidate size="-1,-1" extend_left="@dim/interval_cand" index="5:" />
-            </window>
+          <window size="-1,-1" layout="hbox" name="cand_container" interval="@dim/interval_cand">
+            <candidate size="-1,-1" index="1:"  class="cls_cand_first"/>
+            <candidate size="-1,-1" index="2:"  class="cls_cand"/>
+            <candidate size="-1,-1" index="3:"  class="cls_cand"/>
+            <candidate size="-1,-1" index="4:"  class="cls_cand"/>
+            <candidate size="-1,-1" index="5:"  class="cls_cand"/>
+          </window>
             <imgbtn size="-1,-1" display="0" skin="btn_nextpage" name="btn_nextpage"/>
           </mutexView>
           <mutexView size="-1,-1" layout="hbox" name="cand_english"  >

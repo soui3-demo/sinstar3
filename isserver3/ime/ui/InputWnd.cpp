@@ -178,7 +178,7 @@ namespace SOUI
 				SWindow *pTip = pMutexView->FindChildByID(R.id.txt_tip);
 				if (pTip)
 				{
-					if (m_pInputContext->sbState == SBST_NORMAL && m_pInputContext->bShowTip)
+					if (m_pInputContext->sbState == ::SBST_NORMAL && m_pInputContext->bShowTip)
 					{
 						pTip->SetVisible(TRUE);
 						pTip->SetWindowText(S_CA2T(m_pInputContext->szTip));
@@ -192,7 +192,7 @@ namespace SOUI
 			}else
 			{//update sentence input state
 				SWindow * compSent = FindChildByID(R.id.comp_sent);
-				compSent->SetVisible(m_pInputContext->sbState != SBST_NORMAL, TRUE);
+				compSent->SetVisible(m_pInputContext->sbState != ::SBST_NORMAL, TRUE);
 
 				SSentView *pStvSent = compSent->FindChildByID2<SSentView>(R.id.stv_sent);
 				SASSERT(pStvSent);
@@ -205,6 +205,7 @@ namespace SOUI
 				SStringT strRight = S_CA2T(strRightA);
 
 				SStringT strAll = strInput + strLeft + strRight;
+				pStvSent->SetActive(m_pInputContext->sbState == SBST_SENTENCE);
 				pStvSent->SetSent(strAll, strInput.GetLength());
 				pStvSent->SetSelCount(strLeft.GetLength());
 			}

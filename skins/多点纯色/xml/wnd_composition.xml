@@ -14,7 +14,18 @@
     <imglist name="lines" src="img:png_lines" states="6"/>
     <imglist name="comlogo" src="img:comlogo" />
   </skin>
-
+  <style>
+    <class name="cls_cand_first"  colorIndex="@color/cand_index" colorCand="@color/cand_first" colorComp="@color/cand_comp" colorWild="@color/cand_wild"/>
+    <class name="cls_cand"   colorIndex="@color/cand_index" 
+	    colorCand="@color/cand_text" 
+	    colorCandUserDef="@color/cand_user_def" 
+	    colorCandUserCmd="@color/cand_user_cmd"  
+	    colorCandForecast="@color/cand_forecast"  
+	    colorCandBlendPy="@color/cand_blend_py"  
+	    colorCandGbk="@color/cand_gbk"  
+	    colorComp="@color/cand_comp" 
+	    colorWild="@color/cand_wild"/>
+  </style>
   <root>
     <comp_bg size="-1,-1" skin="skin_bk" cache="1" colorBorder="@color/border" layout="vbox" margin="1,1,1,1" padding="4,0,4,0">
       <window size="-2,0" weight="1" layout="hbox" gravity="center">
@@ -42,7 +53,7 @@
             <text size="-1,-2" name="txt_auto_complete" colorText="@color/comp_auto_complete"/>
           </mutexView>
           <mutexView size="-1,-2" name="comp_sent" layout="hbox" gravity="center">
-            <sentView name="stv_sent" size="-1,-2"  valign="bottom" colorText="@color/sent_right" colorInput="@color/sent_input" colorSelected="@color/sent_left"/>
+            <sentView name="stv_sent" size="-1,-2"  valign="bottom" colorRemain="@color/sent_right" colorInactive="@color/sent_inactive" colorInput="@color/sent_input" colorSelected="@color/sent_left"/>
           </mutexView>
         </window>
         <img size="-1,-1" skin="comlogo"/>
@@ -50,12 +61,12 @@
       <window size="-1,0" weight="1" layout="hbox"  tip="candidate window" gravity="center">
         <mutexView size="-1,-1" layout="hbox" name="cand_normal"  gravity="center">
           <imgbtn size="-1,-1" display="0" skin="btn_prevpage" name="btn_prevpage"/>
-          <window size="-1,-1" layout="hbox" name="cand_container">
-            <candidate size="-1,-1" index="1:" colorIndex="@color/cand_first" colorCand="@color/cand_first" colorComp="@color/cand_text" colorWild="@color/cand_text"/>
-            <candidate size="-1,-1" extend_left="@dim/interval_cand" index="2:" />
-            <candidate size="-1,-1" extend_left="@dim/interval_cand" index="3:" />
-            <candidate size="-1,-1" extend_left="@dim/interval_cand" index="4:" />
-            <candidate size="-1,-1" extend_left="@dim/interval_cand" index="5:" />
+          <window size="-1,-1" layout="hbox" name="cand_container" interval="@dim/interval_cand">
+            <candidate size="-1,-1" index="1:"  class="cls_cand_first"/>
+            <candidate size="-1,-1" index="2:"  class="cls_cand"/>
+            <candidate size="-1,-1" index="3:"  class="cls_cand"/>
+            <candidate size="-1,-1" index="4:"  class="cls_cand"/>
+            <candidate size="-1,-1" index="5:"  class="cls_cand"/>
           </window>
           <imgbtn size="-1,-1" display="0" skin="btn_nextpage" name="btn_nextpage"/>
         </mutexView>

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu itemHeight="28" contextHelpId="100"
-          maxWidth="300" minWidth="150">
+          maxWidth="300" minWidth="150"
+          font="size:15"
+          >
   <item text="系统设置" name="config" id="100" />
   <item text="隐藏状态" name="hide_statusbar" id="101"/>
   <item text="光标跟随" name="follow_caret" id="102"/>

@@ -3,7 +3,13 @@
 
 namespace SOUI
 {
-	SSentView::SSentView():m_crSel(RGBA(0,255,0,255)),m_crInput(RGBA(255,0,0,255)),m_nSelCount(0),m_nHeaderCount(0)
+	SSentView::SSentView()
+		:m_crSel(RGBA(0,255,0,255))
+		,m_crInput(RGBA(255,0,0,255))
+		,m_crInactive(RGBA(128,128,128,255))
+		,m_nSelCount(0)
+		,m_nHeaderCount(0)
+		,m_bSentInput(false)
 	{
 	}
 
@@ -68,14 +74,14 @@ namespace SOUI
 		}
 		range.IntersectRect(rangeDraw,range2);
 		if (!range.IsRectEmpty())
-		{//draw header
+		{//draw selected
 			pRT->SetTextColor(m_crSel);
 			pRT->TextOut(rc.left, rc.top, pszBuf + range.left, range.Width());
 			pRT->MeasureText(pszBuf + range.left, range.Width(), &szTxt);
 			rc.left += szTxt.cx;
 		}
 
-		pRT->SetTextColor(crDef);
+		pRT->SetTextColor(m_bSentInput?m_crRemain:m_crInactive);
 		range.IntersectRect(rangeDraw, range3);
 		if (!range.IsRectEmpty())
 		{//draw remain
@@ -83,6 +89,13 @@ namespace SOUI
 			pRT->MeasureText(pszBuf + range.left, range.Width(), &szTxt);
 			rc.left += szTxt.cx;
 		}
+		pRT->SetTextColor(crDef);
+	}
+
+	void SSentView::SetActive(bool bSentInput)
+	{
+		m_bSentInput = bSentInput;
+		Invalidate();
 	}
 
 }

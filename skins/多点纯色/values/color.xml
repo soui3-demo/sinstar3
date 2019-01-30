@@ -18,9 +18,17 @@
   <cand_wild value="rgb(255,0,0)"/>
   <cand_phonetic value="rgb(0,0,255)"/>
 
+  <cand_user_def value="rgb(246,6,175)"/>
+ <cand_user_cmd value="rgb(246,6,175)"/>
+ <cand_forecast value="rgb(128,0,64)"/>
+ <cand_blend_py value="rgb(35,181,116)"/>
+ <cand_gbk value="rgb(0,113,189)"/>
+ 
   <sent_input value="rgb(255,0,0)"/>
   <sent_left value="rgb(0,0,255)"/>
   <sent_right value="rgb(0,0,0)"/>
+  <sent_inactive value="rgb(93,93,93)"/>
+  
   <comp_umode_prefix value="rgb(255,0,0)"/>
   <comp_auto_complete value="rgb(88,88,88"/>
   <tip_comp value="#808080"/>
