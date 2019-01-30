@@ -60,6 +60,8 @@ namespace SOUI
 			crCand = m_crCand[CAND_NORMAL];
 			break;
 		}
+		if (crCand == CR_INVALID)
+			crCand = m_crCand[CAND_NORMAL];
 		pRT->SetTextColor(crCand);
 		pRT->TextOut(pt.x,pt.y,m_strCand,m_strCand.GetLength());
 		pRT->MeasureText(m_strCand,m_strCand.GetLength(),&szBlock);
