@@ -25,6 +25,7 @@ protected:
 	void OnGetConversionMode( Param_GetConversionMode &param);
 	void OnSetOpenStatus( Param_SetOpenStatus &param);
 	void OnGetOpenStatus( Param_GetOpenStatus &param);
+	void OnGetActiveWnd( Param_GetActiveWnd &param);
 
 	FUN_BEGIN
 		FUN_HANDLER(Param_InputStringW, OnInputStringW)
@@ -39,6 +40,7 @@ protected:
 		FUN_HANDLER(Param_GetConversionMode, OnGetConversionMode)
 		FUN_HANDLER(Param_SetOpenStatus, OnSetOpenStatus)
 		FUN_HANDLER(Param_GetOpenStatus, OnGetOpenStatus)
+		FUN_HANDLER(Param_GetActiveWnd, OnGetActiveWnd)
 	FUN_END
 
 private:

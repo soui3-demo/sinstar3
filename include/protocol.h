@@ -137,16 +137,16 @@ enum {
 	ITextService_GetConversionMode,
 	ITextService_SetOpenStatus,
 	ITextService_GetOpenStatus,
+	ITextService_GetActiveWnd,
 };
 
 struct Param_Create : FunParams_Base
 {
-	DWORD  hOwner;
 	bool   bDpiAware;
 	string strHostPath;
 	DWORD  dwVer;
 	FUNID(ISinstar_Create)
-		PARAMS4(Input, hOwner,bDpiAware,strHostPath,dwVer)
+		PARAMS3(Input, bDpiAware,strHostPath,dwVer)
 		TOSTR2(strHostPath,dwVer)
 };
 
@@ -390,4 +390,12 @@ struct Param_GetOpenStatus : FunParams_Base
 		PARAMS1(Input, lpImeContext)
 		PARAMS1(Output, bOpen)
 		TOSTR2(lpImeContext, bOpen)
+};
+
+struct Param_GetActiveWnd : FunParams_Base
+{
+	DWORD hActive;
+	FUNID(ITextService_GetActiveWnd)
+		PARAMS1(Output, hActive)
+		TOSTR1(hActive)
 };

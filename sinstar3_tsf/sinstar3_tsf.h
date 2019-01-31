@@ -35,8 +35,6 @@ public:
 	/* ITfTextInputProcessorEx */
 	STDMETHODIMP ActivateEx(ITfThreadMgr *pThreadMgr, TfClientId tfClientId, DWORD dwFlags);
 
-	HWND GetActiveWnd();
-
     // ITfThreadMgrEventSink
     STDMETHODIMP OnInitDocumentMgr(ITfDocumentMgr *pDocMgr);
     STDMETHODIMP OnUninitDocumentMgr(ITfDocumentMgr *pDocMgr);
@@ -85,6 +83,7 @@ public:
 	void SetConversionMode( EInputMethod eInputMode);
 	BOOL SetOpenStatus(UINT64 imeContext,BOOL bOpen);
 	BOOL GetOpenStatus(UINT64 imeContext) const;
+	DWORD GetActiveWnd() const;
 
     ITfThreadMgr *_GetThreadMgr() { return _pThreadMgr; }
 

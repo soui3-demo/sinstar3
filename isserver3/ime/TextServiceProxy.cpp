@@ -106,6 +106,14 @@ BOOL CSvrConnection::GetOpenStatus(UINT64 imeContext) const
 	return param.bOpen;
 }
 
+
+DWORD CSvrConnection::GetActiveWnd() const
+{
+	Param_GetActiveWnd param;
+	CallFun(&param);
+	return param.hActive;
+}
+
 //////////////////////////////////////////////////////////////////////////
 void CSvrConnection::HandleCreate(Param_Create & param)
 {
@@ -114,7 +122,7 @@ void CSvrConnection::HandleCreate(Param_Create & param)
 	m_bDpiAware = param.bDpiAware;
 	Helper_VersionString(param.dwVer, szVer);
 	SLOG_INFO("create connection, host:" << param.strHostPath.c_str() << " ver:" << szVer);
-	m_pSinstar.Attach(new CSinstar3Impl(this, m_hSvr,(HWND)param.hOwner));
+	m_pSinstar.Attach(new CSinstar3Impl(this, m_hSvr));
 }
 
 void CSvrConnection::HandleDestroy(Param_Destroy & param)

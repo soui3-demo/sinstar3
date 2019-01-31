@@ -440,4 +440,3 @@ BOOL CUiWnd::IsDefaultIme(void)
 	return hKlCur==hDefIME;
 }
 
-

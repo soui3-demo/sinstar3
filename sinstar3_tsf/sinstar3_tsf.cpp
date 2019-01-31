@@ -146,7 +146,7 @@ ExitError:
 	return E_FAIL;
 }
 
-HWND CSinstar3Tsf::GetActiveWnd()
+DWORD CSinstar3Tsf::GetActiveWnd() const
 {
 	HWND hWnd = NULL;
 	SOUI::SComPtr<ITfDocumentMgr> pDocumentMgr;
@@ -160,8 +160,9 @@ HWND CSinstar3Tsf::GetActiveWnd()
 	if(hr == S_OK) hr = pContextView->GetWnd(&hWnd);
 
 	if (hWnd == NULL) hWnd = ::GetFocus();
-	return hWnd;
+	return (DWORD)hWnd;
 }
+
 
 STDAPI CSinstar3Tsf::Activate(ITfThreadMgr *pThreadMgr, TfClientId tfClientId)
 {

@@ -229,3 +229,9 @@ BOOL CUiWnd::GetOpenStatus(UINT64 imeContext) const
 	if(!imeContext) return FALSE;
 	return ImmGetOpenStatus(((CImeContext *)imeContext)->_hIMC);
 }
+
+DWORD CUiWnd::GetActiveWnd() const
+{
+	return (DWORD)::GetActiveWindow();
+}
+

@@ -36,7 +36,7 @@ public:
 
 	virtual BOOL GetOpenStatus(UINT64 imeContext) const;
 
-
+	virtual DWORD GetActiveWnd() const;
 protected:
 	void HandleCreate(Param_Create &param);
 	void HandleDestroy(Param_Destroy &param);

@@ -23,7 +23,7 @@ public:
 
 const TCHAR * KSinstar3WndName = _T("sinstar3_msg_recv_20180801");
 
-CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HWND hSvr,HWND hOwner)
+CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HWND hSvr)
 :m_pTxtSvr(pTxtSvr)
 ,m_pInputWnd(NULL)
 ,m_pStatusWnd(NULL)
@@ -31,17 +31,19 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HWND hSvr,HWND hOwner)
 ,m_curImeContext(NULL)
 , m_cmdHandler(this)
 , m_hSvr(hSvr)
-, m_hOwner(hOwner)
 {
 	addEvent(EVENTID(EventSvrNotify));
 	addEvent(EVENTID(EventSetSkin));
 
+	HWND hOwner = (HWND)pTxtSvr->GetActiveWnd();
  	m_pInputWnd = new CInputWnd(this,m_inputState.GetInputContext(),this);
 	m_pInputWnd->Create(_T("Sinstar3_Input"));
-	m_pInputWnd->SetOwner(m_hOwner);
+
+	m_pInputWnd->SetOwner(hOwner);
 
 	m_pStatusWnd = new CStatusWnd(this,this);
-	m_pStatusWnd->Create(_T("Sinstar3_Status"),m_hOwner);
+	m_pStatusWnd->Create(_T("Sinstar3_Status"));
+	m_pStatusWnd->SetOwner(hOwner);
 	m_inputState.SetInputListener(this);
 	
 	m_pInputWnd->SetAnchorPosition(CDataCenter::getSingleton().GetData().m_ptInput);
@@ -147,6 +149,7 @@ void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 	SLOG_INFO("GetThreadID="<<GetCurrentThreadId()<<" focus="<<bFocus);
 
 	BOOL bOpen = FALSE;
+
 	UINT64 pImeCtx = m_pTxtSvr->GetImeContext();
 	if (pImeCtx)
 	{
@@ -159,6 +162,9 @@ void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 		if (bFocus)
 			m_pTxtSvr->SetConversionMode(FullNative);
 
+		HWND hOwner = (HWND)m_pTxtSvr->GetActiveWnd();
+		m_pInputWnd->SetOwner(hOwner);
+		m_pStatusWnd->SetOwner(hOwner);
 		m_pStatusWnd->Show(bFocus && !g_SettingsUI->bHideStatus);
 
 		if (bFocus)

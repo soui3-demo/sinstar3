@@ -78,7 +78,6 @@ BOOL CSinstarProxy::Init(HWND hClient, LPCTSTR pszSvrPath)
 	}
 
 	Param_Create param;
-	param.hOwner = (DWORD)GetActiveWindow();
 	HMODULE hMod = GetModuleHandle(NULL);
 	param.bDpiAware = PROCESS_DPI_UNAWARE != GetProcessDpiAwareness(NULL);
 	if (hMod)
@@ -295,4 +294,9 @@ void CClientConnection::OnGetOpenStatus( Param_GetOpenStatus & param)
 {
 	param.bOpen = m_pTxtService->GetOpenStatus(param.lpImeContext);
 
+}
+
+void CClientConnection::OnGetActiveWnd(Param_GetActiveWnd &param)
+{
+	param.hActive = m_pTxtService->GetActiveWnd();
 }

@@ -55,4 +55,5 @@ interface ITextService
 	virtual EInputMethod GetConversionMode()=NULL;
 	virtual BOOL SetOpenStatus(UINT64 imeContext,BOOL bOpen)=NULL;
 	virtual BOOL GetOpenStatus(UINT64 imeContext) const =NULL;
+	virtual DWORD GetActiveWnd() const = NULL;
 };

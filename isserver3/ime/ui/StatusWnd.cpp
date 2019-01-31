@@ -31,9 +31,8 @@ namespace SOUI
 	}
 
 
-	HWND CStatusWnd::Create(LPCTSTR pszWndName,HWND hOwner)
+	HWND CStatusWnd::Create(LPCTSTR pszWndName)
 	{
-		m_hOwner = hOwner;
 		HWND hWnd = __super::Create(pszWndName);
 		if(hWnd)
 		{
@@ -48,6 +47,12 @@ namespace SOUI
 			UpdateUI();
 		}
 		return hWnd;
+	}
+
+
+	void CStatusWnd::SetOwner(HWND hOwner)
+	{
+		m_hOwner = hOwner;
 	}
 
 	int CStatusWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)

@@ -39,6 +39,7 @@ public:
 	EInputMethod GetConversionMode();
 	BOOL SetOpenStatus(UINT64 imeContext,BOOL bOpen);
 	BOOL GetOpenStatus(UINT64 imeContext) const;
+	DWORD GetActiveWnd() const;
 
 	CSinstarProxy * m_pSinstar3;
 	CImeContext *m_pCurContext;
