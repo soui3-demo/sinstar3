@@ -90,11 +90,11 @@ void CCmdHandler::OnHotKeyQueryInfo(LPARAM lp)
 			{
 				PMSGDATA pData = ISComm_GetData();
 				pData->byData[pData->sSize] = 0;
-				p += sprintf(p, "\r\n%s=%s", ISComm_GetCompInfo()->szName, (char*)pData->byData);
+				p += sprintf(p, "\\n%s=%s", ISComm_GetCompInfo()->szName, (char*)pData->byData);
 			}
 			else
 			{
-				p += sprintf(p, "\r\n%s=查询失败", ISComm_GetCompInfo()->szName);
+				p += sprintf(p, "\\n%s=查询失败", ISComm_GetCompInfo()->szName);
 			}
 
 			if (ISComm_SpellQueryComp(strBuf, nGet) == ISACK_SUCCESS)
@@ -102,7 +102,7 @@ void CCmdHandler::OnHotKeyQueryInfo(LPARAM lp)
 				PMSGDATA pData = ISComm_GetData();
 				short i, sCount = 0;
 				BYTE *pbyData = pData->byData;
-				p += sprintf(p, "\r\n拼音=");
+				p += sprintf(p, "\\n拼音=");
 				memcpy(&sCount, pbyData, 2);
 				pbyData += 2;
 				if (sCount>10) sCount = 10;//只取前面10个拼音
@@ -119,22 +119,22 @@ void CCmdHandler::OnHotKeyQueryInfo(LPARAM lp)
 			}
 			else
 			{
-				p += sprintf(p, "\r\n拼音=查询失败");
+				p += sprintf(p, "\\n拼音=查询失败");
 			}
 		}
 		else
 		{//查询英文单词
-			p += sprintf(p, "\r\n单词=%s", (LPCSTR)strBuf);
+			p += sprintf(p, "\\n单词=%s", (LPCSTR)strBuf);
 			if (ISComm_En2Ch(strBuf, nGet) == ISACK_SUCCESS)
 			{
 				PMSGDATA pData = ISComm_GetData();
 				LPBYTE pbyData = pData->byData;
 				BYTE i = 0, byItems = *pbyData++;
 				pbyData += pbyData[0] + 1;//skip phonetic
-				p += sprintf(p, "\r\n中文释意");
+				p += sprintf(p, "\\n中文释意");
 				while (i<byItems)
 				{
-					p += sprintf(p, "\r\n\t%d:", i + 1);
+					p += sprintf(p, "\\n    %d:", i + 1);
 					memcpy(p, pbyData + 1, pbyData[0]); p += pbyData[0]; pbyData += pbyData[0] + 1;
 					i++;
 				}
@@ -142,31 +142,10 @@ void CCmdHandler::OnHotKeyQueryInfo(LPARAM lp)
 			}
 			else
 			{
-				p += sprintf(p, "\r\n外文词库查询失败!");
+				p += sprintf(p, "\\n外文词库查询失败!");
 			}
 		}
-		if (ISComm_QueryUserDict(strBuf, nGet) == ISACK_SUCCESS)
-		{//查询用户词典成功
-			PMSGDATA pData = ISComm_GetData();
-			if (pData->sSize<1000 + 100)//关键词长度最大100，数据最大长度1000
-			{
-				char *pbuf = (char*)pData->byData;
-				p += sprintf(p, "\r\n用户词典[%s]:%s", ISComm_GetUserDict(), pbuf);
-				pbuf += strlen(pbuf) + 1;
-				p += sprintf(p, "\r\n\t%s", pbuf);
-				if (OpenClipboard(m_pSinstar3->m_hWnd))
-				{//将用户词典内容保存到剪贴板
-					int nLen = (int)strlen(pbuf);
-					HGLOBAL hMem = GlobalAlloc(GMEM_DDESHARE | GMEM_MOVEABLE, nLen + 1);
-					LPSTR pMem = (LPSTR)GlobalLock(hMem);
-					strcpy(pMem, pbuf);
-					GlobalUnlock(hMem);
-					EmptyClipboard();
-					SetClipboardData(CF_TEXT, hMem);
-					CloseClipboard();
-				}
-			}
-		}
+
 		SStringT msg = S_CA2T(szRet);
 		m_pSinstar3->ShowTip(_T("查询"), msg);
 	}

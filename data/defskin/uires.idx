@@ -55,6 +55,9 @@
     <file name="btn_english_disable" path="image\btn_english_disable.png"/>
     <file name="SYS_SCROLLBAR" path="image\scrollbar.png"/>
   </IMG>
+  <img2>
+    <file name="png_tip_bg" path="image2\tip_bg.png"/>
+  </img2>
   <ICON>
     <file name="ICON_LOGO" path="icon\logo.ico"/>
     <file name="ICON_LOGO1" path="icon\logo1.ico"/>
