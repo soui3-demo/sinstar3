@@ -86,7 +86,7 @@ void CCmdHandler::OnHotKeyQueryInfo(LPARAM lp)
 		if (strBuf[0] & 0x80)
 		{//中文关键词，可以查询编码数据
 			p += sprintf(p, "关键词=%s", (LPCSTR)strBuf);
-			if (ISComm_QueryComp(strBuf, nGet) == ISACK_SUCCESS)
+			if (ISComm_QueryComp(strBuf, strBuf.GetLength()) == ISACK_SUCCESS)
 			{
 				PMSGDATA pData = ISComm_GetData();
 				pData->byData[pData->sSize] = 0;
@@ -97,7 +97,7 @@ void CCmdHandler::OnHotKeyQueryInfo(LPARAM lp)
 				p += sprintf(p, "\\n%s=查询失败", ISComm_GetCompInfo()->szName);
 			}
 
-			if (ISComm_SpellQueryComp(strBuf, nGet) == ISACK_SUCCESS)
+			if (ISComm_SpellQueryComp(strBuf, strBuf.GetLength()) == ISACK_SUCCESS)
 			{
 				PMSGDATA pData = ISComm_GetData();
 				short i, sCount = 0;
@@ -125,7 +125,7 @@ void CCmdHandler::OnHotKeyQueryInfo(LPARAM lp)
 		else
 		{//查询英文单词
 			p += sprintf(p, "\\n单词=%s", (LPCSTR)strBuf);
-			if (ISComm_En2Ch(strBuf, nGet) == ISACK_SUCCESS)
+			if (ISComm_En2Ch(strBuf, strBuf.GetLength()) == ISACK_SUCCESS)
 			{
 				PMSGDATA pData = ISComm_GetData();
 				LPBYTE pbyData = pData->byData;
