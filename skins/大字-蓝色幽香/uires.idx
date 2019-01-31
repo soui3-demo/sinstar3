@@ -30,6 +30,5 @@
     <file name="btn_record_disable" path="image\btn_record_disable.png"/>
     <file name="btn_sound_enable" path="image\btn_sound_enable.png"/>
     <file name="btn_sound_disable" path="image\btn_sound_disable.png"/>    
-    <file name="ani_demo" path="image\ani_demo.png"/>
   </IMG>
 </resource>

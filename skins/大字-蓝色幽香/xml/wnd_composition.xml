@@ -12,7 +12,6 @@
     <imglist name="btn_prevpage" src="img:btn_prevpage" states="3"/>
     <imglist name="btn_nextpage" src="img:btn_nextpage" states="3"/>
     <imglist name="lines" src="img:png_lines" states="6"/>
-    <pngx name="ani_demo" src="img:ani_demo" delay="30[5],50[3],80[3]" vert="1"/>
   </skin>
 
   <style>
@@ -30,7 +29,6 @@
   
   <root>
     <comp_bg size="-1,-1" skin="bg_composition" cache="1" padding="@dim/input_padding_left,@dim/input_padding_top,@dim/input_padding_right,@dim/input_padding_bottom">
-      <apngPlayer pos="|0,|0,@100,@100" offset="-0.5,-0.5" skin="ani_demo"/>
       <window pos="0,0" size="-1,-2" layout="vbox">
         <window size="-1,0" weight="1" layout="hbox">
           <mutexView size="-1,-2" name="comp_normal" layout="hbox">
