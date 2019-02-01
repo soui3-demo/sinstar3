@@ -294,6 +294,10 @@ STDMETHODIMP CEsUpdateResultAndComp::DoEditSession(TfEditCookie ec)
 
 	BOOL fEmpty=TRUE;
 
+	if (!_pTextService->_IsComposing())
+	{
+		_pTextService->_StartComposition(_pContext);
+	}
 	SASSERT(_pTextService->_IsComposing());
 	SOUI::SComPtr<ITfComposition> pCompostion=_pTextService->GetITfComposition();
 	//将当前数据上屏
