@@ -103,6 +103,7 @@ private:
 
 	SStringT		m_strLoadedFontFile;
 	HWND			m_hSvr;
+	BOOL			m_bTyping;
 };
 
 

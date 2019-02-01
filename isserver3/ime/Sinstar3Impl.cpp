@@ -31,6 +31,7 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HWND hSvr)
 ,m_curImeContext(NULL)
 , m_cmdHandler(this)
 , m_hSvr(hSvr)
+, m_bTyping(FALSE)
 {
 	addEvent(EVENTID(EventSvrNotify));
 	addEvent(EVENTID(EventSetSkin));
@@ -123,7 +124,8 @@ void CSinstar3Impl::OnSetFocusSegmentPosition(POINT pt,int nHei)
 
 void CSinstar3Impl::OnCompositionStarted()
 {
-	SLOG_INFO("");
+	m_bTyping = TRUE;
+	SLOG_INFO("bTyping:TRUE");
 }
 
 void CSinstar3Impl::OnCompositionChanged()
@@ -132,7 +134,8 @@ void CSinstar3Impl::OnCompositionChanged()
 
 void CSinstar3Impl::OnCompositionTerminated(bool bClearCtx)
 {
-	SLOG_INFO("bClearCtx:"<<bClearCtx);
+	m_bTyping = FALSE;
+	SLOG_INFO("bTyping:FALSE, bClearCtx:"<<bClearCtx);
 	if(bClearCtx)
 	{
 		m_inputState.ClearContext(CPC_ALL);
@@ -169,7 +172,7 @@ void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 
 		if (bFocus)
 		{
-			if (m_pTxtSvr->IsCompositing() || m_inputState.IsTempSpell()) m_pInputWnd->Show(TRUE);
+			if (m_bTyping || m_inputState.IsTempSpell()) m_pInputWnd->Show(TRUE);
 		}
 		else
 		{
@@ -178,7 +181,7 @@ void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 	}
 	else
 	{
-		if (m_pTxtSvr->IsCompositing())
+		if (m_bTyping)
 			m_inputState.InputEnd();
 		m_inputState.ClearContext(CPC_ALL);
 		if(g_SettingsG->compMode == IM_SHAPECODE &&	m_inputState.m_ctx.compMode == IM_SPELL)
@@ -359,7 +362,8 @@ BOOL CSinstar3Impl::OnCopyData(HWND wnd, PCOPYDATASTRUCT pCopyDataStruct)
 
 BOOL CSinstar3Impl::IsCompositing() const
 {
-	return m_pTxtSvr->IsCompositing();
+	SASSERT(m_bTyping == m_pTxtSvr->IsCompositing());
+	return m_bTyping;
 }
 
 HWND CSinstar3Impl::GetHwnd() const
@@ -371,6 +375,7 @@ void CSinstar3Impl::OnInputStart()
 {
 	if(!m_curImeContext) return;
 	m_pTxtSvr->StartComposition(m_curImeContext);
+	SLOG_INFO("bTypeing:" << m_bTyping);
 }
 
 
@@ -378,6 +383,22 @@ void CSinstar3Impl::OnInputEnd()
 {
 	if(!m_curImeContext) return;
 	m_pTxtSvr->EndComposition(m_curImeContext);
+	SLOG_INFO("bTypeing:" << m_bTyping);
+}
+
+
+void CSinstar3Impl::OnInputResult(const SStringT & strResult, const SStringT & strComp/*=SStringT() */)
+{
+	if (!m_curImeContext) return;
+	SLOG_INFO("bTypeing:" << m_bTyping);
+	if (!IsCompositing())
+	{
+		SLOG_WARN("input result but not is compositing: " << strResult);
+		return;
+	}
+	SStringW strResultW = S_CT2W(strResult);
+	SStringW strCompW = S_CT2W(strComp);
+	m_pTxtSvr->UpdateResultAndCompositionStringW(m_curImeContext, strResult, strResult.GetLength(), strCompW, strCompW.GetLength());
 }
 
 BOOL CSinstar3Impl::GoNextCandidatePage()
@@ -545,7 +566,7 @@ void CSinstar3Impl::ShowTip(LPCTSTR pszTitle, LPCTSTR pszContent)
 
 void CSinstar3Impl::InputSpchar(LPCTSTR pszText)
 {
-	if (m_pTxtSvr->IsCompositing())
+	if (IsCompositing())
 	{
 		m_inputState.ClearContext(CPC_ALL);
 		m_inputState.InputEnd();
@@ -576,14 +597,6 @@ void CSinstar3Impl::Broadcast(UINT uCmd, LPVOID pData, DWORD nLen)
 		}
 		hFind = FindWindowEx(HWND_MESSAGE, hFind, NULL, KSinstar3WndName);
 	}
-}
-
-void CSinstar3Impl::OnInputResult(const SStringT & strResult,const SStringT & strComp/*=SStringT() */)
-{
-	if(!m_curImeContext) return;
-	SStringW strResultW = S_CT2W(strResult);
-	SStringW strCompW = S_CT2W(strComp);
-	m_pTxtSvr->UpdateResultAndCompositionStringW(m_curImeContext,strResult,strResult.GetLength(),strCompW,strCompW.GetLength());
 }
 
 void CSinstar3Impl::OpenInputWnd()
