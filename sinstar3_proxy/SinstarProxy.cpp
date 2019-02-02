@@ -2,6 +2,7 @@
 #include "SinstarProxy.h"
 #include <shellapi.h>
 #include "../helper/helper.h"
+using namespace SOUI;
 
 typedef enum PROCESS_DPI_AWARENESS {
 	PROCESS_DPI_UNAWARE = 0,
@@ -29,6 +30,13 @@ PROCESS_DPI_AWARENESS GetProcessDpiAwareness(HANDLE hProc)
 	return dpiAware;
 }
 
+namespace SOUI{
+	namespace IPC
+	{
+		BOOL SCreateInstance(IObjRef ** ppIpcFactory);
+	}
+}
+
 CSinstarProxy::CSinstarProxy(ITextService *pTxtService):m_conn(pTxtService)
 {
 
@@ -39,7 +47,7 @@ CSinstarProxy::~CSinstarProxy()
 {
 	Param_Destroy param;
 	m_conn.CallFun(&param);
-	m_conn.Disconnect();
+	m_conn.GetIpcHandle()->Disconnect();
 }
 
 BOOL CSinstarProxy::Init(HWND hClient, LPCTSTR pszSvrPath)
@@ -72,7 +80,7 @@ BOOL CSinstarProxy::Init(HWND hClient, LPCTSTR pszSvrPath)
 	{
 		return FALSE;
 	}
-	if(m_conn.ConnectTo(hClient,hSvr) != 0)
+	if(m_conn.GetIpcHandle()->ConnectTo((ULONG_PTR)hClient,(ULONG_PTR)hSvr) != 0)
 	{
 		return FALSE;
 	}
@@ -300,3 +308,28 @@ void CClientConnection::OnGetActiveWnd(Param_GetActiveWnd &param)
 {
 	param.hActive = m_pTxtService->GetActiveWnd();
 }
+
+SOUI::IIpcHandle * CClientConnection::GetIpcHandle()
+{
+	return m_ipcHandle;
+}
+
+void CClientConnection::BuildShareBufferName(ULONG_PTR idLocal, ULONG_PTR idRemote, TCHAR szName[MAX_PATH]) const 
+{
+	_stprintf(szName, SINSTAR3_SHARE_BUF_NAME_FMT, (DWORD)(((LPARAM)idLocal)&0xffffffff), (DWORD)(((LPARAM)idRemote) & 0xffffffff));
+}
+
+bool CClientConnection::CallFun(SOUI::IFunParams *params) const
+{
+	SASSERT(m_ipcHandle);
+	return m_ipcHandle->CallFun(params);
+}
+
+CClientConnection::CClientConnection(ITextService * pTxtService) :m_pTxtService(pTxtService)
+{
+	CAutoRefPtr<IIpcFactory> ipcFactory;
+	IPC::SCreateInstance((IObjRef**)&ipcFactory);
+	ipcFactory->CreateIpcHandle(&m_ipcHandle);
+	m_ipcHandle->SetIpcConnection(this);
+}
+

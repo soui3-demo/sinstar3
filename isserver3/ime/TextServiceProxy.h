@@ -4,8 +4,6 @@
 #include "../include/unknown.h"
 #include "../include/protocol.h"
 
-#include <interface/sipcobj-i.h>
-#include <helper/paramhelper.hpp>
 #include <unknown/obj-ref-impl.hpp>
 
 class CSvrConnection : public ITextService, public TObjRefImpl<SOUI::IIpcConnection> {
@@ -18,7 +16,7 @@ public:
 	virtual IIpcHandle * GetIpcHandle() override;
 	virtual void BuildShareBufferName(ULONG_PTR idLocal, ULONG_PTR idRemote, TCHAR szBuf[MAX_PATH]) const override;
 
-	void CallFun(IFunParams *params) const;
+	bool CallFun(IFunParams *params) const;
 public:
 	virtual BOOL InputStringW(LPCWSTR pszBuf, int nLen);
 

@@ -142,7 +142,7 @@ LRESULT CUiWnd::WindowProc(UINT uMsg,WPARAM wParam,LPARAM lParam)
 	case WM_IME_ENDCOMPOSITION:
 		return 0;
 	default:
-		{
+		if(m_pSinstar3){
 			LRESULT result;
 			BOOL bHandled = m_pSinstar3->ProcessWindowMessage(m_hWnd, uMsg, wParam, lParam, result);
 			if (bHandled) return result;

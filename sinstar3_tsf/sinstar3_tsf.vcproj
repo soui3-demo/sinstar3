@@ -64,7 +64,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="helperd.lib ipcobjectd.lib sinstar3_proxyd.lib"
+				AdditionalDependencies="helperd.lib sipcobjectd.lib sinstar3_proxyd.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(SOUIPATH)\bin;..\lib"
 				ModuleDefinitionFile="sinstar3_tsf.def"
@@ -141,7 +141,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="helperd.lib ipcobjectd.lib sinstar3_proxyd.lib"
+				AdditionalDependencies="helperd.lib sipcobjectd.lib sinstar3_proxyd.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\lib\x64"
 				ModuleDefinitionFile="sinstar3_tsf.def"
@@ -218,7 +218,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="helper.lib ipcobject.lib sinstar3_proxy.lib"
+				AdditionalDependencies="helper.lib sipcobject.lib sinstar3_proxy.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(SOUIPATH)\bin;..\lib"
 				ModuleDefinitionFile="sinstar3_tsf.def"
@@ -297,7 +297,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="helper.lib ipcobject.lib sinstar3_proxy.lib"
+				AdditionalDependencies="helper.lib sipcobject.lib sinstar3_proxy.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\lib\x64"
 				ModuleDefinitionFile="sinstar3_tsf.def"

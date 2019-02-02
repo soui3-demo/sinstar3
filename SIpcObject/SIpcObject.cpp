@@ -62,7 +62,7 @@ namespace SOUI
 		LRESULT lRet = ::SendMessage(hRemote, UM_CALL_FUN, FUN_ID_CONNECT, (LPARAM)hLocal);
 		if (lRet == 0)
 		{
-			return 0;
+			return S_FAILED;
 		}
 		InitShareBuf(idLocal, idRemote, 0, NULL);
 		return S_OK;
@@ -71,9 +71,9 @@ namespace SOUI
 	HRESULT SIpcHandle::Disconnect()
 	{
 		if (m_hLocalId == NULL)
-			return E_NOT_VALID_STATE;
+			return E_UNEXPECTED;
 		if (m_hRemoteId == NULL)
-			return E_NOT_VALID_STATE;
+			return E_UNEXPECTED;
 		::SendMessage(m_hRemoteId, UM_CALL_FUN, FUN_ID_DISCONNECT, (LPARAM)m_hLocalId);
 		m_hRemoteId = NULL;
 		m_RecvBuf.Close();
@@ -96,6 +96,36 @@ namespace SOUI
 			pParam->FromStream4Output(ps2);
 		}
 		return lRet!=0;
+	}
+
+	void SIpcHandle::SetIpcConnection(IIpcConnection *pConn)
+	{
+		m_pConn = pConn;
+	}
+
+	IIpcConnection * SIpcHandle::GetIpcConnection() const
+	{
+		return m_pConn;
+	}
+
+	ULONG_PTR SIpcHandle::GetLocalId() const
+	{
+		return (ULONG_PTR)m_hRemoteId;
+	}
+
+	ULONG_PTR SIpcHandle::GetRemoteId() const
+	{
+		return (ULONG_PTR)m_hRemoteId;
+	}
+
+	IShareBuffer * SIpcHandle::GetSendBuffer()
+	{
+		return &m_SendBuf;
+	}
+
+	IShareBuffer * SIpcHandle::GetRecvBuffer()
+	{
+		return &m_RecvBuf;
 	}
 
 
@@ -138,7 +168,7 @@ namespace SOUI
 		pIpcHandle.Attach(new SIpcHandle);
 
 		IIpcConnection *pConn = NULL;
-		m_pCallback->OnConnected(pIpcHandle, &pConn);
+		m_pCallback->OnNewConnection(pIpcHandle, &pConn);
 		assert(pConn);
 		pIpcHandle->SetIpcConnection(pConn);
 
@@ -172,7 +202,7 @@ namespace SOUI
 		if (!IsWindow(hSvr))
 			return E_INVALIDARG;
 		if (m_hSvr != NULL)
-			return E_NOT_VALID_STATE;
+			return E_UNEXPECTED;
 
 		m_hSvr = hSvr;
 		m_pCallback = pCallback;

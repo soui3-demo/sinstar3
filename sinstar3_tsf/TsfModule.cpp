@@ -3,14 +3,15 @@
 #include "ClassFactory.h"
 #include "sinstar3_tsf.h"
 #include "../sinstar3_proxy/SimpleWnd.h"
-#include "../ipcobject/include/SecurityAttribute.h"
+#include "../helper/helper.h"
 
 CTsfModule::CTsfModule(HINSTANCE hInst, LPCTSTR pszSvrPath):CModuleRef(hInst),m_classFactory(NULL)
 {
 	CSimpleWnd::RegisterWndClass(hInst);
 	_tcscpy(m_szSvrPath, pszSvrPath);
-	SecurityAttribute sa;
-	m_hMutex = CreateMutex(sa.get_attr(), FALSE, SINSTAR3_MUTEX);
+	SECURITY_ATTRIBUTES * psa = Helper_BuildLowIntegritySA();
+	m_hMutex = CreateMutex(psa, FALSE, SINSTAR3_MUTEX);
+	Helper_FreeSa(psa);
 	if (!m_hMutex && GetLastError() == ERROR_ACCESS_DENIED)
 	{
 		m_hMutex = OpenMutex(SYNCHRONIZE, FALSE, SINSTAR3_MUTEX);

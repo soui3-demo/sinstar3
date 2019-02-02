@@ -1,15 +1,16 @@
 #include "stdafx.h"
 #include "ImeModule.h"
 #include "UiWnd.h"
-#include "../ipcobject/include/SecurityAttribute.h"
+#include "../helper/helper.h"
 
 
 CImeModule::CImeModule(HINSTANCE hInst, LPCTSTR pszSvrPath):CModuleRef(hInst),m_dwSystemInfoFlags(0)
 {
 	CUiWnd::RegisterClass(hInst);
 	_tcscpy(m_szSvrPath, pszSvrPath);
-	SecurityAttribute sa;
-	m_hMutex = CreateMutex(sa.get_attr(), FALSE, SINSTAR3_MUTEX);
+	SECURITY_ATTRIBUTES *psa = Helper_BuildLowIntegritySA();
+	m_hMutex = CreateMutex(psa, FALSE, SINSTAR3_MUTEX);
+	Helper_FreeSa(psa);
 	if (!m_hMutex && GetLastError() == ERROR_ACCESS_DENIED)
 	{
 		m_hMutex = OpenMutex(SYNCHRONIZE, FALSE, SINSTAR3_MUTEX);

@@ -27,13 +27,9 @@ namespace SOUI
 
 	public:
 
-		virtual void SetIpcConnection(IIpcConnection *pConn) {
-			m_pConn = pConn;
-		}
+		virtual void SetIpcConnection(IIpcConnection *pConn);
 
-		virtual IIpcConnection * GetIpcConnection() const {
-			return m_pConn;
-		}
+		virtual IIpcConnection * GetIpcConnection() const;
 
 		virtual LRESULT OnMessage(ULONG_PTR idLocal, UINT uMsg, WPARAM wp, LPARAM lp, BOOL &bHandled);
 
@@ -43,23 +39,13 @@ namespace SOUI
 
 		virtual bool CallFun(IFunParams * pParam) const;
 
-		virtual ULONG_PTR GetLocalId() const {
-			return (ULONG_PTR)m_hRemoteId;
-		}
+		virtual ULONG_PTR GetLocalId() const;
 
-		virtual ULONG_PTR GetRemoteId() const {
-			return (ULONG_PTR)m_hRemoteId;
-		}
+		virtual ULONG_PTR GetRemoteId() const;
 
-		virtual IShareBuffer * GetSendBuffer() override
-		{
-			return &m_SendBuf;
-		}
+		virtual IShareBuffer * GetSendBuffer() ;
 
-		virtual IShareBuffer * GetRecvBuffer()  override
-		{
-			return &m_RecvBuf;
-		}
+		virtual IShareBuffer * GetRecvBuffer() ;
 
 		virtual BOOL InitShareBuf(ULONG_PTR idLocal, ULONG_PTR idRemote, UINT nBufSize, void* pSa);
 	protected:

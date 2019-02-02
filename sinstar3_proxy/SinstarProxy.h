@@ -2,16 +2,19 @@
 
 #include "../include/sinstar-i.h"
 #include "../include/unknown.h"
-#include "../ipcobject/include/IpcObject.h"
 #include "../include/protocol.h"
 #include <unknown\obj-ref-impl.hpp>
 
-class CClientConnection : public SOUI::TObjRefImpl<SIpcConnection>
+class CClientConnection : public SOUI::TObjRefImpl<SOUI::IIpcConnection>
 {
 public:
-	CClientConnection(ITextService * pTxtService) 
-		:m_pTxtService(pTxtService) 
-	{}
+	CClientConnection(ITextService * pTxtService);
+
+public:
+	// 通过 IIpcConnection 继承
+	virtual SOUI::IIpcHandle * GetIpcHandle() override;
+	virtual void BuildShareBufferName(ULONG_PTR idLocal, ULONG_PTR idRemote, TCHAR szName[MAX_PATH]) const override;
+	bool CallFun(SOUI::IFunParams *params) const;
 protected:
 	void OnInputStringW( Param_InputStringW &param);
 	void OnIsCompositing( Param_IsCompositing &param);
@@ -45,10 +48,15 @@ protected:
 
 private:
 	ITextService * m_pTxtService;
+	SOUI::CAutoRefPtr<SOUI::IIpcHandle> m_ipcHandle;
 };
 
 class CSinstarProxy : public ISinstar, public CUnknown
 {
+private:
+	ITextService * m_pTxtService;
+	CClientConnection	m_conn;
+
 public:
 	CSinstarProxy(ITextService *pTxtService);
 	~CSinstarProxy();
@@ -57,7 +65,11 @@ public:
 
 	BOOL ProcessWindowMessage(HWND hWnd, UINT uMsg, WPARAM wp, LPARAM lp, LRESULT &result)
 	{
-		return m_conn.ProcessWindowMessage(hWnd, uMsg, wp, lp, result);
+		BOOL bHandled=FALSE;
+		if(!m_conn.GetIpcHandle())
+			return FALSE;
+		result = m_conn.GetIpcHandle()->OnMessage((ULONG_PTR)hWnd,uMsg,wp,lp,bHandled);
+		return bHandled;
 	}
 public:
 	// 通过 ISinstar 继承
@@ -82,8 +94,5 @@ public:
 	IUNKNOWN_BEGIN(IUnknown)
 	IUNKNOWN_END()
 
-private:
-	ITextService * m_pTxtService;
-	CClientConnection	m_conn;
 };
 

@@ -4,26 +4,17 @@
 #include "sinstar-i.h"
 #include "TextService-i.h"
 #include <interface/SIpcObj-i.h>
-#include <helper/paramhelper.hpp>
-
-using namespace std;
+#include <helper/sipcparamhelper.hpp>
 
 #define SINSTAR3_SERVER_HWND _T("sinstar3_server_wnd_{85B55CBC-7D48-4860-BA88-0BE4B073A94F}")
+#define SINSTAR3_SHARE_BUF_NAME_FMT _T("sistart3_share_buffer_8085395F-E2FA-4F96-8BD0-FE5D7412CD22_%08x_2_%08x")
+
 
 //////////////////////////////////////////////////////////////////
-template<class _Traits> inline
-basic_ostream<char, _Traits>& operator<<(
-	basic_ostream<char, _Traits>& _Ostr,
-	const UINT64 & value)
-{
-	char szBuf[50];
-	sprintf(szBuf, "0x%i64u", value);
-	_Ostr << szBuf;
-	return _Ostr;
-}
-//////////////////////////////////////////////////////////////////
+namespace SOUI{
+
 template<>
-inline SParamStream & SParamStream::operator<<(const string & str)
+inline SParamStream & SParamStream::operator<<(const std::string & str)
 {
 	int nSize = (int)str.size();
 	GetBuffer()->Write((const BYTE*)&nSize, sizeof(int));
@@ -31,20 +22,20 @@ inline SParamStream & SParamStream::operator<<(const string & str)
 	return *this;
 }
 template<>
-inline SParamStream & SParamStream::operator >> (string & str)
+inline SParamStream & SParamStream::operator >> (std::string & str)
 {
 	int nSize = 0;
 	GetBuffer()->Read((BYTE*)&nSize, sizeof(int));
 	char *pBuf = new char[nSize];
 	GetBuffer()->Read((BYTE*)pBuf, nSize);
-	str = string(pBuf, nSize);
+	str = std::string(pBuf, nSize);
 	delete[]pBuf;
 	return *this;
 }
 
 ////////////////////////////////////////////////////////////////////////
 template<>
-inline SParamStream & SParamStream::operator<<(const wstring & str)
+inline SParamStream & SParamStream::operator<<(const std::wstring & str)
 {
 	int nSize = (int)str.size();
 	GetBuffer()->Write((const BYTE*)&nSize, sizeof(int));
@@ -52,27 +43,15 @@ inline SParamStream & SParamStream::operator<<(const wstring & str)
 	return *this;
 }
 template<>
-inline SParamStream & SParamStream::operator >> (wstring & str)
+inline SParamStream & SParamStream::operator >> (std::wstring & str)
 {
 	int nSize = 0;
 	GetBuffer()->Read((BYTE*)&nSize, sizeof(int));
 	wchar_t *pBuf = new wchar_t[nSize];
 	GetBuffer()->Read((BYTE*)pBuf, nSize*sizeof(wchar_t));
-	str = wstring(pBuf, nSize);
+	str = std::wstring(pBuf, nSize);
 	delete[]pBuf;
 	return *this;
-}
-
-template<class _Traits> inline
-basic_ostream<char, _Traits>& operator<<(
-	basic_ostream<char, _Traits>& _Ostr,
-	const wstring & value)
-{
-	char szBuf[500];
-	int nRet = WideCharToMultiByte(CP_ACP, 0, value.c_str(), (int)value.size(), szBuf, 500, NULL, NULL);
-	szBuf[nRet] = 0;
-	_Ostr << szBuf;
-	return _Ostr;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -94,17 +73,19 @@ inline SParamStream & SParamStream::operator >> (POINT & pt)
 	return *this;
 }
 
-template<class _Traits> inline
-basic_ostream<char, _Traits>& operator<<(
-	basic_ostream<char, _Traits>& _Ostr,
-	const POINT & pt)
-{
-	_Ostr << "(" << pt.x << "," << pt.y << ")";
-	return _Ostr;
 }
 
+struct FunParams_Base : SOUI::IFunParams
+{
+	virtual void ToStream4Input(SOUI::SParamStream &  ps) {}
+	virtual void ToStream4Output(SOUI::SParamStream &  ps) {}
+	virtual void FromStream4Input(SOUI::SParamStream &  ps) {}
+	virtual void FromStream4Output(SOUI::SParamStream &  ps) {}
+};
+
+
 enum {
-	ISinstar_Create = FUN_ID_START,
+	ISinstar_Create = SOUI::FUN_ID_START,
 	ISinstar_Destroy,
 	ISinstar_OnImeSelect,
 	ISinstar_OnCompositionStarted,
@@ -138,18 +119,11 @@ enum {
 	ITextService_GetActiveWnd,
 };
 
-struct FunParams_Base : IFunParams
-{
-	virtual void ToStream4Input(SParamStream &  ps) {}
-	virtual void ToStream4Output(SParamStream &  ps) {}
-	virtual void FromStream4Input(SParamStream &  ps) {}
-	virtual void FromStream4Output(SParamStream &  ps) {}
-};
 
 struct Param_Create : FunParams_Base
 {
 	bool   bDpiAware;
-	string strHostPath;
+	std::string strHostPath;
 	DWORD  dwVer;
 	FUNID(ISinstar_Create)
 		PARAMS3(Input, bDpiAware,strHostPath,dwVer)
@@ -281,7 +255,7 @@ struct Param_GetDefInputMode : FunParams_Base
 ////////////////////////////////////////////////////////////////////////////
 struct Param_InputStringW : FunParams_Base
 {
-	wstring buf;
+	std::wstring buf;
 	BOOL bRet;
 	FUNID(ITextService_InputStringW)
 		PARAMS1(Input,buf)
@@ -304,14 +278,14 @@ struct Param_StartComposition : FunParams_Base
 
 struct Param_ReplaceSelCompositionW : FunParams_Base
 {
-	UINT64 lpImeContext; int nLeft; int nRight; wstring buf;
+	UINT64 lpImeContext; int nLeft; int nRight; std::wstring buf;
 	FUNID(ITextService_ReplaceSelCompositionW)
 		PARAMS4(Input,lpImeContext,nLeft,nRight,buf)
 };
 
 struct Param_UpdateResultAndCompositionStringW : FunParams_Base
 {
-	UINT64 lpImeContext; wstring resultStr; wstring compStr;
+	UINT64 lpImeContext; std::wstring resultStr; std::wstring compStr;
 	FUNID(ITextService_UpdateResultAndCompositionStringW)
 		PARAMS3(Input, lpImeContext, resultStr, compStr)
 };

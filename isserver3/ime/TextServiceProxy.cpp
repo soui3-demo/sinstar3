@@ -14,7 +14,7 @@ CSvrConnection::~CSvrConnection(void)
 BOOL CSvrConnection::InputStringW(LPCWSTR pszBuf, int nLen)
 {
 	Param_InputStringW param;
-	param.buf = wstring(pszBuf, nLen);
+	param.buf = std::wstring(pszBuf, nLen);
 	CallFun(&param);
 	return param.bRet;
 }
@@ -40,7 +40,7 @@ void CSvrConnection::ReplaceSelCompositionW(UINT64 imeContext,int nLeft,int nRig
 	param.lpImeContext = imeContext;
 	param.nLeft = nLeft;
 	param.nRight = nRight;
-	param.buf = wstring(wszComp,nLen);
+	param.buf = std::wstring(wszComp,nLen);
 	CallFun(&param);
 }
 
@@ -48,8 +48,8 @@ void CSvrConnection::UpdateResultAndCompositionStringW(UINT64 imeContext,const W
 {
 	Param_UpdateResultAndCompositionStringW param;
 	param.lpImeContext = imeContext;
-	param.resultStr = wstring(wszResultStr,nResStrLen);
-	param.compStr = wstring(wszCompStr,nCompStrLen);
+	param.resultStr = std::wstring(wszResultStr,nResStrLen);
+	param.compStr = std::wstring(wszCompStr,nCompStrLen);
 	CallFun(&param);
 }
 
@@ -239,11 +239,12 @@ IIpcHandle * CSvrConnection::GetIpcHandle()
 	return m_ipcHandle;
 }
 
-void CSvrConnection::BuildShareBufferName(ULONG_PTR idLocal, ULONG_PTR idRemote, TCHAR szBuf[MAX_PATH]) const
+void CSvrConnection::BuildShareBufferName(ULONG_PTR idLocal, ULONG_PTR idRemote, TCHAR szName[MAX_PATH]) const
 {
+	_stprintf(szName, SINSTAR3_SHARE_BUF_NAME_FMT, (DWORD)(((LPARAM)idLocal)&0xffffffff), (DWORD)(((LPARAM)idRemote) & 0xffffffff));
 }
 
-void CSvrConnection::CallFun(IFunParams * params) const
+bool CSvrConnection::CallFun(IFunParams * params) const
 {
-	m_ipcHandle->CallFun(params);
+	return m_ipcHandle->CallFun(params);
 }

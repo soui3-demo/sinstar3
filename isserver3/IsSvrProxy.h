@@ -28,7 +28,7 @@ public:
 	~CIsSvrProxy();
 
 protected:
-	virtual void OnConnected(IIpcHandle * pIpcHandle, IIpcConnection ** ppConn)
+	virtual void OnNewConnection(IIpcHandle * pIpcHandle, IIpcConnection ** ppConn)
 	{
 		*ppConn = new CSvrConnection(pIpcHandle);
 	}

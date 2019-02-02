@@ -40,7 +40,6 @@ CSinstar3Tsf::CSinstar3Tsf()
 {
     theModule->AddRef();
 
-	Create(0, WS_POPUP, HWND_MESSAGE, 0, theModule->GetModule());
     //
     // Initialize the thread manager pointer.
     //
@@ -80,6 +79,7 @@ CSinstar3Tsf::CSinstar3Tsf()
 
 	_bCompsiting = FALSE;
 
+	Create(0, WS_POPUP, HWND_MESSAGE, 0, theModule->GetModule());
 }
 
 //+---------------------------------------------------------------------------
