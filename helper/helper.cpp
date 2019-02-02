@@ -138,9 +138,9 @@ BOOL Helper_SetObjectToLowIntegrity(HANDLE hObject, SE_OBJECT_TYPE type)
 }
 
 
-SECURITY_ATTRIBUTES Helper_BuildLowIntegritySA()
+SECURITY_ATTRIBUTES *Helper_BuildLowIntegritySA()
 {
-	SECURITY_ATTRIBUTES sa;
+	SECURITY_ATTRIBUTES *sa=new SECURITY_ATTRIBUTES;
 	PSECURITY_DESCRIPTOR pSD = NULL;
 	LPCTSTR pszDesc = Helper_IsWin8orLater()
 		? LOW_INTEGRITY_SDDL_SACL
@@ -156,9 +156,9 @@ SECURITY_ATTRIBUTES Helper_BuildLowIntegritySA()
 		EVERYONE_FILE_ACCESS;
 
 	ConvertStringSecurityDescriptorToSecurityDescriptor(pszDesc,SDDL_REVISION_1,&pSD,NULL);
-	sa.nLength = sizeof(sa);
-	sa.lpSecurityDescriptor = pSD;
-	sa.bInheritHandle = TRUE;
+	sa->nLength = sizeof(SECURITY_ATTRIBUTES);
+	sa->lpSecurityDescriptor = pSD;
+	sa->bInheritHandle = TRUE;
 	return sa;
 }
 
@@ -170,6 +170,7 @@ void Helper_FreeSa(SECURITY_ATTRIBUTES *psa)
 		LocalFree(psa->lpSecurityDescriptor);
 	}
 	psa->lpSecurityDescriptor = NULL;
+	delete psa;
 }
 
 BOOL Helper_SetFileACLEx(LPCTSTR pszPath, BOOL bSubFile)

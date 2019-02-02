@@ -2,15 +2,23 @@
 
 #include "../include/sinstar-i.h"
 #include "../include/unknown.h"
-#include "../ipcobject/include/IpcObject.h"
 #include "../include/protocol.h"
-#include <unknown\obj-ref-impl.hpp>
 
-class CSvrConnection : public ITextService, public SOUI::TObjRefImpl<SIpcConnection> {
+#include <interface/sipcobj-i.h>
+#include <helper/paramhelper.hpp>
+#include <unknown/obj-ref-impl.hpp>
+
+class CSvrConnection : public ITextService, public TObjRefImpl<SOUI::IIpcConnection> {
 public:
-	CSvrConnection::CSvrConnection(HWND hSvr);
+	CSvrConnection::CSvrConnection(IIpcHandle *pIpcHandle);
 
 	CSvrConnection::~CSvrConnection(void);
+public:
+	// Í¨¹ý IIpcConnection ¼Ì³Ð
+	virtual IIpcHandle * GetIpcHandle() override;
+	virtual void BuildShareBufferName(ULONG_PTR idLocal, ULONG_PTR idRemote, TCHAR szBuf[MAX_PATH]) const override;
+
+	void CallFun(IFunParams *params) const;
 public:
 	virtual BOOL InputStringW(LPCWSTR pszBuf, int nLen);
 
@@ -81,4 +89,6 @@ private:
 	SComPtr<ISinstar>	m_pSinstar;
 	HWND				m_hSvr;
 	bool			    m_bDpiAware;
+
+	CAutoRefPtr<IIpcHandle> m_ipcHandle;
 };

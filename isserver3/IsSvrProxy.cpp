@@ -33,6 +33,13 @@ static void DoSomething()
 	}
 }
 
+namespace SOUI {
+	namespace IPC
+	{
+		BOOL  SCreateInstance(IObjRef **ppIpcFactory);
+	}
+}
+
 CIsSvrProxy::CIsSvrProxy(const SStringT & strDataPath)
 	:m_strDataPath(strDataPath)
 	,m_hCoreModule(NULL)
@@ -62,8 +69,24 @@ static SStringT GetVersionInfo(DWORD &dwVer)
 	return SStringT(szDesc);
 }
 
+
+void * CIsSvrProxy::GetSecurityAttr() const
+{
+	return Helper_BuildLowIntegritySA();
+}
+
+void CIsSvrProxy::ReleaseSecurityAttr(void * psa) const
+{
+	SECURITY_ATTRIBUTES *psa2 = (SECURITY_ATTRIBUTES *)psa;
+	Helper_FreeSa(psa2);
+}
+
 int CIsSvrProxy::OnCreate(LPCREATESTRUCT pCS)
 {
+	CAutoRefPtr<SOUI::IIpcFactory> ipcFac;
+	IPC::SCreateInstance((IObjRef**)&ipcFac);
+	ipcFac->CreateIpcServer(&m_ipcSvr);
+	m_ipcSvr->Init((ULONG_PTR)m_hWnd, this);
 	m_hCoreModule = LoadLibrary(_T("iscore.dll"));
 	if (!m_hCoreModule) return -1;
 	int nRet = 0;
@@ -347,7 +370,7 @@ void CIsSvrProxy::OnTimer(UINT_PTR uID)
 		CSimpleWnd::SetTimer(uID, SPAN_DATA_REPORT2, NULL);
 	}else if(uID == TIMERID_CHECK_CLIENT)
 	{
-		CheckConnectivity();
+		m_ipcSvr->CheckConnectivity();
 	}
 	else
 	{

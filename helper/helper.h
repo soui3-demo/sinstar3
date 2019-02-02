@@ -14,7 +14,7 @@ BOOL Helper_SetFileACL(LPCTSTR pszPath);
 BOOL Helper_SetFileACLEx(LPCTSTR pszPath, BOOL bSubFile);
 BOOL Helper_SetObjectToLowIntegrity(HANDLE hObject, SE_OBJECT_TYPE type);
 
-SECURITY_ATTRIBUTES Helper_BuildLowIntegritySA();
+SECURITY_ATTRIBUTES * Helper_BuildLowIntegritySA();
 void Helper_FreeSa(SECURITY_ATTRIBUTES *psa);
 
 void Helper_TraceW(wchar_t * pszFormat,...);

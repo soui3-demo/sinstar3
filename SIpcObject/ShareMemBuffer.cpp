@@ -4,8 +4,6 @@
 
 #include "stdafx.h"
 #include "ShareMemBuffer.h"
-#include "../helper/helper.h"
-#include "SecurityAttribute.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -15,6 +13,8 @@ static char THIS_FILE[]=__FILE__;
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
+namespace SOUI
+{
 
 CShareMemBuffer::CShareMemBuffer()
 {
@@ -27,7 +27,7 @@ CShareMemBuffer::~CShareMemBuffer()
 	Close();
 }
 
-BOOL CShareMemBuffer::OpenMemFile(LPCTSTR pszName,DWORD dwMaximumSize)
+BOOL CShareMemBuffer::OpenMemFile(LPCTSTR pszName,DWORD dwMaximumSize , void * pSecurityAttr)
 {
 	if(m_hMap) return FALSE;
 	if (dwMaximumSize == 0)
@@ -36,9 +36,8 @@ BOOL CShareMemBuffer::OpenMemFile(LPCTSTR pszName,DWORD dwMaximumSize)
 	}
 	else
 	{
-		SECURITY_ATTRIBUTES *sa = Helper_BuildLowIntegritySA();
-		m_hMap = ::CreateFileMapping(INVALID_HANDLE_VALUE, sa, PAGE_READWRITE, 0, dwMaximumSize + sizeof(DWORD) * 2, pszName);
-		Helper_FreeSa(sa);
+		SECURITY_ATTRIBUTES *psa = (SECURITY_ATTRIBUTES*)pSecurityAttr;
+		m_hMap = ::CreateFileMapping(INVALID_HANDLE_VALUE, psa, PAGE_READWRITE, 0, dwMaximumSize + sizeof(DWORD) * 2, pszName);
 	}
 	if (!m_hMap)	return FALSE;
 	m_pBuffer=(LPBYTE)::MapViewOfFile(m_hMap, FILE_MAP_READ | FILE_MAP_WRITE,0,0,0);//map whole file
@@ -67,7 +66,7 @@ void CShareMemBuffer::Close(){
 	}
 }
 
-int CShareMemBuffer::Write(const BYTE * pBuf, UINT nLen)
+int CShareMemBuffer::Write(const void * pBuf, UINT nLen)
 {
 	assert(m_pBuffer);
 	DWORD & dwWritePos = GetUsedSizeRef();
@@ -78,7 +77,7 @@ int CShareMemBuffer::Write(const BYTE * pBuf, UINT nLen)
 	return nLen;
 }
 
-int CShareMemBuffer::Read(BYTE * pBuf, UINT nLen)
+int CShareMemBuffer::Read(void * pBuf, UINT nLen)
 {
 	DWORD & dwWritePos = GetUsedSizeRef();
 	UINT nRemain = (dwWritePos - m_dwReadPos);
@@ -86,4 +85,6 @@ int CShareMemBuffer::Read(BYTE * pBuf, UINT nLen)
 	memcpy(pBuf, GetBuffer() + m_dwReadPos, nLen);
 	m_dwReadPos += nLen;
 	return nLen;
+}
+
 }

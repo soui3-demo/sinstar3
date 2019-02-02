@@ -1,14 +1,12 @@
 #pragma once
-#include <IpcObject.h>
 #include <string>
 #include <sstream>
 #include "sinstar-i.h"
 #include "TextService-i.h"
+#include <interface/SIpcObj-i.h>
+#include <helper/paramhelper.hpp>
 
 using namespace std;
-
-#include "paramstream.hpp"
-#include "paramhelper.hpp"
 
 #define SINSTAR3_SERVER_HWND _T("sinstar3_server_wnd_{85B55CBC-7D48-4860-BA88-0BE4B073A94F}")
 
@@ -25,7 +23,7 @@ basic_ostream<char, _Traits>& operator<<(
 }
 //////////////////////////////////////////////////////////////////
 template<>
-inline CParamStream & CParamStream::operator<<(const string & str)
+inline SParamStream & SParamStream::operator<<(const string & str)
 {
 	int nSize = (int)str.size();
 	GetBuffer()->Write((const BYTE*)&nSize, sizeof(int));
@@ -33,7 +31,7 @@ inline CParamStream & CParamStream::operator<<(const string & str)
 	return *this;
 }
 template<>
-inline CParamStream & CParamStream::operator >> (string & str)
+inline SParamStream & SParamStream::operator >> (string & str)
 {
 	int nSize = 0;
 	GetBuffer()->Read((BYTE*)&nSize, sizeof(int));
@@ -46,7 +44,7 @@ inline CParamStream & CParamStream::operator >> (string & str)
 
 ////////////////////////////////////////////////////////////////////////
 template<>
-inline CParamStream & CParamStream::operator<<(const wstring & str)
+inline SParamStream & SParamStream::operator<<(const wstring & str)
 {
 	int nSize = (int)str.size();
 	GetBuffer()->Write((const BYTE*)&nSize, sizeof(int));
@@ -54,7 +52,7 @@ inline CParamStream & CParamStream::operator<<(const wstring & str)
 	return *this;
 }
 template<>
-inline CParamStream & CParamStream::operator >> (wstring & str)
+inline SParamStream & SParamStream::operator >> (wstring & str)
 {
 	int nSize = 0;
 	GetBuffer()->Read((BYTE*)&nSize, sizeof(int));
@@ -79,14 +77,14 @@ basic_ostream<char, _Traits>& operator<<(
 
 //////////////////////////////////////////////////////////////////////
 template<>
-inline CParamStream & CParamStream::operator<<(const POINT & pt)
+inline SParamStream & SParamStream::operator<<(const POINT & pt)
 {
 	GetBuffer()->Write((const BYTE*)&pt.x, sizeof(int));
 	GetBuffer()->Write((const BYTE*)&pt.y, sizeof(int));
 	return *this;
 }
 template<>
-inline CParamStream & CParamStream::operator >> (POINT & pt)
+inline SParamStream & SParamStream::operator >> (POINT & pt)
 {
 	int tmp = 0;
 	GetBuffer()->Read((BYTE*)&tmp, sizeof(int));
@@ -140,6 +138,14 @@ enum {
 	ITextService_GetActiveWnd,
 };
 
+struct FunParams_Base : IFunParams
+{
+	virtual void ToStream4Input(SParamStream &  ps) {}
+	virtual void ToStream4Output(SParamStream &  ps) {}
+	virtual void FromStream4Input(SParamStream &  ps) {}
+	virtual void FromStream4Output(SParamStream &  ps) {}
+};
+
 struct Param_Create : FunParams_Base
 {
 	bool   bDpiAware;
@@ -147,7 +153,6 @@ struct Param_Create : FunParams_Base
 	DWORD  dwVer;
 	FUNID(ISinstar_Create)
 		PARAMS3(Input, bDpiAware,strHostPath,dwVer)
-		TOSTR2(strHostPath,dwVer)
 };
 
 struct Param_Destroy : FunParams_Base
@@ -160,7 +165,6 @@ struct Param_OnImeSelect : FunParams_Base
 	BOOL bSelect;
 	FUNID(ISinstar_OnImeSelect)
 	PARAMS1(Input, bSelect)
-	TOSTR1(bSelect)
 };
 
 struct Param_OnCompositionStarted : FunParams_Base
@@ -174,7 +178,6 @@ struct Param_OnCompositionTerminated : FunParams_Base
 	bool bClearCtx;
 	FUNID(ISinstar_OnCompositionTerminated)
 	PARAMS1(Input, bClearCtx)
-	TOSTR1(bClearCtx)
 };
 
 struct Param_OnCompositionChanged : FunParams_Base
@@ -188,7 +191,6 @@ struct Param_OnSetCaretPosition : FunParams_Base
 	int nHei;
 	FUNID(ISinstar_OnSetCaretPosition)
 	PARAMS2(Input, pt,nHei)
-	TOSTR2(pt, nHei)
 };
 
 struct Param_OnSetFocusSegmentPosition : FunParams_Base
@@ -196,7 +198,6 @@ struct Param_OnSetFocusSegmentPosition : FunParams_Base
 	POINT pt; int nHei;
 	FUNID(ISinstar_OnSetFocusSegmentPosition)
 	PARAMS2(Input, pt, nHei)
-	TOSTR2(pt, nHei)
 };
 
 struct Param_ProcessKeyStoke : FunParams_Base {
@@ -204,7 +205,6 @@ struct Param_ProcessKeyStoke : FunParams_Base {
 	BYTE byKeyState[256];
 	BOOL bEaten;
 	FUNID(ISinstar_ProcessKeyStoke)
-	TOSTR5(lpImeContext, vkCode, lParam, bKeyDown, bEaten)
 	PARAMS5(Input, lpImeContext, vkCode, lParam, bKeyDown, byKeyState)
 	PARAMS1(Output,bEaten)
 };
@@ -217,7 +217,6 @@ struct Param_TranslateKey : FunParams_Base
 	FUNID(ISinstar_TranslateKey)
 	PARAMS5(Input, lpImeContext, vkCode, uScanCode, bKeyDown, byKeyState)
 	PARAMS1(Output, bEaten)
-	TOSTR5(lpImeContext, vkCode, uScanCode, bKeyDown, bEaten)
 };
 
 struct Param_OnSetFocus : FunParams_Base
@@ -225,7 +224,6 @@ struct Param_OnSetFocus : FunParams_Base
 	BOOL bFocus;
 	FUNID(ISinstar_OnSetFocus)
 		PARAMS1(Input, bFocus)
-		TOSTR1(bFocus)
 };
 
 struct Param_GetCompositionSegments : FunParams_Base
@@ -233,7 +231,6 @@ struct Param_GetCompositionSegments : FunParams_Base
 	int nSegs;
 	FUNID(ISinstar_GetCompositionSegments)
 		PARAMS1(Output, nSegs)
-		TOSTR1(nSegs)
 };
 
 struct Param_GetCompositionSegmentEnd : FunParams_Base
@@ -243,7 +240,6 @@ struct Param_GetCompositionSegmentEnd : FunParams_Base
 	FUNID(ISinstar_GetCompositionSegmentEnd)
 		PARAMS1(Input,iSeg)
 		PARAMS1(Output,iEnd)
-		TOSTR2(iSeg,iEnd)
 };
 
 struct Param_GetCompositionSegmentAttr : FunParams_Base
@@ -253,7 +249,6 @@ struct Param_GetCompositionSegmentAttr : FunParams_Base
 	FUNID(ISinstar_GetCompositionSegmentAttr)
 		PARAMS1(Input, iSeg)
 		PARAMS1(Output, nAttr)
-		TOSTR2(iSeg, nAttr)
 };
 
 struct Param_OnOpenStatusChanged : FunParams_Base
@@ -261,7 +256,6 @@ struct Param_OnOpenStatusChanged : FunParams_Base
 	BOOL bOpen;
 	FUNID(ISinstar_OnOpenStatusChanged)
 		PARAMS1(Input, bOpen)
-		TOSTR1(bOpen)
 };
 
 struct Param_OnConversionModeChanged : FunParams_Base
@@ -269,7 +263,6 @@ struct Param_OnConversionModeChanged : FunParams_Base
 	EInputMethod uMode;
 	FUNID(ISinstar_OnConversionModeChanged)
 		PARAMS1(Input, uMode)
-		TOSTR1(uMode)
 };
 
 struct Param_ShowHelp : FunParams_Base
@@ -282,7 +275,6 @@ struct Param_GetDefInputMode : FunParams_Base
 	EInputMethod uMode;
 	FUNID(ISinstar_GetDefInputMode)
 		PARAMS1(Output,uMode)
-		TOSTR1(uMode)
 };
 
 
@@ -294,7 +286,6 @@ struct Param_InputStringW : FunParams_Base
 	FUNID(ITextService_InputStringW)
 		PARAMS1(Input,buf)
 		PARAMS1(Output,bRet)
-		TOSTR2(buf,bRet)
 };
 
 struct Param_IsCompositing : FunParams_Base
@@ -302,7 +293,6 @@ struct Param_IsCompositing : FunParams_Base
 	BOOL bRet;
 	FUNID(ITextService_IsCompositing)
 		PARAMS1(Output,bRet)
-		TOSTR1(bRet)
 };
 
 struct Param_StartComposition : FunParams_Base
@@ -310,7 +300,6 @@ struct Param_StartComposition : FunParams_Base
 	UINT64 lpImeContext;
 	FUNID(ITextService_StartComposition)
 		PARAMS1(Input,lpImeContext)
-		TOSTR1(lpImeContext)
 };
 
 struct Param_ReplaceSelCompositionW : FunParams_Base
@@ -318,7 +307,6 @@ struct Param_ReplaceSelCompositionW : FunParams_Base
 	UINT64 lpImeContext; int nLeft; int nRight; wstring buf;
 	FUNID(ITextService_ReplaceSelCompositionW)
 		PARAMS4(Input,lpImeContext,nLeft,nRight,buf)
-		TOSTR4(lpImeContext, nLeft, nRight, buf)
 };
 
 struct Param_UpdateResultAndCompositionStringW : FunParams_Base
@@ -326,7 +314,6 @@ struct Param_UpdateResultAndCompositionStringW : FunParams_Base
 	UINT64 lpImeContext; wstring resultStr; wstring compStr;
 	FUNID(ITextService_UpdateResultAndCompositionStringW)
 		PARAMS3(Input, lpImeContext, resultStr, compStr)
-		TOSTR3(lpImeContext, resultStr, compStr)
 };
 
 struct Param_EndComposition : FunParams_Base
@@ -334,7 +321,6 @@ struct Param_EndComposition : FunParams_Base
 	UINT64 lpImeContext;
 	FUNID(ITextService_EndComposition)
 		PARAMS1(Input,lpImeContext)
-		TOSTR1(lpImeContext)
 };
 
 struct Param_GetImeContext : FunParams_Base
@@ -342,7 +328,6 @@ struct Param_GetImeContext : FunParams_Base
 	UINT64 lpImeContext;
 	FUNID(ITextService_GetImeContext)
 		PARAMS1(Output,lpImeContext)
-		TOSTR1(lpImeContext)
 };
 
 struct Param_ReleaseImeContext : FunParams_Base
@@ -352,7 +337,6 @@ struct Param_ReleaseImeContext : FunParams_Base
 	FUNID(ITextService_ReleaseImeContext)
 		PARAMS1(Input, lpImeContext)
 		PARAMS1(Output,bRet)
-		TOSTR2(lpImeContext,bRet)
 };
 
 struct Param_SetConversionMode : FunParams_Base
@@ -360,7 +344,6 @@ struct Param_SetConversionMode : FunParams_Base
 	EInputMethod mode;
 	FUNID(ITextService_SetConversionMode)
 		PARAMS1(Input,mode)
-		TOSTR1(mode)
 };
 
 struct Param_GetConversionMode : FunParams_Base
@@ -368,7 +351,6 @@ struct Param_GetConversionMode : FunParams_Base
 	EInputMethod mode;
 	FUNID(ITextService_GetConversionMode)
 		PARAMS1(Output, mode)
-		TOSTR1(mode)
 };
 
 struct Param_SetOpenStatus : FunParams_Base
@@ -379,7 +361,6 @@ struct Param_SetOpenStatus : FunParams_Base
 	FUNID(ITextService_SetOpenStatus)
 		PARAMS2(Input,lpImeContext,bOpen)
 		PARAMS1(Output,bRet)
-		TOSTR3(lpImeContext,bOpen,bRet)
 };
 
 struct Param_GetOpenStatus : FunParams_Base
@@ -389,7 +370,6 @@ struct Param_GetOpenStatus : FunParams_Base
 	FUNID(ITextService_GetOpenStatus)
 		PARAMS1(Input, lpImeContext)
 		PARAMS1(Output, bOpen)
-		TOSTR2(lpImeContext, bOpen)
 };
 
 struct Param_GetActiveWnd : FunParams_Base
@@ -397,5 +377,4 @@ struct Param_GetActiveWnd : FunParams_Base
 	DWORD hActive;
 	FUNID(ITextService_GetActiveWnd)
 		PARAMS1(Output, hActive)
-		TOSTR1(hActive)
 };

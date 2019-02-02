@@ -4,6 +4,25 @@
 enum{FUN_ID=id};\
 UINT GetID() {return FUN_ID;}
 
+#define FUN_BEGIN \
+bool HandleFun(UINT uMsg, CParamStream &ps){ \
+	bool bHandled = false; \
+
+#define FUN_HANDLER(x,fun) \
+	if(!bHandled && uMsg == x::FUN_ID) \
+	{\
+		x param; \
+		param.FromStream4Input(ps);\
+		fun(param); \
+		CParamStream psOut(ps.GetBuffer(),true);\
+		param.ToStream4Output(psOut);\
+		bHandled = true;\
+	}
+
+#define FUN_END \
+	return bHandled; \
+}
+
 /////////////////////////////////////////////////////////////////////
 template<typename P1>
 void toParamStream(CParamStream &  ps, P1 &p1)

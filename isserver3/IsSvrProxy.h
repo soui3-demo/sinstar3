@@ -19,7 +19,7 @@ class CIsSvrProxy : public CSimpleWnd
 	, public IUiMsgHandler
 	, public IKeyMapListener
 	, public IUpdateIntervalObserver
-	, public SIpcServer
+	, public SOUI::IIpcSvrCallback
 	, public TAutoEventMapReg<CIsSvrProxy>
 {
 	friend class CWorker;
@@ -28,14 +28,16 @@ public:
 	~CIsSvrProxy();
 
 protected:
-	virtual HWND GetSvrId() const {
-		return m_hWnd;
-	}
-	virtual HRESULT CreateConnection(SIpcConnection ** ppConnection) const
+	virtual void OnConnected(IIpcHandle * pIpcHandle, IIpcConnection ** ppConn)
 	{
-		*ppConnection = new CSvrConnection(m_hWnd);
-		return S_OK;
+		*ppConn = new CSvrConnection(pIpcHandle);
 	}
+
+	virtual int GetBufSize() const {
+		return 10240;
+	}
+	virtual void * GetSecurityAttr() const;
+	virtual void ReleaseSecurityAttr(void* psa) const;
 
 protected:
 	virtual void OnKeyMapFree(CKeyMapDlg *pWnd);
@@ -111,7 +113,7 @@ protected:
 		MESSAGE_HANDLER_EX(UM_TRAYNOTIFY, OnTrayNotify)
 		CHAIN_MSG_MAP_MEMBER(m_trayIcon)
 		CHAIN_MSG_MAP(CSimpleWnd)
-		CHAIN_MSG_MAP(SIpcServer)
+		CHAIN_MSG_MAP_2_IPC(m_ipcSvr)
 		REFLECT_NOTIFICATIONS_EX()
 	END_MSG_MAP()
 private:
@@ -122,6 +124,8 @@ private:
 	HMODULE		  m_hCoreModule;
 	funIscore_Create m_funIsCore_Create;
 	funIscore_Destroy m_funIsCore_Destroy;
+
+	CAutoRefPtr<IIpcServer> m_ipcSvr;
 
 	SStringT	m_strDataPath;
 

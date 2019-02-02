@@ -3,7 +3,7 @@
 #include "Sinstar3Impl.h"
 #include "../helper/helper.h"
 
-CSvrConnection::CSvrConnection(HWND hSvr):m_hSvr(hSvr)
+CSvrConnection::CSvrConnection(IIpcHandle *pIpcHandle):m_ipcHandle(pIpcHandle)
 {
 }
 
@@ -232,4 +232,18 @@ void CSvrConnection::HandleGetDefInputMode(Param_GetDefInputMode &param)
 {
 	param.uMode = m_pSinstar->GetDefInputMode();
 
+}
+
+IIpcHandle * CSvrConnection::GetIpcHandle()
+{
+	return m_ipcHandle;
+}
+
+void CSvrConnection::BuildShareBufferName(ULONG_PTR idLocal, ULONG_PTR idRemote, TCHAR szBuf[MAX_PATH]) const
+{
+}
+
+void CSvrConnection::CallFun(IFunParams * params) const
+{
+	m_ipcHandle->CallFun(params);
 }
