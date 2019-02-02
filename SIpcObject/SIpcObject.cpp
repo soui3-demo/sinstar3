@@ -62,7 +62,7 @@ namespace SOUI
 		LRESULT lRet = ::SendMessage(hRemote, UM_CALL_FUN, FUN_ID_CONNECT, (LPARAM)hLocal);
 		if (lRet == 0)
 		{
-			return S_FAILED;
+			return E_FAIL;
 		}
 		InitShareBuf(idLocal, idRemote, 0, NULL);
 		return S_OK;
