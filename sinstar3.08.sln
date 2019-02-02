@@ -180,7 +180,7 @@ Global
 		{1A661C8F-0665-31B3-9106-86CECB8A047D}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{1A661C8F-0665-31B3-9106-86CECB8A047D}.Release|Win32.ActiveCfg = Release|Win32
 		{1A661C8F-0665-31B3-9106-86CECB8A047D}.Release|Win32.Build.0 = Release|Win32
-		{1A661C8F-0665-31B3-9106-86CECB8A047D}.Release|x64.ActiveCfg = Release|Win32
+		{1A661C8F-0665-31B3-9106-86CECB8A047D}.Release|x64.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

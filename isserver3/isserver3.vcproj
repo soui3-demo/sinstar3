@@ -137,7 +137,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="utilities.lib soui.lib helper.lib iscomm.lib ipcobject.lib"
+				AdditionalDependencies="utilities.lib soui.lib helper.lib iscomm.lib sipcobject.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(SOUIPATH)\bin;$(SolutionDir)lib"
 				GenerateDebugInformation="true"

@@ -120,8 +120,9 @@ void CSvrConnection::HandleCreate(Param_Create & param)
 	SASSERT(!m_pSinstar);
 	TCHAR szVer[100];
 	m_bDpiAware = param.bDpiAware;
+	m_strHostPath = param.strHostPath;
 	Helper_VersionString(param.dwVer, szVer);
-	SLOG_INFO("create connection, host:" << param.strHostPath.c_str() << " ver:" << szVer);
+	SLOG_INFO("create connection, host:" << m_strHostPath.c_str() << " ver:" << szVer);
 	m_pSinstar.Attach(new CSinstar3Impl(this, m_hSvr));
 }
 
@@ -188,8 +189,8 @@ void CSvrConnection::HandleTranslateKey(Param_TranslateKey &param)
 
 void CSvrConnection::HandleOnSetFocus(Param_OnSetFocus &param)
 {
+	SLOG_INFO("OnSetFocus, host:"<<m_strHostPath.c_str()<<" bFocus:"<<param.bFocus);
 	m_pSinstar->OnSetFocus(param.bFocus);
-
 }
 
 void CSvrConnection::HandleGetCompositionSegments(Param_GetCompositionSegments &param)

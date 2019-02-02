@@ -87,6 +87,6 @@ private:
 	SComPtr<ISinstar>	m_pSinstar;
 	HWND				m_hSvr;
 	bool			    m_bDpiAware;
-
+	std::string			m_strHostPath;
 	CAutoRefPtr<IIpcHandle> m_ipcHandle;
 };
