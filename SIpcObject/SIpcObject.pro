@@ -18,11 +18,10 @@ else{
 
 DEPENDPATH += .
 INCLUDEPATH += . \
-			   ../../utilities/include \
-			   ../../soui/include \
+			   $(SOUIPATH)/utilities/include \
+			   $(SOUIPATH)/soui/include \
 
-dir = ../..
-include($$dir/common.pri)
+include($$(SOUIPATH)/demo_com.pri)
 
 PRECOMPILED_HEADER = stdafx.h
 
