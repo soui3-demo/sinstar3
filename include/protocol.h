@@ -53,26 +53,6 @@ inline SParamStream & SParamStream::operator >> (std::wstring & str)
 	delete[]pBuf;
 	return *this;
 }
-
-//////////////////////////////////////////////////////////////////////
-template<>
-inline SParamStream & SParamStream::operator<<(const POINT & pt)
-{
-	GetBuffer()->Write((const BYTE*)&pt.x, sizeof(int));
-	GetBuffer()->Write((const BYTE*)&pt.y, sizeof(int));
-	return *this;
-}
-template<>
-inline SParamStream & SParamStream::operator >> (POINT & pt)
-{
-	int tmp = 0;
-	GetBuffer()->Read((BYTE*)&tmp, sizeof(int));
-	pt.x = tmp;
-	GetBuffer()->Read((BYTE*)&tmp, sizeof(int));
-	pt.y = tmp;
-	return *this;
-}
-
 }
 
 struct FunParams_Base : SOUI::IFunParams
