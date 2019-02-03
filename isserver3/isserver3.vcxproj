@@ -90,7 +90,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>..\lib;$(SOUIPATH)\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>helper.lib;iscomm.lib;utilities.lib;soui.lib;ipcobject.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>helper.lib;iscomm.lib;utilities.lib;soui.lib;sipcobject.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
     <ResourceCompile>
