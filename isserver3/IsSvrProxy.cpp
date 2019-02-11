@@ -593,20 +593,20 @@ LRESULT CIsSvrProxy::OnCopyData(HWND hWnd,PCOPYDATASTRUCT lpCopyData)
 		SStringA strPath = S_CW2A((wchar_t*)lpCopyData->lpData);
 		if(m_pCore->InstallCit(strPath))
 		{
-			SMessageBox(m_hWnd,_T("码表安装成功！"),_T("提示"),MB_OK|MB_ICONINFORMATION);
+			SMessageBox(GetActiveWindow(),_T("码表安装成功！"),_T("提示"),MB_OK|MB_ICONINFORMATION);
 		}else
 		{
-			SMessageBox(m_hWnd,SStringT().Format(_T("码表安装失败！错误码:%d"),GetLastError()),_T("提示"),MB_OK|MB_ICONSTOP);
+			SMessageBox(GetActiveWindow(),SStringT().Format(_T("码表安装失败！错误码:%d"),GetLastError()),_T("提示"),MB_OK|MB_ICONSTOP);
 		}
 	}else if(lpCopyData->dwData == CD_CMD_INSTALL_PLT)
 	{//install plt
 		SStringA strPath = S_CW2A((wchar_t*)lpCopyData->lpData);
 		if(m_pCore->InstallPlt(strPath))
 		{
-			SMessageBox(m_hWnd,_T("词库安装成功！"),_T("提示"),MB_OK|MB_ICONINFORMATION);
+			SMessageBox(GetActiveWindow(),_T("词库安装成功！"),_T("提示"),MB_OK|MB_ICONINFORMATION);
 		}else
 		{
-			SMessageBox(m_hWnd,SStringT().Format(_T("词库安装失败！错误码:%d"),GetLastError()),_T("提示"),MB_OK|MB_ICONSTOP);
+			SMessageBox(GetActiveWindow(),SStringT().Format(_T("词库安装失败！错误码:%d"),GetLastError()),_T("提示"),MB_OK|MB_ICONSTOP);
 		}
 	}
 	return 1;
