@@ -577,7 +577,7 @@ LRESULT CIsSvrProxy::OnCopyData(HWND hWnd,PCOPYDATASTRUCT lpCopyData)
 		{
 			SLOG_WARN("discard shell cmd:"<<lpCopyData->dwData);
 			return 3;
-		}else
+		}else	
 		{
 			m_pPendingCmd = (PCOPYDATASTRUCT)malloc(sizeof(COPYDATASTRUCT)+lpCopyData->cbData);
 			m_pPendingCmd->dwData = lpCopyData->dwData;
