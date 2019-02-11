@@ -15,6 +15,12 @@ typedef void(*funIscore_Destroy)(IServerCore* pCore);
 #define UM_IMPORT_USER_LIB		(WM_USER+2003)
 
 
+enum{
+	CD_CMD_NULL = 0,
+	CD_CMD_INSTALL_CIT=100,
+	CD_CMD_INSTALL_PLT,
+};
+
 class CIsSvrProxy : public CSimpleWnd
 	, public IUiMsgHandler
 	, public IKeyMapListener
@@ -82,6 +88,7 @@ protected:
 	LRESULT OnTrayNotify(UINT uMsg, WPARAM wp, LPARAM lp);
 	LRESULT OnTaskbarCreated(UINT uMsg, WPARAM wp, LPARAM lp);
 	LRESULT OnBuildIndexProg(UINT uMsg, WPARAM wp, LPARAM lp);
+	LRESULT OnCopyData(HWND hWnd,PCOPYDATASTRUCT lpCopyData);
 
 	void OnTimer(UINT_PTR uID);
 
@@ -102,6 +109,7 @@ protected:
 		MSG_WM_CREATE(OnCreate)
 		MSG_WM_DESTROY(OnDestroy)
 		MSG_WM_TIMER(OnTimer)
+		MSG_WM_COPYDATA(OnCopyData)
 		MESSAGE_HANDLER_EX(m_uMsgTaskbarCreated,OnTaskbarCreated)
 		MESSAGE_RANGE_HANDLER_EX(UM_BUILD_INDEX_PROG0, UM_IMPORT_USER_LIB,OnBuildIndexProg)
 		COMMAND_ID_HANDLER_EX(R.id.menu_force_exit, OnMenuExit)
@@ -136,5 +144,7 @@ private:
 	CBuildIndexProgWnd * m_pBuildIndexProg;
 
 	SHostDialog	* m_pCurModalDlg;
+
+	PCOPYDATASTRUCT m_pPendingCmd;
 };
 

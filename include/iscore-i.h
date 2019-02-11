@@ -62,6 +62,12 @@ struct IServerCore {
 	virtual void SetAutoQuit(bool bAutoQuit) = 0;
 
 	virtual void GetConfigIni(LPSTR pszBuf, int nLen) = 0;
+
+	virtual bool IsDataReady() const = 0;
+
+	virtual bool InstallCit(LPCSTR pszCitPath) = 0;
+
+	virtual bool InstallPlt(LPCSTR pszPltPath) = 0;
 };
 
 

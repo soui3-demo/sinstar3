@@ -23,6 +23,9 @@
 #define TIMERID_CHECK_CLIENT 500
 #define SPAN_CHECK_CLIENT 50
 
+#define TIMERID_PENDING_CMD 600
+#define SPAN_PENDING_CMD    100
+
 static void DoSomething()
 {
 	MSG msg;
@@ -49,6 +52,7 @@ CIsSvrProxy::CIsSvrProxy(const SStringT & strDataPath)
 	, m_pKeyMapDlg(NULL)
 	, m_pBuildIndexProg(NULL)
 	, m_pCurModalDlg(NULL)
+	, m_pPendingCmd(NULL)
 {
 	m_uMsgTaskbarCreated = RegisterWindowMessage(TEXT("TaskbarCreated"));
 }
@@ -58,6 +62,7 @@ CIsSvrProxy::~CIsSvrProxy()
 {
 	if (m_pKeyMapDlg) m_pKeyMapDlg->DestroyWindow();
 	if (m_pBuildIndexProg) m_pBuildIndexProg->DestroyWindow();
+	if(m_pPendingCmd) free(m_pPendingCmd);
 }
 
 static SStringT GetVersionInfo(DWORD &dwVer)
@@ -371,6 +376,15 @@ void CIsSvrProxy::OnTimer(UINT_PTR uID)
 	}else if(uID == TIMERID_CHECK_CLIENT)
 	{
 		m_ipcSvr->CheckConnectivity();
+	}else if(uID == TIMERID_PENDING_CMD)
+	{
+		SASSERT(m_pPendingCmd);
+		if(m_pCore->IsDataReady())
+		{
+			OnCopyData(NULL,m_pPendingCmd);
+			free(m_pPendingCmd);
+			KillTimer(TIMERID_PENDING_CMD);
+		}
 	}
 	else
 	{
@@ -402,7 +416,7 @@ void CIsSvrProxy::OnMenuSettings(UINT uNotifyCode, int nID, HWND wndCtl)
 
 void CIsSvrProxy::OnMenuAutoRun(UINT uNotifyCode, int nID, HWND wndCtl)
 {
-	BOOL bAutoRun = !IsAutoRun();
+	bool bAutoRun = !IsAutoRun();
 	if (bAutoRun) m_pCore->SetAutoQuit(false);
 	SetAutoRun(bAutoRun);
 }
@@ -547,4 +561,53 @@ bool CIsSvrProxy::SetAutoRun(bool bAutoRun) const
 void CIsSvrProxy::OnUpdateNow()
 {
 	CheckUpdate(true);
+}
+
+LRESULT CIsSvrProxy::OnCopyData(HWND hWnd,PCOPYDATASTRUCT lpCopyData)
+{
+	if(!(lpCopyData->dwData == CD_CMD_INSTALL_CIT
+		|| lpCopyData->dwData == CD_CMD_INSTALL_PLT))
+	{
+		SetMsgHandled(FALSE);
+		return 0;
+	}
+	if(!m_pCore->IsDataReady())
+	{
+		if(m_pPendingCmd)
+		{
+			SLOG_WARN("discard shell cmd:"<<lpCopyData->dwData);
+			return 3;
+		}else
+		{
+			m_pPendingCmd = (PCOPYDATASTRUCT)malloc(sizeof(COPYDATASTRUCT)+lpCopyData->cbData);
+			m_pPendingCmd->dwData = lpCopyData->dwData;
+			m_pPendingCmd->cbData = lpCopyData->cbData;
+			m_pPendingCmd->lpData = m_pPendingCmd+1;
+			memcpy(m_pPendingCmd->lpData,lpCopyData->lpData,lpCopyData->cbData);
+			SetTimer(TIMERID_PENDING_CMD,SPAN_PENDING_CMD);
+			return 2;
+		}
+	}
+	if(lpCopyData->dwData == CD_CMD_INSTALL_CIT)
+	{//install cit
+		SStringA strPath = S_CW2A((wchar_t*)lpCopyData->lpData);
+		if(m_pCore->InstallCit(strPath))
+		{
+			SMessageBox(m_hWnd,_T("码表安装成功！"),_T("提示"),MB_OK|MB_ICONINFORMATION);
+		}else
+		{
+			SMessageBox(m_hWnd,SStringT().Format(_T("码表安装失败！错误码:%d"),GetLastError()),_T("提示"),MB_OK|MB_ICONSTOP);
+		}
+	}else if(lpCopyData->dwData == CD_CMD_INSTALL_PLT)
+	{//install plt
+		SStringA strPath = S_CW2A((wchar_t*)lpCopyData->lpData);
+		if(m_pCore->InstallPlt(strPath))
+		{
+			SMessageBox(m_hWnd,_T("词库安装成功！"),_T("提示"),MB_OK|MB_ICONINFORMATION);
+		}else
+		{
+			SMessageBox(m_hWnd,SStringT().Format(_T("词库安装失败！错误码:%d"),GetLastError()),_T("提示"),MB_OK|MB_ICONSTOP);
+		}
+	}
+	return 1;
 }
