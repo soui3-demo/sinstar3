@@ -299,6 +299,11 @@ BOOL Sinstar_Uninstall()
 			Sleep(500);
 	}
 
+	//step8:reg ime file type.
+	TCHAR szRegCmd[MAX_PATH];
+	_stprintf(szRegCmd,_T("%s\\program\\isserver3.exe -unreg"),g_szPath);
+	ShellExecute(NULL,_T("open"),szRegCmd,NULL,NULL,0);
+
 	MessageBox(GetActiveWindow(), _T("卸载成功！"), _T("install"), MB_OK | MB_ICONINFORMATION);
 
 	return TRUE;
@@ -319,73 +324,6 @@ BOOL MyCopyFile(LPCTSTR pszSour,LPCTSTR pszDest)
 	int nRet=SHFileOperation(&fileOp);
 	return nRet==0;
 }
-
-DWORD AddAceToObjectsSecurityDescriptor(
-	LPTSTR pszObjName,          // name of object
-	SE_OBJECT_TYPE ObjectType,  // type of object
-	LPTSTR pszTrustee,          // trustee for new ACE
-	TRUSTEE_FORM TrusteeForm,   // format of trustee structure
-	DWORD dwAccessRights,       // access mask for new ACE
-	ACCESS_MODE AccessMode,     // type of ACE
-	DWORD dwInheritance         // inheritance flags for new ACE
-)
-{
-	DWORD dwRes = 0;
-	PACL pOldDACL = NULL, pNewDACL = NULL;
-	PSECURITY_DESCRIPTOR pSD = NULL;
-	EXPLICIT_ACCESS ea;
-
-	if (NULL == pszObjName)
-		return ERROR_INVALID_PARAMETER;
-
-	// Get a pointer to the existing DACL.
-
-	dwRes = GetNamedSecurityInfo(pszObjName, ObjectType,
-		DACL_SECURITY_INFORMATION,
-		NULL, NULL, &pOldDACL, NULL, &pSD);
-	if (ERROR_SUCCESS != dwRes) {
-		printf("GetNamedSecurityInfo Error %u\n", dwRes);
-		goto Cleanup;
-	}
-
-	// Initialize an EXPLICIT_ACCESS structure for the new ACE. 
-
-	ZeroMemory(&ea, sizeof(EXPLICIT_ACCESS));
-	ea.grfAccessPermissions = dwAccessRights;
-	ea.grfAccessMode = AccessMode;
-	ea.grfInheritance = dwInheritance;
-	ea.Trustee.TrusteeForm = TrusteeForm;
-	ea.Trustee.ptstrName = pszTrustee;
-
-	// Create a new ACL that merges the new ACE
-	// into the existing DACL.
-
-	dwRes = SetEntriesInAcl(1, &ea, pOldDACL, &pNewDACL);
-	if (ERROR_SUCCESS != dwRes) {
-		printf("SetEntriesInAcl Error %u\n", dwRes);
-		goto Cleanup;
-	}
-
-	// Attach the new ACL as the object's DACL.
-
-	dwRes = SetNamedSecurityInfo(pszObjName, ObjectType,
-		DACL_SECURITY_INFORMATION,
-		NULL, NULL, pNewDACL, NULL);
-	if (ERROR_SUCCESS != dwRes) {
-		printf("SetNamedSecurityInfo Error %u\n", dwRes);
-		goto Cleanup;
-	}
-
-Cleanup:
-
-	if (pSD != NULL)
-		LocalFree((HLOCAL)pSD);
-	if (pNewDACL != NULL)
-		LocalFree((HLOCAL)pNewDACL);
-
-	return dwRes;
-}
-
 
 BOOL Sinstar_Install()
 {
@@ -477,14 +415,15 @@ BOOL Sinstar_Install()
 		}
 	}
 
-	//step8:修改配置文件属性
+	//step8:reg ime file type.
+	TCHAR szRegCmd[MAX_PATH];
+	_stprintf(szRegCmd,_T("%s -reg"),szSvrExe);
+	ShellExecute(NULL,_T("open"),szRegCmd,NULL,NULL,0);
+
+	//step9:修改配置文件属性
 	_stprintf(szPath,_T("%s\\data\\config.ini"),g_szPath);
 	Helper_SetFileACL(szPath);
 	Helper_SetFileACLEx(szSvrData,TRUE);
-
-	TCHAR szUser[]=_T("ALL APPLICATION PACKAGES");
-	DWORD dc = AddAceToObjectsSecurityDescriptor(g_szPath, SE_FILE_OBJECT, szUser, TRUSTEE_IS_NAME,
-		WRITE_DAC | GENERIC_ALL, SET_ACCESS, SUB_CONTAINERS_AND_OBJECTS_INHERIT);
 
 	MessageBox(GetActiveWindow(), _T("安装成功！"), _T("install"), MB_OK | MB_ICONINFORMATION);
 

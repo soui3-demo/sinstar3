@@ -275,6 +275,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ShellTypeReg.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ime\Sinstar3Impl.cpp"
 				>
 			</File>
@@ -497,6 +501,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ShellTypeReg.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ime\Sinstar3Impl.h"
 				>
 			</File>
@@ -607,11 +615,23 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
+				RelativePath=".\res\cit.ico"
+				>
+			</File>
+			<File
+				RelativePath=".\res\icon1.ico"
+				>
+			</File>
+			<File
 				RelativePath=".\isserver3.rc"
 				>
 			</File>
 			<File
 				RelativePath=".\res\logo.ico"
+				>
+			</File>
+			<File
+				RelativePath=".\res\plt.ico"
 				>
 			</File>
 			<File
