@@ -36,7 +36,7 @@ public:
 protected:
 	virtual void OnNewConnection(IIpcHandle * pIpcHandle, IIpcConnection ** ppConn)
 	{
-		*ppConn = new CSvrConnection(pIpcHandle);
+		*ppConn = new CSvrConnection(pIpcHandle,m_hWnd);
 	}
 
 	virtual int GetBufSize() const {

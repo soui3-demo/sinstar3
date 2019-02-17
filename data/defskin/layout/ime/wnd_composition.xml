@@ -27,7 +27,7 @@
 	    colorWild="@color/cand_wild"/>
   </style>
   <root>
-    <comp_bg size="-1,-1" skin="bg_composition" id="500" cache="1" layout="vbox" padding="@dim/input_padding_left,@dim/input_padding_top,@dim/input_padding_right,@dim/input_padding_bottom">
+    <comp_bg size="-1,-1" skin="bg_composition" cache="1" layout="vbox" padding="@dim/input_padding_left,@dim/input_padding_top,@dim/input_padding_right,@dim/input_padding_bottom">
       <window size="-1,0" weight="1" layout="hbox">
         <mutexView size="-1,-2" name="comp_normal" layout="hbox">
           <text size="-1,-2" name="txt_comps"/>

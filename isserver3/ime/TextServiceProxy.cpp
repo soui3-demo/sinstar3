@@ -3,7 +3,7 @@
 #include "Sinstar3Impl.h"
 #include "../helper/helper.h"
 
-CSvrConnection::CSvrConnection(IIpcHandle *pIpcHandle):m_ipcHandle(pIpcHandle)
+CSvrConnection::CSvrConnection(IIpcHandle *pIpcHandle,HWND hSvr):m_ipcHandle(pIpcHandle),m_hSvr(hSvr)
 {
 }
 

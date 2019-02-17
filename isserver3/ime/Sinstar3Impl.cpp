@@ -549,6 +549,7 @@ BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 void CSinstar3Impl::OpenConfig()
 {
 	SASSERT(m_hSvr);
+	SLOG_INFO("OpenConfig,m_hSvr:"<<m_hSvr);
 	::SendMessage(m_hSvr, WM_COMMAND, R.id.menu_settings, 0);
 }
 

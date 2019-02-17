@@ -24,7 +24,7 @@
         <item width="100">备注</item>
       </items>
     </header>
-    <template itemHeight="30" colorHover="#cccccc" colorSelected="#0000ff">
+    <template itemHeight="30" colorHover="#cccccc" colorSelected="#0000ff" font="size:16">
       <window name="col_group" clipClient="1" layout="hbox" gravity="center">
         <check name="chk_group_name" />
       </window>

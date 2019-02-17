@@ -8,7 +8,7 @@
 
 class CSvrConnection : public ITextService, public TObjRefImpl<SOUI::IIpcConnection> {
 public:
-	CSvrConnection::CSvrConnection(IIpcHandle *pIpcHandle);
+	CSvrConnection::CSvrConnection(IIpcHandle *pIpcHandle,HWND hSvr);
 
 	CSvrConnection::~CSvrConnection(void);
 public:
