@@ -17,17 +17,17 @@ template<>
 inline SParamStream & SParamStream::operator<<(const std::string & str)
 {
 	int nSize = (int)str.size();
-	GetBuffer()->Write((const BYTE*)&nSize, sizeof(int));
-	GetBuffer()->Write((const BYTE*)str.c_str(), nSize);
+	GetBuffer()->Write(&nSize, sizeof(int));
+	GetBuffer()->Write(str.c_str(), nSize);
 	return *this;
 }
 template<>
 inline SParamStream & SParamStream::operator >> (std::string & str)
 {
 	int nSize = 0;
-	GetBuffer()->Read((BYTE*)&nSize, sizeof(int));
+	GetBuffer()->Read(&nSize, sizeof(int));
 	char *pBuf = new char[nSize];
-	GetBuffer()->Read((BYTE*)pBuf, nSize);
+	GetBuffer()->Read(pBuf, nSize);
 	str = std::string(pBuf, nSize);
 	delete[]pBuf;
 	return *this;
@@ -38,17 +38,17 @@ template<>
 inline SParamStream & SParamStream::operator<<(const std::wstring & str)
 {
 	int nSize = (int)str.size();
-	GetBuffer()->Write((const BYTE*)&nSize, sizeof(int));
-	GetBuffer()->Write((const BYTE*)str.c_str(), nSize*sizeof(wchar_t));
+	GetBuffer()->Write(&nSize, sizeof(int));
+	GetBuffer()->Write(str.c_str(), nSize*sizeof(wchar_t));
 	return *this;
 }
 template<>
 inline SParamStream & SParamStream::operator >> (std::wstring & str)
 {
 	int nSize = 0;
-	GetBuffer()->Read((BYTE*)&nSize, sizeof(int));
+	GetBuffer()->Read(&nSize, sizeof(int));
 	wchar_t *pBuf = new wchar_t[nSize];
-	GetBuffer()->Read((BYTE*)pBuf, nSize*sizeof(wchar_t));
+	GetBuffer()->Read(pBuf, nSize*sizeof(wchar_t));
 	str = std::wstring(pBuf, nSize);
 	delete[]pBuf;
 	return *this;
