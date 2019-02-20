@@ -529,8 +529,12 @@ namespace SOUI
 		BOOL bLoad = menu.LoadMenu(UIRES.smenu.context_status);
 		m_skinManager.ClearMap();
 		SLOG_INFO("before trackpopupmenu");
-		SetForegroundWindow(m_hWnd);
+
+		DWORD dwThreadID = GetWindowThreadProcessId(m_hOwner,NULL);
+		DWORD dwCurID = GetCurrentThreadId();
+		AttachThreadInput(dwCurID,dwThreadID,TRUE);
 		int nRet = menu.TrackPopupMenu(TPM_LEFTALIGN | TPM_BOTTOMALIGN | TPM_RETURNCMD, pt.x, pt.y, m_hWnd);
+		AttachThreadInput(dwCurID,dwThreadID,FALSE);
 		SLOG_INFO("after trackpopupmenu" << " nRet:" << nRet);
 		if (nRet == R.id.config)
 		{//system config
