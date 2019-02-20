@@ -160,7 +160,7 @@ DWORD CSinstar3Tsf::GetActiveWnd() const
 	if(hr == S_OK) hr = pContextView->GetWnd(&hWnd);
 
 	if (hWnd == NULL) hWnd = ::GetFocus();
-	return (DWORD)hWnd;
+	return (DWORD)(ULONG_PTR)hWnd;
 }
 
 
