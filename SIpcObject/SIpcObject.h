@@ -12,8 +12,8 @@
 #define SIPC_API __declspec(dllexport)
 #else
 #define SIPC_API __declspec(dllimport)
-#define SIPC_COM_C  EXTERN_C
 #endif
+#define SIPC_COM_C  EXTERN_C
 #endif
 
 
