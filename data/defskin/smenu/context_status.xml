@@ -45,4 +45,5 @@
   <item text="打字速度" name="key_speed" id="111"/>
   <sep/>
   <item text="查看帮助" name="help" id="112"/>
+  <item text="捐助启程" name="menu_donate" id="113"/>
 </menu>

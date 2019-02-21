@@ -47,20 +47,4 @@
       <qrctrl size="200,200" text="http://qm.qq.com/cgi-bin/qm/qr?k=wGMykx8zDb_42F9cYi0iLSPq2Pk-4k0y"/>
     </window>
   </window>
-
-  <window size="-2,-1" layout="hbox" gravity="center" extend_top="20">
-    <window size="-1,-1" layout="vbox" gravity="center">
-      <text>微信赞助</text>
-      <qrctrl size="200,200" text="wxp://f2f0J_TGrQJ7F_KjpfCdDTFNKDAvDFIYrSM5">
-        <icon pos="|0,|0,@32,@32" offset="-0.5,-0.5" src="ICON_LOGO:32"/>
-      </qrctrl>
-    </window>
-    <window size="0,0" weight="1"/>
-    <window size="-1,-1" layout="vbox" gravity="center">
-      <text>支付宝赞助</text>
-      <qrctrl size="200,200" text="HTTPS://QR.ALIPAY.COM/FKX07171QGERGGU4MNY8C8">
-        <icon pos="|0,|0,@32,@32" offset="-0.5,-0.5" src="ICON_LOGO:32"/>
-      </qrctrl>
-    </window>
-  </window>
 </include>

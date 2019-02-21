@@ -7,6 +7,7 @@
     <file name="dlg_keymap" path="layout\server\dlg_keymap.xml"/>
     <file name="wnd_build_index_prog" path="layout\server\wnd_build_index_prog.xml"/>
     <file name="dlg_update_info" path="layout\server\dlg_update_info.xml"/>
+    <file name="dlg_donate" path="layout\server\dlg_donate.xml"/>
     
     <file name="wnd_composition" path="layout\ime\wnd_composition.xml"/>
     <file name="wnd_status_bar" path="layout\ime\wnd_status_bar.xml"/>

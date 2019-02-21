@@ -627,6 +627,11 @@ namespace SOUI
 		{
 			OnHelpClick();
 		}
+		else if (nRet == R.id.menu_donate)
+		{
+			SHostDialog dlgDonate(UIRES.LAYOUT.dlg_donate);
+			dlgDonate.DoModal(GetActiveWindow());
+		}
 		else if (nRet >= R.id.memu_edit_userdef && nRet <=R.id.memu_edit_userjm)
 		{
 			int types[] = {

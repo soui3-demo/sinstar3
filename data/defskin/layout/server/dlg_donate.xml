@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SOUI name="donate" title="@string/donate" bigIcon="ICON_LOGO:32" smallIcon="ICON_LOGO:16" width="400" height="480"  margin="5,5,5,5"  resizable="1" wndType="normal"
+appWnd="1"
+translucent="1"
+>
+  <root skin="_skin.sys.wnd.bkgnd" cache="1" layout="vbox" padding="5,5,5,5" intervel="5">
+    <caption size="-2,30" layout="hbox" gravity="center">
+      <text size="-1,-1" text="@string/donate"/>
+      <window size="0,0" weight="1" visible="0"/>
+      <imgbtn size="-1,-1" name="btn_close" skin="_skin.sys.btn.close"  id="IDCANCEL" tip="close" animate="1"/>
+    </caption>
+    <tabctrl size="-2,0" weight="1" tabHeight="30" name="tab_pay_way">
+      <page title="微信">
+        <qrctrl size="-2,-2" text="wxp://f2f0J_TGrQJ7F_KjpfCdDTFNKDAvDFIYrSM5"/>
+      </page>
+      <page title="支付宝">
+        <qrctrl size="-2,-2" text="HTTPS://QR.ALIPAY.COM/FKX07171QGERGGU4MNY8C8"/>
+      </page>
+    </tabctrl>
+    <text size="-2,-1" multiLines="1" text="启程输入法是一款完全免费开源的良心输入法产品。为了输入法的进一步完善，欢迎大家捐助！"/>
+  </root>
+</SOUI>
