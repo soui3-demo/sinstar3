@@ -6,36 +6,38 @@
   <blue value="rgb(0,0,255)"/>
   <white value="rgb(255,255,255)"/>
   <gray value="#808080"/>
-  <tabnavbk value="#f0f0f1"/>
-  <configborder value="#fee51b"/>
-
+  <border value="#cfe3ae"/>
+  <comp value="#00a514"/>
   <associate_english_prefix value="#808080"/>
   <temp_spell_flag value="rgb(255,0,0)"/>
-  <cand_first value="rgb(255,255,255)"/>
-  <cand_index value="rgb(0,0,0)"/>
+  <configborder value="#fecc01"/>
+  <cand_first value="#f65f28"/>
+  <cand_index value="rgb(128,128,128)"/>
   <cand_text value="rgb(0,0,0)"/>
   <cand_comp value="rgb(0,0,128)"/>
   <cand_wild value="rgb(255,0,0)"/>
   <cand_phonetic value="rgb(0,0,255)"/>
-  
-  <cand_user_def value="rgb(0,0,255)"/>
- <cand_user_cmd value="rgb(0,0,255)"/>
- <cand_forecast value="rgb(128,0,64)"/>
- <cand_blend_py value="rgb(255,255,255)"/>
- <cand_gbk value="rgb(0,255,0)"/>
 
+  <cand_user_def value="rgb(246,6,175)"/>
+ <cand_user_cmd value="rgb(246,6,175)"/>
+ <cand_forecast value="rgb(128,0,64)"/>
+ <cand_blend_py value="rgb(35,181,116)"/>
+ <cand_gbk value="rgb(0,113,189)"/>
+ 
   <sent_input value="rgb(255,0,0)"/>
-  <sent_inactive value="rgb(93,93,93)"/>
-  <sent_left value="rgb(255,255,255)"/>
+  <sent_left value="rgb(0,0,255)"/>
   <sent_right value="rgb(0,0,0)"/>
+  <sent_inactive value="rgb(93,93,93)"/>
+  
   <comp_umode_prefix value="rgb(255,0,0)"/>
   <comp_auto_complete value="rgb(88,88,88"/>
   <tip_comp value="#808080"/>
   <tip_cand value="#808080"/>
-  
-  <spell value="rgb(0,0,128)"/>
-  <spell_result value="rgb(0,0,0)"/>
-  <spell_caret value="rgb(0,0,255)"/>
-  <spell_edit value="rgb(0,0,255)"/>
+
+  <spell_comp value="#f65f28"/>
+  <spell_result value="#00a514"/>
+  <spell_caret value="#000000"/>
+
+  <theme value="#cfe3aeff"/>
 </color> 
  

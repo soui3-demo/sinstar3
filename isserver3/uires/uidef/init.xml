@@ -1,8 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <UIDEF>
-  <desc author="setoutsoft" name="京剧武生" version="1.0"/>
-  <offset x="50" y="60"/>
-  <font face="微软雅黑" size="15"/>
+  <desc author="008" name="多点纯色" version="1.0" />
+  <font face="微软雅黑" size="16"/>
 
   <string src="values:string" />  
   <color src="values:color"/>

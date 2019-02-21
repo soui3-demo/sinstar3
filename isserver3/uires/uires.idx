@@ -39,8 +39,7 @@
     <file name="png_charmode" path="image\charmode.png"/>
     <file name="png_charmode_full" path="image\charmode_full.png"/>
     <file name="png_charmode_half" path="image\charmode_half.png"/>
-    <file name="png_status_open" path="image\status_open.png"/>
-    <file name="png_status_close" path="image\status_close.png"/>
+    <file name="png_status_bar" path="image\status_bar.png"/>
     <file name="png_composition" path="image\composition.png"/>
     <file name="btn_extend" path="image\btn_extend.png"/>
     <file name="btn_shrink" path="image\btn_shrink.png"/>
@@ -56,6 +55,7 @@
     <file name="btn_english_enable" path="image\btn_english_enable.png"/>
     <file name="btn_english_disable" path="image\btn_english_disable.png"/>
     <file name="SYS_SCROLLBAR" path="image\scrollbar.png"/>
+    <file name="png_comp_logo" path="image\comp_logo.png"/>
   </IMG>
   <img2>
     <file name="png_tip_bg" path="image2\tip_bg.png"/>
