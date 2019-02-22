@@ -9,6 +9,25 @@
 
 namespace SOUI
 {
+	class CDenoteDlg: public SHostWnd
+	{
+	public:
+		CDenoteDlg():SHostWnd(UIRES.LAYOUT.dlg_donate){}
+
+		virtual void OnFinalMessage(HWND hWnd){
+			__super::OnFinalMessage(hWnd);
+			delete this;
+		}
+
+		void OnClose()
+		{
+			DestroyWindow();
+		}
+		EVENT_MAP_BEGIN()
+			EVENT_ID_COMMAND(IDCANCEL,OnClose)
+		EVENT_MAP_END()
+	};
+
 	static int PopupMenuEndID(int nStart)
 	{
 		if (nStart % 100 == 0) return nStart + 100;
@@ -626,8 +645,10 @@ namespace SOUI
 		}
 		else if (nRet == R.id.menu_donate)
 		{
-			SHostDialog dlgDonate(UIRES.LAYOUT.dlg_donate);
-			dlgDonate.DoModal(GetActiveWindow());
+			CDenoteDlg *dlgDonate = new CDenoteDlg;
+			dlgDonate->Create(m_hWnd,WS_POPUP,WS_EX_TOPMOST,0,0,0,0);
+			dlgDonate->CenterWindow(GetDesktopWindow());
+			dlgDonate->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
 		}
 		else if (nRet >= R.id.memu_edit_userdef && nRet <=R.id.memu_edit_userjm)
 		{
