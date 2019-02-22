@@ -31,6 +31,16 @@
       <toggle2 size="-1,-1" skin1="btn_record_enable" extend_left="2" skin2="btn_record_disable" name="btn_record"/>
       <toggle2 size="-1,-1" skin1="btn_sound_enable" extend_left="2" extend_right="5" skin2="btn_sound_disable" name="btn_sound"/>
       <window size="5,-2"/>
+      <!--invisible button, used for generate button id-->
+      <button size="0,0" visible="0" name="btn_status_shrink"/>
+      <button size="0,0" visible="0" name="btn_status_extend"/>
+      <button size="0,0" visible="0" name="btn_english"/>
+      <button size="0,0" visible="0" name="btn_filter_gbk"/>
+      <button size="0,0" visible="0" name="btn_menu"/>
+      <button size="0,0" visible="0" name="btn_help"/>
+      <button size="0,0" visible="0" name="btn_query"/>
     </status_bg>
+    <!--invisible status, used for generate id-->
+    <status_bg size="-1,-1" name="status_extend" skin="bg_status_bar" visible="0"/>
   </root>
 </SOUI>
