@@ -275,6 +275,11 @@ void CCmdHandler::OnSyncUI(LPARAM lp)
 	m_pSinstar3->Broadcast(CMD_SYNCUI, &dwData, sizeof(DWORD));
 }
 
+void CCmdHandler::OnOpenHelp(LPARAM lp)
+{
+	m_pSinstar3->ShowHelp();
+}
+
 void CCmdHandler::OnOpenConfig(LPARAM lp)
 {
 	m_pSinstar3->OpenConfig();

@@ -3,6 +3,7 @@
 #include "Utils.h"
 #include <initguid.h>
 #include "ui/SkinMananger.h"
+#include <shellapi.h>
 
 class CAutoContext
 {
@@ -124,8 +125,7 @@ void CSinstar3Impl::OnSetFocusSegmentPosition(POINT pt,int nHei)
 
 void CSinstar3Impl::OnCompositionStarted()
 {
-	m_bTyping = TRUE;
-	SLOG_INFO("bTyping:TRUE");
+	SLOG_INFO("bTyping:"<<m_bTyping);
 }
 
 void CSinstar3Impl::OnCompositionChanged()
@@ -134,6 +134,7 @@ void CSinstar3Impl::OnCompositionChanged()
 
 void CSinstar3Impl::OnCompositionTerminated(bool bClearCtx)
 {
+	SLOG_INFO("bTyping:" << m_bTyping);
 	m_bTyping = FALSE;
 	SLOG_INFO("bTyping:FALSE, bClearCtx:"<<bClearCtx);
 	if(bClearCtx)
@@ -223,6 +224,7 @@ void CSinstar3Impl::OnConversionModeChanged(EInputMethod nMode)
 
 void CSinstar3Impl::ShowHelp()
 {
+	ShellExecute(NULL, _T("open"), _T("http://soime.cn/help"), NULL, NULL, SW_SHOWNORMAL);
 }
 
 EInputMethod CSinstar3Impl::GetDefInputMode()
@@ -375,7 +377,8 @@ void CSinstar3Impl::OnInputStart()
 {
 	if(!m_curImeContext) return;
 	m_pTxtSvr->StartComposition(m_curImeContext);
-	SLOG_INFO("bTypeing:" << m_bTyping);
+	m_bTyping = TRUE;
+	SLOG_INFO("bTyping:" << m_bTyping);
 }
 
 
@@ -383,17 +386,18 @@ void CSinstar3Impl::OnInputEnd()
 {
 	if(!m_curImeContext) return;
 	m_pTxtSvr->EndComposition(m_curImeContext);
-	SLOG_INFO("bTypeing:" << m_bTyping);
+	m_bTyping = FALSE;
+	SLOG_INFO("bTyping:" << m_bTyping);
 }
 
 
 void CSinstar3Impl::OnInputResult(const SStringT & strResult, const SStringT & strComp/*=SStringT() */)
 {
 	if (!m_curImeContext) return;
-	SLOG_INFO("bTypeing:" << m_bTyping);
+	SLOG_INFO("bTyping:" << m_bTyping);
 	if (!IsCompositing())
 	{
-		SLOG_WARN("input result but not is compositing: " << strResult);
+		SLOG_WARN("input result but not in compositing status: " << strResult);
 		return;
 	}
 	SStringW strResultW = S_CT2W(strResult);

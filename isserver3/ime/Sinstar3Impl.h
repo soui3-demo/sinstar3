@@ -43,9 +43,6 @@ public:
 	virtual EInputMethod GetDefInputMode();
 
 public:
-	IUNKNOWN_BEGIN(IUnknown)
-	IUNKNOWN_END()
-public:
 	virtual int GetID() const {	return SENDER_SINSTSR3;}
 protected://IInputListener
 	virtual BOOL IsCompositing() const;
@@ -89,6 +86,9 @@ public:
 		CHAIN_MSG_MAP(SOUI::CSimpleWnd)
 	END_MSG_MAP()
 
+public:
+	IUNKNOWN_BEGIN(IUnknown)
+	IUNKNOWN_END()
 
 private:
 	ITextService	*m_pTxtSvr;

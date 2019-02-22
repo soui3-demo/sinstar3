@@ -1,9 +1,6 @@
 #include "StdAfx.h"
 #include "StatusWnd.h"
 #include <helper/SMenuEx.h>
-#include <HtmlHelp.h>
-#pragma comment(lib,"htmlhelp.lib")
-#include <shellapi.h>
 
 #include "../Utils.h"
 #include "../InputState.h"
@@ -653,8 +650,7 @@ namespace SOUI
 
 	void CStatusWnd::OnHelpClick()
 	{
-		SStringT path= SStringT().Format(_T("%s\\data\\sinstar3.chm"), CDataCenter::getSingletonPtr()->GetDataPath());
-		HtmlHelp(NULL, path, HH_DISPLAY_TOPIC, 0);
+		m_pCmdListener->OnCommand(CMD_OPENHELP, 0);
 	}
 
 	void CStatusWnd::OnQueryClick()

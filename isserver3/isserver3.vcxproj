@@ -74,6 +74,9 @@
       <Culture>0x0804</Culture>
       <PreprocessorDefinitions>_UNICODE;UNICODE;_DEBUG;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
+    <Manifest>
+      <AdditionalManifestFiles>res\DeclareDPIAware.manifest</AdditionalManifestFiles>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -96,6 +99,9 @@
     <ResourceCompile>
       <Culture>0x0804</Culture>
     </ResourceCompile>
+    <Manifest>
+      <AdditionalManifestFiles>res\DeclareDPIAware.manifest</AdditionalManifestFiles>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
     <Text Include="license.txt" />
@@ -203,6 +209,7 @@
     <ClInclude Include="ime\Utils.h" />
     <ClInclude Include="IsSvrProxy.h" />
     <ClInclude Include="Minidump.h" />
+    <ClInclude Include="res\resource.h" />
     <ClInclude Include="settings\AddBlurDlg.h" />
     <ClInclude Include="settings\ConfigDlg.h" />
     <ClInclude Include="ShellTypeReg.h" />
@@ -258,12 +265,17 @@
     <Xml Include="uires\xml\wnd_tip.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\cit.ico" />
     <Image Include="res\logo.ico" />
+    <Image Include="res\plt.ico" />
     <Image Include="uires\icon\logo.ico" />
     <Image Include="uires\icon\logo1.ico" />
     <Image Include="uires\icon\logo2.ico" />
     <Image Include="uires\icon\logo3.ico" />
     <Image Include="uires\icon\logo4.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="res\DeclareDPIAware.manifest" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

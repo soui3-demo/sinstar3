@@ -73,7 +73,7 @@
 			/>
 			<Tool
 				Name="VCManifestTool"
-				AdditionalManifestFiles="DeclareDPIAware.manifest"
+				AdditionalManifestFiles="res\DeclareDPIAware.manifest"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -151,7 +151,7 @@
 			/>
 			<Tool
 				Name="VCManifestTool"
-				AdditionalManifestFiles="DeclareDPIAware.manifest"
+				AdditionalManifestFiles="res\DeclareDPIAware.manifest"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -461,6 +461,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\res\resource.h"
+				>
+			</File>
+			<File
 				RelativePath=".\controls\SAniImgFrame.h"
 				>
 			</File>
@@ -635,10 +639,18 @@
 				>
 			</File>
 			<File
+				RelativePath=".\res\soui_res.rc2"
+				>
+			</File>
+			<File
 				RelativePath=".\res\version.rc2"
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath=".\res\DeclareDPIAware.manifest"
+			>
+		</File>
 		<File
 			RelativePath=".\license.txt"
 			>

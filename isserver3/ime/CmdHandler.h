@@ -33,6 +33,7 @@ enum {
 	CMD_EDITFILE,
 	CMD_EXECUTETOOL,
 	CMD_SYNCUI,
+	CMD_OPENHELP,
 };
 
 struct TIPINFO
@@ -76,6 +77,7 @@ protected:
 	void OnStartProcess(LPARAM lp);
 	void OnExecuteTool(LPARAM lp);
 	void OnSyncUI(LPARAM lp);
+	void OnOpenHelp(LPARAM lp);
 
 	LRESULT OnProcessExit(UINT uMsg, WPARAM wp, LPARAM lp);
 
@@ -100,6 +102,7 @@ protected:
 		MSG_WM_COMMAND_EX(CMD_EDITFILE,OnStartProcess)
 		MSG_WM_COMMAND_EX(CMD_EXECUTETOOL,OnExecuteTool)
 		MSG_WM_COMMAND_EX(CMD_SYNCUI,OnSyncUI)
+		MSG_WM_COMMAND_EX(CMD_OPENHELP,OnOpenHelp)
 		MESSAGE_HANDLER_EX(UM_PROCESSEXIT,OnProcessExit)
 	END_MSG_MAP()
 
