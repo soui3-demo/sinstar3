@@ -1577,11 +1577,13 @@ BOOL CInputState::KeyIn_All_TurnCandPage(InputContext * lpCntxtPriv,UINT byInput
 	BOOL bRet=FALSE;
 	if(lpCntxtPriv->sCandCount )
 	{
-		//联想状态及自定义状态只能使用上下箭头翻页,以避免与符号输入冲突
-		if(byInput==VK_DOWN || (!(lpbKeyState[VK_SHIFT]&0x80) && byInput==g_SettingsG->byTurnPageDownVK&& lpCntxtPriv->sbState!=SBST_ASSOCIATE && lpCntxtPriv->inState!=INST_USERDEF))
+		//联想状态及单词输入状态只能使用上下箭头翻页,以避免与符号输入冲突
+		if(byInput==VK_DOWN || byInput ==VK_PRIOR 
+			|| (!(lpbKeyState[VK_SHIFT]&0x80) && byInput==g_SettingsG->byTurnPageDownVK && lpCntxtPriv->sbState!=SBST_ASSOCIATE && lpCntxtPriv->inState != INST_ENGLISH))
 		{
 			bRet = m_pListener->GoNextCandidatePage();
-		}else if(byInput==VK_UP || (!(lpbKeyState[VK_SHIFT]&0x80) && byInput==g_SettingsG->byTurnPageUpVK&& lpCntxtPriv->sbState!=SBST_ASSOCIATE && lpCntxtPriv->inState!=INST_USERDEF))
+		}else if(byInput==VK_UP || byInput == VK_NEXT
+			|| (!(lpbKeyState[VK_SHIFT]&0x80) && byInput==g_SettingsG->byTurnPageUpVK&& lpCntxtPriv->sbState!=SBST_ASSOCIATE && lpCntxtPriv->inState != INST_ENGLISH))
 		{
 			bRet = m_pListener->GoPrevCandidatePage();
 		}
@@ -2024,7 +2026,20 @@ BOOL CInputState::KeyIn_Code_English(InputContext * lpCntxtPriv,UINT byInput,
 									 CONST BYTE* lpbKeyState)
 {
 	SASSERT(lpCntxtPriv->inState==INST_ENGLISH);
-	if((byInput>='A' && byInput<='Z')||(byInput>='a' && byInput<='z') || byInput==VK_BACK || byInput==VK_SPACE || byInput=='\'')
+	if(byInput==VK_RETURN)
+	{//输入当前英文
+		SStringA strResult = SStringA((char*)lpCntxtPriv->szComp, lpCntxtPriv->cComp);
+		if(g_SettingsUI->bSound) ISComm_TTS(strResult,(char)strResult.GetLength(),MTTS_EN);
+		InputResult(strResult,0);
+		InputEnd();
+		InputHide(FALSE);
+		ClearContext(CPC_ALL);
+	}else if(byInput==VK_ESCAPE)
+	{//清除输入
+		InputEnd();
+		InputHide(TRUE);
+		ClearContext(CPC_ALL);
+	}else
 	{
 		if(byInput==VK_BACK)
 		{
@@ -2070,19 +2085,6 @@ BOOL CInputState::KeyIn_Code_English(InputContext * lpCntxtPriv,UINT byInput,
 				lpCntxtPriv->pbyEnAstPhrase=NULL;
 			}
 		}
-	}else if(byInput==VK_RETURN)
-	{//输入当前英文
-		SStringA strResult = SStringA((char*)lpCntxtPriv->szComp, lpCntxtPriv->cComp);
-		if(g_SettingsUI->bSound) ISComm_TTS(strResult,(char)strResult.GetLength(),MTTS_EN);
-		InputResult(strResult,0);
-		InputEnd();
-		InputHide(FALSE);
-		ClearContext(CPC_ALL);
-	}else if(byInput==VK_ESCAPE)
-	{//清除输入
-		InputEnd();
-		InputHide(TRUE);
-		ClearContext(CPC_ALL);
 	}
 	return TRUE;
 }

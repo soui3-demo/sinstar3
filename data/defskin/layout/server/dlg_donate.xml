@@ -17,6 +17,6 @@ translucent="1"
         <qrctrl size="-2,-2" text="HTTPS://QR.ALIPAY.COM/FKX07171QGERGGU4MNY8C8"/>
       </page>
     </tabctrl>
-    <text size="-2,-1" multiLines="1" text="启程输入法是一款完全免费开源的良心输入法产品。为了输入法的进一步完善，欢迎大家捐助！"/>
+    <text size="-2,-1" multiLines="1" text="启程输入法是一款完全免费开源的良心输入法产品。2003年发布1.0版本，2009年发布2.8，此后一直没有时间更新，2017年开始准备3.0的开发，持续了1年半终于3.0快要出生了。\n为了输入法的进一步完善，欢迎大家捐助！"/>
   </root>
 </SOUI>

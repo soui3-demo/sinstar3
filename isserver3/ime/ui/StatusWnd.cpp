@@ -317,6 +317,35 @@ namespace SOUI
 		}
 	}
 
+
+	bool CStatusWnd::SwitchToggle(int nID, BOOL  bToggle)
+	{
+		bool bRet=false;
+		SWindow *pShrink = FindChildByID(R.id.status_shrink);
+		SWindow *pExtend = FindChildByID(R.id.status_extend);
+		if(pShrink)
+		{
+			SToggle *pToggle = pShrink->FindChildByID2<SToggle>(nID);
+			if(pToggle) 
+			{
+				pToggle->SetToggle(bToggle);
+				if(pToggle->IsVisible(TRUE))
+					bRet = true;
+			}
+		}
+		if(pExtend)
+		{
+			SToggle *pToggle = pExtend->FindChildByID2<SToggle>(nID);
+			if(pToggle) 
+			{
+				pToggle->SetToggle(bToggle);
+				if(pToggle->IsVisible(TRUE))
+					bRet = true;
+			}
+		}
+		return bRet;
+	}
+
 	void CStatusWnd::UpdateToggleStatus(DWORD flags, BOOL bInit)
 	{
 		if (flags & BTN_STATUSMODE)
@@ -324,10 +353,8 @@ namespace SOUI
 			UpdateMode();
 		}
 		if(flags & BTN_CHARMODE){
-			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_charmode);
-			if (toggle)
-				toggle->SetToggle(g_SettingsUI->bCharMode);
-			if (m_pCmdListener && !bInit && (!toggle || !toggle->IsVisible(TRUE)))
+			bool bUpdated = SwitchToggle(R.id.btn_charmode,g_SettingsUI->bCharMode);
+			if (m_pCmdListener && !bInit && !bUpdated)
 			{
 				TIPINFO ti(_T("标点模式改变"));
 				ti.strTip.Format(_T("当前标点:%s"), g_SettingsUI->bCharMode ? _T("中文标点") : _T("英文标点"));
@@ -335,10 +362,8 @@ namespace SOUI
 			}
 		}
 		if(flags & BTN_SOUND){
-			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_sound);
-			if (toggle) 
-				toggle->SetToggle(!g_SettingsUI->bSound);
-			if (m_pCmdListener && !bInit && (!toggle || !toggle->IsVisible(TRUE)))
+			bool bUpdated = SwitchToggle(R.id.btn_sound,!g_SettingsUI->bSound);
+			if (m_pCmdListener && !bInit && !bUpdated)
 			{
 				TIPINFO ti(_T("语音较对改变:"));
 				ti.strTip.Format(_T("当前语音较对:%s"), g_SettingsUI->bSound ? _T("打开") : _T("关闭"));
@@ -346,10 +371,8 @@ namespace SOUI
 			}
 		}
 		if (flags & BTN_RECORD) {
-			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_record);
-			if (toggle) 
-				toggle->SetToggle(!g_SettingsUI->bRecord);
-			if (m_pCmdListener && !bInit && (!toggle || !toggle->IsVisible(TRUE)))
+			bool bUpdated = SwitchToggle(R.id.btn_record,!g_SettingsUI->bRecord);
+			if (m_pCmdListener && !bInit && !bUpdated)
 			{
 				TIPINFO ti(_T("记忆输入改变:"));
 				ti.strTip.Format(_T("当前记忆状态:%s"), g_SettingsUI->bRecord ? _T("启用") : _T("关闭"));
@@ -359,10 +382,8 @@ namespace SOUI
 		}
 		if (flags & BTN_ENGLISHMODE)
 		{
-			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_english);
-			if (toggle) 
-				toggle->SetToggle(!g_SettingsUI->bEnglish);
-			if (m_pCmdListener && !bInit && (!toggle || !toggle->IsVisible(TRUE)))
+			bool bUpdated = SwitchToggle(R.id.btn_english,!g_SettingsUI->bEnglish);
+			if (m_pCmdListener && !bInit && !bUpdated)
 			{
 				TIPINFO ti(_T("单词输入改变:"));
 				ti.strTip.Format(_T("当前单词输入状态:%s"), g_SettingsUI->bEnglish ? _T("启用") : _T("关闭"));
@@ -371,10 +392,8 @@ namespace SOUI
 		}
 		if (flags & BTN_FILTERGBK)
 		{
-			SToggle * toggle = FindChildByID2<SToggle>(R.id.btn_filter_gbk);
-			if (toggle)
-				toggle->SetToggle(!g_SettingsUI->bFilterGbk);
-			if (m_pCmdListener && !bInit && (!toggle || !toggle->IsVisible(TRUE)))
+			bool bUpdated = SwitchToggle(R.id.btn_filter_gbk,!g_SettingsUI->bFilterGbk);
+			if (m_pCmdListener && !bInit && !bUpdated)
 			{
 				TIPINFO ti(_T("GBK过滤策略改变:"));
 				ti.strTip.Format(_T("当前GBK过滤:%s"), g_SettingsUI->bFilterGbk ? _T("启用") : _T("关闭"));

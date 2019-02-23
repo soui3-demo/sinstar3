@@ -50,6 +50,7 @@ namespace SOUI
 
 		int OnRecreateUI(LPCREATESTRUCT lpCreateStruct);
 
+		bool SwitchToggle(int nID, BOOL  bToggle);
 	protected:
 		int OnCreate(LPCREATESTRUCT lpCreateStruct);
 

@@ -22,7 +22,7 @@
 	    </caption2>
 	    <caption2 size="-1,-1" padding="0,10,0,0">
 	    	<window pos="0,0,100,120" visible="0"/> 
-	    	<text pos="0,0" size="-1,-1" maxWidth="300dp" multiLines="1" name="txt_tip_content"/>
+	    	<text pos="0,0" size="-1,-1" maxWidth="350dp" multiLines="1" name="txt_tip_content"/>
 	    </caption2>
     </caption2>
   </root>
