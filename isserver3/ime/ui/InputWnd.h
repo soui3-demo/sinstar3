@@ -59,10 +59,7 @@ namespace SOUI
 		void OnMouseMove(UINT nFlags, CPoint point);
 		void OnRButtonUp(UINT nFlags, CPoint pt);
 
-		void OnInitMenuPopup(HMENU menuPopup, UINT nIndex, BOOL bSysMenu);
-
 		BEGIN_MSG_MAP_EX(CInputWnd)
-			MSG_WM_INITMENUPOPUP(OnInitMenuPopup)
 			MSG_WM_RBUTTONUP(OnRButtonUp)
 			MSG_WM_LBUTTONDOWN(OnLButtonDown)
 			MSG_WM_LBUTTONUP(OnLButtonUp)

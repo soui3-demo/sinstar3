@@ -628,15 +628,6 @@ namespace SOUI
 
 	void CInputWnd::OnRButtonUp(UINT nFlags, CPoint pt)
 	{
-		const MSG * pMsg = GetCurrentMessage();
-		SHostWnd::OnMouseEvent(pMsg->message, pMsg->wParam, pMsg->lParam);
-
 		m_pStateWnd->OnMenuClick();
 	}
-
-	void CInputWnd::OnInitMenuPopup(HMENU menuPopup, UINT nIndex, BOOL bSysMenu)
-	{
-		m_pStateWnd->OnInitMenuPopup(menuPopup, nIndex, bSysMenu);
-	}
-
 }
