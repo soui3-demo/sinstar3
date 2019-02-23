@@ -3,6 +3,7 @@
 #include "ImeWnd.h"
 #include "SkinMananger.h"
 #include "../inputContext.h"
+#include "StatusWnd.h"
 
 namespace SOUI
 {
@@ -17,6 +18,7 @@ namespace SOUI
 		~CInputWnd(void);
 
 		void SetFollowCaret(BOOL bFollowCaret);
+		void SetStatusWnd(CStatusWnd * pWnd);
 		void SetAnchorPosition(CPoint ptAnchor);
 
 		void MoveTo(CPoint pt,int nCaretHeight);
@@ -41,6 +43,7 @@ namespace SOUI
 		void OnBtnPrevPage();
 		void OnBtnNextPage();
 		void OnUpdateBtnTooltip(EventArgs *e);
+
 		EVENT_MAP_BEGIN()
 			EVENT_ID_COMMAND(R.id.btn_prevpage,OnBtnPrevPage)
 			EVENT_ID_COMMAND(R.id.btn_nextpage,OnBtnNextPage)
@@ -54,8 +57,13 @@ namespace SOUI
 		void OnLButtonDown(UINT nFlags, CPoint point);
 		void OnLButtonUp(UINT nFlags, CPoint point);
 		void OnMouseMove(UINT nFlags, CPoint point);
+		void OnRButtonUp(UINT nFlags, CPoint pt);
+
+		void OnInitMenuPopup(HMENU menuPopup, UINT nIndex, BOOL bSysMenu);
 
 		BEGIN_MSG_MAP_EX(CInputWnd)
+			MSG_WM_INITMENUPOPUP(OnInitMenuPopup)
+			MSG_WM_RBUTTONUP(OnRButtonUp)
 			MSG_WM_LBUTTONDOWN(OnLButtonDown)
 			MSG_WM_LBUTTONUP(OnLButtonUp)
 			MSG_WM_MOUSEMOVE(OnMouseMove)
@@ -70,6 +78,7 @@ namespace SOUI
 		BOOL			 m_bLocated;
 		BOOL			 m_bShow;
 
+		CStatusWnd	    *m_pStateWnd;
 		short			 m_cPageSize;
 		InputContext	* m_pInputContext;
 		IInputWndListener * m_pInputWndListener;

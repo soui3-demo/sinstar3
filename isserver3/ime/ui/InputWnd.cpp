@@ -17,6 +17,7 @@ namespace SOUI
 		, m_bDraging(FALSE)
 		, m_bFollowCaret(TRUE)
 		, m_hOwner(NULL)
+		, m_pStateWnd(NULL)
 	{
 	}
 
@@ -32,6 +33,11 @@ namespace SOUI
 			UpdateAnchorPosition();
 			SetWindowPos(HWND_TOPMOST, m_ptAnchor.x, m_ptAnchor.y, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
 		}
+	}
+
+	void CInputWnd::SetStatusWnd(CStatusWnd *pWnd)
+	{
+		m_pStateWnd = pWnd;
 	}
 
 	void CInputWnd::SetAnchorPosition(CPoint ptAnchor)
@@ -618,6 +624,19 @@ namespace SOUI
 			SetWindowPos(HWND_TOPMOST, rcWnd.left, rcWnd.top, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
 		}
 
+	}
+
+	void CInputWnd::OnRButtonUp(UINT nFlags, CPoint pt)
+	{
+		const MSG * pMsg = GetCurrentMessage();
+		SHostWnd::OnMouseEvent(pMsg->message, pMsg->wParam, pMsg->lParam);
+
+		m_pStateWnd->OnMenuClick();
+	}
+
+	void CInputWnd::OnInitMenuPopup(HMENU menuPopup, UINT nIndex, BOOL bSysMenu)
+	{
+		m_pStateWnd->OnInitMenuPopup(menuPopup, nIndex, bSysMenu);
 	}
 
 }
