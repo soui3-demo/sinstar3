@@ -33,6 +33,7 @@ namespace SOUI
 			AMV_TOP = 1<<8,
 			AMV_BOTTOM = 1<<9,
 		};
+		friend class CInputWnd;
 
 		CStatusWnd(SEventSet *pEvtSets, ICmdListener *pListener);
 		~CStatusWnd(void);
