@@ -44,6 +44,8 @@ protected:
 	}
 	virtual void * GetSecurityAttr() const;
 	virtual void ReleaseSecurityAttr(void* psa) const;
+	virtual void OnConnected(IIpcConnection * pConn) {}
+	virtual void OnDisconnected(IIpcConnection * pConn) {}
 
 protected:
 	virtual void OnKeyMapFree(CKeyMapDlg *pWnd);
