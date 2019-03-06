@@ -28,11 +28,6 @@ namespace SOUI
 
 		CAutoRefPtr<IUiDefInfo> m_defUiDefine;
 
-		SStringT	m_strSkin;
-
-		CPoint		m_ptStatus;
-		CPoint		m_ptInput;
-		CPoint		m_ptSpchar;
 		CPoint		m_ptSkinOffset;
 
 		int			m_cInputCount;

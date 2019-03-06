@@ -230,7 +230,7 @@ void CCmdHandler::OnUpdateMode(LPARAM lp)
 void CCmdHandler::OnChangeSkin(LPARAM lp)
 {
 	SStringT *pSkin = (SStringT*)lp;
-	if (CDataCenter::getSingleton().GetData().m_strSkin != *pSkin)
+	if (g_SettingsG->strSkin != *pSkin)
 	{
 		SStringA strUtf8 = S_CT2A((*pSkin), CP_UTF8);
 		m_pSinstar3->Broadcast(CMD_CHANGESKIN, (LPVOID)(LPCSTR)strUtf8, strUtf8.GetLength());

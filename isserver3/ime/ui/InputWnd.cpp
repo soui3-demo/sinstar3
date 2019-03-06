@@ -604,7 +604,7 @@ namespace SOUI
 		CSimpleWnd::GetWindowRect(&rcWnd);
 		m_ptAnchor = rcWnd.TopLeft();
 		//save anchor
-		CDataCenter::getSingleton().GetData().m_ptInput = m_ptAnchor;
+		g_SettingsG->ptInput = m_ptAnchor;
 	}
 
 	void CInputWnd::OnMouseMove(UINT nFlags, CPoint point)

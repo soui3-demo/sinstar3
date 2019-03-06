@@ -48,7 +48,7 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HWND hSvr)
 	m_pStatusWnd->SetOwner(hOwner);
 	m_inputState.SetInputListener(this);
 	
-	m_pInputWnd->SetAnchorPosition(CDataCenter::getSingleton().GetData().m_ptInput);
+	m_pInputWnd->SetAnchorPosition(g_SettingsG->ptInput);
 	m_pInputWnd->SetFollowCaret(g_SettingsUI->bMouseFollow);
 	m_pInputWnd->SetStatusWnd(m_pStatusWnd);
 
@@ -473,7 +473,7 @@ BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 	//将内置皮肤的skinpool,stylepool,SObjDefAttr保存起来.
 	IUiDefInfo *pBulitinUidef =  CDataCenter::getSingletonPtr()->GetData().m_defUiDefine;
 
-	if (CDataCenter::getSingletonPtr()->GetData().m_strSkin != strSkin)
+	if (g_SettingsG->strSkin != strSkin)
 	{
 		if (!strSkin.IsEmpty())
 		{//加载外部皮肤
@@ -494,7 +494,7 @@ BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 
 			SLOG_INFO("step3, load external skin ok");
 
-			if (!CDataCenter::getSingletonPtr()->GetData().m_strSkin.IsEmpty())
+			if (!g_SettingsG->strSkin.IsEmpty())
 			{//清除正在使用的外置皮肤。
 				SLOG_INFO("step4, remove current in using external skin");
 
@@ -515,7 +515,7 @@ BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 			pUiDef->Release();
 			SLOG_INFO("step9, set external skin ok");
 		}
-		else if (!CDataCenter::getSingletonPtr()->GetData().m_strSkin.IsEmpty())
+		else if (!g_SettingsG->strSkin.IsEmpty())
 		{//清除正在使用的外置皮肤,还原使用系统内置皮肤
 			SLOG_INFO("step10, remove external skin");
 			IResProvider *pLastRes = SApplication::getSingleton().GetTailResProvider();
@@ -530,7 +530,7 @@ BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 		}
 
 		SLOG_INFO("step14, save new skin name");
-		CDataCenter::getSingletonPtr()->GetData().m_strSkin = strSkin;
+		g_SettingsG->strSkin=strSkin;
 	}
 
 	//还原skinpool and stylepool.

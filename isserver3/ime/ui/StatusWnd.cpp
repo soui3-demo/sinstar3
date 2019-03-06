@@ -52,7 +52,7 @@ namespace SOUI
 		HWND hWnd = __super::Create(pszWndName);
 		if(hWnd)
 		{
-			CPoint pt = CDataCenter::getSingletonPtr()->GetData().m_ptStatus;
+			CPoint pt = g_SettingsG->ptStatus;
 			if(pt.x==-1 || pt.y==-1)
 			{
 				m_anchorMode = AMH_RIGHT|AMV_BOTTOM;
@@ -78,7 +78,7 @@ namespace SOUI
 
 	void CStatusWnd::OnReposition(CPoint pt)
 	{
-		CDataCenter::getSingletonPtr()->GetData().m_ptStatus = pt;
+		g_SettingsG->ptStatus = pt;
 		UpdateAnchorMode();
 	}
 
@@ -120,7 +120,7 @@ namespace SOUI
 		EventSwndSize *e2 = sobj_cast<EventSwndSize>(e);
 		if(m_bResizing) return true;
 
-		CPoint pt = CDataCenter::getSingletonPtr()->GetData().m_ptStatus;
+		CPoint pt = g_SettingsG->ptStatus;
 		CRect rcTo=CRect(pt,e2->szWnd);
 
 		CRect rcWorkArea;
@@ -145,7 +145,7 @@ namespace SOUI
 
 		SetWindowPos(NULL,rcTo.left,rcTo.top,rcTo.Width(),rcTo.Height(),SWP_NOZORDER|SWP_NOACTIVATE);
 		UpdateAnchorMode();
-		CDataCenter::getSingletonPtr()->GetData().m_ptStatus = rcTo.TopLeft();
+		g_SettingsG->ptStatus = rcTo.TopLeft();
 		return true;
 	}
 
@@ -172,7 +172,7 @@ namespace SOUI
 			}
 		case 2:
 			{//skin
-				SStringT strCurSkin = CDataCenter::getSingletonPtr()->GetData().m_strSkin;
+				SStringT strCurSkin = g_SettingsG->strSkin;
 				if (strCurSkin.IsEmpty())
 				{
 					smenuPopup.CheckMenuItem(R.id.skin_def, MF_BYCOMMAND|MF_CHECKED);

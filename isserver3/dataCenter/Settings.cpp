@@ -35,153 +35,179 @@ BOOL WritePrivateProfileInt(
 }
 
 
+const TCHAR * KSettingINI =  _T("config.ini");
 const TCHAR * KSession = _T("IME");
+const TCHAR * KUI = _T("UI");
 
-void CSettingsGlobal::Save(LPCTSTR pszIniFile)
+void CSettingsGlobal::Save(const SStringT & strDataPath)
 {
-	TCHAR szBuf[100]={0};
-	WritePrivateProfileInt(KSession,_T("CompMode"),compMode,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("RateAdjust"),byRateAdjust,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("23CandKey"),b23CandKey,pszIniFile);
+	SStringT strConfigIni = strDataPath + _T("\\server\\") + KSettingINI;
 
-	WritePrivateProfileInt(KSession,_T("2CandVK"),by2CandVK,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("3CandVK"),by3CandVK,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("TurnPageUpVK"),byTurnPageUpVK,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("TurnPageDownVK"),byTurnPageDownVK,pszIniFile);
+	TCHAR szBuf[MAX_PATH]={0};
+	WritePrivateProfileInt(KSession,_T("CompMode"),compMode,strConfigIni);
+	WritePrivateProfileInt(KSession,_T("RateAdjust"),byRateAdjust,strConfigIni);
+	WritePrivateProfileInt(KSession,_T("23CandKey"),b23CandKey,strConfigIni);
+
+	WritePrivateProfileInt(KSession,_T("2CandVK"),by2CandVK,strConfigIni);
+	WritePrivateProfileInt(KSession,_T("3CandVK"),by3CandVK,strConfigIni);
+	WritePrivateProfileInt(KSession,_T("TurnPageUpVK"),byTurnPageUpVK,strConfigIni);
+	WritePrivateProfileInt(KSession,_T("TurnPageDownVK"),byTurnPageDownVK,strConfigIni);
 
 	for (int i = 0; i < ARRAYSIZE(KHotKeyEntryMap); i++)
 	{
 		SStringT strHotKey = CAccelerator::FormatAccelKey(dwHotkeys[KHotKeyEntryMap[i].idx]);
-		WritePrivateProfileString(KSession, KHotKeyEntryMap[i].szName, strHotKey, pszIniFile);
+		WritePrivateProfileString(KSession, KHotKeyEntryMap[i].szName, strHotKey, strConfigIni);
 	}
 
-	WritePrivateProfileInt(KSession,_T("Associate"),byAstMode,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("SwitchKey"),bySwitchKey,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("TempSpellKey"),byTempSpellKey,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("Forecast"),byForecast,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("ShowTip"),bShowOpTip,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("AutoMatch"),bAutoMatch,pszIniFile);
+	WritePrivateProfileInt(KSession,_T("Associate"),byAstMode,strConfigIni);
+	WritePrivateProfileInt(KSession,_T("SwitchKey"),bySwitchKey,strConfigIni);
+	WritePrivateProfileInt(KSession,_T("TempSpellKey"),byTempSpellKey,strConfigIni);
+	WritePrivateProfileInt(KSession,_T("Forecast"),byForecast,strConfigIni);
+	WritePrivateProfileInt(KSession,_T("ShowTip"),bShowOpTip,strConfigIni);
+	WritePrivateProfileInt(KSession,_T("AutoMatch"),bAutoMatch,strConfigIni);
 
 	szBuf[0]=byLineKey[0];
-	WritePrivateProfileString(KSession,_T("LineKey1"),szBuf,pszIniFile);
+	WritePrivateProfileString(KSession,_T("LineKey1"),szBuf,strConfigIni);
 	szBuf[0]=byLineKey[1];
-	WritePrivateProfileString(KSession,_T("LineKey2"),szBuf,pszIniFile);
+	WritePrivateProfileString(KSession,_T("LineKey2"),szBuf,strConfigIni);
 	szBuf[0]=byLineKey[2];
-	WritePrivateProfileString(KSession,_T("LineKey3"),szBuf,pszIniFile);
+	WritePrivateProfileString(KSession,_T("LineKey3"),szBuf,strConfigIni);
 	szBuf[0]=byLineKey[3];
-	WritePrivateProfileString(KSession,_T("LineKey4"),szBuf,pszIniFile);
+	WritePrivateProfileString(KSession,_T("LineKey4"),szBuf,strConfigIni);
 	szBuf[0]=byLineKey[4];
-	WritePrivateProfileString(KSession,_T("LineKey5"),szBuf,pszIniFile);
+	WritePrivateProfileString(KSession,_T("LineKey5"),szBuf,strConfigIni);
 	szBuf[0]=byLineKey[5];
-	WritePrivateProfileString(KSession,_T("LineKey6"),szBuf,pszIniFile);
+	WritePrivateProfileString(KSession,_T("LineKey6"),szBuf,strConfigIni);
 
-	WritePrivateProfileInt(KSession,_T("GBKMODE"),nGbkMode,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("BlendUD"),bBlendUD,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("BlendSpWord"),bBlendSpWord,pszIniFile);
+	WritePrivateProfileInt(KSession,_T("GBKMODE"),nGbkMode,strConfigIni);
+	WritePrivateProfileInt(KSession,_T("BlendUD"),bBlendUD,strConfigIni);
+	WritePrivateProfileInt(KSession,_T("BlendSpWord"),bBlendSpWord,strConfigIni);
 
-	WritePrivateProfileInt(KSession,_T("AutoInput"),bAutoInput,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("PYPhraseFirst"),bPYPhraseFirst,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("EnterClear"),bEnterClear,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("SoundAlert"),nSoundAlert,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("DisableFnKey"),bDisableFnKey,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("AutoDot"),bAutoDot,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("AutoPrompt"),bAutoPrompt,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("DisableDelWordCand"),bDisableDelWordCand,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("CandSelNoNum"),bCandSelNoNum,pszIniFile);
-	WritePrivateProfileString(KSession,_T("WebHeader"),S_CA2T(szWebHeader),pszIniFile);
-	WritePrivateProfileInt(KSession,_T("OnlySimpleCode"),bOnlySimpleCode,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("delayTime"),nDelayTime,pszIniFile);
+	WritePrivateProfileInt(KSession,_T("AutoInput"),bAutoInput,strConfigIni);
+	WritePrivateProfileInt(KSession,_T("PYPhraseFirst"),bPYPhraseFirst,strConfigIni);
+	WritePrivateProfileInt(KSession,_T("EnterClear"),bEnterClear,strConfigIni);
+	WritePrivateProfileInt(KSession,_T("SoundAlert"),nSoundAlert,strConfigIni);
+	WritePrivateProfileInt(KSession,_T("DisableFnKey"),bDisableFnKey,strConfigIni);
+	WritePrivateProfileInt(KSession,_T("AutoDot"),bAutoDot,strConfigIni);
+	WritePrivateProfileInt(KSession,_T("AutoPrompt"),bAutoPrompt,strConfigIni);
+	WritePrivateProfileInt(KSession,_T("DisableDelWordCand"),bDisableDelWordCand,strConfigIni);
+	WritePrivateProfileInt(KSession,_T("CandSelNoNum"),bCandSelNoNum,strConfigIni);
+	WritePrivateProfileString(KSession,_T("WebHeader"),S_CA2T(szWebHeader),strConfigIni);
+	WritePrivateProfileInt(KSession,_T("OnlySimpleCode"),bOnlySimpleCode,strConfigIni);
+	WritePrivateProfileInt(KSession,_T("delayTime"),nDelayTime,strConfigIni);
 
+	SStringT strSkinDir = strDataPath + _T("\\skins\\");
+	SStringT strSkin2;
+
+	if(strSkin.StartsWith(strSkinDir))
+		strSkin2 = strSkin.Right(strSkin.GetLength()-strSkinDir.GetLength());
+	
+	WritePrivateProfileString(KUI,_T("skin"),strSkin2,strConfigIni);
+	WritePrivateProfileString(KUI,_T("InputPosition"),SStringT().Format(_T("%d,%d"),ptInput.x,ptInput.y),strConfigIni);
+	WritePrivateProfileString(KUI,_T("StatusPosition"),SStringT().Format(_T("%d,%d"),ptStatus.x,ptStatus.y),strConfigIni);
 }
 
-void CSettingsGlobal::Load(LPCTSTR pszIniFile)
+void CSettingsGlobal::Load(const SStringT & strDataPath)
 {
-	TCHAR szBuf[100];
-	compMode = GetPrivateProfileInt(KSession,_T("CompMode"),1,pszIniFile);
+	SStringT strConfigIni = strDataPath + _T("\\server\\") + KSettingINI;
+	TCHAR szBuf[MAX_PATH];
+	compMode = GetPrivateProfileInt(KSession,_T("CompMode"),1,strConfigIni);
 
-	byRateAdjust=GetPrivateProfileInt(KSession,_T("RateAdjust"),1,pszIniFile);
-	b23CandKey=GetPrivateProfileInt(KSession,_T("23CandKey"),FALSE,pszIniFile);
+	byRateAdjust=GetPrivateProfileInt(KSession,_T("RateAdjust"),1,strConfigIni);
+	b23CandKey=GetPrivateProfileInt(KSession,_T("23CandKey"),FALSE,strConfigIni);
 
-	by2CandVK=GetPrivateProfileInt(KSession,_T("2CandVK"),VkKeyScan(';'),pszIniFile);
-	by3CandVK=GetPrivateProfileInt(KSession,_T("3CandVK"),VkKeyScan('\''),pszIniFile);
-	byTurnPageUpVK=GetPrivateProfileInt(KSession,_T("TurnPageUpVK"),VkKeyScan('-'),pszIniFile);
-	byTurnPageDownVK=GetPrivateProfileInt(KSession,_T("TurnPageDownVK"),VkKeyScan('='),pszIniFile);
+	by2CandVK=GetPrivateProfileInt(KSession,_T("2CandVK"),VkKeyScan(';'),strConfigIni);
+	by3CandVK=GetPrivateProfileInt(KSession,_T("3CandVK"),VkKeyScan('\''),strConfigIni);
+	byTurnPageUpVK=GetPrivateProfileInt(KSession,_T("TurnPageUpVK"),VkKeyScan('-'),strConfigIni);
+	byTurnPageDownVK=GetPrivateProfileInt(KSession,_T("TurnPageDownVK"),VkKeyScan('='),strConfigIni);
 
 	for (int i = 0; i < ARRAYSIZE(KHotKeyEntryMap); i++)
 	{
-		GetPrivateProfileString(KSession, KHotKeyEntryMap[i].szName, KHotKeyEntryMap[i].szDefault, szBuf, 100, pszIniFile);
+		GetPrivateProfileString(KSession, KHotKeyEntryMap[i].szName, KHotKeyEntryMap[i].szDefault, szBuf, 100, strConfigIni);
 		dwHotkeys[KHotKeyEntryMap[i].idx] = CAccelerator::TranslateAccelKey(szBuf);
 	}
 
-	byAstMode=GetPrivateProfileInt(KSession,_T("Associate"),2,pszIniFile);//2=english
-	bySwitchKey=GetPrivateProfileInt(KSession,_T("SwitchKey"),0x36,pszIniFile);//ÓÒSHIFT
-	byTempSpellKey=GetPrivateProfileInt(KSession,_T("TempSpellKey"),0xC1,pszIniFile);//ÓÒCtrl
-	GetPrivateProfileString(KSession,_T("LineKey1"),_T("g"),szBuf,2,pszIniFile);
+	byAstMode=GetPrivateProfileInt(KSession,_T("Associate"),2,strConfigIni);//2=english
+	bySwitchKey=GetPrivateProfileInt(KSession,_T("SwitchKey"),0x36,strConfigIni);//ÓÒSHIFT
+	byTempSpellKey=GetPrivateProfileInt(KSession,_T("TempSpellKey"),0xC1,strConfigIni);//ÓÒCtrl
+	GetPrivateProfileString(KSession,_T("LineKey1"),_T("g"),szBuf,2,strConfigIni);
 	byLineKey[0]=szBuf[0];
-	GetPrivateProfileString(KSession,_T("LineKey2"),_T("h"),szBuf,2,pszIniFile);
+	GetPrivateProfileString(KSession,_T("LineKey2"),_T("h"),szBuf,2,strConfigIni);
 	byLineKey[1]=szBuf[0];
-	GetPrivateProfileString(KSession,_T("LineKey3"),_T("t"),szBuf,2,pszIniFile);
+	GetPrivateProfileString(KSession,_T("LineKey3"),_T("t"),szBuf,2,strConfigIni);
 	byLineKey[2]=szBuf[0];
-	GetPrivateProfileString(KSession,_T("LineKey4"),_T("y"),szBuf,2,pszIniFile);
+	GetPrivateProfileString(KSession,_T("LineKey4"),_T("y"),szBuf,2,strConfigIni);
 	byLineKey[3]=szBuf[0];
-	GetPrivateProfileString(KSession,_T("LineKey5"),_T("n"),szBuf,2,pszIniFile);
+	GetPrivateProfileString(KSession,_T("LineKey5"),_T("n"),szBuf,2,strConfigIni);
 	byLineKey[4]=szBuf[0];
-	GetPrivateProfileString(KSession,_T("LineKey6"),_T("z"),szBuf,2,pszIniFile);
+	GetPrivateProfileString(KSession,_T("LineKey6"),_T("z"),szBuf,2,strConfigIni);
 	byLineKey[5]=szBuf[0];
-	byForecast=GetPrivateProfileInt(KSession,_T("Forecast"),MQC_FORECAST,pszIniFile);
+	byForecast=GetPrivateProfileInt(KSession,_T("Forecast"),MQC_FORECAST,strConfigIni);
 
-	bShowOpTip=GetPrivateProfileInt(KSession,_T("ShowTip"),1,pszIniFile);
-	bAutoMatch=GetPrivateProfileInt(KSession,_T("AutoMatch"),1,pszIniFile);
-	nGbkMode=(GbkMode)GetPrivateProfileInt(KSession,_T("GBKMODE"),1,pszIniFile);
-	bBlendUD=GetPrivateProfileInt(KSession,_T("BlendUD"),1,pszIniFile);
-	bBlendSpWord=GetPrivateProfileInt(KSession,_T("BlendSpWord"),0,pszIniFile);
-	bAutoInput=GetPrivateProfileInt(KSession,_T("AutoInput"),1,pszIniFile);
+	bShowOpTip=GetPrivateProfileInt(KSession,_T("ShowTip"),1,strConfigIni);
+	bAutoMatch=GetPrivateProfileInt(KSession,_T("AutoMatch"),1,strConfigIni);
+	nGbkMode=(GbkMode)GetPrivateProfileInt(KSession,_T("GBKMODE"),1,strConfigIni);
+	bBlendUD=GetPrivateProfileInt(KSession,_T("BlendUD"),1,strConfigIni);
+	bBlendSpWord=GetPrivateProfileInt(KSession,_T("BlendSpWord"),0,strConfigIni);
+	bAutoInput=GetPrivateProfileInt(KSession,_T("AutoInput"),1,strConfigIni);
 
-	bPYPhraseFirst=GetPrivateProfileInt(KSession,_T("PYPhraseFirst"),1,pszIniFile);
-	bEnterClear=GetPrivateProfileInt(KSession,_T("EnterClear"),1,pszIniFile);
-	nSoundAlert=GetPrivateProfileInt(KSession,_T("SoundAlert"),1,pszIniFile);
+	bPYPhraseFirst=GetPrivateProfileInt(KSession,_T("PYPhraseFirst"),1,strConfigIni);
+	bEnterClear=GetPrivateProfileInt(KSession,_T("EnterClear"),1,strConfigIni);
+	nSoundAlert=GetPrivateProfileInt(KSession,_T("SoundAlert"),1,strConfigIni);
 
-	bDisableFnKey=GetPrivateProfileInt(KSession,_T("DisableFnKey"),1,pszIniFile);
-	bAutoDot=GetPrivateProfileInt(KSession,_T("AutoDot"),1,pszIniFile);
-	bAutoPrompt=GetPrivateProfileInt(KSession,_T("AutoPrompt"),0,pszIniFile);
+	bDisableFnKey=GetPrivateProfileInt(KSession,_T("DisableFnKey"),1,strConfigIni);
+	bAutoDot=GetPrivateProfileInt(KSession,_T("AutoDot"),1,strConfigIni);
+	bAutoPrompt=GetPrivateProfileInt(KSession,_T("AutoPrompt"),0,strConfigIni);
 
-	bDisableDelWordCand=GetPrivateProfileInt(KSession,_T("DisableDelWordCand"),1,pszIniFile);
-	bCandSelNoNum=GetPrivateProfileInt(KSession,_T("CandSelNoNum"),0,pszIniFile);
+	bDisableDelWordCand=GetPrivateProfileInt(KSession,_T("DisableDelWordCand"),1,strConfigIni);
+	bCandSelNoNum=GetPrivateProfileInt(KSession,_T("CandSelNoNum"),0,strConfigIni);
 
 	TCHAR szTmp[100]={0};
-	GetPrivateProfileString(KSession,_T("WebHeader"),_T("www. http mail bbs. ftp:"),szTmp,100,pszIniFile);
+	GetPrivateProfileString(KSession,_T("WebHeader"),_T("www. http mail bbs. ftp:"),szTmp,100,strConfigIni);
 	SStringA strHeader = S_CT2A(szTmp);
 	strcpy(szWebHeader,strHeader);
 
-	bOnlySimpleCode=GetPrivateProfileInt(KSession,_T("OnlySimpleCode"),0,pszIniFile);
-	nDelayTime = GetPrivateProfileInt(KSession,_T("delayTime"),5,pszIniFile);
+	bOnlySimpleCode=GetPrivateProfileInt(KSession,_T("OnlySimpleCode"),0,strConfigIni);
+	nDelayTime = GetPrivateProfileInt(KSession,_T("delayTime"),5,strConfigIni);
+
+	GetPrivateProfileString(KUI,_T("skin"),_T(""),szBuf,MAX_PATH,strConfigIni);
+	if(szBuf[0]!=0)
+	{
+		strSkin = strDataPath+_T("\\skins\\")+szBuf;
+	}
+	GetPrivateProfileString(KUI,_T("InputPosition"),_T("-1,-1"),szBuf,100,strConfigIni);
+	_stscanf(szBuf,_T("%d,%d"),&ptInput.x,&ptInput.y);
+	GetPrivateProfileString(KUI,_T("StatusPosition"),_T("-1,-1"),szBuf,100,strConfigIni);
+	_stscanf(szBuf,_T("%d,%d"),&ptStatus.x,&ptStatus.y);
 }
 
 
 //////////////////////////////////////////////////////////////////////////
 
-void CSettingsUI::Load(LPCTSTR pszIniFile)
+void CSettingsUI::Load(const SStringT & strDataPath)
 {
-	bCharMode=GetPrivateProfileInt(KSession,_T("CharMode"),TRUE,pszIniFile);
-	bFullStatus=GetPrivateProfileInt(KSession,_T("FullStatus"),TRUE,pszIniFile);
-	bSound=GetPrivateProfileInt(KSession,_T("Sound"),TRUE,pszIniFile);
-	bRecord=GetPrivateProfileInt(KSession,_T("Record"),TRUE,pszIniFile);
-	bEnglish=GetPrivateProfileInt(KSession,_T("English"),FALSE,pszIniFile);
-	bMouseFollow=GetPrivateProfileInt(KSession,_T("MouseFollow"),TRUE,pszIniFile);
-	bHideStatus=GetPrivateProfileInt(KSession,_T("HideStatus"),0,pszIniFile);
-	bInputBig5=GetPrivateProfileInt(KSession,_T("InputBig5"),0,pszIniFile);
-	bFilterGbk = GetPrivateProfileInt(KSession, _T("FilterGbk"), 0, pszIniFile);
+	SStringT strConfigIni = strDataPath + _T("\\server\\") + KSettingINI;
+	bCharMode=GetPrivateProfileInt(KSession,_T("CharMode"),TRUE,strConfigIni);
+	bFullStatus=GetPrivateProfileInt(KSession,_T("FullStatus"),TRUE,strConfigIni);
+	bSound=GetPrivateProfileInt(KSession,_T("Sound"),TRUE,strConfigIni);
+	bRecord=GetPrivateProfileInt(KSession,_T("Record"),TRUE,strConfigIni);
+	bEnglish=GetPrivateProfileInt(KSession,_T("English"),FALSE,strConfigIni);
+	bMouseFollow=GetPrivateProfileInt(KSession,_T("MouseFollow"),TRUE,strConfigIni);
+	bHideStatus=GetPrivateProfileInt(KSession,_T("HideStatus"),0,strConfigIni);
+	bInputBig5=GetPrivateProfileInt(KSession,_T("InputBig5"),0,strConfigIni);
+	bFilterGbk = GetPrivateProfileInt(KSession, _T("FilterGbk"), 0, strConfigIni);
 }
 
-void CSettingsUI::Save(LPCTSTR pszIniFile)
+void CSettingsUI::Save(const SStringT & strDataPath)
 {
-	WritePrivateProfileInt(KSession,_T("CharMode"),bCharMode,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("FullStatus"),bFullStatus,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("Sound"),bSound,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("Record"),bRecord,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("English"),bEnglish,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("MouseFollow"),bMouseFollow,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("HideStatus"),bHideStatus,pszIniFile);
-	WritePrivateProfileInt(KSession,_T("InputBig5"),bInputBig5,pszIniFile);
-	WritePrivateProfileInt(KSession, _T("FilterGbk"), bFilterGbk, pszIniFile);
+	SStringT strConfigIni = strDataPath + _T("\\server\\") + KSettingINI;
+	WritePrivateProfileInt(KSession,_T("CharMode"),bCharMode,strConfigIni);
+	WritePrivateProfileInt(KSession,_T("FullStatus"),bFullStatus,strConfigIni);
+	WritePrivateProfileInt(KSession,_T("Sound"),bSound,strConfigIni);
+	WritePrivateProfileInt(KSession,_T("Record"),bRecord,strConfigIni);
+	WritePrivateProfileInt(KSession,_T("English"),bEnglish,strConfigIni);
+	WritePrivateProfileInt(KSession,_T("MouseFollow"),bMouseFollow,strConfigIni);
+	WritePrivateProfileInt(KSession,_T("HideStatus"),bHideStatus,strConfigIni);
+	WritePrivateProfileInt(KSession,_T("InputBig5"),bInputBig5,strConfigIni);
+	WritePrivateProfileInt(KSession, _T("FilterGbk"), bFilterGbk, strConfigIni);
 }

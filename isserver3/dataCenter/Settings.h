@@ -1,6 +1,5 @@
 #pragma once
 
-#define KSettingINI L"config.ini"
 
 enum HotKeyIndex{
 	HKI_CharMode = 0,	// 标点模式切换
@@ -32,8 +31,8 @@ public:
 		GBK_SHOW_NORMAL,//显示正常上屏
 	};
 
-	void Load(LPCTSTR pszIniFile);
-	void Save(LPCTSTR pszIniFile);
+	void Load(const SStringT & strDataPath);
+	void Save(const SStringT & strDataPath);
 
 	int		compMode;		//当前输入类型
 	BOOL	b23CandKey;			// ;+'选23重码
@@ -73,13 +72,18 @@ public:
 	BYTE    bySentMode;
 
 	int		nDelayTime;			//delay timer for closing composition window in seconds.
+
+	
+	SStringT   strSkin;   //skin
+	POINT	ptInput;			//input window pos for not caret follow.
+	POINT   ptStatus;			//status window pos
 };
 
 class CSettingsUI
 {
 public:
-	void Load(LPCTSTR pszIniFile);
-	void Save(LPCTSTR pszIniFile);
+	void Load(const SStringT & strDataPath);
+	void Save(const SStringT & strDataPath);
 
 	BOOL	bHideStatus;		// 当前状态栏隐藏状态
 	BOOL	bMouseFollow;		// 鼠标跟随开关
