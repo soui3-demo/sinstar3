@@ -279,12 +279,7 @@ BOOL Sinstar_Uninstall()
 
 	reg.RecurseDeleteKey(_T("sinstar3"));
 	reg.Close();
-	ret = reg.Open(HKEY_CURRENT_USER, _T("SOFTWARE\\SetoutSoft"), KEY_WRITE | KEY_WOW64_64KEY);
-	if (ret == ERROR_SUCCESS)
-	{
-		reg.RecurseDeleteKey(_T("sinstar3"));
-		reg.Close();
-	}
+
 
 	//ÍË³ö·þÎñÆ÷
 	HWND hWndSvr = FindWindow(NULL, SINSTAR3_SERVER_HWND);
