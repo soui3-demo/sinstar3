@@ -79,6 +79,7 @@ namespace SOUI
 	void CStatusWnd::OnReposition(CPoint pt)
 	{
 		g_SettingsG->ptStatus = pt;
+		g_SettingsG->SetModified(true);
 		UpdateAnchorMode();
 	}
 
@@ -146,6 +147,7 @@ namespace SOUI
 		SetWindowPos(NULL,rcTo.left,rcTo.top,rcTo.Width(),rcTo.Height(),SWP_NOZORDER|SWP_NOACTIVATE);
 		UpdateAnchorMode();
 		g_SettingsG->ptStatus = rcTo.TopLeft();
+		g_SettingsG->SetModified(true);
 		return true;
 	}
 
@@ -224,6 +226,7 @@ namespace SOUI
 	void CStatusWnd::OnBtnExtend()
 	{
 		g_SettingsUI->bFullStatus = TRUE;
+		g_SettingsUI->SetModified(true);
 		SWindow *pStatus=FindChildByID(R.id.status_extend);
 		if(pStatus) pStatus->SetVisible(TRUE, TRUE);
 		m_pCmdListener->OnCommand(CMD_SYNCUI, BTN_STATUSMODE);
@@ -232,6 +235,7 @@ namespace SOUI
 	void CStatusWnd::OnBtnShrink()
 	{
 		g_SettingsUI->bFullStatus = FALSE;
+		g_SettingsUI->SetModified(true);
 		SWindow *pStatus=FindChildByID(R.id.status_shrink);
 		if(pStatus) pStatus->SetVisible(TRUE,TRUE);
 		m_pCmdListener->OnCommand(CMD_SYNCUI, BTN_STATUSMODE);
@@ -426,6 +430,7 @@ namespace SOUI
 		if(toggle)
 		{
 			g_SettingsUI->bCharMode = toggle->GetToggle();
+			g_SettingsUI->SetModified(true);
 			m_pCmdListener->OnCommand(CMD_SYNCUI, BTN_CHARMODE);
 		}
 	}
@@ -436,6 +441,7 @@ namespace SOUI
 		if(toggle)
 		{
 			g_SettingsUI->bRecord = !toggle->GetToggle();
+			g_SettingsUI->SetModified(true);
 			m_pCmdListener->OnCommand(CMD_SYNCUI, BTN_RECORD);
 		}
 	}
@@ -446,6 +452,7 @@ namespace SOUI
 		if(toggle)
 		{
 			g_SettingsUI->bSound = !toggle->GetToggle();
+			g_SettingsUI->SetModified(true);
 			m_pCmdListener->OnCommand(CMD_SYNCUI, BTN_SOUND);
 		}
 
@@ -457,6 +464,7 @@ namespace SOUI
 		if (toggle)
 		{
 			g_SettingsUI->bEnglish = !toggle->GetToggle();
+			g_SettingsUI->SetModified(true);
 			m_pCmdListener->OnCommand(CMD_SYNCUI, BTN_ENGLISHMODE);
 		}
 	}
@@ -467,6 +475,7 @@ namespace SOUI
 		if (toggle)
 		{
 			g_SettingsUI->bFilterGbk = !toggle->GetToggle();
+			g_SettingsUI->SetModified(true);
 			m_pCmdListener->OnCommand(CMD_SYNCUI, BTN_FILTERGBK);
 		}
 	}
@@ -612,6 +621,7 @@ namespace SOUI
 		else if (nRet == R.id.spell_one)
 		{
 			g_SettingsG->bBlendSpWord = !g_SettingsG->bBlendSpWord;
+			g_SettingsG->SetModified(true);
 		}
 		else if (nRet == R.id.spell_two)
 		{
@@ -637,6 +647,7 @@ namespace SOUI
 		else if (nRet == R.id.userdef)
 		{
 			g_SettingsG->bBlendUD = !g_SettingsG->bBlendUD;
+			g_SettingsG->SetModified(true);
 		}
 		else if (nRet == R.id.key_map)
 		{
@@ -653,6 +664,7 @@ namespace SOUI
 		else if (nRet == R.id.input_big5)
 		{
 			g_SettingsUI->bInputBig5 = !g_SettingsUI->bInputBig5;
+			g_SettingsUI->SetModified(true);
 		}
 		else if (nRet == R.id.key_speed)
 		{

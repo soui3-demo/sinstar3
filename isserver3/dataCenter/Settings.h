@@ -20,7 +20,21 @@ enum HotKeyIndex{
 	HKI_DelCandidate,	// 在线删词: Ctrl+Shift+重码号 
 };
 
-class CSettingsGlobal
+class CModifiedMark
+{
+public:
+	CModifiedMark():m_bModified(false){}
+	bool IsModified() const{
+		return m_bModified;
+	}
+	void SetModified(bool bModified)
+	{
+		m_bModified = bModified;
+	}
+private:
+	bool m_bModified;
+};
+class CSettingsGlobal: public CModifiedMark
 {
 public:
 	/*GBK重码显示上屏模式*/
@@ -79,7 +93,7 @@ public:
 	POINT   ptStatus;			//status window pos
 };
 
-class CSettingsUI
+class CSettingsUI: public CModifiedMark
 {
 public:
 	void Load(const SStringT & strDataPath);
@@ -94,6 +108,7 @@ public:
 	BOOL	bRecord;			// 记录输入语句
 	BOOL	bInputBig5;			// 繁体输出标志
 	BOOL    bFilterGbk;			// filter gbk
+
 };
 
 extern CSettingsGlobal	*g_SettingsG;

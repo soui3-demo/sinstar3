@@ -605,6 +605,7 @@ namespace SOUI
 		m_ptAnchor = rcWnd.TopLeft();
 		//save anchor
 		g_SettingsG->ptInput = m_ptAnchor;
+		g_SettingsG->SetModified(true);
 	}
 
 	void CInputWnd::OnMouseMove(UINT nFlags, CPoint point)

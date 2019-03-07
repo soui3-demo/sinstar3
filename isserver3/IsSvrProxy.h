@@ -91,7 +91,6 @@ protected:
 	LRESULT OnTaskbarCreated(UINT uMsg, WPARAM wp, LPARAM lp);
 	LRESULT OnBuildIndexProg(UINT uMsg, WPARAM wp, LPARAM lp);
 	LRESULT OnCopyData(HWND hWnd,PCOPYDATASTRUCT lpCopyData);
-
 	void OnTimer(UINT_PTR uID);
 
 	void OnMenuExit(UINT uNotifyCode, int nID, HWND wndCtl);

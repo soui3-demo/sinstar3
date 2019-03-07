@@ -267,6 +267,7 @@ LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 			else
 				g_SettingsG->bySentMode =0;
 		}
+		g_SettingsG->SetModified(true);
 
 		CDataCenter::getSingleton().Unlock();
 
@@ -531,6 +532,7 @@ BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 
 		SLOG_INFO("step14, save new skin name");
 		g_SettingsG->strSkin=strSkin;
+		g_SettingsG->SetModified(true);
 	}
 
 	//»¹Ô­skinpool and stylepool.

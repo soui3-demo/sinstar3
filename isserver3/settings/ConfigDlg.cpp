@@ -1195,6 +1195,7 @@ SWindow *pCtrl = FindChildByID(id);\
 	void CConfigDlg::OnFinalMessage(HWND hWnd)
 	{
 		__super::OnFinalMessage(hWnd);
+		g_SettingsG->SetModified(true);
 		delete this;
 	}
 

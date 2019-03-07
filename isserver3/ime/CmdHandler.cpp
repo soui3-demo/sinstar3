@@ -189,36 +189,42 @@ void CCmdHandler::OnKeySpeed(LPARAM lp)
 void CCmdHandler::OnHotKeyCharMode(LPARAM lp)
 {
 	g_SettingsUI->bCharMode = !g_SettingsUI->bCharMode;
+	g_SettingsUI->SetModified(true);
 	OnSyncUI(CStatusWnd::BTN_CHARMODE);
 }
 
 void CCmdHandler::OnHotKeyEnglishMode(LPARAM lp)
 {
 	g_SettingsUI->bEnglish = !g_SettingsUI->bEnglish;
+	g_SettingsUI->SetModified(true);
 	OnSyncUI(CStatusWnd::BTN_ENGLISHMODE);
 }
 
 void CCmdHandler::OnHotKeyFilterGbk(LPARAM lp)
 {
 	g_SettingsUI->bFilterGbk = !g_SettingsUI->bFilterGbk;
+	g_SettingsUI->SetModified(true);
 	OnSyncUI(CStatusWnd::BTN_FILTERGBK);
 }
 
 void CCmdHandler::OnHotkeyTTS(LPARAM lp)
 {
 	g_SettingsUI->bSound = !g_SettingsUI->bSound;
+	g_SettingsUI->SetModified(true);
 	OnSyncUI(CStatusWnd::BTN_SOUND);
 }
 
 void CCmdHandler::OnHotkeyRecord(LPARAM lp)
 {
 	g_SettingsUI->bRecord = !g_SettingsUI->bRecord;
+	g_SettingsUI->SetModified(true);
 	OnSyncUI(CStatusWnd::BTN_RECORD);
 }
 
 void CCmdHandler::OnFollowCaret(LPARAM lp)
 {
 	g_SettingsUI->bMouseFollow = !g_SettingsUI->bMouseFollow;
+	g_SettingsUI->SetModified(true);
 	m_pSinstar3->m_pInputWnd->SetFollowCaret(g_SettingsUI->bMouseFollow);
 }
 

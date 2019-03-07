@@ -41,6 +41,8 @@ const TCHAR * KUI = _T("UI");
 
 void CSettingsGlobal::Save(const SStringT & strDataPath)
 {
+	if(!IsModified())
+		return;
 	SStringT strConfigIni = strDataPath + _T("\\server\\") + KSettingINI;
 
 	TCHAR szBuf[MAX_PATH]={0};
@@ -105,6 +107,8 @@ void CSettingsGlobal::Save(const SStringT & strDataPath)
 	WritePrivateProfileString(KUI,_T("skin"),strSkin2,strConfigIni);
 	WritePrivateProfileString(KUI,_T("InputPosition"),SStringT().Format(_T("%d,%d"),ptInput.x,ptInput.y),strConfigIni);
 	WritePrivateProfileString(KUI,_T("StatusPosition"),SStringT().Format(_T("%d,%d"),ptStatus.x,ptStatus.y),strConfigIni);
+
+	SetModified(false);
 }
 
 void CSettingsGlobal::Load(const SStringT & strDataPath)
@@ -179,6 +183,7 @@ void CSettingsGlobal::Load(const SStringT & strDataPath)
 	_stscanf(szBuf,_T("%d,%d"),&ptInput.x,&ptInput.y);
 	GetPrivateProfileString(KUI,_T("StatusPosition"),_T("-1,-1"),szBuf,100,strConfigIni);
 	_stscanf(szBuf,_T("%d,%d"),&ptStatus.x,&ptStatus.y);
+	SetModified(false);
 }
 
 
@@ -196,10 +201,13 @@ void CSettingsUI::Load(const SStringT & strDataPath)
 	bHideStatus=GetPrivateProfileInt(KSession,_T("HideStatus"),0,strConfigIni);
 	bInputBig5=GetPrivateProfileInt(KSession,_T("InputBig5"),0,strConfigIni);
 	bFilterGbk = GetPrivateProfileInt(KSession, _T("FilterGbk"), 0, strConfigIni);
+	SetModified(false);
 }
 
 void CSettingsUI::Save(const SStringT & strDataPath)
 {
+	if(!IsModified())
+		return;
 	SStringT strConfigIni = strDataPath + _T("\\server\\") + KSettingINI;
 	WritePrivateProfileInt(KSession,_T("CharMode"),bCharMode,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("FullStatus"),bFullStatus,strConfigIni);
@@ -210,4 +218,5 @@ void CSettingsUI::Save(const SStringT & strDataPath)
 	WritePrivateProfileInt(KSession,_T("HideStatus"),bHideStatus,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("InputBig5"),bInputBig5,strConfigIni);
 	WritePrivateProfileInt(KSession, _T("FilterGbk"), bFilterGbk, strConfigIni);
+	SetModified(false);
 }
