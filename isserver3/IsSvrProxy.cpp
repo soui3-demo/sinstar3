@@ -46,8 +46,9 @@ namespace SOUI {
 	}
 }
 
-CIsSvrProxy::CIsSvrProxy(const SStringT & strDataPath)
+CIsSvrProxy::CIsSvrProxy(const SStringT &strDataPath,const SStringT & strSvrPath)
 	:m_strDataPath(strDataPath)
+    ,m_strSvrPath(strSvrPath)
 	,m_hCoreModule(NULL)
 	,m_pCore(NULL)
 	,m_funIsCore_Create(NULL)
@@ -112,7 +113,7 @@ int CIsSvrProxy::OnCreate(LPCREATESTRUCT pCS)
 			nRet = -1;
 			break;
 		}
-		if (!m_pCore->Init(m_hWnd, this, S_CT2A(m_strDataPath)))
+		if (!m_pCore->Init(m_hWnd, this, S_CT2A(m_strSvrPath)))
 		{
 			m_funIsCore_Destroy(m_pCore);
 			m_pCore = NULL;

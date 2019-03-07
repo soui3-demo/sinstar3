@@ -30,7 +30,7 @@ class CIsSvrProxy : public CSimpleWnd
 {
 	friend class CWorker;
 public:
-	CIsSvrProxy(const SStringT & strDataPath);
+	CIsSvrProxy(const SStringT &strDataPath,const SStringT & strSvrPath);
 	~CIsSvrProxy();
 
 protected:
@@ -136,6 +136,7 @@ private:
 
 	CAutoRefPtr<IIpcServer> m_ipcSvr;
 
+	SStringT	m_strSvrPath;
 	SStringT	m_strDataPath;
 
 	CTrayIcon	m_trayIcon;
