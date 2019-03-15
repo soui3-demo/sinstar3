@@ -77,7 +77,7 @@ CSinstar3Tsf::CSinstar3Tsf()
 	
 	_ec = 0;
 
-	_bCompsiting = FALSE;
+	_bCompositing = FALSE;
 
 	Create(0, WS_POPUP, HWND_MESSAGE, 0, theModule->GetModule());
 }
@@ -256,37 +256,9 @@ STDMETHODIMP CSinstar3Tsf::GetDisplayName(BSTR* pbstrName)
 }
 
 
-
-//ITextService
-
-BOOL CSinstar3Tsf::InputStringW(LPCWSTR pszBuf, int nLen) {
-	if(IsCompositing())
-	{
-		return FALSE;
-	}else 
-	{
-		UINT64 nCtx = GetImeContext();
-		if(nCtx)
-		{
-			StartComposition(nCtx);
-			UpdateResultAndCompositionStringW(nCtx,pszBuf,nLen,NULL,0);
-			EndComposition(nCtx);
-			ReleaseImeContext(nCtx);
-			return TRUE;
-		}
-	}
-	return FALSE;
-}
-
-BOOL CSinstar3Tsf::IsCompositing() const
-{
-	return _bCompsiting;
-}
-
-
 HRESULT CSinstar3Tsf::_AdviseTextLayoutSink(ITfContext *pContext)
 {
-	if(_dwCookieTextLayoutSink != TF_INVALID_COOKIE)
+	if (_dwCookieTextLayoutSink != TF_INVALID_COOKIE)
 		return S_OK;
 
 	SOUI::SComPtr<ITfSource> pSource;
@@ -304,7 +276,7 @@ HRESULT CSinstar3Tsf::_UnadviseTextLayoutSink(ITfContext *pContext)
 {
 	SOUI::SComPtr<ITfSource> pSource;
 
-	if(_dwCookieTextLayoutSink==TF_INVALID_COOKIE)
+	if (_dwCookieTextLayoutSink == TF_INVALID_COOKIE)
 		return S_FALSE;
 
 	if (FAILED(pContext->QueryInterface(IID_ITfSource, (void **)&pSource)))
@@ -317,32 +289,111 @@ HRESULT CSinstar3Tsf::_UnadviseTextLayoutSink(ITfContext *pContext)
 	return S_OK;
 }
 
+
+BOOL CSinstar3Tsf::_UninitSinstar3()
+{
+	if (m_pSinstar3)
+	{
+		m_pSinstar3->OnIMESelect(FALSE);
+		delete m_pSinstar3;
+		m_pSinstar3 = NULL;
+	}
+	return TRUE;
+}
+
+BOOL CSinstar3Tsf::_InitSinstar3()
+{
+	SASSERT(!m_pSinstar3);
+	m_pSinstar3 = new CSinstarProxy(this);
+	Helper_ChangeWindowMessageFilter(UM_CALL_FUN, MSGFLT_ADD);
+
+	if (!m_pSinstar3->Init(m_hWnd, theModule->GetSvrPath()))
+	{
+		delete m_pSinstar3;
+		m_pSinstar3 = NULL;
+		return FALSE;
+	}
+
+	m_pSinstar3->OnIMESelect(_bHasFocus);
+	m_pSinstar3->OnSetFocus(_bHasFocus && _bInEditDocument);
+	OnChange(GUID_COMPARTMENT_KEYBOARD_OPENCLOSE);
+	OnChange(GUID_COMPARTMENT_KEYBOARD_INPUTMODE_CONVERSION);
+	return TRUE;
+}
+
+LRESULT CSinstar3Tsf::WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	LRESULT result = 0;
+	if (m_pSinstar3)
+	{
+		BOOL bHandled = m_pSinstar3->ProcessWindowMessage(m_hWnd, uMsg, wParam, lParam, result);
+		if (bHandled) return result;
+	}
+	return __super::WindowProc(uMsg, wParam, lParam);
+}
+//ITextService
+
+BOOL CSinstar3Tsf::InputStringW(LPCWSTR pszBuf, int nLen) {
+	if(IsCompositing())
+	{
+		SLOG_WARN("not in compositing!!!");
+		return FALSE;
+	}else 
+	{
+		UINT64 nCtx = GetImeContext();
+		SLOG_INFO("imeContext:"<<nCtx);
+		if(nCtx)
+		{
+			StartComposition(nCtx);
+			UpdateResultAndCompositionStringW(nCtx,pszBuf,nLen,NULL,0);
+			EndComposition(nCtx);
+			ReleaseImeContext(nCtx);
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
+BOOL CSinstar3Tsf::IsCompositing() const
+{
+	SLOG_INFO("bCompositing:"<< _bCompositing);
+	return _bCompositing;
+}
+
 void CSinstar3Tsf::StartComposition(UINT64 imeContext)
 {
+	SLOG_INFO("imeContext:" << imeContext);
 	_StartComposition((ITfContext*)imeContext);
 }
 
 
 void CSinstar3Tsf::EndComposition(UINT64 imeContext)
 {
+	SLOG_INFO("imeContext:" << imeContext);
 	_EndComposition((ITfContext*)imeContext);
 }
 
 
 void CSinstar3Tsf::ReplaceSelCompositionW(UINT64 imeContext,int nLeft,int nRight,const WCHAR* wszComp,int nLen)
 {
+	SLOG_INFO("imeContext:" << imeContext);
 	_ChangeComposition((ITfContext*)imeContext,nLeft,nRight,NULL,0);
 }
 
 void CSinstar3Tsf::UpdateResultAndCompositionStringW(UINT64 imeContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen)
 {
+	SLOG_INFO("imeContext:" << imeContext<<" resultStr:"<<wszResultStr);
 	_UpdateResultAndCompositionStringW((ITfContext*)imeContext,wszResultStr,nResStrLen,wszCompStr,nCompStrLen);
 }
 
 
 UINT64 CSinstar3Tsf::GetImeContext()
 {
-	if(!_pThreadMgr) return NULL;
+	if (!_pThreadMgr)
+	{
+		SLOG_WARN("ThreadMgr is null");
+		return NULL;
+	}
 	HRESULT         hr;
 
 	UINT64 imeCtx = 0;
@@ -379,67 +430,33 @@ UINT64 CSinstar3Tsf::GetImeContext()
 
 BOOL   CSinstar3Tsf::ReleaseImeContext(UINT64 imeContext)
 {
-	if(!imeContext) return FALSE;
+	if (!imeContext)
+	{
+		SLOG_WARN("imeContext is 0");
+		return FALSE;
+	}
 	SLOG_INFO("CSinstar3Tsf::ReleaseImeContext, imeCtx:"<<imeContext);
 	ITfContext *pContext=(ITfContext*)imeContext;
 	pContext->Release();
 	return TRUE;
 }
 
-BOOL CSinstar3Tsf::_InitSinstar3()
-{
-	SASSERT(!m_pSinstar3);
-	m_pSinstar3 = new CSinstarProxy(this);
-	Helper_ChangeWindowMessageFilter(UM_CALL_FUN, MSGFLT_ADD);
-
-	if (!m_pSinstar3->Init(m_hWnd, theModule->GetSvrPath()))
-	{
-		delete m_pSinstar3;
-		m_pSinstar3 = NULL;
-		return FALSE;
-	}
-
-	m_pSinstar3->OnIMESelect(_bHasFocus);
- 	m_pSinstar3->OnSetFocus(_bHasFocus && _bInEditDocument);
- 	OnChange(GUID_COMPARTMENT_KEYBOARD_OPENCLOSE);
- 	OnChange(GUID_COMPARTMENT_KEYBOARD_INPUTMODE_CONVERSION);
-	return TRUE;
-}
-
-BOOL CSinstar3Tsf::_UninitSinstar3()
-{
-	if(m_pSinstar3)
-	{
-		m_pSinstar3->OnIMESelect(FALSE);
-		delete m_pSinstar3;
-		m_pSinstar3=NULL;
-	}
-	return TRUE;
-}
-
-LRESULT CSinstar3Tsf::WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-	LRESULT result = 0;
-	if(m_pSinstar3) 
-	{
-		BOOL bHandled = m_pSinstar3->ProcessWindowMessage(m_hWnd, uMsg, wParam, lParam, result);
-		if (bHandled) return result;
-	}
-	return __super::WindowProc(uMsg, wParam, lParam);
-}
-
 BOOL CSinstar3Tsf::SetOpenStatus(UINT64 imeContext,BOOL bOpen)
 {
+	SLOG_INFO("imeContext:" << imeContext << " bOpen:" << bOpen);
 	return _SetKeyboardOpen(bOpen);
 }
 
 BOOL CSinstar3Tsf::GetOpenStatus(UINT64 imeContext) const
 {
-	return _IsKeyboardOpen();
+	BOOL bRet = _IsKeyboardOpen();
+	SLOG_INFO("imeContext:" << imeContext<<" isOpen:"<< bRet);
+	return bRet;
 }
 
 void CSinstar3Tsf::OnStartComposition(TfEditCookie ec,ITfComposition *pComposition)
 {
+	SLOG_INFO("TfEditCookie:"<<ec<<" ITfComposition:"<< pComposition);
 	_pComposition = pComposition;
 	if(m_pSinstar3) m_pSinstar3->OnCompositionStarted();
 }

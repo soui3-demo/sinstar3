@@ -16,7 +16,7 @@ void CSinstar3Tsf::_StartComposition(ITfContext *pContext)
 	CEsStartComposition *pStartCompositionEditSession = new CEsStartComposition(this, pContext);
 	SLOG_INFO("pContext:"<<pContext);
 
-	_bCompsiting = TRUE;
+	_bCompositing = TRUE;
 	_AdviseTextLayoutSink(pContext);
 	HRESULT hr;
 	pContext->RequestEditSession(_tfClientId, pStartCompositionEditSession, TF_ES_SYNC | TF_ES_READWRITE, &hr);
@@ -67,6 +67,7 @@ void CSinstar3Tsf::_EndComposition(ITfContext *pContext)
 
 BOOL CSinstar3Tsf::_EndCompositionEx()
 {
+	SLOG_INFO("_EndCompositionEx IsCompositing()=" << IsCompositing());
 	if(!_IsComposing()) return FALSE;
 	HRESULT hr;
 	SOUI::SComPtr<ITfRange> pRange;
@@ -114,6 +115,6 @@ void CSinstar3Tsf::_TerminateComposition(TfEditCookie ecWrite,ITfContext *pCtx, 
 	if(m_pSinstar3) m_pSinstar3->OnCompositionTerminated(bClearCtx);
 
 	_pComposition = NULL;
-	_bCompsiting = FALSE;
+	_bCompositing = FALSE;
 	SLOG_INFO("_pComposition = NULL, _bCompsiting = FALSE");
 }

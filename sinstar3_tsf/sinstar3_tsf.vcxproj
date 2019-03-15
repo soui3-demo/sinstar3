@@ -99,7 +99,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>helperd.lib;sipcobjectd.lib;sinstar3_proxyd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>helperd.lib;sipcobjectd.lib;sinstar3_proxyd.lib;slog4zd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>sinstar3_tsf.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -127,7 +127,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>helperd.lib;sipcobjectd.lib;sinstar3_proxyd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>helperd.lib;sipcobjectd.lib;sinstar3_proxyd.lib;slog4zd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>sinstar3_tsf.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -152,7 +152,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>helper.lib;sipcobject.lib;sinstar3_proxy.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>helper.lib;sipcobject.lib;sinstar3_proxy.lib;slog4z.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>sinstar3_tsf.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -184,7 +184,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX64</TargetMachine>
-      <AdditionalDependencies>helper.lib;sipcobject.lib;sinstar3_proxy.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>helper.lib;sipcobject.lib;sinstar3_proxy.lib;slog4z.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>

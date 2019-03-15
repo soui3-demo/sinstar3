@@ -8,6 +8,8 @@
 
 #include <interface/slog-i.h>
 
+#ifndef GETLOGMGR
 #define GETLOGMGR() NULL
+#endif
 #include <helper/slog.h>
 

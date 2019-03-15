@@ -2,7 +2,6 @@
 #include "../include/module_ref.h"
 
 class CClassFactory;
-
 class CTsfModule : public CModuleRef
 {
 public:

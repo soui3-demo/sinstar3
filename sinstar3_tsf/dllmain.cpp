@@ -16,14 +16,18 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
 		{
 
 			TCHAR szPath[MAX_PATH] = { 0 };
+			TCHAR szPathInstall[MAX_PATH] = { 0 };
 			CRegKey reg;
 			LONG ret = reg.Open(HKEY_LOCAL_MACHINE,_T("SOFTWARE\\SetoutSoft\\sinstar3"),KEY_READ|KEY_WOW64_64KEY);
 			if(ret == ERROR_SUCCESS)
 			{
 				ULONG len = MAX_PATH;
 				reg.QueryStringValue(_T("path_svr"),szPath,&len);
+				len = MAX_PATH;
+				reg.QueryStringValue(_T("path_client"), szPathInstall, &len);
 				reg.Close();
 			}
+			new SOUI::SLogMgr(szPathInstall);
 			theModule = new CTsfModule(hInstance,szPath);
 		}
 		break;
@@ -31,6 +35,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
 	case DLL_PROCESS_DETACH:
 		{
 			SLOG_INFO(L"DLL_PROCESS_DETACH");
+			delete SOUI::SLogMgr::getSingletonPtr();
 			delete theModule;
 			theModule = NULL;
 		}

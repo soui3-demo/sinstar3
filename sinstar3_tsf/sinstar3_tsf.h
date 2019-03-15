@@ -165,7 +165,7 @@ public:
 
     // the current composition object.
 	TfEditCookie _ec;
-	BOOL         _bCompsiting;
+	BOOL         _bCompositing;
 
 public:
 	IUNKNOWN_BEGIN(ITfTextInputProcessorEx)

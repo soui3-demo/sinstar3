@@ -5,17 +5,19 @@
 #include "../sinstar3_proxy/SimpleWnd.h"
 #include "../helper/helper.h"
 
+
 CTsfModule::CTsfModule(HINSTANCE hInst, LPCTSTR pszSvrPath):CModuleRef(hInst),m_classFactory(NULL)
 {
 	CSimpleWnd::RegisterWndClass(hInst);
 	_tcscpy(m_szSvrPath, pszSvrPath);
 	SECURITY_ATTRIBUTES * psa = Helper_BuildLowIntegritySA();
 	m_hMutex = CreateMutex(psa, FALSE, SINSTAR3_MUTEX);
-	Helper_FreeSa(psa);
 	if (!m_hMutex && GetLastError() == ERROR_ACCESS_DENIED)
 	{
 		m_hMutex = OpenMutex(SYNCHRONIZE, FALSE, SINSTAR3_MUTEX);
 	}
+
+	Helper_FreeSa(psa);
 }
 
 CTsfModule::~CTsfModule(void)
@@ -62,3 +64,4 @@ HRESULT CTsfModule::GetClassObject(REFCLSID rclsid, REFIID riid, void **ppvObj)
 	return CLASS_E_CLASSNOTAVAILABLE;
 
 }
+
