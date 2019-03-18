@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="SIpcObject"
-	ProjectGUID="{1A661C8F-0665-31B3-9106-86CECB8A047D}"
+	Name="SLog4Z"
+	ProjectGUID="{4EA43A9C-113F-4EFF-B006-AC8020482D6A}"
 	Keyword="Qt4VSv1.0"
 	TargetFrameworkVersion="0"
 	>
@@ -50,7 +50,7 @@
 				AdditionalOptions="/MP"
 				Optimization="2"
 				AdditionalIncludeDirectories=".;include;&quot;$(SOUIPATH)/utilities/include&quot;;&quot;$(SOUIPATH)/soui/include&quot;;&quot;$(SOUIPATH)/components&quot;;&quot;$(SOUIPATH)/config&quot;;&quot;..\..\work\soui.git\tools\mkspecs\win32-msvc2008&quot;;..\ipcobject\include"
-				PreprocessorDefinitions="_WINDOWS,UNICODE,WIN32,_LIB,QT_NO_DYNAMIC_CAST,NDEBUG"
+				PreprocessorDefinitions="_WINDOWS;UNICODE;WIN32;_LIB;QT_NO_DYNAMIC_CAST;NDEBUG"
 				GeneratePreprocessedFile="0"
 				ExceptionHandling="1"
 				RuntimeLibrary="0"
@@ -131,7 +131,7 @@
 				AdditionalOptions="/MP"
 				Optimization="2"
 				AdditionalIncludeDirectories=".;include;&quot;$(SOUIPATH)/utilities/include&quot;;&quot;$(SOUIPATH)/soui/include&quot;;&quot;$(SOUIPATH)/components&quot;;&quot;$(SOUIPATH)/config&quot;;&quot;..\..\work\soui.git\tools\mkspecs\win32-msvc2008&quot;;..\ipcobject\include"
-				PreprocessorDefinitions="_WINDOWS,UNICODE,WIN32,_LIB,QT_NO_DYNAMIC_CAST,NDEBUG"
+				PreprocessorDefinitions="_WINDOWS;UNICODE;WIN32;_LIB;QT_NO_DYNAMIC_CAST;NDEBUG"
 				GeneratePreprocessedFile="0"
 				ExceptionHandling="1"
 				RuntimeLibrary="0"
@@ -211,7 +211,7 @@
 				AdditionalOptions="/MP"
 				Optimization="4"
 				AdditionalIncludeDirectories=".;include;&quot;$(SOUIPATH)/utilities/include&quot;;&quot;$(SOUIPATH)/soui/include&quot;;&quot;$(SOUIPATH)/components&quot;;&quot;$(SOUIPATH)/config&quot;;&quot;..\..\work\soui.git\tools\mkspecs\win32-msvc2008&quot;;..\ipcobject\include"
-				PreprocessorDefinitions="_WINDOWS,UNICODE,WIN32,_LIB,QT_NO_DYNAMIC_CAST"
+				PreprocessorDefinitions="_WINDOWS;UNICODE;WIN32;_LIB;QT_NO_DYNAMIC_CAST"
 				GeneratePreprocessedFile="0"
 				ExceptionHandling="1"
 				RuntimeLibrary="1"
@@ -292,7 +292,7 @@
 				AdditionalOptions="/MP"
 				Optimization="4"
 				AdditionalIncludeDirectories=".;include;&quot;$(SOUIPATH)/utilities/include&quot;;&quot;$(SOUIPATH)/soui/include&quot;;&quot;$(SOUIPATH)/components&quot;;&quot;$(SOUIPATH)/config&quot;;&quot;..\..\work\soui.git\tools\mkspecs\win32-msvc2008&quot;;..\ipcobject\include"
-				PreprocessorDefinitions="_WINDOWS,UNICODE,WIN32,_LIB,QT_NO_DYNAMIC_CAST"
+				PreprocessorDefinitions="_WINDOWS;UNICODE;WIN32;_LIB;QT_NO_DYNAMIC_CAST"
 				GeneratePreprocessedFile="0"
 				ExceptionHandling="1"
 				RuntimeLibrary="1"
@@ -350,11 +350,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="ShareMemBuffer.cpp"
-				>
-			</File>
-			<File
-				RelativePath="SIpcObject.cpp"
+				RelativePath=".\log4z.cpp"
 				>
 			</File>
 		</Filter>
@@ -364,11 +360,7 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="ShareMemBuffer.h"
-				>
-			</File>
-			<File
-				RelativePath="SIpcObject.h"
+				RelativePath=".\log4z.h"
 				>
 			</File>
 			<File

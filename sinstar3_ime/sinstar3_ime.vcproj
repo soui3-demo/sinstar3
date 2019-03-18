@@ -65,7 +65,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="sipcobjectd.lib helperd.lib sinstar3_proxyd.lib"
+				AdditionalDependencies="sipcobjectd.lib helperd.lib sinstar3_proxyd.lib slog4zd.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\lib"
 				ModuleDefinitionFile="sinstar3_ime.def"
@@ -144,7 +144,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="sipcobjectd.lib helperd.lib sinstar3_proxyd.lib"
+				AdditionalDependencies="sipcobjectd.lib helperd.lib sinstar3_proxyd.lib slog4zd.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\lib\x64"
 				ModuleDefinitionFile="sinstar3_ime.def"
@@ -222,7 +222,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="sipcobject.lib helper.lib sinstar3_proxy.lib"
+				AdditionalDependencies="sipcobject.lib helper.lib sinstar3_proxy.lib slog4z.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\lib"
 				ModuleDefinitionFile="sinstar3_ime.def"
@@ -301,7 +301,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="sipcobject.lib helper.lib sinstar3_proxy.lib"
+				AdditionalDependencies="sipcobject.lib helper.lib sinstar3_proxy.lib slog4z.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\lib\x64"
 				ModuleDefinitionFile="sinstar3_ime.def"
