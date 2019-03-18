@@ -116,13 +116,14 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
+				Optimization="0"
 				EnableIntrinsicFunctions="true"
 				AdditionalIncludeDirectories=".;&quot;$(SOUIPATH)\config&quot;;&quot;$(SOUIPATH)\components&quot;;&quot;$(SOUIPATH)\SOUI\include&quot;;&quot;$(SOUIPATH)\utilities\include&quot;;&quot;$(SolutionDir)include&quot;;&quot;$(SolutionDir)ipcobject\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
+				BrowseInformation="1"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -457,11 +458,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\res\resource.h"
+				RelativePath=".\resource.h"
 				>
 			</File>
 			<File
-				RelativePath=".\resource.h"
+				RelativePath=".\res\resource.h"
 				>
 			</File>
 			<File
