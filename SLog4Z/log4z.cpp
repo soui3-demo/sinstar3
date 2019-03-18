@@ -439,9 +439,6 @@ private:
 
     //! thread status.
     bool        _runing;
-    //! wait thread started.
-    SemHelper        _semaphore;
-
     //! hot change name or path for one logger
     LockHelper _hotLock;
     int _hotUpdateInterval;
@@ -1353,10 +1350,9 @@ bool LogerManager::start()
     {
         return false;
     }
-    _semaphore.create(0);
-    bool ret = ThreadHelper::start();
-    return ret && _semaphore.wait(3000);
+    return ThreadHelper::start();
 }
+
 bool LogerManager::stop()
 {
     if (_runing == true)
@@ -1727,7 +1723,6 @@ void LogerManager::run()
         }
     }
 
-    _semaphore.post();
 
 
 	char *pszBuf = new char[LOG4Z_LOG_BUF_SIZE];
