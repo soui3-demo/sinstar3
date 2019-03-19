@@ -19,7 +19,7 @@ STDAPI CSinstar3Tsf::OnEndEdit(ITfContext *pContext, TfEditCookie ecReadOnly, IT
         // If the selection is moved to out side of the current composition,
         // terminate the composition. This TextService supports only one
         // composition in one context object.
-        if (_IsComposing())
+        if (_IsCompositing())
         {
             TF_SELECTION tfSelection;
             ULONG cFetched;

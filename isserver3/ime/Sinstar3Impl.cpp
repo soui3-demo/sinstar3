@@ -366,7 +366,11 @@ BOOL CSinstar3Impl::OnCopyData(HWND wnd, PCOPYDATASTRUCT pCopyDataStruct)
 
 BOOL CSinstar3Impl::IsCompositing() const
 {
-	SASSERT(m_bTyping == m_pTxtSvr->IsCompositing());
+	if(m_bTyping!=m_pTxtSvr->IsCompositing())
+	{
+		SLOG_WARN("bTyping:"<<m_bTyping<<" isCompositing():"<<m_pTxtSvr->IsCompositing());
+		SASSERT_FMT(FALSE,_T("m_bTyping != m_pTxtSvr->IsCompositing()"));
+	}
 	return m_bTyping;
 }
 

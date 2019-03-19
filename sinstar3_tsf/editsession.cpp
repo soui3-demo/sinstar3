@@ -294,11 +294,12 @@ STDMETHODIMP CEsUpdateResultAndComp::DoEditSession(TfEditCookie ec)
 
 	BOOL fEmpty=TRUE;
 
-	if (!_pTextService->_IsComposing())
+	if (!_pTextService->_IsCompositing())
 	{
+		SLOG_WARN("force start composition in CEsUpdateResultAndComp!!!");
 		_pTextService->_StartComposition(_pContext);
 	}
-	SASSERT(_pTextService->_IsComposing());
+	SASSERT(_pTextService->_IsCompositing());
 	SOUI::SComPtr<ITfComposition> pCompostion=_pTextService->GetITfComposition();
 	//将当前数据上屏
 	pCompostion->GetRange(&pRangeComposition);

@@ -101,9 +101,8 @@ public:
 	void _ChangeComposition(ITfContext *pContext,int nLeft,int nRight,const WCHAR* wszComp,int nLen);
 	void _UpdateResultAndCompositionStringW(ITfContext * pContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen);
 	void _EndComposition(ITfContext *pContext);
-	BOOL _EndCompositionEx();
 	void _TerminateComposition(TfEditCookie ecWrite,ITfContext *pContext,bool bClearCtx);
-	BOOL _IsComposing() const;
+	BOOL _IsCompositing() const;
 	BOOL _GetSegRange(TfEditCookie ec,ITfRange **pRange,int nLeft,int nRight);
 
 protected:
@@ -150,8 +149,10 @@ private:
     ITfContext   *_pTextEditSinkContext;
     DWORD _dwTextEditSinkCookie;
 
-	SOUI::SComPtr<ITfComposition> _pComposition;
-	DWORD _dwCookieTextLayoutSink; // Cookie for ITfContextKeyEventSink
+	SOUI::SComPtr<ITfComposition> _pComposition;	//save composition ptr, indicator.
+	BOOL         _bCompositing;                     //save startComposition and endComposition call
+
+	DWORD _dwCookieTextLayoutSink;					// Cookie for ITfContextKeyEventSink
 
 	// 标志是否在一个可编辑的文档内
 	BOOL _bInEditDocument;	
@@ -162,10 +163,6 @@ public:
 	CSinstarProxy*   m_pSinstar3;
 	BOOL		_bHasFocus;
 	BOOL		_bInKeyProc;
-
-    // the current composition object.
-	TfEditCookie _ec;
-	BOOL         _bCompositing;
 
 public:
 	IUNKNOWN_BEGIN(ITfTextInputProcessorEx)

@@ -75,8 +75,6 @@ CSinstar3Tsf::CSinstar3Tsf()
 	_bInKeyProc=FALSE;
 	_bInEditDocument = FALSE;	
 	
-	_ec = 0;
-
 	_bCompositing = FALSE;
 
 	Create(0, WS_POPUP, HWND_MESSAGE, 0, theModule->GetModule());
@@ -179,7 +177,7 @@ STDAPI CSinstar3Tsf::Deactivate()
 {
 	SLOGFMTI("Deactivate");
 	//确保输入过程结束
-	if(_IsComposing())
+	if(_IsCompositing())
 	{
 		SASSERT(_pThreadMgr);
 		UINT64 nCtx = GetImeContext();
@@ -457,6 +455,7 @@ BOOL CSinstar3Tsf::GetOpenStatus(UINT64 imeContext) const
 void CSinstar3Tsf::OnStartComposition(TfEditCookie ec,ITfComposition *pComposition)
 {
 	SLOG_INFO("TfEditCookie:"<<ec<<" ITfComposition:"<< pComposition);
+	SASSERT(!_pComposition);
 	_pComposition = pComposition;
 	if(m_pSinstar3) m_pSinstar3->OnCompositionStarted();
 }

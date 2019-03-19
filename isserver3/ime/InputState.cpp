@@ -2383,6 +2383,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 						InputOpen();
 						InputUpdate();
 						StatusbarUpdate();
+						SLOG_INFO("");
 						if (!m_pListener->IsCompositing())
 						{//query cursor position
 							InputStart();
