@@ -101,7 +101,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>sipcobjectd.lib;sinstar3_proxyd.lib;helperd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sipcobjectd.lib;sinstar3_proxyd.lib;helperd.lib;slog4zd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>sinstar3_ime.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -131,7 +131,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>sipcobjectd.lib;sinstar3_proxyd.lib;helperd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sipcobjectd.lib;sinstar3_proxyd.lib;helperd.lib;slog4zd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>sinstar3_ime.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -158,7 +158,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>sipcobject.lib;sinstar3_proxy.lib;helper.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sipcobject.lib;sinstar3_proxy.lib;helper.lib;slog4z.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>sinstar3_ime.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -184,7 +184,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>sipcobject.lib;sinstar3_proxy.lib;helper.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sipcobject.lib;sinstar3_proxy.lib;helper.lib;slog4z.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>sinstar3_ime.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
