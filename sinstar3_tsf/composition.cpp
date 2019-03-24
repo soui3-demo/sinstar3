@@ -95,13 +95,12 @@ void CSinstar3Tsf::_UpdateResultAndCompositionStringW(ITfContext * pContext,cons
 void CSinstar3Tsf::_TerminateComposition(TfEditCookie ecWrite,ITfContext *pCtx, bool bClearCtx)
 {
 	SLOG_INFO("pComposition:"<<_pComposition<<" bCompositing:"<<_bCompositing);
+	_pComposition = NULL;
+	_bCompositing = FALSE;
 	if ( pCtx != NULL)
 	{
 		_UnadviseTextLayoutSink(pCtx);
 	}
-	_pComposition = NULL;
-	_bCompositing = FALSE;
-
 	if(m_pSinstar3) 
 	{
 		m_pSinstar3->OnCompositionTerminated(bClearCtx);

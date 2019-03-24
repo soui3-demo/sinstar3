@@ -19,12 +19,9 @@ public:
 	STDMETHODIMP LockServer(BOOL fLock);
 
 	// Constructor
-	CClassFactory(REFCLSID rclsid, HRESULT (*pfnCreateInstance)(IUnknown *, REFIID , void **))
-		: _rclsid(rclsid)
-	{
-		_pfnCreateInstance = pfnCreateInstance;
-	}
+	CClassFactory(REFCLSID rclsid, HRESULT (*pfnCreateInstance)(IUnknown *, REFIID , void **));
 
+	~CClassFactory();
 public:
 	REFCLSID _rclsid;
 	HRESULT (*_pfnCreateInstance)(IUnknown *pUnkOuter, REFIID riid, void **ppvObj);
