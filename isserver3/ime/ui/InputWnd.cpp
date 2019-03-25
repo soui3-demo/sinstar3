@@ -1,5 +1,6 @@
 #include "StdAfx.h"
 #include "InputWnd.h"
+#include "../utils.h"
 
 #define SIZE_BELOW 5
 #define TIMERID_DELAY 100
@@ -537,17 +538,31 @@ namespace SOUI
 	BOOL CInputWnd::GoPrevCandidatePage()
 	{
 		if(m_cPageSize==0) return FALSE;
-		if(m_pInputContext->iCandBegin< m_cPageSize) return FALSE;
-		m_pInputContext->iCandBegin -= m_cPageSize;
+		if (m_pInputContext->sCandCount <= m_cPageSize) return FALSE;
+		if (m_pInputContext->iCandBegin < m_cPageSize)
+		{
+			CUtils::SoundPlay(_T("error"));
+		}
+		else
+		{
+			m_pInputContext->iCandBegin -= m_cPageSize;
+		}
 		return TRUE;
 	}
 
 
 	BOOL CInputWnd::GoNextCandidatePage()
 	{
-		if(m_pInputContext->iCandLast ==-1) return FALSE;
-		if(m_pInputContext->iCandLast >=m_pInputContext->sCandCount) return FALSE;
-		m_pInputContext->iCandBegin = m_pInputContext->iCandLast;
+		if (m_cPageSize == 0) return FALSE;
+		if (m_pInputContext->sCandCount <= m_cPageSize) return FALSE;
+		if (m_pInputContext->iCandLast < m_pInputContext->sCandCount)
+		{
+			m_pInputContext->iCandBegin = m_pInputContext->iCandLast;
+		}
+		else
+		{
+			CUtils::SoundPlay(_T("error"));
+		}
 		return TRUE;
 	}
 
