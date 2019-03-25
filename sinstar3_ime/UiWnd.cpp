@@ -394,6 +394,17 @@ LRESULT CUiWnd::OnCreate()
 {
 	if(theModule->GetSysInfoFlags() & IME_SYSINFO_WINLOGON) return -1;
 
+	TCHAR szPathInstall[MAX_PATH] = { 0 };
+	CRegKey reg;
+	LONG ret = reg.Open(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\SetoutSoft\\sinstar3"), KEY_READ | KEY_WOW64_64KEY);
+	if (ret == ERROR_SUCCESS)
+	{
+		ULONG len = MAX_PATH;
+		reg.QueryStringValue(_T("path_client"), szPathInstall, &len);
+		reg.Close();
+	}
+	new SOUI::SLogMgr(szPathInstall);
+
 	SLOGFMTI("CUiWnd::OnCreate,hWnd:%p",m_hWnd);
 	_InitSinstar3();
 	PostMessage(WM_IME_NOTIFY,IMN_SETCONVERSIONMODE,0);
@@ -405,6 +416,7 @@ LRESULT CUiWnd::OnDestroy()
 	SLOGFMTI("CUiWnd::OnDestroy");
 	_UninitSinstar3();
 	AttachToIMC(FALSE);
+	delete SOUI::SLogMgr::getSingletonPtr();
 	return 0;
 }
 
