@@ -46,8 +46,15 @@ namespace SOUI
 		if (UM_CALL_FUN != uMsg)
 			return 0;
 		bHandled = TRUE;
-		//from current pos to read params.
-		SParamStream ps(GetRecvBuffer(), false);
+		IShareBuffer *pBuf = GetRecvBuffer();
+		static const int LengthBytes = sizeof(int);
+		assert(pBuf->Tell()>=LengthBytes);
+		pBuf->Seek(IShareBuffer::seek_cur,-LengthBytes);
+		int nLen;
+		pBuf->Read(&nLen,LengthBytes);
+		assert(pBuf->Tell()>=(UINT)(nLen+LengthBytes));
+		pBuf->Seek(IShareBuffer::seek_cur,-(nLen+LengthBytes));
+		SParamStream ps(GetRecvBuffer());
 		return m_pConn->HandleFun((UINT)wp, ps)?1:0;
 	}
 
@@ -88,21 +95,25 @@ namespace SOUI
 		if (m_hRemoteId == NULL)
 			return false;
 
-		UINT dwPos = m_sendBuf.Tell();
-		//write params to share buf, and set pos to begin of params.
-		SParamStream ps(&m_sendBuf, true);
-		pParam->ToStream4Input(ps);
-		m_sendBuf.Seek(seek_set, dwPos);//tell receiver to read params from begining.
+		DWORD dwPos = m_sendBuf.Tell();
+		if(!ToStream4Input(pParam,&m_sendBuf))
+		{
+			m_sendBuf.Seek(IShareBuffer::seek_set, dwPos);
+			m_sendBuf.SetTail(dwPos);
+			return false;
+		}
+		int nLen = m_sendBuf.Tell()-dwPos;
+		m_sendBuf.Write(&nLen,sizeof(int));//write a length of params to stream, which will be used to locate param header.
 
 		LRESULT lRet = SendMessage(m_hRemoteId, UM_CALL_FUN, pParam->GetID(), (LPARAM)m_hLocalId);
 		if (lRet != 0)
 		{
-			//read output params from current pos of buf.
-			SParamStream ps2(&m_sendBuf, false);
-			pParam->FromStream4Output(ps2);
+			m_sendBuf.Seek(IShareBuffer::seek_set,dwPos+nLen+sizeof(int));//output param must be follow input params.
+			BOOL bRet = FromStream4Output(pParam,&m_sendBuf);
+			assert(bRet);
 		}
 		//clear params.
-		m_sendBuf.Seek(seek_set, dwPos);
+		m_sendBuf.Seek(IShareBuffer::seek_set, dwPos);
 		m_sendBuf.SetTail(dwPos);
 		return lRet!=0;
 	}
@@ -137,6 +148,55 @@ namespace SOUI
 		return &m_recvBuf;
 	}
 
+	static const BYTE KInputFlag= 0xf0;
+	static const BYTE KOutputFlag= 0xf1;
+
+	BOOL SIpcHandle::ToStream4Input(IFunParams * pParams,IShareBuffer * pBuf) const
+	{
+		UINT uId = pParams->GetID();
+		pBuf->Write(&uId,sizeof(UINT));
+		pBuf->Write(&KInputFlag,1);
+		SParamStream ps(pBuf);
+		pParams->ToStream4Input(ps);
+		return TRUE;
+	}
+
+	BOOL SIpcHandle::FromStream4Input(IFunParams * pParams,IShareBuffer * pBuf) const
+	{
+		UINT uFunId=0;
+		pBuf->Read(&uFunId,sizeof(UINT));
+		assert(uFunId == pParams->GetID());
+		BYTE flag=0;
+		pBuf->Read(&flag,1);
+		assert(flag == KInputFlag);
+		SParamStream ps(pBuf);
+		pParams->FromStream4Input(ps);
+		return TRUE;
+	}
+
+	BOOL SIpcHandle::ToStream4Output(IFunParams * pParams,IShareBuffer * pBuf) const
+	{
+		UINT uId = pParams->GetID();
+		pBuf->Write(&uId,sizeof(UINT));
+		pBuf->Write(&KOutputFlag,1);
+		SParamStream ps(pBuf);
+		pParams->ToStream4Output(ps);
+		return TRUE;
+	}
+
+	BOOL SIpcHandle::FromStream4Output(IFunParams * pParams,IShareBuffer * pBuf) const
+	{
+		UINT uFunId=0;
+		pBuf->Read(&uFunId,sizeof(UINT));
+		assert(uFunId == pParams->GetID());
+		BYTE flag=0;
+		pBuf->Read(&flag,1);
+		assert(flag == KOutputFlag);
+		SParamStream ps(pBuf);
+		pParams->FromStream4Output(ps);
+		return TRUE;
+	}
+
 
 	///////////////////////////////////////////////////////////////////////
 	SIpcServer::SIpcServer() 
@@ -165,8 +225,8 @@ namespace SOUI
 		std::map<HWND, IIpcConnection*>::iterator it = m_mapClients.find(hClient);
 		if (it == m_mapClients.end())
 			return 0;
-		SParamStream ps(it->second->GetIpcHandle()->GetRecvBuffer(), false);
-		return it->second->HandleFun((UINT)wp, ps) ? 1 : 0;
+		BOOL bHandled=FALSE;
+		return it->second->GetIpcHandle()->OnMessage((ULONG_PTR)m_hSvr,uMsg,wp,lp,bHandled);
 	}
 
 	void SIpcServer::EnumClient(FunEnumConnection funEnum, ULONG_PTR data)
