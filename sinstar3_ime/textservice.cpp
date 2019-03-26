@@ -232,6 +232,6 @@ BOOL CUiWnd::GetOpenStatus(UINT64 imeContext) const
 
 DWORD CUiWnd::GetActiveWnd() const
 {
-	return (DWORD)::GetActiveWindow();
+	return (DWORD)(ULONG_PTR)::GetActiveWindow();
 }
 
