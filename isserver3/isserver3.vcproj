@@ -138,7 +138,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="utilities.lib soui.lib helper.lib iscomm.lib sipcobject.lib"
+				AdditionalDependencies="utilities.lib soui.lib helper.lib iscomm.lib sipcobject.lib slog4z.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib&quot;;&quot;$(SOUIPATH)\bin&quot;"
 				GenerateDebugInformation="true"
@@ -458,11 +458,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\res\resource.h"
+				RelativePath=".\resource.h"
 				>
 			</File>
 			<File
-				RelativePath=".\resource.h"
+				RelativePath=".\res\resource.h"
 				>
 			</File>
 			<File
