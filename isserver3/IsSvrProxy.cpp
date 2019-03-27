@@ -26,9 +26,6 @@
 #define TIMERID_PENDING_CMD 600
 #define SPAN_PENDING_CMD    100
 
-#define TIMERID_SAVE_SETTING 700
-#define SPAN_SAVE_SETTING	1000
-
 static void DoSomething()
 {
 	MSG msg;
@@ -144,7 +141,6 @@ int CIsSvrProxy::OnCreate(LPCREATESTRUCT pCS)
 		CSimpleWnd::SetTimer(TIMERID_CHECK_UPDATE, SPAN_CHECK_UPDATE, NULL);
 		CSimpleWnd::SetTimer(TIMERID_DATA_REPORT, SPAN_DATA_REPORT1, NULL);
 		CSimpleWnd::SetTimer(TIMERID_CHECK_CLIENT,SPAN_CHECK_CLIENT,NULL);
-		CSimpleWnd::SetTimer(TIMERID_SAVE_SETTING,SPAN_SAVE_SETTING,NULL);
 	}
 	return nRet;
 }
@@ -162,6 +158,8 @@ void CIsSvrProxy::OnDestroy()
 		FreeLibrary(m_hCoreModule);
 		m_hCoreModule = NULL;
 	}
+	g_SettingsG->Save(m_strDataPath);
+	g_SettingsUI->Save(m_strDataPath);
 }
 
 LRESULT CIsSvrProxy::OnBuildIndexProg(UINT uMsg, WPARAM wp, LPARAM lp)
@@ -381,19 +379,16 @@ void CIsSvrProxy::OnTimer(UINT_PTR uID)
 	}else if(uID == TIMERID_CHECK_CLIENT)
 	{
 		m_ipcSvr->CheckConnectivity();
-	}else if(uID == TIMERID_PENDING_CMD)
+	}
+	else if (uID == TIMERID_PENDING_CMD)
 	{
 		SASSERT(m_pPendingCmd);
-		if(m_pCore->IsDataReady())
+		if (m_pCore->IsDataReady())
 		{
-			OnCopyData(NULL,m_pPendingCmd);
+			OnCopyData(NULL, m_pPendingCmd);
 			free(m_pPendingCmd);
 			KillTimer(TIMERID_PENDING_CMD);
 		}
-	}else if(uID == TIMERID_SAVE_SETTING)
-	{
-		g_SettingsG->Save(m_strDataPath);
-		g_SettingsUI->Save(m_strDataPath);
 	}
 	else
 	{
@@ -565,6 +560,11 @@ bool CIsSvrProxy::SetAutoRun(bool bAutoRun) const
 		return true;
 	}
 	return false;
+}
+
+void CIsSvrProxy::OnEndSession(BOOL bEnding, UINT uLogOff)
+{
+	OnDestroy();
 }
 
 void CIsSvrProxy::OnUpdateNow()
