@@ -37,7 +37,6 @@ namespace SOUI
 		return TRUE;
 	}
 
-
 	LRESULT SIpcHandle::OnMessage(ULONG_PTR idLocal, UINT uMsg, WPARAM wp, LPARAM lp, BOOL &bHandled)
 	{
 		bHandled = FALSE;
@@ -47,15 +46,17 @@ namespace SOUI
 			return 0;
 		bHandled = TRUE;
 		IShareBuffer *pBuf = GetRecvBuffer();
-		static const int LengthBytes = sizeof(int);
-		assert(pBuf->Tell()>=LengthBytes);
-		pBuf->Seek(IShareBuffer::seek_cur,-LengthBytes);
+		pBuf->Lock();
+		assert(pBuf->Tell()>= 4); //4=sizeof(int)
+		pBuf->Seek(IShareBuffer::seek_cur,-4);
 		int nLen;
-		pBuf->Read(&nLen,LengthBytes);
-		assert(pBuf->Tell()>=(UINT)(nLen+LengthBytes));
-		pBuf->Seek(IShareBuffer::seek_cur,-(nLen+LengthBytes));
+		pBuf->Read(&nLen, 4);
+		assert(pBuf->Tell()>=(UINT)(nLen+ 4));
+		pBuf->Seek(IShareBuffer::seek_cur,-(nLen+ 4));
 		SParamStream ps(GetRecvBuffer());
-		return m_pConn->HandleFun((UINT)wp, ps)?1:0;
+		LRESULT lRet = m_pConn->HandleFun((UINT)wp, ps)?1:0;
+		pBuf->Unlock();
+		return lRet;
 	}
 
 	HRESULT SIpcHandle::ConnectTo(ULONG_PTR idLocal, ULONG_PTR idRemote)
@@ -95,17 +96,21 @@ namespace SOUI
 		if (m_hRemoteId == NULL)
 			return false;
 
-		DWORD dwPos = m_sendBuf.Tell();
-		if(!ToStream4Input(pParam,&m_sendBuf))
+		IShareBuffer *pBuf = &m_sendBuf;
+		pBuf->Lock();
+		DWORD dwPos = pBuf->Tell();
+		if(!ToStream4Input(pParam, pBuf))
 		{
-			m_sendBuf.Seek(IShareBuffer::seek_set, dwPos);
+			pBuf->Seek(IShareBuffer::seek_set, dwPos);
 			m_sendBuf.SetTail(dwPos);
+			pBuf->Unlock();
 			return false;
 		}
 		int nLen = m_sendBuf.Tell()-dwPos;
 		m_sendBuf.Write(&nLen,sizeof(int));//write a length of params to stream, which will be used to locate param header.
-
+		pBuf->Unlock();
 		LRESULT lRet = SendMessage(m_hRemoteId, UM_CALL_FUN, pParam->GetID(), (LPARAM)m_hLocalId);
+		pBuf->Lock();
 		if (lRet != 0)
 		{
 			m_sendBuf.Seek(IShareBuffer::seek_set,dwPos+nLen+sizeof(int));//output param must be follow input params.
@@ -115,6 +120,7 @@ namespace SOUI
 		//clear params.
 		m_sendBuf.Seek(IShareBuffer::seek_set, dwPos);
 		m_sendBuf.SetTail(dwPos);
+		pBuf->Unlock();
 		return lRet!=0;
 	}
 
