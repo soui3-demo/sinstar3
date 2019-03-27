@@ -107,7 +107,7 @@ namespace SOUI
 	void CompInfo::SetSvrCompInfo(const COMPINFO * compInfo)
 	{
 		cWild = compInfo->cWildChar;
-		strCompName = S_CA2T(compInfo->szName);
+		strCompName = S_CA2T(compInfo->szName, CP_GB);
 		strcpy(szCode,compInfo->szCode);
 		nCodeNum = (int)strlen(szCode);
 		qsort(szCode,nCodeNum,sizeof(char),CharCmp);

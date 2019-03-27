@@ -126,11 +126,13 @@ int CIsSvrProxy::OnCreate(LPCREATESTRUCT pCS)
 	else
 	{
 		DWORD dwVer = 0;
-		SStringT strTip = GetVersionInfo(dwVer);
-		strTip += _T("\n°æ±¾:");
+		GetVersionInfo(dwVer);
+		SStringW strTrayTip = GETSTRING(R.string.tray_tip);
+		strTrayTip.Replace(L"\\n", L"\n");
+		SStringT strTipFmt = S_CW2T(strTrayTip, CP_GB);
 		TCHAR szVer[100];
 		Helper_VersionString(dwVer, szVer);
-		strTip += szVer;
+		SStringT strTip = SStringT().Format(strTipFmt, szVer);
 		m_trayIcon.Init(m_hWnd, strTip);
 		if(m_pCore->IsShowTray()) m_trayIcon.Show();
 

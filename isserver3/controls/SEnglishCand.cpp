@@ -77,10 +77,10 @@ namespace SOUI
 	void SEnglishCand::SetCandData(const BYTE* pbyCandData)
 	{
 		const char * p = (const char *)pbyCandData;		
-		m_strCand = S_CA2T(SStringA(p+1,p[0]));
+		m_strCand = S_CA2T(SStringA(p+1,p[0]), CP_GB);
 		p += p[0] + 1;
 		if (p[0] > 0)
-			m_strPhonetic = S_CA2T(SStringA(p + 1, p[0]));
+			m_strPhonetic = S_CA2T(SStringA(p + 1, p[0]), CP_GB);
 		else
 			m_strPhonetic.Empty();
 		RequestRelayout();

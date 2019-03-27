@@ -44,11 +44,11 @@ namespace SOUI
 
 		//分３段显示预测结果
 		pRT->SetTextColor(m_crResult);
-		SStringT strLeft = S_CA2T(SStringA((char*)m_ctx->szWord,m_ctx->byCaret*2));
+		SStringT strLeft = S_CA2T(SStringA((char*)m_ctx->szWord,m_ctx->byCaret*2), CP_GB);
 		SpTextOut(pRT,pt,strLeft);
 		
 		pRT->SetTextColor(m_crEdit);
-		SStringT strEdit = S_CA2T(SStringA((char*)m_ctx->szWord[m_ctx->byCaret],2));
+		SStringT strEdit = S_CA2T(SStringA((char*)m_ctx->szWord[m_ctx->byCaret],2), CP_GB);
 		pts[0]=pt;
 		CSize sz = SpTextOut(pRT,pt,strEdit);
 		pts[1]=pt;
@@ -57,14 +57,14 @@ namespace SOUI
 
 		pRT->SetTextColor(m_crResult);
 		SStringT strRight = S_CA2T(SStringA((char*)(m_ctx->szWord+m_ctx->byCaret+1),
-			(m_ctx->bySyllables-m_ctx->byCaret-1)*2));
+			(m_ctx->bySyllables-m_ctx->byCaret-1)*2), CP_GB);
 		SpTextOut(pRT,pt,strRight);
 
 		//显示当前音节的拼音
 		if(m_ctx->bySyCaret != 0xFF)
 		{
 			const SPELLINFO *lpSpi=m_ctx->spellData+m_ctx->byCaret;
-			SStringT strLeft = S_CA2T(SStringA(lpSpi->szSpell,m_ctx->bySyCaret));
+			SStringT strLeft = S_CA2T(SStringA(lpSpi->szSpell,m_ctx->bySyCaret), CP_GB);
 			CSize sz ;
 			pRT->MeasureText(strLeft,strLeft.GetLength(),&sz);
 			pts[0].x = pt.x + sz.cx;
@@ -73,7 +73,7 @@ namespace SOUI
 			pts[1].y = pt.y + sz.cy;
 		}
 		pRT->SetTextColor(m_crSpell);
-		SStringT strSpell = S_CA2T(SStringA(m_ctx->spellData[m_ctx->byCaret].szSpell,m_ctx->spellData[m_ctx->byCaret].bySpellLen));
+		SStringT strSpell = S_CA2T(SStringA(m_ctx->spellData[m_ctx->byCaret].szSpell,m_ctx->spellData[m_ctx->byCaret].bySpellLen), CP_GB);
 		SpTextOut(pRT,pt,strSpell);
 
 		//draw caret
@@ -114,10 +114,10 @@ namespace SOUI
 		GETRENDERFACTORY->CreateRenderTarget(&pRT,0,0);
 		BeforePaintEx(pRT);
 		CSize sz,szRet;
-		SStringT strResult = S_CA2T(SStringA((char*)m_ctx->szWord,m_ctx->bySyllables*2));
+		SStringT strResult = S_CA2T(SStringA((char*)m_ctx->szWord,m_ctx->bySyllables*2), CP_GB);
 		pRT->MeasureText(strResult,strResult.GetLength(),&sz);
 		szRet = sz;
-		SStringT strSpell = S_CA2T(SStringA(m_ctx->spellData[m_ctx->byCaret].szSpell,m_ctx->spellData[m_ctx->byCaret].bySpellLen));
+		SStringT strSpell = S_CA2T(SStringA(m_ctx->spellData[m_ctx->byCaret].szSpell,m_ctx->spellData[m_ctx->byCaret].bySpellLen), CP_GB);
 		pRT->MeasureText(strSpell,strSpell.GetLength(),&sz);
 		szRet.cx += sz.cx;
 		if(m_ctx->bPYBiHua)

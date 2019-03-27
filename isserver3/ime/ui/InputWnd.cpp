@@ -179,7 +179,7 @@ namespace SOUI
 				{
 					pMutexView = FindChildByID(R.id.comp_normal);
 					pMutexView->SetVisible(TRUE, TRUE);
-					pMutexView->FindChildByID(R.id.txt_comps)->SetWindowText(S_CA2T(SStringA(m_pInputContext->szComp, m_pInputContext->cComp)));
+					pMutexView->FindChildByID(R.id.txt_comps)->SetWindowText(S_CA2T(SStringA(m_pInputContext->szComp, m_pInputContext->cComp), CP_GB));
 				}
 				//update tips
 				SWindow *pTip = pMutexView->FindChildByID(R.id.txt_tip);
@@ -188,7 +188,7 @@ namespace SOUI
 					if (m_pInputContext->sbState == ::SBST_NORMAL && m_pInputContext->bShowTip)
 					{
 						pTip->SetVisible(TRUE);
-						pTip->SetWindowText(S_CA2T(m_pInputContext->szTip));
+						pTip->SetWindowText(S_CA2T(m_pInputContext->szTip, CP_GB));
 					}
 					else
 					{
@@ -208,8 +208,8 @@ namespace SOUI
 				int nSelLen = int(m_pInputContext->pbySentWord[m_pInputContext->sSentCaret] - m_pInputContext->pbySentWord[0]);
 				SStringA strLeftA((char*)m_pInputContext->pbySentWord[0], nSelLen);
 				SStringA strRightA((char*)m_pInputContext->pbySentWord[m_pInputContext->sSentCaret], m_pInputContext->sSentLen - nSelLen);
-				SStringT strLeft = S_CA2T(strLeftA);
-				SStringT strRight = S_CA2T(strRightA);
+				SStringT strLeft = S_CA2T(strLeftA, CP_GB);
+				SStringT strRight = S_CA2T(strRightA, CP_GB);
 
 				SStringT strAll = strInput + strLeft + strRight;
 				pStvSent->SetActive(m_pInputContext->sbState == SBST_SENTENCE);
@@ -222,7 +222,7 @@ namespace SOUI
 			{
 				SWindow * compUmode = FindChildByID(R.id.comp_umode);
 				compUmode->SetVisible(TRUE,TRUE);
-				compUmode->FindChildByID(R.id.txt_comps)->SetWindowText(S_CA2T(SStringA(m_pInputContext->szComp,m_pInputContext->cComp)));
+				compUmode->FindChildByID(R.id.txt_comps)->SetWindowText(S_CA2T(SStringA(m_pInputContext->szComp,m_pInputContext->cComp), CP_GB));
 				SWindow *pCompAutoComplete = compUmode->FindChildByID(R.id.txt_auto_complete);
 				if (pCompAutoComplete)
 				{
@@ -234,7 +234,7 @@ namespace SOUI
 							strCompAutoComplete = SStringA(m_pInputContext->szCompAutoComplete + m_pInputContext->cComp,
 								m_pInputContext->cCompACLen - m_pInputContext->cComp);
 						}
-						pCompAutoComplete->SetWindowText(S_CA2T(strCompAutoComplete));
+						pCompAutoComplete->SetWindowText(S_CA2T(strCompAutoComplete, CP_GB));
 					}
 					else
 					{
@@ -247,7 +247,7 @@ namespace SOUI
 			{
 				SWindow * compLineIme = FindChildByID(R.id.comp_lineime);
 				compLineIme->SetVisible(TRUE, TRUE);
-				compLineIme->FindChildByID(R.id.txt_comps)->SetWindowText(S_CA2T(SStringA(m_pInputContext->szComp, m_pInputContext->cComp)));
+				compLineIme->FindChildByID(R.id.txt_comps)->SetWindowText(S_CA2T(SStringA(m_pInputContext->szComp, m_pInputContext->cComp), CP_GB));
 			}
 			break;
 		case INST_ENGLISH:
@@ -256,12 +256,12 @@ namespace SOUI
 				compEnglish->SetVisible(TRUE, TRUE);
 
 				SStringA strComp(m_pInputContext->szComp, m_pInputContext->cComp);
-				compEnglish->FindChildByID(R.id.txt_comps)->SetWindowText(S_CA2T(strComp));
+				compEnglish->FindChildByID(R.id.txt_comps)->SetWindowText(S_CA2T(strComp, CP_GB));
 				SWindow * autoComp = compEnglish->FindChildByID(R.id.txt_auto_complete);
 				if (m_pInputContext->pbyEnSpell)
 				{//ÓÐÓ¢ÎÄµ¥´Ê
 					SStringA strWord((char *)m_pInputContext->pbyEnSpell + 1 + m_pInputContext->cComp, m_pInputContext->pbyEnSpell[0] - m_pInputContext->cComp);
-					autoComp->SetWindowText(S_CA2T(strWord));
+					autoComp->SetWindowText(S_CA2T(strWord, CP_GB));
 				}
 				else
 				{
@@ -340,7 +340,7 @@ namespace SOUI
 				{
 					SCandView *pCand2 = (SCandView*)pCand;
 					pCand2->SetVisible(TRUE, TRUE);
-					pCand2->SetCandData(cWild, S_CA2T(SStringA(m_pInputContext->szComp, m_pInputContext->cComp)), m_pInputContext->ppbyCandInfo[iCand]);
+					pCand2->SetCandData(cWild, S_CA2T(SStringA(m_pInputContext->szComp, m_pInputContext->cComp), CP_GB), m_pInputContext->ppbyCandInfo[iCand]);
 					iCand++;
 				}
 				pCand = pCand->GetWindow(GSW_NEXTSIBLING);
@@ -367,7 +367,7 @@ namespace SOUI
 
 				if(m_pInputContext->bShowTip)
 				{
-					pTip->SetWindowText(S_CA2T(m_pInputContext->szTip));
+					pTip->SetWindowText(S_CA2T(m_pInputContext->szTip, CP_GB));
 				}
 				else
 				{

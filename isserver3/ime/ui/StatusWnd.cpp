@@ -192,7 +192,7 @@ namespace SOUI
 					SStringA strText = SStringA().Format("%s[%s]", comps[i].strName, comps[i].strType);
 					UINT flag = MF_STRING;
 					if (iSelComp == i) flag |= MF_CHECKED;
-					smenuPopup.AppendMenu( flag, idStart + i+1, S_CA2T(strText));
+					smenuPopup.AppendMenu( flag, idStart + i+1, S_CA2T(strText, CP_GB));
 				}
 				break;
 			}

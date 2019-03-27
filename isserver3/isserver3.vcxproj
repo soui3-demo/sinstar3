@@ -242,6 +242,7 @@
     <Xml Include="uires\smenu\context.xml" />
     <Xml Include="uires\uidef\init.xml" />
     <Xml Include="uires\values\color.xml" />
+    <Xml Include="uires\values\dim.xml" />
     <Xml Include="uires\values\skin.xml" />
     <Xml Include="uires\values\string.xml" />
     <Xml Include="uires\xml\dlg_addblur.xml" />

@@ -5,8 +5,8 @@ namespace SOUI
 {
 	CKeyMapDlg::CKeyMapDlg(IBitmap *pBmp, LPCSTR pszName, LPCSTR pszUrl):SHostWnd(UIRES.LAYOUT.dlg_keymap), m_pBmp(pBmp), m_pListener(NULL)
 	{
-		m_strName = S_CA2T(pszName);
-		m_strUrl = S_CA2T(pszUrl);
+		m_strName = S_CA2T(pszName, CP_GB);
+		m_strUrl = S_CA2T(pszUrl, CP_GB);
 	}
 
 

@@ -12,6 +12,7 @@
 
 #define  _CRT_SECURE_NO_WARNINGS
 #define _CRT_NON_CONFORMING_SWPRINTFS
+#define CP_GB  936
 
 // Windows м╥нд╪Ч:
 #include <windows.h>

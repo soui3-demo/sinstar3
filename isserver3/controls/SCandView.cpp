@@ -98,11 +98,11 @@ namespace SOUI
 
 		m_byRate = pbyCandData[0];
 		const BYTE * p = pbyCandData+1;
-		m_strCand = S_CA2T(SStringA((const char*)p+1,p[0]));
+		m_strCand = S_CA2T(SStringA((const char*)p+1,p[0]), CP_GB);
 		if(cWild!=0 && m_byRate != RATE_USERCMD)
 		{
 			p+=p[0]+1;
-			m_strComp = S_CA2T(SStringA((const char*)p+1,p[0]));
+			m_strComp = S_CA2T(SStringA((const char*)p+1,p[0]), CP_GB);
 		}else
 		{
 			m_strComp.Empty();

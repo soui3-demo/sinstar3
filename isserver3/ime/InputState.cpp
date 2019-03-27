@@ -417,7 +417,7 @@ void CInputState::InputResult(const SStringT &strResult,BYTE byAstMask)
 
 void CInputState::InputResult(const SStringA &strResult,BYTE byAstMask)
 {
-	InputResult(S_CA2T(strResult),byAstMask);
+	InputResult(S_CA2T(strResult,CP_GB),byAstMask);
 }
 
 void CInputState::InputEnd()

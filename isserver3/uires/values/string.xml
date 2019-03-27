@@ -5,7 +5,7 @@
   <prog value="进度"/>
   <new_ver_found value="发现新版本"/>
   <donate value="捐助启程"/>
-  
+  <tray_tip value="启程输入法后台服务\n版本:%s"/>
   <title_config value="系统设置"/>
   <btn_close value="关闭"/>
   <cfg_habit value="使用习惯"/>
