@@ -28,7 +28,13 @@
 #include "../include/TextService-i.h"
 #include "../include/unknown.h"
 
-#define LOG_FILTER "sinstar3_core"
+#include "../SLog4Z/log4z.h"
+
+#define GETLOGMGR() (SOUI::SLogMgr::getSingletonPtr()?SOUI::SLogMgr::getSingletonPtr()->GetLogMgr():NULL)
+#include "../include/slog_wrapper.h"
+
+#define LOG_FILTER "sinstar3_tsf"
+#include <helper/slog-def.h>
 
 #define	 DLL_SOUI
 #include <souistd.h>
