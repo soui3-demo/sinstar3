@@ -127,7 +127,7 @@ int CIsSvrProxy::OnCreate(LPCREATESTRUCT pCS)
 	{
 		DWORD dwVer = 0;
 		GetVersionInfo(dwVer);
-		SStringW strTrayTip = GETSTRING(R.string.tray_tip);
+		SStringW strTrayTip = GETSTRING(L"@string/tray_tip");
 		strTrayTip.Replace(L"\\n", L"\n");
 		SStringT strTipFmt = S_CW2T(strTrayTip, CP_GB);
 		TCHAR szVer[100];
