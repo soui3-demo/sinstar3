@@ -27,11 +27,20 @@ BOOL ProcessModuleDetect(DWORD dwProcID,LPCTSTR pszModuleName,LPCTSTR pszProcFil
 		return (FALSE);
 	}
 
+	BOOL bFillPath = FALSE;
 	do
 	{
-		if(0==lstrcmpi(pszProcFile,me32.szModule)) _tcscpy(pszProcPath,me32.szExePath);
-		if (0==lstrcmpi(pszModuleName, me32.szExePath)) 
+		if(0==lstrcmpi(pszProcFile,me32.szModule)) 
+		{
+			_tcscpy(pszProcPath,me32.szExePath);
+			bFillPath = TRUE;
+			if(bRet) break;
+		}
+		if (0==lstrcmpi(pszModuleName, me32.szModule)) 
+		{
 			bRet=TRUE;
+			if(bFillPath) break;
+		}
 	} while (Module32Next(hModuleSnap, &me32));
 
 	CloseHandle(hModuleSnap);
@@ -64,7 +73,7 @@ BOOL ProcessModuleDetect(DWORD dwProcID,LPCTSTR pszModuleName,LPCTSTR pszProcFil
 	do
 	{
 		szProcPath[0]=0;
-		if(ProcessModuleDetect(pe32.th32ProcessID,pszDllPath,pe32.szExeFile,szProcPath) && pe32.th32ProcessID!=0)
+		if(pe32.th32ProcessID!=0 && ProcessModuleDetect(pe32.th32ProcessID,pszDllPath,pe32.szExeFile,szProcPath))
 		{
 			_tcscpy(ci.szFile,pe32.szExeFile);
 			_tcscpy(ci.szPath,szProcPath);

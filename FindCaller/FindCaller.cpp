@@ -15,6 +15,10 @@ ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 
+typedef BOOL (WINAPI *FunWow64DisableWow64FsRedirection)(
+	PVOID *OldValue
+	);
+
 int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpstrCmdLine*/, int nCmdShow)
 {
     // 初始化全局字符串
