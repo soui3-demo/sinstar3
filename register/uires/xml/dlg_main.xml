@@ -10,7 +10,7 @@ translucent="1"
       <imgbtn name="btn_min" skin="_skin.sys.btn.minimize" pos="-83,0" animate="1" />
     </caption>
     <window pos="5,[2,-5,-5" layout="vbox" gravity="center" interval="10">
-      <richedit name="edit_license" size="-2,0" weight="1" multiLines="1" vscrollBar="1" hscrollBar="0" readOnly="1"/>
+      <richedit name="edit_license" size="-2,0" weight="1" multiLines="1" vscrollBar="1" wordWrap="1"  autoVscroll="1" hscrollBar="0" readOnly="1"/>
       <check name="chk_agree" text="同意启程输入法使用协议"/>
       <window size="-1,-1" layout="hbox" interval="20" name="wnd_btn_container">
         <button.normal name="btn_install" text="安装" tip="将输入法接口文件复制到系统目录，并运行regsvr32来注册输入法"/>
