@@ -1,0 +1,29 @@
+﻿<SOUI name="mainWindow" title="@string/title" bigIcon="ICON_LOGO:32" smallIcon="ICON_LOGO:16" width="600" height="400"  margin="5,5,5,5"  resizable="1" wndType="appMain"
+appWnd="1"
+translucent="1"
+>
+  <root skin="_skin.sys.wnd.bkgnd" cache="1">
+    <caption pos="0,0,-0,30" show="1" font="adding:0">
+      <icon pos="10,8" src="ICON_LOGO:16"/>
+      <text pos="29,9">@string/title</text>
+      <imgbtn name="btn_close" skin="_skin.sys.btn.close"    pos="-45,0" tip="close" animate="1"/>
+      <imgbtn name="btn_min" skin="_skin.sys.btn.minimize" pos="-83,0" animate="1" />
+    </caption>
+    <window pos="5,[2,-5,-5" layout="vbox" gravity="center" interval="10">
+      <richedit name="edit_license" size="-2,0" weight="1" multiLines="1" vscrollBar="1" hscrollBar="0" readOnly="1"/>
+      <check name="chk_agree" text="同意启程输入法使用协议"/>
+      <window size="-1,-1" layout="hbox" interval="20" name="wnd_btn_container">
+        <button.normal name="btn_install" text="安装" tip="将输入法接口文件复制到系统目录，并运行regsvr32来注册输入法"/>
+        <button.normal name="btn_update" text="更新" tip="输入法已经安装时，可以只复制输入法接口文件"/>
+        <button.normal name="btn_uninstall" text="卸载" tip="运行regsvr32 -u来反注册输入法，并从系统目录将输入法接口文件删除"/>
+      </window>
+      <window size="-2,-1" layout="vbox" interval="10" gravity="center">
+        <window size="-1,-1" layout="hbox" interval="10" gravity="center">
+          <button.donate name="btn_donate" text="捐助"/>
+          <link.web text="访问启程输入法官网" href="soime.cn"/>
+        </window>
+        <text size="-2,-1" multiLines="1" text="启程输入法是一款良心制作的免费绿色输入法产品，10以后再度更新，完美支持win10。您的支持是输入法持续更新的最大动力！"/>
+      </window>
+    </window>
+  </root>
+</SOUI>
