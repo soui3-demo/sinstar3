@@ -49,7 +49,7 @@ namespace SOUI
 		IShareBuffer *pBuf = GetRecvBuffer();
 		assert(pBuf->Tell()>= 4); //4=sizeof(int)
 		pBuf->Seek(IShareBuffer::seek_cur,-4);
-		int nLen;
+		int nLen=0;
 		pBuf->Read(&nLen, 4);
 		assert(pBuf->Tell()>=(UINT)(nLen+ 4));
 		pBuf->Seek(IShareBuffer::seek_cur,-(nLen+ 4));
