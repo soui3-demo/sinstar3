@@ -115,7 +115,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="..\sinstar3[2019.03.28]"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC60.vsprops"
@@ -182,7 +182,7 @@
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib&quot;;&quot;$(SOUIPATH)\bin&quot;"
 				UACExecutionLevel="2"
 				DelayLoadDLLs="soui.dll;utilities.dll"
-				GenerateDebugInformation="true"
+				GenerateDebugInformation="false"
 				ProgramDatabaseFile=".\Release/register.pdb"
 				SubSystem="2"
 				RandomizedBaseAddress="1"

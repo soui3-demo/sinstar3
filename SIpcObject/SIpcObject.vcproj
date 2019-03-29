@@ -48,7 +48,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
-				Optimization="2"
+				Optimization="0"
 				AdditionalIncludeDirectories=".;include;&quot;$(SOUIPATH)/utilities/include&quot;;&quot;$(SOUIPATH)/soui/include&quot;;&quot;$(SOUIPATH)/components&quot;;&quot;$(SOUIPATH)/config&quot;;&quot;..\..\work\soui.git\tools\mkspecs\win32-msvc2008&quot;;..\ipcobject\include"
 				PreprocessorDefinitions="_WINDOWS,UNICODE,WIN32,_LIB,QT_NO_DYNAMIC_CAST,NDEBUG"
 				GeneratePreprocessedFile="0"
@@ -63,7 +63,7 @@
 				ProgramDataBaseFileName="$(IntDir)\vc90.pdb"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
-				DebugInformationFormat="0"
+				DebugInformationFormat="3"
 				ForcedIncludeFiles="stdafx.h"
 			/>
 			<Tool
@@ -129,7 +129,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
-				Optimization="2"
+				Optimization="0"
 				AdditionalIncludeDirectories=".;include;&quot;$(SOUIPATH)/utilities/include&quot;;&quot;$(SOUIPATH)/soui/include&quot;;&quot;$(SOUIPATH)/components&quot;;&quot;$(SOUIPATH)/config&quot;;&quot;..\..\work\soui.git\tools\mkspecs\win32-msvc2008&quot;;..\ipcobject\include"
 				PreprocessorDefinitions="_WINDOWS,UNICODE,WIN32,_LIB,QT_NO_DYNAMIC_CAST,NDEBUG"
 				GeneratePreprocessedFile="0"
@@ -144,7 +144,7 @@
 				ProgramDataBaseFileName="$(IntDir)\vc90.pdb"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
-				DebugInformationFormat="0"
+				DebugInformationFormat="3"
 				ForcedIncludeFiles="stdafx.h"
 			/>
 			<Tool
