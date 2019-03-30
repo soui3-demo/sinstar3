@@ -139,7 +139,7 @@ void CWorker::ReportUserInfo()
 
 void CWorker::CheckUpdate(LPCSTR pszUri, bool bManual)
 {
-	PostMessage(UM_FUN_CHECK_UPDATE, bManual, (LPARAM)strdup(pszUri));
+	PostMessage(UM_FUN_CHECK_UPDATE, bManual, (LPARAM)_strdup(pszUri));
 }
 
 

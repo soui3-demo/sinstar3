@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "IsSvrProxy.h"
-#include <helper/smenuex.h>
 #include <helper/STime.h>
 #include <com-loader.hpp>
 #include "settings/ConfigDlg.h"
@@ -343,7 +342,9 @@ LRESULT CIsSvrProxy::OnTrayNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 				SetForegroundWindow(m_hWnd);
 				::CheckMenuItem(menu.m_hMenu,R.id.menu_auto_exit, MF_BYCOMMAND | (m_pCore->IsAutoQuit()?MF_CHECKED:0));
 				::CheckMenuItem(menu.m_hMenu, R.id.menu_auto_run, MF_BYCOMMAND | (IsAutoRun() ? MF_CHECKED : 0));
-				menu.TrackPopupMenu(0, pt.x, pt.y, m_hWnd);
+				int nScale = SDpiHelper::getScale(GetDesktopWindow());
+				//nScale=100;
+				menu.TrackPopupMenu(0, pt.x, pt.y, m_hWnd,NULL,nScale);
 				PostMessage(WM_NULL);
 			}
 		}

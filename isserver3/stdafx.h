@@ -45,6 +45,7 @@
 #include <event/NotifyCenter.h>
 #include <commgr2.h>
 #include <helper/SMenu.h>
+#include <helper/SDpiHelper.hpp>
 #include <resprovider-zip/zipresprovider-param.h>
 
 #include "resource.h"

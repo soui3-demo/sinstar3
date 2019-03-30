@@ -122,7 +122,7 @@ namespace SOUI
         int m_nHoverTabItem; /**< hover状态item */
         int m_nCurrentPage;  /**< 当前页码      */
         int m_nTabInterSize;   /**< tab页面间距   */
-        SIZE m_szTab;        /**< tab SIZE   */
+        SLayoutSize m_szTab[2];        /**< tab SIZE   */
         int m_nTabPos;       /**< tab位置       */
         ISkinObj *m_pSkinTab; /**< ISkibObj对象 */
         ISkinObj *m_pSkinIcon; /**< ISkibObj对象  */
@@ -471,9 +471,9 @@ namespace SOUI
 
         SOUI_ATTRS_BEGIN()
             ATTR_INT(L"curSel", m_nCurrentPage, FALSE)
-            ATTR_SIZE(L"tabSize",m_szTab,TRUE)
-            ATTR_INT(L"tabWidth", m_szTab.cx, FALSE)
-            ATTR_INT(L"tabHeight", m_szTab.cy, FALSE)
+            ATTR_LAYOUTSIZE2(L"tabSize",m_szTab,TRUE)
+            ATTR_LAYOUTSIZE(L"tabWidth", m_szTab[0], FALSE)
+            ATTR_LAYOUTSIZE(L"tabHeight", m_szTab[1], FALSE)
             ATTR_INT(L"tabPos", m_nTabPos, FALSE)
             ATTR_INT(L"tabInterSize", m_nTabInterSize, FALSE)
             ATTR_SKIN(L"tabInterSkin", m_pSkinTabInter, FALSE)

@@ -577,7 +577,8 @@ namespace SOUI
 		DWORD dwThreadID = GetWindowThreadProcessId(m_hOwner,NULL);
 		DWORD dwCurID = GetCurrentThreadId();
 		AttachThreadInput(dwCurID,dwThreadID,TRUE);
-		int nRet = menu.TrackPopupMenu(TPM_LEFTALIGN | TPM_BOTTOMALIGN | TPM_RETURNCMD, pt.x, pt.y, m_hWnd);
+		int nScale = SDpiHelper::getScale(m_hWnd);
+		int nRet = menu.TrackPopupMenu(TPM_LEFTALIGN | TPM_BOTTOMALIGN | TPM_RETURNCMD, pt.x, pt.y, m_hWnd,NULL,nScale);
 		AttachThreadInput(dwCurID,dwThreadID,FALSE);
 		SLOG_INFO("after trackpopupmenu" << " nRet:" << nRet);
 		if (nRet == R.id.config)
