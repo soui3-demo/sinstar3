@@ -388,9 +388,10 @@ void CIsSvrProxy::OnTimer(UINT_PTR uID)
 		SASSERT(m_pPendingCmd);
 		if (m_pCore->IsDataReady())
 		{
+			KillTimer(TIMERID_PENDING_CMD);
 			OnCopyData(NULL, m_pPendingCmd);
 			free(m_pPendingCmd);
-			KillTimer(TIMERID_PENDING_CMD);
+			m_pPendingCmd = NULL;
 		}
 	}
 	else
