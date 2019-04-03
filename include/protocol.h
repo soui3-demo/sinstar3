@@ -66,6 +66,7 @@ struct FunParams_Base : SOUI::IFunParams
 
 enum {
 	ISinstar_Create = SOUI::FUN_ID_START,
+	ISinstar_ScaleInfo,	//notify server the active view hwnd and size gotten from client. server read size again and calculate scale factor of client.
 	ISinstar_Destroy,
 	ISinstar_OnImeSelect,
 	ISinstar_OnCompositionStarted,
@@ -102,11 +103,18 @@ enum {
 
 struct Param_Create : FunParams_Base
 {
-	bool   bDpiAware;
 	std::string strHostPath;
 	DWORD  dwVer;
 	FUNID(ISinstar_Create)
-		PARAMS3(Input, bDpiAware,strHostPath,dwVer)
+		PARAMS2(Input, strHostPath,dwVer)
+};
+
+struct Param_ScaleInfo : FunParams_Base
+{
+	DWORD hRefWnd;
+	SIZE  szWnd;
+	FUNID(ISinstar_ScaleInfo)
+		PARAMS2(Input, hRefWnd,szWnd)
 };
 
 struct Param_Destroy : FunParams_Base

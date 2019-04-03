@@ -163,7 +163,6 @@ public:
 	CSinstarProxy*   m_pSinstar3;
 	BOOL		_bHasFocus;
 	BOOL		_bInKeyProc;
-
 public:
 	IUNKNOWN_BEGIN(ITfTextInputProcessorEx)
 		IUNKNOWN_ADD_IID(ITfTextInputProcessor)

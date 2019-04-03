@@ -45,6 +45,7 @@ public:
 	virtual DWORD GetActiveWnd() const;
 protected:
 	void HandleCreate(Param_Create &param);
+	void HandleScaleInfo(Param_ScaleInfo &param);
 	void HandleDestroy(Param_Destroy &param);
 	void HandleOnImeSelect(Param_OnImeSelect & param);
 	void HandleOnCompositionStarted(Param_OnCompositionStarted &param);
@@ -65,6 +66,7 @@ protected:
 
 	FUN_BEGIN
 		FUN_HANDLER(Param_Create,HandleCreate)
+		FUN_HANDLER(Param_ScaleInfo,HandleScaleInfo)
 		FUN_HANDLER(Param_Destroy, HandleDestroy)
 		FUN_HANDLER(Param_OnImeSelect, HandleOnImeSelect)
 		FUN_HANDLER(Param_OnCompositionStarted, HandleOnCompositionStarted)
@@ -86,7 +88,8 @@ protected:
 private:
 	SComPtr<ISinstar>	m_pSinstar;
 	HWND				m_hSvr;
-	bool			    m_bDpiAware;
 	std::string			m_strHostPath;
+	float				m_xScale;
+	float				m_yScale;
 	CAutoRefPtr<IIpcHandle> m_ipcHandle;
 };

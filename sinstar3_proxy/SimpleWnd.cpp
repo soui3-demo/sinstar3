@@ -10,18 +10,9 @@ CSimpleWnd::~CSimpleWnd(void)
 {
 }
 
-HWND CSimpleWnd::Create(DWORD dwExStyle,DWORD dwStyle,HWND hParent,UINT_PTR uID,HINSTANCE hInst)
+HWND CSimpleWnd::Create(HINSTANCE hInst)
 {
-	HWND hWnd=::CreateWindowEx(dwExStyle,CLS_SIMPLEWND,NULL,dwStyle,0,0,0,0,hParent,(HMENU)uID,hInst,this);
-	if(hWnd && (dwExStyle&WS_EX_LAYERED))
-	{//有时候Create时设置的WS_EX_LAYERED属性失败，需要使用SetWindowLongPtr来设置。
-		LONG_PTR dwExStyle2=GetWindowLongPtr(hWnd,GWL_EXSTYLE);
-		if(!(dwExStyle2&WS_EX_LAYERED))
-		{
-			SetWindowLongPtr(hWnd,GWL_EXSTYLE,dwExStyle);
-		}
-	}
-	return hWnd;
+	return ::CreateWindowEx(0,CLS_SIMPLEWND,NULL,WS_POPUP,0,0,0,0,HWND_MESSAGE,(HMENU)0,hInst,this);
 }
 
 BOOL CSimpleWnd::Destroy()

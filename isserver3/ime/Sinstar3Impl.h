@@ -41,7 +41,7 @@ public:
 	virtual void OnConversionModeChanged(EInputMethod uMode);
 	virtual void ShowHelp();
 	virtual EInputMethod GetDefInputMode();
-
+	virtual void NotifyScaleInfo(HWND hRefWnd);
 public:
 	virtual int GetID() const {	return SENDER_SINSTSR3;}
 protected://IInputListener

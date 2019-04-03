@@ -11,13 +11,20 @@ CEditSessionBase::CEditSessionBase(CSinstar3Tsf *pTextService, ITfContext *pCont
 
 
 //////////////////////////////////////////////////////////////////////////
+
+CEsKeyHandler::CEsKeyHandler(CSinstar3Tsf *pTextService, ITfContext *pContext,WPARAM wParam, LPARAM lParam) :CEditSessionBase(pTextService,pContext)
+,_wParam(wParam)
+,_lParam(lParam)
+{
+	GetKeyboardState(_byKeyState);
+}
+
 STDMETHODIMP CEsKeyHandler::DoEditSession(TfEditCookie ec)
 {
 	BOOL fEaten = FALSE;
 	GetTextService()->_bInKeyProc = TRUE;
-	BYTE byKeyState[256];
-	GetKeyboardState(byKeyState);
-	GetSinstar3()->TranslateKey((UINT64)GetContext(),(UINT)_wParam, MapVirtualKey((UINT)_wParam,0), TRUE, byKeyState, &fEaten);
+
+	GetSinstar3()->TranslateKey((UINT64)GetContext(),(UINT)_wParam, MapVirtualKey((UINT)_wParam,0), TRUE, _byKeyState, &fEaten);
 	GetTextService()->_bInKeyProc = FALSE;
 
 	return S_OK;
@@ -150,7 +157,7 @@ STDMETHODIMP CEsGetTextExtent::DoEditSession(TfEditCookie ec)
 	if ( pComposition->GetRange( &range) == S_OK && range != NULL)
 	{
 		BOOL fClip = FALSE;
-		RECT rc;
+		RECT rc={0};
 		_pContextView->GetTextExt(ec, range, &rc, &fClip);
 		POINT pt = { rc.left,rc.top };
 		int nHei = rc.bottom - rc.top;

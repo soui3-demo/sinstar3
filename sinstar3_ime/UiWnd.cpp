@@ -373,6 +373,7 @@ BOOL CUiWnd::_InitSinstar3()
 		m_pSinstar3 = NULL;
 		return FALSE;
 	}
+	m_pSinstar3->NotifyScaleInfo(GetActiveWindow());
 	m_pSinstar3->OnIMESelect(m_bActivate);
 	HIMC hIMC=(HIMC)GetWindowLongPtr(m_hWnd,IMMGWLP_IMC);
 	m_pSinstar3->OnSetFocus(hIMC!=0);

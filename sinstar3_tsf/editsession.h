@@ -28,19 +28,13 @@ public:
 class CEsKeyHandler : public CEditSessionBase
 {
 public:
-	CEsKeyHandler(CSinstar3Tsf *pTextService, ITfContext *pContext,WPARAM wParam, LPARAM lParam)
-		:CEditSessionBase(pTextService,pContext)
-		,_wParam(wParam)
-		,_lParam(lParam)
-	{
-
-	}
+	CEsKeyHandler(CSinstar3Tsf *pTextService, ITfContext *pContext,WPARAM wParam, LPARAM lParam);
 
 	STDMETHODIMP DoEditSession(TfEditCookie ec);
-
 private:
 	WPARAM _wParam;
 	LPARAM _lParam;
+	BYTE _byKeyState[256];
 };
 
 class CEsStartComposition : public CEditSessionBase

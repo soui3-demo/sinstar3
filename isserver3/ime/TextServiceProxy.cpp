@@ -3,7 +3,11 @@
 #include "Sinstar3Impl.h"
 #include "../helper/helper.h"
 
-CSvrConnection::CSvrConnection(IIpcHandle *pIpcHandle,HWND hSvr):m_ipcHandle(pIpcHandle),m_hSvr(hSvr)
+CSvrConnection::CSvrConnection(IIpcHandle *pIpcHandle,HWND hSvr)
+:m_ipcHandle(pIpcHandle)
+,m_hSvr(hSvr)
+,m_xScale(1.0f)
+,m_yScale(1.0f)
 {
 }
 
@@ -119,11 +123,19 @@ void CSvrConnection::HandleCreate(Param_Create & param)
 {
 	SASSERT(!m_pSinstar);
 	TCHAR szVer[100];
-	m_bDpiAware = param.bDpiAware;
 	m_strHostPath = param.strHostPath;
 	Helper_VersionString(param.dwVer, szVer);
 	SLOG_INFO("create connection, host:" << m_strHostPath.c_str() << " ver:" << szVer);
 	m_pSinstar.Attach(new CSinstar3Impl(this, m_hSvr));
+}
+
+
+void CSvrConnection::HandleScaleInfo(Param_ScaleInfo &param)
+{
+	CRect rcWnd;
+	GetWindowRect((HWND)param.hRefWnd,&rcWnd);
+	m_xScale = rcWnd.Width()*1.0f/param.szWnd.cx;
+	m_yScale = rcWnd.Height()*1.0f/param.szWnd.cy;
 }
 
 void CSvrConnection::HandleDestroy(Param_Destroy & param)
@@ -160,13 +172,10 @@ void CSvrConnection::HandleOnSetCaretPosition(Param_OnSetCaretPosition &param)
 {
 	CPoint pt = param.pt;
 	int nHei = param.nHei;
-	if(!m_bDpiAware)
-	{
-		int nScale = CDataCenter::getSingletonPtr()->GetData().m_nScale;
-		pt.x = pt.x * nScale/100;
-		pt.y = pt.y * nScale/100;
-		nHei = nHei * nScale/100;
-	}
+	pt.x = (int)(pt.x*m_xScale);
+	pt.y = (int)(pt.y*m_yScale);
+	nHei = (int)(nHei*m_yScale);
+
 	m_pSinstar->OnSetCaretPosition(pt,nHei);
 
 }
@@ -190,6 +199,7 @@ void CSvrConnection::HandleTranslateKey(Param_TranslateKey &param)
 void CSvrConnection::HandleOnSetFocus(Param_OnSetFocus &param)
 {
 	SLOG_INFO("OnSetFocus, host:"<<m_strHostPath.c_str()<<" bFocus:"<<param.bFocus);
+	if(!m_pSinstar) return;
 	m_pSinstar->OnSetFocus(param.bFocus);
 }
 

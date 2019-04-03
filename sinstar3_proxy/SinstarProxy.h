@@ -89,6 +89,7 @@ public:
 	virtual void OnConversionModeChanged(EInputMethod uMode) override;
 	virtual void ShowHelp() override;
 	virtual EInputMethod GetDefInputMode() override;
+	virtual void NotifyScaleInfo(HWND hRefWnd) override;
 
 public:
 	IUNKNOWN_BEGIN(IUnknown)

@@ -21,5 +21,6 @@ interface ISinstar : public IUnknown
 	virtual void OnConversionModeChanged(EInputMethod uMode)=NULL;
 	virtual void ShowHelp()=NULL;
 	virtual EInputMethod GetDefInputMode() = NULL;
+	virtual void NotifyScaleInfo(HWND hRefWnd) = NULL;
 };
 

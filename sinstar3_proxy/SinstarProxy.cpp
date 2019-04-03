@@ -4,32 +4,6 @@
 #include "../helper/helper.h"
 using namespace SOUI;
 
-typedef enum PROCESS_DPI_AWARENESS {
-	PROCESS_DPI_UNAWARE = 0,
-	PROCESS_SYSTEM_DPI_AWARE = 1,
-	PROCESS_PER_MONITOR_DPI_AWARE = 2
-} PROCESS_DPI_AWARENESS;
-
-typedef HRESULT (__stdcall *FunGetProcessDpiAwareness)(
-	HANDLE hprocess,
-	PROCESS_DPI_AWARENESS *value);
-
-PROCESS_DPI_AWARENESS GetProcessDpiAwareness(HANDLE hProc)
-{
-	PROCESS_DPI_AWARENESS  dpiAware = PROCESS_SYSTEM_DPI_AWARE;
-	HMODULE hMod = LoadLibrary(_T("Shcore.dll"));
-	if (hMod)
-	{
-		FunGetProcessDpiAwareness fun = (FunGetProcessDpiAwareness)GetProcAddress(hMod, "GetProcessDpiAwareness");
-		if (fun)
-		{
-			fun(hProc, &dpiAware);
-		}
-		FreeLibrary(hMod);
-	}
-	return dpiAware;
-}
-
 namespace SOUI{
 	namespace IPC
 	{
@@ -87,7 +61,6 @@ BOOL CSinstarProxy::Init(HWND hClient, LPCTSTR pszSvrPath)
 
 	Param_Create param;
 	HMODULE hMod = GetModuleHandle(NULL);
-	param.bDpiAware = PROCESS_DPI_UNAWARE != GetProcessDpiAwareness(NULL);
 	if (hMod)
 	{
 		TCHAR szBuf[MAX_PATH];
@@ -99,7 +72,19 @@ BOOL CSinstarProxy::Init(HWND hClient, LPCTSTR pszSvrPath)
 	}
 
 	m_conn.CallFun(&param);
+	
 	return TRUE;
+}
+
+void CSinstarProxy::NotifyScaleInfo(HWND hRefWnd)
+{
+	Param_ScaleInfo param;
+	RECT rc={0};
+	GetWindowRect(hRefWnd,&rc);
+	param.hRefWnd = (DWORD)(ULONG_PTR)hRefWnd;
+	param.szWnd.cx = rc.right - rc.left;
+	param.szWnd.cy = rc.bottom - rc.top;
+	m_conn.CallFun(&param);
 }
 
 void CSinstarProxy::OnIMESelect(BOOL bSelect)

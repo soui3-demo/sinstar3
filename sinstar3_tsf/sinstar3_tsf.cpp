@@ -77,7 +77,7 @@ CSinstar3Tsf::CSinstar3Tsf()
 	
 	_bCompositing = FALSE;
 
-	Create(0, WS_POPUP, HWND_MESSAGE, 0, theModule->GetModule());
+	Create(theModule->GetModule());
 }
 
 //+---------------------------------------------------------------------------
@@ -311,6 +311,7 @@ BOOL CSinstar3Tsf::_InitSinstar3()
 		m_pSinstar3 = NULL;
 		return FALSE;
 	}
+	m_pSinstar3->NotifyScaleInfo(GetActiveWindow());
 
 	m_pSinstar3->OnIMESelect(_bHasFocus);
 	m_pSinstar3->OnSetFocus(_bHasFocus && _bInEditDocument);

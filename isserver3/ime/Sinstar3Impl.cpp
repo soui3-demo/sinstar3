@@ -233,6 +233,10 @@ EInputMethod CSinstar3Impl::GetDefInputMode()
 	return FullNative;
 }
 
+void CSinstar3Impl::NotifyScaleInfo(HWND hRefWnd)
+{
+
+}
 
 LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 {
