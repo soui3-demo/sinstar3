@@ -193,7 +193,7 @@ STDAPI CSinstar3Tsf::Deactivate()
 		_UninitKeyEventSink();
 	}
 
-    if (_pThreadMgr != NULL)
+    if (_pThreadMgr)
     {
 		OnKillThreadFocus();
 		_UninitSinstar3();
