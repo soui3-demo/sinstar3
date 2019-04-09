@@ -9,7 +9,7 @@
 
 namespace SOUI
 {
-	class CDenoteDlg: public SHostWnd
+	class CDenoteDlg: public SHostWnd, public SDpiHandler<CDenoteDlg>
 	{
 	public:
 		CDenoteDlg():SHostWnd(UIRES.LAYOUT.dlg_donate){}
@@ -26,6 +26,12 @@ namespace SOUI
 		EVENT_MAP_BEGIN()
 			EVENT_ID_COMMAND(IDCANCEL,OnClose)
 		EVENT_MAP_END()
+
+	protected:
+		BEGIN_MSG_MAP_EX(CDenoteDlg)
+			CHAIN_MSG_MAP(SDpiHandler<CDenoteDlg>)
+			CHAIN_MSG_MAP(SHostWnd)
+		END_MSG_MAP()
 	};
 
 	static int PopupMenuEndID(int nStart)
@@ -679,6 +685,7 @@ namespace SOUI
 		{
 			CDenoteDlg *dlgDonate = new CDenoteDlg;
 			dlgDonate->Create(m_hWnd,WS_POPUP,WS_EX_TOPMOST,0,0,0,0);
+			dlgDonate->SendMessage(WM_INITDIALOG);
 			dlgDonate->CenterWindow(GetDesktopWindow());
 			dlgDonate->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
 		}
