@@ -23,7 +23,9 @@ BOOL CUpdateInfoDlg::OnInitDialog(HWND wnd, LPARAM lInitParam)
 	pMore->SetAttribute(L"href", m_pResult->strUrl);
 	pMore->SetAttribute(L"tip", m_pResult->strUrl);
 
-	FindChildByID2<SChatEdit>(R.id.edit_info)->AppendFormatText(m_pResult->strInfo,FALSE,FALSE);
-
+	SChatEdit *pEdit = FindChildByID2<SChatEdit>(R.id.edit_info);
+	pEdit->AppendFormatText(m_pResult->strInfo,FALSE,FALSE);
+	pEdit->SetSel(0);
+	pEdit->SSendMessage(WM_VSCROLL,SB_TOP,0);
 	return 0;
 }
