@@ -577,10 +577,12 @@ void CIsSvrProxy::OnUpdateNow()
 	CheckUpdate(true);
 }
 
+extern const TCHAR * KSinstar3WndName;
 LRESULT CIsSvrProxy::OnCopyData(HWND hWnd,PCOPYDATASTRUCT lpCopyData)
 {
 	if(!(lpCopyData->dwData == CD_CMD_INSTALL_CIT
-		|| lpCopyData->dwData == CD_CMD_INSTALL_PLT))
+		|| lpCopyData->dwData == CD_CMD_INSTALL_PLT
+		|| lpCopyData->dwData == CD_CMD_INSTALL_SKIN))
 	{
 		SetMsgHandled(FALSE);
 		return 0;
@@ -622,6 +624,46 @@ LRESULT CIsSvrProxy::OnCopyData(HWND hWnd,PCOPYDATASTRUCT lpCopyData)
 		{
 			SMessageBox(GetActiveWindow(),SStringT().Format(_T("词库安装失败！错误码:%d"),GetLastError()),_T("提示"),MB_OK|MB_ICONSTOP);
 		}
+	}else if(lpCopyData->dwData == CD_CMD_INSTALL_SKIN)
+	{
+		SStringT strPath = S_CW2T((wchar_t*)lpCopyData->lpData);
+		int nPos = strPath.ReverseFind('\\');
+		SStringT strName = strPath.Mid(nPos);
+		SStringT strDst = m_strDataPath + _T("\\skins")+strName;
+		if(CopyFile(strPath,strDst,FALSE))
+		{
+			if(IDOK==SMessageBox(GetActiveWindow(),_T("词库皮肤成功！现在使用吗?"),_T("提示"),MB_OKCANCEL|MB_ICONQUESTION))
+			{
+				if(!CDataCenter::getSingletonPtr()->GetData().changeSkin(strDst))
+				{
+					DeleteFile(strDst);
+					SMessageBox(GetActiveWindow(),_T("应用皮肤失败!不支持的皮肤格式"),_T("错误"),MB_OK|MB_ICONSTOP);
+				}else
+				{
+					g_SettingsG->strSkin = strDst;
+					g_SettingsG->SetModified(true);
+
+
+					SStringA strSkinUtf8 = S_CW2A(S_CT2W(strDst),CP_UTF8);
+					COPYDATASTRUCT cds = { 0 };
+					cds.dwData = CMD_CHANGESKIN;
+					cds.cbData = strSkinUtf8.GetLength()+1;
+					cds.lpData = (PVOID)(LPCSTR)strSkinUtf8;
+
+					HWND hFind = FindWindowEx(HWND_MESSAGE, NULL, NULL, KSinstar3WndName);
+					while (hFind)
+					{
+						::SendMessage(hFind, WM_COPYDATA, (WPARAM)m_hWnd, (LPARAM)&cds);
+						hFind = FindWindowEx(HWND_MESSAGE, hFind, NULL, KSinstar3WndName);
+					}
+				}
+
+			}
+		}else
+		{
+			SMessageBox(GetActiveWindow(),SStringT().Format(_T("词库皮肤失败！错误码:%d"),GetLastError()),_T("提示"),MB_OK|MB_ICONSTOP);
+		}
+
 	}
 	return 1;
 }

@@ -475,88 +475,19 @@ extern SComMgr2 * g_ComMgr2;
 
 BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 {
-	SLOG_INFO("skin:" << strSkin);
-	CDataCenter::getSingletonPtr()->Lock(); //注意处理多个输入法UI线程之间的同步.
-	SLOG_INFO("step1,lock ok");
-
-	//将内置皮肤的skinpool,stylepool,SObjDefAttr保存起来.
-	IUiDefInfo *pBulitinUidef =  CDataCenter::getSingletonPtr()->GetData().m_defUiDefine;
-
 	if (g_SettingsG->strSkin != strSkin)
 	{
-		if (!strSkin.IsEmpty())
-		{//加载外部皮肤
-			SLOG_INFO("step2, prepare for load skin");
-			CAutoRefPtr<IResProvider> pResProvider;
-			g_ComMgr2->CreateResProvider_ZIP((IObjRef**)&pResProvider);
-			ZIPRES_PARAM param;
-			param.ZipFile(GETRENDERFACTORY, strSkin);
-			if (!pResProvider->Init((WPARAM)&param, 0))
-				return FALSE;
-
-			IUiDefInfo * pUiDef = SUiDef::CreateUiDefInfo2(pResProvider, _T("uidef:xml_init"));
-			if (pUiDef->GetSkinPool() || pUiDef->GetStylePool() || pUiDef->GetObjDefAttr())
-			{//不允许皮肤中存在全局的skin and style data
-				pUiDef->Release();
-				return FALSE;
-			}
-
-			SLOG_INFO("step3, load external skin ok");
-
-			if (!g_SettingsG->strSkin.IsEmpty())
-			{//清除正在使用的外置皮肤。
-				SLOG_INFO("step4, remove current in using external skin");
-
-				IResProvider *pLastRes = SApplication::getSingleton().GetTailResProvider();
-				SApplication::getSingleton().RemoveResProvider(pLastRes);
-			}
-
-			SLOG_INFO("step6, extract skin defined offset");
-			CDataCenter::getSingleton().GetData().m_ptSkinOffset = CSkinMananger::ExtractSkinOffset(pResProvider);
-
-			SLOG_INFO("step7, add new skin to sinstar3");
-			SApplication::getSingleton().AddResProvider(pResProvider, NULL);
-			SLOG_INFO("step8, set uidef");
-			pUiDef->GetNamedColor().Merge(pBulitinUidef->GetNamedColor());
-			pUiDef->GetNamedString().Merge(pBulitinUidef->GetNamedString());
-			pUiDef->GetNamedDimension().Merge(pBulitinUidef->GetNamedDimension());
-			SUiDef::getSingleton().SetUiDef(pUiDef);
-			pUiDef->Release();
-			SLOG_INFO("step9, set external skin ok");
-		}
-		else if (!g_SettingsG->strSkin.IsEmpty())
-		{//清除正在使用的外置皮肤,还原使用系统内置皮肤
-			SLOG_INFO("step10, remove external skin");
-			IResProvider *pLastRes = SApplication::getSingleton().GetTailResProvider();
-			SApplication::getSingleton().RemoveResProvider(pLastRes);
-
-			SLOG_INFO("step12, restore uidef");
-			SUiDef::getSingleton().SetUiDef(pBulitinUidef);
-
-			SLOG_INFO("step13, extract builtin skin defined offset");
-			IResProvider *pCurRes = SApplication::getSingleton().GetHeadResProvider();
-			CDataCenter::getSingleton().GetData().m_ptSkinOffset = CSkinMananger::ExtractSkinOffset(pCurRes);
-		}
-
-		SLOG_INFO("step14, save new skin name");
+		if(!CDataCenter::getSingletonPtr()->GetData().changeSkin(strSkin))
+			return FALSE;
 		g_SettingsG->strSkin=strSkin;
 		g_SettingsG->SetModified(true);
 	}
 
-	//还原skinpool and stylepool.
-	SUiDef::getSingleton().GetUiDef()->SetSkinPool(pBulitinUidef->GetSkinPool());
-	SUiDef::getSingleton().GetUiDef()->SetStylePool(pBulitinUidef->GetStylePool());
-	SUiDef::getSingleton().GetUiDef()->SetObjDefAttr(pBulitinUidef->GetObjDefAttr());
 
 	SLOG_INFO("step15, notify skin changed");
 	//notify skin changed
 	EventSetSkin evt(this);
 	FireEvent(evt);
-
-	SLOG_INFO("step16, notify skin changed finish");
-
-	CDataCenter::getSingletonPtr()->Unlock();
-	SLOG_INFO("step17, unlock");
 
 	return TRUE;
 }

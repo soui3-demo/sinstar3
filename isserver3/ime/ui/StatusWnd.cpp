@@ -6,6 +6,7 @@
 #include "../InputState.h"
 #include "../ShellExecuteMonitor.h"
 #include "../../../include/FileHelper.h"
+#include <ShellAPI.h>
 
 namespace SOUI
 {
@@ -610,6 +611,9 @@ namespace SOUI
 					SMessageBox(GetActiveWindow(), _T("安装编码失败,可能已经存在该编码"), _T("提示"), MB_OK | MB_ICONSTOP);
 				}
 			}
+		}else if(nRet == R.id.skin_cloud)
+		{
+			ShellExecute(NULL,_T("open"),_T("http://soime.cn/skin"),NULL,NULL,SW_SHOWNORMAL);
 		}
 		else if (nRet > R.id.comp_install && nRet < PopupMenuEndID(R.id.comp_install))
 		{//comps

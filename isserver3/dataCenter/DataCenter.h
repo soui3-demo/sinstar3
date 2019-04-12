@@ -26,7 +26,7 @@ namespace SOUI
 
 		SStringW getFontFile(const SStringW &strFace) const;
 
-		CAutoRefPtr<IUiDefInfo> m_defUiDefine;
+		CAutoRefPtr<IUiDefInfo> m_defUiDefine;	//uidef info of builtin skin.
 
 		CPoint		m_ptSkinOffset;
 
@@ -34,6 +34,8 @@ namespace SOUI
 		DWORD		m_tmInputSpan;
 
 		int			m_nScale;
+
+		bool changeSkin(const SStringT &strSkin);
 	private:
 		SMap<SStringW, SStringW> m_fontMap;
 	};

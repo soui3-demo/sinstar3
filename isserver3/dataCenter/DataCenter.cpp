@@ -1,5 +1,6 @@
 #include "StdAfx.h"
 #include "DataCenter.h"
+#include "../ime/ui/SkinMananger.h"
 
 namespace SOUI
 {
@@ -94,6 +95,71 @@ namespace SOUI
 			return SStringW();
 		else
 			return p->m_value;
+	}
+
+	bool CMyData::changeSkin(const SStringT &strSkin)
+	{
+		if (!strSkin.IsEmpty())
+		{//加载外部皮肤
+			SLOG_INFO("step2, prepare for load skin");
+			CAutoRefPtr<IResProvider> pResProvider;
+			g_ComMgr2->CreateResProvider_ZIP((IObjRef**)&pResProvider);
+			ZIPRES_PARAM param;
+			param.ZipFile(GETRENDERFACTORY, strSkin);
+			if (!pResProvider->Init((WPARAM)&param, 0))
+				return false;
+
+			IUiDefInfo * pUiDef = SUiDef::CreateUiDefInfo2(pResProvider, _T("uidef:xml_init"));
+			if (pUiDef->GetSkinPool() || pUiDef->GetStylePool() || pUiDef->GetObjDefAttr())
+			{//不允许皮肤中存在全局的skin and style data
+				pUiDef->Release();
+				return false;
+			}
+
+			SLOG_INFO("step3, load external skin ok");
+
+			if (!g_SettingsG->strSkin.IsEmpty())
+			{//清除正在使用的外置皮肤。
+				SLOG_INFO("step4, remove current in using external skin");
+
+				IResProvider *pLastRes = SApplication::getSingleton().GetTailResProvider();
+				SApplication::getSingleton().RemoveResProvider(pLastRes);
+			}
+
+			SLOG_INFO("step6, extract skin defined offset");
+			m_ptSkinOffset = CSkinMananger::ExtractSkinOffset(pResProvider);
+
+			SLOG_INFO("step7, add new skin to sinstar3");
+			SApplication::getSingleton().AddResProvider(pResProvider, NULL);
+
+			SLOG_INFO("step8, set uidef");
+			pUiDef->GetNamedColor().Merge(m_defUiDefine->GetNamedColor());
+			pUiDef->GetNamedString().Merge(m_defUiDefine->GetNamedString());
+			pUiDef->GetNamedDimension().Merge(m_defUiDefine->GetNamedDimension());
+			SUiDef::getSingleton().SetUiDef(pUiDef);
+			pUiDef->Release();
+
+			//还原skinpool and stylepool.
+			SLOG_INFO("step9, restore builtin skin, style and object default pools.");
+			SUiDef::getSingleton().GetUiDef()->SetSkinPool(m_defUiDefine->GetSkinPool());
+			SUiDef::getSingleton().GetUiDef()->SetStylePool(m_defUiDefine->GetStylePool());
+			SUiDef::getSingleton().GetUiDef()->SetObjDefAttr(m_defUiDefine->GetObjDefAttr());
+			SLOG_INFO("step10, set external skin ok");
+		}
+		else if (!g_SettingsG->strSkin.IsEmpty())
+		{//清除正在使用的外置皮肤,还原使用系统内置皮肤
+			SLOG_INFO("step11, remove external skin");
+			IResProvider *pLastRes = SApplication::getSingleton().GetTailResProvider();
+			SApplication::getSingleton().RemoveResProvider(pLastRes);
+
+			SLOG_INFO("step12, restore uidef");
+			SUiDef::getSingleton().SetUiDef(m_defUiDefine);
+
+			SLOG_INFO("step13, extract builtin skin defined offset");
+			IResProvider *pCurRes = SApplication::getSingleton().GetHeadResProvider();
+			CDataCenter::getSingleton().GetData().m_ptSkinOffset = CSkinMananger::ExtractSkinOffset(pCurRes);
+		}
+		return true;
 	}
 
 
