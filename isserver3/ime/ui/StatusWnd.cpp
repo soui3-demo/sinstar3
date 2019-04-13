@@ -608,7 +608,7 @@ namespace SOUI
 				SStringA strCompUtf8 = S_CT2A(openDlg.m_szFileName, CP_UTF8);
 				if (ISACK_SUCCESS != ISComm_InstallComp(strCompUtf8, 1))
 				{
-					SMessageBox(GetActiveWindow(), _T("安装编码失败,可能已经存在该编码"), _T("提示"), MB_OK | MB_ICONSTOP);
+					SMessageBox(GetDesktopWindow(), _T("安装编码失败,可能已经存在该编码"), _T("提示"), MB_OK | MB_ICONSTOP);
 				}
 			}
 		}else if(nRet == R.id.skin_cloud)

@@ -609,20 +609,20 @@ LRESULT CIsSvrProxy::OnCopyData(HWND hWnd,PCOPYDATASTRUCT lpCopyData)
 		SStringA strPath = S_CW2A((wchar_t*)lpCopyData->lpData);
 		if(m_pCore->InstallCit(strPath))
 		{
-			SMessageBox(GetActiveWindow(),_T("码表安装成功！"),_T("提示"),MB_OK|MB_ICONINFORMATION);
+			SMessageBox(GetDesktopWindow(),_T("码表安装成功！"),_T("提示"),MB_OK|MB_ICONINFORMATION);
 		}else
 		{
-			SMessageBox(GetActiveWindow(),SStringT().Format(_T("码表安装失败！错误码:%d"),GetLastError()),_T("提示"),MB_OK|MB_ICONSTOP);
+			SMessageBox(GetDesktopWindow(),SStringT().Format(_T("码表安装失败！错误码:%d"),GetLastError()),_T("提示"),MB_OK|MB_ICONSTOP);
 		}
 	}else if(lpCopyData->dwData == CD_CMD_INSTALL_PLT)
 	{//install plt
 		SStringA strPath = S_CW2A((wchar_t*)lpCopyData->lpData);
 		if(m_pCore->InstallPlt(strPath))
 		{
-			SMessageBox(GetActiveWindow(),_T("词库安装成功！"),_T("提示"),MB_OK|MB_ICONINFORMATION);
+			SMessageBox(GetDesktopWindow(),_T("词库安装成功！"),_T("提示"),MB_OK|MB_ICONINFORMATION);
 		}else
 		{
-			SMessageBox(GetActiveWindow(),SStringT().Format(_T("词库安装失败！错误码:%d"),GetLastError()),_T("提示"),MB_OK|MB_ICONSTOP);
+			SMessageBox(GetDesktopWindow(),SStringT().Format(_T("词库安装失败！错误码:%d"),GetLastError()),_T("提示"),MB_OK|MB_ICONSTOP);
 		}
 	}else if(lpCopyData->dwData == CD_CMD_INSTALL_SKIN)
 	{
@@ -632,12 +632,12 @@ LRESULT CIsSvrProxy::OnCopyData(HWND hWnd,PCOPYDATASTRUCT lpCopyData)
 		SStringT strDst = m_strDataPath + _T("\\skins")+strName;
 		if(CopyFile(strPath,strDst,FALSE))
 		{
-			if(IDOK==SMessageBox(GetActiveWindow(),_T("词库皮肤成功！现在使用吗?"),_T("提示"),MB_OKCANCEL|MB_ICONQUESTION))
+			if(IDOK==SMessageBox(GetDesktopWindow(),_T("词库皮肤成功！现在使用吗?"),_T("提示"),MB_OKCANCEL|MB_ICONQUESTION))
 			{
 				if(!CDataCenter::getSingletonPtr()->GetData().changeSkin(strDst))
 				{
 					DeleteFile(strDst);
-					SMessageBox(GetActiveWindow(),_T("应用皮肤失败!不支持的皮肤格式"),_T("错误"),MB_OK|MB_ICONSTOP);
+					SMessageBox(GetDesktopWindow(),_T("应用皮肤失败!不支持的皮肤格式"),_T("错误"),MB_OK|MB_ICONSTOP);
 				}else
 				{
 					g_SettingsG->strSkin = strDst;
@@ -661,7 +661,7 @@ LRESULT CIsSvrProxy::OnCopyData(HWND hWnd,PCOPYDATASTRUCT lpCopyData)
 			}
 		}else
 		{
-			SMessageBox(GetActiveWindow(),SStringT().Format(_T("词库皮肤失败！错误码:%d"),GetLastError()),_T("提示"),MB_OK|MB_ICONSTOP);
+			SMessageBox(GetDesktopWindow(),SStringT().Format(_T("词库皮肤失败！错误码:%d"),GetLastError()),_T("提示"),MB_OK|MB_ICONSTOP);
 		}
 
 	}
