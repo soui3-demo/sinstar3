@@ -201,7 +201,7 @@ int CInputState::TestHotKey(UINT uVk, const BYTE * lpbKeyState) const
 	{
 		if (m_ctx.cComp > 0 || m_ctx.inState == INST_USERDEF)
 			iRet = -1;
-		if(IsTempSpell() && iRet == HKI_UDMode)
+		if(iRet == HKI_UDMode && (g_SettingsG->compMode == IM_SPELL || IsTempSpell()))
 			iRet = -1;
 	}else//iRet == -1
 	{
