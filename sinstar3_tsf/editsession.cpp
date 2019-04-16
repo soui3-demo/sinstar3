@@ -198,7 +198,7 @@ STDMETHODIMP CEsChangeComposition::DoEditSession(TfEditCookie ec)
 	SOUI::SComPtr<ITfRange> pRangeSel;
 	SOUI::SComPtr<ITfComposition> pComposition = _pTextService->GetITfComposition();
 
-	SASSERT(pComposition);
+	SASSERT_RET(pComposition, return E_FAIL);
 
 	TF_SELECTION tfSelection;
 	ULONG cFetched;
@@ -306,10 +306,12 @@ STDMETHODIMP CEsUpdateResultAndComp::DoEditSession(TfEditCookie ec)
 		SLOG_WARN("force start composition in CEsUpdateResultAndComp!!!");
 		_pTextService->_StartComposition(_pContext);
 	}
-	SASSERT(_pTextService->_IsCompositing());
-	SOUI::SComPtr<ITfComposition> pCompostion=_pTextService->GetITfComposition();
+	if(!_pTextService->_IsCompositing())
+		return E_FAIL;
+	SOUI::SComPtr<ITfComposition> pComposition=_pTextService->GetITfComposition();
+	SASSERT_RET(pComposition, return E_FAIL);
 	//将当前数据上屏
-	pCompostion->GetRange(&pRangeComposition);
+	pComposition->GetRange(&pRangeComposition);
 	if(!pRangeComposition)
 	{
 		SLOG_WARN("CEsUpdateResultAndComp::DoEditSession getRange return null");
@@ -330,7 +332,7 @@ STDMETHODIMP CEsUpdateResultAndComp::DoEditSession(TfEditCookie ec)
 	if(pRangeComposition->IsEmpty(ec,&fEmpty)==S_OK && !fEmpty)
 	{
 		pRangeComposition->Collapse(ec,TF_ANCHOR_END);
-		pCompostion->ShiftStart(ec,pRangeComposition);
+		pComposition->ShiftStart(ec,pRangeComposition);
 	}
 
 	TF_SELECTION tfSelection;

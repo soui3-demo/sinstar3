@@ -6,10 +6,11 @@
 #include "../InputState.h"
 #include "../ShellExecuteMonitor.h"
 #include "../../../include/FileHelper.h"
+#include <ShellAPI.h>
 
 namespace SOUI
 {
-	class CDenoteDlg: public SHostWnd
+	class CDenoteDlg: public SHostWnd, public SDpiHandler<CDenoteDlg>
 	{
 	public:
 		CDenoteDlg():SHostWnd(UIRES.LAYOUT.dlg_donate){}
@@ -26,6 +27,12 @@ namespace SOUI
 		EVENT_MAP_BEGIN()
 			EVENT_ID_COMMAND(IDCANCEL,OnClose)
 		EVENT_MAP_END()
+
+	protected:
+		BEGIN_MSG_MAP_EX(CDenoteDlg)
+			CHAIN_MSG_MAP(SDpiHandler<CDenoteDlg>)
+			CHAIN_MSG_MAP(SHostWnd)
+		END_MSG_MAP()
 	};
 
 	static int PopupMenuEndID(int nStart)
@@ -601,9 +608,12 @@ namespace SOUI
 				SStringA strCompUtf8 = S_CT2A(openDlg.m_szFileName, CP_UTF8);
 				if (ISACK_SUCCESS != ISComm_InstallComp(strCompUtf8, 1))
 				{
-					SMessageBox(GetActiveWindow(), _T("安装编码失败,可能已经存在该编码"), _T("提示"), MB_OK | MB_ICONSTOP);
+					SMessageBox(GetDesktopWindow(), _T("安装编码失败,可能已经存在该编码"), _T("提示"), MB_OK | MB_ICONSTOP);
 				}
 			}
+		}else if(nRet == R.id.skin_cloud)
+		{
+			ShellExecute(NULL,_T("open"),_T("http://soime.cn/skin"),NULL,NULL,SW_SHOWNORMAL);
 		}
 		else if (nRet > R.id.comp_install && nRet < PopupMenuEndID(R.id.comp_install))
 		{//comps
@@ -679,6 +689,7 @@ namespace SOUI
 		{
 			CDenoteDlg *dlgDonate = new CDenoteDlg;
 			dlgDonate->Create(m_hWnd,WS_POPUP,WS_EX_TOPMOST,0,0,0,0);
+			dlgDonate->SendMessage(WM_INITDIALOG);
 			dlgDonate->CenterWindow(GetDesktopWindow());
 			dlgDonate->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
 		}

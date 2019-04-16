@@ -1143,14 +1143,7 @@ SWindow *pCtrl = FindChildByID(id);\
 	int CConfigDlg::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	{
 		int nRet = __super::OnCreate(lpCreateStruct);
-		if (nRet != 0) return nRet;
-		int nScale = SDpiHelper::getScale(m_hWnd);
-		CRect rcWnd;
-		CSimpleWnd::GetWindowRect(&rcWnd);
-		
-		SetWindowPos(NULL,0,0,rcWnd.Width()*nScale/100,rcWnd.Height()*nScale/100,SWP_NOZORDER|SWP_NOMOVE);
-		SDispatchMessage(UM_SETSCALE,nScale,0);
-	
+		if (nRet != 0) return nRet;	
 		ISComm_Login(m_hWnd);
 		InitPages();
 		return 0;

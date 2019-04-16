@@ -8,4 +8,6 @@ cd "..\大字-紫黛云鬓"
 "..\..\tools\7z.exe" a -tzip "..\..\data\skins\大字-紫黛云鬓.sskn" "*" -r -mmt=on 
 cd "..\京剧武生"
 "..\..\tools\7z.exe" a -tzip "..\..\data\skins\京剧武生.sskn" "*" -r -mmt=on 
+cd "..\表形码logo"
+"..\..\tools\7z.exe" a -tzip "..\..\data\skins\表形码logo.sskn" "*" -r -mmt=on 
 cd ..

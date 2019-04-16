@@ -12,7 +12,7 @@ namespace SOUI
 		virtual void OnUpdateNow() = 0;
 	};
 
-	class CConfigDlg: public SHostWnd
+	class CConfigDlg: public SHostWnd, public SDpiHandler<CConfigDlg>
 	{
 	public:
 		CConfigDlg(IUpdateIntervalObserver *pObserver);
@@ -161,6 +161,7 @@ namespace SOUI
 		BEGIN_MSG_MAP_EX(CConfigDlg)
 			MSG_WM_CREATE(OnCreate)
 			MSG_WM_DESTROY(OnDestroy)
+			CHAIN_MSG_MAP(SDpiHandler<CConfigDlg>)
 			CHAIN_MSG_MAP(SHostWnd)
 		END_MSG_MAP()
 
