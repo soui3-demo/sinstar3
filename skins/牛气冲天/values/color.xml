@@ -10,61 +10,61 @@
   <!--状态栏编码颜色-->
   <comp_name value="rgb(255,255,255)"/>
   <!--英文联想前缀-->
-  <associate_english_prefix value="#808080"/>
+  <associate_english_prefix value="rgb(255,128,192)"/>
   <!--临时拼音标志-->
-  <temp_spell_flag value="rgb(255,0,0)"/>
+  <temp_spell_flag value="rgb(255,128,192)"/>
   <!--第一重码--> 
   <cand_first value="rgb(255,255,255)"/>
   <!--重码的序号-->
   <cand_index value="rgb(255,255,0)"/>
   <!--重码颜色-->
-  <cand_text value="rgb(255,255,181)"/>
+  <cand_text value="rgb(255,255,255)"/>
   <!--重码的编码提示-->
-  <cand_comp value="rgb(0,255,255)"/>
+  <cand_comp value="rgb(192,192,192)"/>
   <!--重码的编码中的万能键-->
   <cand_wild value="rgb(255,0,0)"/>
   <!--英文重码的音标-->
   <cand_phonetic value="rgb(0,0,255)"/>
 
  <!--自定义重码-->
-  <cand_user_def value="rgb(255,128,255)"/>
+  <cand_user_def value="rgb(255,128,128)"/>
   <!--自定义命令-->
  <cand_user_cmd value="rgb(255,128,255)"/>
  <!--自动预测重码-->
  <cand_forecast value="rgb(0,255,255)"/>
  <!--拼音重码-->
- <cand_blend_py value="rgb(192,192,192)"/>
+ <cand_blend_py value="rgb(255,255,255)"/>
   <!--GBK重码-->
  <cand_gbk value="rgb(0,255,0)"/>
 
   <!--语句输入中上一次上屏部分-->
   <sent_input value="rgb(255,255,255)"/>
   <!--语句输入的选中部分-->
-  <sent_left value="rgb(0,255,255)"/>
+  <sent_left value="rgb(220,220,220)"/>
   <!--语句输入的剩余部分-->
-  <sent_right value="rgb(255,128,255)"/>
+  <sent_right value="rgb(0,255,64)"/>
   <!--未激活状态的语句联想-->
   <sent_inactive value="rgb(0,255,64)"/>
 
   <!--普通编码-->
   <comp_normal value="rgb(255,255,255)"/>
   <!--编码前缀-->
-  <comp_umode_prefix value="rgb(255,0,0)"/>
+  <comp_umode_prefix value="rgb(255,128,192)"/>
    <!--编码自动完成-->
-  <comp_auto_complete value="rgb(255,128,128"/>
+  <comp_auto_complete value="rgb(192,192,192"/>
   <!--编码窗口显示的提示-->
   <tip_comp value="#808080"/>
    <!--重码窗口显示的提示-->
   <tip_cand value="#808080"/>
   
   <!--拼音-->
-   <spell value="rgb(0,2555,255)"/>
+   <spell value="rgb(192,192,192)"/>
    <!--拼音转换的汉字-->
   <spell_result value="rgb(255,255,255)"/>
   <!--拼音光标-->
-  <spell_caret value="rgb(255,0,0)"/>
+  <spell_caret value="rgb(255,128,192)"/>
   <!--拼音焦点-->
-  <spell_edit value="rgb(255,255,0)"/>
+  <spell_edit value="rgb(255,128,255)"/>
 
 </color> 
  

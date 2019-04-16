@@ -19,7 +19,8 @@
     <file name="png_charmode_half" path="image\charmode_half.png"/>
     <file name="png_status_open" path="image\status_open.png"/>
     <file name="png_status_close" path="image\status_close.png"/>
-    <file name="png_composition" path="image\composition.png"/>
+    <file name="png_bg_comp" path="image\bg_comp.png"/>
+    <file name="png_bg_cand" path="image\bg_cand.png"/>
     <file name="btn_extend" path="image\btn_extend.png"/>
     <file name="btn_shrink" path="image\btn_shrink.png"/>
     <file name="btn_extend" path="image\btn_extend.png"/>
