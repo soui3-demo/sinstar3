@@ -108,7 +108,6 @@ protected:
 	bool SetAutoRun(bool bAutoRun) const;
 
 	void OnEndSession(BOOL bEnding, UINT uLogOff);
-
 	BEGIN_MSG_MAP_EX(CIsSvrProxy)
 		CHAIN_MSG_MAP_2_IPC(m_ipcSvr)
 		if (m_pCore) CHAIN_MSG_MAP_MEMBER(*m_pCore)
@@ -124,8 +123,8 @@ protected:
 		COMMAND_ID_HANDLER_EX(R.id.menu_auto_run, OnMenuAutoRun)
 		MESSAGE_HANDLER_EX(UM_TRAYNOTIFY, OnTrayNotify)
 		CHAIN_MSG_MAP_MEMBER(m_trayIcon)
-		CHAIN_MSG_MAP(CSimpleWnd)
 		MSG_WM_ENDSESSION(OnEndSession)
+		CHAIN_MSG_MAP(CSimpleWnd)
 		REFLECT_NOTIFICATIONS_EX()
 	END_MSG_MAP()
 private:
