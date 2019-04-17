@@ -129,8 +129,18 @@ LRESULT OnCopyData(HWND hWnd, WPARAM wp, LPARAM lp)
 		{
 			DWORD pid = 0;
 			memcpy(&pid, pCds->lpData, sizeof(DWORD));
-			HWND hWnd= GetProcessWnd(pid);
-			::SetForegroundWindow(hWnd);
+			HWND hWnd=0;
+			DWORD dwThreadID=0;
+			GetProcessInfo(pid,hWnd,dwThreadID);
+			DWORD dwCurId = GetCurrentThreadId();
+			AttachThreadInput(dwCurId,dwThreadID,TRUE);
+			if (IsIconic(hWnd))
+			{
+				ShowWindow(hWnd, SW_RESTORE);
+			}
+			SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+			SetWindowPos(hWnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+			AttachThreadInput(dwCurId, dwThreadID, FALSE);
 			lRet = 0;
 		}
 		break;

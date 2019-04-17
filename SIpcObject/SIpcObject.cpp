@@ -72,9 +72,13 @@ namespace SOUI
 			return E_INVALIDARG;
 		if (!IsWindow(hRemote))
 			return E_INVALIDARG;
-
-		LRESULT lRet = ::SendMessage(hRemote, UM_CALL_FUN, FUN_ID_CONNECT, (LPARAM)hLocal);
+		ULONG_PTR dwResult = 0;
+		LRESULT lRet = ::SendMessageTimeout(hRemote, UM_CALL_FUN, FUN_ID_CONNECT, (LPARAM)hLocal, SMTO_ABORTIFHUNG,100,&dwResult);
 		if (lRet == 0)
+		{
+			return E_FAIL;
+		}
+		if (dwResult == 0)
 		{
 			return E_FAIL;
 		}
@@ -88,7 +92,7 @@ namespace SOUI
 			return E_UNEXPECTED;
 		if (m_hRemoteId == NULL)
 			return E_UNEXPECTED;
-		::SendMessage(m_hRemoteId, UM_CALL_FUN, FUN_ID_DISCONNECT, (LPARAM)m_hLocalId);
+		::PostMessage(m_hRemoteId, UM_CALL_FUN, FUN_ID_DISCONNECT, (LPARAM)m_hLocalId);
 		m_hRemoteId = NULL;
 		m_recvBuf.Close();
 		m_hLocalId = NULL;

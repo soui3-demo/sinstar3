@@ -147,8 +147,9 @@ BOOL ProcessModuleDetect(DWORD dwProcID,LPCTSTR pszModuleName,LPCTSTR pszProcFil
 
 typedef struct tagEWPARAM
 {
-	HWND hWnd;
 	DWORD dwProcID;
+	HWND hWnd;
+	DWORD dwThreadID;
 }EWPARAM;
 
 BOOL CALLBACK MyEnumWindowsProc(
@@ -158,18 +159,21 @@ BOOL CALLBACK MyEnumWindowsProc(
 {
 	DWORD dwProcID=0;
 	EWPARAM *p=(EWPARAM*)lParam;
-	GetWindowThreadProcessId(hWnd,&dwProcID);
+	DWORD dwThreadID = GetWindowThreadProcessId(hWnd,&dwProcID);
 	if(dwProcID==p->dwProcID && !GetParent(hWnd) && !(GetWindowLong(hWnd,GWL_EXSTYLE)&WS_EX_TOOLWINDOW) && !(GetWindowLong(hWnd,GWL_STYLE)&WS_DISABLED))
 	{
 		p->hWnd=hWnd;
+		p->dwThreadID = dwThreadID;
 		return FALSE;
 	}
 	return TRUE;
 }
 
- HWND GetProcessWnd(DWORD dwProcID)
+ BOOL GetProcessInfo(DWORD dwProcID,HWND &hWnd, DWORD &dwThreadID)
 {
-	EWPARAM ewp={0,dwProcID};
-	EnumWindows(MyEnumWindowsProc,(LPARAM)&ewp);
-	return ewp.hWnd;
+	EWPARAM ewp={ dwProcID,0};
+	BOOL bRet = EnumWindows(MyEnumWindowsProc,(LPARAM)&ewp);
+	hWnd = ewp.hWnd;
+	dwThreadID = ewp.dwThreadID;
+	return bRet;
 }
