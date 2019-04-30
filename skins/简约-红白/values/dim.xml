@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+  <dim>
+    <!--输入窗口编码窗口皮肤九宫格配置-->
+    <comp_margin_left value="8"/>
+    <comp_margin_top value="8"/>
+    <comp_margin_right value="8"/>
+    <comp_margin_bottom value="2"/>
+	
+	<!--输入窗口重码窗口皮肤九宫格配置-->
+    <cand_margin_left value="8"/>
+    <cand_margin_top value="2"/>
+    <cand_margin_right value="8"/>
+    <cand_margin_bottom value="8"/>
+
+	<!--编码窗口内边距-->
+    <comp_padding_left value="8"/>
+    <comp_padding_top value="2"/>
+    <comp_padding_right value="10"/>
+    <comp_padding_bottom value="5"/>
+
+	<!--重码窗口内边距-->
+	<cand_padding_left value="8"/>
+    <cand_padding_top value="2"/>
+    <cand_padding_right value="10"/>
+    <cand_padding_bottom value="5"/>
+    
+    <interval_comp_prefix value="5"/>
+    <interval_cand_prefix value="3"/>
+    <interval_comp value="10"/>
+    <interval_cand value="5"/>
+
+    <status_logo_size value="16"/>
+
+	<!--收缩状态的内边距-->
+    <shrink_padding_left value="5"/>
+    <shrink_padding_top value="0"/>
+    <shrink_padding_right value="1"/>
+    <shrink_padding_bottom value="0"/>
+
+	<!--扩展状态内边距-->
+    <extend_padding_left value="5"/>
+    <extend_padding_top value="0"/>
+    <extend_padding_right value="1"/>
+    <extend_padding_bottom value="0"/>
+    
+    <!--状态栏logo边框-->
+    <status_logo_margin_left value="0"/>
+    <status_logo_margin_top value="0"/>
+    <status_logo_margin_right value="0"/>
+    <status_logo_margin_bottom value="0"/>
+
+  </dim>
