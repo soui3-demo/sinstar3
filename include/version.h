@@ -10,10 +10,10 @@
 #define _sinstar3_ime_version_a		3
 #define _sinstar3_ime_version_b		0
 #define _sinstar3_ime_version_c		4
-#define _sinstar3_ime_version_d		8
+#define _sinstar3_ime_version_d		9
 
 #define _sinstar3_ime_name			启程输入法
-#define _sinstar3_ime				启程输入法IME模块
+#define _sinstar3_ime		 		启程输入法IME模块
 #define _sinstar3_tsf				启程输入法TSF模块
 #define _sinstar3_mutex             sinstar3_mutex_40AC2365-F592-4BE3-8B41-04A6B5337BFB
 
