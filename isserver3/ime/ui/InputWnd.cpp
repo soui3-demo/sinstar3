@@ -67,7 +67,11 @@ namespace SOUI
 		MONITORINFO info = { sizeof(info),0 };
 		GetMonitorInfo(hMonitor, &info);
 		CRect rcWorkArea = info.rcWork;
-		if (pos.x + rcWnd.Width() > rcWorkArea.right)
+		if(pos.x<rcWorkArea.left)
+		{
+			pos.x = rcWorkArea.left;
+		}
+		else if (pos.x + rcWnd.Width() > rcWorkArea.right)
 		{
 			pos.x = rcWorkArea.right - rcWnd.Width();
 		}

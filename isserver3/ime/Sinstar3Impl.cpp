@@ -502,6 +502,8 @@ void CSinstar3Impl::OpenConfig()
 
 void CSinstar3Impl::ShowTip(LPCTSTR pszTitle, LPCTSTR pszContent)
 {
+	if(!m_pStatusWnd->IsWindowVisible())
+		return;
 	if (m_pTipWnd == NULL)
 	{
 		m_pTipWnd = new STipWnd(this);

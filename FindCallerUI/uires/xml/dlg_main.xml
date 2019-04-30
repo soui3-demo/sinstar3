@@ -12,18 +12,18 @@ translucent="1"
       <imgbtn name="btn_min" skin="_skin.sys.btn.minimize" pos="-121,0" animate="1" />
     </caption>
     <window pos="5,[2,-5,-5" layout="vbox">
-      <window size="-2,-1" layout="hbox">
+      <window size="-2,-1" layout="hbox" gravity="center">
         <text text="文件名:"/>
         <edit size="0,30" weight="1" name="edit_dll" readonly="1"/>
       </window>
-      <window size="-2,0" weight="1" layout="hbox">
+      <window size="-2,0" weight="1" layout="hbox" interval="10">
         <mclistview size="0,-2" weight="1" name="mclv_tasks" headerHeight="30">
             <header align="center" itemSwapEnable="1" fixWidth="0" font="underline:0,adding:-3" sortHeader="1" colorBkgnd="#ffffff" >
               <items>
-                <item width="50">type</item>
-                <item width="95">pid</item>
-                <item width="200">name</item>
-                <item width="200">path</item>
+                <item width="50">类型</item>
+                <item width="95">进程ID</item>
+                <item width="200">名称</item>
+                <item width="200">路径</item>
               </items>
             </header>
             <template itemHeight="40" colorHover="#cccccc" colorSelected="#0000ff">
@@ -41,10 +41,11 @@ translucent="1"
               </window>
             </template>
           </mclistview>
-        <window size="-1,-2" layout="vbox">
-          <button size="100,30" name="btn_refresh" text="refresh"/>
-          <button size="100,30" name="btn_activate" text="activate" extend_top="10"/>
-          <button size="100,30" name="btn_kill" text="kill" extend_top="10"/>
+        <window size="100,-2" layout="vbox" interval="10">
+          <button size="-2,30" name="btn_refresh" text="刷新"/>
+          <button size="-2,30" name="btn_activate" text="激活" extend_top="10"/>
+          <button size="-2,30" name="btn_kill" text="强制退出" extend_top="10"/>
+          <text size="-2,-1" multiLines="1" colorText="#ff0000" text="警告:\n强制退出进程将会杀死进程，使用前先确认目标进程的数据已经保存，切记！"/> 
         </window>
       </window>
     </window>

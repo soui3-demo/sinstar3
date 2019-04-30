@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UIDEF>
+  <desc author="小新" name="简约-红白" version="1.0" />
+  <font face="宋体" size="20"/>
+
+  <color src="values:color"/>
+  <dim src="values:dim"/>
+  
+</UIDEF>
