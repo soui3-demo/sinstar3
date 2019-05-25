@@ -2,6 +2,8 @@
 #include "SinstarProxy.h"
 #include <shellapi.h>
 #include "../helper/helper.h"
+#include <assert.h>
+
 using namespace SOUI;
 
 namespace SOUI{
@@ -10,6 +12,28 @@ namespace SOUI{
 		BOOL SCreateInstance(IObjRef ** ppIpcFactory);
 	}
 }
+
+const LPCTSTR kBlackList[]=
+{
+_T("SearchUI.exe"),//win10 ¿ªÊ¼²Ëµ¥
+};
+
+bool CSinstarProxy::isInBlackList()
+{
+	TCHAR szPath[MAX_PATH+1];
+	GetModuleFileName(NULL,szPath,MAX_PATH);
+	LPCTSTR pszName = _tcsrchr(szPath,_T('\\'));
+	assert(pszName);
+	pszName++;
+
+	for(int i=0;i<ARRAYSIZE(kBlackList);i++)
+	{
+		if(_tcsicmp(kBlackList[i],pszName)==0)
+			return true;
+	}
+	return false;
+}
+
 
 CSinstarProxy::CSinstarProxy(ITextService *pTxtService):m_conn(pTxtService)
 {

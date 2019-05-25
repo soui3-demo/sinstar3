@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "sinstar3_tsf.h"
+#include "../sinstar3_proxy/SinstarProxy.h"
 
 CTsfModule	*theModule = NULL;
 
@@ -12,6 +13,10 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
 		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF|_CRTDBG_LEAK_CHECK_DF);
 #endif
 		SLOG_INFO(L"DLL_PROCESS_ATTACH");
+
+		//check for black list
+		if(CSinstarProxy::isInBlackList())
+			return FALSE;
 
 		{
 

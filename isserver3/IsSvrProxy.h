@@ -28,6 +28,7 @@ class CIsSvrProxy : public CSimpleWnd
 	, public IUpdateIntervalObserver
 	, public SOUI::IIpcSvrCallback
 	, public TAutoEventMapReg<CIsSvrProxy>
+	, public IConntionFocusListener
 {
 	friend class CWorker;
 public:
@@ -37,7 +38,7 @@ public:
 protected:
 	virtual void OnNewConnection(IIpcHandle * pIpcHandle, IIpcConnection ** ppConn)
 	{
-		*ppConn = new CSvrConnection(pIpcHandle,m_hWnd);
+		*ppConn = new CSvrConnection(pIpcHandle,m_hWnd,this);
 	}
 
 	virtual int GetBufSize() const {
@@ -45,8 +46,12 @@ protected:
 	}
 	virtual void * GetSecurityAttr() const;
 	virtual void ReleaseSecurityAttr(void* psa) const;
-	virtual void OnConnected(IIpcConnection * pConn) {}
-	virtual void OnDisconnected(IIpcConnection * pConn) {}
+	virtual void OnConnected(IIpcConnection * pConn);
+	virtual void OnDisconnected(IIpcConnection * pConn);
+
+protected:
+	virtual void OnSetFocus(CSvrConnection * pConn);
+	virtual void OnKillFocus(CSvrConnection * pConn);
 
 protected:
 	virtual void OnKeyMapFree(CKeyMapDlg *pWnd);
@@ -127,6 +132,8 @@ protected:
 		CHAIN_MSG_MAP(CSimpleWnd)
 		REFLECT_NOTIFICATIONS_EX()
 	END_MSG_MAP()
+
+
 private:
 	int			m_nUpdateInterval;
 
@@ -150,5 +157,7 @@ private:
 	SHostDialog	* m_pCurModalDlg;
 
 	PCOPYDATASTRUCT m_pPendingCmd;
+
+	CSvrConnection * m_pFocusConn;
 };
 

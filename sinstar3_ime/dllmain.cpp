@@ -3,6 +3,7 @@
 #include <ShlObj.h>
 #include "ImeModule.h"
 #include "ImeMgr.h"
+#include "../sinstar3_proxy/SinstarProxy.h"
 
 #undef ENABLE_VLD
 #ifdef ENABLE_VLD
@@ -22,6 +23,9 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 #ifdef _DEBUG
 		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF|_CRTDBG_LEAK_CHECK_DF);
 #endif
+		//check for black list
+		if(CSinstarProxy::isInBlackList())
+			return FALSE;
 		{
 			TCHAR szPath[MAX_PATH] = { 0 };
 			CRegKey reg;

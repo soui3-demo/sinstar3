@@ -3,11 +3,12 @@
 #include "Sinstar3Impl.h"
 #include "../helper/helper.h"
 
-CSvrConnection::CSvrConnection(IIpcHandle *pIpcHandle,HWND hSvr)
+CSvrConnection::CSvrConnection(IIpcHandle *pIpcHandle,HWND hSvr,IConntionFocusListener * pFocusListener)
 :m_ipcHandle(pIpcHandle)
 ,m_hSvr(hSvr)
 ,m_xScale(1.0f)
 ,m_yScale(1.0f)
+,m_pFocusListener(pFocusListener)
 {
 }
 
@@ -201,6 +202,13 @@ void CSvrConnection::HandleOnSetFocus(Param_OnSetFocus &param)
 	SLOG_INFO("OnSetFocus, host:"<<m_strHostPath.c_str()<<" bFocus:"<<param.bFocus);
 	if(!m_pSinstar) return;
 	m_pSinstar->OnSetFocus(param.bFocus);
+	if(m_pFocusListener)
+	{
+		if(param.bFocus)
+			m_pFocusListener->OnSetFocus(this);
+		else
+			m_pFocusListener->OnKillFocus(this);
+	}
 }
 
 void CSvrConnection::HandleGetCompositionSegments(Param_GetCompositionSegments &param)

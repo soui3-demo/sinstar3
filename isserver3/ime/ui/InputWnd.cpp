@@ -63,10 +63,19 @@ namespace SOUI
 		CPoint pos = pt - CDataCenter::getSingleton().GetData().m_ptSkinOffset;
 		CRect rcWnd = GetClientRect();
 		
-		HMONITOR hMonitor = MonitorFromWindow(m_hOwner, MONITOR_DEFAULTTONEAREST);
-		MONITORINFO info = { sizeof(info),0 };
-		GetMonitorInfo(hMonitor, &info);
-		CRect rcWorkArea = info.rcWork;
+		CRect rcWorkArea;
+		if(::IsWindow(m_hOwner))
+		{
+			HMONITOR hMonitor = MonitorFromWindow(m_hOwner, MONITOR_DEFAULTTONEAREST);
+			MONITORINFO info = { sizeof(info),0 };
+			GetMonitorInfo(hMonitor, &info);
+			rcWorkArea = info.rcWork;
+			SLOGFMTI("work area: %d,%d,%d,%d",rcWorkArea.left,rcWorkArea.top,rcWorkArea.right,rcWorkArea.bottom);
+		}else
+		{
+			SystemParametersInfo(SPI_GETWORKAREA,0,(PVOID)&rcWorkArea,0);
+			SLOGFMTW("!!!!! owner is not a window! work area: %d,%d,%d,%d",rcWorkArea.left,rcWorkArea.top,rcWorkArea.right,rcWorkArea.bottom);
+		}
 		if(pos.x<rcWorkArea.left)
 		{
 			pos.x = rcWorkArea.left;

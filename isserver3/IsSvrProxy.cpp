@@ -53,6 +53,7 @@ CIsSvrProxy::CIsSvrProxy(const SStringT &strDataPath,const SStringT & strSvrPath
 	, m_pBuildIndexProg(NULL)
 	, m_pCurModalDlg(NULL)
 	, m_pPendingCmd(NULL)
+	,m_pFocusConn(NULL)
 {
 	m_uMsgTaskbarCreated = RegisterWindowMessage(TEXT("TaskbarCreated"));
 }
@@ -668,3 +669,36 @@ LRESULT CIsSvrProxy::OnCopyData(HWND hWnd,PCOPYDATASTRUCT lpCopyData)
 	return 1;
 }
 
+void CIsSvrProxy::OnSetFocus(CSvrConnection * pConn)
+{
+	if(m_pFocusConn)
+	{
+		if(m_pFocusConn!=pConn)
+		{
+			Param_OnSetFocus param;
+			param.bFocus = FALSE;
+			m_pFocusConn->HandleOnSetFocus(param);
+		}
+	}
+	m_pFocusConn = pConn;
+}
+
+void CIsSvrProxy::OnKillFocus(CSvrConnection * pConn)
+{
+	if(pConn == m_pFocusConn)
+		m_pFocusConn=NULL;
+}
+
+void CIsSvrProxy::OnConnected(IIpcConnection * pConn)
+{
+
+}
+
+
+void CIsSvrProxy::OnDisconnected(IIpcConnection * pConn)
+{
+	if(pConn == (IIpcConnection *)m_pFocusConn)
+	{
+		m_pFocusConn = NULL;
+	}
+}

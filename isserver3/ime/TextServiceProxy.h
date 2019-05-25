@@ -6,9 +6,17 @@
 
 #include <unknown/obj-ref-impl.hpp>
 
+class CSvrConnection;
+struct IConntionFocusListener
+{
+	virtual void OnSetFocus(CSvrConnection * pConn) = 0;
+	virtual void OnKillFocus(CSvrConnection * pConn) = 0;
+};
+
 class CSvrConnection : public ITextService, public TObjRefImpl<SOUI::IIpcConnection> {
+	friend class CIsSvrProxy;
 public:
-	CSvrConnection::CSvrConnection(IIpcHandle *pIpcHandle,HWND hSvr);
+	CSvrConnection::CSvrConnection(IIpcHandle *pIpcHandle,HWND hSvr,IConntionFocusListener * pFocusListener);
 
 	CSvrConnection::~CSvrConnection(void);
 public:
@@ -92,4 +100,5 @@ private:
 	float				m_xScale;
 	float				m_yScale;
 	CAutoRefPtr<IIpcHandle> m_ipcHandle;
+	IConntionFocusListener	* m_pFocusListener;
 };

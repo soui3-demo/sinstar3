@@ -71,6 +71,8 @@ public:
 		result = m_conn.GetIpcHandle()->OnMessage((ULONG_PTR)hWnd,uMsg,wp,lp,bHandled);
 		return bHandled;
 	}
+
+	static bool isInBlackList();
 public:
 	// Í¨¹ý ISinstar ¼Ì³Ð
 	virtual void OnIMESelect(BOOL bSelect) override;
