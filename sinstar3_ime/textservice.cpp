@@ -11,7 +11,7 @@ BOOL CUiWnd::InputStringW(LPCWSTR pszBuf, int nLen)
 	{
 		return FALSE;
 	}
-	UINT64 pCtx = GetImeContext();
+	CImeContext * pCtx = GetImeContext();
 	if (!pCtx) return FALSE;
 	StartComposition(pCtx);
 	UpdateResultAndCompositionStringW(pCtx, pszBuf, nLen, NULL, 0);
@@ -25,7 +25,7 @@ BOOL CUiWnd::IsCompositing() const
 	return m_bCompositing;
 }
 
-void CUiWnd::StartComposition(UINT64 imeContext)
+void CUiWnd::StartComposition(CImeContext * imeContext)
 {
 	if (!imeContext) return;
 	if(!IsCompositing())
@@ -45,7 +45,7 @@ void CUiWnd::StartComposition(UINT64 imeContext)
 // nLeft,nRight: [-1,-1]:在当前光标位置插入
 //				 [0,-1]:替换全部内容
 //				 [left,right]:替换该范围，都不能为负值
-void CUiWnd::ReplaceSelCompositionW(UINT64 imeContext,int nLeft,int nRight,const WCHAR *wszComp,int nLen)
+void CUiWnd::ReplaceSelCompositionW(CImeContext * imeContext,int nLeft,int nRight,const WCHAR *wszComp,int nLen)
 {
 	if (!imeContext) return;
 #ifdef _UNICODE
@@ -77,12 +77,12 @@ void CUiWnd::ReplaceSelCompositionW(UINT64 imeContext,int nLeft,int nRight,const
 	}
 	ImmUnlockIMCC(pCtx->_lpContext->hCompStr);
 #else
-	#error "have not been implemented ReplaceSelCompositionA"
+	#error " ReplaceSelCompositionA have not been implemented"
 #endif//_UNICODE
 
 }
 
-void CUiWnd::UpdateResultAndCompositionStringW(UINT64 imeContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen)
+void CUiWnd::UpdateResultAndCompositionStringW(CImeContext * imeContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen)
 {
 	if (!imeContext) return;
 #ifdef _UNICODE
@@ -115,10 +115,10 @@ void CUiWnd::UpdateResultAndCompositionStringW(UINT64 imeContext,const WCHAR *ws
 #endif//_UNICODE
 }
 
-void CUiWnd::EndComposition(UINT64 imeContext)
+void CUiWnd::EndComposition(CImeContext * imeContext)
 {
 	if (!imeContext) return;
-	CImeContext *pCtx = (CImeContext *)imeContext;
+	CImeContext *pCtx = imeContext;
 	CCompStrEx *pCompStr = (CCompStrEx *)ImmLockIMCC(pCtx->_lpContext->hCompStr);
 	if (pCompStr && pCompStr->dwCompStrLen)
 	{
@@ -137,28 +137,29 @@ void CUiWnd::EndComposition(UINT64 imeContext)
 }
 
 
-UINT64 CUiWnd::GetImeContext()
+CImeContext * CUiWnd::GetImeContext() const
 {
-	if(m_pCurContext) return (UINT64)m_pCurContext;
+	if(m_pCurContext) 
+		return m_pCurContext;
 	CImeContext *pContext=new CImeContext;
 	HIMC hIMC=(HIMC)GetWindowLongPtr(m_hWnd,IMMGWLP_IMC);
-	if(pContext->Init(hIMC)) return (UINT64)pContext;
+	if(pContext->Init(hIMC)) 
+		return pContext;
 	delete pContext;
 	return NULL;
 }
 
-BOOL   CUiWnd::ReleaseImeContext(UINT64 imeContext)
+void  CUiWnd::ReleaseImeContext(CImeContext * imeContext) const
 {
-	if(m_pCurContext == (CImeContext*)imeContext) return TRUE;
-	if(!imeContext) return FALSE;
-	delete (CImeContext*)imeContext;
-	return TRUE;
+	if(m_pCurContext == imeContext) 
+		return;
+	if(imeContext) 
+		delete imeContext;
 }
 
 void  CUiWnd::SetConversionMode(EInputMethod mode)
 {
-	UINT64 nCtx = GetImeContext();
-	CImeContext *pCtx=(CImeContext *)nCtx;
+	CImeContext *pCtx=GetImeContext();
 	if(pCtx)
 	{
 		DWORD dwMode=0;
@@ -180,26 +181,25 @@ void  CUiWnd::SetConversionMode(EInputMethod mode)
 		//首先保证键盘状态同步
 		if(mode != HalfAlphanumeric)
 		{
-			if(!GetOpenStatus(nCtx)) SetOpenStatus(nCtx,TRUE);
+			SetOpenStatus(pCtx,TRUE);
 			ImmSetConversionStatus(pCtx->_hIMC,dwMode,0);
 		}else
 		{
-			if(GetOpenStatus(nCtx)) SetOpenStatus(nCtx,FALSE);
+			SetOpenStatus(pCtx,FALSE);
 		}
 	}
-	ReleaseImeContext(nCtx);
+	ReleaseImeContext(pCtx);
 }
 
 EInputMethod CUiWnd::GetConversionMode()
 {
 	EInputMethod eInputMode =m_pSinstar3?m_pSinstar3->GetDefInputMode():FullNative;
 
-	UINT64 nCtx = GetImeContext();
-	CImeContext *pCtx=(CImeContext *)nCtx;
+	CImeContext *pCtx=GetImeContext();
 	if(!pCtx) return HalfAlphanumeric;
 	DWORD dwMode=0,dwSent=0;
 	ImmGetConversionStatus(pCtx->_hIMC,&dwMode,&dwSent);
-	ReleaseImeContext(nCtx);
+	ReleaseImeContext(pCtx);
 
 	switch( dwMode)
 	{
@@ -211,23 +211,23 @@ EInputMethod CUiWnd::GetConversionMode()
 		eInputMode = HalfNative;
 		break;
 
-	case IME_CMODE_ROMAN:																				// 0x10
+	case IME_CMODE_ROMAN:// 0x10
 		eInputMode = HalfAlphanumeric;
 		break;
 	}
 	return eInputMode;
 }
 
-BOOL CUiWnd::SetOpenStatus(UINT64 imeContext,BOOL bOpen)
+void CUiWnd::SetOpenStatus(CImeContext * imeContext,BOOL bOpen)
 {
-	if(!imeContext) return FALSE;
-	return ImmSetOpenStatus(((CImeContext *)imeContext)->_hIMC,bOpen);
+	if(!imeContext) return;
+	ImmSetOpenStatus(imeContext->_hIMC,bOpen);
 }
 
-BOOL CUiWnd::GetOpenStatus(UINT64 imeContext) const
+BOOL CUiWnd::GetOpenStatus(CImeContext * imeContext) const
 {
 	if(!imeContext) return FALSE;
-	return ImmGetOpenStatus(((CImeContext *)imeContext)->_hIMC);
+	return ImmGetOpenStatus(imeContext->_hIMC);
 }
 
 DWORD CUiWnd::GetActiveWnd() const

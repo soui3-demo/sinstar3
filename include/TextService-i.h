@@ -49,11 +49,9 @@ interface ITextService
 	virtual void ReplaceSelCompositionW(UINT64 imeContext,int nLeft,int nRight,const WCHAR *wszComp,int nLen)=NULL;
 	virtual void UpdateResultAndCompositionStringW(UINT64 imeContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen)=NULL;
 	virtual void EndComposition(UINT64 imeContext)=NULL;
-	virtual UINT64 GetImeContext()=NULL;
-	virtual BOOL   ReleaseImeContext(UINT64 imeContext)=NULL;
 	virtual void  SetConversionMode(EInputMethod mode)=NULL;
 	virtual EInputMethod GetConversionMode()=NULL;
-	virtual BOOL SetOpenStatus(UINT64 imeContext,BOOL bOpen)=NULL;
-	virtual BOOL GetOpenStatus(UINT64 imeContext) const =NULL;
+	virtual void SetOpenStatus(BOOL bOpen)=NULL;
+	virtual BOOL GetOpenStatus() const =NULL;
 	virtual DWORD GetActiveWnd() const = NULL;
 };

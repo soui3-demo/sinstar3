@@ -277,18 +277,6 @@ void CClientConnection::OnEndComposition( Param_EndComposition & param)
 
 }
 
-void CClientConnection::OnGetImeContext( Param_GetImeContext & param)
-{
-	param.lpImeContext = (UINT64)m_pTxtService->GetImeContext();
-
-}
-
-void CClientConnection::OnReleaseImeContext( Param_ReleaseImeContext & param)
-{
-	m_pTxtService->ReleaseImeContext(param.lpImeContext);
-
-}
-
 void CClientConnection::OnSetConversionMode( Param_SetConversionMode & param)
 {
 	m_pTxtService->SetConversionMode(param.mode);
@@ -303,13 +291,13 @@ void CClientConnection::OnGetConversionMode( Param_GetConversionMode & param)
 
 void CClientConnection::OnSetOpenStatus( Param_SetOpenStatus & param)
 {
-	param.bRet = m_pTxtService->SetOpenStatus(param.lpImeContext, param.bOpen);
+	m_pTxtService->SetOpenStatus(param.bOpen);
 
 }
 
 void CClientConnection::OnGetOpenStatus( Param_GetOpenStatus & param)
 {
-	param.bOpen = m_pTxtService->GetOpenStatus(param.lpImeContext);
+	param.bOpen = m_pTxtService->GetOpenStatus();
 
 }
 

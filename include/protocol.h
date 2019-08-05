@@ -285,21 +285,6 @@ struct Param_EndComposition : FunParams_Base
 		PARAMS1(Input,lpImeContext)
 };
 
-struct Param_GetImeContext : FunParams_Base
-{
-	UINT64 lpImeContext;
-	FUNID(ITextService_GetImeContext)
-		PARAMS1(Output,lpImeContext)
-};
-
-struct Param_ReleaseImeContext : FunParams_Base
-{
-	UINT64 lpImeContext;
-	BOOL bRet;
-	FUNID(ITextService_ReleaseImeContext)
-		PARAMS1(Input, lpImeContext)
-		PARAMS1(Output,bRet)
-};
 
 struct Param_SetConversionMode : FunParams_Base
 {
@@ -317,20 +302,15 @@ struct Param_GetConversionMode : FunParams_Base
 
 struct Param_SetOpenStatus : FunParams_Base
 {
-	UINT64 lpImeContext;
 	BOOL bOpen;
-	BOOL bRet;
 	FUNID(ITextService_SetOpenStatus)
-		PARAMS2(Input,lpImeContext,bOpen)
-		PARAMS1(Output,bRet)
+		PARAMS1(Input, bOpen)
 };
 
 struct Param_GetOpenStatus : FunParams_Base
 {
-	UINT64 lpImeContext;
 	BOOL bOpen;
 	FUNID(ITextService_GetOpenStatus)
-		PARAMS1(Input, lpImeContext)
 		PARAMS1(Output, bOpen)
 };
 

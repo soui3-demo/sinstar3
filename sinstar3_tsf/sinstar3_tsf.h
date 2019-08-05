@@ -71,19 +71,16 @@ public:
 
 
 	//ITextService
-	BOOL InputStringW(LPCWSTR pszBuf, int nLen);
-	BOOL IsCompositing() const;
-	void StartComposition(UINT64 imeContext);
-	void ReplaceSelCompositionW(UINT64 imeContext,int nLeft,int nRight,const WCHAR* wszComp,int nLen);
-	void UpdateResultAndCompositionStringW(UINT64 imeContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen);
-	void EndComposition(UINT64 imeContext);
-	UINT64 GetImeContext();
-	BOOL   ReleaseImeContext(UINT64 imeContext);
-	EInputMethod GetConversionMode();
-	void SetConversionMode( EInputMethod eInputMode);
-	BOOL SetOpenStatus(UINT64 imeContext,BOOL bOpen);
-	BOOL GetOpenStatus(UINT64 imeContext) const;
-	DWORD GetActiveWnd() const;
+	BOOL InputStringW(LPCWSTR pszBuf, int nLen) override;
+	BOOL IsCompositing() const override;
+	void StartComposition(UINT64 imeContext) override;
+	void ReplaceSelCompositionW(UINT64 imeContext,int nLeft,int nRight,const WCHAR* wszComp,int nLen) override;
+	void UpdateResultAndCompositionStringW(UINT64 imeContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen) override;
+	void EndComposition(UINT64 imeContext) override;
+	EInputMethod GetConversionMode() override;
+	void SetConversionMode( EInputMethod eInputMode) override;
+	DWORD GetActiveWnd() const override;
+
 
     ITfThreadMgr *_GetThreadMgr() { return _pThreadMgr; }
 
@@ -108,6 +105,11 @@ public:
 protected:
 	virtual LRESULT WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	
+	ITfContext * GetImeContext();
+	void   ReleaseImeContext(ITfContext * imeContext);
+	void SetOpenStatus(BOOL bOpen);
+	BOOL GetOpenStatus() const;
+
 private:
 
 	BOOL _InitSinstar3();

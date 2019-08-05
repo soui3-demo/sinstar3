@@ -11,6 +11,8 @@ include($$(SOUIPATH)/demo_com.pri)
 
 PRECOMPILED_HEADER = stdafx.h
 
+DEFINES += _CRT_NON_CONFORMING_SWPRINTFS
+
 # Input
 HEADERS += sinstarproxy.h simplewnd.h
 

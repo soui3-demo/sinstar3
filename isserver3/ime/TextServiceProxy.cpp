@@ -65,21 +65,6 @@ void CSvrConnection::EndComposition(UINT64 imeContext)
 	CallFun(&param);
 }
 
-UINT64 CSvrConnection::GetImeContext()
-{
-	Param_GetImeContext param;
-	CallFun(&param);
-	return param.lpImeContext;
-}
-
-BOOL CSvrConnection::ReleaseImeContext(UINT64 imeContext)
-{
-	Param_ReleaseImeContext param;
-	param.lpImeContext =imeContext;
-	CallFun(&param);
-	return param.bRet;
-}
-
 void CSvrConnection::SetConversionMode(EInputMethod mode)
 {
 	Param_SetConversionMode param;
@@ -94,19 +79,16 @@ EInputMethod CSvrConnection::GetConversionMode()
 	return param.mode;
 }
 
-BOOL CSvrConnection::SetOpenStatus(UINT64 imeContext,BOOL bOpen)
+void CSvrConnection::SetOpenStatus(BOOL bOpen)
 {
 	Param_SetOpenStatus param;
-	param.lpImeContext = imeContext;
 	param.bOpen = bOpen;
 	CallFun(&param);
-	return param.bRet;
 }
 
-BOOL CSvrConnection::GetOpenStatus(UINT64 imeContext) const
+BOOL CSvrConnection::GetOpenStatus() const
 {
 	Param_GetOpenStatus param;
-	param.lpImeContext = imeContext;
 	CallFun(&param);
 	return param.bOpen;
 }

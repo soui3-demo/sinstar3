@@ -153,15 +153,7 @@ void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 {
 	SLOG_INFO("GetThreadID="<<GetCurrentThreadId()<<" focus="<<bFocus);
 
-	BOOL bOpen = FALSE;
-
-	UINT64 pImeCtx = m_pTxtSvr->GetImeContext();
-	if (pImeCtx)
-	{
-		bOpen = m_pTxtSvr->GetOpenStatus(pImeCtx);
-		m_pTxtSvr->ReleaseImeContext(pImeCtx);
-	}
-
+	BOOL bOpen = m_pTxtSvr->GetOpenStatus();
 	if (bOpen)
 	{
 		if (bFocus)
@@ -194,7 +186,11 @@ void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 
 		m_pStatusWnd->Show(FALSE);
 		m_pInputWnd->Show(FALSE);
-		if (m_pTipWnd) m_pTipWnd->DestroyWindow();
+		if (m_pTipWnd)
+		{
+			m_pTipWnd->DestroyWindow();
+			m_pTipWnd = NULL;
+		}
 	}
 }
 
@@ -305,12 +301,7 @@ LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 	}
 	else if (wp == NT_SERVEREXIT)
 	{
-		UINT64 pImeCtx = m_pTxtSvr->GetImeContext();
-		if (pImeCtx)
-		{
-			m_pTxtSvr->SetOpenStatus(pImeCtx, FALSE);
-			m_pTxtSvr->ReleaseImeContext(pImeCtx);
-		}
+		m_pTxtSvr->SetOpenStatus(FALSE);
 		EventSvrNotify evt(this);
 		evt.wp = wp;
 		evt.lp = lp;
@@ -435,16 +426,14 @@ void CSinstar3Impl::CloseInputWnd(BOOL bDelay)
 	m_pInputWnd->Hide(bDelay?g_SettingsG->nDelayTime*1000:0);
 }
 
-BOOL CSinstar3Impl::SetOpenStatus(BOOL bOpen)
+void CSinstar3Impl::SetOpenStatus(BOOL bOpen)
 {
-	SASSERT(m_curImeContext);
-	return m_pTxtSvr->SetOpenStatus(m_curImeContext,bOpen);
+	m_pTxtSvr->SetOpenStatus(bOpen);
 }
 
 BOOL CSinstar3Impl::GetOpenStatus() const
 {
-	SASSERT(m_curImeContext);
-	return m_pTxtSvr->GetOpenStatus(m_curImeContext);
+	return m_pTxtSvr->GetOpenStatus();
 }
 
 void CSinstar3Impl::OnCommand(WORD cmd, LPARAM lp)

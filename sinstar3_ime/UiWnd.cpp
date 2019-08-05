@@ -441,3 +441,45 @@ BOOL CUiWnd::IsDefaultIme(void)
 	return hKlCur==hDefIME;
 }
 
+void CUiWnd::StartComposition(UINT64 imeContext)
+{
+	StartComposition((CImeContext*)imeContext);
+}
+
+void CUiWnd::ReplaceSelCompositionW(UINT64 imeContext,int nLeft,int nRight,const WCHAR *wszComp,int nLen)
+{
+	ReplaceSelCompositionW((CImeContext*)imeContext,nLeft,nRight,wszComp,nLen);
+}
+
+void CUiWnd::UpdateResultAndCompositionStringW(UINT64 imeContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen)
+{
+	UpdateResultAndCompositionStringW((CImeContext*)imeContext,wszResultStr,nResStrLen,wszCompStr,nCompStrLen);
+}
+
+void CUiWnd::EndComposition(UINT64 imeContext)
+{
+	EndComposition((CImeContext*)imeContext);
+}
+
+void CUiWnd::SetOpenStatus(BOOL bOpen)
+{
+	CImeContext *pCtx = GetImeContext();
+	if(pCtx)
+	{
+		SetOpenStatus(pCtx,bOpen);
+		ReleaseImeContext(pCtx);
+	}
+}
+
+BOOL CUiWnd::GetOpenStatus() const
+{
+	BOOL bOpen = FALSE;
+	CImeContext *pCtx = GetImeContext();
+	if(pCtx)
+	{
+		bOpen=GetOpenStatus(pCtx);
+		ReleaseImeContext(pCtx);
+	}
+	return bOpen;
+}
+

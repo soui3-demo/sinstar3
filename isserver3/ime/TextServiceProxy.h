@@ -38,17 +38,13 @@ public:
 
 	virtual void EndComposition(UINT64 imeContext);
 
-	virtual UINT64 GetImeContext();
-
-	virtual BOOL ReleaseImeContext(UINT64 imeContext);
-
 	virtual void SetConversionMode(EInputMethod mode);
 
 	virtual EInputMethod GetConversionMode();
 
-	virtual BOOL SetOpenStatus(UINT64 imeContext, BOOL bOpen);
+	virtual void SetOpenStatus(BOOL bOpen);
 
-	virtual BOOL GetOpenStatus(UINT64 imeContext) const;
+	virtual BOOL GetOpenStatus() const;
 
 	virtual DWORD GetActiveWnd() const;
 protected:

@@ -57,7 +57,7 @@ protected://IInputListener
 	virtual short SelectCandidate(short iCand);
 	virtual void OpenInputWnd();
 	virtual void CloseInputWnd(BOOL bDelay);
-	virtual BOOL SetOpenStatus(BOOL bOpen);
+	virtual void SetOpenStatus(BOOL bOpen);
 	virtual BOOL GetOpenStatus() const;
 protected://ICmdListener
 	virtual void OnCommand(WORD cmd, LPARAM lp);

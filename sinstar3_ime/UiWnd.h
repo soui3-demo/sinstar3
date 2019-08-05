@@ -15,6 +15,9 @@ public:
 	static BOOL RegisterClass(HINSTANCE hInstance);
 	static void UnregisterClass(HINSTANCE hInstance);
 
+public:
+	BOOL IsDefaultIme(void);
+public:
 	//UIWnd
 	LRESULT WindowProc(UINT uMsg,WPARAM wParam,LPARAM lParam);
 	LRESULT OnSetContext(BOOL bActivate,LPARAM lParam);
@@ -26,23 +29,35 @@ public:
 	LRESULT OnDestroy();
 	LRESULT OnTimer(WPARAM nEventID);
 
+public:
 	//ITextService
-	BOOL InputStringW(LPCWSTR pszBuf, int nLen);
-	BOOL IsCompositing() const;
-	void StartComposition(UINT64 imeContext);
-	void ReplaceSelCompositionW(UINT64 imeContext,int nLeft,int nRight,const WCHAR *wszComp,int nLen);
-	void UpdateResultAndCompositionStringW(UINT64 imeContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen);
-	void EndComposition(UINT64 imeContext);
-	UINT64 GetImeContext();
-	BOOL   ReleaseImeContext(UINT64 imeContext);
-	void  SetConversionMode(EInputMethod mode);
-	EInputMethod GetConversionMode();
-	BOOL SetOpenStatus(UINT64 imeContext,BOOL bOpen);
-	BOOL GetOpenStatus(UINT64 imeContext) const;
-	DWORD GetActiveWnd() const;
+	virtual BOOL InputStringW(LPCWSTR pszBuf, int nLen) override;
+	virtual BOOL IsCompositing() const override;
+	virtual void StartComposition(UINT64 imeContext) override;
+	virtual void ReplaceSelCompositionW(UINT64 imeContext,int nLeft,int nRight,const WCHAR *wszComp,int nLen) override;
+	virtual void UpdateResultAndCompositionStringW(UINT64 imeContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen) override;
+	virtual void EndComposition(UINT64 imeContext) override;
+	virtual void  SetConversionMode(EInputMethod mode) override;
+	virtual EInputMethod GetConversionMode() override;
+	virtual void SetOpenStatus(BOOL bOpen)  override;
+	virtual BOOL GetOpenStatus() const override;
+	virtual DWORD GetActiveWnd() const override;
 
+public:
 	CSinstarProxy * m_pSinstar3;
 	CImeContext *m_pCurContext;
+
+protected:
+	void StartComposition(CImeContext * imeContext);
+	void ReplaceSelCompositionW(CImeContext * imeContext,int nLeft,int nRight,const WCHAR *wszComp,int nLen);
+	void UpdateResultAndCompositionStringW(CImeContext * imeContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen);
+	void EndComposition(CImeContext * imeContext);
+	CImeContext* GetImeContext() const;
+	void   ReleaseImeContext(CImeContext * imeContext) const;
+	void SetOpenStatus(CImeContext * imeContext,BOOL bOpen);
+	BOOL GetOpenStatus(CImeContext * imeContext) const;
+
+
 	BOOL		m_bCompositing;
 
 	int        m_nFontHei;
@@ -54,7 +69,5 @@ private:
 	BOOL IsIMEMessage(UINT message);
 	POINT GetAbsPos(HWND hWnd,DWORD dwStyle,POINT ptCur,RECT rc);
 	BOOL AttachToIMC(BOOL bAttach);
-public:
-	BOOL IsDefaultIme(void);
 };
 

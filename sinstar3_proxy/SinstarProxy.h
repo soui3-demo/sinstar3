@@ -22,8 +22,6 @@ protected:
 	void OnReplaceSelCompositionW( Param_ReplaceSelCompositionW &param);
 	void OnUpdateResultAndCompositionStringW( Param_UpdateResultAndCompositionStringW &param);
 	void OnEndComposition( Param_EndComposition &param);
-	void OnGetImeContext( Param_GetImeContext &param);
-	void OnReleaseImeContext( Param_ReleaseImeContext &param);
 	void OnSetConversionMode( Param_SetConversionMode &param);
 	void OnGetConversionMode( Param_GetConversionMode &param);
 	void OnSetOpenStatus( Param_SetOpenStatus &param);
@@ -37,8 +35,6 @@ protected:
 		FUN_HANDLER(Param_ReplaceSelCompositionW, OnReplaceSelCompositionW)
 		FUN_HANDLER(Param_UpdateResultAndCompositionStringW, OnUpdateResultAndCompositionStringW)
 		FUN_HANDLER(Param_EndComposition, OnEndComposition)
-		FUN_HANDLER(Param_GetImeContext, OnGetImeContext)
-		FUN_HANDLER(Param_ReleaseImeContext, OnReleaseImeContext)
 		FUN_HANDLER(Param_SetConversionMode, OnSetConversionMode)
 		FUN_HANDLER(Param_GetConversionMode, OnGetConversionMode)
 		FUN_HANDLER(Param_SetOpenStatus, OnSetOpenStatus)
