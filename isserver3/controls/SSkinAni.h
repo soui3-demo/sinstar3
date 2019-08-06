@@ -53,7 +53,7 @@ namespace SOUI
         * @return   void
         * Describe  
         */    
-        void SelectActiveFrame(int iFrame)
+        void SelectActiveFrame(int iFrame) const
         {
             if(m_nFrames>1 && iFrame<m_nFrames)
             {
@@ -63,7 +63,7 @@ namespace SOUI
 
 	protected:
 		int m_nFrames;
-        int m_iFrame;
+        mutable int m_iFrame;
 
     };
 

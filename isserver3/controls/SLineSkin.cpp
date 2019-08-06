@@ -19,7 +19,7 @@ SLineSkin::~SLineSkin()
 {
 }
 
-void SLineSkin::_Draw(IRenderTarget * pRT, LPCRECT prcDraw, DWORD dwState, BYTE byAlpha)
+void SLineSkin::_DrawByIndex(IRenderTarget * pRT, LPCRECT prcDraw, int dwState, BYTE byAlpha) const
 {
 	if (dwState > 3) return;
 	

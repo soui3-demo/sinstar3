@@ -308,12 +308,12 @@ namespace SOUI
 	WORD Char2VKey(TCHAR wChar)
 	{
 		TCHAR szBuf[2] = { wChar,0 };
-		return CAccelerator::VkFromString(szBuf);
+		return SAccelerator::VkFromString(szBuf);
 	}
 
 	WORD Vkey2Char(WORD wVK)
 	{
-		SStringT strName = CAccelerator::GetKeyName(wVK);
+		SStringT strName = SAccelerator::GetKeyName(wVK);
 		if (strName.GetLength() > 1 || strName.IsEmpty()) return 0;
 		return strName[0];
 	}
@@ -448,7 +448,7 @@ namespace SOUI
 		FileTimeToLocalFileTime(&wfd.ftLastWriteTime,&lft);
 		SYSTEMTIME tm;
 		FileTimeToSystemTime(&lft, &tm);
-		CTime time(tm.wYear,tm.wMonth,tm.wDay,tm.wHour,tm.wMinute,tm.wSecond);
+		STime time(tm.wYear,tm.wMonth,tm.wDay,tm.wHour,tm.wMinute,tm.wSecond);
 		SStringT strTm = time.Format(_T("%Y-%m-%d %H:%M:%S %A"));
 		FindChildByID(R.id.txt_build_time)->SetWindowText(strTm);
 		
@@ -883,7 +883,7 @@ SWindow *pCtrl = FindChildByID(id);\
 		SHotKeyCtrl * pHotKeyCtrl = sobj_cast<SHotKeyCtrl>(pEvt->sender);
 		SASSERT(pHotKeyCtrl);
 		DWORD dwAccel = MAKELONG(pHotKeyEvt->vKey, pHotKeyEvt->wModifiers);
-		SLOG_INFO("id:" << pHotKeyCtrl->GetID() << " accel:" << CAccelerator::FormatAccelKey(dwAccel));
+		SLOG_INFO("id:" << pHotKeyCtrl->GetID() << " accel:" << SAccelerator::FormatAccelKey(dwAccel));
 		switch (pHotKeyCtrl->GetID())
 		{
 			//hotpage

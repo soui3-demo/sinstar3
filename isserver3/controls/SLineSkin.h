@@ -6,7 +6,7 @@ public:
 	SLineSkin();
 ~SLineSkin(); 
 protected:
-	virtual void _Draw(IRenderTarget *pRT, LPCRECT prcDraw, DWORD dwState, BYTE byAlpha);
+	virtual void _DrawByIndex(IRenderTarget *pRT, LPCRECT rcDraw, int iState, BYTE byAlpha)  const;
 
 	virtual BOOL IgnoreState() { return GetStates() < 2; }
 

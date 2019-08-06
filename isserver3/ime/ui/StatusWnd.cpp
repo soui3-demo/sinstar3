@@ -108,7 +108,7 @@ namespace SOUI
 	void CStatusWnd::UpdateAnchorMode()
 	{
 		CRect rcWnd;
-		CSimpleWnd::GetWindowRect(&rcWnd);
+		SNativeWnd::GetWindowRect(&rcWnd);
 		CRect rcWorkArea;
 		SystemParametersInfo(SPI_GETWORKAREA, 0, &rcWorkArea, 0);
 
@@ -497,37 +497,37 @@ namespace SOUI
 		{
 		case R.id.btn_charmode:
 			e2->bUpdated = TRUE;
-			strAccel = CAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_CharMode]);
+			strAccel = SAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_CharMode]);
 			e2->strToolTip = SStringT().Format(_T("标点模式:%s"), g_SettingsUI->bCharMode? _T("中文"):_T("英文"));
 			break;
 		case R.id.btn_make_phrase:
 			e2->bUpdated = TRUE;
-			strAccel = CAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_MakePhrase]);
+			strAccel = SAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_MakePhrase]);
 			e2->strToolTip = _T("剪贴板造词");
 			break;
 		case R.id.btn_record:
 			e2->bUpdated = TRUE;
-			strAccel = CAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_Record]);
+			strAccel = SAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_Record]);
 			e2->strToolTip = SStringT().Format(_T("记录输入状态:%s"), g_SettingsUI->bRecord ? _T("启用") : _T("禁用"));
 			break;
 		case R.id.btn_sound:
 			e2->bUpdated = TRUE;
-			strAccel = CAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_TTS]);
+			strAccel = SAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_TTS]);
 			e2->strToolTip = SStringT().Format(_T("语音较对:%s"), g_SettingsUI->bSound ? _T("启用") : _T("禁用"));
 			break;
 		case R.id.btn_english:
 			e2->bUpdated = TRUE;
-			strAccel = CAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_EnSwitch]);
+			strAccel = SAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_EnSwitch]);
 			e2->strToolTip = SStringT().Format(_T("单词输入:%s"), g_SettingsUI->bEnglish ? _T("启用") : _T("禁用"));
 			break;
 		case R.id.btn_query:
 			e2->bUpdated = TRUE;
-			strAccel = CAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_Query]);
+			strAccel = SAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_Query]);
 			e2->strToolTip = _T("编码反查");
 			break;
 		case R.id.btn_filter_gbk:
 			e2->bUpdated = TRUE;
-			strAccel = CAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_FilterGbk]);
+			strAccel = SAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_FilterGbk]);
 			e2->strToolTip = SStringT().Format(_T("过滤GBK重码:%s"), g_SettingsUI->bFilterGbk ? _T("启用") : _T("禁用"));
 			break;
 		case R.id.btn_menu:

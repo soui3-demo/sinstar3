@@ -37,7 +37,7 @@ void SQrCtrl::MakeCacheApha( ISkinObj *pSkin, IBitmap *_pBitCache, IBitmap *_pBi
 	CAutoRefPtr<IRenderObj> pOldBmp;
 	pRTDst->SelectObject(_pBitCache, &pOldBmp);
 	CRect rc(CPoint(0, 0), _pBitCache->Size());
-	pSkin->Draw(pRTDst, &rc, 0);
+	pSkin->DrawByIndex(pRTDst, &rc, 0);
 	CAutoRefPtr<IBitmap> bmp;
 	GETRENDERFACTORY->CreateBitmap(&bmp);
 	if (m_QrRect.IsRectEmpty())

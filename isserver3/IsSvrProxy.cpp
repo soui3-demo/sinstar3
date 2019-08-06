@@ -140,9 +140,9 @@ int CIsSvrProxy::OnCreate(LPCREATESTRUCT pCS)
 		m_pCore->GetConfigIni(szConfig, MAX_PATH);
 		m_nUpdateInterval = GetPrivateProfileIntA("update", "interval", 30, szConfig);
 
-		CSimpleWnd::SetTimer(TIMERID_CHECK_UPDATE, SPAN_CHECK_UPDATE, NULL);
-		CSimpleWnd::SetTimer(TIMERID_DATA_REPORT, SPAN_DATA_REPORT1, NULL);
-		CSimpleWnd::SetTimer(TIMERID_CHECK_CLIENT,SPAN_CHECK_CLIENT,NULL);
+		SNativeWnd::SetTimer(TIMERID_CHECK_UPDATE, SPAN_CHECK_UPDATE, NULL);
+		SNativeWnd::SetTimer(TIMERID_DATA_REPORT, SPAN_DATA_REPORT1, NULL);
+		SNativeWnd::SetTimer(TIMERID_CHECK_CLIENT,SPAN_CHECK_CLIENT,NULL);
 	}
 	return nRet;
 }
@@ -227,13 +227,13 @@ void CIsSvrProxy::OnClientActive() {
 }
 
 void CIsSvrProxy::OnClientLogin() {
-	CSimpleWnd::KillTimer(TIMERID_DELAY_EXIT);
+	SNativeWnd::KillTimer(TIMERID_DELAY_EXIT);
 }
 
 void CIsSvrProxy::OnClientLogout() {
 	if (m_pCore->CanQuitNow())
 	{
-		CSimpleWnd::SetTimer(TIMERID_DELAY_EXIT, SPAN_DELAY_EXIT, NULL);
+		SNativeWnd::SetTimer(TIMERID_DELAY_EXIT, SPAN_DELAY_EXIT, NULL);
 	}
 }
 
@@ -371,7 +371,7 @@ void CIsSvrProxy::OnTimer(UINT_PTR uID)
 	}
 	else if (uID == TIMERID_CHECK_UPDATE)
 	{
-		CSimpleWnd::KillTimer(uID);
+		SNativeWnd::KillTimer(uID);
 		CheckUpdate(false);
 	}
 	else if (uID == TIMERID_DATA_REPORT)
@@ -379,7 +379,7 @@ void CIsSvrProxy::OnTimer(UINT_PTR uID)
 		
 		CWorker::getSingletonPtr()->ReportUserInfo();
 		KillTimer(uID);
-		CSimpleWnd::SetTimer(uID, SPAN_DATA_REPORT2, NULL);
+		SNativeWnd::SetTimer(uID, SPAN_DATA_REPORT2, NULL);
 	}else if(uID == TIMERID_CHECK_CLIENT)
 	{
 		m_ipcSvr->CheckConnectivity();
@@ -436,7 +436,7 @@ void CIsSvrProxy::CheckUpdate(bool bManual)
 {
 	char szConfig[MAX_PATH];
 	char szDate[100];
-	CTime timeToday = CTime::GetCurrentTime();
+	STime timeToday = STime::GetCurrentTime();
 	m_pCore->GetConfigIni(szConfig, MAX_PATH);
 	if (!bManual)
 	{

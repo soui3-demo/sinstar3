@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SOUI name="build index prog" title="@string/prog" bigIcon="ICON_LOGO:32" smallIcon="ICON_LOGO:16" width="400" height="100"  margin="5,5,5,5"  resizable="0" wndType="normal"
+<SOUI name="build index prog" title="@string/prog" bigIcon="ICON_LOGO:32" smallIcon="ICON_LOGO:16" margin="5,5,5,5"  resizable="0" wndType="normal"
 appWnd="1"
 translucent="1"
 >
-  <root skin="_skin.sys.wnd.bkgnd" cache="1" layout="vbox" padding="5,5,5,5">
+  <root  width="400" height="100" skin="_skin.sys.wnd.bkgnd" cache="1" layout="vbox" padding="5,5,5,5">
     <tabctrl size="-2,0" weight="1" tabHeight="0" name="tab_stage">
       <page layout="vbox" gravity="center" >
         <caption size="-2,30" layout="vbox" gravity="center">

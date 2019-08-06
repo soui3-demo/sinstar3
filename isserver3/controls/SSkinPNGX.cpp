@@ -34,12 +34,12 @@ int SSkinPNGX::LoadFromMemory(LPVOID pBits,size_t szData)
 	return 0;
 }
 
-int SSkinPNGX::GetStates()
+int SSkinPNGX::GetStates() const
 {
 	return (int)m_nDelays.GetCount();
 }
 
-SIZE SSkinPNGX::GetSkinSize()
+SIZE SSkinPNGX::GetSkinSize() const
 {
 	CSize szSkin;
 	if(m_pngx)
@@ -63,7 +63,7 @@ long SSkinPNGX::GetFrameDelay(int iFrame/*=-1*/)
 	return m_nDelays[iFrame];
 }
 
-void SSkinPNGX::_Draw(IRenderTarget *pRT, LPCRECT rcDraw, DWORD dwState,BYTE byAlpha/*=0xFF*/)
+void SSkinPNGX::_DrawByIndex(IRenderTarget *pRT, LPCRECT rcDraw, int dwState,BYTE byAlpha/*=0xFF*/) const
 {
 	if(dwState!=-1) SelectActiveFrame(dwState);
 	if(m_pngx)

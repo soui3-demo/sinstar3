@@ -1,7 +1,7 @@
 #pragma once
 #include <core/swnd.h>
 
-#include "SAniImgFrame.h"
+#include "SSkinAni.h"
 
 namespace SOUI
 {

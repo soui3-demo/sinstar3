@@ -20,7 +20,7 @@ void SApngPlayer::OnPaint( IRenderTarget *pRT )
 	__super::OnPaint(pRT);
 	if(m_aniSkin)
 	{		
-		m_aniSkin->Draw(pRT, GetWindowRect(),m_iCurFrame);
+		m_aniSkin->DrawByIndex(pRT, GetWindowRect(),m_iCurFrame);
 	}
 }
 

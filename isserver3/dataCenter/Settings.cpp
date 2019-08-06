@@ -57,7 +57,7 @@ void CSettingsGlobal::Save(const SStringT & strDataPath)
 
 	for (int i = 0; i < ARRAYSIZE(KHotKeyEntryMap); i++)
 	{
-		SStringT strHotKey = CAccelerator::FormatAccelKey(dwHotkeys[KHotKeyEntryMap[i].idx]);
+		SStringT strHotKey = SAccelerator::FormatAccelKey(dwHotkeys[KHotKeyEntryMap[i].idx]);
 		WritePrivateProfileString(KSession, KHotKeyEntryMap[i].szName, strHotKey, strConfigIni);
 	}
 
@@ -128,7 +128,7 @@ void CSettingsGlobal::Load(const SStringT & strDataPath)
 	for (int i = 0; i < ARRAYSIZE(KHotKeyEntryMap); i++)
 	{
 		GetPrivateProfileString(KSession, KHotKeyEntryMap[i].szName, KHotKeyEntryMap[i].szDefault, szBuf, 100, strConfigIni);
-		dwHotkeys[KHotKeyEntryMap[i].idx] = CAccelerator::TranslateAccelKey(szBuf);
+		dwHotkeys[KHotKeyEntryMap[i].idx] = SAccelerator::TranslateAccelKey(szBuf);
 	}
 
 	byAstMode=GetPrivateProfileInt(KSession,_T("Associate"),2,strConfigIni);//2=english

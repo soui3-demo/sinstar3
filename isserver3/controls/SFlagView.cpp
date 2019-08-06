@@ -40,7 +40,7 @@ namespace SOUI {
 		{//拼音状态
 			if (m_defFlag)
 			{
-				m_defFlag->Draw(pRT, rcClient, 1);	//绘制默认图中的第二个子图.
+				m_defFlag->DrawByIndex(pRT, rcClient, 1);	//绘制默认图中的第二个子图.
 			}
 		}
 		else if (m_imeFlag)
@@ -51,7 +51,7 @@ namespace SOUI {
 		}
 		else if (m_defFlag)
 		{
-			m_defFlag->Draw(pRT, rcClient, 0);//绘制默认图中的第一个子图.
+			m_defFlag->DrawByIndex(pRT, rcClient, 0);//绘制默认图中的第一个子图.
 		}
 	}
 }

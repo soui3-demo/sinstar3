@@ -26,7 +26,7 @@ enum {
 	UM_FUN_DATA_REPORT,
 };
 
-class CWorker : public CSimpleWnd
+class CWorker : public SNativeWnd
 	, protected CThreadObject
 	, public SSingleton<CWorker>
 {

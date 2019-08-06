@@ -77,7 +77,7 @@ int SSkinAPNG::_InitImgFrame( IImgX *pImgX )
     return m_nFrames;
 }
 
-void SSkinAPNG::_Draw(IRenderTarget *pRT, LPCRECT rcDraw, DWORD dwState,BYTE byAlpha/*=0xFF*/)
+void SSkinAPNG::_DrawByIndex(IRenderTarget *pRT, LPCRECT rcDraw, int dwState,BYTE byAlpha/*=0xFF*/) const
 {
 	if(dwState!=-1) SelectActiveFrame(dwState);
 	CRect rcSrc(CPoint(0,0),GetSkinSize());
@@ -95,7 +95,7 @@ long SSkinAPNG::GetFrameDelay(int iFrame/*=-1*/)
 	return nRet;
 }
 
-SIZE SSkinAPNG::GetSkinSize()
+SIZE SSkinAPNG::GetSkinSize() const
 {
 	SIZE sz={0};
 	if(m_nFrames>0 && m_pFrames)

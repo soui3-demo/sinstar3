@@ -92,7 +92,7 @@ namespace SOUI
 			CRect rcWord(pt, szSkin);
 			for (int i = 0; i < strTxt.GetLength(); i++)
 			{
-				m_lines->Draw(pRT, rcWord, strTxt[i] - '1');
+				m_lines->DrawByIndex(pRT, rcWord, strTxt[i] - '1');
 				rcWord.OffsetRect(rcWord.Width(), 0);
 			}
 		}

@@ -22,7 +22,7 @@ enum{
 	CD_CMD_INSTALL_SKIN,
 };
 
-class CIsSvrProxy : public CSimpleWnd
+class CIsSvrProxy : public SNativeWnd
 	, public IUiMsgHandler
 	, public IKeyMapListener
 	, public IUpdateIntervalObserver
@@ -129,7 +129,7 @@ protected:
 		MESSAGE_HANDLER_EX(UM_TRAYNOTIFY, OnTrayNotify)
 		CHAIN_MSG_MAP_MEMBER(m_trayIcon)
 		MSG_WM_ENDSESSION(OnEndSession)
-		CHAIN_MSG_MAP(CSimpleWnd)
+		CHAIN_MSG_MAP(SNativeWnd)
 		REFLECT_NOTIFICATIONS_EX()
 	END_MSG_MAP()
 

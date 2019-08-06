@@ -13,7 +13,7 @@ purpose:	动画PNG（APNG）扩展支持，依赖于当前使用的图片解码器。
 #include <interface/SSkinobj-i.h>
 #include <unknown/obj-ref-impl.hpp>
 
-#include "SAniImgFrame.h"
+#include "SSkinAni.h"
 
 namespace SOUI
 {
@@ -58,9 +58,9 @@ namespace SOUI
 			ATTR_BOOL(L"vert",m_bVert,FALSE)
         SOUI_ATTRS_END()
 	protected:
-		virtual int GetStates();
+		virtual int GetStates() const  override;
 
-        virtual SIZE GetSkinSize();
+        virtual SIZE GetSkinSize() const override;
 
         /**
         * GetFrameDelay
@@ -81,7 +81,7 @@ namespace SOUI
         * @return   void
         * Describe  
         */    
-        virtual void _Draw(IRenderTarget *pRT, LPCRECT rcDraw, DWORD dwState,BYTE byAlpha=0xFF);
+        virtual void _DrawByIndex(IRenderTarget *pRT, LPCRECT rcDraw, int dwState,BYTE byAlpha=0xFF) const override;
     protected:
 		HRESULT OnAttrDelay(const SStringW &strValue,BOOL bLoading);
  

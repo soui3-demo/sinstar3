@@ -170,7 +170,7 @@
   <ItemGroup>
     <ClInclude Include="Base64.h" />
     <ClInclude Include="controls\QR_Encode.h" />
-    <ClInclude Include="controls\SAniImgFrame.h" />
+    <ClInclude Include="controls\SSkinAni.h" />
     <ClInclude Include="controls\SApngPlayer.h" />
     <ClInclude Include="controls\SCandView.h" />
     <ClInclude Include="controls\SCaption2.h" />

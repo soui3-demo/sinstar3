@@ -17,7 +17,7 @@ class CSinstar3Impl:
 	public IDestroyListener,
 	public IInputWndListener,
 	public SOUI::SObject,
-	public SOUI::CSimpleWnd,
+	public SOUI::SNativeWnd,
 	public SOUI::SEventSet
 {
 	friend class CCmdHandler;// CCmdHandler need access this private members.
@@ -83,7 +83,7 @@ public:
 		MSG_WM_COPYDATA(OnCopyData)
 		MESSAGE_HANDLER_EX(ISComm_GetCommMsgID(),OnSvrNotify)
 		CHAIN_MSG_MAP_MEMBER(m_cmdHandler)
-		CHAIN_MSG_MAP(SOUI::CSimpleWnd)
+		CHAIN_MSG_MAP(SOUI::SNativeWnd)
 	END_MSG_MAP()
 
 public:

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SOUI name="KeyMap" title="@string/title" bigIcon="ICON_LOGO:32" smallIcon="ICON_LOGO:16" width="600" height="200"  margin="5,5,5,5"  resizable="1" wndType="normal"
+<SOUI name="KeyMap" title="@string/title" bigIcon="ICON_LOGO:32" smallIcon="ICON_LOGO:16"  margin="5,5,5,5"  resizable="1" wndType="normal"
 appWnd="1"
 translucent="1"
 >
-  <root skin="_skin.sys.wnd.bkgnd" cache="1" layout="vbox" padding="5,5,5,5">
+  <root  width="600" height="200" skin="_skin.sys.wnd.bkgnd" cache="1" layout="vbox" padding="5,5,5,5">
     <caption size="-2,30" layout="hbox" gravity="center">
       <caption size="0,-1" layout="hbox" weight="1" gravity="center">
         <text size="-1,-1" text="@string/keymap"/>

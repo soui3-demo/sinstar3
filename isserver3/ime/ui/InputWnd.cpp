@@ -29,7 +29,7 @@ namespace SOUI
 	void CInputWnd::SetFollowCaret(BOOL bFollowCaret)
 	{
 		m_bFollowCaret = bFollowCaret;
-		if (CSimpleWnd::IsWindowVisible() && !bFollowCaret)
+		if (SNativeWnd::IsWindowVisible() && !bFollowCaret)
 		{
 			UpdateAnchorPosition();
 			SetWindowPos(HWND_TOPMOST, m_ptAnchor.x, m_ptAnchor.y, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
@@ -151,12 +151,12 @@ namespace SOUI
 		{
 		case R.id.btn_prevpage:
 			e2->bUpdated = TRUE;
-			strAccel = CAccelerator::FormatAccelKey(g_SettingsG->byTurnPageUpVK);
+			strAccel = SAccelerator::FormatAccelKey(g_SettingsG->byTurnPageUpVK);
 			e2->strToolTip = SStringT().Format(_T("ÖØÂëÉÏ·­Ò³,·­Ò³¼ü:%s"), strAccel);
 			break;
 		case R.id.btn_nextpage:
 			e2->bUpdated = TRUE;
-			strAccel = CAccelerator::FormatAccelKey(g_SettingsG->byTurnPageDownVK);
+			strAccel = SAccelerator::FormatAccelKey(g_SettingsG->byTurnPageDownVK);
 			e2->strToolTip = SStringT().Format(_T("ÖØÂëÏÂ·­Ò³,·­Ò³¼ü:%s"),strAccel);
 			break;
 		}
@@ -480,7 +480,7 @@ namespace SOUI
 		if (m_ptAnchor.x == -1)
 		{
 			CRect rcWnd;
-			CSimpleWnd::GetWindowRect(&rcWnd);
+			SNativeWnd::GetWindowRect(&rcWnd);
 
 			HMONITOR hMonitor = MonitorFromWindow(m_hOwner, MONITOR_DEFAULTTONEAREST);
 			MONITORINFO info = { sizeof(info),0 };
@@ -629,7 +629,7 @@ namespace SOUI
 		SWindow::ReleaseCapture();
 
 		CRect rcWnd;
-		CSimpleWnd::GetWindowRect(&rcWnd);
+		SNativeWnd::GetWindowRect(&rcWnd);
 		m_ptAnchor = rcWnd.TopLeft();
 		//save anchor
 		g_SettingsG->ptInput = m_ptAnchor;
@@ -648,7 +648,7 @@ namespace SOUI
 		if (m_bDraging)
 		{
 			CRect rcWnd;
-			CSimpleWnd::GetWindowRect(&rcWnd);
+			SNativeWnd::GetWindowRect(&rcWnd);
 			rcWnd.OffsetRect(point - m_ptClick);
 			SetWindowPos(HWND_TOPMOST, rcWnd.left, rcWnd.top, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
 		}

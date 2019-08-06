@@ -53,14 +53,14 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HWND hSvr)
 	m_pInputWnd->SetStatusWnd(m_pStatusWnd);
 
 	SLOG_INFO("status:"<<m_pStatusWnd->m_hWnd<<", input:"<<m_pInputWnd->m_hWnd);
-	SOUI::CSimpleWnd::Create(KSinstar3WndName,WS_DISABLED|WS_POPUP,WS_EX_TOOLWINDOW,0,0,0,0,HWND_MESSAGE,NULL);
+	SOUI::SNativeWnd::Create(KSinstar3WndName,WS_DISABLED|WS_POPUP,WS_EX_TOOLWINDOW,0,0,0,0,HWND_MESSAGE,NULL);
 	ISComm_Login(m_hWnd);
 }
 
 CSinstar3Impl::~CSinstar3Impl(void)
 {
 	ISComm_Logout(m_hWnd);
-	SOUI::CSimpleWnd::DestroyWindow();
+	SOUI::SNativeWnd::DestroyWindow();
 	m_pInputWnd->DestroyWindow();
 	m_pStatusWnd->DestroyWindow();
 	delete m_pStatusWnd;
@@ -74,7 +74,7 @@ CSinstar3Impl::~CSinstar3Impl(void)
 
 	SStringT strHotKeyFile = SStringT().Format(_T("%s\\data\\hotkey_%s.txt"), CDataCenter::getSingletonPtr()->GetDataPath(), CDataCenter::getSingleton().GetData().m_compInfo.strCompName);
 	//加载特定的自定义状态及语句输入状态开关
-	SStringT strHotKey = CAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_UDMode]);
+	SStringT strHotKey = SAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_UDMode]);
 	WritePrivateProfileString(_T("hotkey"), _T("umode"), strHotKey, strHotKeyFile);
 	strHotKey = SStringT((TCHAR)g_SettingsG->bySentMode);
 	WritePrivateProfileString(_T("hotkey"), _T("sentence"), strHotKey, strHotKeyFile);
@@ -249,7 +249,7 @@ LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 		SStringT strHotKeyFile = SStringT().Format(_T("%s\\data\\hotkey_%s.txt"), CDataCenter::getSingletonPtr()->GetDataPath(),myData.m_compInfo.strCompName);
 		//加载特定的自定义状态及语句输入状态开关
 		GetPrivateProfileString(_T("hotkey"),_T("umode"),_T(""),szBuf,100,strHotKeyFile);
-		g_SettingsG->dwHotkeys[HKI_UDMode]=CAccelerator::TranslateAccelKey(szBuf);
+		g_SettingsG->dwHotkeys[HKI_UDMode]=SAccelerator::TranslateAccelKey(szBuf);
 		if(g_SettingsG->dwHotkeys[HKI_UDMode] ==0)
 		{
 			short sKey = VkKeyScan(myData.m_compInfo.cWild);

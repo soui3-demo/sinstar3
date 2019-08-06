@@ -10,7 +10,7 @@ namespace SOUI
 		~SToggle2(void);
 
 	protected:
-		virtual CSize GetDesiredSize(LPCRECT pRcContainer);
+		virtual CSize GetDesiredSize(int wid, int hei) override;
 
 		void OnPaint(IRenderTarget *pRT);
 

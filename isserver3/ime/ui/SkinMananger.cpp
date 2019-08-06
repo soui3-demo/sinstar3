@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "SkinMananger.h"
 #include <helper/SMenu.h>
-#include <helper/mybuffer.h>
+#include <helper/SAutoBuf.h>
 
 CSkinMananger::CSkinMananger()
 {
@@ -64,7 +64,7 @@ SOUI::SStringT CSkinMananger::ExtractSkinInfo(SStringT strSkinPath)
 	param.ZipFile(NULL, strSkinPath);
 	pResProvider->Init((WPARAM)&param,0);
 	int nSize = (int)pResProvider->GetRawBufferSize(_T("uidef"),_T("xml_init"));
-	CMyBuffer<char> buffer(nSize);
+	SAutoBuf buffer(nSize);
 	pResProvider->GetRawBuffer(_T("uidef"),_T("xml_init"),buffer,nSize);
 	pResProvider->Release();
 
@@ -89,7 +89,7 @@ CPoint CSkinMananger::ExtractSkinOffset(IResProvider * pResProvider)
 {
 	int nSize = (int)pResProvider->GetRawBufferSize(_T("uidef"), _T("xml_init"));
 
-	CMyBuffer<char> buffer(nSize);
+	SAutoBuf buffer(nSize);
 	pResProvider->GetRawBuffer(_T("uidef"), _T("xml_init"), buffer, nSize);
 
 	pugi::xml_document xmlDoc;
