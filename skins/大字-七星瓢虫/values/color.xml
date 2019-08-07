@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<color>
+  <red value="rgb(255,0,0)"/>
+  <green value="rgb(0,255,0)"/>
+  <blue value="rgb(0,0,255)"/>
+  <white value="rgb(255,255,255)"/>
+  <gray value="#808080"/>
+ <comp value="rgb(29,32,136)"/>
+  <associate_english_prefix value="#808080"/>
+  <temp_spell_flag value="rgb(255,0,0)"/>
+  <configborder value="#fecc01"/>
+  <cand_first value="rgb(29,32,136)"/>
+  <cand_index value="rgb(29,32,136)"/>
+  <cand_text value="rgb(34,23,20)"/>
+  <cand_comp value="rgb(29,32,136)"/>
+  <cand_wild value="rgb(255,0,0)"/>
+  <cand_phonetic value="rgb(34,23,20)"/>
+
+  <sent_input value="rgb(0,0,0)"/>
+  <sent_left value="rgb(0,0,255)"/>
+  <sent_right value="rgb(20,20,20)"/>
+  <sent_inactive value="rgb(93,93,93)"/>
+  <comp_umode_prefix value="rgb(255,0,0)"/>
+  <comp_auto_complete value="rgb(88,88,88"/>
+  <tip_comp value="rgb(0,159,232)"/>
+  <tip_cand value="rgb(0,159,232)"/>
+  
+     <spell value="rgb(128,0,64)"/>
+  <spell_result value="rgb(0,0,0)"/>
+  <spell_caret value="rgb(51,102,204)"/>
+  <spell_edit value="rgb(51,102,204)"/>
+
+</color> 
+ 

@@ -23,11 +23,13 @@ int CSkinMananger::InitSkinMenu(HMENU hMenu, const SStringT &strSkinPath, int nS
 			{
 				if (_tcscmp(findData.cFileName, _T(".")) != 0 && _tcscmp(findData.cFileName, _T("..")) != 0)
 				{					
-					if (smenu.AppendMenu(MF_STRING , ++nStartId, findData.cFileName))
+					HMENU hSubMenu = CreatePopupMenu();
+					if (smenu.AppendMenu(MF_STRING|MF_POPUP ,(UINT_PTR)hSubMenu , findData.cFileName))
 					{
-						int nItems = ::GetMenuItemCount(hMenu);
-						HMENU hSubMenu = GetSubMenu(hMenu, nItems-1);
-						nStartId = InitSkinMenu(hSubMenu, strSkinPath + _T("\\") + findData.cFileName, nStartId, strCurSkin);
+						nStartId = InitSkinMenu(hSubMenu, strSkinPath + _T("\\") + findData.cFileName, ++nStartId, strCurSkin);
+					}else
+					{
+						DestroyMenu(hSubMenu);
 					}
 				}
 			}
