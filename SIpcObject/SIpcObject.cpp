@@ -58,9 +58,8 @@ namespace SOUI
 		UINT uFunId = 0;
 		pBuf->Read(&uFunId,4);
 		SParamStream ps(pBuf);
-		SLOG_WARN("[----------------handle call, this:"<<this<<" seq="<<nCallSeq<<" fun id="<<wp);
+		SLOG_WARN("handle call, this:"<<this<<" seq="<<nCallSeq<<" fun id="<<uFunId<<" wp="<<wp);
 		bool bReqHandled = m_pConn->HandleFun(uFunId, ps);
-		SLOG_WARN("----------------]handle call, this:"<<this<<" seq="<<nCallSeq<<" fun id="<<uFunId<<" wp="<<wp);
 		return  bReqHandled?1:0;
 	}
 
@@ -107,11 +106,11 @@ namespace SOUI
 
 		//make sure msg queue is empty.
 		MSG msg;
-		while(::PeekMessage(&msg, m_hLocalId, UM_CALL_FUN, UM_CALL_FUN, PM_REMOVE))
+		while(::PeekMessage(&msg, NULL, UM_CALL_FUN, UM_CALL_FUN, PM_REMOVE))
 		{
 			if(msg.message == WM_QUIT)
 			{
-				PostMessage(m_hLocalId,WM_QUIT,0,0);
+				PostQuitMessage(msg.wParam);
 				return false;
 			}
 			DispatchMessage(&msg);
@@ -119,7 +118,7 @@ namespace SOUI
 
 		int nCallSeq = m_uCallSeq ++;
 		if(m_uCallSeq>100000) m_uCallSeq=0;
-		SLOG_WARN("<----------------call function, this:"<<this<<" seq="<<nCallSeq<<" id="<<pParam->GetID());
+		SLOG_WARN("call function, this:"<<this<<" seq="<<nCallSeq<<" id="<<pParam->GetID());
 		IShareBuffer *pBuf = &m_sendBuf;
 		DWORD dwPos = pBuf->Tell();
 		pBuf->Write(&nCallSeq,4);//write call seq first.
@@ -144,7 +143,7 @@ namespace SOUI
 		//clear params.
 		m_sendBuf.Seek(IShareBuffer::seek_set, dwPos);
 		m_sendBuf.SetTail(dwPos);
-		SLOG_WARN("------------------>call function, this:"<<this<<" seq="<<nCallSeq<<" id="<<pParam->GetID());
+
 		return lRet!=0;
 	}
 
