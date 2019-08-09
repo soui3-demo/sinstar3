@@ -467,9 +467,19 @@ BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 	{
 		return TRUE;
 	}
-	if(!CDataCenter::getSingletonPtr()->GetData().changeSkin(strSkin))
-		return FALSE;
-	if(strSkin != g_SettingsG->strDebugSkinPath)
+	SStringT skinPath = strSkin;
+	if(!CDataCenter::getSingletonPtr()->GetData().changeSkin(skinPath))
+	{
+		if(skinPath == g_SettingsG->strDebugSkinPath)
+		{//restore to default skin.
+			skinPath.Empty();
+			CDataCenter::getSingletonPtr()->GetData().changeSkin(skinPath);
+		}else
+		{
+			return FALSE;
+		}
+	}
+	if(skinPath != g_SettingsG->strDebugSkinPath)
 	{
 		g_SettingsG->strSkin=strSkin;
 		g_SettingsG->SetModified(true);
