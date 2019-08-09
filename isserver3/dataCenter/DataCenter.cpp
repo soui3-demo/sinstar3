@@ -103,11 +103,19 @@ namespace SOUI
 		{//º”‘ÿÕ‚≤ø∆§∑Ù
 			SLOG_INFO("step2, prepare for load skin");
 			CAutoRefPtr<IResProvider> pResProvider;
-			g_ComMgr2->CreateResProvider_ZIP((IObjRef**)&pResProvider);
-			ZIPRES_PARAM param;
-			param.ZipFile(GETRENDERFACTORY, strSkin);
-			if (!pResProvider->Init((WPARAM)&param, 0))
-				return false;
+			if(strSkin.EndsWith(_T("sskn"),true))
+			{
+				g_ComMgr2->CreateResProvider_ZIP((IObjRef**)&pResProvider);
+				ZIPRES_PARAM param;
+				param.ZipFile(GETRENDERFACTORY, strSkin);
+				if (!pResProvider->Init((WPARAM)&param, 0))
+					return false;
+			}else
+			{//load folder
+				CreateResProvider(RES_FILE,(IObjRef**)&pResProvider);
+				if(!pResProvider->Init((WPARAM)(LPCTSTR)strSkin,0))
+					return false;
+			}
 
 			IUiDefInfo * pUiDef = SUiDef::CreateUiDefInfo2(pResProvider, _T("uidef:xml_init"));
 			if (pUiDef->GetSkinPool() || pUiDef->GetStylePool() || pUiDef->GetObjDefAttr())

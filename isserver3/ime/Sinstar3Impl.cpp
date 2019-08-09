@@ -322,8 +322,7 @@ LRESULT CSinstar3Impl::OnAsyncCopyData(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	HWND hSender = (HWND)wParam;
 	if (pCds->dwData == CMD_CHANGESKIN)
 	{//change skin
-		SStringA strUtf8((const char *)pCds->lpData, pCds->cbData);
-		SStringT strPath = S_CA2T(strUtf8, CP_UTF8);
+		SStringT strPath((const TCHAR *)pCds->lpData, pCds->cbData/sizeof(TCHAR));
 		SLOG_INFO("skin:"<<strPath);
 		ChangeSkin(strPath);
 	}
@@ -464,16 +463,18 @@ extern SComMgr2 * g_ComMgr2;
 
 BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 {
-	if (g_SettingsG->strSkin != strSkin)
+	if(g_SettingsG->strSkin == strSkin)
 	{
-		if(!CDataCenter::getSingletonPtr()->GetData().changeSkin(strSkin))
-			return FALSE;
+		return TRUE;
+	}
+	if(!CDataCenter::getSingletonPtr()->GetData().changeSkin(strSkin))
+		return FALSE;
+	if(strSkin != g_SettingsG->strDebugSkinPath)
+	{
 		g_SettingsG->strSkin=strSkin;
 		g_SettingsG->SetModified(true);
 	}
 
-
-	SLOG_INFO("step15, notify skin changed");
 	//notify skin changed
 	EventSetSkin evt(this);
 	FireEvent(evt);

@@ -238,8 +238,7 @@ void CCmdHandler::OnChangeSkin(LPARAM lp)
 	SStringT *pSkin = (SStringT*)lp;
 	if (g_SettingsG->strSkin != *pSkin)
 	{
-		SStringA strUtf8 = S_CT2A((*pSkin), CP_UTF8);
-		m_pSinstar3->Broadcast(CMD_CHANGESKIN, (LPVOID)(LPCSTR)strUtf8, strUtf8.GetLength());
+		m_pSinstar3->Broadcast(CMD_CHANGESKIN, (LPVOID)(LPCTSTR)(*pSkin), pSkin->GetLength()*sizeof(TCHAR));
 	}
 }
 
