@@ -172,11 +172,15 @@ namespace SOUI
 
 		switch (::GetMenuContextHelpId(menuPopup))
 		{
-		case 100:
+		case 1:
 			{//main menu
-				smenuPopup.CheckMenuItem(R.id.follow_caret, MF_BYCOMMAND | g_SettingsUI->bMouseFollow ? MF_CHECKED : 0);
-				smenuPopup.CheckMenuItem(R.id.hide_statusbar, MF_BYCOMMAND | g_SettingsUI->bHideStatus ? MF_CHECKED : 0);
-				smenuPopup.CheckMenuItem(R.id.input_big5, MF_BYCOMMAND | g_SettingsUI->bInputBig5 ? MF_CHECKED : 0);
+				smenuPopup.CheckMenuItem(R.id.switch_follow_caret, MF_BYCOMMAND | g_SettingsUI->bMouseFollow ? MF_CHECKED : 0);
+				smenuPopup.CheckMenuItem(R.id.switch_hide_statusbar, MF_BYCOMMAND | g_SettingsUI->bHideStatus ? MF_CHECKED : 0);
+				smenuPopup.CheckMenuItem(R.id.switch_input_big5, MF_BYCOMMAND | g_SettingsUI->bInputBig5 ? MF_CHECKED : 0);
+				smenuPopup.CheckMenuItem(R.id.switch_read_input, MF_BYCOMMAND | g_SettingsUI->bSound ? MF_CHECKED : 0);
+				smenuPopup.CheckMenuItem(R.id.switch_record_input, MF_BYCOMMAND | g_SettingsUI->bRecord ? MF_CHECKED : 0);
+				smenuPopup.CheckMenuItem(R.id.switch_word_input, MF_BYCOMMAND | g_SettingsUI->bEnglish ? MF_CHECKED : 0);
+				smenuPopup.CheckMenuItem(R.id.switch_filter_gbk, MF_BYCOMMAND | g_SettingsUI->bFilterGbk ? MF_CHECKED : 0);
 				break;
 			}
 		case 2:
@@ -664,15 +668,15 @@ namespace SOUI
 		{
 			m_pCmdListener->OnCommand(CMD_HOTKEY_KEYMAP, 0);
 		}
-		else if (nRet == R.id.follow_caret)
+		else if (nRet == R.id.switch_follow_caret)
 		{
 			m_pCmdListener->OnCommand(CMD_FOLLOWCARET, 0);
 		}
-		else if (nRet == R.id.hide_statusbar)
+		else if (nRet == R.id.switch_hide_statusbar)
 		{
 			m_pCmdListener->OnCommand(CMD_HOTKEY_HIDESTATUSBAR, 0);
 		}
-		else if (nRet == R.id.input_big5)
+		else if (nRet == R.id.switch_input_big5)
 		{
 			g_SettingsUI->bInputBig5 = !g_SettingsUI->bInputBig5;
 			g_SettingsUI->SetModified(true);
@@ -707,6 +711,30 @@ namespace SOUI
 		{//open tools.
 			SStringT strToolPath = m_toolManager.ToolPathFromID(nRet);
 			m_pCmdListener->OnCommand(CMD_EXECUTETOOL, (LPARAM)&strToolPath);
+		}
+		else if (nRet == R.id.switch_filter_gbk)
+		{
+			g_SettingsUI->bFilterGbk = !g_SettingsUI->bFilterGbk;
+			g_SettingsUI->SetModified(true);
+			m_pCmdListener->OnCommand(CMD_SYNCUI, BTN_FILTERGBK);
+		}
+		else if (nRet == R.id.switch_read_input)
+		{
+			g_SettingsUI->bSound = !g_SettingsUI->bSound;
+			g_SettingsUI->SetModified(true);
+			m_pCmdListener->OnCommand(CMD_SYNCUI, BTN_SOUND);
+		}
+		else if (nRet == R.id.switch_record_input)
+		{
+			g_SettingsUI->bRecord = !g_SettingsUI->bRecord;
+			g_SettingsUI->SetModified(true);
+			m_pCmdListener->OnCommand(CMD_SYNCUI, BTN_RECORD);
+		}
+		else if (nRet == R.id.switch_word_input)
+		{
+			g_SettingsUI->bEnglish = !g_SettingsUI->bEnglish;
+			g_SettingsUI->SetModified(true);
+			m_pCmdListener->OnCommand(CMD_SYNCUI, BTN_ENGLISHMODE);
 		}
 
 		m_skinManager.ClearMap();

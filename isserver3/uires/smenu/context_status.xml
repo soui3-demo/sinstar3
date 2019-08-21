@@ -4,9 +4,15 @@
           font="size:15"
           >
   <item text="系统设置" name="config" id="100" />
-  <item text="隐藏状态" name="hide_statusbar" id="101"/>
-  <item text="光标跟随" name="follow_caret" id="102"/>
-  <item text="输出繁体" name="input_big5" id="103"/>
+  <item test="状态开关" contextHelpId="1">
+    <item text="隐藏状态栏" name="switch_hide_statusbar" id="101"/>
+    <item text="光标跟随" name="switch_follow_caret" id="102"/>
+    <item text="输出繁体" name="switch_input_big5" id="103"/>
+    <item text="语音校对" name="switch_read_input" id="104"/>
+    <item text="智能记忆" name="switch_record_input" id="105"/>
+    <item text="单词补全" name="switch_word_input" id="106"/>
+    <item text="GBK过滤" name="switch_filter_gbk" id="107"/>
+  </item>
   <sep/>
   <item text="皮    肤" name="menu_skin" id="200" contextHelpId="2">
     <item text="皮肤目录" name="skin_mgr" id="201"/>
