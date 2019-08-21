@@ -36,7 +36,7 @@ namespace SOUI{
 
 	HWND CSkinAwareWnd::Create(LPCTSTR pszTitle, HWND hParent)
 	{
-		return SNativeWnd::Create(pszTitle, WS_POPUP, WS_EX_TOOLWINDOW, 0, 0, 0, 0, hParent, NULL);
+		return GetNative()->Create(pszTitle, WS_POPUP, WS_EX_TOOLWINDOW, 0, 0, 0, 0, hParent, NULL);
 	}
 
 	void CSkinAwareWnd::SetDestroyListener(IDestroyListener * pListener, IMEWNDTYPE type)

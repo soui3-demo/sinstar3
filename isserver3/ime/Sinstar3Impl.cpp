@@ -53,14 +53,14 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HWND hSvr)
 	m_pInputWnd->SetStatusWnd(m_pStatusWnd);
 
 	SLOG_INFO("status:"<<m_pStatusWnd->m_hWnd<<", input:"<<m_pInputWnd->m_hWnd);
-	SOUI::SNativeWnd::Create(KSinstar3WndName,WS_DISABLED|WS_POPUP,WS_EX_TOOLWINDOW,0,0,0,0,HWND_MESSAGE,NULL);
+	Create(KSinstar3WndName,WS_DISABLED|WS_POPUP,WS_EX_TOOLWINDOW,0,0,0,0,HWND_MESSAGE,NULL);
 	ISComm_Login(m_hWnd);
 }
 
 CSinstar3Impl::~CSinstar3Impl(void)
 {
 	ISComm_Logout(m_hWnd);
-	SOUI::SNativeWnd::DestroyWindow();
+	DestroyWindow();
 	m_pInputWnd->DestroyWindow();
 	m_pStatusWnd->DestroyWindow();
 	delete m_pStatusWnd;
@@ -322,8 +322,7 @@ LRESULT CSinstar3Impl::OnAsyncCopyData(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	HWND hSender = (HWND)wParam;
 	if (pCds->dwData == CMD_CHANGESKIN)
 	{//change skin
-		SStringA strUtf8((const char *)pCds->lpData, pCds->cbData);
-		SStringT strPath = S_CA2T(strUtf8, CP_UTF8);
+		SStringT strPath((const TCHAR *)pCds->lpData, pCds->cbData/sizeof(TCHAR));
 		SLOG_INFO("skin:"<<strPath);
 		ChangeSkin(strPath);
 	}
@@ -464,16 +463,28 @@ extern SComMgr2 * g_ComMgr2;
 
 BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 {
-	if (g_SettingsG->strSkin != strSkin)
+	if(g_SettingsG->strSkin == strSkin)
 	{
-		if(!CDataCenter::getSingletonPtr()->GetData().changeSkin(strSkin))
+		return TRUE;
+	}
+	SStringT skinPath = strSkin;
+	if(!CDataCenter::getSingletonPtr()->GetData().changeSkin(skinPath))
+	{
+		if(skinPath == g_SettingsG->strDebugSkinPath)
+		{//restore to default skin.
+			skinPath.Empty();
+			CDataCenter::getSingletonPtr()->GetData().changeSkin(skinPath);
+		}else
+		{
 			return FALSE;
+		}
+	}
+	if(skinPath != g_SettingsG->strDebugSkinPath)
+	{
 		g_SettingsG->strSkin=strSkin;
 		g_SettingsG->SetModified(true);
 	}
 
-
-	SLOG_INFO("step15, notify skin changed");
 	//notify skin changed
 	EventSetSkin evt(this);
 	FireEvent(evt);

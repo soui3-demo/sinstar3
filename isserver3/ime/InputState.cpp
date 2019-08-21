@@ -4,7 +4,7 @@
 #include <ShellAPI.h>
 
 #pragma warning(disable:4311 4302)
-const BYTE KCompKey[] ={0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,        // 00-0F
+static const BYTE KCompKey[] ={0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,        // 00-0F
 						0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,        // 10-1F
 						1,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,        // 20-2F
 						1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,        // 30-3F
@@ -22,6 +22,7 @@ const BYTE KCompKey[] ={0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,        // 00-0F
 						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};       // F0-FF
 
 
+static const int HKI_LoadDebugSkin	 = -2;
 
 //符号处理
 //BYTE byInput:键盘输入
@@ -205,6 +206,10 @@ int CInputState::TestHotKey(UINT uVk, const BYTE * lpbKeyState) const
 			iRet = -1;
 	}else//iRet == -1
 	{
+		if(uVk == 'F' && (lpbKeyState[VK_CONTROL] & 0x80) && (lpbKeyState[VK_MENU] & 0x80) && g_SettingsG->bEnableDebugSkin)
+		{//load debug skin
+			return HKI_LoadDebugSkin;
+		}
 		if(m_ctx.sCandCount && ((uVk>='0' && uVk<='9')||(uVk>=VK_NUMPAD0 && uVk<=VK_NUMPAD9)))
 		{//number
 			if(lpbKeyState[VK_CONTROL] & 0x80)
@@ -460,6 +465,10 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 	int iHotKey = TestHotKey(uVKey, lpbKeyState);
 	if (iHotKey != -1)
 	{
+		if(iHotKey == HKI_LoadDebugSkin)
+		{//load debug skin
+			return TRUE;
+		}
 		if(iHotKey == HKI_UDMode)
 		{//切换到用户自定义输入状态
 			ClearContext(CPC_ALL);
@@ -2232,6 +2241,12 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 		{
 			switch (iHotKey)
 			{
+			case HKI_LoadDebugSkin:
+				{
+					SStringT debugSkin=g_SettingsG->strDebugSkinPath;
+					m_pListener->OnCommand(CMD_CHANGESKIN, (LPARAM)&debugSkin);
+				}
+				break;
 			case HKI_CharMode:
 				m_pListener->OnCommand(CMD_HOTKEY_CHARMODE, 0);
 				break;

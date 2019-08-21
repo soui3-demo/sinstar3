@@ -39,7 +39,7 @@ void CImeWnd::OnMouseMove(UINT nFlags, CPoint point)
 
 HWND CImeWnd::Create(LPCTSTR pszTitle,HWND hParent)
 {
-	return SNativeWnd::Create(pszTitle,WS_POPUP|WS_DISABLED,WS_EX_TOOLWINDOW|WS_EX_TOPMOST|WS_EX_NOACTIVATE,0,0,0,0, hParent,NULL);
+	return GetNative()->Create(pszTitle,WS_POPUP|WS_DISABLED,WS_EX_TOOLWINDOW|WS_EX_TOPMOST|WS_EX_NOACTIVATE,0,0,0,0, hParent,NULL);
 }
 
 void CImeWnd::Show(BOOL bShow)
@@ -47,7 +47,7 @@ void CImeWnd::Show(BOOL bShow)
 	if(!IsWindow()) return;
 	if(bShow)
 		SetWindowPos(HWND_TOPMOST,0,0,0,0,SWP_NOSIZE|SWP_NOMOVE|SWP_NOACTIVATE|SWP_SHOWWINDOW);
-	else if(SNativeWnd::IsWindowVisible())
+	else if(GetNative()->IsWindowVisible())
 	{
 		ShowWindow(SW_HIDE);
 	}
@@ -79,7 +79,7 @@ void CImeWnd::OnDragStatus(EventArgs *e)
 {
 	EventDragMove *e2 = sobj_cast<EventDragMove>(e);
 	CRect rcWnd;
-	SNativeWnd::GetWindowRect(&rcWnd);
+	GetNative()->GetWindowRect(&rcWnd);
 
 	CPoint pt = rcWnd.TopLeft() + e2->ptMove;
 

@@ -108,7 +108,7 @@ namespace SOUI
 	void CStatusWnd::UpdateAnchorMode()
 	{
 		CRect rcWnd;
-		SNativeWnd::GetWindowRect(&rcWnd);
+		GetNative()->GetWindowRect(&rcWnd);
 		CRect rcWorkArea;
 		SystemParametersInfo(SPI_GETWORKAREA, 0, &rcWorkArea, 0);
 
@@ -518,7 +518,7 @@ namespace SOUI
 		case R.id.btn_english:
 			e2->bUpdated = TRUE;
 			strAccel = SAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_EnSwitch]);
-			e2->strToolTip = SStringT().Format(_T("单词输入:%s"), g_SettingsUI->bEnglish ? _T("启用") : _T("禁用"));
+			e2->strToolTip = SStringT().Format(_T("单词补全:%s"), g_SettingsUI->bEnglish ? _T("启用") : _T("禁用"));
 			break;
 		case R.id.btn_query:
 			e2->bUpdated = TRUE;

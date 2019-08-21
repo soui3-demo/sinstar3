@@ -183,6 +183,21 @@ void CSettingsGlobal::Load(const SStringT & strDataPath)
 	_stscanf(szBuf,_T("%d,%d"),&ptInput.x,&ptInput.y);
 	GetPrivateProfileString(KUI,_T("StatusPosition"),_T("-1,-1"),szBuf,100,strConfigIni);
 	_stscanf(szBuf,_T("%d,%d"),&ptStatus.x,&ptStatus.y);
+
+	bEnableDebugSkin = GetPrivateProfileInt(_T("DebugSkin"),_T("enable"),FALSE,strConfigIni);
+	if(bEnableDebugSkin)
+	{
+		GetPrivateProfileString(_T("DebugSkin"),_T("path"),_T(""),szBuf,MAX_PATH,strConfigIni);
+		DWORD dwAttr = GetFileAttributes(szBuf) ;
+		if(dwAttr == INVALID_FILE_ATTRIBUTES || !(dwAttr&FILE_ATTRIBUTE_DIRECTORY))
+		{
+			bEnableDebugSkin = FALSE;
+		}else
+		{
+			strDebugSkinPath = szBuf;
+		}
+	}
+
 	SetModified(false);
 }
 

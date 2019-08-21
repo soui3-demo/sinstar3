@@ -17,7 +17,7 @@ namespace SOUI {
 		FindChildByID(R.id.txt_tip_title)->SetWindowTextW(strTitle);
 		FindChildByID(R.id.txt_tip_content)->SetWindowTextW(strTip);
 		SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOSIZE | SWP_SHOWWINDOW);
-		SNativeWnd::SetTimer(TIMER_DELAY_HIDE, 5000, NULL);
+		GetNative()->SetTimer(TIMER_DELAY_HIDE, 5000, NULL);
 	}
 
 	void STipWnd::OnTimer(UINT_PTR idEvent)
@@ -46,7 +46,7 @@ namespace SOUI {
 
 	void STipWnd::OnMouseMove(UINT nFlags, CPoint point)
 	{
-		SNativeWnd::SetTimer(TIMER_DELAY_HIDE, 3000, NULL);
+		GetNative()->SetTimer(TIMER_DELAY_HIDE, 3000, NULL);
 		SetMsgHandled(FALSE);
 	}
 

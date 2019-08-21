@@ -86,8 +86,9 @@ public:
 	BYTE    bySentMode;
 
 	int		nDelayTime;			//delay timer for closing composition window in seconds.
+	BOOL	bEnableDebugSkin;	//enable debug skin. default is false
+	SStringT   strDebugSkinPath;//debug skin path.
 
-	
 	SStringT   strSkin;   //skin
 	POINT	ptInput;			//input window pos for not caret follow.
 	POINT   ptStatus;			//status window pos

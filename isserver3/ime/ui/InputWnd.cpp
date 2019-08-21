@@ -29,7 +29,7 @@ namespace SOUI
 	void CInputWnd::SetFollowCaret(BOOL bFollowCaret)
 	{
 		m_bFollowCaret = bFollowCaret;
-		if (SNativeWnd::IsWindowVisible() && !bFollowCaret)
+		if (GetNative()->IsWindowVisible() && !bFollowCaret)
 		{
 			UpdateAnchorPosition();
 			SetWindowPos(HWND_TOPMOST, m_ptAnchor.x, m_ptAnchor.y, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
@@ -480,7 +480,7 @@ namespace SOUI
 		if (m_ptAnchor.x == -1)
 		{
 			CRect rcWnd;
-			SNativeWnd::GetWindowRect(&rcWnd);
+			GetNative()->GetWindowRect(&rcWnd);
 
 			HMONITOR hMonitor = MonitorFromWindow(m_hOwner, MONITOR_DEFAULTTONEAREST);
 			MONITORINFO info = { sizeof(info),0 };
@@ -629,7 +629,7 @@ namespace SOUI
 		SWindow::ReleaseCapture();
 
 		CRect rcWnd;
-		SNativeWnd::GetWindowRect(&rcWnd);
+		GetNative()->GetWindowRect(&rcWnd);
 		m_ptAnchor = rcWnd.TopLeft();
 		//save anchor
 		g_SettingsG->ptInput = m_ptAnchor;
@@ -648,7 +648,7 @@ namespace SOUI
 		if (m_bDraging)
 		{
 			CRect rcWnd;
-			SNativeWnd::GetWindowRect(&rcWnd);
+			GetNative()->GetWindowRect(&rcWnd);
 			rcWnd.OffsetRect(point - m_ptClick);
 			SetWindowPos(HWND_TOPMOST, rcWnd.left, rcWnd.top, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
 		}
