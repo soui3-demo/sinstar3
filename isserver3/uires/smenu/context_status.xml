@@ -4,7 +4,7 @@
           font="size:15"
           >
   <item text="系统设置" name="config" id="100" />
-  <item test="状态开关" contextHelpId="1">
+  <item text="状态开关" contextHelpId="1">
     <item text="隐藏状态栏" name="switch_hide_statusbar" id="101"/>
     <item text="光标跟随" name="switch_follow_caret" id="102"/>
     <item text="输出繁体" name="switch_input_big5" id="103"/>
