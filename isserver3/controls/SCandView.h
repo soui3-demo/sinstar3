@@ -58,7 +58,7 @@ namespace SOUI
 		COLORREF m_crWild;
 
 		BYTE	 m_byRate;
-
+		bool	 m_bGbk;
 		COLORREF m_crShadow;
 		CPoint   m_ptShadowOffset;
 	};

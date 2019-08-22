@@ -39,26 +39,30 @@ namespace SOUI
 		}
 
 		COLORREF crCand = CR_INVALID;
-		switch (m_byRate)
+		if(m_bGbk)
 		{
-		case RATE_GBK:
 			crCand = m_crCand[CAND_GBK];
-			break;
-		case RATE_FORECAST:
-			crCand = m_crCand[CAND_FORECAST];
-			break;
-		case RATE_MIXSP:
-			crCand = m_crCand[CAND_BLENDPY];
-			break;
-		case RATE_USERDEF:
-			crCand = m_crCand[CAND_USERDEF];
-			break;
-		case RATE_USERCMD:
-			crCand = m_crCand[CAND_USERCMD];
-			break;
-		default:
-			crCand = m_crCand[CAND_NORMAL];
-			break;
+		}
+		else
+		{
+			switch (m_byRate)
+			{
+			case RATE_FORECAST:
+				crCand = m_crCand[CAND_FORECAST];
+				break;
+			case RATE_MIXSP:
+				crCand = m_crCand[CAND_BLENDPY];
+				break;
+			case RATE_USERDEF:
+				crCand = m_crCand[CAND_USERDEF];
+				break;
+			case RATE_USERCMD:
+				crCand = m_crCand[CAND_USERCMD];
+				break;
+			default:
+				crCand = m_crCand[CAND_NORMAL];
+				break;
+			}
 		}
 		if (crCand == CR_INVALID)
 			crCand = m_crCand[CAND_NORMAL];
@@ -97,7 +101,8 @@ namespace SOUI
 		m_strInput = strInput;
 
 		m_byRate = pbyCandData[0];
-		const BYTE * p = pbyCandData+1;
+		m_bGbk = pbyCandData[1]!=0;
+		const BYTE * p = pbyCandData+2;
 		m_strCand = S_CA2T(SStringA((const char*)p+1,p[0]), CP_GB);
 		if(cWild!=0 && m_byRate != RATE_USERCMD)
 		{

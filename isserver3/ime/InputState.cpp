@@ -733,16 +733,17 @@ void CInputState::KeyIn_Spell_UpdateCandList(InputContext *  lpCntxtPriv,BYTE by
 		lpCntxtPriv->ppbyCandInfo=(LPBYTE*)malloc(sCount*sizeof(LPBYTE));
 		for(i=0;i<sCount;i++)
 		{
+			char nLen = pBuf[2];
 			if(byCaret==(lpCntxtPriv->bySyllables-1))
 			{
-				if(strncmp((char*)(lpCntxtPriv->szWord+lpCntxtPriv->bySyllables-pBuf[1]/2),(char*)pBuf+2,pBuf[1])!=0) //去掉与预测相同的重码
+				if(strncmp((char*)(lpCntxtPriv->szWord+lpCntxtPriv->bySyllables-nLen/2),(char*)pBuf+3,nLen)!=0) //去掉与预测相同的重码
 					lpCntxtPriv->ppbyCandInfo[sValidCount++]=pBuf;
 			}else
 			{
-				if(strncmp((char*)(lpCntxtPriv->szWord+byCaret),(char*)pBuf+2,pBuf[1])!=0)
+				if(strncmp((char*)(lpCntxtPriv->szWord+byCaret),(char*)pBuf+3,nLen)!=0)
 					lpCntxtPriv->ppbyCandInfo[sValidCount++]=pBuf;
 			}
-			pBuf+=pBuf[1]+2;
+			pBuf+=nLen+3;
 		}
 		lpCntxtPriv->sCandCount=sValidCount;
 	}
@@ -1402,7 +1403,7 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 				if(lpCntxtPriv->compMode==IM_SPELL)
 				{//拼音输入状态
 					BYTE iWord=0;
-					BYTE byPhraseLen=pData[1]/2;
+					BYTE byPhraseLen=pData[2]/2;
 					BYTE byCaret=lpCntxtPriv->byCaret;
 					if(byCaret==lpCntxtPriv->bySyllables-1)
 					{
@@ -1413,7 +1414,7 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 					}
 					while(iWord<byPhraseLen)
 					{
-						memcpy(lpCntxtPriv->szWord[iWord+byCaret],pData+2+iWord*2,2);
+						memcpy(lpCntxtPriv->szWord[iWord+byCaret],pData+3+iWord*2,2);
 						lpCntxtPriv->bySelect[iWord+byCaret]=byPhraseLen;
 						iWord++;
 					}
@@ -1424,7 +1425,7 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 					}
 					if(byPhraseLen>lpCntxtPriv->bySyllables)
 					{//不完整输入长词重码
-						SStringA strResultA((char*)pData+2,pData[1]);
+						SStringA strResultA((char*)pData+3,pData[2]);
 						BOOL isTempSpell = IsTempSpell();
 
 						ClearContext(CPC_ALL);
@@ -1499,28 +1500,29 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 						byMask=0;
 					}else
 					{//普通的选择重码
-						LPBYTE pComp=pData+2+pData[1];
+						LPBYTE pCand=pData+2;//rate+gbkFlag
+						LPBYTE pComp=pCand+1+pCand[0];
 						if(pData[0]==RATE_USERDEF)
 						{//自定义编码
 							if(pComp[0]!=0)	pData=pComp;
-							else pData++;
+							else pData=pCand;
 							strResultA = SStringA((char*)pData+1,pData[0]);
 							byMask=0;
 						}else
 						{//不是自定义编码
-							strResultA = SStringA((char*)pData+2,pData[1]);
+							strResultA = SStringA((char*)pCand+1,pCand[0]);
 							if(pData[0]!=RATE_FORECAST)
 							{//不是预测词，词频调整
 								if(lpbKeyState[VK_CONTROL] & 0x80)
 								{
-									ISComm_RateAdjust((char*)pComp+1,pComp[0],(char*)pData+2,pData[1],RAM_FAST,m_pListener->GetHwnd());
+									ISComm_RateAdjust((char*)pComp+1,pComp[0],(char*)pCand+1,pCand[0],RAM_FAST,m_pListener->GetHwnd());
 								}else if(g_SettingsG->byRateAdjust) 
 								{
-									ISComm_RateAdjust((char*)pComp+1,pComp[0],(char*)pData+2,pData[1],g_SettingsG->byRateAdjust==1?RAM_AUTO:RAM_FAST,m_pListener->GetHwnd());
+									ISComm_RateAdjust((char*)pComp+1,pComp[0],(char*)pCand+1,pCand[0],g_SettingsG->byRateAdjust==1?RAM_AUTO:RAM_FAST,m_pListener->GetHwnd());
 								}
 							}else
 							{//预测词，自动造词
-								ISComm_MakePhrase((char*)pData+2,pData[1]);
+								ISComm_MakePhrase((char*)pCand+1,pCand[0]);
 							}
 						}
 					}
@@ -1560,7 +1562,7 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 			}
 		}else if(lpCntxtPriv->inState==INST_LINEIME)
 		{//笔画输入状态
-			strResultA=SStringA((char*)pData+2,pData[1]);
+			strResultA=SStringA((char*)pData+3,pData[2]);
 		}
 		ClearContext(CPC_ALL);
 		InputResult(strResultA,byMask);
@@ -1720,10 +1722,12 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 		{
 			if(lpCntxtPriv->sCandCount)
 			{
-				BYTE byType=lpCntxtPriv->ppbyCandInfo[0][0];
+				BYTE *p = lpCntxtPriv->ppbyCandInfo[0];
+				BYTE byType= p[0];
+				bool bGbk = p[1]!=0;
 				//防止符号输入时出现错误:标点不能做首编码,退出当前过程,进入标点顶字上屏过程
 				if((byInput<'a' || byInput>'z') && !ISComm_GetCompInfo()->bSymbolFirst) return FALSE;
-				if(byType!=RATE_FORECAST && (byType!=RATE_GBK || g_SettingsG->nGbkMode==2)) 
+				if(byType!=RATE_FORECAST && (!bGbk || g_SettingsG->nGbkMode==2)) 
 				{
 					KeyIn_All_SelectCand(lpCntxtPriv,'1',1,lpbKeyState,true);
 					bRet=TRUE;
@@ -1853,14 +1857,15 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 				//先找出单字数量
 				for(i=0;i<sCount;i++)
 				{
-					if(pCandData[1]==2) sSingleWords++;
-					pCandData+=pCandData[1]+2;	//偏移词组信息
+					//format: rate+bGbk+candLen+cand+compLen+comp
+					if(pCandData[2]==2) sSingleWords++;
+					pCandData+=pCandData[2]+3;	//偏移词组信息
 					pCandData+=pCandData[0]+1;	//偏移编码信息					
 				}
 				pCandData=pbyData;
 				for(i=0;i<sCount;i++)
 				{
-					if (pCandData[0] == RATE_GBK)
+					if (pCandData[2]!=0)
 					{
 						if (!g_SettingsUI->bFilterGbk && (g_SettingsG->nGbkMode != 0 ||  sSingleWords<2))
 						{//GBK显示或者不是GBK重码
@@ -1871,7 +1876,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 					{
 						lpCntxtPriv->ppbyCandInfo[lpCntxtPriv->sCandCount++] = pCandData;
 					}
-					pCandData+=pCandData[1]+2;	//偏移词组信息
+					pCandData+=pCandData[2]+3;	//偏移词组信息
 					pCandData+=pCandData[0]+1;	//偏移编码信息
 				}
 			}
@@ -1888,7 +1893,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 		}
 		if((byType&MCR_AUTOSELECT ||(KeyIn_Code_IsMaxCode(lpCntxtPriv,byType) && g_SettingsG->bAutoInput)) && !lpCntxtPriv->bWebMode)
 		{
-			if(lpCntxtPriv->sCandCount==1 && lpbyCand[0]!=RATE_FORECAST && (lpbyCand[0]!=RATE_GBK || g_SettingsG->nGbkMode!=1))
+			if(lpCntxtPriv->sCandCount==1 && lpbyCand[0]!=RATE_FORECAST && (lpbyCand[1]!=0 || g_SettingsG->nGbkMode!=1))
 				KeyIn_All_SelectCand(lpCntxtPriv,'1',0,lpbKeyState);
 			else
 			{
@@ -2168,7 +2173,7 @@ BOOL CInputState::KeyIn_UserDef_ChangeComp(InputContext * lpCntxtPriv,UINT byInp
 		for(i=0;i<lpCntxtPriv->sCandCount;i++)
 		{
 			lpCntxtPriv->ppbyCandInfo[i]=pbyData;
-			pbyData+=pbyData[1]+2;//重码
+			pbyData+=pbyData[2]+3;//重码
 			pbyData+=pbyData[0]+1;//编码
 		}
 	}
@@ -2217,7 +2222,7 @@ BOOL CInputState::KeyIn_Line_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 			for(i=0;i<sCount;i++)
 			{
 				lpCntxtPriv->ppbyCandInfo[i]=pBuf;
-				pBuf+=pBuf[1]+2;
+				pBuf+=pBuf[2]+3;
 			}
 			lpCntxtPriv->sCandCount=sCount;
 		}

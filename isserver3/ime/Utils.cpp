@@ -65,7 +65,7 @@ BOOL CUtils::CmdExecute(BYTE * pszBuf)
 {
 	UINT_PTR uRet = FALSE;
 	char *pParam = NULL;
-	char *pCmd = (char*)pszBuf + pszBuf[1] + 2 + 1;
+	char *pCmd = (char*)pszBuf + pszBuf[2] + 3 + 1;
 	if (pCmd[0] == '\"')
 	{
 		pParam = strstr(pCmd, "\" ");

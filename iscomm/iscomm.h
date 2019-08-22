@@ -60,7 +60,6 @@ typedef struct tagFLMINFO
 
 #define RATE_USERDEF	0xFF	//自定义编码使用的词频
 #define RATE_FORECAST	0xFE	//智能预测得到的词使用的词频
-#define RATE_GBK		0xFD	//GBK flag
 #define RATE_USERCMD	0xFC	//Command ID
 #define RATE_MIXSP		0xFB	//简拼词组
 #define RATE_WILD		0xFA	//万能键查询结果
