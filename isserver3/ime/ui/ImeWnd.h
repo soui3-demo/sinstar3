@@ -14,6 +14,8 @@ public:
 	void Show(BOOL bShow);
 
 protected:
+	virtual int OnRecreateUI(LPCREATESTRUCT lpCreateStruct);
+
 	virtual SWND OnSetSwndCapture(SWND swnd);
 	virtual BOOL OnReleaseSwndCapture();
 

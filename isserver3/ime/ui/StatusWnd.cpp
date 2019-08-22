@@ -92,7 +92,8 @@ namespace SOUI
 
 	int CStatusWnd::OnRecreateUI(LPCREATESTRUCT lpCreateStruct)
 	{
-		int nRet = __super::OnCreate(lpCreateStruct);
+		m_szAppSetted = CSize();
+		int nRet = __super::OnRecreateUI(lpCreateStruct);
 		if (nRet != 0) return nRet;
 
 		UpdateUI();

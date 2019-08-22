@@ -128,7 +128,7 @@ namespace SOUI
 
 	int CInputWnd::OnRecreateUI(LPCREATESTRUCT lpCreateStruct)
 	{
-		int nRet = __super::OnCreate(lpCreateStruct);
+		int nRet = __super::OnRecreateUI(lpCreateStruct);
 		if (nRet != 0) return nRet;
 		UpdateUI();
 		MoveTo(m_ptCaret, m_nCaretHeight);
