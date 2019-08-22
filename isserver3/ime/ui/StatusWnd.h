@@ -38,7 +38,7 @@ namespace SOUI
 		CStatusWnd(SEventSet *pEvtSets, ICmdListener *pListener);
 		~CStatusWnd(void);
 
-		HWND Create(LPCTSTR pszWndName);
+		HWND Create();
 		void SetOwner(HWND hOwner);
 		void UpdateCompInfo();
 		void UpdateToggleStatus(DWORD flags,BOOL bInit=FALSE);

@@ -34,9 +34,9 @@ namespace SOUI{
 		e->bubbleUp = true;
 	}
 
-	HWND CSkinAwareWnd::Create(LPCTSTR pszTitle, HWND hParent)
+	HWND CSkinAwareWnd::Create(HWND hParent)
 	{
-		return GetNative()->Create(pszTitle, WS_POPUP, WS_EX_TOOLWINDOW, 0, 0, 0, 0, hParent, NULL);
+		return SHostWnd::Create(hParent,WS_POPUP, WS_EX_TOOLWINDOW, 0, 0, 0, 0);
 	}
 
 	void CSkinAwareWnd::SetDestroyListener(IDestroyListener * pListener, IMEWNDTYPE type)

@@ -39,12 +39,12 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HWND hSvr)
 
 	HWND hOwner = (HWND)pTxtSvr->GetActiveWnd();
  	m_pInputWnd = new CInputWnd(this,m_inputState.GetInputContext(),this);
-	m_pInputWnd->Create(_T("Sinstar3_Input"));
+	m_pInputWnd->Create();
 
 	m_pInputWnd->SetOwner(hOwner);
 
 	m_pStatusWnd = new CStatusWnd(this,this);
-	m_pStatusWnd->Create(_T("Sinstar3_Status"));
+	m_pStatusWnd->Create();
 	m_pStatusWnd->SetOwner(hOwner);
 	m_inputState.SetInputListener(this);
 	
@@ -479,7 +479,7 @@ BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 			return FALSE;
 		}
 	}
-	if(skinPath != g_SettingsG->strDebugSkinPath)
+	if(skinPath != g_SettingsG->strDebugSkinPath || g_SettingsG->strDebugSkinPath.IsEmpty())
 	{
 		g_SettingsG->strSkin=strSkin;
 		g_SettingsG->SetModified(true);
@@ -507,7 +507,7 @@ void CSinstar3Impl::ShowTip(LPCTSTR pszTitle, LPCTSTR pszContent)
 	if (m_pTipWnd == NULL)
 	{
 		m_pTipWnd = new STipWnd(this);
-		m_pTipWnd->Create(_T("Sinstar3_Tip"));
+		m_pTipWnd->Create();
 		m_pTipWnd->SetDestroyListener(this, IME_TIP);
 	}
 	m_pTipWnd->SetTip(pszTitle, pszContent);

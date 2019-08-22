@@ -16,7 +16,15 @@ namespace SOUI {
 	{
 		FindChildByID(R.id.txt_tip_title)->SetWindowTextW(strTitle);
 		FindChildByID(R.id.txt_tip_content)->SetWindowTextW(strTip);
-		SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOSIZE | SWP_SHOWWINDOW);
+		UpdateLayout();
+
+		CRect rcWnd = GetWindowRect();
+		CRect rcWorkArea;
+		SystemParametersInfo(SPI_GETWORKAREA, 0, &rcWorkArea, 0);
+		int x = (rcWorkArea.Width() - rcWnd.Width()) / 2 + rcWorkArea.left;
+		int y = (rcWorkArea.Height() - rcWnd.Height()) / 2 + rcWorkArea.top;
+
+		SetWindowPos(HWND_TOPMOST, x, y, 0, 0, SWP_NOACTIVATE | SWP_NOSIZE | SWP_SHOWWINDOW);
 		GetNative()->SetTimer(TIMER_DELAY_HIDE, 5000, NULL);
 	}
 
@@ -29,18 +37,6 @@ namespace SOUI {
 		else
 		{
 			SetMsgHandled(FALSE);
-		}
-	}
-
-	void STipWnd::OnWindowPosChanging(LPWINDOWPOS lpWndPos)
-	{
-		if (!(lpWndPos->flags&SWP_NOSIZE))
-		{
-			CRect rcWorkArea;
-			SystemParametersInfo(SPI_GETWORKAREA, 0, &rcWorkArea, 0);
-			lpWndPos->x = (rcWorkArea.Width() - lpWndPos->cx) / 2 + rcWorkArea.left;
-			lpWndPos->y = (rcWorkArea.Height() - lpWndPos->cy) / 2 + rcWorkArea.top;
-			lpWndPos->flags &= ~SWP_NOMOVE;
 		}
 	}
 

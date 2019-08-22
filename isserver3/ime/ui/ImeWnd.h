@@ -10,7 +10,7 @@ public:
 	CImeWnd(SEventSet *pEvtSets,LPCTSTR pszLayout);
 	virtual ~CImeWnd();
 
-	HWND Create(LPCTSTR pszTitle,HWND hParent=NULL);
+	HWND Create(HWND hParent=NULL);
 	void Show(BOOL bShow);
 
 protected:

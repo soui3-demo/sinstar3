@@ -54,9 +54,9 @@ namespace SOUI
 	}
 
 
-	HWND CStatusWnd::Create(LPCTSTR pszWndName)
+	HWND CStatusWnd::Create()
 	{
-		HWND hWnd = __super::Create(pszWndName);
+		HWND hWnd = __super::Create();
 		if(hWnd)
 		{
 			CPoint pt = g_SettingsG->ptStatus;

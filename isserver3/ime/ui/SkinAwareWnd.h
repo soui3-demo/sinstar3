@@ -22,7 +22,7 @@ namespace SOUI
 		CSkinAwareWnd(SEventSet *pEvtSets, LPCTSTR pszLayout);
 		virtual ~CSkinAwareWnd();
 
-		HWND Create(LPCTSTR pszTitle, HWND hParent = NULL);
+		HWND Create(HWND hParent = NULL);
 
 		void SetDestroyListener(IDestroyListener *pListener, IMEWNDTYPE type);
 

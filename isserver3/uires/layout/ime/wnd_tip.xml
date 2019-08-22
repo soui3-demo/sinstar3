@@ -9,7 +9,7 @@
     <caption2 size="-1,-1" layout="vbox" skin="skin_tip_bg" padding="160,70,90,20" font="size:16">
 	    <caption2 size="-2,30dp"  layout="hbox">
 	      <text  name="txt_tip_title"  text="tip" font="bold:1"/>
-	      <window size="0,0" weigth="1" visible="0"/>
+	      <window size="0,0" weight="1" visible="0"/>
 	      <imgbtn  name="btn_close" skin="_skin.sys.btn.close" tip="close"/>
 	    </caption2>
 	    <caption2 size="-1,-1" padding="0,10,0,0">
