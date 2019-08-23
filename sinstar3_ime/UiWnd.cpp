@@ -5,6 +5,8 @@
 #define HEI_LINEMARGIN	3
 #define TIMERID_CHKDEFIME	200
 
+#include "Minidump.h"
+static bool g_bInstallDump = false;
 
 LRESULT CALLBACK UIWndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
@@ -15,6 +17,23 @@ LRESULT CALLBACK UIWndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 		_ASSERT(pUiWnd==NULL);
 		pUiWnd=new CUiWnd;
 		pUiWnd->Attach(hWnd);
+		if(!g_bInstallDump)
+		{
+			g_bInstallDump = true;
+
+			TCHAR szModule[MAX_PATH];
+			GetModuleFileName(NULL,szModule,MAX_PATH);
+			LPCTSTR pName=_tcsrchr(szModule,'\\');
+			if(pName)
+				pName++;
+			else
+				pName=szModule;
+
+			TCHAR szDumpPath[MAX_PATH];
+			_stprintf(szDumpPath,_T("%s\\log\\%s.dump"),theModule->GetInstallPath(),pName);
+			CMinidump::SetDumpFile(szDumpPath);
+			CMinidump::Enable();
+		}
 		break;
 	case WM_NCDESTROY:
 		pUiWnd->WindowProc(uMsg,wParam,lParam);

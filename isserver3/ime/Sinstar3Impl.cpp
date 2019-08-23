@@ -211,6 +211,24 @@ int CSinstar3Impl::GetCompositionSegmentAttr(int iSeg)
 
 void CSinstar3Impl::OnOpenStatusChanged(BOOL bOpen)
 {
+	if(!bOpen)
+	{
+		if (m_bTyping)
+			m_inputState.InputEnd();
+		m_inputState.ClearContext(CPC_ALL);
+		if(g_SettingsG->compMode == IM_SHAPECODE &&	m_inputState.m_ctx.compMode == IM_SPELL)
+		{//temp spell mode.
+			m_inputState.m_ctx.compMode = IM_SHAPECODE;
+			m_inputState.StatusbarUpdate();
+		}
+
+		m_pInputWnd->Show(FALSE);
+		if (m_pTipWnd)
+		{
+			m_pTipWnd->DestroyWindow();
+			m_pTipWnd = NULL;
+		}
+	}
 	m_pStatusWnd->Show(bOpen && !g_SettingsUI->bHideStatus);
 }
 
@@ -384,8 +402,10 @@ void CSinstar3Impl::OnInputStart()
 
 void CSinstar3Impl::OnInputEnd()
 {
-	if(!m_curImeContext) return;
-	m_pTxtSvr->EndComposition(m_curImeContext);
+	if(m_curImeContext)
+	{
+		m_pTxtSvr->EndComposition(m_curImeContext);
+	}
 	m_bTyping = FALSE;
 	SLOG_INFO("bTyping:" << m_bTyping);
 }

@@ -2,15 +2,34 @@
 #include "sinstar3_tsf.h"
 #include "editsession.h"
 #include "../helper/helper.h"
+#include "Minidump.h"
+static bool g_bInstallDump = false;
+
 #define TIMERID_CHKDEFIME 100
-
-
 
 /* static */
 HRESULT CSinstar3Tsf::CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj)
 {
     CSinstar3Tsf *pCase;
     HRESULT hr;
+
+	if(!g_bInstallDump)
+	{
+		g_bInstallDump = true;
+		
+		TCHAR szModule[MAX_PATH];
+		GetModuleFileName(NULL,szModule,MAX_PATH);
+		LPCTSTR pName=_tcsrchr(szModule,'\\');
+		if(pName)
+			pName++;
+		else
+			pName=szModule;
+
+		TCHAR szDumpPath[MAX_PATH];
+		_stprintf(szDumpPath,_T("%s\\log\\%s.dump"),theModule->GetInstallPath(),pName);
+		CMinidump::SetDumpFile(szDumpPath);
+		CMinidump::Enable();
+	}
 
     if (ppvObj == NULL)
         return E_INVALIDARG;

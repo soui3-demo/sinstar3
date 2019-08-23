@@ -20,16 +20,19 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
 
 		{
 
-			TCHAR szPath[MAX_PATH] = { 0 };
+			TCHAR szPathSvr[MAX_PATH] = { 0 },szPathClient[MAX_PATH]={0};
 			CRegKey reg;
 			LONG ret = reg.Open(HKEY_LOCAL_MACHINE,_T("SOFTWARE\\SetoutSoft\\sinstar3"),KEY_READ|KEY_WOW64_64KEY);
 			if(ret == ERROR_SUCCESS)
 			{
 				ULONG len = MAX_PATH;
-				reg.QueryStringValue(_T("path_svr"),szPath,&len);
+				reg.QueryStringValue(_T("path_svr"),szPathSvr,&len);
+				len = MAX_PATH;
+				reg.QueryStringValue(_T("path_client"),szPathClient,&len);
+
 				reg.Close();
 			}
-			theModule = new CTsfModule(hInstance,szPath);
+			theModule = new CTsfModule(hInstance,szPathSvr,szPathClient);
 		}
 		break;
 

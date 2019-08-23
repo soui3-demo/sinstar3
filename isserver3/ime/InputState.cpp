@@ -5,21 +5,21 @@
 
 #pragma warning(disable:4311 4302)
 static const BYTE KCompKey[] ={0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,        // 00-0F
-						0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,        // 10-1F
-						1,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,        // 20-2F
-						1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,        // 30-3F
-						0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,        // 40-4F
-						1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,        // 50-5F
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,        // 60-6F
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,        // 70-7F
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,        // 80-8F
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,        // 90-9F
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,        // A0-AF
-						0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,        // B0-BF
-						1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,        // C0-CF
-						0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,        // D0-DF
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,        // E0-EF
-						0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};       // F0-FF
+0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,        // 10-1F
+1,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,        // 20-2F
+1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,        // 30-3F
+0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,        // 40-4F
+1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,        // 50-5F
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,        // 60-6F
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,        // 70-7F
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,        // 80-8F
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,        // 90-9F
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,        // A0-AF
+0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,        // B0-BF
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,        // C0-CF
+0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,        // D0-DF
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,        // E0-EF
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};       // F0-FF
 
 
 static const int HKI_LoadDebugSkin	 = -2;
@@ -154,12 +154,12 @@ BOOL KeyIn_IsCoding(InputContext * lpCntxtPriv)
 }
 
 CInputState::CInputState(void)
-	:m_pListener(NULL)
-	,m_fOpen(FALSE)
-	,m_bUpdateTips(TRUE)
-	,m_bPressOther(FALSE)
-	,m_bPressShift(FALSE)
-	,m_bPressCtrl(FALSE)
+:m_pListener(NULL)
+,m_fOpen(FALSE)
+,m_bUpdateTips(TRUE)
+,m_bPressOther(FALSE)
+,m_bPressShift(FALSE)
+,m_bPressCtrl(FALSE)
 
 {
 	memset(&m_ctx,0,sizeof(InputContext));
@@ -377,7 +377,7 @@ void CInputState::InputStart()
 {
 	SLOG_INFO("");
 	m_pListener->OnInputStart();
-	
+
 	DWORD tmCur = GetTickCount();
 	if (tmCur - m_tmInputEnd > 10 * 1000)
 	{
@@ -499,7 +499,7 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 				&& !KeyIn_IsNumCode(lpCntxtPriv) //数字不是编码状态
 				&& (!g_SettingsG->bCandSelNoNum || g_SettingsG->compMode==IM_SPELL) //未禁止数字选择重码
 				)//允许数字选择重码
-			)
+				)
 			{//获得输入数字的ASCII码
 				if((uVKey>=VK_NUMPAD0 && uVKey<=VK_NUMPAD9))
 					byCandIndex=uVKey-VK_NUMPAD0+'0';

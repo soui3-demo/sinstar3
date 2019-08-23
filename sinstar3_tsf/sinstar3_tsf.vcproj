@@ -367,6 +367,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Minidump.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\register.cpp"
 				>
 			</File>
@@ -414,6 +418,10 @@
 			</File>
 			<File
 				RelativePath=".\Globals.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Minidump.h"
 				>
 			</File>
 			<File

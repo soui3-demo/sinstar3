@@ -6,10 +6,11 @@
 #include "../helper/helper.h"
 
 
-CTsfModule::CTsfModule(HINSTANCE hInst, LPCTSTR pszSvrPath):CModuleRef(hInst),m_classFactory(NULL)
+CTsfModule::CTsfModule(HINSTANCE hInst, LPCTSTR pszSvrPath,LPCTSTR pszInstallPath):CModuleRef(hInst),m_classFactory(NULL)
 {
 	CSimpleWnd::RegisterWndClass(hInst);
 	_tcscpy(m_szSvrPath, pszSvrPath);
+	_tcscpy(m_szInstallPath,pszInstallPath);
 	SECURITY_ATTRIBUTES * psa = Helper_BuildLowIntegritySA();
 	m_hMutex = CreateMutex(psa, FALSE, SINSTAR3_MUTEX);
 	if (!m_hMutex && GetLastError() == ERROR_ACCESS_DENIED)

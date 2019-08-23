@@ -367,6 +367,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Minidump.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\sinstar3_ime.def"
 				>
 			</File>
@@ -422,6 +426,10 @@
 			</File>
 			<File
 				RelativePath=".\Imm.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Minidump.h"
 				>
 			</File>
 			<File
