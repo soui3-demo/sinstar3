@@ -250,7 +250,20 @@ LRESULT CUiWnd::OnImeNotify(WPARAM wParam,LPARAM lParam)
 	case IMN_CLOSECANDIDATE:
 		break;
 	case IMN_SETOPENSTATUS:
-		if(m_pSinstar3) m_pSinstar3->OnOpenStatusChanged(ImmGetOpenStatus(hIMC));
+		if(m_pSinstar3)
+		{
+			BOOL bOpen = ImmGetOpenStatus(hIMC);
+			if(!bOpen)
+			{
+				CImeContext *ctx = GetImeContext();
+				if(ctx)
+				{
+					EndComposition(ctx);
+				}
+				ReleaseImeContext(ctx);
+			}
+			m_pSinstar3->OnOpenStatusChanged(bOpen);
+		}
 		break;
 	case IMN_SETCONVERSIONMODE:
 		if(m_pSinstar3)

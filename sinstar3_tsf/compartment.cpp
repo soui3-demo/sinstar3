@@ -328,6 +328,19 @@ STDAPI CSinstar3Tsf::OnChange(REFGUID rguidCompartment)
 	if (IsEqualGUID(rguidCompartment,GUID_COMPARTMENT_KEYBOARD_OPENCLOSE))
 	{//update input mode flags
 		BOOL bOpen=_IsKeyboardOpen();
+		if(!bOpen)
+		{
+			if(_IsCompositing())
+			{
+				SASSERT(_pThreadMgr);
+				ITfContext * pCtx = GetImeContext();
+				if(pCtx) 
+				{	
+					_EndComposition(pCtx);
+					ReleaseImeContext(pCtx);
+				}
+			}
+		}
 		if(m_pSinstar3)
 		{
 			m_pSinstar3->OnOpenStatusChanged(bOpen);
