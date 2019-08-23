@@ -47,11 +47,7 @@ namespace SOUI{
 
 	int CSkinAwareWnd::OnRecreateUI(LPCREATESTRUCT lpCreateStruct)
 	{
-		m_szAppSetted = CSize();
-		m_nAutoSizing++;
-		int nRet = __super::OnCreate(lpCreateStruct);
-		m_nAutoSizing--;
-		return nRet;
+		return __super::OnCreate(lpCreateStruct);
 	}
 
 	void CSkinAwareWnd::OnFinalMessage(HWND hWnd)

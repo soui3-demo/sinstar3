@@ -1468,7 +1468,7 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 					{//Ctrl+Shift+数字键:在线删词,在形码状态支持
 						if(lpCntxtPriv->sCandCount>1)
 						{//只在有多个重码的时候才有效
-							char *pPhrase=(char*)pData+1;
+							char *pPhrase=(char*)pData+2;
 							char *pComp=(char *)pPhrase+pPhrase[0]+1;
 							char cCompLen=pComp[0];
 							if(cCompLen==0)
@@ -1504,9 +1504,10 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 						LPBYTE pComp=pCand+1+pCand[0];
 						if(pData[0]==RATE_USERDEF)
 						{//自定义编码
-							if(pComp[0]!=0)	pData=pComp;
-							else pData=pCand;
-							strResultA = SStringA((char*)pData+1,pData[0]);
+							if(pComp[0]!=0)	
+								strResultA = SStringA((char*)pComp + 1, pComp[0]);
+							else 
+								strResultA = SStringA((char*)pCand + 1, pCand[0]);
 							byMask=0;
 						}else
 						{//不是自定义编码
@@ -1552,12 +1553,12 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 				byMask=0;
 			}else
 			{//一般的自定义
-				LPBYTE pComp=pData+2+pData[1];
+				LPBYTE pCand = pData + 2;
+				LPBYTE pComp= pCand +1+pCand[0];
 				if(pComp[0]!=0) 
-					pData=pComp;
+					strResultA = SStringA((char*)pComp + 1, pComp[0]);
 				else
-					pData++;
-				strResultA = SStringA((char*)pData+1,pData[0]);
+					strResultA = SStringA((char*)pCand + 1, pCand[0]);
 				byMask=GetKeyinMask(FALSE,MKI_RECORD|MKI_TTSINPUT);//不联想
 			}
 		}else if(lpCntxtPriv->inState==INST_LINEIME)
@@ -1865,7 +1866,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 				pCandData=pbyData;
 				for(i=0;i<sCount;i++)
 				{
-					if (pCandData[2]!=0)
+					if (pCandData[1]!=0)
 					{
 						if (!g_SettingsUI->bFilterGbk && (g_SettingsG->nGbkMode != 0 ||  sSingleWords<2))
 						{//GBK显示或者不是GBK重码

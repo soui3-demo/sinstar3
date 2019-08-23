@@ -98,11 +98,7 @@ void CImeWnd::OnDragStatus(EventArgs *e)
 
 int CImeWnd::OnRecreateUI(LPCREATESTRUCT lpCreateStruct)
 {
-	m_szAppSetted = CSize();
-	m_nAutoSizing++;
-	int nRet = SHostWnd::OnCreate(lpCreateStruct);
-	m_nAutoSizing--;
-	return nRet;
+	return SHostWnd::OnCreate(lpCreateStruct);
 }
 
 SWND CImeWnd::OnSetSwndCapture(SWND swnd)
