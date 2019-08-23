@@ -54,18 +54,18 @@ HWND CImeWnd::Create(HWND hParent)
 void CImeWnd::Show(BOOL bShow)
 {
 	if(!IsWindow()) return;
+	DWORD dwThreadID = GetWindowThreadProcessId(m_hOwner, NULL);
+	DWORD dwCurID = GetCurrentThreadId();
+	AttachThreadInput(dwCurID, dwThreadID, TRUE);
 	if (bShow)
 	{
-		DWORD dwThreadID = GetWindowThreadProcessId(m_hOwner, NULL);
-		DWORD dwCurID = GetCurrentThreadId();
-		AttachThreadInput(dwCurID, dwThreadID, TRUE);
 		SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE | SWP_SHOWWINDOW);
-		AttachThreadInput(dwCurID, dwThreadID, FALSE);
 	}
 	else if (GetNative()->IsWindowVisible())
 	{
 		ShowWindow(SW_HIDE);
 	}
+	AttachThreadInput(dwCurID, dwThreadID, FALSE);
 }
 
 LRESULT CImeWnd::OnMouseEvent(UINT uMsg, WPARAM wParam, LPARAM lParam)
