@@ -45,7 +45,6 @@ namespace SOUI
 		:CImeWnd(pEvtSets,UIRES.LAYOUT.wnd_status_bar)
 		, m_pCmdListener(pListener)
 		,m_anchorMode(AMH_NULL|AMV_NULL)
-,		 m_hOwner(NULL)
 	{
 	}
 
@@ -70,12 +69,6 @@ namespace SOUI
 			UpdateUI();
 		}
 		return hWnd;
-	}
-
-
-	void CStatusWnd::SetOwner(HWND hOwner)
-	{
-		m_hOwner = hOwner;
 	}
 
 	int CStatusWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)

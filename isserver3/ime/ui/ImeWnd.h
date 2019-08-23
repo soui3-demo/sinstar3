@@ -12,7 +12,7 @@ public:
 
 	HWND Create(HWND hParent=NULL);
 	void Show(BOOL bShow);
-
+	void SetOwner(HWND hOwner);
 protected:
 	virtual int OnRecreateUI(LPCREATESTRUCT lpCreateStruct);
 
@@ -20,7 +20,7 @@ protected:
 	virtual BOOL OnReleaseSwndCapture();
 
 	BOOL m_canReleaseCapture;
-
+	HWND	m_hOwner;
 protected:
 	virtual void OnReposition(CPoint pt) {}
 	void OnDragStatus(EventArgs *e);

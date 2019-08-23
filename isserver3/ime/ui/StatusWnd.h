@@ -39,7 +39,6 @@ namespace SOUI
 		~CStatusWnd(void);
 
 		HWND Create();
-		void SetOwner(HWND hOwner);
 		void UpdateCompInfo();
 		void UpdateToggleStatus(DWORD flags,BOOL bInit=FALSE);
 		void UpdateMode();
@@ -112,7 +111,6 @@ namespace SOUI
 		ICmdListener     *  m_pCmdListener;
 
 		int					m_anchorMode;
-		HWND				m_hOwner;
 	};
 
 }

@@ -6,13 +6,22 @@ namespace SOUI
 
 #define SIZE_MAGNETIC	 5
 
-CImeWnd::CImeWnd(SEventSet *pEvtSets,LPCTSTR pszLayout):CSkinAwareWnd(pEvtSets,pszLayout), m_canReleaseCapture(TRUE)
+CImeWnd::CImeWnd(SEventSet *pEvtSets,LPCTSTR pszLayout)
+	:CSkinAwareWnd(pEvtSets,pszLayout)
+	, m_canReleaseCapture(TRUE)
+	, m_hOwner(NULL)
 {
 }
 
 CImeWnd::~CImeWnd()
 {
 }
+
+void CImeWnd::SetOwner(HWND hOwner)
+{
+	m_hOwner = hOwner;
+}
+
 
 BOOL CImeWnd::OnSetCursor(HWND wnd, UINT nHitTest, UINT message)
 {
@@ -45,9 +54,15 @@ HWND CImeWnd::Create(HWND hParent)
 void CImeWnd::Show(BOOL bShow)
 {
 	if(!IsWindow()) return;
-	if(bShow)
-		SetWindowPos(HWND_TOPMOST,0,0,0,0,SWP_NOSIZE|SWP_NOMOVE|SWP_NOACTIVATE|SWP_SHOWWINDOW);
-	else if(GetNative()->IsWindowVisible())
+	if (bShow)
+	{
+		DWORD dwThreadID = GetWindowThreadProcessId(m_hOwner, NULL);
+		DWORD dwCurID = GetCurrentThreadId();
+		AttachThreadInput(dwCurID, dwThreadID, TRUE);
+		SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE | SWP_SHOWWINDOW);
+		AttachThreadInput(dwCurID, dwThreadID, FALSE);
+	}
+	else if (GetNative()->IsWindowVisible())
 	{
 		ShowWindow(SW_HIDE);
 	}

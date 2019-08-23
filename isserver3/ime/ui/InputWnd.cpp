@@ -17,7 +17,6 @@ namespace SOUI
 		,m_bShow(FALSE)
 		, m_bDraging(FALSE)
 		, m_bFollowCaret(TRUE)
-		, m_hOwner(NULL)
 		, m_pStateWnd(NULL)
 	{
 	}
@@ -535,11 +534,6 @@ namespace SOUI
 	void CInputWnd::OnFlmInfo(PFLMINFO pFlmInfo)
 	{
 		SDispatchMessage(UM_FLMINFO, 0, (LPARAM)pFlmInfo);
-	}
-
-	void CInputWnd::SetOwner(HWND hOwner)
-	{
-		m_hOwner = hOwner;
 	}
 
 	void CInputWnd::OnSetSkin(EventArgs * e)
