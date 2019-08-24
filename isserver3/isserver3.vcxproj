@@ -230,10 +230,10 @@
   <ItemGroup>
     <None Include="res\soui_res.rc2" />
     <CustomBuild Include="uires\uires.idx">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(SOUIPATH)\tools\uiresbuilder.exe" -i "%(FullPath)" -p uires -r .\res\soui_res.rc2 -h .\res\resource.h idtable</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(SOUI3PATH)\tools\uiresbuilder.exe" -i "%(FullPath)" -p uires -r .\res\soui_res.rc2 -h .\res\resource.h idtable</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building SoUI Resource</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\res\soui_res.rc2;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(SOUIPATH)\tools\uiresbuilder.exe" -i "%(FullPath)" -p uires -r .\res\soui_res.rc2 -h .\res\resource.h idtable</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(SOUI3PATH)\tools\uiresbuilder.exe" -i "%(FullPath)" -p uires -r .\res\soui_res.rc2 -h .\res\resource.h idtable</Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building SoUI Resource</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\res\soui_res.rc2;%(Outputs)</Outputs>
     </CustomBuild>

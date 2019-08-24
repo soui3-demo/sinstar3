@@ -49,7 +49,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;&quot;$(SOUIPATH)\config&quot;;&quot;$(SOUIPATH)\components&quot;;&quot;$(SOUIPATH)\SOUI\include&quot;;&quot;$(SOUIPATH)\utilities\include&quot;;&quot;$(SolutionDir)include&quot;;&quot;$(SolutionDir)ipcobject\include&quot;"
+				AdditionalIncludeDirectories=".;&quot;$(SOUI3PATH)\config&quot;;&quot;$(SOUI3PATH)\components&quot;;&quot;$(SOUI3PATH)\SOUI\include&quot;;&quot;$(SOUI3PATH)\utilities\include&quot;;&quot;$(SolutionDir)include&quot;;&quot;$(SolutionDir)ipcobject\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -75,11 +75,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="utilitiesd.lib souid.lib"
+				AdditionalDependencies="utilitiesd.lib soui3d.lib"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib&quot;;&quot;$(SOUIPATH)\bin&quot;"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib&quot;;&quot;$(SOUI3PATH)\bin&quot;"
 				UACExecutionLevel="2"
 				DelayLoadDLLs=""
 				GenerateDebugInformation="true"
@@ -148,7 +148,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories=".;&quot;$(SOUIPATH)\config&quot;;&quot;$(SOUIPATH)\components&quot;;&quot;$(SOUIPATH)\SOUI\include&quot;;&quot;$(SOUIPATH)\utilities\include&quot;;&quot;$(SolutionDir)include&quot;;&quot;$(SolutionDir)ipcobject\include&quot;"
+				AdditionalIncludeDirectories=".;&quot;$(SOUI3PATH)\config&quot;;&quot;$(SOUI3PATH)\components&quot;;&quot;$(SOUI3PATH)\SOUI\include&quot;;&quot;$(SOUI3PATH)\utilities\include&quot;;&quot;$(SolutionDir)include&quot;;&quot;$(SolutionDir)ipcobject\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				StringPooling="true"
 				RuntimeLibrary="0"
@@ -175,13 +175,13 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="utilities.lib soui.lib"
+				AdditionalDependencies="utilities.lib soui3.lib"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib&quot;;&quot;$(SOUIPATH)\bin&quot;"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib&quot;;&quot;$(SOUI3PATH)\bin&quot;"
 				UACExecutionLevel="2"
-				DelayLoadDLLs="soui.dll;utilities.dll"
+				DelayLoadDLLs="soui3.dll;utilities.dll"
 				GenerateDebugInformation="false"
 				ProgramDatabaseFile=".\Release/register.pdb"
 				SubSystem="2"

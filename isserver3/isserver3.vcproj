@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;&quot;$(SOUIPATH)\config&quot;;&quot;$(SOUIPATH)\components&quot;;&quot;$(SOUIPATH)\SOUI\include&quot;;&quot;$(SOUIPATH)\utilities\include&quot;;&quot;$(SolutionDir)include&quot;;&quot;$(SolutionDir)ipcobject\include&quot;"
+				AdditionalIncludeDirectories=".;&quot;$(SOUI3PATH)\config&quot;;&quot;$(SOUI3PATH)\components&quot;;&quot;$(SOUI3PATH)\SOUI\include&quot;;&quot;$(SOUI3PATH)\utilities\include&quot;;&quot;$(SolutionDir)include&quot;;&quot;$(SolutionDir)ipcobject\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -61,9 +61,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="utilitiesd.lib souid.lib helperd.lib iscommd.lib sipcobjectd.lib slog4zd.lib"
+				AdditionalDependencies="utilitiesd.lib soui3d.lib helperd.lib iscommd.lib sipcobjectd.lib slog4zd.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib&quot;;&quot;$(SOUIPATH)\bin&quot;"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib&quot;;&quot;$(SOUI3PATH)\bin&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -118,7 +118,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories=".;&quot;$(SOUIPATH)\config&quot;;&quot;$(SOUIPATH)\components&quot;;&quot;$(SOUIPATH)\SOUI\include&quot;;&quot;$(SOUIPATH)\utilities\include&quot;;&quot;$(SolutionDir)include&quot;;&quot;$(SolutionDir)ipcobject\include&quot;"
+				AdditionalIncludeDirectories=".;&quot;$(SOUI3PATH)\config&quot;;&quot;$(SOUI3PATH)\components&quot;;&quot;$(SOUI3PATH)\SOUI\include&quot;;&quot;$(SOUI3PATH)\utilities\include&quot;;&quot;$(SolutionDir)include&quot;;&quot;$(SolutionDir)ipcobject\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
@@ -138,9 +138,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="utilities.lib soui.lib helper.lib iscomm.lib sipcobject.lib slog4z.lib"
+				AdditionalDependencies="utilities.lib soui3.lib helper.lib iscomm.lib sipcobject.lib slog4z.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib&quot;;&quot;$(SOUIPATH)\bin&quot;"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib&quot;;&quot;$(SOUI3PATH)\bin&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -458,11 +458,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\resource.h"
+				RelativePath=".\res\resource.h"
 				>
 			</File>
 			<File
-				RelativePath=".\res\resource.h"
+				RelativePath=".\resource.h"
 				>
 			</File>
 			<File

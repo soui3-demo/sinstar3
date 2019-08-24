@@ -90,7 +90,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SOUIPATH)\SOUI\include;$(SOUIPATH)\utilities\include;$(SOUIPATH)\config;..\ipcobject\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SOUI3PATH)\SOUI\include;$(SOUI3PATH)\utilities\include;$(SOUI3PATH)\config;..\ipcobject\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SINSTAR3_IME_EXPORTS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -120,7 +120,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SOUIPATH)\SOUI\include;$(SOUIPATH)\utilities\include;$(SOUIPATH)\config;..\ipcobject\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SOUI3PATH)\SOUI\include;$(SOUI3PATH)\utilities\include;$(SOUI3PATH)\config;..\ipcobject\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN64;_DEBUG;ENABLE_VLD;_WINDOWS;_USRDLL;SINSTAR3_IME_EXPORTS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -149,7 +149,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(SOUIPATH)\SOUI\include;$(SOUIPATH)\utilities\include;$(SOUIPATH)\config;..\ipcobject\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SOUI3PATH)\SOUI\include;$(SOUI3PATH)\utilities\include;$(SOUI3PATH)\config;..\ipcobject\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SINSTAR3_IME_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -175,7 +175,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(SOUIPATH)\SOUI\include;$(SOUIPATH)\utilities\include;$(SOUIPATH)\config;..\ipcobject\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SOUI3PATH)\SOUI\include;$(SOUI3PATH)\utilities\include;$(SOUI3PATH)\config;..\ipcobject\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SINSTAR3_IME_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
