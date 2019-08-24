@@ -144,7 +144,9 @@ namespace SOUI
 		if(rcTo.bottom>rcWorkArea.bottom)
 			rcTo.MoveToY(rcWorkArea.bottom-e2->szWnd.cy);
 
+		m_nAutoSizing++;//to prevent set SHostWnd::m_szAppSetted.
 		SetWindowPos(NULL,rcTo.left,rcTo.top,rcTo.Width(),rcTo.Height(),SWP_NOZORDER|SWP_NOACTIVATE);
+		m_nAutoSizing--;
 		UpdateAnchorMode();
 		g_SettingsG->ptStatus = rcTo.TopLeft();
 		g_SettingsG->SetModified(true);
@@ -232,7 +234,11 @@ namespace SOUI
 		g_SettingsUI->bFullStatus = TRUE;
 		g_SettingsUI->SetModified(true);
 		SWindow *pStatus=FindChildByID(R.id.status_extend);
-		if(pStatus) pStatus->SetVisible(TRUE, TRUE);
+		if(pStatus) 
+		{
+			pStatus->SetVisible(TRUE, TRUE);
+			UpdateLayout();
+		}
 		m_pCmdListener->OnCommand(CMD_SYNCUI, BTN_STATUSMODE);
 	}
 
@@ -241,7 +247,11 @@ namespace SOUI
 		g_SettingsUI->bFullStatus = FALSE;
 		g_SettingsUI->SetModified(true);
 		SWindow *pStatus=FindChildByID(R.id.status_shrink);
-		if(pStatus) pStatus->SetVisible(TRUE,TRUE);
+		if(pStatus) 
+		{
+			pStatus->SetVisible(TRUE,TRUE);
+			UpdateLayout();
+		}
 		m_pCmdListener->OnCommand(CMD_SYNCUI, BTN_STATUSMODE);
 	}
 
