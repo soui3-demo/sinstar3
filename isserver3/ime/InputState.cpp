@@ -1787,7 +1787,15 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 			}else
 			{
 				BYTE byMask=0;
-				SStringA strResultA(lpCntxtPriv->szComp,lpCntxtPriv->cComp);
+				SStringA strResultA;
+				if (lpCntxtPriv->cComp == 1 && (lpCntxtPriv->szComp[0]<'a' || lpCntxtPriv->szComp[0]>'z'))
+				{
+					strResultA += Symbol_Convert(&m_ctx, lpCntxtPriv->szComp[0], lpbKeyState);
+				}
+				else
+				{
+					strResultA=SStringA(lpCntxtPriv->szComp, lpCntxtPriv->cComp);
+				}
 
 				if(g_SettingsUI->bRecord)
 					byMask|=MKI_RECORD;
@@ -1955,6 +1963,7 @@ BOOL CInputState::KeyIn_All_Associate(InputContext * lpCntxtPriv,UINT byInput,
 		if(lpCntxtPriv->sSentLen)
 		{//切换到语句输入状态
 			lpCntxtPriv->sbState=SBST_SENTENCE;
+			ClearContext(CPC_CAND);
 			lpCntxtPriv->sSentCaret=0;
 			InputStart();
 			InputOpen();
@@ -2420,6 +2429,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 							)
 						{//进入语句联想状态
 							m_ctx.sbState=SBST_SENTENCE;
+							ClearContext(CPC_CAND);//clear candidate list
 							m_ctx.sSentCaret=0;
 							InputStart();
 							InputOpen();

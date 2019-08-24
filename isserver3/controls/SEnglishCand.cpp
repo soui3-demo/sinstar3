@@ -6,7 +6,10 @@ namespace SOUI
 	const TCHAR KPhoneticLeft[] = _T("[");
 	const TCHAR KPhoneticRight[] = _T("]");
 
-	SEnglishCand::SEnglishCand(void):m_bShowPhonetic(TRUE)
+	SEnglishCand::SEnglishCand(void)
+		:m_bShowPhonetic(TRUE)
+		,m_crIndex(RGBA(0,0,0,255))
+		,m_crPhonetic(RGBA(0,0,255,255))
 	{
 		m_bDisplay=0;
 	}
