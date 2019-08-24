@@ -1,7 +1,5 @@
 ﻿<SOUI 
   name="wnd_composition" 
-  width="-1" 
-  height="-1"   
   resizable="0" 
   wndType="normal"
   translucent="1"
@@ -26,7 +24,7 @@
 	    colorComp="@color/cand_comp" 
 	    colorWild="@color/cand_wild"/>
   </style>
-  <root>
+  <root size="-1,-1">
     <comp_bg size="-1,-1" skin="skin_bk" cache="1" colorBorder="@color/border" layout="vbox" margin="1,1,1,1" padding="4,0,4,0">
       <window size="-2,0" weight="1" layout="hbox" gravity="center">
         <window size="-1,-2" weight="1" layout="hbox">

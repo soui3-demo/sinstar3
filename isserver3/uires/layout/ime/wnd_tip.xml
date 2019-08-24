@@ -6,7 +6,7 @@
   toolwindow="1"
 >
   <root size="-1,-1" layout="vbox">
-    <caption2 size="-1,-1" layout="vbox" skin="skin_tip_bg" padding="160,70,90,20" font="size:16">
+    <caption2 size="-1,-1" layout="vbox" skin="skin_tip_bg" padding="160,70,50,20" font="size:16">
 	    <caption2 size="-2,30dp"  layout="hbox">
 	      <text  name="txt_tip_title"  text="tip" font="bold:1"/>
 	      <window size="0,0" weight="1" visible="0"/>

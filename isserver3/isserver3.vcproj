@@ -458,11 +458,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\res\resource.h"
+				RelativePath=".\resource.h"
 				>
 			</File>
 			<File
-				RelativePath=".\resource.h"
+				RelativePath=".\res\resource.h"
 				>
 			</File>
 			<File
@@ -543,6 +543,10 @@
 			</File>
 			<File
 				RelativePath=".\controls\SSentView.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\SSkinAni.h"
 				>
 			</File>
 			<File

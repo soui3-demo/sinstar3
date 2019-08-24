@@ -1,7 +1,5 @@
 ﻿<SOUI 
   name="wnd_status_bar" 
-  width="-1" 
-  height="-1"   
   resizable="0" 
   wndType="normal"
   translucent="1"
@@ -22,7 +20,7 @@
     <imglist name="btn_sound_enable" src="img:btn_sound_enable" states="3"/>
     <imglist name="btn_sound_disable" src="img:btn_sound_disable" states="3"/>
   </skin>
-  <root> 
+  <root size="-1,-1"> 
     <!--default must have both status_shrink and status_extend status and all of buttons name -->
     <status_bg size="-1,-1" name="status_shrink" layout="hbox" skin="bg_status_bar" gravity="center"  padding="@dim/extend_padding_left,@dim/extend_padding_top,@dim/extend_padding_right,@dim/extend_padding_bottom">
       <caption2 size="75,-2" weight="1" extend_left="32" name="txt_comp" cursor="sizeall" dotted="1"/>

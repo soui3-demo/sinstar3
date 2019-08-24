@@ -12,7 +12,7 @@
   <style>
     <class name="edit_border" margin="2,2,2,2" ncSkin="_skin.sys.border"/>
     <class name="normalbtn" font="" colorText="#385e8b" colorTextDisable="#91a7c0" textMode="0x25" cursor="hand" margin-x="0"/>
-    <class name="cls_btn_weblink" cursor="hand" colorText="#1e78d5" colorTextHover="#1e78d5" fontHover="underline:1,size:16dp" />
+    <class name="cls_btn_weblink" cursor="hand" colorText="#1e78d5" colorTextHover="#1e78d5"  fontHover="underline:1,size:16dp" />
   </style>
 
   <objattr>
@@ -24,6 +24,8 @@
     <group  padding="10,10,10,15"/>
     <hotkey class="edit_border"  padding="5,0,5,0"/>
     <link class="cls_btn_weblink"/>
+    <EnCand colorIndex="@color/cand_index" colorCand="@color/cand_text" colorPhonetic="@color/cand_phonetic"/>
+    <PhraseCand colorIndex="@color/cand_index" colorCand="@color/cand_text" />
     <candidate colorIndex="@color/cand_index" colorCand="@color/cand_text" colorComp="@color/cand_comp" colorWild="@color/cand_wild"/>    
   </objattr>
 </UIDEF>

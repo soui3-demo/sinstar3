@@ -3,11 +3,13 @@ appWnd="1"
 translucent="1"
 >
   <root width="600" height="400" skin="_skin.sys.wnd.bkgnd" cache="1">
-    <caption pos="0,0,-0,30" show="1" font="adding:0">
-      <img pos="10,8,@16,@16" skin="img_logo"/>
-      <text pos="29,9">@string/title</text>
-      <imgbtn name="btn_close" skin="_skin.sys.btn.close"    pos="-45,0" tip="close" animate="1"/>
-      <imgbtn name="btn_min" skin="_skin.sys.btn.minimize" pos="-83,0" animate="1" />
+    <caption pos="0,0,-0,30" show="1" font="adding:0" layout="hbox" padding="10,0,2,0" gravity="center">
+      <img skin="img_logo"/>
+      <text extend_left="5">@string/title</text>
+      <text extend_left="5" name="txt_ver"/>
+      <window size="0,0" weight="1" visible="0"/>
+      <imgbtn name="btn_min" skin="_skin.sys.btn.minimize" animate="1" />
+      <imgbtn name="btn_close" skin="_skin.sys.btn.close"  tip="close" animate="1"/>
     </caption>
     <window pos="5,[2,-5,-5" layout="vbox" gravity="center" interval="10">
       <richedit name="edit_license" size="-2,0" weight="1" multiLines="1" vscrollBar="1" wordWrap="1"  autoVscroll="1" hscrollBar="0" readOnly="1"/>
