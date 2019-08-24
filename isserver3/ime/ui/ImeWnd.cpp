@@ -54,9 +54,12 @@ HWND CImeWnd::Create(HWND hParent)
 void CImeWnd::Show(BOOL bShow)
 {
 	if(!IsWindow()) return;
-	DWORD dwThreadID = GetWindowThreadProcessId(m_hOwner, NULL);
-	DWORD dwCurID = GetCurrentThreadId();
-	AttachThreadInput(dwCurID, dwThreadID, TRUE);
+	PostMessage(UM_AYNC_UI, bShow);
+}
+
+LRESULT CImeWnd::OnAyncUI(UINT uMsg, WPARAM wp, LPARAM lp)
+{
+	BOOL bShow = wp;
 	if (bShow)
 	{
 		SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE | SWP_SHOWWINDOW);
@@ -65,7 +68,7 @@ void CImeWnd::Show(BOOL bShow)
 	{
 		ShowWindow(SW_HIDE);
 	}
-	AttachThreadInput(dwCurID, dwThreadID, FALSE);
+	return 0;
 }
 
 LRESULT CImeWnd::OnMouseEvent(UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -77,6 +80,7 @@ LRESULT CImeWnd::OnMouseEvent(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 	return 0;
 }
+
 
 BOOL CImeWnd::OnReleaseSwndCapture()
 {
