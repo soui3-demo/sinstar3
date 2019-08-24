@@ -196,6 +196,7 @@
     <ClCompile Include="editsession.cpp" />
     <ClCompile Include="globals.cpp" />
     <ClCompile Include="keyeventsink.cpp" />
+    <ClCompile Include="Minidump.cpp" />
     <ClCompile Include="register.cpp" />
     <ClCompile Include="server.cpp" />
     <ClCompile Include="sinstar3_tsf.cpp" />
@@ -214,6 +215,7 @@
     <ClInclude Include="ClassFactory.h" />
     <ClInclude Include="editsession.h" />
     <ClInclude Include="Globals.h" />
+    <ClInclude Include="Minidump.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="sinstar3_tsf.h" />
     <ClInclude Include="stdafx.h" />
