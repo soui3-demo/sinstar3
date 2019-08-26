@@ -356,7 +356,6 @@ void CInputState::ClearContext(UINT dwMask)
 		m_ctx.bySyllables=1;
 		m_ctx.bySyCaret=0xFF;
 		m_ctx.byCaret=0;
-		m_ctx.bPYBiHua=FALSE;
 	}
 	if(dwMask & CPC_TIP)
 	{
@@ -601,32 +600,7 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 			{//编码输入
 				if(lpCntxtPriv->compMode==IM_SPELL)
 				{//拼音状态
-					if(lpCntxtPriv->bPYBiHua)
-					{//笔画辅助输入，不支持万能键
-						BOOL bInputKey=FALSE;
-						if(uVKey>=VK_NUMPAD1&&uVKey<=VK_NUMPAD5)
-						{//小键盘输入
-							bInputKey=TRUE;
-						}else
-						{//设置的转换键
-							int i;
-							for( i=0;i<5;i++)
-							{
-								if(g_SettingsG->byLineKey[i]==uVKey)
-								{
-									uVKey=VK_NUMPAD1+i;
-									bInputKey=TRUE;
-									break;
-								}
-							}
-							if(uVKey==VK_ESCAPE || uVKey==VK_BACK) bInputKey=TRUE;
-						}
-						bHandle=KeyIn_PYBiHua_ChangComp(lpCntxtPriv,uVKey,lpbKeyState);
-						if(!bHandle) bHandle=KeyIn_Spell_InputText(lpCntxtPriv,uVKey,lpbKeyState);
-					}else
-					{
-						bHandle=KeyIn_Spell_Normal(lpCntxtPriv,uVKey,lpbKeyState);
-					}
+					bHandle=KeyIn_Spell_Normal(lpCntxtPriv,uVKey,lpbKeyState);
 				}else
 				{
 					bHandle=KeyIn_Code_Normal(lpCntxtPriv,uVKey,lpbKeyState);
@@ -808,11 +782,6 @@ BOOL CInputState::KeyIn_Spell_MoveCaret(InputContext *lpCntxtPriv, UINT byInput,
 		}
 		if(bRet) 
 		{
-			if(lpCntxtPriv->bPYBiHua)
-			{
-				lpCntxtPriv->bPYBiHua=FALSE;
-				lpCntxtPriv->szBiHua[0]=0;
-			}
 			KeyIn_Spell_UpdateCandList(lpCntxtPriv,lpCntxtPriv->byCaret);
 		}
 	}else
@@ -894,7 +863,7 @@ BOOL CInputState::KeyIn_Spell_SyFix(InputContext * lpCntxtPriv,UINT byInput,
 	if(lpCntxtPriv->bySyllables==1 && lpCntxtPriv->spellData[0].bySpellLen==0) return FALSE;
 	if(lpCntxtPriv->bySyCaret==0xFF)
 	{
-		if(!lpCntxtPriv->bPYBiHua && byInput==VK_RETURN && !(lpbKeyState[VK_SHIFT]&0x80))
+		if(byInput==VK_RETURN && !(lpbKeyState[VK_SHIFT]&0x80))
 		{
 			lpCntxtPriv->bySyCaret=lpCntxtPriv->spellData[lpCntxtPriv->byCaret].bySpellLen;
 			return TRUE;
@@ -1279,13 +1248,8 @@ BOOL CInputState::KeyIn_Spell_InputText(InputContext* lpCntxtPriv,UINT byInput,
 
 		//将用户输入提交给服务器保存
 		if(bGetSpID) ISComm_SpellMemoryEx(strResult,strResult.GetLength(),bySpellID);
-		if(lpCntxtPriv->bPYBiHua)
-		{//退出笔画选择重码状态
-			lpCntxtPriv->bPYBiHua=FALSE;
-			lpCntxtPriv->szBiHua[0]=0;
-		}		
 		bRet=TRUE;
-	}else if ( byInput == VK_RETURN && g_SettingsG->compMode == IM_SPELL && !lpCntxtPriv->bPYBiHua)
+	}else if ( byInput == VK_RETURN && g_SettingsG->compMode == IM_SPELL)
 	{//回车输入编码
 
 		SStringA strResultA;
@@ -1312,7 +1276,7 @@ BOOL CInputState::KeyIn_Spell_Locate(InputContext *lpCntxtPriv,UINT byInput,
 									 CONST BYTE * lpbKeyState)
 {
 	BOOL bRet=FALSE;
-	if(byInput>='A' && byInput<='Z' && !lpCntxtPriv->bPYBiHua && lpCntxtPriv->spellData[lpCntxtPriv->byCaret].bySpellLen!=0)
+	if(byInput>='A' && byInput<='Z' && lpCntxtPriv->spellData[lpCntxtPriv->byCaret].bySpellLen!=0)
 	{//大写输入,非笔画输入状态，非空码状态
 		BYTE byCaret=lpCntxtPriv->byCaret+1;
 		byInput+=0x20;
@@ -1418,11 +1382,6 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 						lpCntxtPriv->bySelect[iWord+byCaret]=byPhraseLen;
 						iWord++;
 					}
-					if(lpCntxtPriv->bPYBiHua)
-					{//退出笔画辅助
-						lpCntxtPriv->bPYBiHua=FALSE;
-						lpCntxtPriv->szBiHua[0]=0;
-					}
 					if(byPhraseLen>lpCntxtPriv->bySyllables)
 					{//不完整输入长词重码
 						SStringA strResultA((char*)pData+3,pData[2]);
@@ -1436,11 +1395,6 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 						{//临时拼音模式获得输入字的编码
 							lpCntxtPriv->bShowTip=TRUE;
 							GetShapeComp(strResultA,strResultA.GetLength());
-						}
-						if(lpCntxtPriv->bPYBiHua)
-						{//退出笔画选择重码状态
-							lpCntxtPriv->bPYBiHua=FALSE;
-							lpCntxtPriv->szBiHua[0]=0;
 						}
 						if(isTempSpell)
 						{//退出临时拼音
@@ -1628,65 +1582,6 @@ BOOL CInputState::IsTempSpell() const
 	return TRUE;
 }
 
-//拼音的笔画辅助重码选择状态:输入编码
-BOOL CInputState::KeyIn_PYBiHua_ChangComp(InputContext * lpCntxtPriv,UINT byInput,
-										  CONST BYTE * lpbKeyState)
-{
-	BOOL bRet=FALSE;
-	int nLen=(int)strlen(lpCntxtPriv->szBiHua);
-
-	if(byInput == VK_BACK)
-	{
-		if(nLen>0)
-		{
-			lpCntxtPriv->szBiHua[--nLen]=0;
-			bRet=TRUE;
-		}else
-		{//退出笔画输入状态
-			if(lpCntxtPriv->bPYBiHua) lpCntxtPriv->bPYBiHua=FALSE;
-			return TRUE;
-		}
-	}else if(byInput>=VK_NUMPAD1 && byInput<=VK_NUMPAD6)
-	{
-		if(nLen<50)
-		{
-			lpCntxtPriv->szBiHua[nLen++]=byInput-VK_NUMPAD1+'1';
-			lpCntxtPriv->szBiHua[nLen]=0;
-		}
-		bRet=TRUE;
-	}else if(byInput==VK_ESCAPE)
-	{
-		lpCntxtPriv->bPYBiHua=FALSE;
-		lpCntxtPriv->szBiHua[0]=0;
-		return TRUE;
-	}
-	if(bRet)
-	{
-		char *pszWordList=(char*)malloc(lpCntxtPriv->sCandCount*2);
-		short i;
-		for(i=0;i<lpCntxtPriv->sCandCount;i++)
-		{
-			LPBYTE pbyCand=lpCntxtPriv->ppbyCandInfo[i];
-			memcpy(pszWordList+i*2,pbyCand+2,2);
-		}
-		if(ISComm_SortWordByBiHua(lpCntxtPriv->szBiHua,nLen,pszWordList,lpCntxtPriv->sCandCount)==ISACK_SUCCESS)
-		{
-			PMSGDATA pData=ISComm_GetData();
-			for(i=0;i<lpCntxtPriv->sCandCount;i++)
-			{
-				LPBYTE pbyCand=lpCntxtPriv->ppbyCandInfo[i];
-				memcpy(pbyCand+2,pData->byData+i*2,2);
-			}
-			memcpy(lpCntxtPriv->szWord+lpCntxtPriv->byCaret,pData->byData,2);//自动选择第一个重码
-			lpCntxtPriv->bySelect[lpCntxtPriv->byCaret]=1;					//设定为自动选择，不允许自动修改
-		}else
-		{
-			CUtils::SoundPlay(_T("error"));
-		}
-		free(pszWordList);
-	}
-	return bRet;
-}
 
 BOOL CInputState::KeyIn_Code_Normal(InputContext * lpCntxtPriv,UINT byInput,
 									CONST BYTE * lpbKeyState)
@@ -2371,38 +2266,16 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 			if(!m_bPressOther && m_bPressCtrl)//Ctrl键按下后没有按下其它键，表示使用快捷关闭功能
 			{
 				if(g_SettingsG->byTempSpellKey==byKey)
-				{//临时拼音｜拼音辅助
+				{//临时拼音
 					if(m_ctx.compMode==IM_SPELL)
 					{//拼音输入状态
-						if(IsTempSpell() && m_ctx.bySyllables==1 && m_ctx.spellData[0].bySpellLen==0)
+						if(IsTempSpell())
 						{//退出临时拼音状态
 							m_ctx.compMode = IM_SHAPECODE;
 							InputHide(FALSE);
+							InputEnd();
 							StatusbarUpdate();
 							ClearContext(CPC_ALL);
-						}else if(m_ctx.sCandCount)
-						{
-							if(m_ctx.bPYBiHua)
-							{//退出笔画码辅助输入模式
-								m_ctx.szBiHua[0]=0;
-								m_ctx.bPYBiHua=FALSE;
-							}else
-							{//进入笔画码辅助输入模式
-								short i,sCands=0;
-								m_ctx.bPYBiHua=TRUE;
-								m_ctx.szBiHua[0]=0;
-								//整理出所有单字重码
-								for(i=0;i<m_ctx.sCandCount;i++)
-								{
-									LPBYTE 	pbyCand=m_ctx.ppbyCandInfo[i];
-									if(pbyCand[1]==2)
-									{
-										m_ctx.ppbyCandInfo[sCands++]=m_ctx.ppbyCandInfo[i];
-									}
-								}
-								m_ctx.sCandCount=sCands;
-							}
-							InputUpdate();
 						}
 					}else if(g_SettingsG->compMode==IM_SHAPECODE && m_ctx.inState==INST_CODING)
 					{//五笔输入状态，进入临时拼音状态

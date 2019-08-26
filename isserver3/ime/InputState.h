@@ -77,7 +77,6 @@ private:
 	BOOL KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,char cCompLen, CONST BYTE * lpbKeyState,bool bKeepVisible=false);
 	BOOL KeyIn_InputAndAssociate(InputContext * lpCntxtPriv,const char *pszInput,short sLen,BYTE byMask);
 	void GetShapeComp(const char *pInput,char cLen);
-	BOOL KeyIn_PYBiHua_ChangComp(InputContext * lpCntxtPriv,UINT byInput, CONST BYTE * lpbKeyState);
 	BOOL KeyIn_Code_Normal(InputContext * lpCntxtPriv,UINT byInput, CONST BYTE * lpbKeyState);
 	BOOL KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput, CONST BYTE * lpbKeyState);
 	BOOL KeyIn_Code_Symbol(InputContext * lpCntxtPriv,UINT byInput, CONST BYTE * lpbKeyState);

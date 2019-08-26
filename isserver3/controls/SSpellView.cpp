@@ -83,17 +83,6 @@ namespace SOUI
 		pRT->DrawLines(pts,2);
 		pRT->SelectObject(oldPen);
 
-		if(m_ctx->bPYBiHua)
-		{//ÏÔÊ¾±Ê»­Âë
-			int i=0;
-			SpTextOut(pRT,pt,_T("+"));
-			while(m_ctx->szBiHua[i])
-			{
-				SpTextOut(pRT,pt,g_szLine[m_ctx->szBiHua[i]-'1']);
-				i++;
-			}
-		}
-
 		AfterPaint(pRT,painter);
 	}
 
@@ -120,20 +109,7 @@ namespace SOUI
 		SStringT strSpell = S_CA2T(SStringA(m_ctx->spellData[m_ctx->byCaret].szSpell,m_ctx->spellData[m_ctx->byCaret].bySpellLen), CP_GB);
 		pRT->MeasureText(strSpell,strSpell.GetLength(),&sz);
 		szRet.cx += sz.cx;
-		if(m_ctx->bPYBiHua)
-		{//ÏÔÊ¾±Ê»­Âë
-			int i=0;
-			pRT->MeasureText(_T("+"),1,&sz);
-			szRet.cx += sz.cx;
-
-			while(m_ctx->szBiHua[i])
-			{
-				LPCTSTR pszBihua = g_szLine[m_ctx->szBiHua[i]-'1'];
-				pRT->MeasureText(pszBihua,-1,&sz);
-				szRet.cx += sz.cx;
-				i++;
-			}
-		}
+		
 		szRet.cy +=1; //for underline
 
 		return szRet;

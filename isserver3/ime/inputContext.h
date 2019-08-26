@@ -82,8 +82,6 @@ struct InputContext
 	SPELLINFO spellData[MAX_SYLLABLES];	//音节信息
 	BYTE	bySelect[MAX_SYLLABLES];	//手动选择重码标志 0-自动预测,1-手动选择单字，其它－手动选择词组
 	LPBYTE  pbyBlur[MAX_SYLLABLES];		//拼音的模糊音
-	BOOL	bPYBiHua;				//拼音笔画辅助状态标志
-	char    szBiHua[50];
 	//智能语句
 	LPBYTE  pbySentWord[MAX_SENTLEN];	//单字地址
 	short   sSentLen;				//句子长度
