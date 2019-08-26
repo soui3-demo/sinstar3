@@ -120,6 +120,7 @@ namespace SOUI
 	{
 		EventSwndSize *e2 = sobj_cast<EventSwndSize>(e);
 		if(m_bResizing) return true;
+		SHostWnd::onRootResize(e);
 
 		CPoint pt = g_SettingsG->ptStatus;
 		CRect rcTo=CRect(pt,e2->szWnd);
@@ -144,9 +145,7 @@ namespace SOUI
 		if(rcTo.bottom>rcWorkArea.bottom)
 			rcTo.MoveToY(rcWorkArea.bottom-e2->szWnd.cy);
 
-		m_nAutoSizing++;//to prevent set SHostWnd::m_szAppSetted.
-		SetWindowPos(NULL,rcTo.left,rcTo.top,rcTo.Width(),rcTo.Height(),SWP_NOZORDER|SWP_NOACTIVATE);
-		m_nAutoSizing--;
+		SetWindowPos(NULL,rcTo.left,rcTo.top,0,0,SWP_NOZORDER|SWP_NOACTIVATE|SWP_NOSIZE);
 		UpdateAnchorMode();
 		g_SettingsG->ptStatus = rcTo.TopLeft();
 		g_SettingsG->SetModified(true);
