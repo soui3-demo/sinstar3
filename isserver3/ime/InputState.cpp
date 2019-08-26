@@ -1932,7 +1932,7 @@ BOOL CInputState::KeyIn_Code_Symbol(InputContext * lpCntxtPriv,UINT byInput,
 		if(iCand!=-1)
 		{
 			LPBYTE pbyCand=lpCntxtPriv->ppbyCandInfo[iCand];
-			strResultA = SStringA((char*)pbyCand+2,pbyCand[1]);
+			strResultA = SStringA((char*)pbyCand+3,pbyCand[2]);
 		}
 	}
 
