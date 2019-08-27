@@ -486,6 +486,9 @@ BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 	SLOG_INFO("change skin, new skin:" << strSkin.c_str() << " old skin:" << g_SettingsG->strSkin.c_str() << " this:" << this);
 	if(g_SettingsG->strSkin == strSkin)
 	{
+		//notify skin changed
+		EventSetSkin evt(this);
+		FireEvent(evt);
 		return TRUE;
 	}
 	SStringT skinPath = strSkin;
