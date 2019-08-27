@@ -153,11 +153,9 @@ void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 {
 	SLOG_INFO("GetThreadID="<<GetCurrentThreadId()<<" focus="<<bFocus);
 
-	BOOL bOpen = m_pTxtSvr->GetOpenStatus();
-	if (bOpen)
+	if (bFocus)
 	{
-		if (bFocus)
-			m_pTxtSvr->SetConversionMode(FullNative);
+		m_pTxtSvr->SetConversionMode(FullNative);
 
 		HWND hOwner = (HWND)m_pTxtSvr->GetActiveWnd();
 		m_pInputWnd->SetOwner(hOwner);
@@ -183,6 +181,8 @@ void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 			m_inputState.m_ctx.compMode = IM_SHAPECODE;
 			m_inputState.StatusbarUpdate();
 		}
+		m_pInputWnd->SetOwner(NULL);
+		m_pStatusWnd->SetOwner(NULL);
 
 		m_pStatusWnd->Show(FALSE);
 		m_pInputWnd->Show(FALSE);

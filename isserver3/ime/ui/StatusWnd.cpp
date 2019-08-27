@@ -580,6 +580,8 @@ namespace SOUI
 
 	void CStatusWnd::OnMenuClick()
 	{
+		if (!m_hOwner)
+			return;
 		CPoint pt;
 		GetCursorPos(&pt);
 		SMenu menu;

@@ -59,6 +59,7 @@ void CImeWnd::Show(BOOL bShow)
 
 LRESULT CImeWnd::OnAyncUI(UINT uMsg, WPARAM wp, LPARAM lp)
 {
+	SLOG_INFO("OnAyncUI,bShow:"<<wp);
 	BOOL bShow = wp;
 	if (bShow)
 	{

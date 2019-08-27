@@ -671,6 +671,7 @@ LRESULT CIsSvrProxy::OnCopyData(HWND hWnd,PCOPYDATASTRUCT lpCopyData)
 
 void CIsSvrProxy::OnSetFocus(CSvrConnection * pConn)
 {
+	SLOG_INFO("pConn:" << pConn);
 	if(m_pFocusConn)
 	{
 		if(m_pFocusConn!=pConn)
@@ -685,6 +686,7 @@ void CIsSvrProxy::OnSetFocus(CSvrConnection * pConn)
 
 void CIsSvrProxy::OnKillFocus(CSvrConnection * pConn)
 {
+	SLOG_INFO("pConn:" << pConn<<"curFocusConn:"<<m_pFocusConn);
 	if(pConn == m_pFocusConn)
 		m_pFocusConn=NULL;
 }
