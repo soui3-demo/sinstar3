@@ -334,7 +334,7 @@ LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 
 LRESULT CSinstar3Impl::OnAsyncCopyData(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	SLOG_INFO("begin");
+	SLOG_INFO("begin,this:"<<this);
 
 	PCOPYDATASTRUCT pCds = (PCOPYDATASTRUCT)lParam;
 	HWND hSender = (HWND)wParam;
@@ -483,6 +483,7 @@ extern SComMgr2 * g_ComMgr2;
 
 BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 {
+	SLOG_INFO("change skin, new skin:" << strSkin.c_str() << " old skin:" << g_SettingsG->strSkin.c_str() << " this:" << this);
 	if(g_SettingsG->strSkin == strSkin)
 	{
 		return TRUE;
