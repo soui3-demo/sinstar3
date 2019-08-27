@@ -6,6 +6,7 @@ translucent="1"
     <caption pos="0,0,-0,30" show="1" font="adding:0" layout="hbox" padding="10,0,2,0" gravity="center">
       <img skin="img_logo"/>
       <text extend_left="5">@string/title</text>
+      <text extend_left="5" text="ver:"/>
       <text extend_left="5" name="txt_ver"/>
       <window size="0,0" weight="1" visible="0"/>
       <imgbtn name="btn_min" skin="_skin.sys.btn.minimize" animate="1" />
