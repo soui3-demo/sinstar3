@@ -13,7 +13,7 @@ typedef void(*funIscore_Destroy)(IServerCore* pCore);
 #define UM_BUILD_INDEX_PROG1	(WM_USER+2001)
 #define UM_BUILD_INDEX_PROG2	(WM_USER+2002)
 #define UM_IMPORT_USER_LIB		(WM_USER+2003)
-
+#define UM_CHANGE_SKIN			(WM_USER+2010)
 
 enum{
 	CD_CMD_NULL = 0,
@@ -94,6 +94,10 @@ protected:
 	int OnCreate(LPCREATESTRUCT pCS);
 	void OnDestroy();
 	LRESULT OnTrayNotify(UINT uMsg, WPARAM wp, LPARAM lp);
+	LRESULT OnChangeSkin(UINT uMsg, WPARAM wp, LPARAM lp);
+	BOOL ChangeSkin(const SStringT & strSkin);
+	static void CbNotifyConnectionsSkinChanged(IIpcConnection *pConn, ULONG_PTR data);
+
 	LRESULT OnTaskbarCreated(UINT uMsg, WPARAM wp, LPARAM lp);
 	LRESULT OnBuildIndexProg(UINT uMsg, WPARAM wp, LPARAM lp);
 	LRESULT OnCopyData(HWND hWnd,PCOPYDATASTRUCT lpCopyData);
@@ -127,6 +131,7 @@ protected:
 		COMMAND_ID_HANDLER_EX(R.id.menu_settings, OnMenuSettings)
 		COMMAND_ID_HANDLER_EX(R.id.menu_auto_run, OnMenuAutoRun)
 		MESSAGE_HANDLER_EX(UM_TRAYNOTIFY, OnTrayNotify)
+		MESSAGE_HANDLER_EX(UM_CHANGE_SKIN,OnChangeSkin)
 		CHAIN_MSG_MAP_MEMBER(m_trayIcon)
 		MSG_WM_ENDSESSION(OnEndSession)
 		CHAIN_MSG_MAP(SNativeWnd)
@@ -143,7 +148,7 @@ private:
 	funIscore_Create m_funIsCore_Create;
 	funIscore_Destroy m_funIsCore_Destroy;
 
-	CAutoRefPtr<IIpcServer> m_ipcSvr;
+	SAutoRefPtr<IIpcServer> m_ipcSvr;
 
 	SStringT	m_strSvrPath;
 	SStringT	m_strDataPath;

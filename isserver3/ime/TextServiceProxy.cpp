@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "TextServiceProxy.h"
-#include "Sinstar3Impl.h"
 #include "../helper/helper.h"
+#include "Sinstar3Impl.h"
 
 CSvrConnection::CSvrConnection(IIpcHandle *pIpcHandle,HWND hSvr,IConntionFocusListener * pFocusListener)
 :m_ipcHandle(pIpcHandle)
@@ -248,4 +248,10 @@ void CSvrConnection::BuildShareBufferName(ULONG_PTR idLocal, ULONG_PTR idRemote,
 bool CSvrConnection::CallFun(IFunParams * params) const
 {
 	return m_ipcHandle->CallFun(params);
+}
+
+void CSvrConnection::OnSkinChanged()
+{
+	CSinstar3Impl *pSinstar3 =(CSinstar3Impl*)(ISinstar*)m_pSinstar;
+	pSinstar3->OnSkinChanged();
 }

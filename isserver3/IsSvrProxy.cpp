@@ -641,22 +641,7 @@ LRESULT CIsSvrProxy::OnCopyData(HWND hWnd,PCOPYDATASTRUCT lpCopyData)
 					SMessageBox(GetDesktopWindow(),_T("应用皮肤失败!不支持的皮肤格式"),_T("错误"),MB_OK|MB_ICONSTOP);
 				}else
 				{
-					g_SettingsG->strSkin = strDst;
-					g_SettingsG->SetModified(true);
-
-
-					SStringA strSkinUtf8 = S_CW2A(S_CT2W(strDst),CP_UTF8);
-					COPYDATASTRUCT cds = { 0 };
-					cds.dwData = CMD_CHANGESKIN;
-					cds.cbData = strSkinUtf8.GetLength()+1;
-					cds.lpData = (PVOID)(LPCSTR)strSkinUtf8;
-
-					HWND hFind = FindWindowEx(HWND_MESSAGE, NULL, NULL, KSinstar3WndName);
-					while (hFind)
-					{
-						::SendMessage(hFind, WM_COPYDATA, (WPARAM)m_hWnd, (LPARAM)&cds);
-						hFind = FindWindowEx(HWND_MESSAGE, hFind, NULL, KSinstar3WndName);
-					}
+					ChangeSkin(strDst);
 				}
 
 			}
@@ -703,4 +688,47 @@ void CIsSvrProxy::OnDisconnected(IIpcConnection * pConn)
 	{
 		m_pFocusConn = NULL;
 	}
+}
+
+LRESULT CIsSvrProxy::OnChangeSkin(UINT uMsg, WPARAM wp, LPARAM lp)
+{
+	SStringT *strSkin =(SStringT*)lp;
+	ChangeSkin(*strSkin);
+	delete strSkin;
+	return 0;
+}
+
+
+BOOL CIsSvrProxy::ChangeSkin(const SStringT & strSkin)
+{
+	SLOG_INFO("change skin, new skin:" << strSkin.c_str() << " old skin:" << g_SettingsG->strSkin.c_str() << " this:" << this);
+	if(g_SettingsG->strSkin != strSkin)
+	{
+		SStringT skinPath = strSkin;
+		if(!CDataCenter::getSingletonPtr()->GetData().changeSkin(skinPath))
+		{
+			if(skinPath == g_SettingsG->strDebugSkinPath)
+			{//restore to default skin.
+				CDataCenter::getSingletonPtr()->GetData().changeSkin(SStringT());
+			}else
+			{
+				return FALSE;
+			}
+		}
+		if(skinPath != g_SettingsG->strDebugSkinPath || g_SettingsG->strDebugSkinPath.IsEmpty())
+		{
+			g_SettingsG->strSkin=skinPath;
+			g_SettingsG->SetModified(true);
+		}
+
+		//notify all connection skin changed.
+		m_ipcSvr->EnumClient(&CIsSvrProxy::CbNotifyConnectionsSkinChanged,0);
+	}
+	return TRUE;
+}
+
+void CIsSvrProxy::CbNotifyConnectionsSkinChanged(IIpcConnection *pConn, ULONG_PTR data)
+{
+	CSvrConnection *pSvrConn = (CSvrConnection*)pConn;
+	pSvrConn->OnSkinChanged();
 }

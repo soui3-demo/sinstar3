@@ -16,15 +16,16 @@ struct IConntionFocusListener
 class CSvrConnection : public ITextService, public TObjRefImpl<SOUI::IIpcConnection> {
 	friend class CIsSvrProxy;
 public:
-	CSvrConnection::CSvrConnection(IIpcHandle *pIpcHandle,HWND hSvr,IConntionFocusListener * pFocusListener);
+	CSvrConnection(IIpcHandle *pIpcHandle,HWND hSvr,IConntionFocusListener * pFocusListener);
 
-	CSvrConnection::~CSvrConnection(void);
+	~CSvrConnection(void);
 public:
 	// Í¨¹ý IIpcConnection ¼Ì³Ð
 	virtual IIpcHandle * GetIpcHandle() override;
 	virtual void BuildShareBufferName(ULONG_PTR idLocal, ULONG_PTR idRemote, TCHAR szBuf[MAX_PATH]) const override;
 
 	bool CallFun(IFunParams *params) const;
+	void OnSkinChanged();
 public:
 	virtual BOOL InputStringW(LPCWSTR pszBuf, int nLen);
 
@@ -95,6 +96,6 @@ private:
 	std::string			m_strHostPath;
 	float				m_xScale;
 	float				m_yScale;
-	CAutoRefPtr<IIpcHandle> m_ipcHandle;
+	SAutoRefPtr<IIpcHandle> m_ipcHandle;
 	IConntionFocusListener	* m_pFocusListener;
 };

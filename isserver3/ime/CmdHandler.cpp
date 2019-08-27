@@ -238,7 +238,7 @@ void CCmdHandler::OnChangeSkin(LPARAM lp)
 	SStringT *pSkin = (SStringT*)lp;
 	if (g_SettingsG->strSkin != *pSkin)
 	{
-		m_pSinstar3->Broadcast(CMD_CHANGESKIN, (LPVOID)(LPCTSTR)(*pSkin), pSkin->GetLength()*sizeof(TCHAR));
+		m_pSinstar3->ChangeSkin(*pSkin);
 	}
 }
 

@@ -4,6 +4,7 @@
 #include <initguid.h>
 #include "ui/SkinMananger.h"
 #include <shellapi.h>
+#include "IsSvrProxy.h"
 
 class CAutoContext
 {
@@ -338,13 +339,7 @@ LRESULT CSinstar3Impl::OnAsyncCopyData(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 	PCOPYDATASTRUCT pCds = (PCOPYDATASTRUCT)lParam;
 	HWND hSender = (HWND)wParam;
-	if (pCds->dwData == CMD_CHANGESKIN)
-	{//change skin
-		SStringT strPath((const TCHAR *)pCds->lpData, pCds->cbData/sizeof(TCHAR));
-		SLOG_INFO("skin:"<<strPath);
-		ChangeSkin(strPath);
-	}
-	else if (pCds->dwData == CMD_SYNCUI)
+	if (pCds->dwData == CMD_SYNCUI)
 	{
 		DWORD dwFlag = *(DWORD*)pCds->lpData;
 		m_pStatusWnd->UpdateToggleStatus(dwFlag);
@@ -479,42 +474,19 @@ void CSinstar3Impl::OnInputDelayHide()
 	m_inputState.ClearContext(CPC_ALL&~CPC_INPUT);
 }
 
-extern SComMgr2 * g_ComMgr2;
 
 BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 {
-	SLOG_INFO("change skin, new skin:" << strSkin.c_str() << " old skin:" << g_SettingsG->strSkin.c_str() << " this:" << this);
-	if(g_SettingsG->strSkin == strSkin)
-	{
-		//notify skin changed
-		EventSetSkin evt(this);
-		FireEvent(evt);
-		return TRUE;
-	}
-	SStringT skinPath = strSkin;
-	if(!CDataCenter::getSingletonPtr()->GetData().changeSkin(skinPath))
-	{
-		if(skinPath == g_SettingsG->strDebugSkinPath)
-		{//restore to default skin.
-			skinPath.Empty();
-			CDataCenter::getSingletonPtr()->GetData().changeSkin(skinPath);
-		}else
-		{
-			return FALSE;
-		}
-	}
-	if(skinPath != g_SettingsG->strDebugSkinPath || g_SettingsG->strDebugSkinPath.IsEmpty())
-	{
-		g_SettingsG->strSkin=strSkin;
-		g_SettingsG->SetModified(true);
-	}
+	return ::PostMessage(m_hSvr,UM_CHANGE_SKIN,0,(LPARAM)(new SStringT(strSkin)));
+}
 
-	//notify skin changed
+
+void CSinstar3Impl::OnSkinChanged()
+{
 	EventSetSkin evt(this);
 	FireEvent(evt);
-
-	return TRUE;
 }
+
 
 void CSinstar3Impl::OpenConfig()
 {

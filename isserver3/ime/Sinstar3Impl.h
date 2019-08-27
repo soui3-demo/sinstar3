@@ -68,6 +68,8 @@ protected://IInputWndListener
 	virtual void OnInputDelayHide();
 public:
 	BOOL ChangeSkin(const SStringT & strSkin);
+	void OnSkinChanged();
+
 	void OpenConfig();
 	void ShowTip(LPCTSTR pszTitle, LPCTSTR pszContent);
 
