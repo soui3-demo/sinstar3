@@ -178,7 +178,7 @@ int CInputState::TestHotKey(UINT uVk, const BYTE * lpbKeyState) const
 {
 	if (uVk == VK_CONTROL || uVk == VK_SHIFT || uVk == VK_MENU)
 		return -1;
-	if (!m_pListener->GetOpenStatus())
+	if (!m_pListener->GetOpenStatus() || lpbKeyState[VK_CAPITAL]&0x01)
 		return -1;
 	int iRet = -1;
 	for (int i = 0; i < HKI_COUNT; i++)
@@ -577,7 +577,7 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 			}
 			if((bReadyEn || bReadyDgt) && lpCntxtPriv->bShowTip) //关闭tip
 				lpCntxtPriv->bShowTip=FALSE;
-			if(bReadyEn && uVKey>='A' && uVKey<='Z' && !(lpbKeyState[VK_CAPITAL]&0x80))
+			if(bReadyEn && uVKey>='A' && uVKey<='Z' && (lpbKeyState[VK_CAPITAL]&0x01)== 0)
 			{//大写输入，则切换到英文状态
 				ClearContext(CPC_ALL);
 				if(g_SettingsUI->bEnglish)

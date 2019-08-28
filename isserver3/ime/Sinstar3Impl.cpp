@@ -40,13 +40,12 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HWND hSvr)
 
 	HWND hOwner = (HWND)pTxtSvr->GetActiveWnd();
  	m_pInputWnd = new CInputWnd(this,m_inputState.GetInputContext(),this);
+	m_pInputWnd->SetOwner(hOwner);
 	m_pInputWnd->Create();
 
-	m_pInputWnd->SetOwner(hOwner);
-
 	m_pStatusWnd = new CStatusWnd(this,this);
-	m_pStatusWnd->Create();
 	m_pStatusWnd->SetOwner(hOwner);
+	m_pStatusWnd->Create();
 	m_inputState.SetInputListener(this);
 	
 	m_pInputWnd->SetAnchorPosition(g_SettingsG->ptInput);
