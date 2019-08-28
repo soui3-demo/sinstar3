@@ -577,7 +577,7 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 			}
 			if((bReadyEn || bReadyDgt) && lpCntxtPriv->bShowTip) //关闭tip
 				lpCntxtPriv->bShowTip=FALSE;
-			if(bReadyEn && uVKey>='A' && uVKey<='Z')
+			if(bReadyEn && uVKey>='A' && uVKey<='Z' && !(lpbKeyState[VK_CAPITAL]&0x80))
 			{//大写输入，则切换到英文状态
 				ClearContext(CPC_ALL);
 				if(g_SettingsUI->bEnglish)
