@@ -16,7 +16,12 @@ static char THIS_FILE[]=__FILE__;
 namespace SOUI
 {
 
-CShareMemBuffer::CShareMemBuffer():m_pMemBuf(NULL),m_pHeader(NULL),m_pBuffer(NULL),m_hMap(NULL)
+CShareMemBuffer::CShareMemBuffer()
+	:m_pMemBuf(NULL)
+	,m_pHeader(NULL)
+	,m_pBuffer(NULL)
+	,m_hMap(NULL)
+	,m_hMutex(NULL)
 {
 }
 
@@ -40,7 +45,13 @@ BOOL CShareMemBuffer::OpenMemFile(LPCTSTR pszName,DWORD dwMaximumSize , void * p
 	if (!m_hMap)	goto error;
 	m_pMemBuf=::MapViewOfFile(m_hMap, FILE_MAP_READ | FILE_MAP_WRITE,0,0,0);//map whole file
 	if (!m_pMemBuf) goto error;
-
+	TCHAR szMutex[MAX_PATH];
+	_stprintf(szMutex, _T("mutex_%s"), pszName);
+	m_hMutex = CreateEvent(psa, FALSE, TRUE, szMutex);
+	if (!m_hMutex && GetLastError() == ERROR_ACCESS_DENIED)
+	{
+		m_hMutex = OpenEvent(SYNCHRONIZE, FALSE, szMutex);
+	}
 	m_pHeader = (BufHeader*)m_pMemBuf;
 	m_pBuffer = (LPBYTE)(m_pHeader + 1);
 	if (dwMaximumSize != 0)
@@ -69,6 +80,11 @@ void CShareMemBuffer::Close(){
 		m_pMemBuf = NULL;
 		::CloseHandle(m_hMap);
 		m_hMap = 0;
+	}
+	if (m_hMutex)
+	{
+		CloseHandle(m_hMutex);
+		m_hMutex = NULL;
 	}
 }
 
@@ -136,5 +152,14 @@ void CShareMemBuffer::SetTail(UINT uPos)
 	if (pHeader->dwPos > uPos) pHeader->dwPos = uPos;
 }
 
+BOOL CShareMemBuffer::Lock(DWORD timeout)
+{
+	return WaitForSingleObject(m_hMutex, timeout) == WAIT_OBJECT_0;
+}
+
+void CShareMemBuffer::Unlock()
+{
+	SetEvent(m_hMutex);//make mutex waitable.
+}
 
 }
