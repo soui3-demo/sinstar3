@@ -13,6 +13,7 @@
 #ifndef _CRT_SECURE_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
 #endif//_CRT_SECURE_NO_WARNINGS
+#define LIB_SOUI_COM		//using lib to import soui com objects.
 
 // Windows Í·ÎÄ¼þ:
 #define NOIME
@@ -33,6 +34,9 @@
 #include "../include/version.h"
 #include "../include/sinstar-i.h"
 #include "../include/reg.h"
+#include "../SLog4Z/log4z.h"
+
+#define GETLOGMGR() (SOUI::SLogMgr::getSingletonPtr()?SOUI::SLogMgr::getSingletonPtr()->GetLogMgr():NULL)
 #include "../include/slog_wrapper.h"
 
 #define LOG_FILTER "sinstar3_ime"

@@ -6,6 +6,8 @@
 #endif//_CRT_SECURE_NO_WARNINGS
 #define ENABLE_LANGUAGEBAR
 
+#define LIB_SOUI_COM		//using lib to import soui com objects.
+
 #include <windows.h>
 #include <ole2.h>
 #include <olectl.h>
@@ -19,6 +21,9 @@
 #include "../include/version.h"
 #include "../include/TextService-i.h"
 #include "../include/sinstar3_guids.h"
+#include "../SLog4Z/log4z.h"
+
+#define GETLOGMGR() (SOUI::SLogMgr::getSingletonPtr()?SOUI::SLogMgr::getSingletonPtr()->GetLogMgr():NULL)
 #include "../include/slog_wrapper.h"
 
 #define LOG_FILTER "sinstar3_tsf"
