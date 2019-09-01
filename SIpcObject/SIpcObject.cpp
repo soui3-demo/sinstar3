@@ -119,12 +119,12 @@ namespace SOUI
 		assert(m_nCallStack >= 0);
 		if (m_nCallStack + 1 > m_pConn->GetStackSize())
 			return false;
-		SLOG_WARN("call function, this:"<<this<<" seq="<<nCallSeq<<" id="<<pParam->GetID());
 		pBuf->Seek(IShareBuffer::seek_set, m_nCallStack * m_pConn->GetBufSize());
 		m_nCallStack++;
 
 		int nCallSeq = m_uCallSeq ++;
 		if(m_uCallSeq>100000) m_uCallSeq=0;
+		SLOG_WARN("call function, this:"<<this<<" seq="<<nCallSeq<<" id="<<pParam->GetID());
 		pBuf->Write(&nCallSeq,4);//write call seq first.
 		UINT uFunId = pParam->GetID();
 		pBuf->Write(&uFunId,4);

@@ -16,6 +16,9 @@ namespace SOUI{
 const LPCTSTR kBlackList[]=
 {
 _T("SearchUI.exe"),//win10 开始菜单
+_T("explorer.exe"),//win10 开始菜单
+_T("taskmgr.exe"),//win10 开始菜单
+_T("devenv.exe"),//win10 开始菜单
 };
 
 bool CSinstarProxy::isInBlackList()
@@ -328,5 +331,15 @@ CClientConnection::CClientConnection(ITextService * pTxtService) :m_pTxtService(
 	IPC::SCreateInstance((IObjRef**)&ipcFactory);
 	ipcFactory->CreateIpcHandle(&m_ipcHandle);
 	m_ipcHandle->SetIpcConnection(this);
+}
+
+int CClientConnection::GetBufSize() const
+{
+	return MAX_PATH*2;
+}
+
+int CClientConnection::GetStackSize() const
+{
+	return 10;
 }
 

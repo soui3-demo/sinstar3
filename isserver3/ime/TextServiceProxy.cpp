@@ -255,3 +255,13 @@ void CSvrConnection::OnSkinChanged()
 	CSinstar3Impl *pSinstar3 =(CSinstar3Impl*)(ISinstar*)m_pSinstar;
 	pSinstar3->OnSkinChanged();
 }
+
+int CSvrConnection::GetBufSize() const 
+{
+	return MAX_PATH*2;
+}
+
+int CSvrConnection::GetStackSize() const 
+{
+	return 10;
+}

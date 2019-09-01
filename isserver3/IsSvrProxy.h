@@ -41,9 +41,6 @@ protected:
 		*ppConn = new CSvrConnection(pIpcHandle,m_hWnd,this);
 	}
 
-	virtual int GetBufSize() const {
-		return 10240;
-	}
 	virtual void * GetSecurityAttr() const;
 	virtual void ReleaseSecurityAttr(void* psa) const;
 	virtual void OnConnected(IIpcConnection * pConn);

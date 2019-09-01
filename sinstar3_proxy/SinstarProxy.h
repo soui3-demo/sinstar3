@@ -12,6 +12,8 @@ public:
 
 public:
 	// Í¨¹ý IIpcConnection ¼Ì³Ð
+	virtual int GetBufSize() const override;
+	virtual int GetStackSize() const override;
 	virtual SOUI::IIpcHandle * GetIpcHandle() override;
 	virtual void BuildShareBufferName(ULONG_PTR idLocal, ULONG_PTR idRemote, TCHAR szName[MAX_PATH]) const override;
 	bool CallFun(SOUI::IFunParams *params) const;

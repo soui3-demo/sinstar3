@@ -21,6 +21,9 @@ public:
 	~CSvrConnection(void);
 public:
 	// Í¨¹ý IIpcConnection ¼Ì³Ð
+	virtual int GetBufSize() const override;
+	virtual int GetStackSize() const override;
+
 	virtual IIpcHandle * GetIpcHandle() override;
 	virtual void BuildShareBufferName(ULONG_PTR idLocal, ULONG_PTR idRemote, TCHAR szBuf[MAX_PATH]) const override;
 
