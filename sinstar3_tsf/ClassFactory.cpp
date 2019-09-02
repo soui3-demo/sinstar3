@@ -6,6 +6,7 @@ CClassFactory::CClassFactory(REFCLSID rclsid, HRESULT (*pfnCreateInstance)(IUnkn
 {
 	_pfnCreateInstance = pfnCreateInstance;
 
+#ifdef ENABLE_LOG
 	TCHAR szPathInstall[MAX_PATH] = { 0 };
 	CRegKey reg;
 	LONG ret = reg.Open(HKEY_LOCAL_MACHINE,_T("SOFTWARE\\SetoutSoft\\sinstar3"),KEY_READ|KEY_WOW64_64KEY);
@@ -16,11 +17,14 @@ CClassFactory::CClassFactory(REFCLSID rclsid, HRESULT (*pfnCreateInstance)(IUnkn
 		reg.Close();
 	}
 	new SOUI::SLogMgr(szPathInstall);
+#endif
 }
 
 CClassFactory::~CClassFactory()
 {
+#ifdef ENABLE_LOG
 	delete SOUI::SLogMgr::getSingletonPtr();
+#endif
 }
 
 //+---------------------------------------------------------------------------
