@@ -332,7 +332,7 @@ CClientConnection::CClientConnection(ITextService * pTxtService) :m_pTxtService(
 
 int CClientConnection::GetBufSize() const
 {
-	return MAX_PATH*2;
+	return 1024*2;
 }
 
 int CClientConnection::GetStackSize() const
