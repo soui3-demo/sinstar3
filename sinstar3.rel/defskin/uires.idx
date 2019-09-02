@@ -1,0 +1,74 @@
+﻿<resource>
+  <UIDEF>
+    <file name="XML_INIT" path="uidef\init.xml"/>
+  </UIDEF>
+  <LAYOUT>
+    <file name="dlg_msgbox" path="layout\server\dlg_msgbox.xml"/>
+    <file name="dlg_keymap" path="layout\server\dlg_keymap.xml"/>
+    <file name="wnd_build_index_prog" path="layout\server\wnd_build_index_prog.xml"/>
+    <file name="dlg_update_info" path="layout\server\dlg_update_info.xml"/>
+    <file name="dlg_donate" path="layout\server\dlg_donate.xml"/>
+    
+    <file name="wnd_composition" path="layout\ime\wnd_composition.xml"/>
+    <file name="wnd_status_bar" path="layout\ime\wnd_status_bar.xml"/>
+    <file name="wnd_tip" path="layout\ime\wnd_tip.xml"/>
+
+    <file name="dlg_addblur" path="layout\settings\dlg_addblur.xml"/>
+    <file name="dlg_config" path="layout\settings\dlg_config.xml"/>
+    <file name="page_about" path="layout\settings\page_about.xml"/>
+    <file name="page_misc" path="layout\settings\page_misc.xml"/>
+    <file name="page_phraselib" path="layout\settings\page_phraselib.xml"/>
+    <file name="page_pinyin" path="layout\settings\page_pinyin.xml"/>
+    <file name="page_tts" path="layout\settings\page_tts.xml"/>
+    <file name="page_candidate" path="layout\settings\page_candidate.xml"/>
+    <file name="page_associate" path="layout\settings\page_associate.xml"/>
+    <file name="page_hotkey" path="layout\settings\page_hotkey.xml"/>
+    <file name="page_habit" path="layout\settings\page_habit.xml"/>
+    <file name="page_celib" path="layout\settings\page_celib.xml"/>
+  </LAYOUT>
+
+  <values>
+    <file name="string" path="values\string.xml"/>
+    <file name="color" path="values\color.xml"/>
+    <file name="skin" path="values\skin.xml"/>
+    <file name="dim" path="values\dim.xml"/>
+  </values>
+
+  <IMG>
+    <file name="logo_32" path="image\logo_32.png"/>
+    <file name="png_charmode" path="image\charmode.png"/>
+    <file name="png_charmode_full" path="image\charmode_full.png"/>
+    <file name="png_charmode_half" path="image\charmode_half.png"/>
+    <file name="png_status_bar" path="image\status_bar.png"/>
+    <file name="png_composition" path="image\composition.png"/>
+    <file name="btn_extend" path="image\btn_extend.png"/>
+    <file name="btn_shrink" path="image\btn_shrink.png"/>
+    <file name="btn_makeword" path="image\btn_makeword.png"/>
+    <file name="btn_prevpage" path="image\btn_prevpage.png"/>
+    <file name="btn_nextpage" path="image\btn_nextpage.png"/>
+    <file name="btn_query" path="image\btn_query.png"/>
+    <file name="btn_record_enable" path="image\btn_record_enable.png"/>
+    <file name="btn_record_disable" path="image\btn_record_disable.png"/>
+    <file name="btn_sound_enable" path="image\btn_sound_enable.png"/>
+    <file name="btn_sound_disable" path="image\btn_sound_disable.png"/>
+    <file name="png_lines" path="image\lines.png"/>
+    <file name="btn_english_enable" path="image\btn_english_enable.png"/>
+    <file name="btn_english_disable" path="image\btn_english_disable.png"/>
+    <file name="SYS_SCROLLBAR" path="image\scrollbar.png"/>
+    <file name="png_comp_logo" path="image\comp_logo.png"/>
+  </IMG>
+  <img2>
+    <file name="png_tip_bg" path="image2\tip_bg.png"/>
+  </img2>
+  <ICON>
+    <file name="ICON_LOGO" path="icon\logo.ico"/>
+    <file name="ICON_LOGO1" path="icon\logo1.ico"/>
+    <file name="ICON_LOGO2" path="icon\logo2.ico"/>
+    <file name="ICON_LOGO3" path="icon\logo3.ico"/>
+    <file name="ICON_LOGO4" path="icon\logo4.ico"/>  
+  </ICON>
+  <smenu>
+    <file name="context_tray" path="smenu\context_tray.xml"/>
+    <file name="context_status" path="smenu\context_status.xml"/>
+  </smenu>
+</resource>

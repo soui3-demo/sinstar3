@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SOUI name="update" title="@string/update" bigIcon="ICON_LOGO:32" smallIcon="ICON_LOGO:16" margin="5,5,5,5"  resizable="1" wndType="normal"
+appWnd="1"
+translucent="1"
+>
+  <root width="300" height="400"  skin="_skin.sys.wnd.bkgnd" cache="1" padding="5,5,5,5">
+    <window size="-2,-2"  layout="vbox"  gravity="center" font="size:16">
+	    <caption size="-2,30" >
+	      <icon pos="5,|0" offset="0,-0.5" src="ICON_LOGO:16"/>
+	      <text pos="|0,|0" offset="-0.5,-0.5">@string/new_ver_found</text>
+	      <imgbtn pos ="-0,|0" offset="-1,-0.5" name="btn_close" skin="_skin.sys.btn.close"  id="IDCANCEL" tip="close" animate="1"/>
+	    </caption>
+	    <window size="-2,-1" layout="vbox" >
+	      <window layout="hbox">
+	        <text text="当前版本:"/>
+	        <text name="txt_ver_cur"/>
+	      </window>
+	      <window layout="hbox">
+	        <text text="发现版本:"/>
+	        <text name="txt_ver_new"/>
+	      </window>
+	    </window>
+	    <window size="-2,-1" extend_top="10" layout="hbox">
+	      <text text="更新内容"/>
+	      <window size="0,0" weight="1" visible="0"/>
+	      <link name="link_more" text="更多信息"/>
+	    </window>
+	    <chatedit name="edit_info" size="-2,0" weight="1" multiLines="1" vscrollBar="1" wordWrap="1"  autoVscroll="1" hscrollBar="0" wantReturn="1" maxBuf="6400000"/>
+    </window>
+  </root>
+</SOUI>

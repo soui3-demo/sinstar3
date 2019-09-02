@@ -1,0 +1,3 @@
+[hotkey]
+umode=Z
+sentence=;

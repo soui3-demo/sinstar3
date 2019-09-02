@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<UIDEF>
+  <desc author="008" name="多点纯色" version="1.0" />
+  <font face="微软雅黑" size="16"/>
+  <unit defUnit="dp"/>
+
+  <string src="values:string" />  
+  <color src="values:color"/>
+  <skin src="values:skin"/>
+  <dim src="values:dim"/>
+  
+  <style>
+    <class name="edit_border" margin="2,2,2,2" ncSkin="_skin.sys.border"/>
+    <class name="normalbtn" font="" colorText="#385e8b" colorTextDisable="#91a7c0" textMode="0x25" cursor="hand" margin-x="0"/>
+    <class name="cls_btn_weblink" cursor="hand" colorText="#1e78d5" colorTextHover="#1e78d5"  fontHover="underline:1,size:16dp" />
+  </style>
+
+  <objattr>
+    <hr colorLine="#cccccc"/>
+    <edit class="edit_border"/>
+    <combobox class="edit_border"/>
+    <listview class="edit_border"/>
+    <mclistview class="edit_border"/>
+    <group  padding="10,10,10,15"/>
+    <hotkey class="edit_border"  padding="5,0,5,0"/>
+    <link class="cls_btn_weblink"/>
+    <EnCand colorIndex="@color/cand_index" colorCand="@color/cand_text" colorPhonetic="@color/cand_phonetic"/>
+    <PhraseCand colorIndex="@color/cand_index" colorCand="@color/cand_text" />
+    <candidate colorIndex="@color/cand_index" colorCand="@color/cand_text" colorComp="@color/cand_comp" colorWild="@color/cand_wild"/>    
+  </objattr>
+</UIDEF>

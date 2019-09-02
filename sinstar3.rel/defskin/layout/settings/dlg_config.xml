@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SOUI
+  name="dlg_config"
+  resizable="0"
+  wndType="normal"
+  translucent="1"
+  sendWheel2Hover="1">
+  <style>
+    <class name="cls_radio" padding="5,5,5,5" extend_top="5" extend_bottom="5"/>
+  </style>
+  <skin>
+    <colorrect name="nav_config_tab" normal="#f3f6fa" hover="#ebebeb" pushdown="#3973d6"/>
+    <scrollbar name="skin.scrollbar"  src="IMG:SYS_SCROLLBAR" margin="5" hasgripper="0"/>
+  </skin>
+  <root size="600,400" colorBkgnd="#000000">
+    <window pos="1,1,-1,-1" colorBkgnd="@color/configborder" font="size:16" layout="vbox">
+      <caption size="-2,38" layout="hbox">
+        <text extend_left="6" extend_top="6" size="-1,-1" text="@string/title_config"/>
+        <window size="0,0" weight="1" visible="0"/>
+        <imgbtn size="-1,-1" skin="_skin.sys.btn.close" name="btn_close" id="2" animate="1" tip="@string/btn_close"/>
+      </caption>
+      <tabctrlex size="-2,0" weight="1" text-x="22" tabPos="10" align="left" clipClient="1" tabInterSize="0" tabWidth="120" tabskin="nav_config_tab" colorBkgnd="#f3f6fa"  tabHeight="32" drawFocusRect="0" show="1" curSel="0">
+        <socrollviewStyle sbArrowSize="0" sbSkin="skin.scrollbar" scrollSpeed="100" updateInterval="0"  colorBkgnd="#f2f2f2" colorBorder="#c6c6c6"/>
+        <pages>
+          <pageex title="@string/cfg_habit" tip="@string/cfg_habit"  size="-2,-1">
+            <include src="layout:page_habit"/>
+          </pageex>
+          <pageex title="@string/cfg_hotkey" tip="@string/cfg_hotkey"  size="-2,-1">
+            <include src="layout:page_hotkey"/>
+          </pageex>
+          <pageex title="@string/cfg_associate" tip="@string/cfg_associate"  size="-2,-1">
+            <include src="layout:page_associate"/>
+          </pageex>
+          <pageex title="@string/cfg_candidate" tip="@string/cfg_candidate" size="-2,-1">
+            <include src="layout:page_candidate"/>
+          </pageex>
+          <pageex title="@string/cfg_tts" tip="@string/cfg_tts" size="-2,-1">
+            <include src="layout:page_tts"/>
+          </pageex>
+          <pageex title="@string/cfg_pinyin" tip="@string/cfg_pinyin" size="-2,-1">
+            <include src="layout:page_pinyin"/>
+          </pageex>
+          <pageex title="@string/cfg_phraselib" layout="vbox" size="-2,-1" padding="10,10,10,10">
+            <include src="layout:page_phraselib"/>
+          </pageex>
+          <pageex title="@string/cfg_celib" layout="vbox" size="-2,-1" padding="10,10,10,10">
+            <include src="layout:page_celib"/>
+          </pageex>
+          <pageex title="@string/cfg_misc" tip="@string/cfg_misc" size="-2,-1">
+            <include src="layout:page_misc"/>
+          </pageex>
+          <pageex title="@string/cfg_about" tip="@string/cfg_about" layout="vbox" size="-2,-1">
+            <include src="layout:page_about"/>
+          </pageex>
+        </pages>
+      </tabctrlex>
+    </window>
+  </root>
+</SOUI>
