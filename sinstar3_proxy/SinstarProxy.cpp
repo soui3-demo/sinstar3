@@ -16,9 +16,6 @@ namespace SOUI{
 const LPCTSTR kBlackList[]=
 {
 _T("SearchUI.exe"),//win10 开始菜单
-_T("explorer.exe"),//win10 开始菜单
-_T("taskmgr.exe"),//win10 开始菜单
-_T("devenv.exe"),//win10 开始菜单
 };
 
 bool CSinstarProxy::isInBlackList()
