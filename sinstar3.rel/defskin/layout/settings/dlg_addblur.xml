@@ -7,7 +7,7 @@
   wndType="normal"
   translucent="1"
   sendWheel2Hover="1">
-  <root skin="_skin.sys.wnd.bkgnd" cache="1" layout="vbox" gravity="center">
+  <root skin="_skin.sys.wnd.bkgnd" cache="1" layout="vbox" gravity="center" font="size:16">
     <caption size="-2,30">
       <icon pos="10,8" src="ICON_LOGO:16"/>
       <text pos="29,9">增加模糊音</text>

@@ -16,8 +16,9 @@ int CSkinMananger::InitSkinMenu(HMENU hMenu, const SStringT &strSkinPath, int nS
 	WIN32_FIND_DATA findData;
 	HANDLE hFind = FindFirstFile(strSkinPath + _T("\\*.*"), &findData);
 	SMenu smenu(hMenu);
+	//enum sub folder
 	if (hFind != INVALID_HANDLE_VALUE)
-	{		
+	{
 		do {
 			if (findData.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY)
 			{
@@ -33,24 +34,26 @@ int CSkinMananger::InitSkinMenu(HMENU hMenu, const SStringT &strSkinPath, int nS
 					}
 				}
 			}
-			else
-			{
-				TCHAR szExt[100];
-				_tsplitpath(findData.cFileName, NULL, NULL, NULL, szExt);
-				if (_tcsicmp(szExt, _T(".sskn")) == 0)
-				{
-					nStartId++;
-					SStringT strFullPath = strSkinPath + _T("\\") + findData.cFileName;
-					m_mapSkin[nStartId] = strFullPath;
-					SStringT strDesc = ExtractSkinInfo(strFullPath);
+		} while (FindNextFile(hFind, &findData));
+		FindClose(hFind);
+	}
 
-					BOOL bInsertSucess= smenu.AppendMenu( MF_STRING , nStartId, strDesc);
-					
-					if (bInsertSucess&&(strFullPath == strCurSkin))
-					{
-						CheckMenuItem(hMenu,nStartId, MF_BYCOMMAND | MF_CHECKED);
-					}
-				}
+	//enum skins.
+	hFind = FindFirstFile(strSkinPath + _T("\\*.sskn"), &findData);
+	if (hFind != INVALID_HANDLE_VALUE)
+	{		
+		do {
+
+			nStartId++;
+			SStringT strFullPath = strSkinPath + _T("\\") + findData.cFileName;
+			m_mapSkin[nStartId] = strFullPath;
+			SStringT strDesc = ExtractSkinInfo(strFullPath);
+
+			BOOL bInsertSucess= smenu.AppendMenu( MF_STRING , nStartId, strDesc);
+
+			if (bInsertSucess&&(strFullPath == strCurSkin))
+			{
+				CheckMenuItem(hMenu,nStartId, MF_BYCOMMAND | MF_CHECKED);
 			}
 		} while (FindNextFile(hFind, &findData));
 		FindClose(hFind);
@@ -73,7 +76,7 @@ SOUI::SStringT CSkinMananger::ExtractSkinInfo(SStringT strSkinPath)
 	pugi::xml_document xmlDoc;
 	xmlDoc.load_buffer_inplace(buffer,nSize);
 	pugi::xml_node xmlDesc = xmlDoc.child(L"uidef").child(L"desc");
-	SStringW strDesc = SStringW(xmlDesc.attribute(L"name").value())+L"["+xmlDesc.attribute(L"author").value()+L"]";
+	SStringW strDesc = SStringW(xmlDesc.attribute(L"name").value())+L":"+xmlDesc.attribute(L"version").value()+L"["+xmlDesc.attribute(L"author").value()+L"]";
 	return S_CW2T(strDesc);
 }
 
