@@ -4,7 +4,7 @@
 namespace SOUI
 {
 	SCompCaret::SCompCaret(): m_bDrawCaret(true),  m_iFrame(0), m_byAlpha(0xFF)
-		, m_crCaret(RGBA(0, 0, 0, 255)), m_nFrames(30), m_bAniCaret(FALSE)
+		, m_crCaret(RGBA(0, 0, 0, 255)), m_nAniFrames(20), m_nShowFrames(10),m_bAniCaret(FALSE)
 	{
 		m_AniInterpolator.Attach(CREATEINTERPOLATOR(SAccelerateInterpolator::GetClassName()));
 	}
@@ -29,24 +29,37 @@ namespace SOUI
 	bool SCompCaret::OnNextFrame()
 	{
 		m_iFrame++;
+		int nFrameCount=(m_nShowFrames + m_nAniFrames*2);
+		if(m_iFrame%nFrameCount==0)
+			m_iFrame=0;
+
 		if (m_bAniCaret)
 		{
-			if (m_iFrame%m_nFrames == 0)
-			{
-				m_iFrame = 0;
+			if(m_iFrame<m_nShowFrames)
+				m_byAlpha = 255;//visible
+			else if(m_iFrame<m_nShowFrames+m_nAniFrames)
+			{//fadeout
+				int iFrame = m_iFrame-m_nShowFrames;
+				m_byAlpha = (BYTE)(255 * m_AniInterpolator->getInterpolation(1.0f - iFrame*1.0f / m_nAniFrames));
+			}else
+			{//fadein
+				int iFrame = m_iFrame-m_nShowFrames-m_nAniFrames;
+				m_byAlpha = (BYTE)(255 * m_AniInterpolator->getInterpolation( iFrame*1.0f / m_nAniFrames));
 			}
-			m_byAlpha = (BYTE)(255 * m_AniInterpolator->getInterpolation((1.0f - m_iFrame*1.0f / m_nFrames)));
 			return true;
 		}
 		else
 		{
-			if (m_iFrame%m_nFrames == 0)
+			if(m_iFrame == 0)
 			{
-				m_bDrawCaret = !m_bDrawCaret;
-				m_iFrame = 0;
+				m_bDrawCaret = true;
+				m_byAlpha = 255;
 				return true;
-			}
-			else
+			}else if(m_iFrame == m_nShowFrames)
+			{
+				m_bDrawCaret = false;
+				return true;
+			}else
 			{
 				return false;
 			}
@@ -60,7 +73,7 @@ namespace SOUI
 
 
 	///////////////////////////////////////////////////////////////////
-	SCompView::SCompView()
+	SCompView::SCompView():m_caretWidth(1)
 	{
 	}
 
@@ -74,13 +87,15 @@ namespace SOUI
 		CSize szRet = SWindow::GetDesiredSize(wid, hei);
 		if (GetLayoutParam()->IsWrapContent(Horz))
 		{
-			szRet.cx += 1;
+			szRet.cx += m_caretWidth;
 		}
 		return szRet;
 	}
 
 	void SCompView::OnNextFrame()
 	{
+		if(!::IsWindowVisible(GetContainer()->GetHostHwnd()))
+			return;
 		bool bInvalid = m_caret.OnNextFrame();
 		if (bInvalid)
 		{
@@ -111,7 +126,8 @@ namespace SOUI
 		}
 		CRect rcCaret = rcText;
 		rcCaret.left = rcText.right;
-		rcCaret.right = rcCaret.left + 1;
+		rcCaret.right = rcCaret.left + m_caretWidth;
+		rcCaret.DeflateRect(0,1);
 		if (!(rcCaret & rcClip).IsRectEmpty())
 		{
 			m_caret.Draw(pRT, rcCaret);
@@ -121,7 +137,7 @@ namespace SOUI
 
 	void SCompView::OnShowWindow(BOOL bShow, UINT nStatus)
 	{
-		__super::OnShowWindow(bShow, nStatus);
+		SWindow::OnShowWindow(bShow, nStatus);
 		if (!IsVisible(TRUE))
 		{
 			GetContainer()->UnregisterTimelineHandler(this);
@@ -131,6 +147,12 @@ namespace SOUI
 			GetContainer()->RegisterTimelineHandler(this);
 			m_caret.Reset();
 		}
+	}
+
+	void SCompView::OnDestroy()
+	{
+		GetContainer()->UnregisterTimelineHandler(this);
+		SWindow::OnDestroy();
 	}
 
 }

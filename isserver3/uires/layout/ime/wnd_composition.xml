@@ -23,13 +23,14 @@
 	    colorCandGbk="@color/cand_gbk"  
 	    colorComp="@color/cand_comp" 
 	    colorWild="@color/cand_wild"/>
+    <class name="cls_comp" caret_width="2" caret_animate="0" caret_color="@color/border" caret_fade_time="20" caret_show_time="20"/>
   </style>
   <root size="-1,-1">
     <comp_bg size="-1,-1" skin="skin_bk" cache="1" colorBorder="@color/border" layout="vbox" margin="1,1,1,1" padding="4,0,4,0">
       <window size="-2,0" weight="1" layout="hbox" gravity="center">
         <window size="-1,-2" weight="1" layout="hbox">
           <mutexView size="-1,-2" name="comp_normal" layout="hbox"  gravity="center">
-            <text size="-1,-2" name="txt_comps" colorText="@color/comp"/>
+            <compView size="-1,-2" name="txt_comps" colorText="@color/comp" class="cls_comp"/>
             <text size="-1,-2" name="txt_tip" colorText="@color/tip_comp" extend_left="@dim/interval_comp"/>
           </mutexView>
           <mutexView size="-1,-2" name="comp_spell"  layout="hbox" gravity="center">
@@ -39,7 +40,7 @@
           </mutexView>
           <mutexView size="-1,-2" name="comp_umode"  layout="hbox"  gravity="center">
             <text size="-1,-2" text="u:" colorText="@color/comp_umode_prefix" padding_right="@dim/interval_comp_prefix"/>
-            <text size="-1,-2" name="txt_comps" text="umode"/>
+            <compView size="-1,-2" name="txt_comps" text="umode"  class="cls_comp"/>
             <text size="-1,-2" name="txt_auto_complete" colorText="@color/comp_auto_complete"/>
           </mutexView>
           <mutexView size="-1,-2" name="comp_lineime"  layut="hbox" gravity="center">
@@ -47,7 +48,7 @@
             <lineComp size="-1,-2" name="txt_comps" lineSkin="lines"/>
           </mutexView>
           <mutexView size="-1,-2" name="comp_english" layut="hbox"  gravity="center">
-            <text size="-1,-2" name="txt_comps"/>
+            <compView size="-1,-2" name="txt_comps"  class="cls_comp"/>
             <text size="-1,-2" name="txt_auto_complete" colorText="@color/comp_auto_complete"/>
           </mutexView>
           <mutexView size="-1,-2" name="comp_sent" layout="hbox" gravity="center">
