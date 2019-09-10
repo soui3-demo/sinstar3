@@ -34,6 +34,7 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HWND hSvr)
 , m_cmdHandler(this)
 , m_hSvr(hSvr)
 , m_bTyping(FALSE)
+, m_hasFocus(FALSE)
 {
 	addEvent(EVENTID(EventSvrNotify));
 	addEvent(EVENTID(EventSetSkin));
@@ -152,7 +153,7 @@ void CSinstar3Impl::OnCompositionTerminated(bool bClearCtx)
 void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 {
 	SLOG_INFO("GetThreadID="<<GetCurrentThreadId()<<" focus="<<bFocus);
-
+	m_hasFocus = bFocus;
 	if (bFocus)
 	{
 		m_pTxtSvr->SetConversionMode(FullNative);
@@ -161,15 +162,8 @@ void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 		m_pInputWnd->SetOwner(hOwner);
 		m_pStatusWnd->SetOwner(hOwner);
 		m_pStatusWnd->Show(bFocus && !g_SettingsUI->bHideStatus);
-
-		if (bFocus)
-		{
-			if (m_bTyping || m_inputState.IsTempSpell()) m_pInputWnd->Show(TRUE);
-		}
-		else
-		{
-			m_pInputWnd->Show(FALSE, FALSE);
-		}
+		if (m_bTyping || m_inputState.IsTempSpell()) 
+			m_pInputWnd->Show(TRUE);
 	}
 	else
 	{
@@ -211,6 +205,11 @@ int CSinstar3Impl::GetCompositionSegmentAttr(int iSeg)
 
 void CSinstar3Impl::OnOpenStatusChanged(BOOL bOpen)
 {
+	if (bOpen && !m_hasFocus)
+	{
+		SLOG_WARN("try to open statusbar but in focus state");
+		return;
+	}
 	if(!bOpen)
 	{
 		if (m_bTyping)
