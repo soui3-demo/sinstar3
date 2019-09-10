@@ -116,6 +116,7 @@
     <ClCompile Include="controls\SCaption2.cpp" />
     <ClCompile Include="controls\SChatEdit.cpp" />
     <ClCompile Include="controls\SCompBackground.cpp" />
+    <ClCompile Include="controls\SCompView.cpp" />
     <ClCompile Include="controls\SEnglishCand.cpp" />
     <ClCompile Include="controls\SFlagView.cpp" />
     <ClCompile Include="controls\SLineComp.cpp" />
@@ -171,6 +172,7 @@
   <ItemGroup>
     <ClInclude Include="Base64.h" />
     <ClInclude Include="controls\QR_Encode.h" />
+    <ClInclude Include="controls\SCompView.h" />
     <ClInclude Include="controls\SSkinAni.h" />
     <ClInclude Include="controls\SApngPlayer.h" />
     <ClInclude Include="controls\SCandView.h" />

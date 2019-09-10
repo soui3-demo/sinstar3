@@ -27,7 +27,7 @@ void SApngPlayer::OnPaint( IRenderTarget *pRT )
 void SApngPlayer::OnShowWindow( BOOL bShow, UINT nStatus )
 {
 	__super::OnShowWindow(bShow,nStatus);
-	if(!bShow)
+	if(!IsVisible(TRUE))
 	{
         GetContainer()->UnregisterTimelineHandler(this);
 	}else if(m_aniSkin && m_aniSkin->GetStates()>1)

@@ -73,6 +73,7 @@ using namespace SOUI;
 #include "controls/SStatusBackground.h"
 #include "controls/SMutexView.h"
 #include "controls/SSpellView.h"
+#include "controls/SCompView.h"
 #include "controls/SFlagView.h"
 #include "controls/SLineComp.h"
 #include "controls/SApngPlayer.h"
