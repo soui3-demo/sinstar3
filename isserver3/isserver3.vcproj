@@ -276,10 +276,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ime\ShellExecuteMonitor.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\ShellTypeReg.cpp"
 				>
 			</File>
@@ -507,10 +503,6 @@
 			</File>
 			<File
 				RelativePath=".\controls\SFlagView.h"
-				>
-			</File>
-			<File
-				RelativePath=".\ime\ShellExecuteMonitor.h"
 				>
 			</File>
 			<File

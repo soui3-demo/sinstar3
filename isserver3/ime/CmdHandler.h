@@ -1,6 +1,5 @@
 #pragma once
 
-#include "ShellExecuteMonitor.h"
 
 #define MSG_WM_COMMAND_EX(code, func) \
     if (uMsg == WM_COMMAND && code == HIWORD(wParam)) \
@@ -30,7 +29,6 @@ enum {
 	CMD_OPENSKINDIR,
 	CMD_OPENCONFIG,
 	CMD_SHOWTIP,
-	CMD_EDITFILE,
 	CMD_EXECUTETOOL,
 	CMD_SYNCUI,
 	CMD_OPENHELP,
@@ -74,13 +72,9 @@ protected:
 	void OnOpenConfig(LPARAM lp);
 	void OnOpenSkinDir(LPARAM lp);
 	void OnShowTip(LPARAM lp);
-	void OnStartProcess(LPARAM lp);
 	void OnExecuteTool(LPARAM lp);
 	void OnSyncUI(LPARAM lp);
 	void OnOpenHelp(LPARAM lp);
-
-	LRESULT OnProcessExit(UINT uMsg, WPARAM wp, LPARAM lp);
-	LRESULT OnFileUpdated(UINT uMsg, WPARAM wp, LPARAM lp);
 
 	BEGIN_MSG_MAP_EX(CCmdHandler)
 		MSG_WM_COMMAND_EX(CMD_HOTKEY_TTS,OnHotkeyTTS)
@@ -100,16 +94,12 @@ protected:
 		MSG_WM_COMMAND_EX(CMD_OPENCONFIG,OnOpenConfig)
 		MSG_WM_COMMAND_EX(CMD_OPENSKINDIR,OnOpenSkinDir)
 		MSG_WM_COMMAND_EX(CMD_SHOWTIP, OnShowTip)
-		MSG_WM_COMMAND_EX(CMD_EDITFILE,OnStartProcess)
 		MSG_WM_COMMAND_EX(CMD_EXECUTETOOL,OnExecuteTool)
 		MSG_WM_COMMAND_EX(CMD_SYNCUI,OnSyncUI)
 		MSG_WM_COMMAND_EX(CMD_OPENHELP,OnOpenHelp)
-		MESSAGE_HANDLER_EX(UM_PROCESSEXIT,OnProcessExit)
-		MESSAGE_HANDLER_EX(UM_FILEUPDATED, OnFileUpdated)
 	END_MSG_MAP()
 
 private:
-	SMap<int, CShellExecuteMonitor*> m_mapShellExecuteMonitor;
 	CSinstar3Impl * m_pSinstar3;
 };
 

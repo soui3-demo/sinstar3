@@ -4,7 +4,6 @@
 
 #include "../Utils.h"
 #include "../InputState.h"
-#include "../ShellExecuteMonitor.h"
 #include "../../../include/FileHelper.h"
 #include <ShellAPI.h>
 
@@ -762,8 +761,12 @@ namespace SOUI
 			PMSGDATA pMsgData = ISComm_GetData();
 			SStringA strUtf8((char*)pMsgData->byData, pMsgData->sSize);
 			SStringT strFileName = S_CA2T(strUtf8, CP_UTF8);
-			SHELLEXECUTEDATA efi = { nType,_T("open"),strFileName };
-			m_pCmdListener->OnCommand(CMD_EDITFILE, (LPARAM)&efi);
+			ShellExecute(GetActiveWindow(),_T("open"),strFileName,NULL,NULL,SW_SHOWNORMAL);
+			if(SMessageBox(NULL,_T("按确定保存修改，取消放弃修改！"),_T("编辑文件"),MB_OKCANCEL|MB_ICONQUESTION)==IDOK)
+			{
+				ISComm_UpdateUserDefData(nType, strUtf8);
+			}
+			DeleteFile(strFileName);
 		}
 		else
 		{

@@ -18,13 +18,6 @@ CCmdHandler::CCmdHandler(CSinstar3Impl * pSinstar3)
 
 CCmdHandler::~CCmdHandler()
 {
-	SPOSITION pos = m_mapShellExecuteMonitor.GetStartPosition();
-	while (pos)
-	{
-		CShellExecuteMonitor * pEditFileFinishMonitor = m_mapShellExecuteMonitor.GetNextValue(pos);
-		delete pEditFileFinishMonitor;
-	}
-	m_mapShellExecuteMonitor.RemoveAll();
 }
 
 void CCmdHandler::OnHotkeyMakePhrase(LPARAM lp)
@@ -261,16 +254,6 @@ void CCmdHandler::OnShowTip(LPARAM lp)
 	m_pSinstar3->ShowTip(pTi->strTitle, pTi->strTip);
 }
 
-void CCmdHandler::OnStartProcess(LPARAM lp)
-{
-	SHELLEXECUTEDATA *efi = (SHELLEXECUTEDATA*)lp;
-	if (m_mapShellExecuteMonitor.Lookup(efi->nType))
-		return;
-	CShellExecuteMonitor *editFileMonitor = new CShellExecuteMonitor(efi, m_pSinstar3->m_hWnd);
-	m_mapShellExecuteMonitor[efi->nType] = editFileMonitor;
-	editFileMonitor->BeginThread();
-}
-
 void CCmdHandler::OnExecuteTool(LPARAM lp)
 {
 	SStringT * pPath = (SStringT*)lp;
@@ -291,25 +274,4 @@ void CCmdHandler::OnOpenHelp(LPARAM lp)
 void CCmdHandler::OnOpenConfig(LPARAM lp)
 {
 	m_pSinstar3->OpenConfig();
-}
-
-LRESULT CCmdHandler::OnProcessExit(UINT uMsg, WPARAM wp, LPARAM lp)
-{
-	CShellExecuteMonitor *shellExecuteMonitor = (CShellExecuteMonitor*)lp;
-	const SHELLEXECUTEDATA *efi = shellExecuteMonitor->GetShellExecuteInfo();
-	DeleteFile(efi->strFileName);
-	SLOG_INFO("OnProcessExit," << efi->strFileName.c_str());
-	m_mapShellExecuteMonitor.RemoveKey(efi->nType);
-	delete shellExecuteMonitor;
-	return 0;
-}
-
-LRESULT CCmdHandler::OnFileUpdated(UINT uMsg, WPARAM wp, LPARAM lp)
-{
-	CShellExecuteMonitor *shellExecuteMonitor = (CShellExecuteMonitor*)lp;
-	const SHELLEXECUTEDATA *efi = shellExecuteMonitor->GetShellExecuteInfo();
-	SStringA strUtf8 = S_CT2A(efi->strFileName, CP_UTF8);
-	ISComm_UpdateUserDefData(efi->nType, strUtf8);
-	SLOG_INFO("OnFileUpdated," << efi->strFileName.c_str());
-	return 0;
 }
