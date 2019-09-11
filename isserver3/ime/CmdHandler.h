@@ -80,6 +80,7 @@ protected:
 	void OnOpenHelp(LPARAM lp);
 
 	LRESULT OnProcessExit(UINT uMsg, WPARAM wp, LPARAM lp);
+	LRESULT OnFileUpdated(UINT uMsg, WPARAM wp, LPARAM lp);
 
 	BEGIN_MSG_MAP_EX(CCmdHandler)
 		MSG_WM_COMMAND_EX(CMD_HOTKEY_TTS,OnHotkeyTTS)
@@ -104,6 +105,7 @@ protected:
 		MSG_WM_COMMAND_EX(CMD_SYNCUI,OnSyncUI)
 		MSG_WM_COMMAND_EX(CMD_OPENHELP,OnOpenHelp)
 		MESSAGE_HANDLER_EX(UM_PROCESSEXIT,OnProcessExit)
+		MESSAGE_HANDLER_EX(UM_FILEUPDATED, OnFileUpdated)
 	END_MSG_MAP()
 
 private:

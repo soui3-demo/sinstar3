@@ -9,6 +9,7 @@ struct SHELLEXECUTEDATA
 };
 
 #define UM_PROCESSEXIT	(WM_USER+400)
+#define UM_FILEUPDATED  (WM_USER+401)
 
 class CShellExecuteMonitor : public CThreadObject
 {
@@ -25,6 +26,7 @@ public:
 	}
 
 	static HANDLE ShellExe(LPCTSTR pszOp, LPCTSTR pszFileName);
+	static SYSTEMTIME GetFileTime(LPCTSTR pszFileName);
 protected:
 	virtual UINT Run(LPARAM lp);
 

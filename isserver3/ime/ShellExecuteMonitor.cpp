@@ -35,20 +35,58 @@ HANDLE CShellExecuteMonitor::ShellExe(LPCTSTR pszOp,LPCTSTR pszFileName)
 	return ShExecInfo.hProcess;
 }
 
-UINT CShellExecuteMonitor::Run(LPARAM lp)
+static SYSTEMTIME OnTime64toSystemTime(__time64_t& itime)
 {
+	struct tm *temptm = _localtime64(&itime);
+	SYSTEMTIME st = { 1900 + temptm->tm_year,
+		1 + temptm->tm_mon,
+		temptm->tm_wday,
+		temptm->tm_mday,
+		temptm->tm_hour,
+		temptm->tm_min,
+		temptm->tm_sec,
+		0 };
+	return st;
+}
+
+SYSTEMTIME CShellExecuteMonitor::GetFileTime(LPCTSTR pszFileName)
+{
+	struct _stat64i32 statbuf;
+	_tstat64i32(pszFileName, &statbuf);
+	return OnTime64toSystemTime(statbuf.st_mtime);
+}
+
+UINT CShellExecuteMonitor::Run(LPARAM lp)
+{	
 	HANDLE hProc = ShellExe(m_shellExecuteInfo->strOp,m_shellExecuteInfo->strFileName);
 	if (!hProc)
 	{
 		PostMessage(m_hWndRecv, UM_PROCESSEXIT, 0, (LPARAM)this);
 		return -1;
 	}
+	SYSTEMTIME time1 = GetFileTime(m_shellExecuteInfo->strFileName);
+
 	HANDLE hWaitObjs[2] = { m_evtStop,hProc };
-	DWORD dwRet = WaitForMultipleObjects(2, hWaitObjs, FALSE, INFINITE);
-	if (dwRet == WAIT_OBJECT_0 + 1)
+	for(;;)
 	{
-		GetExitCodeProcess(hProc, &m_exitCode);
-		PostMessage(m_hWndRecv, UM_PROCESSEXIT, 1, (LPARAM)this);
+		DWORD dwRet = WaitForMultipleObjects(2, hWaitObjs, FALSE, 1000);
+
+		if (dwRet == WAIT_OBJECT_0)
+		{//quit thread
+			break;
+		}
+		SYSTEMTIME time2 = GetFileTime(m_shellExecuteInfo->strFileName);
+		if (memcmp(&time1, &time2, sizeof(SYSTEMTIME)) != 0)
+		{//file changed
+			time1 = time2;
+			PostMessage(m_hWndRecv, UM_FILEUPDATED, 1, (LPARAM)this);
+		}
+		if (dwRet == WAIT_OBJECT_0 + 1)
+		{//exit
+			GetExitCodeProcess(hProc, &m_exitCode);
+			PostMessage(m_hWndRecv, UM_PROCESSEXIT, 1, (LPARAM)this);
+			break;
+		}
 	}
 	CloseHandle(hProc);
 	return 0;

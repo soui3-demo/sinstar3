@@ -297,12 +297,16 @@ LRESULT CCmdHandler::OnProcessExit(UINT uMsg, WPARAM wp, LPARAM lp)
 {
 	CShellExecuteMonitor *shellExecuteMonitor = (CShellExecuteMonitor*)lp;
 	const SHELLEXECUTEDATA *efi = shellExecuteMonitor->GetShellExecuteInfo();
-	if (wp == 1 && shellExecuteMonitor->GetExitCode() == 0)
-	{//edit finish
-		SStringA strUtf8 = S_CT2A(efi->strFileName, CP_UTF8);
-		ISComm_UpdateUserDefData(efi->nType, strUtf8);
-	}
 	m_mapShellExecuteMonitor.RemoveKey(efi->nType);
 	delete shellExecuteMonitor;
+	return 0;
+}
+
+LRESULT CCmdHandler::OnFileUpdated(UINT uMsg, WPARAM wp, LPARAM lp)
+{
+	CShellExecuteMonitor *shellExecuteMonitor = (CShellExecuteMonitor*)lp;
+	const SHELLEXECUTEDATA *efi = shellExecuteMonitor->GetShellExecuteInfo();
+	SStringA strUtf8 = S_CT2A(efi->strFileName, CP_UTF8);
+	ISComm_UpdateUserDefData(efi->nType, strUtf8);
 	return 0;
 }
