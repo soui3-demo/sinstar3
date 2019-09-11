@@ -23,7 +23,7 @@
 	    colorCandGbk="@color/cand_gbk"  
 	    colorComp="@color/cand_comp" 
 	    colorWild="@color/cand_wild"/>
-    <class name="cls_comp" caret_width="2" caret_animate="0" caret_color="@color/border" caret_fade_time="20" caret_show_time="20"/>
+    <class name="cls_comp" caret_width="2" caret_animate="1" caret_color="@color/theme" caret_fade_time="20" caret_show_time="20"/>
   </style>
   <root size="-1,-1">
     <comp_bg size="-1,-1" skin="skin_bk" cache="1" colorBorder="@color/border" layout="vbox" margin="1,1,1,1" padding="4,0,4,0">
