@@ -28,9 +28,14 @@ namespace SOUI
 
 		CAutoRefPtr<IUiDefInfo> m_defUiDefine;	//uidef info of builtin skin.
 
+		DWORD getTotalInput() const;
+		DWORD getTotalSpan() const;
+
 		CPoint		m_ptSkinOffset;
 
-		int			m_cInputCount;
+		DWORD		m_cTotalInput;
+		DWORD		m_tmTotalSpan;
+		DWORD		m_cInputCount;
 		DWORD		m_tmInputSpan;
 
 		int			m_nScale;

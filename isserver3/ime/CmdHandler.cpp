@@ -180,9 +180,12 @@ void CCmdHandler::OnKeySpeed(LPARAM lp)
 {
 	SStringT msg = _T("还没有输入数据");
 	CMyData &data = CDataCenter::getSingleton().GetData();
-	if (data.m_cInputCount>0)
-		msg.Format(_T("输入汉字: %d 个\n打字速度:%d 字/分钟"), data.m_cInputCount, data.m_cInputCount * 60000 / data.m_tmInputSpan);
-
+	if (data.getTotalInput() > 0)
+	{
+		msg.Format(_T("累计输入汉字: %d 个\n打字速度:%d 字/分钟"), data.getTotalInput(), data.getTotalInput() * 60000 / data.getTotalSpan());
+		if (data.m_cInputCount > 0)
+			msg+=SStringT().Format(_T("\n本次输入汉字: %d 个\n打字速度:%d 字/分钟"), data.m_cInputCount, data.m_cInputCount * 60000 / data.m_tmInputSpan);
+	}
 	m_pSinstar3->ShowTip(_T("提示"), msg);
 }
 

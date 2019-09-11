@@ -67,7 +67,10 @@ namespace SOUI
 		return m_path;
 	}
 
-	CMyData::CMyData(const SStringT & strDataPath):m_tmInputSpan(0), m_cInputCount(0),m_nScale(100)
+	CMyData::CMyData(const SStringT & strDataPath)
+		:m_tmInputSpan(0), m_cInputCount(0)
+		,m_tmTotalSpan(0), m_cTotalInput(0)
+		,m_nScale(100)
 	{
 		m_compInfo.cWild = 'z';
 		m_compInfo.strCompName = _T("╪сть...");
@@ -82,10 +85,28 @@ namespace SOUI
 				font = font.next_sibling(L"font");
 			}
 		}
+
+		CRegKey reg;
+		LONG ret = reg.Open(HKEY_CURRENT_USER, _T("SOFTWARE\\SetoutSoft\\sinstar3"), KEY_READ | KEY_WOW64_64KEY);
+		if (ret == ERROR_SUCCESS)
+		{
+			reg.QueryDWORDValue(_T("input_count"), m_cTotalInput);
+			reg.QueryDWORDValue(_T("input_span"), m_tmTotalSpan);
+			reg.Close();
+			if (m_tmTotalSpan == 0) m_cTotalInput = 0;
+		}
 	}
 
 	CMyData::~CMyData()
 	{
+		CRegKey reg;
+		LONG ret = reg.Open(HKEY_CURRENT_USER, _T("SOFTWARE\\SetoutSoft\\sinstar3"), KEY_WRITE | KEY_WOW64_64KEY);
+		if (ret == ERROR_SUCCESS)
+		{
+			reg.SetDWORDValue(_T("input_count"), getTotalInput());
+			reg.SetDWORDValue(_T("input_span"), getTotalSpan());
+			reg.Close();
+		}
 	}
 
 	SStringW CMyData::getFontFile(const SStringW & strFace) const
@@ -95,6 +116,16 @@ namespace SOUI
 			return SStringW();
 		else
 			return p->m_value;
+	}
+
+	DWORD CMyData::getTotalInput() const
+	{
+		return m_cInputCount + m_cTotalInput;
+	}
+
+	DWORD CMyData::getTotalSpan() const
+	{
+		return m_tmInputSpan+m_tmTotalSpan;
 	}
 
 	bool CMyData::changeSkin(const SStringT &strSkin)
