@@ -94,13 +94,17 @@ namespace SOUI
 			reg.QueryDWORDValue(_T("input_span"), m_tmTotalSpan);
 			reg.Close();
 			if (m_tmTotalSpan == 0) m_cTotalInput = 0;
+			if(m_cTotalInput>0x7fffffff || m_tmTotalSpan>0x7fffffff)
+			{//clear data
+				m_cTotalInput = m_tmTotalSpan = 0;
+			}
 		}
 	}
 
 	CMyData::~CMyData()
 	{
 		CRegKey reg;
-		LONG ret = reg.Open(HKEY_CURRENT_USER, _T("SOFTWARE\\SetoutSoft\\sinstar3"), KEY_WRITE | KEY_WOW64_64KEY);
+		LONG ret = reg.Open(HKEY_CURRENT_USER, _T("SOFTWARE\\SetoutSoft\\sinstar3"), KEY_READ|KEY_WRITE | KEY_WOW64_64KEY);
 		if (ret == ERROR_SUCCESS)
 		{
 			reg.SetDWORDValue(_T("input_count"), getTotalInput());
