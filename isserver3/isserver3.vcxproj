@@ -135,7 +135,6 @@
     <ClCompile Include="dataCenter\Settings.cpp" />
     <ClCompile Include="ime\CmdHandler.cpp" />
     <ClCompile Include="ime\InputState.cpp" />
-    <ClCompile Include="ime\ShellExecuteMonitor.cpp" />
     <ClCompile Include="ime\Sinstar3Impl.cpp" />
     <ClCompile Include="ime\TextServiceProxy.cpp" />
     <ClCompile Include="ime\ui\ImeWnd.cpp" />
@@ -199,7 +198,6 @@
     <ClInclude Include="ime\CmdHandler.h" />
     <ClInclude Include="ime\inputContext.h" />
     <ClInclude Include="ime\InputState.h" />
-    <ClInclude Include="ime\ShellExecuteMonitor.h" />
     <ClInclude Include="ime\Sinstar3Impl.h" />
     <ClInclude Include="ime\TextServiceProxy.h" />
     <ClInclude Include="ime\ui\ImeWnd.h" />
