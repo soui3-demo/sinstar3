@@ -26,19 +26,20 @@ namespace SOUI
 		BeforePaint(pRT,painter);
 
 
-		CRect rcClient = GetClientRect();
+		CRect rcText;
+		GetTextRect(rcText);
 		CSize szText ;
 		pRT->MeasureText(_T("A"),1,&szText);
 		szText.cy +=1;//for underline.
 		if(GetTextAlign()&DT_VCENTER)
 		{
-			rcClient.DeflateRect(0,(rcClient.Height()-szText.cy)/2);
+			rcText.DeflateRect(0,(rcText.Height()-szText.cy)/2);
 		}else if(GetTextAlign()&DT_BOTTOM)
 		{
-			rcClient.top = rcClient.bottom - szText.cy;
+			rcText.top = rcText.bottom - szText.cy;
 		}
 
-		CPoint pt = rcClient.TopLeft();
+		CPoint pt = rcText.TopLeft();
 
 		POINT pts[2];
 

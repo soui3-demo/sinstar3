@@ -83,12 +83,17 @@ namespace SOUI
 		CRect rcText;
 		GetTextRect(rcText);
 
+		UINT uAlign = GetTextAlign();
 		if (m_lines)
 		{
 			SStringT strTxt = GetWindowText();
 			CSize szSkin = m_lines->GetSkinSize();
 			CPoint pt = rcText.TopLeft();
-			pt.y += (rcText.Height() - szSkin.cy) / 2;
+			if(uAlign & DT_VCENTER)
+				pt.y += (rcText.Height() - szSkin.cy) / 2;
+			else if(uAlign & DT_BOTTOM)
+				pt.y = rcText.bottom - szSkin.cy;
+
 			CRect rcWord(pt, szSkin);
 			for (int i = 0; i < strTxt.GetLength(); i++)
 			{
@@ -101,7 +106,7 @@ namespace SOUI
 			SPainter painter;
 			BeforePaint(pRT, painter);
 			SStringT strComp = GetMappedComp();
-			DrawText(pRT, strComp, strComp.GetLength(), rcText, GetTextAlign());
+			DrawText(pRT, strComp, strComp.GetLength(), rcText, uAlign);
 			AfterPaint(pRT, painter);
 		}
 	}

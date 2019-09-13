@@ -24,12 +24,23 @@ namespace SOUI
 		BeforePaint(pRT,painter);
 
 		COLORREF crDef = pRT->GetTextColor();
-		CPoint pt = GetClientRect().TopLeft();
+		CRect rcText;
+		GetTextRect(rcText);
+		CPoint pt = rcText.TopLeft();
 		CSize szBlock;
+		UINT uAlign = GetStyle().GetTextAlign();
+		pRT->MeasureText(_T("A"),1,&szBlock);
+		if(uAlign & DT_VCENTER)
+		{
+			pt.y += (rcText.Height()-szBlock.cy)/2;
+		}else if(uAlign & DT_BOTTOM)
+		{
+			pt.y = rcText.bottom - szBlock.cy;
+		}
 
 		pRT->SetTextColor(m_crIndex);
-		pRT->TextOut(pt.x,pt.y,m_strIndex,m_strIndex.GetLength());
 		pRT->MeasureText(m_strIndex,m_strIndex.GetLength(),&szBlock);
+		pRT->TextOut(pt.x,pt.y,m_strIndex,m_strIndex.GetLength());
 		pt.x += szBlock.cx;
 
 		pRT->SetTextColor(m_crCand);

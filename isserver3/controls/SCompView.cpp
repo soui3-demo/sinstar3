@@ -84,7 +84,16 @@ namespace SOUI
 
 	CSize SCompView::GetDesiredSize(int wid, int hei)
 	{
+		SStringT strComp = GetWindowText();
+		if(strComp.IsEmpty())
+			SetWindowText(_T("A"));
 		CSize szRet = SWindow::GetDesiredSize(wid, hei);
+		if(strComp.IsEmpty())
+		{
+			SetWindowText(strComp);
+			if(GetLayoutParam()->IsWrapContent(Horz))
+				szRet.cx = 0;
+		}
 		if (GetLayoutParam()->IsWrapContent(Horz))
 		{
 			szRet.cx += m_caretWidth;
@@ -111,12 +120,23 @@ namespace SOUI
 	{
 		SPainter painter;
 		BeforePaint(pRT, painter);
-		CRect rcClient = GetClientRect();
+		CRect rcClient;
+		GetTextRect(rcClient);
 		SStringT strText = GetWindowText();
 		CSize szText;
 		pRT->MeasureText(strText, strText.GetLength(), &szText);
 		CRect rcText = rcClient;
-		rcText.DeflateRect(0, (rcClient.Height() - szText.cy) / 2);
+		UINT uAlign = GetStyle().GetTextAlign();
+		if(uAlign & DT_VCENTER)
+		{
+			rcText.DeflateRect(0, (rcClient.Height() - szText.cy) / 2);
+		}else if(uAlign & DT_BOTTOM)
+		{
+			rcText.top+= rcClient.Height() - szText.cy;
+		}else
+		{//top align
+			rcText.bottom = rcText.top + szText.cy;
+		}
 		rcText.right = rcText.left + szText.cx;
 		CRect rcClip;
 		pRT->GetClipBox(&rcClip);
