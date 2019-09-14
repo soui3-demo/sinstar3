@@ -73,7 +73,7 @@ namespace SOUI
 
 
 	///////////////////////////////////////////////////////////////////
-	SCompView::SCompView():m_caretWidth(1)
+	SCompView::SCompView():m_caretWidth(1,SLayoutSize::dp)
 	{
 	}
 
@@ -96,7 +96,7 @@ namespace SOUI
 		}
 		if (GetLayoutParam()->IsWrapContent(Horz))
 		{
-			szRet.cx += m_caretWidth;
+			szRet.cx += m_caretWidth.toPixelSize(GetScale());
 		}
 		return szRet;
 	}
@@ -146,7 +146,7 @@ namespace SOUI
 		}
 		CRect rcCaret = rcText;
 		rcCaret.left = rcText.right;
-		rcCaret.right = rcCaret.left + m_caretWidth;
+		rcCaret.right = rcCaret.left + m_caretWidth.toPixelSize(GetScale());
 		rcCaret.DeflateRect(0,1);
 		if (!(rcCaret & rcClip).IsRectEmpty())
 		{

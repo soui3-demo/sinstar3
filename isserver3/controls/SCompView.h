@@ -38,14 +38,14 @@ namespace SOUI
 		SOUI_CLASS_NAME(SCompView,L"compView")
 	protected:
 		SCompCaret	m_caret;
-		int			m_caretWidth;
+		SLayoutSize	m_caretWidth;
 	public:
 		SCompView();
 		~SCompView();
 
 	public:
 		SOUI_ATTRS_BEGIN()
-			ATTR_INT(L"caret_width",m_caretWidth,TRUE)
+			ATTR_LAYOUTSIZE(L"caret_width",m_caretWidth,TRUE)
 			ATTR_CHAIN(m_caret, 0)
 		SOUI_ATTRS_END()
 	protected:
