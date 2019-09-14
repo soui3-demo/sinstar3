@@ -162,6 +162,7 @@ void CIsSvrProxy::OnDestroy()
 	}
 	g_SettingsG->Save(m_strDataPath);
 	g_SettingsUI->Save(m_strDataPath);
+	CDataCenter::getSingletonPtr()->GetData().saveSpeed();
 }
 
 LRESULT CIsSvrProxy::OnBuildIndexProg(UINT uMsg, WPARAM wp, LPARAM lp)

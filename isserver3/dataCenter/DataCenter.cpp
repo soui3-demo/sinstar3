@@ -103,16 +103,22 @@ namespace SOUI
 
 	CMyData::~CMyData()
 	{
-		CRegKey reg;
-		LONG ret = reg.Open(HKEY_CURRENT_USER, _T("SOFTWARE\\SetoutSoft\\sinstar3"), KEY_READ|KEY_WRITE | KEY_WOW64_64KEY);
-		if (ret == ERROR_SUCCESS)
-		{
-			reg.SetDWORDValue(_T("input_count"), getTotalInput());
-			reg.SetDWORDValue(_T("input_span"), getTotalSpan());
-			reg.Close();
-		}
+		saveSpeed();
 	}
 
+	bool CMyData::saveSpeed()
+	{
+		CRegKey reg;
+		LONG ret = reg.Open(HKEY_CURRENT_USER, _T("SOFTWARE\\SetoutSoft\\sinstar3"), KEY_READ|KEY_WRITE | KEY_WOW64_64KEY);
+		if(ret != ERROR_SUCCESS)
+			return false;
+		reg.SetDWORDValue(_T("input_count"), getTotalInput());
+		reg.SetDWORDValue(_T("input_span"), getTotalSpan());
+		reg.Close();
+		return true;
+	}
+
+	
 	SStringW CMyData::getFontFile(const SStringW & strFace) const
 	{
 		const SMap<SStringW,SStringW>::CPair *p= m_fontMap.Lookup(strFace);

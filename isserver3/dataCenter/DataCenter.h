@@ -41,6 +41,7 @@ namespace SOUI
 		int			m_nScale;
 
 		bool changeSkin(const SStringT &strSkin);
+		bool saveSpeed();
 	private:
 		SMap<SStringW, SStringW> m_fontMap;
 	};
