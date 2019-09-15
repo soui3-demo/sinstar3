@@ -753,6 +753,10 @@ namespace SOUI
 		m_pCmdListener->OnCommand(CMD_HOTKEY_QUERYINFO, 0);
 	}
 
+	void CStatusWnd::OnConfigClick()
+	{
+		m_pCmdListener->OnCommand(CMD_OPENCONFIG, 0);
+	}
 
 	void CStatusWnd::OnEditUserDefData(int nType)
 	{
@@ -773,6 +777,7 @@ namespace SOUI
 			CUtils::SoundPlay(_T("error"));
 		}
 	}
+
 
 }
 

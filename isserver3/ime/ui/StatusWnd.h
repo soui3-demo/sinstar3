@@ -84,6 +84,7 @@ namespace SOUI
 		void OnMenuClick();
 		void OnHelpClick();
 		void OnQueryClick();
+		void OnConfigClick();
 
 		EVENT_MAP_BEGIN()
 			EVENT_HANDLER(EventSvrNotify::EventID, OnSvrNotify)
@@ -100,6 +101,7 @@ namespace SOUI
 			EVENT_ID_COMMAND(R.id.btn_menu,OnMenuClick)
 			EVENT_ID_COMMAND(R.id.btn_help,OnHelpClick)
 			EVENT_ID_COMMAND(R.id.btn_query,OnQueryClick)
+			EVENT_ID_COMMAND(R.id.btn_config,OnConfigClick)
 		EVENT_MAP_END()
 
 	protected:
