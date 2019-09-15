@@ -232,7 +232,7 @@ void CCmdHandler::OnUpdateMode(LPARAM lp)
 void CCmdHandler::OnChangeSkin(LPARAM lp)
 {
 	SStringT *pSkin = (SStringT*)lp;
-	if (g_SettingsG->strSkin != *pSkin)
+	if (g_SettingsG->strSkin != *pSkin || g_SettingsG->bEnableDebugSkin)
 	{
 		m_pSinstar3->ChangeSkin(*pSkin);
 	}

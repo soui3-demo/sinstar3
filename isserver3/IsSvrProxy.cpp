@@ -703,7 +703,7 @@ LRESULT CIsSvrProxy::OnChangeSkin(UINT uMsg, WPARAM wp, LPARAM lp)
 BOOL CIsSvrProxy::ChangeSkin(const SStringT & strSkin)
 {
 	SLOG_INFO("change skin, new skin:" << strSkin.c_str() << " old skin:" << g_SettingsG->strSkin.c_str() << " this:" << this);
-	if(g_SettingsG->strSkin != strSkin)
+	if(g_SettingsG->strSkin != strSkin || g_SettingsG->bEnableDebugSkin)
 	{
 		SStringT skinPath = strSkin;
 		if(!CDataCenter::getSingletonPtr()->GetData().changeSkin(skinPath))

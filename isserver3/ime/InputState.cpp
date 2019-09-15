@@ -23,7 +23,7 @@ static const BYTE KCompKey[] ={0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,        // 00-0F
 
 
 static const int HKI_LoadDebugSkin	 = -2;
-
+static const int HKI_UnloadDebugSkin = -3;
 //·ûºÅ´¦Àí
 //BYTE byInput:¼üÅÌÊäÈë
 SStringA Symbol_Convert(InputContext * lpCntxtPriv,UINT byInput,const BYTE * lpbKeyState)
@@ -206,10 +206,17 @@ int CInputState::TestHotKey(UINT uVk, const BYTE * lpbKeyState) const
 			iRet = -1;
 	}else//iRet == -1
 	{
-		if(uVk == 'F' && (lpbKeyState[VK_CONTROL] & 0x80) && (lpbKeyState[VK_MENU] & 0x80) && g_SettingsG->bEnableDebugSkin)
-		{//load debug skin
-			return HKI_LoadDebugSkin;
+		if((lpbKeyState[VK_CONTROL] & 0x80) && (lpbKeyState[VK_MENU] & 0x80) && g_SettingsG->bEnableDebugSkin)
+		{
+			if(uVk == 'F')
+			{//load debug skin
+				return HKI_LoadDebugSkin;
+			}else if(uVk='U')
+			{
+				return HKI_UnloadDebugSkin;
+			}
 		}
+		
 		if(m_ctx.sCandCount && ((uVk>='0' && uVk<='9')||(uVk>=VK_NUMPAD0 && uVk<=VK_NUMPAD9)))
 		{//number
 			if(lpbKeyState[VK_CONTROL] & 0x80)
@@ -467,7 +474,7 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 	int iHotKey = TestHotKey(uVKey, lpbKeyState);
 	if (iHotKey != -1)
 	{
-		if(iHotKey == HKI_LoadDebugSkin)
+		if(iHotKey == HKI_LoadDebugSkin || iHotKey == HKI_UnloadDebugSkin)
 		{//load debug skin
 			return TRUE;
 		}
@@ -2158,6 +2165,12 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 				{
 					SStringT debugSkin=g_SettingsG->strDebugSkinPath;
 					m_pListener->OnCommand(CMD_CHANGESKIN, (LPARAM)&debugSkin);
+				}
+				break;
+			case HKI_UnloadDebugSkin:
+				{
+					SStringT curSkin=g_SettingsG->strSkin;
+					m_pListener->OnCommand(CMD_CHANGESKIN, (LPARAM)&curSkin);
 				}
 				break;
 			case HKI_CharMode:
