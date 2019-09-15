@@ -412,6 +412,9 @@ void CInputState::InputResult(const SStringT &strResult,BYTE byAstMask)
 	{
 		SStringA strResultA = S_CT2A(strTemp);
 		KeyIn_InputAndAssociate(&m_ctx,strResultA,(short)strResultA.GetLength(),byAstMask);
+	}else
+	{
+		InputHide(FALSE);
 	}
 
 	m_tmInputEnd = GetTickCount();
@@ -878,7 +881,7 @@ BOOL CInputState::KeyIn_Spell_SyFix(InputContext * lpCntxtPriv,UINT byInput,
 			else
 			{
 				lpCntxtPriv->bShowTip=TRUE;
-				// 				strcpy(g_szTip,"音节错误!");
+				strcpy(lpCntxtPriv->szTip,"音节错误!");
 			}
 			return TRUE;
 		}else
@@ -2437,6 +2440,7 @@ BOOL CInputState::OnSvrNotify(UINT wp, PMSGDATA pMsg)
 		if(m_fOpen)
 		{
 			InputContext * ctx = &m_ctx;
+			ctx->bShowTip = FALSE;
 			if(INST_CODING== ctx->inState && SBST_ASSOCIATE==ctx->sbState)
 			{//保证当前状态是等待联想数据状态
 
@@ -2506,8 +2510,9 @@ BOOL CInputState::OnSvrNotify(UINT wp, PMSGDATA pMsg)
 				if(ctx->bShowTip || ctx->sCandCount || ctx->sSentLen)
 				{//有联想词组或有联想句子
 					SLOG_INFO("Update Input Window");
-					if (ctx->sCandCount == 0 && g_SettingsG->bShowOpTip)
+					if (ctx->sCandCount == 0 && g_SettingsG->bShowOpTip && !ctx->bShowTip)
 					{//没有候选时,在侯选位置显示操作提示
+						ctx->bShowTip=TRUE;
 						Tips_Rand(ctx->compMode == IM_SPELL, ctx->szTip);
 					}
 					InputUpdate();
