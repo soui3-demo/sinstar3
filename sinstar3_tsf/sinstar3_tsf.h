@@ -112,7 +112,7 @@ protected:
 
 private:
 
-	BOOL _InitSinstar3();
+	BOOL _InitSinstar3(HWND hWnd);
 	BOOL _UninitSinstar3();
 
     // initialize and uninitialize ThreadMgrEventSink.

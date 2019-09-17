@@ -116,9 +116,16 @@ void CSvrConnection::HandleCreate(Param_Create & param)
 void CSvrConnection::HandleScaleInfo(Param_ScaleInfo &param)
 {
 	CRect rcWnd;
-	GetWindowRect((HWND)param.hRefWnd,&rcWnd);
-	m_xScale = rcWnd.Width()*1.0f/param.szWnd.cx;
-	m_yScale = rcWnd.Height()*1.0f/param.szWnd.cy;
+	HWND hRefWnd = (HWND)param.hRefWnd;
+	if(IsWindow(hRefWnd))
+	{
+		GetWindowRect((HWND)param.hRefWnd,&rcWnd);
+		m_xScale = rcWnd.Width()*1.0f/param.szWnd.cx;
+		m_yScale = rcWnd.Height()*1.0f/param.szWnd.cy;
+	}else
+	{
+		SLOG_ERROR("ref hwnd is invalid");
+	}
 }
 
 void CSvrConnection::HandleDestroy(Param_Destroy & param)

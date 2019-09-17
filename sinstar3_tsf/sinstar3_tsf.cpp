@@ -152,7 +152,7 @@ STDAPI CSinstar3Tsf::ActivateEx(ITfThreadMgr *pThreadMgr, TfClientId tfClientId,
 
 	OnSetThreadFocus();
 
-	if (!_InitSinstar3())
+	if (!_InitSinstar3((HWND)GetActiveWnd()))
 		goto ExitError;
 
 
@@ -320,7 +320,7 @@ BOOL CSinstar3Tsf::_UninitSinstar3()
 	return TRUE;
 }
 
-BOOL CSinstar3Tsf::_InitSinstar3()
+BOOL CSinstar3Tsf::_InitSinstar3(HWND hWnd)
 {
 	SASSERT(!m_pSinstar3);
 	m_pSinstar3 = new CSinstarProxy(this);
@@ -332,7 +332,7 @@ BOOL CSinstar3Tsf::_InitSinstar3()
 		m_pSinstar3 = NULL;
 		return FALSE;
 	}
-	m_pSinstar3->NotifyScaleInfo(GetActiveWindow());
+	m_pSinstar3->NotifyScaleInfo(hWnd);
 
 	m_pSinstar3->OnIMESelect(_bHasFocus);
 	m_pSinstar3->OnSetFocus(_bHasFocus && _bInEditDocument);
