@@ -239,7 +239,16 @@ LRESULT CUiWnd::OnImeNotify(WPARAM wParam,LPARAM lParam)
 		SLOGFMTI("IMN_OPENSTATUSWINDOW");
 		break;
 	case IMN_CLOSESTATUSWINDOW:
-		if(m_pSinstar3) m_pSinstar3->OnSetFocus(FALSE);
+		if (IsCompositing())
+		{
+			CImeContext *pCtx = GetImeContext();
+			EndComposition(pCtx);
+			ReleaseImeContext(pCtx);
+		}
+		if (m_pSinstar3)
+		{
+			m_pSinstar3->OnSetFocus(FALSE);
+		}
 		SLOGFMTI("IMN_CLOSESTATUSWINDOW");
 		break;
 	case IMN_OPENCANDIDATE:

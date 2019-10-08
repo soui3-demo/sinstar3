@@ -143,10 +143,12 @@ CImeContext * CUiWnd::GetImeContext() const
 		return m_pCurContext;
 	CImeContext *pContext=new CImeContext;
 	HIMC hIMC=(HIMC)GetWindowLongPtr(m_hWnd,IMMGWLP_IMC);
-	if(pContext->Init(hIMC)) 
-		return pContext;
-	delete pContext;
-	return NULL;
+	if (!pContext->Init(hIMC))
+	{
+		delete pContext;
+		return NULL;
+	}
+	return pContext;
 }
 
 void  CUiWnd::ReleaseImeContext(CImeContext * imeContext) const
