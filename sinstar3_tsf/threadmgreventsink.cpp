@@ -71,8 +71,14 @@ STDAPI CSinstar3Tsf::OnKillThreadFocus()
 {
 	SLOGFMTI("OnKillThreadFocus");
 
-	_bHasFocus=FALSE;
-	if(m_pSinstar3)
+	if (IsCompositing())
+	{
+		ITfContext *pCtx = GetImeContext();
+		_EndComposition(pCtx);
+		ReleaseImeContext(pCtx);
+	}
+	_bHasFocus = FALSE;
+	if (m_pSinstar3)
 	{
 		m_pSinstar3->OnSetFocus(FALSE);
 	}
