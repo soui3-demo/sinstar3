@@ -40,7 +40,7 @@
 #include "../include/slog_wrapper.h"
 
 #define LOG_FILTER "sinstar3_ime"
-#include <helper/slog-def.h>
+#include <helper/slogdef.h>
 
 #include "ImeModule.h"
 

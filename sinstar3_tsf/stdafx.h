@@ -27,7 +27,7 @@
 #include "../include/slog_wrapper.h"
 
 #define LOG_FILTER "sinstar3_tsf"
-#include <helper/slog-def.h>
+#include <helper/slogdef.h>
 
 #include "TsfModule.h"
 #include "Globals.h"
