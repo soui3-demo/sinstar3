@@ -1,6 +1,6 @@
 #pragma once
 
-#include <interface/render-i.h>
+#include <interface/srender-i.h>
 namespace SOUI
 {
     class SSkinAni : public SSkinObjBase

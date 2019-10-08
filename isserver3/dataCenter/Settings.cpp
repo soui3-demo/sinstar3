@@ -1,6 +1,6 @@
 #include "StdAfx.h"
 #include "Settings.h"
-#include <core/Accelerator.h>
+#include <core/SAccelerator.h>
 
 CSettingsGlobal	*g_SettingsG = NULL;
 CSettingsUI  *g_SettingsUI = NULL;
