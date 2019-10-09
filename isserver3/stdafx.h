@@ -34,7 +34,7 @@
 #include "../include/slog_wrapper.h"
 
 #define LOG_FILTER "sinstar3_tsf"
-#include <helper/slog-def.h>
+#include <helper/slogdef.h>
 
 #define	 DLL_SOUI
 #include <souistd.h>
@@ -42,7 +42,7 @@
 #include <control/SMessageBox.h>
 #include <control/souictrls.h>
 #include <res.mgr/sobjdefattr.h>
-#include <event/NotifyCenter.h>
+#include <event/SNotifyCenter.h>
 #include <commgr2.h>
 #include <helper/SMenu.h>
 #include <helper/SDpiHelper.hpp>
