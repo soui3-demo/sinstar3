@@ -1875,7 +1875,7 @@ BOOL CInputState::KeyIn_All_Associate(InputContext * lpCntxtPriv,UINT byInput,
 			if(g_SettingsG->bShowOpTip)
 			{
 				m_ctx.bShowTip=TRUE;
-				Tips_Rand(FALSE,m_ctx.szTip);
+				strcpy(m_ctx.szTip,"逗号逐字选择,空格上屏;句号全部上屏");
 			}
 
 			bRet=TRUE;
@@ -2526,7 +2526,10 @@ BOOL CInputState::OnSvrNotify(UINT wp, PMSGDATA pMsg)
 					if (ctx->sCandCount == 0 && g_SettingsG->bShowOpTip && !ctx->bShowTip)
 					{//没有候选时,在侯选位置显示操作提示
 						ctx->bShowTip=TRUE;
-						Tips_Rand(ctx->compMode == IM_SPELL, ctx->szTip);
+						if(ctx->sSentLen )
+							strcpy(ctx->szTip,"分号进入语句输入");
+						else
+							Tips_Rand(ctx->compMode == IM_SPELL, ctx->szTip);
 					}
 					InputUpdate();
 				}else
