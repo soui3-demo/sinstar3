@@ -500,6 +500,13 @@ namespace SOUI
 		SStringT strAccel;
 		switch (e2->idFrom)
 		{
+		case R.id.img_logo:
+			{
+				SStringT strComp = CDataCenter::getSingletonPtr()->GetData().m_compInfo.strCompName;
+				e2->bUpdated = TRUE;
+				e2->strToolTip = SStringT().Format(_T("«–ªª[∆¥“Ù<=>%s]"), strComp.c_str());
+			}
+			break;
 		case R.id.btn_charmode:
 			e2->bUpdated = TRUE;
 			strAccel = SAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_CharMode]);
