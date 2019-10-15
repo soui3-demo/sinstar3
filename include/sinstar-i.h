@@ -2,7 +2,6 @@
 
 #include "TextService-i.h"
 
-
 interface ISinstar : public IUnknown
 {
 	virtual void OnIMESelect(BOOL bSelect)=NULL;

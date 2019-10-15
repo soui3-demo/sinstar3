@@ -354,10 +354,12 @@ namespace SOUI
 		*ppHandle = new SIpcHandle;
 		return S_OK;
 	}
+
+	BOOL  IPC::SCreateInstance(IObjRef ** ppIpcFactory)
+	{
+		*ppIpcFactory = new SIpcFactory();
+		return TRUE;
+	}
 }
 
- BOOL  SOUI::IPC::SCreateInstance(IObjRef ** ppIpcFactory)
-{
-	*ppIpcFactory = new SOUI::SIpcFactory();
-	return TRUE;
-}
+ 
