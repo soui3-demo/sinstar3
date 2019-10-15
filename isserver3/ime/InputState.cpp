@@ -291,7 +291,7 @@ int CInputState::Tips_Next(BOOL bSpell,char *pszBuf, int iTip, bool bNext)
 	if (bSpell)
 	{
 		int total = (int)(m_tips[TT_SPELL].GetCount() + m_tips[TT_BOTH].GetCount());
-		if (iTip = -1)
+		if (iTip == -1)
 		{
 			idx = bNext ? 0 : total - 1;
 		}
@@ -309,7 +309,7 @@ int CInputState::Tips_Next(BOOL bSpell,char *pszBuf, int iTip, bool bNext)
 	else
 	{
 		int total = (int)(m_tips[TT_SHAPE].GetCount() + m_tips[TT_BOTH].GetCount());
-		if (iTip = -1)
+		if (iTip == -1)
 		{
 			idx = bNext ? 0 : total - 1;
 		}
