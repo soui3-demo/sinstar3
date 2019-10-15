@@ -66,6 +66,7 @@ protected://IDestroyListener
 	virtual void OnSkinAwareWndDestroy(CSkinAwareWnd * pWnd);
 protected://IInputWndListener
 	virtual void OnInputDelayHide();
+	virtual void OnSwitchTip(InputContext * pCtx,bool bNext);
 public:
 	BOOL ChangeSkin(const SStringT & strSkin);
 	void OnSkinChanged();

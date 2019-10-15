@@ -96,7 +96,8 @@ struct InputContext
 	LPBYTE  pbyEnPhontic;			//Òô±êÊý¾Ý
 
 	BOOL    bShowTip;				//show tip in comp
-	char	szTip[200];
+	int		iTip;					//current tip index
+	char	szTip[201];
 
 	TCHAR   szInput[MAX_INPUT];
 	int		cInput;

@@ -83,6 +83,7 @@ using namespace SOUI;
 #include "controls/SLineSkin.h"
 #include "controls/SQrCtrl.h"
 #include "controls/STabCtrlEx.h"
+#include "controls/STipView.h"
 
 #include "dataCenter/datacenter.h"
 #include "dataCenter/Settings.h"

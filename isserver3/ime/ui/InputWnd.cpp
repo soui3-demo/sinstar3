@@ -161,6 +161,16 @@ namespace SOUI
 		}
 	}
 
+	void CInputWnd::OnSwitchTip(EventArgs * e)
+	{
+		EventSwitchTip *e2 = sobj_cast<EventSwitchTip>(e);
+		SASSERT(e2);
+		STipView *pTipView = sobj_cast<STipView>(e->sender);
+		SASSERT(pTipView);
+		m_pInputWndListener->OnSwitchTip(m_pInputContext, e2->bNext);
+		pTipView->SetWindowText(S_CA2T(m_pInputContext->szTip));
+	}
+
 	void CInputWnd::OnBtnPrevPage()
 	{
 		if(GoPrevCandidatePage())
