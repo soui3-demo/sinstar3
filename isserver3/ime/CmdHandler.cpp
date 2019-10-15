@@ -83,11 +83,11 @@ void CCmdHandler::OnHotKeyQueryInfo(LPARAM lp)
 			{
 				PMSGDATA pData = ISComm_GetData();
 				pData->byData[pData->sSize] = 0;
-				p += sprintf(p, "\\n%s=%s", ISComm_GetCompInfo()->szName, (char*)pData->byData);
+				p += sprintf(p, "\n%s=%s", ISComm_GetCompInfo()->szName, (char*)pData->byData);
 			}
 			else
 			{
-				p += sprintf(p, "\\n%s=查询失败", ISComm_GetCompInfo()->szName);
+				p += sprintf(p, "\n%s=查询失败", ISComm_GetCompInfo()->szName);
 			}
 
 			if (ISComm_SpellQueryComp(strBuf, strBuf.GetLength()) == ISACK_SUCCESS)
@@ -95,7 +95,7 @@ void CCmdHandler::OnHotKeyQueryInfo(LPARAM lp)
 				PMSGDATA pData = ISComm_GetData();
 				short i, sCount = 0;
 				BYTE *pbyData = pData->byData;
-				p += sprintf(p, "\\n拼音=");
+				p += sprintf(p, "\n拼音=");
 				memcpy(&sCount, pbyData, 2);
 				pbyData += 2;
 				if (sCount>10) sCount = 10;//只取前面10个拼音
@@ -112,22 +112,22 @@ void CCmdHandler::OnHotKeyQueryInfo(LPARAM lp)
 			}
 			else
 			{
-				p += sprintf(p, "\\n拼音=查询失败");
+				p += sprintf(p, "\n拼音=查询失败");
 			}
 		}
 		else
 		{//查询英文单词
-			p += sprintf(p, "\\n单词=%s", (LPCSTR)strBuf);
+			p += sprintf(p, "\n单词=%s", (LPCSTR)strBuf);
 			if (ISComm_En2Ch(strBuf, strBuf.GetLength()) == ISACK_SUCCESS)
 			{
 				PMSGDATA pData = ISComm_GetData();
 				LPBYTE pbyData = pData->byData;
 				BYTE i = 0, byItems = *pbyData++;
 				pbyData += pbyData[0] + 1;//skip phonetic
-				p += sprintf(p, "\\n中文释意");
+				p += sprintf(p, "\n中文释意");
 				while (i<byItems)
 				{
-					p += sprintf(p, "\\n    %d:", i + 1);
+					p += sprintf(p, "\n    %d:", i + 1);
 					memcpy(p, pbyData + 1, pbyData[0]); p += pbyData[0]; pbyData += pbyData[0] + 1;
 					i++;
 				}
@@ -135,7 +135,7 @@ void CCmdHandler::OnHotKeyQueryInfo(LPARAM lp)
 			}
 			else
 			{
-				p += sprintf(p, "\\n外文词库查询失败!");
+				p += sprintf(p, "\n外文词库查询失败!");
 			}
 		}
 
