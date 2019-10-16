@@ -212,6 +212,7 @@
     <ClInclude Include="IsSvrProxy.h" />
     <ClInclude Include="Minidump.h" />
     <ClInclude Include="res\resource.h" />
+    <ClInclude Include="res\version.h" />
     <ClInclude Include="settings\AddBlurDlg.h" />
     <ClInclude Include="settings\ConfigDlg.h" />
     <ClInclude Include="ShellTypeReg.h" />
