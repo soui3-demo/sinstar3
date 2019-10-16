@@ -1,15 +1,18 @@
 #pragma once
 
-#define MAX_SKINS	80
 class CSkinMananger 
 {
+public:
+	enum{
+		MAX_SKINS=80,
+	};
 public:
 	CSkinMananger();
 	~CSkinMananger(void);
 
 	void ClearMap(){m_mapSkin.RemoveAll();}
 	int InitSkinMenu(HMENU hmenu, const SStringT & strSkinPath, int nStartId, const SStringT & strCurSkin);
-	SStringT ExtractSkinInfo(SStringT strSkinPath);
+	bool ExtractSkinInfo(SStringT strSkinPath,SStringT & strDesc);
 	SStringT SkinPathFromID(int nSkinID) const;
 
 	static CPoint ExtractSkinOffset(IResProvider *pResProvider);

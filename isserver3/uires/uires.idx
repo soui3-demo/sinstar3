@@ -59,14 +59,8 @@
   </IMG>
   <img2>
     <file name="png_tip_bg" path="image2\tip_bg.png"/>
+    <file name="png_item_bg" path="image2\item_bg.png"/>
   </img2>
-  <ICON>
-    <file name="ICON_LOGO" path="icon\logo.ico"/>
-    <file name="ICON_LOGO1" path="icon\logo1.ico"/>
-    <file name="ICON_LOGO2" path="icon\logo2.ico"/>
-    <file name="ICON_LOGO3" path="icon\logo3.ico"/>
-    <file name="ICON_LOGO4" path="icon\logo4.ico"/>  
-  </ICON>
   <smenu>
     <file name="context_tray" path="smenu\context_tray.xml"/>
     <file name="context_status" path="smenu\context_status.xml"/>

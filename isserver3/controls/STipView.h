@@ -21,6 +21,7 @@ namespace SOUI
 			MSG_WM_LBUTTONDOWN(OnLButtonDown)
 			MSG_WM_LBUTTONDBLCLK(OnLButtonDown)
 			MSG_WM_RBUTTONDOWN(OnRButtonDown)
+			MSG_WM_RBUTTONDBLCLK(OnRButtonDown)
 		SOUI_MSG_MAP_END()
 	};
 

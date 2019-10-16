@@ -606,7 +606,7 @@ namespace SOUI
 		{//system config
 			m_pCmdListener->OnCommand(CMD_OPENCONFIG, 0);
 		}
-		else if (nRet >= R.id.skin_def && nRet <= R.id.skin_def + MAX_SKINS)
+		else if (nRet >= R.id.skin_def && nRet <= R.id.skin_def + CSkinMananger::MAX_SKINS)
 		{//select menu
 			SStringT strSkinPath = m_skinManager.SkinPathFromID(nRet);
 			m_pCmdListener->OnCommand(CMD_CHANGESKIN, (LPARAM)&strSkinPath);

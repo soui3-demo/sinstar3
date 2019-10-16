@@ -299,7 +299,7 @@ int CInputState::Tips_Next(BOOL bSpell,char *pszBuf, int iTip, bool bNext)
 		{
 			idx = bNext ? (iTip + 1) : (iTip - 1);
 		}
-		idx  %= total;
+		idx = (idx+total)%total;
 		if (idx < (int)m_tips[TT_SPELL].GetCount())
 			strcpy_s(pszBuf, 200,m_tips[TT_SPELL][idx]);
 		else
@@ -317,7 +317,7 @@ int CInputState::Tips_Next(BOOL bSpell,char *pszBuf, int iTip, bool bNext)
 		{
 			idx = bNext ? (iTip + 1) : (iTip - 1);
 		}
-		idx %= total;
+		idx = (idx+total)%total;
 		if (idx < (int)m_tips[TT_SHAPE].GetCount())
 			strcpy_s(pszBuf,200, m_tips[TT_SHAPE][idx]);
 		else

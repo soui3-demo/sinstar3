@@ -13,12 +13,16 @@ namespace SOUI
 #define TIMERID_ANI_LOGO	100
 #define IDC_LOGOTRAY		1324	//TRAY ID
 
+	const int LogoID[]={IDI_LOGO1,IDI_LOGO2,IDI_LOGO3,IDI_LOGO4};
+	const int ANI_ICON_NUM = ARRAYSIZE(LogoID);
+
 	CTrayIcon::CTrayIcon():m_iIcon(0), m_bVisible(FALSE)
 	{
 		memset(&m_nid, 0, sizeof(m_nid));
-		for (int i = 0; i <= ANI_ICON_NUM; i++)
+		m_AniLogo = new HICON[ANI_ICON_NUM];
+		for (int i = 0; i < ANI_ICON_NUM; i++)
 		{
-			m_AniLogo[i] = LOADICON2(SStringT().Format(_T("icon_logo%d"), i + 1));
+			m_AniLogo[i] = LoadIcon(SApplication::getSingletonPtr()->GetInstance(),MAKEINTRESOURCE(LogoID[i]));
 		}
 	}
 
@@ -26,7 +30,9 @@ namespace SOUI
 		for (int i = 0; i < ANI_ICON_NUM; i++)
 		{
 			DestroyIcon(m_AniLogo[i]);
+			m_AniLogo[i]=NULL;
 		}
+		delete []m_AniLogo;
 	}
 
 

@@ -47,13 +47,15 @@ int CSkinMananger::InitSkinMenu(HMENU hMenu, const SStringT &strSkinPath, int nS
 			nStartId++;
 			SStringT strFullPath = strSkinPath + _T("\\") + findData.cFileName;
 			m_mapSkin[nStartId] = strFullPath;
-			SStringT strDesc = ExtractSkinInfo(strFullPath);
-
-			BOOL bInsertSucess= smenu.AppendMenu( MF_STRING , nStartId, strDesc);
-
-			if (bInsertSucess&&(strFullPath == strCurSkin))
+			SStringT strDesc;
+			if(ExtractSkinInfo(strFullPath,strDesc))
 			{
-				CheckMenuItem(hMenu,nStartId, MF_BYCOMMAND | MF_CHECKED);
+				BOOL bInsertSucess= smenu.AppendMenu( MF_STRING , nStartId, strDesc);
+
+				if (bInsertSucess&&(strFullPath == strCurSkin))
+				{
+					CheckMenuItem(hMenu,nStartId, MF_BYCOMMAND | MF_CHECKED);
+				}
 			}
 		} while (FindNextFile(hFind, &findData));
 		FindClose(hFind);
@@ -61,7 +63,10 @@ int CSkinMananger::InitSkinMenu(HMENU hMenu, const SStringT &strSkinPath, int nS
 	return nStartId;
 }
 
-SOUI::SStringT CSkinMananger::ExtractSkinInfo(SStringT strSkinPath)
+static const int KMinVer[4]={0,0,0,0};
+static const int KMaxVer[4]={2,0,0,0};
+
+bool CSkinMananger::ExtractSkinInfo(SStringT strSkinPath,SStringW &strDesc)
 {
 	IResProvider *pResProvider = NULL;
 	g_ComMgr2->CreateResProvider_ZIP((IObjRef**)&pResProvider);
@@ -75,9 +80,34 @@ SOUI::SStringT CSkinMananger::ExtractSkinInfo(SStringT strSkinPath)
 
 	pugi::xml_document xmlDoc;
 	xmlDoc.load_buffer_inplace(buffer,nSize);
+
 	pugi::xml_node xmlDesc = xmlDoc.child(L"uidef").child(L"desc");
-	SStringW strDesc = SStringW(xmlDesc.attribute(L"name").value())+L":"+xmlDesc.attribute(L"version").value()+L"["+xmlDesc.attribute(L"author").value()+L"]";
-	return S_CW2T(strDesc);
+	SStringW strVer = xmlDesc.attribute(L"version").as_string(L"1.0");
+	SStringWList lstVer;
+	SplitString(strVer,L'.',lstVer);
+	int nVer[4]={0};
+	bool bValid = true;
+	for(size_t i =0;i<lstVer.GetCount() && i<4;i++)
+	{
+		nVer[i]=_wtoi(lstVer[i]);
+		if(nVer[i]<KMinVer[i])
+		{
+			bValid=false;
+			break;
+		}
+		if(nVer[i]<KMaxVer[i])
+			break;
+		if(nVer[i]>KMaxVer[i])
+		{
+			bValid=false;
+			break;
+		}
+	}
+	if(!bValid)
+		return false;
+
+	strDesc = S_CW2T(SStringW(xmlDesc.attribute(L"name").value())+L":"+xmlDesc.attribute(L"version").value()+L"["+xmlDesc.attribute(L"author").value()+L"]");
+	return true;
 }
 
 SStringT CSkinMananger::SkinPathFromID(int nSkinID) const
