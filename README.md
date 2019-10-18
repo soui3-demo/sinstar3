@@ -15,4 +15,6 @@ debug版本下所有输出都在项目的Data目录下。
 输入法实质就是一个dll, 打开任意一个exe,例如notepad, 再notepad里打开输入法就可以了. 如果不是用vs调试方式打开notepad,你可以使用附加到进程来加载调试符号.
 此外,由于win10默认打开了所有进程中自动使用相同的输入法,在调试阶段也非常麻烦,一定要在win10设置里把这个选项关掉.
 
+皮肤仓库：https://gitee.com/setoutsoft/sinstar3.skin
+
 启程软件  2019年9月14日
