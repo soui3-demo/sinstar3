@@ -43,11 +43,11 @@
             <compView size="-1,-2" name="txt_comps" text="umode"  class="cls_comp"/>
             <text size="-1,-2" name="txt_auto_complete" colorText="@color/comp_auto_complete"/>
           </mutexView>
-          <mutexView size="-1,-2" name="comp_lineime"  layut="hbox" gravity="center">
+          <mutexView size="-1,-2" name="comp_lineime"  layout="hbox" gravity="center">
             <text size="-1,-2" text="i:" colorText="@color/comp_umode_prefix" padding_right="@dim/interval_comp_prefix"/>
             <lineComp size="-1,-2" name="txt_comps" lineSkin="lines"/>
           </mutexView>
-          <mutexView size="-1,-2" name="comp_english" layut="hbox"  gravity="center">
+          <mutexView size="-1,-2" name="comp_english" layout="hbox"  gravity="center">
             <compView size="-1,-2" name="txt_comps"  class="cls_comp"/>
             <text size="-1,-2" name="txt_auto_complete" colorText="@color/comp_auto_complete"/>
           </mutexView>
