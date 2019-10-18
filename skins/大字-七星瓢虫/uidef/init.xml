@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<UIDEF>
-	<desc author="木已成舟" name="【4K高分屏】七星瓢虫" version="1.0" />
-	<font face="思源宋体" size="28" />
-
-	<color src="values:color" />
-	<dim src="values:dim"/>
-</UIDEF>
