@@ -500,6 +500,13 @@ namespace SOUI
 		SStringT strAccel;
 		switch (e2->idFrom)
 		{
+		case R.id.img_logo:
+			{
+				SStringT strComp = CDataCenter::getSingletonPtr()->GetData().m_compInfo.strCompName;
+				e2->bUpdated = TRUE;
+				e2->strToolTip = SStringT().Format(_T("«–ªª[∆¥“Ù<=>%s]"), strComp.c_str());
+			}
+			break;
 		case R.id.btn_charmode:
 			e2->bUpdated = TRUE;
 			strAccel = SAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_CharMode]);
@@ -599,7 +606,7 @@ namespace SOUI
 		{//system config
 			m_pCmdListener->OnCommand(CMD_OPENCONFIG, 0);
 		}
-		else if (nRet >= R.id.skin_def && nRet <= R.id.skin_def + MAX_SKINS)
+		else if (nRet >= R.id.skin_def && nRet <= R.id.skin_def + CSkinMananger::MAX_SKINS)
 		{//select menu
 			SStringT strSkinPath = m_skinManager.SkinPathFromID(nRet);
 			m_pCmdListener->OnCommand(CMD_CHANGESKIN, (LPARAM)&strSkinPath);

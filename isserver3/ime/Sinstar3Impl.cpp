@@ -472,6 +472,11 @@ void CSinstar3Impl::OnInputDelayHide()
 	m_inputState.ClearContext(CPC_ALL&~CPC_INPUT);
 }
 
+void CSinstar3Impl::OnSwitchTip(InputContext * pCtx, bool bNext)
+{
+	pCtx->iTip = m_inputState.Tips_Next(pCtx->compMode == IM_SPELL, pCtx->szTip, pCtx->iTip, bNext);
+}
+
 
 BOOL CSinstar3Impl::ChangeSkin(const SStringT & strSkin)
 {

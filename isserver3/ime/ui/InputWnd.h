@@ -9,6 +9,7 @@ namespace SOUI
 {
 	interface IInputWndListener {
 		virtual void OnInputDelayHide() = 0;
+		virtual void OnSwitchTip(InputContext * pCtx,bool bNext) = 0;
 	};
 
 	class CInputWnd : public CImeWnd
@@ -43,10 +44,14 @@ namespace SOUI
 		void OnBtnNextPage();
 		void OnUpdateBtnTooltip(EventArgs *e);
 
+		void OnSwitchTip(EventArgs *e);
+		void OnContextMenu(EventArgs *e);
 		EVENT_MAP_BEGIN()
+			EVENT_ID_HANDLER(R.id.txt_tip,EventSwitchTip::EventID, OnSwitchTip)
 			EVENT_ID_COMMAND(R.id.btn_prevpage,OnBtnPrevPage)
 			EVENT_ID_COMMAND(R.id.btn_nextpage,OnBtnNextPage)
 			EVENT_HANDLER(EventSwndUpdateTooltip::EventID, OnUpdateBtnTooltip)
+			EVENT_HANDLER(EventCtxMenu::EventID,OnContextMenu)
 		EVENT_MAP_END()
 
 	protected:
@@ -56,10 +61,8 @@ namespace SOUI
 		void OnLButtonDown(UINT nFlags, CPoint point);
 		void OnLButtonUp(UINT nFlags, CPoint point);
 		void OnMouseMove(UINT nFlags, CPoint point);
-		void OnRButtonUp(UINT nFlags, CPoint pt);
 
 		BEGIN_MSG_MAP_EX(CInputWnd)
-			MSG_WM_RBUTTONUP(OnRButtonUp)
 			MSG_WM_LBUTTONDOWN(OnLButtonDown)
 			MSG_WM_LBUTTONUP(OnLButtonUp)
 			MSG_WM_MOUSEMOVE(OnMouseMove)

@@ -153,6 +153,7 @@
     <ClCompile Include="settings\AddBlurDlg.cpp" />
     <ClCompile Include="settings\ConfigDlg.cpp" />
     <ClCompile Include="ShellTypeReg.cpp" />
+    <ClCompile Include="controls\STipView.cpp" />
     <ClCompile Include="ThreadObject.cpp" />
     <ClCompile Include="ui\BuildIndexProgWnd.cpp" />
     <ClCompile Include="ui\KeyMapDlg.cpp" />
@@ -211,9 +212,11 @@
     <ClInclude Include="IsSvrProxy.h" />
     <ClInclude Include="Minidump.h" />
     <ClInclude Include="res\resource.h" />
+    <ClInclude Include="res\version.h" />
     <ClInclude Include="settings\AddBlurDlg.h" />
     <ClInclude Include="settings\ConfigDlg.h" />
     <ClInclude Include="ShellTypeReg.h" />
+    <ClInclude Include="controls\STipView.h" />
     <ClInclude Include="ThreadObject.h" />
     <ClInclude Include="ui\BuildIndexProgWnd.h" />
     <ClInclude Include="ui\KeyMapDlg.h" />

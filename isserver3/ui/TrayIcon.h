@@ -22,7 +22,7 @@
 namespace SOUI
 {
 #define UM_TRAYNOTIFY	(WM_USER+600)
-#define ANI_ICON_NUM	4
+
 	class CTrayIcon
 	{
 	public:
@@ -59,7 +59,7 @@ namespace SOUI
 
 		NOTIFYICONDATA m_nid;
 
-		HICON	 m_AniLogo[ANI_ICON_NUM];
+		HICON	 *m_AniLogo;
 		int		 m_iIcon;
 
 		BOOL	 m_bVisible;

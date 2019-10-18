@@ -229,7 +229,7 @@ int CInputState::TestHotKey(UINT uVk, const BYTE * lpbKeyState) const
 	return iRet;
 }
 
-BOOL CInputState::Tips_Rand(BOOL bSpell, char *pszBuf)
+void CInputState::Tips_Init()
 {
 	if (m_bUpdateTips)
 	{
@@ -241,7 +241,7 @@ BOOL CInputState::Tips_Rand(BOOL bSpell, char *pszBuf)
 		const wchar_t * groups[] = {
 			L"all",L"spell",L"shape"
 		};
-		if (xmlTips.load_file(CDataCenter::getSingletonPtr()->GetDataPath()+_T("\\data\\tips.xml")))
+		if (xmlTips.load_file(CDataCenter::getSingletonPtr()->GetDataPath() + _T("\\data\\tips.xml")))
 		{
 			pugi::xml_node tips = xmlTips.child(L"tips");
 			for (int i = 0; i < 3; i++)
@@ -257,6 +257,11 @@ BOOL CInputState::Tips_Rand(BOOL bSpell, char *pszBuf)
 		}
 		m_bUpdateTips = FALSE;
 	}
+}
+
+int CInputState::Tips_Rand(BOOL bSpell, char *pszBuf)
+{
+	Tips_Init();
 	if (bSpell)
 	{
 		int total = (int) (m_tips[TT_SPELL].GetCount() + m_tips[TT_BOTH].GetCount());
@@ -265,6 +270,7 @@ BOOL CInputState::Tips_Rand(BOOL bSpell, char *pszBuf)
 			strcpy(pszBuf, m_tips[TT_SPELL][idx]);
 		else
 			strcpy(pszBuf, m_tips[TT_BOTH][idx - m_tips[TT_SPELL].GetCount()]);
+		return idx;
 	}
 	else
 	{
@@ -274,8 +280,51 @@ BOOL CInputState::Tips_Rand(BOOL bSpell, char *pszBuf)
 			strcpy(pszBuf, m_tips[TT_SHAPE][idx]);
 		else
 			strcpy(pszBuf, m_tips[TT_BOTH][idx - m_tips[TT_SHAPE].GetCount()]);
+		return idx;
 	}
-	return TRUE;
+}
+
+int CInputState::Tips_Next(BOOL bSpell,char *pszBuf, int iTip, bool bNext)
+{
+	Tips_Init();
+	int idx = 0;
+	if (bSpell)
+	{
+		int total = (int)(m_tips[TT_SPELL].GetCount() + m_tips[TT_BOTH].GetCount());
+		if (iTip == -1)
+		{
+			idx = bNext ? 0 : total - 1;
+		}
+		else
+		{
+			idx = bNext ? (iTip + 1) : (iTip - 1);
+		}
+		idx = (idx+total)%total;
+		if (idx < (int)m_tips[TT_SPELL].GetCount())
+			strcpy_s(pszBuf, 200,m_tips[TT_SPELL][idx]);
+		else
+			strcpy_s(pszBuf, 200,m_tips[TT_BOTH][idx - m_tips[TT_SPELL].GetCount()]);
+		return idx;
+	}
+	else
+	{
+		int total = (int)(m_tips[TT_SHAPE].GetCount() + m_tips[TT_BOTH].GetCount());
+		if (iTip == -1)
+		{
+			idx = bNext ? 0 : total - 1;
+		}
+		else
+		{
+			idx = bNext ? (iTip + 1) : (iTip - 1);
+		}
+		idx = (idx+total)%total;
+		if (idx < (int)m_tips[TT_SHAPE].GetCount())
+			strcpy_s(pszBuf,200, m_tips[TT_SHAPE][idx]);
+		else
+			strcpy_s(pszBuf, 200,  m_tips[TT_BOTH][idx - m_tips[TT_SHAPE].GetCount()]);
+	}
+	SLOG_INFO("iTip:" << iTip << " bNext:" << bNext<<" idx:"<<idx);
+	return idx;
 }
 
 void CInputState::GetShapeComp(const char *pInput,char cLen)
@@ -367,6 +416,7 @@ void CInputState::ClearContext(UINT dwMask)
 	if(dwMask & CPC_TIP)
 	{
 		m_ctx.szTip[0]=0;
+		//m_ctx.iTip = -1;
 	}
 	if (dwMask & CPC_UDCOMP)
 	{
@@ -1006,7 +1056,7 @@ BOOL CInputState::KeyIn_Spell_ChangeComp(InputContext* lpCntxtPriv,UINT byInput,
 				if(g_SettingsG->bShowOpTip && !IsTempSpell())
 				{
 					lpCntxtPriv->bShowTip=TRUE;
-					Tips_Rand(TRUE,lpCntxtPriv->szTip);
+					lpCntxtPriv->iTip=Tips_Rand(TRUE,lpCntxtPriv->szTip);
 				}
 			}
 		}
@@ -1251,6 +1301,7 @@ BOOL CInputState::KeyIn_Spell_InputText(InputContext* lpCntxtPriv,UINT byInput,
 		if (IsTempSpell())
 		{//临时拼音模式自动获得输入拼音的编码
 			lpCntxtPriv->bShowTip = TRUE;
+			lpCntxtPriv->iTip = -1;
 			GetShapeComp(strResult, strResult.GetLength());
 			lpCntxtPriv->compMode = IM_SHAPECODE;
 			StatusbarUpdate();
@@ -1404,6 +1455,7 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 						if(isTempSpell) 
 						{//临时拼音模式获得输入字的编码
 							lpCntxtPriv->bShowTip=TRUE;
+							lpCntxtPriv->iTip = -1;
 							GetShapeComp(strResultA,strResultA.GetLength());
 						}
 						if(isTempSpell)
@@ -1651,7 +1703,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 			if(g_SettingsG->bShowOpTip)
 			{//有编码后面显示操作提示
 				lpCntxtPriv->bShowTip=TRUE;
-				Tips_Rand(FALSE,lpCntxtPriv->szTip);
+				lpCntxtPriv->iTip = Tips_Rand(FALSE,lpCntxtPriv->szTip);
 			}
 			//开始编码输入,生成开始编码消息以获取光标跟随时输入窗口的坐标
 			InputStart();
@@ -1803,6 +1855,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 		}else if(lpCntxtPriv->bWebMode)
 		{
 			lpCntxtPriv->bShowTip=TRUE;
+			lpCntxtPriv->iTip = -1;
 			strcpy(lpCntxtPriv->szTip,"网址模式:\n 回车=网址上屏\n Shift+回车=浏览");
 		}
 		if((byType&MCR_AUTOSELECT ||(KeyIn_Code_IsMaxCode(lpCntxtPriv,byType) && g_SettingsG->bAutoInput)) && !lpCntxtPriv->bWebMode)
@@ -1875,7 +1928,8 @@ BOOL CInputState::KeyIn_All_Associate(InputContext * lpCntxtPriv,UINT byInput,
 			if(g_SettingsG->bShowOpTip)
 			{
 				m_ctx.bShowTip=TRUE;
-				Tips_Rand(FALSE,m_ctx.szTip);
+				m_ctx.iTip = -1;
+				strcpy(m_ctx.szTip,"逗号逐字选择,空格上屏;句号全部上屏");
 			}
 
 			bRet=TRUE;
@@ -2298,6 +2352,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 						ClearContext(CPC_ALL);
 						m_ctx.compMode=IM_SPELL;
 						m_ctx.bShowTip=TRUE;
+						m_ctx.iTip = -1;
 						strcpy(m_ctx.szTip,"临时拼音:上屏后自动提示编码");
 						InputOpen();
 						InputUpdate();
@@ -2325,6 +2380,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 							if(g_SettingsG->bShowOpTip)
 							{
 								m_ctx.bShowTip=TRUE;
+								m_ctx.iTip = -1;
 								strcpy(m_ctx.szTip,"语句输入模式");
 							}
 
@@ -2495,6 +2551,7 @@ BOOL CInputState::OnSvrNotify(UINT wp, PMSGDATA pMsg)
 					if(pbyData-pMsg->byData<pMsg->sSize && pbyData[0]==MKI_PHRASEREMIND)
 					{//已有词组提示
 						ctx->bShowTip=TRUE;
+						ctx->iTip = -1;
 						strcpy(ctx->szTip,"系统词组:");
 						memcpy(ctx->szTip+9,pbyData+2,pbyData[1]);
 						ctx->szTip[9+pbyData[1]]=0;
@@ -2526,7 +2583,10 @@ BOOL CInputState::OnSvrNotify(UINT wp, PMSGDATA pMsg)
 					if (ctx->sCandCount == 0 && g_SettingsG->bShowOpTip && !ctx->bShowTip)
 					{//没有候选时,在侯选位置显示操作提示
 						ctx->bShowTip=TRUE;
-						Tips_Rand(ctx->compMode == IM_SPELL, ctx->szTip);
+						if(ctx->sSentLen )
+							strcpy(ctx->szTip,"分号进入语句输入"),ctx->iTip = -1;
+						else
+							ctx->iTip = Tips_Rand(ctx->compMode == IM_SPELL, ctx->szTip);
 					}
 					InputUpdate();
 				}else

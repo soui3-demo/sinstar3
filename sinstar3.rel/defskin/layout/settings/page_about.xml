@@ -40,7 +40,7 @@
     <text text="测试：晴天"/>
     <window layout="hbox">
       <text text="本产品基于开源UI框架"/>
-      <link href="https://github.com/soui2/soui" text="SOUI"/>
+      <link href="https://github.com/soui3/soui" text="SOUI 3.0"/>
     </window>
     <window layout="vbox" gravity="center">
       <text text="QQ群"/>

@@ -161,6 +161,21 @@ namespace SOUI
 		}
 	}
 
+	void CInputWnd::OnSwitchTip(EventArgs * e)
+	{
+		EventSwitchTip *e2 = sobj_cast<EventSwitchTip>(e);
+		SASSERT(e2);
+		STipView *pTipView = sobj_cast<STipView>(e->sender);
+		SASSERT(pTipView);
+		m_pInputWndListener->OnSwitchTip(m_pInputContext, e2->bNext);
+		pTipView->SetWindowText(S_CA2T(m_pInputContext->szTip));
+	}
+
+	void CInputWnd::OnContextMenu(EventArgs * e)
+	{
+		m_pStateWnd->OnMenuClick();
+	}
+
 	void CInputWnd::OnBtnPrevPage()
 	{
 		if(GoPrevCandidatePage())
@@ -607,6 +622,7 @@ namespace SOUI
 			SetMsgHandled(FALSE);
 			return;
 		}
+
 		SWindow::SetCapture();
 		m_ptClick = point;
 		m_bDraging = TRUE;
@@ -647,10 +663,5 @@ namespace SOUI
 			SetWindowPos(HWND_TOPMOST, rcWnd.left, rcWnd.top, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
 		}
 
-	}
-
-	void CInputWnd::OnRButtonUp(UINT nFlags, CPoint pt)
-	{
-		m_pStateWnd->OnMenuClick();
 	}
 }

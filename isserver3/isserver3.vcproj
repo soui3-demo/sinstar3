@@ -344,6 +344,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\controls\STipView.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ime\ui\STipWnd.cpp"
 				>
 			</File>
@@ -578,6 +582,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\controls\STipView.h"
+				>
+			</File>
+			<File
 				RelativePath=".\ime\ui\STipWnd.h"
 				>
 			</File>
@@ -636,6 +644,22 @@
 				>
 			</File>
 			<File
+				RelativePath=".\res\logo1.ico"
+				>
+			</File>
+			<File
+				RelativePath=".\res\logo2.ico"
+				>
+			</File>
+			<File
+				RelativePath=".\res\logo3.ico"
+				>
+			</File>
+			<File
+				RelativePath=".\res\logo4.ico"
+				>
+			</File>
+			<File
 				RelativePath=".\res\plt.ico"
 				>
 			</File>
@@ -645,6 +669,10 @@
 			</File>
 			<File
 				RelativePath=".\res\soui_res.rc2"
+				>
+			</File>
+			<File
+				RelativePath=".\res\version.h"
 				>
 			</File>
 			<File

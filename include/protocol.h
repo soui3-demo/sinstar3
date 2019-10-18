@@ -8,7 +8,7 @@
 
 #define SINSTAR3_SERVER_HWND _T("sinstar3_server_wnd_{85B55CBC-7D48-4860-BA88-0BE4B073A94F}")
 #define SINSTAR3_SHARE_BUF_NAME_FMT _T("sistart3_share_buffer_8085395F-E2FA-4F96-8BD0-FE5D7412CD22_%08x_2_%08x")
-
+#define SINSTAR3_MUTEX _T("sinstar3_mutex_40AC2365-F592-4BE3-8B41-04A6B5337BFB")
 
 //////////////////////////////////////////////////////////////////
 namespace SOUI{
