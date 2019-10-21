@@ -2509,7 +2509,6 @@ BOOL CInputState::OnSvrNotify(UINT wp, PMSGDATA pMsg)
 		if(m_fOpen)
 		{
 			InputContext * ctx = &m_ctx;
-			ctx->bShowTip = FALSE;
 			if(INST_CODING== ctx->inState && SBST_ASSOCIATE==ctx->sbState)
 			{//保证当前状态是等待联想数据状态
 
