@@ -20,14 +20,6 @@ namespace SOUI
 
 		virtual int LoadFromFile(LPCTSTR pszFileName)=0;
 
-        /**
-         * LoadFromMemory
-         * @brief    从内存加载APNG
-         * @param    LPVOID pBits --  内存地址
-         * @param    size_t szData --  内存数据长度
-         * @return   int -- APNG帧数，0-失败
-         * Describe  
-         */    
         virtual int LoadFromMemory(LPVOID pBits,size_t szData)=0;
 
 		/**

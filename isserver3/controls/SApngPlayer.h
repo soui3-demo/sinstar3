@@ -14,7 +14,7 @@ namespace SOUI
     */
     class SApngPlayer : public SWindow , public ITimelineHandler
     {
-        SOUI_CLASS_NAME(SApngPlayer, L"apngPlayer")   //定义GIF控件在XM加的标签
+        SOUI_CLASS_NAME(SApngPlayer, L"apngPlayer")
     public:
         SApngPlayer();
         ~SApngPlayer();

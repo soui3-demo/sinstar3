@@ -10,6 +10,7 @@ namespace SOUI
 
 HRESULT SSkinPNGX::OnAttrDelay(const SStringW &strValue,BOOL bLoading)
 {
+	//解析每一帧的延时，格式为：10,10,20[5],10, 其中[5]代表连续5帧的时延都是20ms。
 	SStringWList strDelays;
 	int nSegs = (int)SplitString(strValue,L',',strDelays);
 	m_nDelays.RemoveAll();
