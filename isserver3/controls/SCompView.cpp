@@ -120,29 +120,17 @@ namespace SOUI
 	{
 		SPainter painter;
 		BeforePaint(pRT, painter);
-		CRect rcClient;
-		GetTextRect(rcClient);
+		CRect rcText;
+		GetTextRect(rcText);
 		SStringT strText = GetWindowText();
 		CSize szText;
 		pRT->MeasureText(strText, strText.GetLength(), &szText);
-		CRect rcText = rcClient;
-		UINT uAlign = GetStyle().GetTextAlign();
-		if(uAlign & DT_VCENTER)
-		{
-			rcText.DeflateRect(0, (rcClient.Height() - szText.cy) / 2);
-		}else if(uAlign & DT_BOTTOM)
-		{
-			rcText.top+= rcClient.Height() - szText.cy;
-		}else
-		{//top align
-			rcText.bottom = rcText.top + szText.cy;
-		}
 		rcText.right = rcText.left + szText.cx;
 		CRect rcClip;
 		pRT->GetClipBox(&rcClip);
 		if (!(rcText & rcClip).IsRectEmpty())
 		{
-			pRT->TextOut(rcText.left, rcText.top, strText, strText.GetLength());
+			pRT->DrawText(strText, strText.GetLength(), &rcText, GetStyle().GetTextAlign());
 		}
 		CRect rcCaret = rcText;
 		rcCaret.left = rcText.right;
