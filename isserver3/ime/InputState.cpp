@@ -1685,10 +1685,9 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 				bool bGbk = p[1]!=0;
 				//防止符号输入时出现错误:标点不能做首编码,退出当前过程,进入标点顶字上屏过程
 				if((byInput<'a' || byInput>'z') && !ISComm_GetCompInfo()->bSymbolFirst) return FALSE;
-				if(byType!=RATE_FORECAST && (!bGbk || g_SettingsG->nGbkMode==2)) 
+				if(byType!=RATE_FORECAST && (!bGbk || g_SettingsG->nGbkMode== CSettingsGlobal::GBK_SHOW_NORMAL)) 
 				{
 					KeyIn_All_SelectCand(lpCntxtPriv,'1',1,lpbKeyState,true);
-					bRet=TRUE;
 				}
 			}
 			lpCntxtPriv->cComp=0;
@@ -1833,7 +1832,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 				{
 					if (pCandData[1]!=0)
 					{
-						if (!g_SettingsUI->bFilterGbk && (g_SettingsG->nGbkMode != 0 ||  sSingleWords<2))
+						if (!g_SettingsUI->bFilterGbk && (g_SettingsG->nGbkMode !=  CSettingsGlobal::GBK_HIDE ||  sSingleWords<2))
 						{//GBK显示或者不是GBK重码
 							lpCntxtPriv->ppbyCandInfo[lpCntxtPriv->sCandCount++] = pCandData;
 						}
@@ -1860,9 +1859,10 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 		}
 		if((byType&MCR_AUTOSELECT ||(KeyIn_Code_IsMaxCode(lpCntxtPriv,byType) && g_SettingsG->bAutoInput)) && !lpCntxtPriv->bWebMode)
 		{
-			if(lpCntxtPriv->sCandCount==1 && lpbyCand[0]!=RATE_FORECAST && (lpbyCand[1]!=0 || g_SettingsG->nGbkMode!=1))
+			if(lpCntxtPriv->sCandCount==1 && lpbyCand[0]!=RATE_FORECAST && (lpbyCand[1]!=0 || g_SettingsG->nGbkMode!=CSettingsGlobal::GBK_SHOW_MANUAL))
+			{
 				KeyIn_All_SelectCand(lpCntxtPriv,'1',0,lpbKeyState);
-			else
+			}else
 			{
 				if(lpCntxtPriv->sCandCount>1)
 					CUtils::SoundPlay(_T("ChongMa"));
