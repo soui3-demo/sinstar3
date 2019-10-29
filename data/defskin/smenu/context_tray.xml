@@ -2,7 +2,7 @@
 <menu itemHeight="28" contextHelpId="100"
           maxWidth="300" minWidth="150"
           textMargin="8"
-          font="size:15">
+          font="size:15,face:微软雅黑">
   <item text="设置" name="menu_settings" id="101"/>
   <item text="强制退出" name="menu_force_exit" id="102"/>
   <item text="自动退出" name="menu_auto_exit" id="103"/>
