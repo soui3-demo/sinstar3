@@ -72,6 +72,7 @@ struct ICompBuilder
 	) = 0;
 
 	virtual BOOL AddWord(char szWord[2], LPCSTR pszComp, char cCompLen = -1) = 0;
+	virtual BOOL AddMakePhraseCode(char szWord[2], LPCSTR pszMakePhraseCode, char cCodeLen = -1) = 0;
 	virtual DWORD GetWords() const = 0;
 };
 
