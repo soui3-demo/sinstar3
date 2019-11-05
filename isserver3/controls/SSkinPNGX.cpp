@@ -74,7 +74,11 @@ void SSkinPNGX::_DrawByIndex(IRenderTarget *pRT, LPCRECT rcDraw, int dwState,BYT
 			rcSrc.OffsetRect(0,rcSrc.Height()*dwState);
 		else
 			rcSrc.OffsetRect(rcSrc.Width()*dwState,0);
-		pRT->DrawBitmapEx(rcDraw,m_pngx,rcSrc,EM_STRETCH,byAlpha);
+
+		if(m_rcMargin.IsRectNull())
+			pRT->DrawBitmapEx(rcDraw,m_pngx,rcSrc,GetExpandCode(),byAlpha);
+		else
+			pRT->DrawBitmap9Patch(rcDraw,m_pngx,rcSrc,m_rcMargin,GetExpandCode(),byAlpha);
 	}
 }
 

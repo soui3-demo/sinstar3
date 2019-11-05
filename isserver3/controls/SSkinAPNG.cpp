@@ -81,7 +81,10 @@ void SSkinAPNG::_DrawByIndex(IRenderTarget *pRT, LPCRECT rcDraw, int dwState,BYT
 {
 	if(dwState!=-1) SelectActiveFrame(dwState);
 	CRect rcSrc(CPoint(0,0),GetSkinSize());
-	pRT->DrawBitmapEx(rcDraw,m_pFrames[m_iFrame].pBmp,rcSrc,EM_STRETCH,byAlpha);
+	if(m_rcMargin.IsRectNull())
+		pRT->DrawBitmapEx(rcDraw,m_pFrames[m_iFrame].pBmp,rcSrc,GetExpandCode(),byAlpha);
+	else
+		pRT->DrawBitmap9Patch(rcDraw,m_pFrames[m_iFrame].pBmp,rcSrc,m_rcMargin,GetExpandCode(),byAlpha);
 }
 
 long SSkinAPNG::GetFrameDelay(int iFrame/*=-1*/)
