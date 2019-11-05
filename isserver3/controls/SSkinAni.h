@@ -1,11 +1,18 @@
 #pragma once
 
-#include <interface/srender-i.h>
+#include <interface/SRender-i.h>
 namespace SOUI
 {
     class SSkinAni : public SSkinObjBase
     {
         SOUI_CLASS_NAME(SSkinAni,L"skinani")
+
+		class SAniFrame
+		{
+		public:
+			SAutoRefPtr<IBitmap> pBmp;
+			int                  nDelay;
+		};
     public:
         SSkinAni():m_nFrames(0),m_iFrame(0),m_bTile(FALSE),m_filterLevel(kLow_FilterLevel)
         {
@@ -16,11 +23,19 @@ namespace SOUI
         {
         }
 
-		virtual long GetFrameDelay(int iFrame=-1) = 0;
+		virtual long GetFrameDelay(int iFrame=-1) const = 0;
 
-		virtual int LoadFromFile(LPCTSTR pszFileName)=0;
+		virtual int LoadFromFile(LPCTSTR pszFileName) { return 0; }
 
-        virtual int LoadFromMemory(LPVOID pBits,size_t szData)=0;
+        /**
+         * LoadFromMemory
+         * @brief    从内存加载APNG
+         * @param    LPVOID pBits --  内存地址
+         * @param    size_t szData --  内存数据长度
+         * @return   int -- APNG帧数，0-失败
+         * Describe  
+         */    
+        virtual int LoadFromMemory(LPVOID pBits,size_t szData) { return 0; }
 
 		/**
         * ActiveNextFrame
@@ -53,6 +68,12 @@ namespace SOUI
             }
         }
 
+		virtual void _DrawByIndex(IRenderTarget *pRT, LPCRECT rcDraw, int iFrame, BYTE byAlpha/*=0xFF*/) const
+		{
+			if (iFrame != -1) SelectActiveFrame(iFrame);
+			_DrawByIndex2(pRT, rcDraw, m_iFrame, byAlpha);
+		}
+
 		LONG GetExpandCode() const{
 			return MAKELONG(m_bTile?EM_TILE:EM_STRETCH,m_filterLevel);
 		}
@@ -67,6 +88,9 @@ namespace SOUI
 				ATTR_ENUM_VALUE(L"high",kHigh_FilterLevel)
 			ATTR_ENUM_END(m_filterLevel)
 		SOUI_ATTRS_END()
+	protected:
+		virtual void _DrawByIndex2(IRenderTarget *pRT, LPCRECT rcDraw, int iFrame, BYTE byAlpha/*=0xFF*/) const = 0;
+
 	protected:
 		int m_nFrames;
         mutable int m_iFrame;

@@ -1,8 +1,8 @@
 /********************************************************************
 created:	2014/10/01
 created:	01:10:2014   16:32
-filename: 	DuiSkinAPNG.h
-file base:	DuiSkinAPNG
+filename: 	SSkinAPNG.h
+file base:	SSkinAPNG
 file ext:	h
 author:		huangjianxiong
 
@@ -17,14 +17,6 @@ purpose:	动画PNG（APNG）扩展支持，依赖于当前使用的图片解码器。
 
 namespace SOUI
 {
-
-	class SAniImgFrame
-	{
-	public:
-		CAutoRefPtr<IBitmap> pBmp;
-		int                  nDelay;
-	};
-
 
     /**
     * @class     SSkinAPNG
@@ -93,7 +85,7 @@ namespace SOUI
         * @return   long -- 延时时间(*10ms)
         * Describe  
         */    
-        virtual long GetFrameDelay(int iFrame=-1);
+        virtual long GetFrameDelay(int iFrame=-1) const override;
         
         /**
         * Draw
@@ -105,7 +97,7 @@ namespace SOUI
         * @return   void
         * Describe  
         */    
-        virtual void _DrawByIndex(IRenderTarget *pRT, LPCRECT rcDraw, int dwState,BYTE byAlpha=0xFF) const  override;
+        virtual void _DrawByIndex2(IRenderTarget *pRT, LPCRECT rcDraw, int dwState,BYTE byAlpha=0xFF) const  override;
 
 
 		IBitmap * GetFrameImage(int iFrame=-1);
@@ -116,6 +108,6 @@ namespace SOUI
         int _InitImgFrame(IImgX *pImgX);
 
 	protected:
-		SAniImgFrame * m_pFrames;
+		SAniFrame * m_pFrames;
     };
 }//end of name space SOUI

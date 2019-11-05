@@ -1,13 +1,10 @@
 /********************************************************************
 created:	2014/10/01
 created:	01:10:2014   16:32
-filename: 	DuiSkinAPNG.h
-file base:	DuiSkinAPNG
+filename: 	SSkinPNGX.h
+file base:	SSkinPNGX
 file ext:	h
 author:		huangjianxiong
-
-purpose:	动画PNG（APNG）扩展支持，依赖于当前使用的图片解码器。
-            目前只有imgdecoder-png支持APNG解码
 *********************************************************************/
 #pragma once
 #include <interface/SSkinobj-i.h>
@@ -33,28 +30,9 @@ namespace SOUI
 
         }
 
-        /**
-         * LoadFromFile
-         * @brief    从文件加载APNG
-         * @param    LPCTSTR pszFileName --  文件名
-         * @return   int -- APNG帧数，0-失败
-         * Describe  
-         */    
-		int LoadFromFile(LPCTSTR pszFileName);
-
-        /**
-         * LoadFromMemory
-         * @brief    从内存加载APNG
-         * @param    LPVOID pBits --  内存地址
-         * @param    size_t szData --  内存数据长度
-         * @return   int -- APNG帧数，0-失败
-         * Describe  
-         */    
-		int LoadFromMemory(LPVOID pBits,size_t szData);
-
         SOUI_ATTRS_BEGIN()
             ATTR_IMAGEAUTOREF(L"src",m_pngx,FALSE)   //XML文件中指定的图片资源名,(type:name)
-			ATTR_CUSTOM(L"delay",OnAttrDelay)
+			ATTR_CUSTOM(L"delay",OnAttrDelay) //delay, format:10[5],20,30 '[5]' is optional repeat count. 
 			ATTR_BOOL(L"vert",m_bVert,FALSE)
         SOUI_ATTRS_END()
 	protected:
@@ -69,7 +47,7 @@ namespace SOUI
         * @return   long -- 延时时间(*10ms)
         * Describe  
         */    
-        virtual long GetFrameDelay(int iFrame=-1);
+        virtual long GetFrameDelay(int iFrame=-1) const;
         
         /**
         * Draw
@@ -81,7 +59,7 @@ namespace SOUI
         * @return   void
         * Describe  
         */    
-        virtual void _DrawByIndex(IRenderTarget *pRT, LPCRECT rcDraw, int dwState,BYTE byAlpha=0xFF) const override;
+        virtual void _DrawByIndex2(IRenderTarget *pRT, LPCRECT rcDraw, int dwState,BYTE byAlpha=0xFF) const override;
     protected:
 		HRESULT OnAttrDelay(const SStringW &strValue,BOOL bLoading);
  

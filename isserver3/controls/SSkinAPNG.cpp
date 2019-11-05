@@ -1,8 +1,8 @@
 #include "StdAfx.h"
 #include "SSkinAPNG.h"
 #include <helper/SplitString.h>
-#include <interface/simgdecoder-i.h>
-#include <interface/srender-i.h>
+#include <interface/SImgDecoder-i.h>
+#include <interface/SRender-i.h>
 
 
 namespace SOUI
@@ -67,7 +67,7 @@ int SSkinAPNG::_InitImgFrame( IImgX *pImgX )
     if(!pImgX) return 0;
 
     m_nFrames = pImgX->GetFrameCount();
-    m_pFrames = new SAniImgFrame[m_nFrames];
+    m_pFrames = new SAniFrame[m_nFrames];
     for(int i=0;i<m_nFrames;i++)
     {
         GETRENDERFACTORY->CreateBitmap(&m_pFrames[i].pBmp);
@@ -77,9 +77,8 @@ int SSkinAPNG::_InitImgFrame( IImgX *pImgX )
     return m_nFrames;
 }
 
-void SSkinAPNG::_DrawByIndex(IRenderTarget *pRT, LPCRECT rcDraw, int dwState,BYTE byAlpha/*=0xFF*/) const
+void SSkinAPNG::_DrawByIndex2(IRenderTarget *pRT, LPCRECT rcDraw, int dwState,BYTE byAlpha/*=0xFF*/) const
 {
-	if(dwState!=-1) SelectActiveFrame(dwState);
 	CRect rcSrc(CPoint(0,0),GetSkinSize());
 	if(m_rcMargin.IsRectNull())
 		pRT->DrawBitmapEx(rcDraw,m_pFrames[m_iFrame].pBmp,rcSrc,GetExpandCode(),byAlpha);
@@ -87,7 +86,7 @@ void SSkinAPNG::_DrawByIndex(IRenderTarget *pRT, LPCRECT rcDraw, int dwState,BYT
 		pRT->DrawBitmap9Patch(rcDraw,m_pFrames[m_iFrame].pBmp,rcSrc,m_rcMargin,GetExpandCode(),byAlpha);
 }
 
-long SSkinAPNG::GetFrameDelay(int iFrame/*=-1*/)
+long SSkinAPNG::GetFrameDelay(int iFrame/*=-1*/) const
 {
 	if(iFrame==-1) iFrame=m_iFrame;
 	long nRet=-1;

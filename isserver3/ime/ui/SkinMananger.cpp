@@ -64,7 +64,7 @@ int CSkinMananger::InitSkinMenu(HMENU hMenu, const SStringT &strSkinPath, int nS
 }
 
 static const int KMinVer[4]={0,0,0,0};
-static const int KMaxVer[4]={2,0,0,0};
+static const int KMaxVer[4]={3,0,0,0};
 
 bool CSkinMananger::ExtractSkinInfo(SStringT strSkinPath,SStringW &strDesc)
 {
