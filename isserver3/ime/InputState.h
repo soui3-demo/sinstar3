@@ -23,6 +23,9 @@ interface IInputListener: public ICmdListener {
 	virtual void CloseInputWnd(int nDelayMS) = 0;
 	virtual void SetOpenStatus(BOOL bOpen)=0;
 	virtual BOOL GetOpenStatus() const =0;
+
+	virtual void EnableInput(BOOL bEnable) = 0;
+	virtual BOOL IsInputEnable() const = 0;
 };
 
 class CInputState

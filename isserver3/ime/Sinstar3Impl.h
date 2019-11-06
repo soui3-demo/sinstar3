@@ -59,6 +59,10 @@ protected://IInputListener
 	virtual void CloseInputWnd(BOOL bDelay);
 	virtual void SetOpenStatus(BOOL bOpen);
 	virtual BOOL GetOpenStatus() const;
+
+	virtual void EnableInput(BOOL bEnable);
+	virtual BOOL IsInputEnable() const;
+
 protected://ICmdListener
 	virtual void OnCommand(WORD cmd, LPARAM lp);
 	virtual InputContext * GetInputContext();
@@ -93,6 +97,9 @@ public:
 	IUNKNOWN_BEGIN(IUnknown)
 	IUNKNOWN_END()
 
+protected:
+	BOOL IsInputVisible() const;
+	BOOL IsStatusVisible() const;
 private:
 	ITextService	*m_pTxtSvr;
 	CInputWnd		*m_pInputWnd;
@@ -108,6 +115,8 @@ private:
 	HWND			m_hSvr;
 	BOOL			m_bTyping;
 	BOOL			m_hasFocus;
+	BOOL			m_bInputEnable;
+	BOOL			m_bOpen;
 };
 
 

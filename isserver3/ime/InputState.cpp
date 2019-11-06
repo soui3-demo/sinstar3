@@ -2203,8 +2203,41 @@ BOOL CInputState::KeyIn_Line_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState)
 {
 	BOOL bRet=FALSE;
-	if ((lKeyData & 0x80000000) && (uKey != VK_SHIFT && uKey !=VK_CONTROL))
+	BOOL bKeyDown = !(lKeyData & 0x80000000);
+	if (!bKeyDown && (uKey != VK_SHIFT && uKey !=VK_CONTROL))
 		return FALSE;
+	BOOL bOpen = m_pListener->IsInputEnable();
+	if (!bOpen)
+	{
+		if (uKey == VK_SHIFT)
+		{//handle shift while input is disabled.
+			if (bKeyDown)
+			{
+				m_bPressShift = TRUE;
+				m_bPressOther = FALSE;
+			}
+			if (!bKeyDown && m_bPressShift)
+			{
+				m_bPressShift = FALSE;
+				BYTE byKey = (BYTE)(lKeyData >> 16);
+				if (!m_bPressOther && !m_bPressCtrl && g_SettingsG->bySwitchKey == byKey)
+				{//激活输入
+					m_pListener->EnableInput(TRUE);
+					if (KeyIn_IsCoding(&m_ctx))
+					{
+						InputOpen();
+					}
+					return TRUE;
+				}
+			}
+			return FALSE;
+		}
+		else
+		{
+			m_bPressOther = TRUE;
+			return FALSE;
+		}
+	}
 
 	//检查快捷键
 	int iHotKey = TestHotKey(uKey, lpbKeyState);
@@ -2279,7 +2312,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 			m_bPressOther=TRUE;
 			return FALSE;
 		}
-		if(lKeyData & 0x80000000)//弹起SHIFT键
+		if(!bKeyDown)//弹起SHIFT键
 		{
 			if(!m_bPressOther && m_bPressShift)//右SHIFT键按下后没有按下其它键，表示使用快捷关闭功能
 			{
@@ -2288,28 +2321,15 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 				if(!(lpbKeyState[VK_SPACE]&0x80) &&
 					g_SettingsG->bySwitchKey==byKey)
 				{ //check the scan code
-					BOOL bOpen = !m_pListener->GetOpenStatus();
-					m_pListener->SetOpenStatus(bOpen);
-					if (bOpen)
-					{//激活输入
-						if (KeyIn_IsCoding(&m_ctx))
-						{
-							//请求打开输入窗口
-							InputOpen();
-						}
+					//关闭输入，如果当前有输入内容,则将当前的输入内容输出到编辑器中
+					if (m_ctx.cComp != 0)
+					{
+						SStringA result(m_ctx.szComp, m_ctx.cComp);
+						InputResult(result, 0);
+						ClearContext(CPC_ALL);
 					}
-					else
-					{//关闭输入，如果当前有输入内容,则将当前的输入内容输出到编辑器中
-						if (m_ctx.cComp != 0)
-						{
-							SStringA result(m_ctx.szComp, m_ctx.cComp);
-							InputResult(result,0);
-							ClearContext(CPC_ALL);
-						}
-						InputEnd();
-						InputHide(FALSE);
-					}
-
+					InputEnd();
+					m_pListener->EnableInput(FALSE);
 				}
 			}else//还原状态
 			{
@@ -2330,7 +2350,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 			m_bPressOther=TRUE;
 			return FALSE;
 		}
-		if(lKeyData & 0x80000000)//弹起Ctrl键
+		if(!bKeyDown)//弹起Ctrl键
 		{
 			BYTE byKey=(BYTE)(lKeyData>>24);
 			if(!m_bPressOther && m_bPressCtrl)//Ctrl键按下后没有按下其它键，表示使用快捷关闭功能

@@ -35,6 +35,8 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HWND hSvr)
 , m_hSvr(hSvr)
 , m_bTyping(FALSE)
 , m_hasFocus(FALSE)
+, m_bInputEnable(TRUE)
+, m_bOpen(FALSE)
 {
 	addEvent(EVENTID(EventSvrNotify));
 	addEvent(EVENTID(EventSetSkin));
@@ -161,9 +163,9 @@ void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 		HWND hOwner = (HWND)m_pTxtSvr->GetActiveWnd();
 		m_pInputWnd->SetOwner(hOwner);
 		m_pStatusWnd->SetOwner(hOwner);
-		m_pStatusWnd->Show(bFocus && !g_SettingsUI->bHideStatus);
+		m_pStatusWnd->Show(IsStatusVisible());
 		if (m_bTyping || m_inputState.IsTempSpell()) 
-			m_pInputWnd->Show(TRUE);
+			m_pInputWnd->Show(IsInputVisible());
 	}
 	else
 	{
@@ -205,6 +207,7 @@ int CSinstar3Impl::GetCompositionSegmentAttr(int iSeg)
 
 void CSinstar3Impl::OnOpenStatusChanged(BOOL bOpen)
 {
+	m_bOpen = bOpen;
 	if (bOpen && !m_hasFocus)
 	{
 		SLOG_WARN("try to open statusbar but in focus state");
@@ -228,7 +231,7 @@ void CSinstar3Impl::OnOpenStatusChanged(BOOL bOpen)
 			m_pTipWnd = NULL;
 		}
 	}
-	m_pStatusWnd->Show(bOpen && !g_SettingsUI->bHideStatus);
+	m_pStatusWnd->Show(IsStatusVisible());
 }
 
 void CSinstar3Impl::OnConversionModeChanged(EInputMethod nMode)
@@ -448,6 +451,26 @@ BOOL CSinstar3Impl::GetOpenStatus() const
 	return m_pTxtSvr->GetOpenStatus();
 }
 
+void CSinstar3Impl::EnableInput(BOOL bEnable)
+{
+	m_bInputEnable = bEnable;
+	if (!bEnable)
+	{
+		m_pInputWnd->Show(FALSE);
+		if (m_pTipWnd)
+		{
+			m_pTipWnd->DestroyWindow();
+			m_pTipWnd = NULL;
+		}
+	}
+	m_pStatusWnd->Show(IsStatusVisible());
+}
+
+BOOL CSinstar3Impl::IsInputEnable() const
+{
+	return m_bInputEnable;
+}
+
 void CSinstar3Impl::OnCommand(WORD cmd, LPARAM lp)
 {
 	SendMessage(WM_COMMAND, MAKELONG(0,cmd), lp);
@@ -549,7 +572,7 @@ void CSinstar3Impl::Broadcast(UINT uCmd, LPVOID pData, DWORD nLen)
 
 void CSinstar3Impl::OpenInputWnd()
 {
-	m_pInputWnd->Show(TRUE);
+	m_pInputWnd->Show(IsInputVisible());
 }
 
 void CSinstar3Impl::UpdateInputWnd()
@@ -557,5 +580,13 @@ void CSinstar3Impl::UpdateInputWnd()
 	m_pInputWnd->UpdateUI();
 }
 
+BOOL CSinstar3Impl::IsInputVisible() const
+{
+	return m_hasFocus && m_bOpen && m_bInputEnable;
+}
 
+BOOL CSinstar3Impl::IsStatusVisible() const
+{
+	return m_hasFocus && m_bOpen && m_bInputEnable && !g_SettingsUI->bHideStatus;
+}
 

@@ -292,7 +292,9 @@ namespace SOUI
 		{
 			SWindow *pBuddy = pCtrl->GetBuddy();
 			if(pBuddy) pBuddy->GetEventSet()->setMutedState(true);
+			pCtrl->GetEventSet()->setMutedState(true);
 			pCtrl->SetValue(nValue);
+			pCtrl->GetEventSet()->setMutedState(false);
 			if (pBuddy) pBuddy->GetEventSet()->setMutedState(false);
 		}
 	}
