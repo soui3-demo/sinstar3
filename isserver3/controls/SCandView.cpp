@@ -82,7 +82,12 @@ namespace SOUI
 		pRT->MeasureText(m_strCand,m_strCand.GetLength(),&szBlock);
 		pt.x += szBlock.cx;
 
-		if(m_cWild!=0 && m_strInput.Find(m_cWild)!=-1)
+		if(m_byRate==RATE_MIXSP)
+		{
+			pRT->SetTextColor(m_crComp);
+			pRT->TextOut(pt.x,pt.y,(LPCTSTR)m_strComp,m_strComp.GetLength());
+		}
+		else if(m_cWild!=0 && m_strInput.Find(m_cWild)!=-1)
 		{
 			for(int i=0;i<m_strComp.GetLength();i++)
 			{
@@ -147,7 +152,11 @@ namespace SOUI
 		szRet.cy = smax(szRet.cy,sz.cy);
 
 		SStringT strComp;
-		if(m_cWild!=0 && m_strInput.Find(m_cWild)!=-1)
+		if(m_byRate==RATE_MIXSP)
+		{
+			strComp=m_strComp;
+		}
+		else if(m_cWild!=0 && m_strInput.Find(m_cWild)!=-1)
 		{
 			strComp = m_strComp;
 		}else if(m_strComp.GetLength()>m_strInput.GetLength())
