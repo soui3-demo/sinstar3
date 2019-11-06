@@ -401,8 +401,8 @@ namespace SOUI
 			bool bUpdated = SwitchToggle(R.id.btn_english,!g_SettingsUI->bEnglish);
 			if (m_pCmdListener && !bInit && !bUpdated)
 			{
-				TIPINFO ti(_T("单词输入改变:"));
-				ti.strTip.Format(_T("当前单词输入状态:%s"), g_SettingsUI->bEnglish ? _T("启用") : _T("关闭"));
+				TIPINFO ti(_T("单词补全改变:"));
+				ti.strTip.Format(_T("当前单词补全状态:%s"), g_SettingsUI->bEnglish ? _T("启用") : _T("关闭"));
 				m_pCmdListener->OnCommand(CMD_SHOWTIP, (LPARAM)&ti);
 			}
 		}

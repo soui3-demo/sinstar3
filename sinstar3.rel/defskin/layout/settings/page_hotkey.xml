@@ -18,7 +18,7 @@
       <hotkey name="hk_show_comp" width="120dp"/>
       <text text="隐藏状态栏"/>
       <hotkey name="hk_show_statusbar" width="120dp"/>
-      <text text="输入英文"/>
+      <text text="单词补全"/>
       <hotkey name="hk_input_en" width="120dp"/>
       <text text="过滤GBK"/>
       <hotkey name="hk_filter_gbk" width="120dp"/>
