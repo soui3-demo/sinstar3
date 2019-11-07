@@ -191,13 +191,9 @@ BOOL ISComm_IsSvrWorking();
 DWORD ISComm_SkinChange(HWND hUIWnd);
 
 BOOL  ISComm_CheckComp(LPCSTR pszComp,char cComplen,BYTE byMask);
-DWORD ISComm_Bldsp_Get(BOOL *pbCe2,BOOL *pbCe3,BOOL *pbCa4);
-DWORD ISComm_Bldsp_Set(BYTE byMask,BOOL bCe2,BOOL bCe3,BOOL bCa4);
 
 BOOL  ISComm_SvrTray_Get();
 void  ISComm_SvrTray_Set(BOOL bTray);
-
-LPCSTR ISComm_Svr_Pages();
 
 
 DWORD ISComm_GetTtsTokens();

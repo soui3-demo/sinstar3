@@ -546,28 +546,6 @@ BOOL  ISComm_CheckComp(LPCSTR pszComp,char cComplen,BYTE byMask)
 	return ISACK_SUCCESS==ISComm_SendMsg(CT_CHECKCOMP,(LPVOID)szBuf,(short)(cComplen+1),0);
 }
 
-DWORD ISComm_Bldsp_Get(BOOL *pbCe2,BOOL *pbCe3,BOOL *pbCa4)
-{
-	DWORD dwRet=ISComm_SendMsg(CT_DATA_BLDSP_GET,NULL,0,0);
-	if(dwRet==ISACK_SUCCESS)
-	{
-		PMSGDATA pData=ISComm_GetData();
-		if(pbCe2) *pbCe2=pData->byData[0]&BLDSP_CE2;
-		if(pbCe3) *pbCe3=pData->byData[0]&BLDSP_CE3;
-		if(pbCa4) *pbCa4=pData->byData[0]&BLDSP_CA4;
-	}
-	return dwRet;
-}
-
-DWORD ISComm_Bldsp_Set(BYTE byMask,BOOL bCe2,BOOL bCe3,BOOL bCa4)
-{
-	BYTE byBuf[2]={byMask,0};
-	if(byMask&BLDSP_CE2 && bCe2) byBuf[1]|=BLDSP_CE2;
-	if(byMask&BLDSP_CE3 && bCe3) byBuf[1]|=BLDSP_CE3;
-	if(byMask&BLDSP_CA4 && bCa4) byBuf[1]|=BLDSP_CA4;
-	return ISACK_SUCCESS==ISComm_SendMsg(CT_DATA_BLDSP_SET,(LPVOID)byBuf,2,0);
-}
-
 BOOL  ISComm_SvrTray_Get()
 {
 	ISComm_SendMsg(CT_SVRTRAY_GET,NULL,0,0);
@@ -578,17 +556,6 @@ void  ISComm_SvrTray_Set(BOOL bTray)
 {
 	BYTE byTray=bTray?1:0;
 	ISComm_SendMsg(CT_SVRTRAY_SET,&byTray,1,0);
-}
-
-LPCSTR ISComm_Svr_Pages()
-{
-	LPCSTR pszPages=NULL;
-	if(ISACK_SUCCESS==ISComm_SendMsg(CT_SVR_PAGES,NULL,0,0))
-	{
-		PMSGDATA pMsg=ISComm_GetData();
-		pszPages=(LPCSTR)pMsg->byData;
-	}
-	return pszPages;
 }
 
 DWORD ISComm_GetTtsTokens()

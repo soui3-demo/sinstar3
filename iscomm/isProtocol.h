@@ -233,11 +233,6 @@
 
 
 //----------------------------------------------
-//	获得服务器的页面数据
-//----------------------------------------------
-#define CT_SVR_PAGES		180
-
-//----------------------------------------------
 //	数据管理消息
 //----------------------------------------------
 #define CT_DATA_FILENAME    200 //fatch file name
@@ -254,17 +249,6 @@
 #define CT_FLM_OPEN			 203    //open flm
 #define CT_FLM_GET_INFO		 204    //get flm info
 #define CT_FLM_ENABLE_GROUP  205    //enable or disable a group
-
-
-//----------------------------------------------
-// 获得/设置形码混拼使用的词组
-//----------------------------------------------
-#define CT_DATA_BLDSP_GET 208
-#define BLDSP_CE2	1
-#define BLDSP_CE3	2
-#define BLDSP_CA4	4
-#define BLDSP_ALL   (BLDSP_CE2|BLDSP_CE3|BLDSP_CA4)
-#define CT_DATA_BLDSP_SET 209
 
 
 //----------------------------------------------

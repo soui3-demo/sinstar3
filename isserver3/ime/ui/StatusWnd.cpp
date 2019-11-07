@@ -202,13 +202,8 @@ namespace SOUI
 			}
 		case 5://blend input
 			{
-				BOOL bCe2 = 0, bCe3 = 0, bCa4 = 0;
-				ISComm_Bldsp_Get(&bCe2, &bCe3, &bCa4);
-				smenuPopup.CheckMenuItem(R.id.spell_one,MF_BYCOMMAND | (g_SettingsG->bBlendSpWord ? MF_CHECKED : 0));
-				smenuPopup.CheckMenuItem(R.id.spell_two, MF_BYCOMMAND | (bCe2 ? MF_CHECKED : 0));
-				smenuPopup.CheckMenuItem(R.id.spell_three, MF_BYCOMMAND | (bCe3 ? MF_CHECKED : 0));
-				smenuPopup.CheckMenuItem(R.id.spell_all, MF_BYCOMMAND | (bCa4 ? MF_CHECKED : 0));
-				smenuPopup.CheckMenuItem(R.id.userdef, MF_BYCOMMAND | (g_SettingsG->bBlendUD ? MF_CHECKED : 0));
+				smenuPopup.CheckMenuItem(R.id.menu_blend_spell,MF_BYCOMMAND | (g_SettingsG->bBlendSpWord ? MF_CHECKED : 0));
+				smenuPopup.CheckMenuItem(R.id.menu_blend_userdef, MF_BYCOMMAND | (g_SettingsG->bBlendUD ? MF_CHECKED : 0));
 
 				break;
 			}
@@ -643,33 +638,12 @@ namespace SOUI
 			BOOL bTray = !ISComm_SvrTray_Get();
 			ISComm_SvrTray_Set(bTray);
 		}
-		else if (nRet == R.id.spell_one)
+		else if (nRet == R.id.menu_blend_spell)
 		{
 			g_SettingsG->bBlendSpWord = !g_SettingsG->bBlendSpWord;
 			g_SettingsG->SetModified(true);
 		}
-		else if (nRet == R.id.spell_two)
-		{
-			BOOL bValid = 0;
-			ISComm_Bldsp_Get(&bValid, NULL, NULL);
-			bValid = !bValid;
-			ISComm_Bldsp_Set(BLDSP_CE2, bValid, 0, 0);
-		}
-		else if (nRet == R.id.spell_three)
-		{
-			BOOL bValid = 0;
-			ISComm_Bldsp_Get(NULL, &bValid, NULL);
-			bValid = !bValid;
-			ISComm_Bldsp_Set(BLDSP_CE3, 0, bValid, 0);
-		}
-		else if (nRet == R.id.spell_all)
-		{
-			BOOL bValid = 0;
-			ISComm_Bldsp_Get(NULL, NULL, &bValid);
-			bValid = !bValid;
-			ISComm_Bldsp_Set(BLDSP_CA4, 0, 0, bValid);
-		}
-		else if (nRet == R.id.userdef)
+		else if (nRet == R.id.menu_blend_userdef)
 		{
 			g_SettingsG->bBlendUD = !g_SettingsG->bBlendUD;
 			g_SettingsG->SetModified(true);
