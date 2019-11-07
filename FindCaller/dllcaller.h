@@ -15,8 +15,6 @@ typedef struct tagCALLERINFO
 
 BYTE * GetCaller(LPCTSTR pszDllPath);
 void FreeCallerInfo(BYTE * pBuf);
-BOOL Kill_Process(DWORD dwProcID);
-BOOL GetProcessInfo(DWORD dwProcID, HWND &hWnd, DWORD &dwThreadID);
 
 #ifdef __cplusplus
 }

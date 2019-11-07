@@ -1,6 +1,5 @@
 #pragma once
 
-#define  UICLASSNAME _T("sinstar3_uiwnd")
 #include "../sinstar3_proxy/simplewnd.h"
 #include "../sinstar3_proxy/SinstarProxy.h"
 

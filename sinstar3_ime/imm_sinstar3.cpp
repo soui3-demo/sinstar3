@@ -27,7 +27,7 @@ BOOL WINAPI ImeInquire(LPIMEINFO lpIMEInfo,LPTSTR lpszUIClass,DWORD dwSystemInfo
 
 	lpIMEInfo->fdwSelectCaps = SELECT_CAP_CONVERSION;
 
-	_tcscpy(lpszUIClass,UICLASSNAME);
+	_tcscpy(lpszUIClass,CLS_SINSTAR3_IME_WND);
 
 	return TRUE;
 }

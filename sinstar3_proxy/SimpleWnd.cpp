@@ -12,7 +12,7 @@ CSimpleWnd::~CSimpleWnd(void)
 
 HWND CSimpleWnd::Create(HINSTANCE hInst)
 {
-	return ::CreateWindowEx(0,CLS_SIMPLEWND,NULL,WS_POPUP,0,0,0,0,HWND_MESSAGE,(HMENU)0,hInst,this);
+	return ::CreateWindowEx(0,CLS_SINSTAR3_IME_WND,NULL,WS_POPUP,0,0,0,0,HWND_MESSAGE,(HMENU)0,hInst,this);
 }
 
 BOOL CSimpleWnd::Destroy()
@@ -73,7 +73,7 @@ BOOL CSimpleWnd::RegisterWndClass(HINSTANCE hInstance)
 	wc.hCursor        = LoadCursor( NULL, IDC_ARROW );
 	wc.hIcon          = NULL;
 	wc.lpszMenuName   = (LPTSTR)NULL;
-	wc.lpszClassName  = CLS_SIMPLEWND;
+	wc.lpszClassName  = CLS_SINSTAR3_IME_WND;
 	wc.hbrBackground  = NULL;
 	wc.hIconSm        = NULL;
 
@@ -82,5 +82,5 @@ BOOL CSimpleWnd::RegisterWndClass(HINSTANCE hInstance)
 
 void CSimpleWnd::UnregisterWndClass(HINSTANCE hInstance)
 {
-	UnregisterClass(CLS_SIMPLEWND,hInstance);
+	UnregisterClass(CLS_SINSTAR3_IME_WND,hInstance);
 }

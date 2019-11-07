@@ -11,12 +11,24 @@ namespace SOUI {
 	{
 	}
 
-	void CTaskAdapter::AddTask(TASKINFO ti, BOOL bX64)
+	bool CTaskAdapter::AddTask(TASKINFO ti, PTYPE type)
 	{
 		TASKINFOEX tiex;
 		memcpy(&tiex, &ti, sizeof(ti));
-		tiex.bX64 = bX64;
+		tiex.type = type;
+		for(int i=0;i<m_arrTasks.GetCount();i++)
+		{
+			if(m_arrTasks[i].pid == ti.pid)
+			{
+				if(m_arrTasks[i].type == Unk && type!=Unk)
+				{
+					m_arrTasks[i]=tiex;
+				}
+				return false;
+			}
+		}
 		m_arrTasks.Add(tiex);
+		return true;
 	}
 
 	TASKINFOEX * CTaskAdapter::GetTask(int iTask)
@@ -48,7 +60,12 @@ namespace SOUI {
 		}
 
 		TASKINFOEX ti = m_arrTasks[position];
-		pItem->FindChildByID(R.id.txt_type)->SetWindowText(ti.bX64 ? _T("x64") : _T("x86"));
+		static LPCTSTR szType[PTYPE_COUNT]={
+			_T("x86"),
+			_T("x64"),
+			_T("unknown")
+		};
+		pItem->FindChildByID(R.id.txt_type)->SetWindowText(szType[ti.type]);
 		pItem->FindChildByID(R.id.txt_pid)->SetWindowText(SStringT().Format(_T("%u"),ti.pid));
 		pItem->FindChildByID(R.id.txt_name)->SetWindowText(ti.szName);
 		pItem->FindChildByID(R.id.txt_path)->SetWindowText(ti.szPath);

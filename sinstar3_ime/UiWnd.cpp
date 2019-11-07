@@ -60,20 +60,16 @@ BOOL CUiWnd::RegisterClass(HINSTANCE hInstance)
 	wc.hCursor        = LoadCursor( NULL, IDC_ARROW );
 	wc.hIcon          = NULL;
 	wc.lpszMenuName   = (LPTSTR)NULL;
-	wc.lpszClassName  = UICLASSNAME;
+	wc.lpszClassName  = CLS_SINSTAR3_IME_WND;
 	wc.hbrBackground  = NULL;
 	wc.hIconSm        = NULL;
 
-	if( !RegisterClassEx( (LPWNDCLASSEX)&wc ) )
-		return FALSE;
-	return CSimpleWnd::RegisterWndClass(hInstance);
+	return RegisterClassEx( (LPWNDCLASSEX)&wc );
 }
 
 void CUiWnd::UnregisterClass(HINSTANCE hInstance)
 {
-	::UnregisterClass(UICLASSNAME,hInstance);
-	CSimpleWnd::UnregisterWndClass(hInstance);
-
+	::UnregisterClass(CLS_SINSTAR3_IME_WND,hInstance);
 }
 
 CUiWnd::CUiWnd(void)

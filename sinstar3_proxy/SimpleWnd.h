@@ -1,6 +1,6 @@
 #pragma once
 
-#define  CLS_SIMPLEWND	_T("simple wnd")
+#define  CLS_SINSTAR3_IME_WND	_T("cls_sinstar3_ime_{8C2BE781-F91D-4c1a-9F98-427C7719E100}")
 class CSimpleWnd
 {
 public:

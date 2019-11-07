@@ -4,9 +4,15 @@
 
 namespace SOUI
 {
+	enum PTYPE{
+		x86=0,
+		x64,
+		Unk,
+		PTYPE_COUNT,
+	};
 	struct TASKINFOEX : TASKINFO
 	{
-		BOOL bX64;
+		PTYPE type;
 	};
 
 	class CTaskAdapter : public SMcAdapterBase
@@ -15,7 +21,7 @@ namespace SOUI
 		CTaskAdapter();
 		~CTaskAdapter();
 
-		void AddTask(TASKINFO ti, BOOL bX64);
+		bool AddTask(TASKINFO ti, PTYPE type);
 		TASKINFOEX* GetTask(int iTask);
 		BOOL DelTask(int iTask);
 		void RemoveAll();

@@ -115,35 +115,6 @@ LRESULT OnCopyData(HWND hWnd, WPARAM wp, LPARAM lp)
 			lRet = 0;
 		}
 		break;
-	case FC_KILLPID:
-		if (pCds->cbData == sizeof(DWORD))
-		{
-			DWORD pid = 0;
-			memcpy(&pid, pCds->lpData, sizeof(DWORD));
-			BOOL bOK = Kill_Process(pid);
-			lRet = bOK ? 0 : 1;
-		}
-		break;
-	case FC_ACTIVATE:
-		if (pCds->cbData == sizeof(DWORD))
-		{
-			DWORD pid = 0;
-			memcpy(&pid, pCds->lpData, sizeof(DWORD));
-			HWND hWnd=0;
-			DWORD dwThreadID=0;
-			GetProcessInfo(pid,hWnd,dwThreadID);
-			DWORD dwCurId = GetCurrentThreadId();
-			AttachThreadInput(dwCurId,dwThreadID,TRUE);
-			if (IsIconic(hWnd))
-			{
-				ShowWindow(hWnd, SW_RESTORE);
-			}
-			SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
-			SetWindowPos(hWnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
-			AttachThreadInput(dwCurId, dwThreadID, FALSE);
-			lRet = 0;
-		}
-		break;
 	case FC_QUIT:
 		{
 			PostQuitMessage(0);
