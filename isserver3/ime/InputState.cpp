@@ -1847,9 +1847,9 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 			}
 			InputUpdate();
 		}
+		lpCntxtPriv->byCandType=m_pbyMsgBuf[0];
 		if(lpCntxtPriv->sCandCount)
 		{
-			lpCntxtPriv->byCandType=m_pbyMsgBuf[0];
 			lpbyCand=lpCntxtPriv->ppbyCandInfo[0];
 		}else if(lpCntxtPriv->bWebMode)
 		{
