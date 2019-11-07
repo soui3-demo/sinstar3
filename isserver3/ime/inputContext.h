@@ -70,6 +70,7 @@ struct InputContext
 
 	//重码数据
 	short   sCandCount;				//重码数
+	BYTE	byCandType;
 	LPBYTE  *ppbyCandInfo;			//重码数据表
 	int     iCandBegin;		        //first visible candidate index
 	int     iCandLast;	            //last visible candidate index + 1

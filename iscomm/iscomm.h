@@ -79,11 +79,10 @@ typedef struct tagFLMINFO
 #define MCR_NORMAL		0		//正常获取重码
 #define MCR_ASSOCIATE	1		//联想字,包含预测及编码提示
 #define MCR_LONGERCOMP	(1<<1)	//存在以当前编码为前缀的长自定义编码
-#define MCR_MIXSP		(1<<2)	//混合简拼
+#define MCR_MIXSP		(1<<2)	//混合拼音
 #define MCR_USERDEF		(1<<3)	//混合自定义输入
-#define MCR_SPCAND		(1<<4)	//输入拼音单字
-#define MCR_WILD		(1<<6)	//万能键的查询
-#define MCR_AUTOSELECT	(1<<7)	//唯一码上屏
+#define MCR_WILD		(1<<4)	//万能键的查询
+#define MCR_AUTOSELECT	(1<<5)	//唯一码上屏
 
 //联想mask
 #define MKI_ASTCAND		1		//词组联想

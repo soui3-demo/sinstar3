@@ -85,10 +85,10 @@ BOOL KeyIn_IsNumCode(InputContext * lpCntxtPriv)
 		);
 }
 
-BOOL KeyIn_Code_IsMaxCode(InputContext * lpCntxtPriv,BYTE byType)
+BOOL KeyIn_Code_IsMaxCode(InputContext * lpCntxtPriv)
 {
 	if(lpCntxtPriv->cComp==0) return FALSE;
-	return (lpCntxtPriv->cComp>=ISComm_GetCompInfo()->cCodeMax &&  byType==MCR_NORMAL);
+	return (lpCntxtPriv->cComp>=ISComm_GetCompInfo()->cCodeMax &&  lpCntxtPriv->byCandType==MCR_NORMAL);
 }
 
 BOOL KeyIn_Code_IsValidComp(InputContext * lpCntxtPriv,char cInput)
@@ -391,6 +391,7 @@ void CInputState::ClearContext(UINT dwMask)
 		m_ctx.iCandBegin = 0;
 		m_ctx.iCandLast = -1;
 		m_ctx.pbyEnAstPhrase=NULL;
+		m_ctx.byCandType = MCR_NORMAL;
 	}
 	if(dwMask&CPC_SENTENCE)
 	{
@@ -1673,7 +1674,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 			ClearContext(CPC_ALL);
 		}
 
-		if(KeyIn_Code_IsMaxCode(lpCntxtPriv,MCR_NORMAL) 
+		if(KeyIn_Code_IsMaxCode(lpCntxtPriv) 
 			&& !KeyIn_Code_IsValidComp(lpCntxtPriv,byInput)
 			&& g_SettingsG->bAutoInput 
 			&& !lpCntxtPriv->bWebMode)
@@ -1790,7 +1791,6 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 	if(bRet)
 	{
 		LPBYTE lpbyCand=NULL;
-		BYTE byType=0;
 		BYTE byMask=MQC_NORMAL|g_SettingsG->byForecast;
 		if(g_SettingsG->bAutoMatch) byMask|=MQC_MATCH;
 		if(g_SettingsG->bBlendUD) byMask|=MQC_USERDEF;
@@ -1849,7 +1849,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 		}
 		if(lpCntxtPriv->sCandCount)
 		{
-			byType=m_pbyMsgBuf[0];
+			lpCntxtPriv->byCandType=m_pbyMsgBuf[0];
 			lpbyCand=lpCntxtPriv->ppbyCandInfo[0];
 		}else if(lpCntxtPriv->bWebMode)
 		{
@@ -1857,7 +1857,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 			lpCntxtPriv->iTip = -1;
 			strcpy(lpCntxtPriv->szTip,"网址模式:\n 回车=网址上屏\n Shift+回车=浏览");
 		}
-		if((byType&MCR_AUTOSELECT ||(KeyIn_Code_IsMaxCode(lpCntxtPriv,byType) && g_SettingsG->bAutoInput)) && !lpCntxtPriv->bWebMode)
+		if((lpCntxtPriv->byCandType&MCR_AUTOSELECT ||(KeyIn_Code_IsMaxCode(lpCntxtPriv) && g_SettingsG->bAutoInput)) && !lpCntxtPriv->bWebMode)
 		{
 			if(lpCntxtPriv->sCandCount==1 && lpbyCand[0]!=RATE_FORECAST && (lpbyCand[1]!=0 || g_SettingsG->nGbkMode!=CSettingsGlobal::GBK_SHOW_MANUAL))
 			{
