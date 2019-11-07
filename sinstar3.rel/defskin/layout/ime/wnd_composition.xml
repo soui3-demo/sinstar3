@@ -13,7 +13,12 @@
     <imglist name="comp_logo" src="img:png_comp_logo" />
   </skin>
   <style>
-    <class name="cls_cand_first"  colorIndex="@color/cand_index" colorCand="@color/cand_first" colorComp="@color/cand_comp" colorWild="@color/cand_wild"/>
+    <class name="cls_cand_first"  colorIndex="@color/cand_first"
+     colorCand="@color/cand_first"
+     colorComp="@color/cand_comp"
+     colorWild="@color/cand_wild"
+     colorCandForecast="@color/cand_forecast"
+     colorCandGbk="@color/cand_gbk"   />
     <class name="cls_cand"   colorIndex="@color/cand_index" 
 	    colorCand="@color/cand_text" 
 	    colorCandUserDef="@color/cand_user_def" 
