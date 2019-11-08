@@ -6,6 +6,7 @@
 #include "../InputState.h"
 #include "../../../include/FileHelper.h"
 #include <ShellAPI.h>
+#include "../../ui/TextEditorDlg.h"
 
 namespace SOUI
 {
@@ -681,13 +682,14 @@ namespace SOUI
 			dlgDonate->CenterWindow(GetDesktopWindow());
 			dlgDonate->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
 		}
-		else if (nRet >= R.id.memu_edit_userdef && nRet <=R.id.memu_edit_userjm)
+		else if (nRet >= R.id.memu_edit_userdef && nRet <=R.id.menu_edit_userdict)
 		{
 			int types[] = {
 				FU_USERDEF,
 				FU_SYMBOL,
 				FU_USERCMD,
 				FU_USERJM,
+				FU_USERDICT,
 			};
 			OnEditUserDefData(types[nRet - R.id.memu_edit_userdef]);
 		}
@@ -746,8 +748,9 @@ namespace SOUI
 			PMSGDATA pMsgData = ISComm_GetData();
 			SStringA strUtf8((char*)pMsgData->byData, pMsgData->sSize);
 			SStringT strFileName = S_CA2T(strUtf8, CP_UTF8);
-			ShellExecute(GetActiveWindow(),_T("open"),strFileName,NULL,NULL,SW_SHOWNORMAL);
-			if(SMessageBox(NULL,_T("按确定保存修改，取消放弃修改！"),_T("编辑文件"),MB_OKCANCEL|MB_ICONQUESTION)==IDOK)
+			
+			CTextEditorDlg dlg(nType, strFileName);
+			if (dlg.DoModal() == IDOK)
 			{
 				ISComm_UpdateUserDefData(nType, strUtf8);
 			}

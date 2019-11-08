@@ -28,11 +28,7 @@
       </window>
     </template>
   </mclistview>
-  <window size="-2,-1" layout="hbox" extend_top="10">
+  <window size="-2,-1" layout="vbox" extend_top="10" gravity="center">
     <button name="btn_install_sys_phrase" padding="10,5,10,5" text="安装系统词库"/>
-    <window size="0,0" weight="1" visible="0"/>
-    <button name="btn_import_user_phrase" padding="10,5,10,5" text="导入用户词库"/>
-    <window size="0,0" weight="1" visible="0"/>
-    <button name="btn_export_user_phrase" padding="10,5,10,5" text="导出用户词库"/>
   </window>
 </include>

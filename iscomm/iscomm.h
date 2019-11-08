@@ -219,9 +219,6 @@ DWORD ISComm_InstallPhraseLib(LPCSTR pszPlnameUtf8);
 DWORD ISComm_QueryPhraseGroup();
 DWORD ISComm_EnablePhraseGroup(LPCSTR pszGroupName, char bEnable);
 
-DWORD ISComm_ImportUserLib(LPCSTR pszUserLibUtf8);
-DWORD ISComm_ExportUserLib(LPCSTR pszUserLibUtf8);
-
 DWORD ISComm_InstallComp(LPCSTR pszCompNameUtf8,char bApplyNow);
 
 DWORD ISComm_Flm_List();

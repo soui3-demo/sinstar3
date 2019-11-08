@@ -56,7 +56,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>.;..\include;$(SOUI3PATH)\config;$(SOUI3PATH)\components;$(SOUI3PATH)\SOUI\include;$(SOUI3PATH)\utilities\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\include;$(SOUI3PATH)\config;$(SOUI3PATH)\components;$(SOUI3PATH)\SOUI\include;$(SOUI3PATH)\utilities\include;$(SOUI3PATH)\third-part\Scintilla\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINDOWS;STRICT;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <BrowseInformation>true</BrowseInformation>
@@ -67,7 +67,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>..\lib;$(SOUI3PATH)\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>helperd.lib;iscommd.lib;utilitiesd.lib;soui3d.lib;SIpcObjectd.lib;slog4zd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>helperd.lib;iscommd.lib;utilitiesd.lib;soui3d.lib;scintillad.lib;imm32.lib;SIpcObjectd.lib;slog4zd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
     <ResourceCompile>
@@ -84,7 +84,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>.;..\include;$(SOUI3PATH)\config;$(SOUI3PATH)\components;$(SOUI3PATH)\SOUI\include;$(SOUI3PATH)\utilities\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;..\include;$(SOUI3PATH)\config;$(SOUI3PATH)\components;$(SOUI3PATH)\SOUI\include;$(SOUI3PATH)\utilities\include;$(SOUI3PATH)\third-part\Scintilla\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -94,7 +94,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>..\lib;$(SOUI3PATH)\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>helper.lib;iscomm.lib;utilities.lib;soui3.lib;sipcobject.lib;slog4z.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>helper.lib;iscomm.lib;utilities.lib;soui3.lib;scintilla.lib;imm32.lib;sipcobject.lib;slog4z.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
     <ResourceCompile>
@@ -115,6 +115,7 @@
     <ClCompile Include="controls\SCandView.cpp" />
     <ClCompile Include="controls\SCaption2.cpp" />
     <ClCompile Include="controls\SChatEdit.cpp" />
+    <ClCompile Include="controls\ScintillaWnd.cpp" />
     <ClCompile Include="controls\SCompBackground.cpp" />
     <ClCompile Include="controls\SCompView.cpp" />
     <ClCompile Include="controls\SEnglishCand.cpp" />
@@ -124,6 +125,7 @@
     <ClCompile Include="controls\SMutexView.cpp" />
     <ClCompile Include="controls\SPhraseCand.cpp" />
     <ClCompile Include="controls\SQrCtrl.cpp" />
+    <ClCompile Include="controls\SRealWndHandler_Scintilla.cpp" />
     <ClCompile Include="controls\SSentView.cpp" />
     <ClCompile Include="controls\SSkinAPNG.cpp" />
     <ClCompile Include="controls\SSkinPNGX.cpp" />
@@ -157,6 +159,7 @@
     <ClCompile Include="ThreadObject.cpp" />
     <ClCompile Include="ui\BuildIndexProgWnd.cpp" />
     <ClCompile Include="ui\KeyMapDlg.cpp" />
+    <ClCompile Include="ui\TextEditorDlg.cpp" />
     <ClCompile Include="ui\TrayIcon.cpp" />
     <ClCompile Include="ui\UpdateInfoDlg.cpp" />
     <ClCompile Include="worker.cpp" />
@@ -172,7 +175,9 @@
   <ItemGroup>
     <ClInclude Include="Base64.h" />
     <ClInclude Include="controls\QR_Encode.h" />
+    <ClInclude Include="controls\ScintillaWnd.h" />
     <ClInclude Include="controls\SCompView.h" />
+    <ClInclude Include="controls\SRealWndHandler_Scintilla.h" />
     <ClInclude Include="controls\SSkinAni.h" />
     <ClInclude Include="controls\SApngPlayer.h" />
     <ClInclude Include="controls\SCandView.h" />
@@ -220,6 +225,7 @@
     <ClInclude Include="ThreadObject.h" />
     <ClInclude Include="ui\BuildIndexProgWnd.h" />
     <ClInclude Include="ui\KeyMapDlg.h" />
+    <ClInclude Include="ui\TextEditorDlg.h" />
     <ClInclude Include="ui\TrayIcon.h" />
     <ClInclude Include="ui\UpdateInfoDlg.h" />
     <ClInclude Include="worker.h" />
@@ -243,6 +249,7 @@
     <None Include="res\version.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="uires\layout\server\dlg_texteditor.xml" />
     <Xml Include="uires\smenu\context.xml" />
     <Xml Include="uires\uidef\init.xml" />
     <Xml Include="uires\values\color.xml" />

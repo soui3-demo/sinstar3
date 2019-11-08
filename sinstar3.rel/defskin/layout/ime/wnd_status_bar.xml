@@ -47,6 +47,7 @@
       <button size="0,0" visible="0" name="btn_menu"/>
       <button size="0,0" visible="0" name="btn_help"/>
       <button size="0,0" visible="0" name="btn_query"/>
+      <button size="0,0" visible="0" name="btn_config"/>
     </status_bg>
   </root>
 </SOUI>

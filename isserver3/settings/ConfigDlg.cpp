@@ -1069,42 +1069,6 @@ SWindow *pCtrl = FindChildByID(id);\
 		}
 	}
 
-	void CConfigDlg::OnImportUserLib()
-	{
-		CFileDialogEx dlg(TRUE, _T("txt"), 0, 6, _T("词库文件(*.txt)\0*.txt\0All files (*.*)\0*.*\0\0"));
-		if (dlg.DoModal() == IDOK)
-		{
-			SStringA strNameUtf8 = S_CT2A(dlg.m_szFileName, CP_UTF8);
-			DWORD dwRet = ISComm_ImportUserLib(strNameUtf8);
-			if (dwRet == ISACK_ERROR)
-			{
-				SMessageBox(m_hWnd, _T("导入失败"), _T("提示"), MB_OK | MB_ICONSTOP);
-			}
-			else if (dwRet == ISACK_SUCCESS)
-			{
-				SMessageBox(m_hWnd, _T("导入成功"), _T("提示"), MB_OK);
-			}
-		}
-	}
-
-	void CConfigDlg::OnExportUserLib()
-	{
-		CFileDialogEx dlg(FALSE, _T("txt"), 0, 6, _T("词库文件(*.txt)\0*.txt\0All files (*.*)\0*.*\0\0"));
-		if (dlg.DoModal() == IDOK)
-		{
-			SStringA strNameUtf8 = S_CT2A(dlg.m_szFileName, CP_UTF8);
-			DWORD dwRet = ISComm_ExportUserLib(strNameUtf8);
-			if (dwRet == ISACK_ERROR)
-			{
-				SMessageBox(m_hWnd, _T("导出失败"), _T("提示"), MB_OK | MB_ICONSTOP);
-			}
-			else if (dwRet == ISACK_SUCCESS)
-			{
-				ShellExecute(m_hWnd, _T("open"), dlg.m_szFileName, NULL,NULL, SW_SHOWDEFAULT);
-			}
-		}
-	}
-
 	void CConfigDlg::OnAddBlur()
 	{
 		CAddBlurDlg addBlurDlg;

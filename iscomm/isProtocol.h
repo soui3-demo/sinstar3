@@ -238,10 +238,10 @@
 #define CT_DATA_FILENAME    200 //fatch file name
 #define CT_DATA_FILEUPDATE	201	//数据文件更新
 #define FU_USERDEF	1		//更新用户定义文件
-#define FU_USERCMD	(1<<1)	//快捷命令文件更新
-#define FU_SYMBOL   (1<<2)  //user define symbol
-#define FU_USERJM   (1<<3)  //user define jm map
-
+#define FU_USERCMD	2	//快捷命令文件更新
+#define FU_SYMBOL   3  //user define symbol
+#define FU_USERJM   4  //user define jm map
+#define FU_USERDICT 5  //user dict
 //----------------------------------------------
 // 获得/设置外文词库分组信息
 //----------------------------------------------
@@ -297,11 +297,6 @@
 
 #define CT_QUERY_PHRASEGROUP	270
 #define CT_ENABLE_PHRASEGROUP 271
-
-//install user phrase lib
-#define CT_IMPORT_USERLIB		280
-//export user phrase lib
-#define CT_EXPORT_USERLIB		281
 
 #define CT_INSTALL_COMP			290
 /////////////////////////////////////////////////////////////////////////////

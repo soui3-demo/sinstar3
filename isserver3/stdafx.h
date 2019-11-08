@@ -84,6 +84,8 @@ using namespace SOUI;
 #include "controls/SQrCtrl.h"
 #include "controls/STabCtrlEx.h"
 #include "controls/STipView.h"
+#include "controls/ScintillaWnd.h"
+#include "controls/SRealWndHandler_Scintilla.h"
 
 #include "dataCenter/datacenter.h"
 #include "dataCenter/Settings.h"

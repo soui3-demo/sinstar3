@@ -672,16 +672,6 @@ DWORD ISComm_EnablePhraseGroup(LPCSTR pszGroupName, char bEnable)
 	return ISComm_SendMsg(CT_ENABLE_PHRASEGROUP, s_byBuf, cf.nOffset, 0);
 }
 
-DWORD ISComm_ImportUserLib(LPCSTR pszUserLibUtf8)
-{
-	return ISComm_SendMsg(CT_IMPORT_USERLIB, (const LPVOID)pszUserLibUtf8, (short)strlen(pszUserLibUtf8), 0);
-}
-
-DWORD ISComm_ExportUserLib(LPCSTR pszUserLibUtf8)
-{
-	return ISComm_SendMsg(CT_EXPORT_USERLIB, (const LPVOID)pszUserLibUtf8, (short)strlen(pszUserLibUtf8), 0);
-}
-
 DWORD ISComm_InstallComp(LPCSTR pszCompNameUtf8, char bApplyNow)
 {
 	int nLen = (int)strlen(pszCompNameUtf8);

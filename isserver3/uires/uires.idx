@@ -25,6 +25,7 @@
     <file name="page_hotkey" path="layout\settings\page_hotkey.xml"/>
     <file name="page_habit" path="layout\settings\page_habit.xml"/>
     <file name="page_celib" path="layout\settings\page_celib.xml"/>
+    <file name="dlg_texteditor" path="layout\server\dlg_texteditor.xml"/>
   </LAYOUT>
 
   <values>
