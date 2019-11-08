@@ -15,11 +15,11 @@
     <item text="GBK过滤" name="switch_filter_gbk" id="107"/>
   </item>
   <sep/>
-  <item text="皮    肤" name="menu_skin" id="200" contextHelpId="2">
-    <item text="皮肤目录" name="skin_mgr" id="201"/>
-    <item text="网上皮肤" name="skin_cloud" id="202"/>
+  <item text="皮    肤" name="menu_skin" id="2000" contextHelpId="2">
+    <item text="皮肤目录" name="skin_mgr" id="2001"/>
+    <item text="网上皮肤" name="skin_cloud" id="2002"/>
     <sep/>
-    <item text="内置皮肤" name="skin_def" id="220"/>
+    <item text="内置皮肤" name="skin_def" id="2220"/>
     <sep/>
   </item>
   <item text="编码方案" name="menu_comp" contextHelpId="4">

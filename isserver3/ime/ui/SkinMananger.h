@@ -4,7 +4,7 @@ class CSkinMananger
 {
 public:
 	enum{
-		MAX_SKINS=80,
+		MAX_SKINS=800,
 	};
 public:
 	CSkinMananger();
