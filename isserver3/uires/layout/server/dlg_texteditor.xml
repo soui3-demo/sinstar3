@@ -3,6 +3,9 @@
 appWnd="1"
 translucent="0"
 >
+  <style>
+    <text.tip size="-2,-1" multiLines="1" colorText="@color/red"/>
+  </style>
   <root  width="600" height="400" skin="_skin.sys.wnd.bkgnd" cache="1" layout="vbox" padding="5,5,5,5" interval="10">
     <caption size="-2,30" layout="hbox" gravity="center">
       <window size="-1,-2" layout="vbox">
@@ -24,11 +27,11 @@ translucent="0"
       <window size="0,0" weight="2" visible="0"/>
     </window>
     <window size="-2,-1" layout="vbox">
-      <text name="tip_edit_userdef" text="@string/tip_edit_userdef" visible="0" display="0"/>
-      <text name="tip_edit_symbol" text="@string/tip_edit_symbol" visible="0" display="0"/>
-      <text name="tip_edit_usercmd" text="@string/tip_edit_usercmd" visible="0" display="0"/>
-      <text name="tip_edit_userjm" text="@string/tip_edit_userjm" visible="0" display="0"/>
-      <text name="tip_edit_userdict" text="@string/tip_edit_userdict" visible="0" display="0"/>
+      <text.tip name="tip_edit_userdef" text="@string/tip_edit_userdef" visible="0" display="0"/>
+      <text.tip name="tip_edit_symbol" text="@string/tip_edit_symbol" visible="0" display="0"/>
+      <text.tip name="tip_edit_usercmd" text="@string/tip_edit_usercmd" visible="0" display="0"/>
+      <text.tip name="tip_edit_userjm" text="@string/tip_edit_userjm" visible="0" display="0"/>
+      <text.tip name="tip_edit_userdict" text="@string/tip_edit_userdict" visible="0" display="0"/>
     </window>
   </root>
 </SOUI>
