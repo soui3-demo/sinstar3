@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;&quot;$(SOUI3PATH)\config&quot;;&quot;$(SOUI3PATH)\components&quot;;&quot;$(SOUI3PATH)\SOUI\include&quot;;&quot;$(SOUI3PATH)\utilities\include&quot;;&quot;$(SolutionDir)include&quot;;&quot;$(SolutionDir)ipcobject\include&quot;"
+				AdditionalIncludeDirectories=".;&quot;$(SOUI3PATH)\config&quot;;&quot;$(SOUI3PATH)\components&quot;;&quot;$(SOUI3PATH)\SOUI\include&quot;;&quot;$(SOUI3PATH)\utilities\include&quot;;&quot;$(SolutionDir)include&quot;;&quot;$(SolutionDir)ipcobject\include&quot;;&quot;$(SOUI3PATH)\third-part\Scintilla\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="utilitiesd.lib soui3d.lib helperd.lib iscommd.lib sipcobjectd.lib slog4zd.lib"
+				AdditionalDependencies="imm32.lib utilitiesd.lib soui3d.lib helperd.lib Scintillad.lib iscommd.lib sipcobjectd.lib slog4zd.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib&quot;;&quot;$(SOUI3PATH)\bin&quot;"
 				GenerateDebugInformation="true"
@@ -118,7 +118,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories=".;&quot;$(SOUI3PATH)\config&quot;;&quot;$(SOUI3PATH)\components&quot;;&quot;$(SOUI3PATH)\SOUI\include&quot;;&quot;$(SOUI3PATH)\utilities\include&quot;;&quot;$(SolutionDir)include&quot;;&quot;$(SolutionDir)ipcobject\include&quot;"
+				AdditionalIncludeDirectories=".;&quot;$(SOUI3PATH)\config&quot;;&quot;$(SOUI3PATH)\components&quot;;&quot;$(SOUI3PATH)\SOUI\include&quot;;&quot;$(SOUI3PATH)\utilities\include&quot;;&quot;$(SolutionDir)include&quot;;&quot;$(SolutionDir)ipcobject\include&quot;;&quot;$(SOUI3PATH)\third-part\Scintilla\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
@@ -138,7 +138,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="utilities.lib soui3.lib helper.lib iscomm.lib sipcobject.lib slog4z.lib"
+				AdditionalDependencies="imm32.lib utilities.lib soui3.lib helper.lib iscomm.lib Scintilla.lib sipcobject.lib slog4z.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib&quot;;&quot;$(SOUI3PATH)\bin&quot;"
 				GenerateDebugInformation="true"
@@ -256,6 +256,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\controls\ScintillaWnd.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\controls\SCompBackground.cpp"
 				>
 			</File>
@@ -312,6 +316,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\controls\SRealWndHandler_Scintilla.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\controls\SSentView.cpp"
 				>
 			</File>
@@ -357,6 +365,10 @@
 			</File>
 			<File
 				RelativePath=".\ime\ui\SToolsMgr.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\ui\TextEditorDlg.cpp"
 				>
 			</File>
 			<File
@@ -462,11 +474,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\res\resource.h"
+				RelativePath=".\resource.h"
 				>
 			</File>
 			<File
-				RelativePath=".\resource.h"
+				RelativePath=".\res\resource.h"
 				>
 			</File>
 			<File
@@ -487,6 +499,10 @@
 			</File>
 			<File
 				RelativePath=".\controls\SChatEdit.h"
+				>
+			</File>
+			<File
+				RelativePath=".\controls\ScintillaWnd.h"
 				>
 			</File>
 			<File
@@ -546,6 +562,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\controls\SRealWndHandler_Scintilla.h"
+				>
+			</File>
+			<File
 				RelativePath=".\controls\SSentView.h"
 				>
 			</File>
@@ -595,6 +615,10 @@
 			</File>
 			<File
 				RelativePath=".\ime\ui\SToolsMgr.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ui\TextEditorDlg.h"
 				>
 			</File>
 			<File
