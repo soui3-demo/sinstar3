@@ -163,8 +163,8 @@ namespace SOUI
 	void CStatusWnd::OnInitMenuPopup(HMENU menuPopup, UINT nIndex, BOOL bSysMenu)
 	{
 		SMenu smenuPopup(menuPopup);
-
-		switch (::GetMenuContextHelpId(menuPopup))
+		DWORD dwCtxID = ::GetMenuContextHelpId(menuPopup);
+		switch (dwCtxID)
 		{
 		case 1:
 			{//main menu
@@ -175,16 +175,6 @@ namespace SOUI
 				smenuPopup.CheckMenuItem(R.id.switch_record_input, MF_BYCOMMAND | g_SettingsUI->bRecord ? MF_CHECKED : 0);
 				smenuPopup.CheckMenuItem(R.id.switch_word_input, MF_BYCOMMAND | g_SettingsUI->bEnglish ? MF_CHECKED : 0);
 				smenuPopup.CheckMenuItem(R.id.switch_filter_gbk, MF_BYCOMMAND | g_SettingsUI->bFilterGbk ? MF_CHECKED : 0);
-				break;
-			}
-		case 2:
-			{//skin
-				SStringT strCurSkin = g_SettingsG->strSkin;
-				if (strCurSkin.IsEmpty())
-				{
-					smenuPopup.CheckMenuItem(R.id.skin_def, MF_BYCOMMAND|MF_CHECKED);
-				}
-				m_skinManager.InitSkinMenu(menuPopup, CDataCenter::getSingletonPtr()->GetDataPath() + _T("\\skins"), R.id.skin_def, strCurSkin);
 				break;
 			}
 		case 4://comp select
@@ -218,8 +208,28 @@ namespace SOUI
 				m_toolManager.InitToolMenu(menuPopup, CDataCenter::getSingletonPtr()->GetDataPath() + _T("\\tools"), R.id.menu_tool_base);
 				break;
 			}
+		case 2:
+			{//skin
+				SStringT strCurSkin = g_SettingsG->strSkin;
+				if (strCurSkin.IsEmpty())
+				{
+					smenuPopup.CheckMenuItem(R.id.skin_def, MF_BYCOMMAND|MF_CHECKED);
+				}
+				m_skinManager.InitSkinMenu(menuPopup, CDataCenter::getSingletonPtr()->GetDataPath() + _T("\\skins"), R.id.skin_def, strCurSkin);
+				break;
+			}
+		default:
+			{
+				SStringT strSkinDir = m_skinManager.SkinPathFromCtxID((int)dwCtxID);
+				if(!strSkinDir.IsEmpty())
+				{//sub skin menu
+					SStringT strCurSkin = g_SettingsG->strSkin;
+					m_skinManager.InitSkinMenu(menuPopup, strSkinDir, dwCtxID, strCurSkin);
+				}
+			}
+			break;
 		}
-		::SetMenuContextHelpId(menuPopup,::GetMenuContextHelpId(menuPopup)+10000);
+		::SetMenuContextHelpId(menuPopup,dwCtxID+1000000);
 	}
 
 
@@ -601,11 +611,6 @@ namespace SOUI
 		if (nRet == R.id.config)
 		{//system config
 			m_pCmdListener->OnCommand(CMD_OPENCONFIG, 0);
-		}
-		else if (nRet >= R.id.skin_def && nRet <= R.id.skin_def + CSkinMananger::MAX_SKINS)
-		{//select menu
-			SStringT strSkinPath = m_skinManager.SkinPathFromID(nRet);
-			m_pCmdListener->OnCommand(CMD_CHANGESKIN, (LPARAM)&strSkinPath);
 		}else if(nRet == R.id.skin_mgr)
 		{
 			m_pCmdListener->OnCommand(CMD_OPENSKINDIR, 0);
@@ -721,7 +726,15 @@ namespace SOUI
 			g_SettingsUI->bEnglish = !g_SettingsUI->bEnglish;
 			g_SettingsUI->SetModified(true);
 			m_pCmdListener->OnCommand(CMD_SYNCUI, BTN_ENGLISHMODE);
+		}else
+		{
+			SStringT strSkinPath = m_skinManager.SkinPathFromID(nRet);
+			if(!strSkinPath.IsEmpty())
+			{//select skin menu
+				m_pCmdListener->OnCommand(CMD_CHANGESKIN, (LPARAM)&strSkinPath);
+			}
 		}
+
 
 		m_skinManager.ClearMap();
 	}

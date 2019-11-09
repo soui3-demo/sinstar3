@@ -11,11 +11,12 @@ CSkinMananger::~CSkinMananger(void)
 {
 }
 
-int CSkinMananger::InitSkinMenu(HMENU hMenu, const SStringT &strSkinPath, int nStartId, const SStringT &strCurSkin)
+int CSkinMananger::InitSkinMenu(HMENU hMenu, const SStringT &strSkinPath, int nStartID, const SStringT &strCurSkin)
 {
 	WIN32_FIND_DATA findData;
 	HANDLE hFind = FindFirstFile(strSkinPath + _T("\\*.*"), &findData);
 	SMenu smenu(hMenu);
+	int nID = nStartID;
 	//enum sub folder
 	if (hFind != INVALID_HANDLE_VALUE)
 	{
@@ -27,7 +28,9 @@ int CSkinMananger::InitSkinMenu(HMENU hMenu, const SStringT &strSkinPath, int nS
 					HMENU hSubMenu = CreatePopupMenu();
 					if (smenu.AppendMenu(MF_STRING|MF_POPUP ,(UINT_PTR)hSubMenu , findData.cFileName))
 					{
-						nStartId = InitSkinMenu(hSubMenu, strSkinPath + _T("\\") + findData.cFileName, ++nStartId, strCurSkin);
+						nStartID+=1000;
+						SetMenuContextHelpId(hSubMenu,nStartID);
+						m_mapCtxId2Path[nStartID] = strSkinPath + _T("\\") + findData.cFileName;
 					}else
 					{
 						DestroyMenu(hSubMenu);
@@ -44,23 +47,23 @@ int CSkinMananger::InitSkinMenu(HMENU hMenu, const SStringT &strSkinPath, int nS
 	{		
 		do {
 
-			nStartId++;
+			nID++;
 			SStringT strFullPath = strSkinPath + _T("\\") + findData.cFileName;
-			m_mapSkin[nStartId] = strFullPath;
+			m_mapSkin[nID] = strFullPath;
 			SStringT strDesc;
 			if(ExtractSkinInfo(strFullPath,strDesc))
 			{
-				BOOL bInsertSucess= smenu.AppendMenu( MF_STRING , nStartId, strDesc);
+				BOOL bInsertSucess= smenu.AppendMenu( MF_STRING , nID, strDesc);
 
 				if (bInsertSucess&&(strFullPath == strCurSkin))
 				{
-					CheckMenuItem(hMenu,nStartId, MF_BYCOMMAND | MF_CHECKED);
+					CheckMenuItem(hMenu,nID, MF_BYCOMMAND | MF_CHECKED);
 				}
 			}
 		} while (FindNextFile(hFind, &findData));
 		FindClose(hFind);
 	}
-	return nStartId;
+	return nID;
 }
 
 static const int KMinVer[4]={0,0,0,0};
@@ -120,6 +123,17 @@ SStringT CSkinMananger::SkinPathFromID(int nSkinID) const
 	return strSkinPath;
 }
 
+
+SOUI::SStringT CSkinMananger::SkinPathFromCtxID(int nCtxID) const
+{
+	SStringT strSkinPath;
+	if (const SMap<int, SStringT>::CPair * p = m_mapCtxId2Path.Lookup(nCtxID))
+	{
+		strSkinPath = p->m_value;
+	}
+	return strSkinPath;
+}
+
 CPoint CSkinMananger::ExtractSkinOffset(IResProvider * pResProvider)
 {
 	int nSize = (int)pResProvider->GetRawBufferSize(_T("uidef"), _T("xml_init"));
@@ -134,4 +148,10 @@ CPoint CSkinMananger::ExtractSkinOffset(IResProvider * pResProvider)
 	pt.x = xmlOffset.attribute(L"x").as_int();
 	pt.y = xmlOffset.attribute(L"y").as_int();
 	return pt;
+}
+
+void CSkinMananger::ClearMap()
+{
+	m_mapSkin.RemoveAll();
+	m_mapCtxId2Path.RemoveAll();
 }
