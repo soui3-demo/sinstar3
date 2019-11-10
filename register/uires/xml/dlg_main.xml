@@ -19,6 +19,7 @@ translucent="1"
         <button.normal name="btn_install" text="安装" tip="将输入法接口文件复制到系统目录，并运行regsvr32来注册输入法"/>
         <button.normal name="btn_update" text="更新" tip="输入法已经安装时，可以只复制输入法接口文件"/>
         <button.normal name="btn_uninstall" text="卸载" tip="运行regsvr32 -u来反注册输入法，并从系统目录将输入法接口文件删除"/>
+        <button.normal name="btn_force_uninstall" text="强力卸载" tip="注销输入法，不影响已经打开输入法的程序，需要重启才能完全卸载"/>
       </window>
       <window size="-2,-1" layout="vbox" interval="10" gravity="center">
         <window size="-1,-1" layout="hbox" interval="10" gravity="center">
