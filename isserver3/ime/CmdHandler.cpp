@@ -53,7 +53,7 @@ void CCmdHandler::OnHotKeyKeyMap(LPARAM lp)
 void CCmdHandler::OnHotKeyHideStatusBar(LPARAM lp)
 {
 	g_SettingsUI->bHideStatus = !g_SettingsUI->bHideStatus;
-	m_pSinstar3->m_pStatusWnd->Show(!g_SettingsUI->bHideStatus);
+	m_pSinstar3->m_pStatusWnd->Show(m_pSinstar3->IsStatusVisible());
 }
 
 void CCmdHandler::OnHotKeyQueryInfo(LPARAM lp)

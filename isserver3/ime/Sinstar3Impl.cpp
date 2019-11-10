@@ -211,7 +211,6 @@ void CSinstar3Impl::OnOpenStatusChanged(BOOL bOpen)
 	if (bOpen && !m_hasFocus)
 	{
 		SLOG_WARN("try to open statusbar but in focus state");
-		return;
 	}
 	if(!bOpen)
 	{
@@ -577,6 +576,15 @@ void CSinstar3Impl::OpenInputWnd()
 
 void CSinstar3Impl::UpdateInputWnd()
 {
+	if(!m_pInputWnd->IsWindowVisible())
+	{
+		if(!IsInputVisible())
+		{
+			SLOG_ERROR("update input but window is unvisible!!!");
+		}
+		m_pInputWnd->Show(TRUE,FALSE);
+		m_pStatusWnd->Show(IsStatusVisible());
+	}
 	m_pInputWnd->UpdateUI();
 }
 
