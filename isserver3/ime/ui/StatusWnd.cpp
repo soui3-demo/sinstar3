@@ -726,7 +726,11 @@ namespace SOUI
 			g_SettingsUI->bEnglish = !g_SettingsUI->bEnglish;
 			g_SettingsUI->SetModified(true);
 			m_pCmdListener->OnCommand(CMD_SYNCUI, BTN_ENGLISHMODE);
-		}else
+		}else if(nRet == R.id.skin_def)
+		{
+			m_pCmdListener->OnCommand(CMD_CHANGESKIN, (LPARAM)&SStringT());
+		}
+		else
 		{
 			SStringT strSkinPath = m_skinManager.SkinPathFromID(nRet);
 			if(!strSkinPath.IsEmpty())

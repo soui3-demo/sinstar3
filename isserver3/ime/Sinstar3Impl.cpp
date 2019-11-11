@@ -580,7 +580,7 @@ void CSinstar3Impl::UpdateInputWnd()
 	{
 		if(!IsInputVisible())
 		{
-			SLOG_ERROR("update input but window is unvisible!!!");
+			SLOG_ERROR("update input but window is invisible!!!, focus:"<<m_hasFocus<<" inputEnable:"<<m_bInputEnable<<" fOpen:"<<m_bOpen<<" hideStatus:"<<g_SettingsUI->bHideStatus);
 		}
 		m_pInputWnd->Show(TRUE,FALSE);
 		m_pStatusWnd->Show(IsStatusVisible());
