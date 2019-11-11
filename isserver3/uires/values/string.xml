@@ -36,4 +36,13 @@
   <tip_edit_userjm  value="格式:编码+“=”+候选，候选词有多个时用“|”分割"/>
   <tip_edit_userdict value="格式:词条+tab+词频,词频为0-255的整数，可以只有词条"/>
 
+  <find value="查找"/>
+  <find_text value="查找替换"/>
+  <search value="搜索:"/>
+  <match_case value="匹配大小写"/>
+  <match_whole_word value="全字匹配"/>
+  <next value="下一个"/>
+  <prev value="上一个"/>
+  <replace value="替换"/>
+  <replace_to value="替换为"/>
 </string>

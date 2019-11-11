@@ -1,18 +1,25 @@
 #pragma once
+#include "FindDlg.h"
 
-class CTextEditorDlg : public SHostDialog
+class CTextEditorDlg : public SHostDialog, IFindListener
 {
 public:
 	CTextEditorDlg(int nMode,const SStringT & strFileName);
 	~CTextEditorDlg();
 
 protected:
-	void OnClose();
-	void OnSave();
+	virtual bool OnFind(const SStringT & strText, bool bFindNext, bool bMatchCase, bool bMatchWholeWord);
+	virtual void OnReplace(const SStringT &strText);
+protected:
+	void OnBtnClose();
+	void OnBtnSave();
+	void OnBtnFind();
+
 
 	EVENT_MAP_BEGIN()
-		EVENT_ID_COMMAND(R.id.btn_close,OnClose)
-		EVENT_ID_COMMAND(R.id.btn_save, OnSave)
+		EVENT_ID_COMMAND(R.id.btn_close,OnBtnClose)
+		EVENT_ID_COMMAND(R.id.btn_save, OnBtnSave)
+		EVENT_ID_COMMAND(R.id.btn_find,OnBtnFind)
 	EVENT_MAP_END()
 	BOOL OnInitDialog(HWND hWnd,LPARAM lp);
 	BEGIN_MSG_MAP_EX(CTextEditorDlg)
@@ -20,8 +27,10 @@ protected:
 		CHAIN_MSG_MAP(SHostDialog)
 	END_MSG_MAP()
 
+
 	int m_mode;
 	SStringT	m_strFileName;
 	CScintillaWnd *			 m_pSciter;
+	CFindDlg   *			 m_pFindDlg;
 };
 
