@@ -580,6 +580,11 @@ void CSinstar3Impl::UpdateInputWnd()
 	{
 		if(!IsInputVisible())
 		{
+			if (!m_bOpen)
+			{
+				m_bOpen = m_pTxtSvr->GetOpenStatus();
+				SLOG_ERROR("UpdateInputWnd, GetOpenStatus:" << m_bOpen);
+			}
 			SLOG_ERROR("update input but window is invisible!!!, focus:"<<m_hasFocus<<" inputEnable:"<<m_bInputEnable<<" fOpen:"<<m_bOpen<<" hideStatus:"<<g_SettingsUI->bHideStatus);
 		}
 		m_pInputWnd->Show(TRUE,FALSE);
