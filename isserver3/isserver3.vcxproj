@@ -158,6 +158,7 @@
     <ClCompile Include="controls\STipView.cpp" />
     <ClCompile Include="ThreadObject.cpp" />
     <ClCompile Include="ui\BuildIndexProgWnd.cpp" />
+    <ClCompile Include="ui\FindDlg.cpp" />
     <ClCompile Include="ui\KeyMapDlg.cpp" />
     <ClCompile Include="ui\TextEditorDlg.cpp" />
     <ClCompile Include="ui\TrayIcon.cpp" />
@@ -224,10 +225,12 @@
     <ClInclude Include="controls\STipView.h" />
     <ClInclude Include="ThreadObject.h" />
     <ClInclude Include="ui\BuildIndexProgWnd.h" />
+    <ClInclude Include="ui\FindDlg.h" />
     <ClInclude Include="ui\KeyMapDlg.h" />
     <ClInclude Include="ui\TextEditorDlg.h" />
     <ClInclude Include="ui\TrayIcon.h" />
     <ClInclude Include="ui\UpdateInfoDlg.h" />
+    <ClInclude Include="ui\whwindow.h" />
     <ClInclude Include="worker.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
