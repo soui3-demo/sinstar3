@@ -176,7 +176,7 @@ namespace SOUI
 			{
 				INDEXINFO ii = { i,-1 };
 				m_lstIndex.Add(ii);
-				for (int j = 0; j < m_lstBlur[i].GetCount(); j++)
+				for (UINT j = 0; j < m_lstBlur[i].GetCount(); j++)
 				{
 					ii.iIndex = j;
 					m_lstIndex.Add(ii);
@@ -493,11 +493,11 @@ namespace SOUI
 
 		if (lstToken.GetCount())
 		{
-			for (int i = 0; i < lstToken.GetCount(); i++)
+			for (UINT i = 0; i < lstToken.GetCount(); i++)
 			{
 				pCbx->InsertItem(-1, S_CA2T(lstToken[i]), 0, 0);
 			}
-			if (iSelToken < lstToken.GetCount())
+			if (iSelToken < (int)lstToken.GetCount())
 			{
 				pCbx->GetEventSet()->setMutedState(true);
 				pCbx->SetCurSel(iSelToken);

@@ -213,7 +213,7 @@ void CIsSvrProxy::_OnBuildIndexProg(int indexMode, PROGTYPE uType, unsigned int 
 	if (uType == PT_MAX) nMax = dwData, nPrevProg = 0;
 	if (uType == PT_PROG)
 	{
-		if (dwData - nPrevProg < nMax / 200)
+		if ((int)dwData - nPrevProg < nMax / 200)
 		{
 			return;
 		}
