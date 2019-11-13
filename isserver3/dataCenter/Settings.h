@@ -92,6 +92,10 @@ public:
 	SStringT   strSkin;   //skin
 	POINT	ptInput;			//input window pos for not caret follow.
 	POINT   ptStatus;			//status window pos
+
+	SStringT urlSkin;
+	SStringT urlComp;
+	SStringT urlStatistics;
 };
 
 class CSettingsUI: public CModifiedMark

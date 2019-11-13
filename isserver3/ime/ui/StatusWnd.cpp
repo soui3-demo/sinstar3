@@ -180,7 +180,7 @@ namespace SOUI
 		case 4://comp select
 			{
 				const SArray<CNameTypePair> &comps = CDataCenter::getSingleton().UpdateCompList();
-				int idStart = R.id.comp_install;
+				int idStart = R.id.comp_cloud;
 				int iSelComp = CDataCenter::getSingleton().GetSelectCompIndex();
 				for (int i = 0; i < (int)comps.GetCount(); i++)
 				{
@@ -615,6 +615,10 @@ namespace SOUI
 		{
 			m_pCmdListener->OnCommand(CMD_OPENSKINDIR, 0);
 		}
+		else if (nRet == R.id.skin_cloud)
+		{
+			ShellExecute(NULL, _T("open"), g_SettingsG->urlSkin, NULL, NULL, SW_SHOWNORMAL);
+		}
 		else if (nRet == R.id.comp_install)
 		{//install comp
 			CFileDialogEx openDlg(TRUE, _T("cit"), 0, 6, _T("启程码表(*.cit)\0*.cit\0All files (*.*)\0*.*\0\0"));
@@ -626,13 +630,14 @@ namespace SOUI
 					SMessageBox(GetDesktopWindow(), _T("安装编码失败,可能已经存在该编码"), _T("提示"), MB_OK | MB_ICONSTOP);
 				}
 			}
-		}else if(nRet == R.id.skin_cloud)
-		{
-			ShellExecute(NULL,_T("open"),_T("http://soime.cn/skin"),NULL,NULL,SW_SHOWNORMAL);
 		}
-		else if (nRet > R.id.comp_install && nRet < PopupMenuEndID(R.id.comp_install))
+		else if (nRet == R.id.comp_cloud)
+		{
+			ShellExecute(NULL, _T("open"), g_SettingsG->urlComp, NULL, NULL, SW_SHOWNORMAL);
+		}
+		else if (nRet > R.id.comp_cloud && nRet < PopupMenuEndID(R.id.comp_cloud))
 		{//comps
-			int iComp = nRet - (R.id.comp_install +1);
+			int iComp = nRet - (R.id.comp_cloud +1);
 			const SArray<CNameTypePair> & compList = CDataCenter::getSingleton().GetCompList();
 			if (iComp < (int)compList.GetCount())
 			{

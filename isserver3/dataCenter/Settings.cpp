@@ -38,6 +38,7 @@ BOOL WritePrivateProfileInt(
 const TCHAR * KSettingINI =  _T("config.ini");
 const TCHAR * KSession = _T("IME");
 const TCHAR * KUI = _T("UI");
+const TCHAR * KUrl = _T("url");
 
 void CSettingsGlobal::Save(const SStringT & strDataPath)
 {
@@ -197,6 +198,12 @@ void CSettingsGlobal::Load(const SStringT & strDataPath)
 			strDebugSkinPath = szBuf;
 		}
 	}
+	GetPrivateProfileString(KUrl, _T("skin_cloud"), _T("http://www.soui.vip/forum.php?mod=forumdisplay&fid=53"), szBuf, MAX_PATH, strConfigIni);
+	urlSkin = szBuf;
+	GetPrivateProfileString(KUrl, _T("comp_cloud"), _T("http://www.soui.vip/forum.php?mod=forumdisplay&fid=54"), szBuf, MAX_PATH, strConfigIni);
+	urlComp = szBuf;
+	GetPrivateProfileString(KUrl, _T("statistics"), _T("https://soime.cn/statistics.php?param="), szBuf, MAX_PATH, strConfigIni);
+	urlStatistics = szBuf;
 
 	SetModified(false);
 }

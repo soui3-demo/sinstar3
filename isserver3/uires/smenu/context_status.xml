@@ -17,13 +17,14 @@
   <sep/>
   <item text="皮    肤" name="menu_skin" id="2000" contextHelpId="2">
     <item text="皮肤目录" name="skin_mgr" id="2001"/>
-    <item text="网上皮肤" name="skin_cloud" id="2002"/>
+    <item text="皮肤下载" name="skin_cloud" id="2002"/>
     <sep/>
     <item text="内置皮肤" name="skin_def" id="2220"/>
     <sep/>
   </item>
   <item text="编码方案" name="menu_comp" contextHelpId="4">
-    <item text="安装编码" name="comp_install" id="400"/>
+    <item text="安装码表" name="comp_install" id="400"/>
+    <item text="码表下载" name="comp_cloud" id="401"/>
     <sep/>
   </item>
   <item text="形码混输" name="menu_blend" contextHelpId="5">

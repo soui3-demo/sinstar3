@@ -439,7 +439,7 @@ LRESULT CWorker::OnDataReport(UINT uMsg, WPARAM wp, LPARAM lp)
 	SStringA strInfoA = S_CT2A(strInfo);
 	std::string info64 = Base64::Encode((LPCSTR)strInfoA);
 
-	std::string url = "http://pdftj.mmbangshou.net:8888/web/tj_az?param=";
+	std::string url = S_CT2A(g_SettingsG->urlStatistics);
 	url += info64;
 
 	CWinHttp  winHttp;
