@@ -1,6 +1,14 @@
 #pragma once
 
 #define  CLS_SINSTAR3_IME_WND _T("sinstar3_uiwnd")	//the class name must like this. otherwise the ime module maybe crash!!!
+#define  UM_GETPROCPATH  (WM_USER+5000)
+#define  CDT_RET_PROCPATH (2134)
+struct PROC_INFO
+{
+	DWORD dwProcID;
+	TCHAR szPath[MAX_PATH];
+};
+
 class CSimpleWnd
 {
 public:

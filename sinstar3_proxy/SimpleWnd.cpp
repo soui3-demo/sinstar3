@@ -41,10 +41,24 @@ LRESULT CALLBACK CSimpleWnd::SimpleWndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPA
 
 LRESULT CSimpleWnd::WindowProc(UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
+	if (uMsg == UM_GETPROCPATH)
+	{
+		HWND hSender = (HWND)lParam;
+		if (::IsWindow(hSender))
+		{
+			PROC_INFO procPath;
+			::GetModuleFileName(NULL, procPath.szPath, MAX_PATH);
+			GetWindowThreadProcessId(m_hWnd, &procPath.dwProcID);
+			COPYDATASTRUCT cs;
+			cs.dwData = CDT_RET_PROCPATH;
+			cs.cbData = sizeof(procPath);
+			cs.lpData = &procPath;
+			::SendMessage(hSender, WM_COPYDATA, (WPARAM)m_hWnd, (LPARAM)&cs);
+		}
+		return 0;
+	}
 	return ::DefWindowProc(m_hWnd,uMsg,wParam,lParam);
 }
-
-
 
 void CSimpleWnd::Attach(HWND hWnd)
 {

@@ -11,27 +11,21 @@ namespace SOUI {
 	{
 	}
 
-	bool CTaskAdapter::AddTask(TASKINFO ti, PTYPE type)
+	bool CTaskAdapter::AddTask(TASKINFO ti)
 	{
-		TASKINFOEX tiex;
-		memcpy(&tiex, &ti, sizeof(ti));
-		tiex.type = type;
 		for(int i=0;i<m_arrTasks.GetCount();i++)
 		{
 			if(m_arrTasks[i].pid == ti.pid)
 			{
-				if(m_arrTasks[i].type == Unk && type!=Unk)
-				{
-					m_arrTasks[i]=tiex;
-				}
+				m_arrTasks[i] = ti;
 				return false;
 			}
 		}
-		m_arrTasks.Add(tiex);
+		m_arrTasks.Add(ti);
 		return true;
 	}
 
-	TASKINFOEX * CTaskAdapter::GetTask(int iTask)
+	TASKINFO * CTaskAdapter::GetTask(int iTask)
 	{
 		if (iTask >= m_arrTasks.GetCount())
 			return NULL;
@@ -59,13 +53,7 @@ namespace SOUI {
 			pItem->InitFromXml(xmlTemplate);
 		}
 
-		TASKINFOEX ti = m_arrTasks[position];
-		static LPCTSTR szType[PTYPE_COUNT]={
-			_T("x86"),
-			_T("x64"),
-			_T("unknown")
-		};
-		pItem->FindChildByID(R.id.txt_type)->SetWindowText(szType[ti.type]);
+		TASKINFO &ti = m_arrTasks[position];
 		pItem->FindChildByID(R.id.txt_pid)->SetWindowText(SStringT().Format(_T("%u"),ti.pid));
 		pItem->FindChildByID(R.id.txt_name)->SetWindowText(ti.szName);
 		pItem->FindChildByID(R.id.txt_path)->SetWindowText(ti.szPath);
@@ -84,7 +72,6 @@ namespace SOUI {
 
 	SStringW CTaskAdapter::GetColumnName(int iCol) const {
 		LPCWSTR KColNames[] = {
-			L"col_type",
 			L"col_pid",
 			L"col_name",
 			L"col_path",

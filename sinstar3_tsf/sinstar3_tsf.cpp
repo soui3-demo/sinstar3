@@ -325,6 +325,7 @@ BOOL CSinstar3Tsf::_InitSinstar3(HWND hWnd)
 	SASSERT(!m_pSinstar3);
 	m_pSinstar3 = new CSinstarProxy(this);
 	Helper_ChangeWindowMessageFilter(SOUI::UM_CALL_FUN, MSGFLT_ADD);
+	Helper_ChangeWindowMessageFilter(UM_GETPROCPATH, MSGFLT_ADD);
 
 	if (!m_pSinstar3->Init(m_hWnd, theModule->GetSvrPath()))
 	{

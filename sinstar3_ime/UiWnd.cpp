@@ -403,6 +403,7 @@ BOOL CUiWnd::_InitSinstar3()
 {
 	m_pSinstar3 = new CSinstarProxy(this);
 	Helper_ChangeWindowMessageFilter(SOUI::UM_CALL_FUN, MSGFLT_ADD);
+	Helper_ChangeWindowMessageFilter(UM_GETPROCPATH, MSGFLT_ADD);
 
 	if (!m_pSinstar3->Init(m_hWnd, theModule->GetSvrPath()))
 	{
