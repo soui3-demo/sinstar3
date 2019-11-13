@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
   <skin>
-       <imgframe name="skin_tip_bg" src="img2:png_tip_bg" margin="160,208,70,20" alpha="200"/>
+       <imgframe name="skin_tip_bg" src="img2:png_tip_bg" margin="50,20,50,20" alpha="200"/>
        <imgframe name="skin_item_bg" src="img2:png_item_bg" margin="3,3,3,3" states="3"/>
   </skin>

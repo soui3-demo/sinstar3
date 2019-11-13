@@ -387,7 +387,7 @@ namespace SOUI
 			bool bUpdated = SwitchToggle(R.id.btn_sound,!g_SettingsUI->bSound);
 			if (m_pCmdListener && !bInit && !bUpdated)
 			{
-				TIPINFO ti(_T("语音较对改变:"));
+				TIPINFO ti(_T("语音较对改变"));
 				ti.strTip.Format(_T("当前语音较对:%s"), g_SettingsUI->bSound ? _T("打开") : _T("关闭"));
 				m_pCmdListener->OnCommand(CMD_SHOWTIP, (LPARAM)&ti);
 			}
@@ -396,7 +396,7 @@ namespace SOUI
 			bool bUpdated = SwitchToggle(R.id.btn_record,!g_SettingsUI->bRecord);
 			if (m_pCmdListener && !bInit && !bUpdated)
 			{
-				TIPINFO ti(_T("记忆输入改变:"));
+				TIPINFO ti(_T("记忆输入改变"));
 				ti.strTip.Format(_T("当前记忆状态:%s"), g_SettingsUI->bRecord ? _T("启用") : _T("关闭"));
 				m_pCmdListener->OnCommand(CMD_SHOWTIP, (LPARAM)&ti);
 			}
@@ -407,7 +407,7 @@ namespace SOUI
 			bool bUpdated = SwitchToggle(R.id.btn_english,!g_SettingsUI->bEnglish);
 			if (m_pCmdListener && !bInit && !bUpdated)
 			{
-				TIPINFO ti(_T("单词补全改变:"));
+				TIPINFO ti(_T("单词补全改变"));
 				ti.strTip.Format(_T("当前单词补全状态:%s"), g_SettingsUI->bEnglish ? _T("启用") : _T("关闭"));
 				m_pCmdListener->OnCommand(CMD_SHOWTIP, (LPARAM)&ti);
 			}
@@ -417,7 +417,7 @@ namespace SOUI
 			bool bUpdated = SwitchToggle(R.id.btn_filter_gbk,!g_SettingsUI->bFilterGbk);
 			if (m_pCmdListener && !bInit && !bUpdated)
 			{
-				TIPINFO ti(_T("GBK过滤策略改变:"));
+				TIPINFO ti(_T("GBK过滤策略改变"));
 				ti.strTip.Format(_T("当前GBK过滤:%s"), g_SettingsUI->bFilterGbk ? _T("启用") : _T("关闭"));
 				m_pCmdListener->OnCommand(CMD_SHOWTIP, (LPARAM)&ti);
 			}

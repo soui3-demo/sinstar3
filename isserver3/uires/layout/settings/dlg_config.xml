@@ -12,8 +12,8 @@
     <colorrect name="nav_config_tab" normal="#f3f6fa" hover="#ebebeb" pushdown="#3973d6"/>
     <scrollbar name="skin.scrollbar"  src="IMG:SYS_SCROLLBAR" margin="5" hasgripper="0"/>
   </skin>
-  <root size="600,400" colorBkgnd="#000000">
-    <window pos="1,1,-1,-1" colorBkgnd="@color/configborder" font="size:16" layout="vbox">
+  <root size="600,400" skin="_skin.sys.wnd.bkgnd" >
+    <window pos="1,1,-1,-1" font="size:16" layout="vbox">
       <caption size="-2,38" layout="hbox">
         <text extend_left="6" extend_top="6" size="-1,-1" text="@string/title_config"/>
         <window size="0,0" weight="1" visible="0"/>

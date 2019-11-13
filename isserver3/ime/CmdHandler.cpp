@@ -117,7 +117,7 @@ void CCmdHandler::OnHotKeyQueryInfo(LPARAM lp)
 		}
 		else
 		{//查询英文单词
-			p += sprintf(p, "\n单词=%s", (LPCSTR)strBuf);
+			p += sprintf(p, "单词=%s", (LPCSTR)strBuf);
 			if (ISComm_En2Ch(strBuf, strBuf.GetLength()) == ISACK_SUCCESS)
 			{
 				PMSGDATA pData = ISComm_GetData();
