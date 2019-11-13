@@ -8,7 +8,7 @@
   <root size="-1,-1" layout="vbox">
     <caption2 size="-1,-1" layout="vbox" skin="skin_tip_bg" padding="20,10,5,20" font="size:16" interval="10">
 	    <caption2 size="-2,30dp">
-	      <text pos="|0,|0" offset="-0.5,-0.5" name="txt_tip_title"  text="tip" font="bold:1"/>
+	      <text pos="|0,|0" offset="-0.5,-0.5" name="txt_tip_title"  text="tip" font="bold:1" colorText="#844003"/>
 	      <imgbtn pos="-0,|0" offset="-1,-0.5" name="btn_close" skin="_skin.sys.btn.close" tip="close"/>
 	    </caption2>
 	    <caption2 size="-1,-1" layout="vbox" padding_right="15">
