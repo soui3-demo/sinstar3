@@ -91,6 +91,12 @@ BOOL KeyIn_Code_IsMaxCode(InputContext * lpCntxtPriv)
 	return (lpCntxtPriv->cComp>=ISComm_GetCompInfo()->cCodeMax &&  lpCntxtPriv->byCandType==MCR_NORMAL);
 }
 
+BOOL KeyIn_Code_IsMaxCode2(InputContext * lpCntxtPriv)
+{
+	if (lpCntxtPriv->cComp == 0) return FALSE;
+	return (lpCntxtPriv->cComp >= ISComm_GetCompInfo()->cCodeMax &&  (lpCntxtPriv->byCandType&(MCR_LONGERCOMP|MCR_MIXSP)) == 0);
+}
+
 BOOL KeyIn_Code_IsValidComp(InputContext * lpCntxtPriv,char cInput)
 {
 	BYTE byMask=0;
@@ -1674,7 +1680,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 			ClearContext(CPC_ALL);
 		}
 
-		if(KeyIn_Code_IsMaxCode(lpCntxtPriv) 
+		if(KeyIn_Code_IsMaxCode2(lpCntxtPriv)
 			&& !KeyIn_Code_IsValidComp(lpCntxtPriv,byInput)
 			&& g_SettingsG->bAutoInput 
 			&& !lpCntxtPriv->bWebMode)
@@ -1813,6 +1819,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 				LPBYTE pbyData,pCandData;
 				short i,sCount,sSingleWords=0;
 				memcpy(m_pbyMsgBuf,pMsgData->byData,pMsgData->sSize);
+				lpCntxtPriv->byCandType = m_pbyMsgBuf[0];
 				pbyData=m_pbyMsgBuf+1;
 				memcpy(&sCount,pbyData,2);
 				pbyData+=2;
@@ -1847,7 +1854,6 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 			}
 			InputUpdate();
 		}
-		lpCntxtPriv->byCandType=m_pbyMsgBuf[0];
 		if(lpCntxtPriv->sCandCount)
 		{
 			lpbyCand=lpCntxtPriv->ppbyCandInfo[0];
