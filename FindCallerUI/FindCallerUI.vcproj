@@ -61,9 +61,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="utilitiesd.lib soui3d.lib"
+				AdditionalDependencies="utilitiesd.lib soui3d.lib helperd.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(SOUI3PATH)\bin;"
+				AdditionalLibraryDirectories="$(SOUI3PATH)\bin;..\lib"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -136,9 +136,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="utilities.lib soui3.lib"
+				AdditionalDependencies="utilities.lib soui3.lib helper.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(SOUI3PATH)\bin;"
+				AdditionalLibraryDirectories="$(SOUI3PATH)\bin;..\lib"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"

@@ -57,7 +57,7 @@ void CTextEditorDlg::OnBtnSave()
 	buf[nLen] = 0;
 	SStringA str = S_CA2A(SStringA(buf, nLen), CP_UTF8, CP_ACP);
 	delete[]buf;
-	FILE *f = _tfopen(m_strFileName, _T("w"));
+	FILE *f = _tfopen(m_strFileName, _T("wb"));
 	if (f)
 	{
 		fwrite(str.c_str(), 1,str.GetLength(), f);
