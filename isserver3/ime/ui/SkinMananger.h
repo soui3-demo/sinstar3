@@ -15,4 +15,5 @@ public:
 protected:
 	SMap<int,SStringT> m_mapSkin;	//map of ID->skin path
 	SMap<int,SStringT> m_mapCtxId2Path;//map of sub menu to path.
+	int				   m_nMaxCtxID;
 };
