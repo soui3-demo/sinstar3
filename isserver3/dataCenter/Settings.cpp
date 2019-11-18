@@ -202,7 +202,7 @@ void CSettingsGlobal::Load(const SStringT & strDataPath)
 	urlSkin = szBuf;
 	GetPrivateProfileString(KUrl, _T("comp_cloud"), _T("http://www.soui.vip/forum.php?mod=forumdisplay&fid=54"), szBuf, MAX_PATH, strConfigIni);
 	urlComp = szBuf;
-	GetPrivateProfileString(KUrl, _T("statistics"), _T("https://soime.cn/statistics.php?param="), szBuf, MAX_PATH, strConfigIni);
+	GetPrivateProfileString(KUrl, _T("statistics"), _T("https://soime.cn/tongji/skTjApi/api.php?soft_id=6&countype_id=4&ditch_id=100"), szBuf, MAX_PATH, strConfigIni);
 	urlStatistics = szBuf;
 
 	SetModified(false);

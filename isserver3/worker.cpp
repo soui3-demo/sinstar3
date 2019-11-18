@@ -369,10 +369,11 @@ LRESULT CWorker::OnDataReport(UINT uMsg, WPARAM wp, LPARAM lp)
 	::CRegKey reg;
 	LONG ret = reg.Open(HKEY_CURRENT_USER, _T("SOFTWARE\\SetoutSoft\\sinstar3"), KEY_READ | KEY_WOW64_64KEY);
 	TCHAR szUerID[100] = { 0 };
+	TCHAR szOsVer[100] = {0};
 	if (ret == ERROR_SUCCESS)
 	{
 		ULONG len = 100;
-		reg.QueryStringValue(_T("userid"), szUerID, &len);
+		reg.QueryStringValue(_T("userid2"), szUerID, &len);
 		reg.Close();
 	}
 	if(szUerID[0] == 0)
@@ -396,51 +397,45 @@ LRESULT CWorker::OnDataReport(UINT uMsg, WPARAM wp, LPARAM lp)
 			_stprintf(szUerID, _T("what_fuck_machine_#%d"), rand());
 		}
 
-		DWORD dwVer = GetKernelVer();
-		BYTE *byVer = (BYTE*)&dwVer;
-		SStringT strOsVer;
-		if(byVer[3] == 10)
-		{
-			strOsVer = _T("Win10");
-		}else if(byVer[3] == 6)
-		{
-			switch (byVer[2])
-			{
-			case 3:strOsVer = _T("Win8.1"); break;
-			case 2:strOsVer = _T("Win8"); break;
-			case 1:strOsVer = _T("Win7"); break;
-			case 0:strOsVer = _T("Vista"); break;
-			}
-		}
-		else if (byVer[3] == 5)
-		{
-			strOsVer = _T("WinXP");
-		}
-		_tcscat(szUerID, _T("_"));
-		_tcscat(szUerID, strOsVer);
 		::CRegKey reg;
 		LONG ret = reg.Open(HKEY_CURRENT_USER, _T("SOFTWARE\\SetoutSoft\\sinstar3"), KEY_READ|KEY_WRITE | KEY_WOW64_64KEY);
 		if (ret == ERROR_SUCCESS)
 		{
 			ULONG len = 100;
-			reg.SetStringValue(_T("userid"), szUerID, REG_SZ);
+			reg.SetStringValue(_T("userid2"), szUerID, REG_SZ);
 			reg.Close();
 		}
+	}
+
+	DWORD dwVer = GetKernelVer();
+	BYTE *byVer = (BYTE*)&dwVer;
+	SStringT strOsVer;
+	if(byVer[3] == 10)
+	{
+		strOsVer = _T("Win10");
+	}else if(byVer[3] == 6)
+	{
+		switch (byVer[2])
+		{
+		case 3:strOsVer = _T("Win8.1"); break;
+		case 2:strOsVer = _T("Win8"); break;
+		case 1:strOsVer = _T("Win7"); break;
+		case 0:strOsVer = _T("Vista"); break;
+		}
+	}
+	else if (byVer[3] == 5)
+	{
+		strOsVer = _T("WinXP");
 	}
 
 	TCHAR szModuleName[MAX_PATH];
 	GetModuleFileName(NULL, szModuleName, MAX_PATH);
 	
-	BYTE byVer[4];
-	Helper_PEVersion(szModuleName, (DWORD*)byVer, NULL, NULL);
+	Helper_PEVersion(szModuleName, &dwVer, NULL, NULL);
 	SStringT strVer = SStringT().Format(_T("%u.%u.%u.%u"), byVer[3], byVer[2], byVer[1], byVer[0]);
 
-	SStringT strInfo = SStringT().Format(_T("userName=qcsrf|guid=%s|softVersion=%s"), szUerID, strVer);
-	SStringA strInfoA = S_CT2A(strInfo);
-	std::string info64 = Base64::Encode((LPCSTR)strInfoA);
-
-	std::string url = S_CT2A(g_SettingsG->urlStatistics);
-	url += info64;
+	SStringT strInfo = SStringT().Format(_T("&user_mac=%s&soft_version=%s&user_osversion=%s"), szUerID, strVer,strOsVer);
+	std::string url = S_CT2A(g_SettingsG->urlStatistics+strInfo);
 
 	CWinHttp  winHttp;
 	string strResp = winHttp.Request(url.c_str(), Hr_Get);
