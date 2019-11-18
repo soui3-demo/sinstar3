@@ -438,7 +438,7 @@ LRESULT CWorker::OnDataReport(UINT uMsg, WPARAM wp, LPARAM lp)
 	std::string url = S_CT2A(g_SettingsG->urlStatistics+strInfo);
 
 	CWinHttp  winHttp;
-	string strResp = winHttp.Request(url.c_str(), Hr_Get);
+	string strResp = winHttp.Request(url.c_str(), Hr_Post);
 	SLOG_INFO("data report result:" << strResp.c_str());
 
 	return 0;

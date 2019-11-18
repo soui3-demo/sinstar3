@@ -51,6 +51,19 @@ bool CWinHttp::Init()
 		return false;
 	}
 	::WinHttpSetTimeouts(m_hInternet, 0, m_nConnTimeout, m_nSendTimeout, m_nRecvTimeout);
+
+	//DWORD dwFlags;
+	//DWORD dwBuffLen = sizeof(dwFlags);           
+	//WinHttpQueryOption (m_hInternet, WINHTTP_OPTION_SECURITY_FLAGS,
+	//	(LPVOID)&dwFlags, &dwBuffLen);
+	//dwFlags |= SECURITY_FLAG_IGNORE_UNKNOWN_CA;
+	//dwFlags |= SECURITY_FLAG_IGNORE_CERT_DATE_INVALID;
+	//dwFlags |= SECURITY_FLAG_IGNORE_CERT_CN_INVALID;
+	////    dwFlags |= SECURITY_FLAG_IGNORE_CERT_WRONG_USAGE;
+
+	//WinHttpSetOption (m_hInternet, WINHTTP_OPTION_SECURITY_FLAGS,
+	//	&dwFlags, sizeof (dwFlags) );
+
 	return true;
 }
 
@@ -324,7 +337,7 @@ bool CWinHttp::InitConnect( LPCWSTR lpUrl, HttpRequest type, LPCSTR lpPostData/*
 		m_error = Hir_ConnectErr;
 		return false;
 	}
-	if ( !CreateHttpRequest(strPage.c_str(), type) )
+	if ( !CreateHttpRequest(strPage.c_str(), type, WINHTTP_FLAG_SECURE) )
 	{
 		m_error = Hir_InitErr;
 		return false;

@@ -8,9 +8,20 @@ inline void MyParseUrlW( LPCWSTR lpUrl, wstring& strHostName, wstring& strPage, 
 {
 	sPort = 80;
 	wstring strTemp(lpUrl);
+	int headerLen = 7;
 	int nPos=strTemp.find(L"http://");
+
+	if(wstring::npos == nPos)
+	{
+		nPos=strTemp.find(L"https://");
+		if(nPos != wstring::npos)
+		{
+			sPort = INTERNET_DEFAULT_HTTPS_PORT;
+			headerLen =8;
+		}
+	}
 	if (wstring::npos != nPos )
-		strTemp=strTemp.substr(nPos+7, strTemp.size()-nPos-7);
+		strTemp=strTemp.substr(nPos+headerLen, strTemp.size()-nPos-headerLen);
 	nPos=strTemp.find('/');
 	if ( wstring::npos == nPos )//ц╩спур╣╫ /
 		strHostName=strTemp;
