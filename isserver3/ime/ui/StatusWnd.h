@@ -33,6 +33,9 @@ namespace SOUI
 			AMV_TOP = 1<<8,
 			AMV_BOTTOM = 1<<9,
 		};
+		enum{
+			UM_EDITUSERDATA = (WM_USER+200)
+		};
 		friend class CInputWnd;
 
 		CStatusWnd(SEventSet *pEvtSets, ICmdListener *pListener);
@@ -58,15 +61,17 @@ namespace SOUI
 
 		void OnInitMenuPopup(HMENU menuPopup, UINT nIndex, BOOL bSysMenu);
 
+		LPARAM OnEditUserDefData(UINT uMsg,WPARAM wp,LPARAM lp);
+
 		BEGIN_MSG_MAP_EX(CStatusWnd)
 			MSG_WM_INITMENUPOPUP(OnInitMenuPopup)
 			MSG_WM_CREATE(OnCreate)
 			MSG_WM_RBUTTONUP(OnRButtonUp)
+			MESSAGE_HANDLER_EX(UM_EDITUSERDATA,OnEditUserDefData)
 			CHAIN_MSG_MAP(CImeWnd)
 		END_MSG_MAP()
 
 	protected:
-		void OnEditUserDefData(int nType);
 
 		void ShowServerExit();
 		void OnSvrNotify(EventArgs *e);

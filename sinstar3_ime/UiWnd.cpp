@@ -477,7 +477,10 @@ BOOL CUiWnd::AttachToIMC(BOOL bAttach)
 			if(bAttach)
 				*pData=this;
 			else
+			{
+				m_pCurContext = NULL;
 				*pData=0;
+			}
 			ImmUnlockIMCC(lpIMC->hPrivate);
 			bRet=TRUE;
 		}

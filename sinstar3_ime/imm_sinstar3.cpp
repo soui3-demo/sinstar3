@@ -192,7 +192,10 @@ UINT WINAPI ImeToAsciiEx (UINT uVKey,UINT uScanCode,CONST LPBYTE lpbKeyState,LPD
 		(*ppUiWnd)->m_pSinstar3->TranslateKey((UINT64)(&ctx), uVKey, uScanCode, bKeyDown, lpbKeyState, &bEaten);
 		if (!bEaten) ctx._nMsgInBuf = 0;
 	}
-	(*ppUiWnd)->m_pCurContext=NULL;
+	if(*ppUiWnd)
+	{//(*ppUiWnd) maybe set to 0
+		(*ppUiWnd)->m_pCurContext=NULL;
+	}
 exit:
 	ImmUnlockIMCC(ctx._lpContext->hPrivate);
 	return ctx._nMsgInBuf;

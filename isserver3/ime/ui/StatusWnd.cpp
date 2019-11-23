@@ -701,7 +701,7 @@ namespace SOUI
 				FU_USERJM,
 				FU_USERDICT,
 			};
-			OnEditUserDefData(types[nRet - R.id.memu_edit_userdef]);
+			PostMessage(UM_EDITUSERDATA,types[nRet - R.id.memu_edit_userdef]);
 		}
 		else if (nRet > R.id.menu_tool_base && nRet < (R.id.menu_tool_base + 99) / 100 * 100)
 		{//open tools.
@@ -763,8 +763,9 @@ namespace SOUI
 		m_pCmdListener->OnCommand(CMD_OPENCONFIG, 0);
 	}
 
-	void CStatusWnd::OnEditUserDefData(int nType)
+	LPARAM CStatusWnd::OnEditUserDefData(UINT uMsg,WPARAM wp,LPARAM lp)
 	{
+		int nType = (int)wp;
 		if (ISComm_FatctUserDefFileName(nType) == ISACK_SUCCESS)
 		{
 			PMSGDATA pMsgData = ISComm_GetData();
@@ -782,6 +783,7 @@ namespace SOUI
 		{
 			CUtils::SoundPlay(_T("error"));
 		}
+		return 0;
 	}
 
 

@@ -4,6 +4,7 @@
 
 class CTextEditorDlg : public SHostDialog, IFindListener
 	, public CWHRoundRectFrameHelper<CTextEditorDlg>
+	, public SDpiHandler<CTextEditorDlg>
 {
 public:
 	CTextEditorDlg(int nMode,const SStringT & strFileName);
@@ -27,6 +28,7 @@ protected:
 	BEGIN_MSG_MAP_EX(CTextEditorDlg)
 		MSG_WM_INITDIALOG(OnInitDialog)
 		CHAIN_MSG_MAP(CWHRoundRectFrameHelper<CTextEditorDlg>)
+		CHAIN_MSG_MAP(SDpiHandler<CTextEditorDlg>)
 		CHAIN_MSG_MAP(SHostDialog)
 	END_MSG_MAP()
 
