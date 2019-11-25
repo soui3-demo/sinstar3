@@ -13,6 +13,7 @@
     <item text="智能记忆" name="switch_record_input" id="105"/>
     <item text="单词补全" name="switch_word_input" id="106"/>
     <item text="GBK过滤" name="switch_filter_gbk" id="107"/>
+    <item text="中文标点" name="switch_char_mode" id="108"/>
   </item>
   <sep/>
   <item text="皮    肤" name="menu_skin" id="2000" contextHelpId="2">

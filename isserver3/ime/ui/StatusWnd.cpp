@@ -175,6 +175,7 @@ namespace SOUI
 				smenuPopup.CheckMenuItem(R.id.switch_record_input, MF_BYCOMMAND | g_SettingsUI->bRecord ? MF_CHECKED : 0);
 				smenuPopup.CheckMenuItem(R.id.switch_word_input, MF_BYCOMMAND | g_SettingsUI->bEnglish ? MF_CHECKED : 0);
 				smenuPopup.CheckMenuItem(R.id.switch_filter_gbk, MF_BYCOMMAND | g_SettingsUI->bFilterGbk ? MF_CHECKED : 0);
+				smenuPopup.CheckMenuItem(R.id.switch_char_mode,MF_BYCOMMAND | g_SettingsUI->bCharMode ? MF_CHECKED : 0);
 				break;
 			}
 		case 4://comp select
@@ -731,7 +732,14 @@ namespace SOUI
 			g_SettingsUI->bEnglish = !g_SettingsUI->bEnglish;
 			g_SettingsUI->SetModified(true);
 			m_pCmdListener->OnCommand(CMD_SYNCUI, BTN_ENGLISHMODE);
-		}else if(nRet == R.id.skin_def)
+		}
+		else if(nRet == R.id.switch_char_mode)
+		{
+			g_SettingsUI->bCharMode = !g_SettingsUI->bCharMode;
+			g_SettingsUI->SetModified(true);
+			m_pCmdListener->OnCommand(CMD_SYNCUI, BTN_CHARMODE);
+		}
+		else if(nRet == R.id.skin_def)
 		{
 			m_pCmdListener->OnCommand(CMD_CHANGESKIN, (LPARAM)&SStringT());
 		}
