@@ -17,7 +17,7 @@
     <window size="-1,-1" layout="hbox" extend_top="10" gravity="center">
       <text text="检查更新周期:"/>
       <combobox name="cbx_update_interval" size="60,25">
-        <liststyle colorBkgnd="#ffffff"/>
+        <liststyle colorBkgnd="#ffffff" font="size:16"/>
         <items>
           <item text="周"/>
           <item text="月"/>
@@ -28,7 +28,7 @@
     </window>
     <window size="-1,-1" layout="hbox" extend_top="10">
       <text text="官网:"/>
-      <link href="http://soime.cn" text="http://soime.cn"/>
+      <link href="https://soime.cn" text="https://soime.cn"/>
     </window>
     <text text="警告：计算机软件受著作权和国际公约保护"/>
     <text text="未经授权擅自用于商业用途"/>

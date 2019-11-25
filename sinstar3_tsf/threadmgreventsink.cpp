@@ -41,12 +41,13 @@ STDAPI CSinstar3Tsf::OnUninitDocumentMgr(ITfDocumentMgr *pDocMgr)
 
 STDAPI CSinstar3Tsf::OnSetFocus(ITfDocumentMgr *pDocMgrFocus, ITfDocumentMgr *pDocMgrPrevFocus)
 {
-	SLOGFMTI("ITfThreadMgrEventSink::OnSetFocus, pDocMgrFocus is %p, pDocMgrPrevFocus is %p", pDocMgrFocus, pDocMgrPrevFocus);
     //
     // Whenever focus is changed, initialize the TextEditSink.
     //
 	_bInEditDocument = _InitTextEditSink(pDocMgrFocus);	
-	
+
+	SLOGFMTI("OnSetFocus,_bHasFocus is %d, _bInEditDocument is %d, pDocMgrFocus=%p", _bHasFocus, _bInEditDocument,pDocMgrFocus);
+
 	if(m_pSinstar3)
 	{
 		m_pSinstar3->OnSetFocus(_bHasFocus && _bInEditDocument);

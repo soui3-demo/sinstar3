@@ -116,6 +116,10 @@ void CSinstar3Impl:: TranslateKey(UINT64 imeContext,UINT vkCode,UINT uScanCode,B
 void CSinstar3Impl::OnIMESelect(BOOL bSelect)
 {
 	m_inputState.OnImeSelect(bSelect);
+	if(bSelect)
+	{
+		m_pTxtSvr->SetConversionMode(FullNative);
+	}
 }
 
 void CSinstar3Impl::OnSetCaretPosition(POINT pt,int nHei)
@@ -158,8 +162,6 @@ void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 	m_hasFocus = bFocus;
 	if (bFocus)
 	{
-		m_pTxtSvr->SetConversionMode(FullNative);
-
 		HWND hOwner = (HWND)m_pTxtSvr->GetActiveWnd();
 		m_pInputWnd->SetOwner(hOwner);
 		m_pStatusWnd->SetOwner(hOwner);
@@ -169,14 +171,6 @@ void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 	}
 	else
 	{
-		if (m_bTyping)
-			m_inputState.InputEnd();
-		m_inputState.ClearContext(CPC_ALL);
-		if(g_SettingsG->compMode == IM_SHAPECODE &&	m_inputState.m_ctx.compMode == IM_SPELL)
-		{//temp spell mode.
-			m_inputState.m_ctx.compMode = IM_SHAPECODE;
-			m_inputState.StatusbarUpdate();
-		}
 		m_pInputWnd->SetOwner(NULL);
 		m_pStatusWnd->SetOwner(NULL);
 
@@ -240,7 +234,7 @@ void CSinstar3Impl::OnConversionModeChanged(EInputMethod nMode)
 
 void CSinstar3Impl::ShowHelp()
 {
-	ShellExecute(NULL, _T("open"), _T("http://soime.cn/help"), NULL, NULL, SW_SHOWNORMAL);
+	ShellExecute(NULL, _T("open"), _T("https://soime.cn/help"), NULL, NULL, SW_SHOWNORMAL);
 }
 
 EInputMethod CSinstar3Impl::GetDefInputMode()
