@@ -1830,6 +1830,9 @@ void LogerManager::run()
             if (LOG4Z_ALL_DEBUGOUTPUT_DISPLAY)
             {
 #if defined (WIN32) || defined(_WIN64)
+				char szIndex[50];
+				sprintf(szIndex,"%llu ",_ullStatusTotalPopLog);
+				OutputDebugStringA(szIndex);
                 OutputDebugStringA(pszBuf);
 #endif
             }
