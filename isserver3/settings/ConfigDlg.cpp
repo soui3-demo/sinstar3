@@ -461,6 +461,25 @@ namespace SOUI
 			FindChildByID(R.id.txt_svr_ver)->SetWindowText(strVer);
 		}
 
+		SWindow *pCheck = FindChildByID(R.id.chk_auto_update);
+		int nCheckUpdateInterval = m_pObserver->GetUpdateInterval();
+		if(nCheckUpdateInterval != 0)
+		{
+			pCheck->GetEventSet()->setMutedState(true);
+			pCheck->SetCheck(TRUE);
+			pCheck->GetEventSet()->setMutedState(false);
+			int intervals[] = {0,7,30,90 };
+			if(nCheckUpdateInterval>90)
+				nCheckUpdateInterval = 90;
+			SComboBox *pCbxInterval = FindChildByID2<SComboBox>(R.id.cbx_update_interval);
+			int idx = -1;
+			for(int i=0;i<ARRAYSIZE(intervals)-1;i++)
+			{
+				if(nCheckUpdateInterval>intervals[i] && nCheckUpdateInterval<=intervals[i+1])
+					idx = i;
+			}
+			pCbxInterval->SetCurSel(idx);
+		}
 	}
 
 	static LPBYTE ExtractTtsToken(LPBYTE pBuf, SStringAList & tokens, int &iSelToken)
