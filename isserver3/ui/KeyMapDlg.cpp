@@ -33,14 +33,9 @@ namespace SOUI
 		if(m_pBmp)
 		{
 			SImageWnd * pImg = FindChildByID2<SImageWnd>(R.id.img_keymap);
-			CSize szImg = m_pBmp->Size();
-			szImg.cx = min(szImg.cx, 1024)+10;
-			szImg.cy = min(szImg.cy, 768)+rcWnd.Height();
 			pImg->SetImage(m_pBmp);
-			SetWindowPos(NULL, 0, 0, szImg.cx, szImg.cy, SWP_NOZORDER | SWP_NOMOVE);		
-		}else
-		{
-			FindChildByID2<STabCtrl>(R.id.tab_keymap)->SetCurSel(1);
+			FindChildByID(R.id.txt_keymap)->SetVisible(FALSE,TRUE);
+			pImg->SetVisible(TRUE,TRUE);
 		}
 		FindChildByID(R.id.txt_comp_name)->SetWindowText(m_strName);
 		FindChildByID(R.id.link_comp_website)->SetAttribute(L"href",m_strUrl);

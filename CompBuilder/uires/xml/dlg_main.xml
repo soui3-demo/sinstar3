@@ -30,7 +30,8 @@ translucent="1"
       <window size="-2,-1" layout="hbox" padding="0,5,0,5">
         <check name="chk_symbol_first" text="标点顶字上屏"/>
         <check name="chk_yinxingma" text="音形码优化"/>
-        <check name="chk_disable_export" text="禁止导出编码"/>
+        <check name="chk_auto_select" text="唯一候选自动上屏"/>
+        <check name="chk_phrase_full_code" text="词组是全码"/>
       </window>
       <window size="-2,-1" layout="hbox" padding="0,5,0,5" gravity="center">
         <text text="编码官网:"/>

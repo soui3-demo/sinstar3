@@ -62,6 +62,7 @@
   <img2>
     <file name="png_tip_bg" path="image2\tip_bg.png"/>
     <file name="png_item_bg" path="image2\item_bg.png"/>
+    <file name="png_menu_icons" path="image2\menu_icons.png"/>
   </img2>
   <smenu>
     <file name="context_tray" path="smenu\context_tray.xml"/>

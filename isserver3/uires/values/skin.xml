@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-  <skin>
-       <imgframe name="skin_tip_bg" src="img2:png_tip_bg" margin="50,20,50,20" alpha="200"/>
-       <imgframe name="skin_item_bg" src="img2:png_item_bg" margin="3,3,3,3" states="3"/>
-  </skin>
+<skin>
+  <imgframe name="skin_tip_bg" src="img2:png_tip_bg" margin="50,20,50,20" alpha="200"/>
+  <imgframe name="skin_item_bg" src="img2:png_item_bg" margin="3,3,3,3" states="3"/>
+  <imglist name="skin_menu_icons" src="img2:png_menu_icons" states="5"/>
+</skin>
