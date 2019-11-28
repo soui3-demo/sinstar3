@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <menu itemHeight="28" contextHelpId="100"
           maxWidth="300" minWidth="150"
           textMargin="10"
@@ -17,7 +17,7 @@
     <item text="中文标点" name="switch_char_mode" id="108"/>
   </item>
   <sep/>
-  <item text="皮    肤" name="menu_skin" id="2000" contextHelpId="2" icon="1">
+  <item text="皮      肤" name="menu_skin" id="2000" contextHelpId="2" icon="1">
     <item text="皮肤目录" name="skin_mgr" id="2001"/>
     <item text="皮肤下载" name="skin_cloud" id="2002"/>
     <sep/>
@@ -43,11 +43,11 @@
     <item text="编辑用户词库" name="menu_edit_userdict" id="606"/>
     <sep/>
   </item>
-  <item text="输入法工具" name="menu_data_mgr" contextHelpId="7">
+  <item text="相关工具" name="menu_data_mgr" contextHelpId="7">
     <item text="无" name="menu_tool_base" id="701" enable="0"/>
   </item>
 
-  <item text="字 根 表" name="key_map" id="110" icon="3"/>
+  <item text="形码字根" name="key_map" id="110" icon="3"/>
   <item text="打字速度" name="key_speed" id="111"/>
   <sep/>
   <item text="查看帮助" name="help" id="112" icon="4"/>
