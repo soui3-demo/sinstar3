@@ -39,6 +39,8 @@ namespace SOUI
 		}
 		FindChildByID(R.id.txt_comp_name)->SetWindowText(m_strName);
 		FindChildByID(R.id.link_comp_website)->SetAttribute(L"href",m_strUrl);
+		UpdateWindow();
+		CenterWindow();
 		return 0;
 	}
 
