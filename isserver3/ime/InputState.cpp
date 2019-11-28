@@ -1690,7 +1690,8 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 				//防止符号输入时出现错误:标点不能做首编码,退出当前过程,进入标点顶字上屏过程
 				if((byInput<'a' || byInput>'z') && !ISComm_GetCompInfo()->bSymbolFirst)
 					return FALSE;
-				if((lpCntxtPriv->byCandType&RATE_FORECAST)==0 && ((lpCntxtPriv->byCandType&RATE_GBK)==0 || g_SettingsG->nGbkMode== CSettingsGlobal::GBK_SHOW_NORMAL))
+				BYTE *pByCand = lpCntxtPriv->ppbyCandInfo[0];
+				if(pByCand[0]!=RATE_FORECAST && (pByCand[0]!=RATE_GBK || g_SettingsG->nGbkMode!=CSettingsGlobal::GBK_SHOW_MANUAL))
 				{
 					KeyIn_All_SelectCand(lpCntxtPriv,'1',1,lpbKeyState,true);
 				}
@@ -1863,7 +1864,8 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 		}
 		if((lpCntxtPriv->byCandType&MCR_AUTOSELECT ||(KeyIn_Code_IsMaxCode(lpCntxtPriv) && g_SettingsG->bAutoInput)) && !lpCntxtPriv->bWebMode)
 		{
-			if(lpCntxtPriv->sCandCount==1 && (lpCntxtPriv->byCandType&RATE_FORECAST)==0 && ((lpCntxtPriv->byCandType&RATE_GBK)==0 || g_SettingsG->nGbkMode!=CSettingsGlobal::GBK_SHOW_MANUAL))
+			BYTE *pByCand = lpCntxtPriv->ppbyCandInfo[0];
+			if(lpCntxtPriv->sCandCount==1 && pByCand[0]!=RATE_FORECAST && (pByCand[0]!=RATE_GBK || g_SettingsG->nGbkMode!=CSettingsGlobal::GBK_SHOW_MANUAL))
 			{
 				KeyIn_All_SelectCand(lpCntxtPriv,'1',0,lpbKeyState);
 			}else

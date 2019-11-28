@@ -7,6 +7,8 @@
           >
   <item text="系统设置" name="config" id="100" icon="0"/>
   <item text="状态开关" contextHelpId="1">
+      <item text="后台运行指示" name="svr_showicon" id="601"/>
+      <sep/>
     <item text="隐藏状态栏" name="switch_hide_statusbar" id="101"/>
     <item text="光标跟随" name="switch_follow_caret" id="102"/>
     <item text="输出繁体" name="switch_input_big5" id="103"/>
@@ -34,8 +36,6 @@
     <item text="自定义短语" name="menu_blend_userdef" id="502"/>
   </item>
   <item text="数据管理" name="menu_data_mgr" contextHelpId="6" icon="2">
-    <item text="后台运行指示" name="svr_showicon" id="601"/>
-    <sep/>
     <item text="编辑自定义词库" name="memu_edit_userdef" id="602"/>
     <item text="编辑符号映射表" name="memu_edit_symbol" id="603"/>
     <item text="编辑快捷命令" name="memu_edit_usercmd" id="604"/>

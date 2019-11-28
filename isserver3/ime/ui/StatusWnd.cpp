@@ -176,6 +176,7 @@ namespace SOUI
 				smenuPopup.CheckMenuItem(R.id.switch_word_input, MF_BYCOMMAND | g_SettingsUI->bEnglish ? MF_CHECKED : 0);
 				smenuPopup.CheckMenuItem(R.id.switch_filter_gbk, MF_BYCOMMAND | g_SettingsUI->bFilterGbk ? MF_CHECKED : 0);
 				smenuPopup.CheckMenuItem(R.id.switch_char_mode,MF_BYCOMMAND | g_SettingsUI->bCharMode ? MF_CHECKED : 0);
+				smenuPopup.CheckMenuItem(R.id.svr_showicon, MF_BYCOMMAND | ISComm_SvrTray_Get() ? MF_CHECKED : 0);
 				break;
 			}
 		case 4://comp select
@@ -197,11 +198,6 @@ namespace SOUI
 				smenuPopup.CheckMenuItem(R.id.menu_blend_spell,MF_BYCOMMAND | (g_SettingsG->bBlendSpWord ? MF_CHECKED : 0));
 				smenuPopup.CheckMenuItem(R.id.menu_blend_userdef, MF_BYCOMMAND | (g_SettingsG->bBlendUD ? MF_CHECKED : 0));
 
-				break;
-			}
-		case 6://svr data manager
-			{
-				smenuPopup.CheckMenuItem(R.id.svr_showicon, MF_BYCOMMAND | ISComm_SvrTray_Get() ? MF_CHECKED : 0);
 				break;
 			}
 		case 7://tools
