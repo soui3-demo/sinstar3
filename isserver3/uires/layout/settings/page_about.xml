@@ -36,14 +36,15 @@
     <text text="包括但不限于以上 "/>
     <text text="2002-2019（C）启程软件 All right is reserved."/>
     <text text="合作开发：ID008"/>
-    <text text="后台支持：李平"/>
-    <text text="测试：晴天"/>
+    <text text="后台技术支持：李平"/>
+    <text text="美术兼测试：晴天"/>
+    <text text="皮肤开发：木已成舟"/>
     <window layout="hbox">
       <text text="本产品基于开源UI框架"/>
       <link href="https://github.com/soui3/soui" text="SOUI 3.0"/>
     </window>
     <window layout="vbox" gravity="center">
-      <text text="QQ群"/>
+      <text text="反馈问题QQ群" colorText="@color/red"/>
       <qrctrl size="200,200" text="http://qm.qq.com/cgi-bin/qm/qr?k=wGMykx8zDb_42F9cYi0iLSPq2Pk-4k0y"/>
     </window>
   </window>

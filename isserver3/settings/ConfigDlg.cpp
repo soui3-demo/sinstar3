@@ -350,6 +350,8 @@ namespace SOUI
 		//op tip
 		FindAndSetCheck(R.id.chk_show_op_tip, g_SettingsG->bShowOpTip);
 
+		FindAndSetCheck(R.id.chk_disable_first_wild,g_SettingsG->bDisableFirstWild);
+
 		FindAndSetHotKey(R.id.hk_to_sentmode, Char2VKey(g_SettingsG->bySentMode));
 
 		FindAndSetSpin(R.id.spin_delay_time, g_SettingsG->nDelayTime);
@@ -818,6 +820,11 @@ SWindow *pCtrl = FindChildByID(id);\
 	void CConfigDlg::OnPyPhraseFirst()
 	{
 		g_SettingsG->bPYPhraseFirst= FindChildByID(R.id.cand_py_phrase_first)->IsChecked();
+	}
+
+	void CConfigDlg::OnDislabeFirstWild()
+	{
+		g_SettingsG->bDisableFirstWild = FindChildByID(R.id.chk_disable_first_wild)->IsChecked();
 	}
 
 	void CConfigDlg::OnChkOpTip(EventArgs *e)

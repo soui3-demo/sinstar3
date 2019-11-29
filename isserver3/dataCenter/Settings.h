@@ -82,7 +82,7 @@ public:
 
 	BOOL	bCandSelNoNum;		// 禁用数字选择重码
 	BOOL	bOnlySimpleCode;	// 出简不出全
-
+	BOOL	bDisableFirstWild;	// 禁止首码万能键
 	BYTE    bySentMode;
 
 	int		nDelayTime;			//delay timer for closing composition window in seconds.

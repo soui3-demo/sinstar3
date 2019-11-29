@@ -91,6 +91,7 @@ void CSettingsGlobal::Save(const SStringT & strDataPath)
 	WritePrivateProfileInt(KSession,_T("EnterClear"),bEnterClear,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("SoundAlert"),nSoundAlert,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("DisableFnKey"),bDisableFnKey,strConfigIni);
+	WritePrivateProfileInt(KSession,_T("DisableFirstWild"),bDisableFirstWild,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("AutoDot"),bAutoDot,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("AutoPrompt"),bAutoPrompt,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("DisableDelWordCand"),bDisableDelWordCand,strConfigIni);
@@ -163,6 +164,7 @@ void CSettingsGlobal::Load(const SStringT & strDataPath)
 	bDisableFnKey=GetPrivateProfileInt(KSession,_T("DisableFnKey"),1,strConfigIni);
 	bAutoDot=GetPrivateProfileInt(KSession,_T("AutoDot"),1,strConfigIni);
 	bAutoPrompt=GetPrivateProfileInt(KSession,_T("AutoPrompt"),0,strConfigIni);
+	bDisableFirstWild = GetPrivateProfileInt(KSession,_T("DisableFirstWild"),0,strConfigIni);
 
 	bDisableDelWordCand=GetPrivateProfileInt(KSession,_T("DisableDelWordCand"),1,strConfigIni);
 	bCandSelNoNum=GetPrivateProfileInt(KSession,_T("CandSelNoNum"),0,strConfigIni);

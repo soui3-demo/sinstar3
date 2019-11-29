@@ -1666,7 +1666,8 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 {
 	BOOL bRet=FALSE;
 	BOOL bCompChar=FALSE;
-	if(byInput==CDataCenter::getSingletonPtr()->GetData().m_compInfo.cWild)
+	BOOL bWild = byInput==CDataCenter::getSingletonPtr()->GetData().m_compInfo.cWild;
+	if(bWild)
 	{
 		bCompChar=TRUE;
 	}else
@@ -1703,8 +1704,11 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 		{
 			if(byInput<'a' || byInput>'z')
 			{//标点：要么不是自定义模式快捷键，或者不支持快捷自定义模式切换
-				if(!ISComm_GetCompInfo()->bSymbolFirst) return bRet;//符号顶字上屏
+				if(!ISComm_GetCompInfo()->bSymbolFirst)
+					return FALSE;//符号顶字上屏
 			}
+			if(bWild && g_SettingsG->bDisableFirstWild)//禁止首码万能键
+				return FALSE;
 			if(g_SettingsG->bShowOpTip)
 			{//有编码后面显示操作提示
 				lpCntxtPriv->bShowTip=TRUE;
@@ -1712,7 +1716,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 			}
 			//开始编码输入,生成开始编码消息以获取光标跟随时输入窗口的坐标
 			InputStart();
-			if(!bRet) InputOpen();
+			InputOpen();
 		}
 		if(lpCntxtPriv->cComp<MAX_COMP)
 		{
