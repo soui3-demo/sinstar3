@@ -7,5 +7,5 @@
   <item text="设置" name="menu_settings" id="101" icon="0"/>
   <item text="开机启动" name="menu_auto_run" id="104"/>
   <item text="自动退出" name="menu_auto_exit" id="103"/>
-  <item text="强制退出" name="menu_force_exit" id="102" icon="5"/>
+  <item text="强制退出" name="menu_force_exit" id="102" icon="11"/>
 </menu>

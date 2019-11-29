@@ -6,7 +6,7 @@
           iconSkin="skin_menu_icons"
           >
   <item text="系统设置" name="config" id="100" icon="0"/>
-  <item text="状态开关" contextHelpId="1">
+  <item text="状态开关" contextHelpId="1" icon="1">
       <item text="后台运行指示" name="svr_showicon" id="601"/>
       <sep/>
     <item text="隐藏状态栏" name="switch_hide_statusbar" id="101"/>
@@ -19,23 +19,23 @@
     <item text="中文标点" name="switch_char_mode" id="108"/>
   </item>
   <sep/>
-  <item text="皮      肤" name="menu_skin" id="2000" contextHelpId="2" icon="1">
+  <item text="皮      肤" name="menu_skin" id="2000" contextHelpId="2" icon="2">
     <item text="皮肤目录" name="skin_mgr" id="2001"/>
     <item text="皮肤下载" name="skin_cloud" id="2002"/>
     <sep/>
     <item text="默认皮肤" name="skin_def" id="2220"/>
     <sep/>
   </item>
-  <item text="编码方案" name="menu_comp" contextHelpId="4">
+  <item text="编码方案" name="menu_comp" contextHelpId="4" icon="3">
     <item text="安装码表" name="comp_install" id="400"/>
     <item text="码表下载" name="comp_cloud" id="401"/>
     <sep/>
   </item>
-  <item text="形码混输" name="menu_blend" contextHelpId="5">
+  <item text="形码混输" name="menu_blend" contextHelpId="5" icon="4">
     <item text="拼音" name="menu_blend_spell" id="501"/>
     <item text="自定义短语" name="menu_blend_userdef" id="502"/>
   </item>
-  <item text="数据管理" name="menu_data_mgr" contextHelpId="6" icon="2">
+  <item text="数据管理" name="menu_data_mgr" contextHelpId="6" icon="5">
     <item text="编辑自定义词库" name="memu_edit_userdef" id="602"/>
     <item text="编辑符号映射表" name="memu_edit_symbol" id="603"/>
     <item text="编辑快捷命令" name="memu_edit_usercmd" id="604"/>
@@ -43,13 +43,13 @@
     <item text="编辑用户词库" name="menu_edit_userdict" id="606"/>
     <sep/>
   </item>
-  <item text="相关工具" name="menu_data_mgr" contextHelpId="7">
+  <item text="相关工具" name="menu_data_mgr" contextHelpId="7" icon="6">
     <item text="无" name="menu_tool_base" id="701" enable="0"/>
   </item>
 
-  <item text="形码字根" name="key_map" id="110" icon="3"/>
-  <item text="打字速度" name="key_speed" id="111"/>
+  <item text="形码字根" name="key_map" id="110" icon="7"/>
+  <item text="打字速度" name="key_speed" id="111" icon="8"/>
   <sep/>
-  <item text="查看帮助" name="help" id="112" icon="4"/>
-  <item text="捐助启程" name="menu_donate" id="113"/>
+  <item text="查看帮助" name="help" id="112" icon="10"/>
+  <item text="捐助启程" name="menu_donate" id="113" icon="9"/>
 </menu>
