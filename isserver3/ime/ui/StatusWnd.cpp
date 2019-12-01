@@ -218,6 +218,7 @@ namespace SOUI
 		default:
 			{
 				SStringT strSkinDir = m_skinManager.SkinPathFromCtxID((int)dwCtxID);
+				
 				if(!strSkinDir.IsEmpty())
 				{//sub skin menu
 					SStringT strCurSkin = g_SettingsG->strSkin;

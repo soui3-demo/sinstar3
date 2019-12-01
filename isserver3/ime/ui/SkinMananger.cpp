@@ -3,7 +3,7 @@
 #include <helper/SMenu.h>
 #include <helper/SAutoBuf.h>
 
-CSkinMananger::CSkinMananger():m_nMaxCtxID(0)
+CSkinMananger::CSkinMananger():m_nMaxCtxID(R.id.menu_skin)
 {
 }
 
@@ -51,6 +51,7 @@ int CSkinMananger::InitSkinMenu(HMENU hMenu, const SStringT &strSkinPath, int nS
 			nID++;
 			SStringT strFullPath = strSkinPath + _T("\\") + findData.cFileName;
 			m_mapSkin[nID] = strFullPath;
+			//SLOG_INFO("skin "<<strFullPath<<" id is "<<nID);
 			SStringT strDesc;
 			if(ExtractSkinInfo(strFullPath,strDesc))
 			{
@@ -155,5 +156,5 @@ void CSkinMananger::ClearMap()
 {
 	m_mapSkin.RemoveAll();
 	m_mapCtxId2Path.RemoveAll();
-	m_nMaxCtxID = 0;
+	m_nMaxCtxID = R.id.menu_skin;
 }
