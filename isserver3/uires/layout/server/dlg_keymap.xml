@@ -3,7 +3,7 @@
 appWnd="1"
 translucent="1"
 >
-  <root  width="-1" height="-1" skin="_skin.sys.wnd.bkgnd" cache="1" layout="vbox" padding="5,5,5,5">
+  <root  width="-1" height="-1" skin="_skin.sys.wnd.bkgnd" cache="1" layout="vbox" padding="5,5,5,5" font="size:16">
     <caption size="-2,30" layout="hbox" gravity="center">
       <caption size="0,-1" layout="hbox" weight="1" gravity="center">
         <text size="-1,-1" text="@string/keymap"/>

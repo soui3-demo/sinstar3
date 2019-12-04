@@ -3,7 +3,7 @@
 appWnd="1"
 translucent="1"
 >
-  <root width="400" height="550" skin="_skin.sys.wnd.bkgnd" cache="1" layout="vbox" padding="5,5,5,5" intervel="5">
+  <root width="400" height="550" skin="_skin.sys.wnd.bkgnd" cache="1" layout="vbox" padding="5,5,5,5" intervel="5" font="size:16">
     <caption size="-2,30" layout="hbox" gravity="center">
       <text size="-1,-1" text="@string/donate"/>
       <window size="0,0" weight="1" visible="0"/>

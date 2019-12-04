@@ -3,7 +3,7 @@
 appWnd="1"
 translucent="1"
 >
-  <root width="300" height="400"  skin="_skin.sys.wnd.bkgnd" cache="1" padding="5,5,5,5">
+  <root width="300" height="400"  skin="_skin.sys.wnd.bkgnd" cache="1" padding="5,5,5,5" font="size:16">
     <window size="-2,-2"  layout="vbox"  gravity="center" font="size:16">
 	    <caption size="-2,30" >
 	      <icon pos="5,|0" offset="0,-0.5" src="ICON_LOGO:16"/>

@@ -68,4 +68,7 @@
     <file name="context_tray" path="smenu\context_tray.xml"/>
     <file name="context_status" path="smenu\context_status.xml"/>
   </smenu>
+  <icon>
+  	<file name="icon_logo" path="image2\logo.ico"/>
+</icon>
 </resource>

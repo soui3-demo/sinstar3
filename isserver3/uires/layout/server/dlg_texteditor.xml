@@ -5,15 +5,18 @@ translucent="0"
 >
   <style>
     <text.tip multiLines="1" colorText="@color/red" visible="0" display="0"/>
+    <text.title visible="0" display="0"/>
   </style>
-  <root  width="600" height="400" skin="_skin.sys.wnd.bkgnd" cache="1" layout="vbox" padding="5,5,5,5" interval="10">
-    <caption size="-2,30" layout="hbox" gravity="center">
+  <root  width="600" height="400" skin="_skin.sys.wnd.bkgnd" cache="1" padding="5,5,5,5"  font="size:16">
+    <window size="-2,-2" layout="vbox" interval="10"   font="size:16">
+    <caption size="-2,30" layout="hbox" gravity="center" interval="5">
+    	<icon size="16,16" src="icon_logo:16"/>
       <window size="-1,-2" layout="vbox">
-        <text name="txt_edit_userdef" text="@string/txt_edit_userdef" visible="0" display="0"/>
-        <text name="txt_edit_symbol" text="@string/txt_edit_symbol" visible="0" display="0"/>
-        <text name="txt_edit_usercmd" text="@string/txt_edit_usercmd" visible="0" display="0"/>
-        <text name="txt_edit_userjm" text="@string/txt_edit_userjm" visible="0" display="0"/>
-        <text name="txt_edit_userdict" text="@string/txt_edit_userdict" visible="0" display="0"/>
+        <text.title size="-1,30" name="txt_edit_userdef" text="@string/txt_edit_userdef"/>
+        <text.title size="-1,30" name="txt_edit_symbol" text="@string/txt_edit_symbol"/>
+        <text.title size="-1,30" name="txt_edit_usercmd" text="@string/txt_edit_usercmd"/>
+        <text.title size="-1,30" name="txt_edit_userjm" text="@string/txt_edit_userjm"/>
+        <text.title size="-1,30" name="txt_edit_userdict" text="@string/txt_edit_userdict"/>
       </window>
       <window size="0,0" weight="1" visible="0"/>
       <imgbtn size="-1,-1" name="btn_close" skin="_skin.sys.btn.close"  id="IDCANCEL" tip="close" animate="1"/>
@@ -34,6 +37,7 @@ translucent="0"
       <text.tip size="-2,-1" name="tip_edit_usercmd" text="@string/tip_edit_usercmd"/>
       <text.tip size="-2,-1" name="tip_edit_userjm" text="@string/tip_edit_userjm"/>
       <text.tip size="-2,-1" name="tip_edit_userdict" text="@string/tip_edit_userdict"/>
+    </window>
     </window>
   </root>
 </SOUI>
