@@ -26,7 +26,7 @@ static const int HKI_LoadDebugSkin	 = -2;
 static const int HKI_UnloadDebugSkin = -3;
 //符号处理
 //BYTE byInput:键盘输入
-SStringA Symbol_Convert(InputContext * lpCntxtPriv,UINT byInput,const BYTE * lpbKeyState)
+SStringA CInputState::Symbol_Convert(InputContext * lpCntxtPriv,UINT byInput,const BYTE * lpbKeyState)
 {
 	char pBuf[100];
 	int nRet=0;
@@ -55,9 +55,7 @@ SStringA Symbol_Convert(InputContext * lpCntxtPriv,UINT byInput,const BYTE * lpb
 				{//解释光标移动函数
 					nRet-=5;
 					pBuf[nRet]=0;
-					if(lpbKeyState[VK_SHIFT]&0x80) 	keybd_event(VK_SHIFT,MapVirtualKey(VK_SHIFT,0),KEYEVENTF_KEYUP,0);
-					keybd_event(VK_LEFT,MapVirtualKey(VK_LEFT,0),0,0);
-					keybd_event(VK_LEFT,MapVirtualKey(VK_LEFT,0),KEYEVENTF_KEYUP,0);
+					m_pListener->DelayCaretLeft();
 				}
 			}
 		}

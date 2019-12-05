@@ -25,6 +25,10 @@ public:
 
 const TCHAR * KSinstar3WndName = _T("sinstar3_msg_recv_20180801");
 
+enum{
+	TIMER_CARETLEFT = 200,
+};
+
 CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HWND hSvr)
 :m_pTxtSvr(pTxtSvr)
 ,m_pInputWnd(NULL)
@@ -595,5 +599,28 @@ BOOL CSinstar3Impl::IsInputVisible() const
 BOOL CSinstar3Impl::IsStatusVisible() const
 {
 	return m_hasFocus && m_bOpen && m_bInputEnable && !g_SettingsUI->bHideStatus;
+}
+
+void CSinstar3Impl::DelayCaretLeft()
+{
+	SetTimer(TIMER_CARETLEFT,10,NULL);
+}
+
+void CSinstar3Impl::OnTimer(UINT_PTR id)
+{
+	if(id == TIMER_CARETLEFT)
+	{
+		if(GetKeyState(VK_SHIFT)&0x80)
+		{
+			keybd_event(VK_SHIFT,MapVirtualKey(VK_SHIFT,0),KEYEVENTF_KEYUP,0);
+		}
+		keybd_event(VK_LEFT,MapVirtualKey(VK_LEFT,0),0,0);
+		keybd_event(VK_LEFT,MapVirtualKey(VK_LEFT,0),KEYEVENTF_KEYUP,0);
+		KillTimer(id);
+	}else
+	{
+		SetMsgHandled(FALSE);
+	}
+
 }
 

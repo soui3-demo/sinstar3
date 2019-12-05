@@ -63,6 +63,7 @@ protected://IInputListener
 	virtual void EnableInput(BOOL bEnable);
 	virtual BOOL IsInputEnable() const;
 
+	virtual void DelayCaretLeft();
 protected://ICmdListener
 	virtual void OnCommand(WORD cmd, LPARAM lp);
 	virtual InputContext * GetInputContext();
@@ -84,11 +85,12 @@ public:
 	LRESULT OnSvrNotify(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	LRESULT OnAsyncCopyData(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	BOOL OnCopyData(HWND wnd, PCOPYDATASTRUCT pCopyDataStruct);
-
+	void OnTimer(UINT_PTR id);
 	BEGIN_MSG_MAP_EX(CSinstar3Impl)
 		MESSAGE_HANDLER_EX(UM_ASYNC_COPYDATA,OnAsyncCopyData)
 		MSG_WM_COPYDATA(OnCopyData)
 		MESSAGE_HANDLER_EX(ISComm_GetCommMsgID(),OnSvrNotify)
+		MSG_WM_TIMER(OnTimer)
 		CHAIN_MSG_MAP_MEMBER(m_cmdHandler)
 		CHAIN_MSG_MAP(SOUI::SNativeWnd)
 	END_MSG_MAP()

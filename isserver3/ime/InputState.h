@@ -26,6 +26,7 @@ interface IInputListener: public ICmdListener {
 
 	virtual void EnableInput(BOOL bEnable) = 0;
 	virtual BOOL IsInputEnable() const = 0;
+	virtual void DelayCaretLeft() = 0;
 };
 
 class CInputState
@@ -93,6 +94,8 @@ private:
 	BOOL KeyIn_Digital_ChangeComp(InputContext * lpCntxtPriv,UINT byInput, CONST BYTE* lpbKeyState);
 	BOOL KeyIn_UserDef_ChangeComp(InputContext * lpCntxtPriv,UINT byInput, CONST BYTE* lpbKeyState);
 	BOOL KeyIn_Line_ChangeComp(InputContext * lpCntxtPriv,UINT byInput, CONST BYTE * lpbKeyState);
+
+	SStringA Symbol_Convert(InputContext * lpCntxtPriv,UINT byInput,const BYTE * lpbKeyState);
 
 	InputContext m_ctx;
 	IInputListener * m_pListener;
