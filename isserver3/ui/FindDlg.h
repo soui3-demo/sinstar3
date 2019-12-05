@@ -7,7 +7,7 @@ namespace SOUI
 		virtual void OnReplace(const SStringT &strText) PURE;
 	};
 
-	class CFindDlg : public SHostWnd
+	class CFindDlg : public SHostWnd, public SDpiHandler<CFindDlg>
 	{
 	public:
 		CFindDlg(IFindListener *pFindListener);
@@ -29,6 +29,11 @@ namespace SOUI
 			EVENT_ID_COMMAND(R.id.btn_prev,OnFindPrev)
 			EVENT_ID_COMMAND(R.id.btn_replace,OnReplace)
 		EVENT_MAP_END()
+
+		BEGIN_MSG_MAP_EX(CFindDlg)
+			CHAIN_MSG_MAP(SDpiHandler<CFindDlg>)
+			CHAIN_MSG_MAP(SHostWnd)
+		END_MSG_MAP()
 
 		virtual void OnFinalMessage(HWND hWnd);
 

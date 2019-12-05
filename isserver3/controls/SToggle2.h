@@ -11,6 +11,7 @@ namespace SOUI
 
 	protected:
 		virtual CSize GetDesiredSize(int wid, int hei) override;
+		virtual void OnScaleChanged(int scale);
 
 		void OnPaint(IRenderTarget *pRT);
 
