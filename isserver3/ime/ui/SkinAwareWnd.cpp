@@ -7,6 +7,7 @@ namespace SOUI{
 		, m_pEvtSet(pEvtSets)
 		, m_pListener(NULL)
 		, m_wndType(IME_UNKNOWN)
+		, m_bAutoScale(false)
 	{
 		m_pEvtSet->subscribeEvent(EventSvrNotify::EventID, Subscriber(&CSkinAwareWnd::OnEvent, this));
 		m_pEvtSet->subscribeEvent(EventSetSkin::EventID, Subscriber(&CSkinAwareWnd::OnEvent, this));
@@ -47,7 +48,10 @@ namespace SOUI{
 
 	int CSkinAwareWnd::OnRecreateUI(LPCREATESTRUCT lpCreateStruct)
 	{
-		return __super::OnCreate(lpCreateStruct);
+		m_bAutoScale = false;
+		SHostWnd::OnCreate(lpCreateStruct);
+		ScaleHost(m_hWnd);
+		return 0;
 	}
 
 	void CSkinAwareWnd::OnFinalMessage(HWND hWnd)
@@ -56,6 +60,19 @@ namespace SOUI{
 		if (m_pListener)
 		{
 			m_pListener->OnSkinAwareWndDestroy(this);
+		}
+	}
+
+	bool CSkinAwareWnd::IsDpiAware() const 
+	{
+		return m_bAutoScale;
+	}
+
+	void CSkinAwareWnd::OnUserXmlNode(pugi::xml_node xmlUser)
+	{
+		if(wcsicmp(xmlUser.name(),L"user")==0)
+		{
+			m_bAutoScale = xmlUser.attribute(L"autoScale").as_bool();
 		}
 	}
 

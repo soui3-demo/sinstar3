@@ -5,6 +5,7 @@
   translucent="1"
   toolwindow="1"
 >
+  <user autoScale="true"/>
   <skin>
     <imglist name="bg_status_bar" src="img:png_status_bar"/>
     <imglist name="logo"	src="img:logo_32" states="2"/>

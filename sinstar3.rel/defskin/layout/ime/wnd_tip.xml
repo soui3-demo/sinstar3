@@ -5,6 +5,7 @@
   translucent="1"
   toolwindow="1"
 >
+  <user autoScale="true"/>
   <root size="-1,-1" layout="vbox">
     <caption2 size="-1,-1" layout="vbox" skin="skin_tip_bg" padding="20,10,5,20" font="size:16" interval="10">
 	    <caption2 size="-2,30dp">

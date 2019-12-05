@@ -5,6 +5,7 @@
   translucent="1"
   toolwindow="1"
 >
+  <user autoScale="true"/>
   <skin>
     <imglist name="skin_bk" src="img:png_composition" tile="1"/>
     <imglist name="btn_prevpage" src="img:btn_prevpage" states="4"/>

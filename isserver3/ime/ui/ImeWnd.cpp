@@ -115,12 +115,6 @@ void CImeWnd::OnDragStatus(EventArgs *e)
 	OnReposition(pt);
 }
 
-
-int CImeWnd::OnRecreateUI(LPCREATESTRUCT lpCreateStruct)
-{
-	return SHostWnd::OnCreate(lpCreateStruct);
-}
-
 SWND CImeWnd::OnSetSwndCapture(SWND swnd)
 {
 	SWND ret =  SwndContainerImpl::OnSetSwndCapture(swnd);

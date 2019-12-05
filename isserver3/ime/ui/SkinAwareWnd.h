@@ -1,4 +1,5 @@
 #pragma once
+#include <helper/SDpiHelper.hpp>
 
 namespace SOUI
 {
@@ -16,7 +17,7 @@ namespace SOUI
 		virtual void OnSkinAwareWndDestroy(CSkinAwareWnd *pWnd) = 0;
 	};
 
-	class CSkinAwareWnd : public SHostWnd
+	class CSkinAwareWnd : public SHostWnd,public SDpiHandler<CSkinAwareWnd>
 	{
 	public:
 		CSkinAwareWnd(SEventSet *pEvtSets, LPCTSTR pszLayout);
@@ -31,6 +32,10 @@ namespace SOUI
 		virtual int OnRecreateUI(LPCREATESTRUCT lpCreateStruct);
 
 		virtual void OnFinalMessage(HWND hWnd);
+
+		virtual bool IsDpiAware() const override;
+
+		virtual void OnUserXmlNode(pugi::xml_node xmlUser) override;
 	protected:
 		bool OnEvent(EventArgs *e);
 		SEventSet * m_pEvtSet;
@@ -40,9 +45,14 @@ namespace SOUI
 			EVENT_HANDLER(EventSetSkin::EventID, OnSetSkin)
 		EVENT_MAP_END()
 
+		BEGIN_MSG_MAP_EX(CSkinAwareWnd)
+			CHAIN_MSG_MAP(SDpiHandler<CSkinAwareWnd>)
+			CHAIN_MSG_MAP(SHostWnd)
+		END_MSG_MAP()
 	private:
 		IMEWNDTYPE		   m_wndType;
 		IDestroyListener * m_pListener;
+		bool			   m_bAutoScale;
 	};
 
 
