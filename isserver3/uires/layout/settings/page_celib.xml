@@ -15,7 +15,7 @@
     <text text="附加信息:"/>
     <edit size="-2,30" name="edit_flm_addtion" readonly="1" columnSpan="3"/>
   </window>
-  <mclistview name="mc_celib" headerHeight="30" size="-2,150" extend_top="10">
+  <mclistview name="mc_celib" headerHeight="30" size="-2,150" extend_top="10" sbSkin="skin_scrollbar" >
     <header align="center" itemSwapEnable="1" fixWidth="0" colorBkgnd="#ffffff" >
       <items>
         <item width="100">分组名称</item>

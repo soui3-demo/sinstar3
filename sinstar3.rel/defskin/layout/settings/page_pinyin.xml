@@ -7,7 +7,7 @@
   <window pos="88,[" layout="vbox">
     <text text="模糊音设置"/>
     <window size="-2,-1" layout="hbox">
-      <listview size="200dp,200dp" name="lv_blur">
+      <listview size="200dp,200dp" name="lv_blur" sbSkin="skin_scrollbar" >
         <template itemHeight="30dp">
           <group layout="hbox" gravity="center"  skin="skin_item_bg"  trackMouseEvent="1"  font="size:16,bold:1">
             <text name="txt_blur_group" colorText="#222222"/>

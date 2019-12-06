@@ -56,10 +56,12 @@
     <file name="png_lines" path="image\lines.png"/>
     <file name="btn_english_enable" path="image\btn_english_enable.png"/>
     <file name="btn_english_disable" path="image\btn_english_disable.png"/>
-    <file name="SYS_SCROLLBAR" path="image\scrollbar.png"/>
     <file name="png_comp_logo" path="image\comp_logo.png"/>
+    <file name="png_comp_logo.150" path="image\comp_logo@150.png"/>
+    <file name="png_comp_logo.200" path="image\comp_logo@200.png"/>
   </IMG>
   <img2>
+    <file name="png_scrollbar" path="image2\scrollbar.png"/>
     <file name="png_tip_bg" path="image2\tip_bg.png"/>
     <file name="png_item_bg" path="image2\item_bg.png"/>
     <file name="png_menu_icons" path="image2\menu_icons.png"/>
@@ -69,6 +71,6 @@
     <file name="context_status" path="smenu\context_status.xml"/>
   </smenu>
   <icon>
-  	<file name="icon_logo" path="image2\logo.ico"/>
-</icon>
+  	<file name="icon_logo" path="icon\logo.ico"/>
+  </icon>
 </resource>

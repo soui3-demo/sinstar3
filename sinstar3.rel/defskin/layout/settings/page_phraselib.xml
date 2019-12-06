@@ -4,7 +4,7 @@
     <text inset="0,5,5,5">@string/cfg_phraselib</text>
     <hr width="-2" height="1"></hr>
   </window>
-  <mclistview name="mc_phraselib" headerHeight="30" size="-2,130">
+  <mclistview name="mc_phraselib" headerHeight="30" size="-2,130" sbSkin="skin_scrollbar" >
     <header align="center" itemSwapEnable="1" fixWidth="0" colorBkgnd="#ffffff" >
       <items>
         <item width="100">分组名称</item>
