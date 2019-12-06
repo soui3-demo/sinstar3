@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <include>
-  <window size="-2,-1" padding="10,10,10,10" layout="vbox">
+  <window size="-2,-1" padding="10,10,10,10" layout="vbox" interval="10">
     <window size="-2,-1" layout="hbox" gravity="center">
       <text inset="5,5,5,5">@string/cfg_about_title</text>
       <hr width="-2" height="1"></hr>
