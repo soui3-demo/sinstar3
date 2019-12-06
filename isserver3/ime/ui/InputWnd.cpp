@@ -534,7 +534,7 @@ namespace SOUI
 				return 1;
 		}else
 		{
-			return nCands;
+			return smin(g_SettingsG->nMaxCands,nCands);
 		}
 	}
 

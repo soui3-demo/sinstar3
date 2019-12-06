@@ -355,7 +355,8 @@ namespace SOUI
 		FindAndSetHotKey(R.id.hk_to_sentmode, Char2VKey(g_SettingsG->bySentMode));
 
 		FindAndSetSpin(R.id.spin_delay_time, g_SettingsG->nDelayTime);
-
+		
+		FindAndSetSpin(R.id.span_cand_num,g_SettingsG->nMaxCands);
 	}
 
 	void CConfigDlg::InitPageHotKey()
@@ -1066,6 +1067,9 @@ SWindow *pCtrl = FindChildByID(id);\
 			break;
 		case R.id.spin_delay_time:
 			g_SettingsG->nDelayTime =  e2->nValue;
+			break;
+		case R.id.spin_cand_num:
+			g_SettingsG->nMaxCands = e2->nValue;
 			break;
 		}
 	}

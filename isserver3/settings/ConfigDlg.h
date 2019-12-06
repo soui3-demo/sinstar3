@@ -148,6 +148,7 @@ namespace SOUI
 			EVENT_ID_HANDLER(R.id.spin_predict_phrase_maxlength,EventSpinValue2String::EventID,OnSpinValue2String)
 			EVENT_ID_HANDLER(R.id.spin_phrase_ast_deepness_max, EventSpinValue2String::EventID, OnSpinValue2String)
 			EVENT_ID_HANDLER(R.id.spin_delay_time,EventSpinValue2String::EventID, OnSpinValue2String)
+			EVENT_ID_HANDLER(R.id.spin_cand_num,EventSpinValue2String::EventID, OnSpinValue2String)
 			EVENT_ID_HANDLER(R.id.edit_sent_record_max, EventRENotify::EventID, OnReNotify)
 		EVENT_MAP_END()
 

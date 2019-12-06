@@ -38,5 +38,12 @@
       </window>
     </window>
 
+    <window pos="58,[5"  layout="hbox" gravity="center">
+      <text text="候选词数量[1->10]："/>
+      <window size="-1,-1" class="edit_border" trackMouseEvent="1" layout="hbox" gravity="center">
+        <edit size="40dp,25dp" name="edit_cand_num" margin-x="0" margin-y="0" notifyChange="1" readonly="1"/>
+        <spinButton size="20dp,-2" max="5" min="1" value="10" buddy="edit_cand_num" name="spin_cand_num"/>
+      </window>
+    </window>
   </window>
 </include>

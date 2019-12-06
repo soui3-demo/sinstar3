@@ -84,7 +84,7 @@ public:
 	BOOL	bOnlySimpleCode;	// 出简不出全
 	BOOL	bDisableFirstWild;	// 禁止首码万能键
 	BYTE    bySentMode;
-
+	int		nMaxCands;			// max candidate number.
 	int		nDelayTime;			//delay timer for closing composition window in seconds.
 	BOOL	bEnableDebugSkin;	//enable debug skin. default is false
 	SStringT   strDebugSkinPath;//debug skin path.
