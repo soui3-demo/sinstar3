@@ -356,7 +356,7 @@ namespace SOUI
 
 		FindAndSetSpin(R.id.spin_delay_time, g_SettingsG->nDelayTime);
 		
-		FindAndSetSpin(R.id.span_cand_num,g_SettingsG->nMaxCands);
+		FindAndSetSpin(R.id.spin_cand_num,g_SettingsG->nMaxCands);
 	}
 
 	void CConfigDlg::InitPageHotKey()
