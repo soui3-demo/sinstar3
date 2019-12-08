@@ -185,7 +185,7 @@ namespace SOUI
 			pUiDef->GetNamedColor().Merge(m_defUiDefine->GetNamedColor());
 			pUiDef->GetNamedString().Merge(m_defUiDefine->GetNamedString());
 			pUiDef->GetNamedDimension().Merge(m_defUiDefine->GetNamedDimension());
-			SUiDef::getSingleton().SetUiDef(pUiDef);
+			SUiDef::getSingleton().SetUiDef(pUiDef,g_SettingsG->strFontDesc.IsEmpty());
 			pUiDef->Release();
 
 			//»¹Ô­skinpool and stylepool.
@@ -202,7 +202,7 @@ namespace SOUI
 			SApplication::getSingleton().RemoveResProvider(pLastRes);
 
 			SLOG_INFO("step12, restore uidef");
-			SUiDef::getSingleton().SetUiDef(m_defUiDefine);
+			SUiDef::getSingleton().SetUiDef(m_defUiDefine,g_SettingsG->strFontDesc.IsEmpty());
 
 			SLOG_INFO("step13, extract builtin skin defined offset");
 			IResProvider *pCurRes = SApplication::getSingleton().GetHeadResProvider();

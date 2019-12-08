@@ -4,7 +4,7 @@
     <text inset="10,5,5,5">@string/cfg_habit</text>
     <hr width="-2" height="1"></hr>
   </window>
-  <window pos="88,[" layout="vbox" interval="10">
+  <window pos="88,[" layout="vbox">
     <text >输入法开关:</text>
     <window layout="hbox">
       <radio text="左Shift" id="100" extend_top="10" name="ime_switch_left_shift"/>
@@ -44,6 +44,12 @@
         <edit size="40dp,25dp" name="edit_cand_num" margin-x="0" margin-y="0" notifyChange="1" readonly="1"/>
         <spinButton size="20dp,-2" max="5" min="1" value="10" buddy="edit_cand_num" name="spin_cand_num"/>
       </window>
+    </window>
+
+    <window extend_top="10" layout="hbox" gravity="center" interval="5">
+      <text text="字体："/>
+      <edit name="edit_font" size="200dp,25dp"  readonly="1"/>
+      <button name="btn_change_font" text="更改" padding="10,5,10,5"/>
     </window>
   </window>
 </include>

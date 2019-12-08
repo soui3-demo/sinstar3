@@ -13,8 +13,8 @@
       <text text="编译时间:"/>
       <text name="txt_build_time"/>
     </window>
-    <check name="chk_auto_update" text="启用自动更新" extend_top="10"/>
-    <window size="-1,-1" layout="hbox" extend_top="10" gravity="center">
+    <check name="chk_auto_update" text="启用自动更新"/>
+    <window size="-1,-1" layout="hbox" gravity="center">
       <text text="检查更新周期:"/>
       <combobox name="cbx_update_interval" size="60,25">
         <liststyle colorBkgnd="#ffffff" font="size:16"/>
@@ -26,7 +26,7 @@
       </combobox>
       <button name="btn_update_now" text="立即检查" padding="10,5,10,5" extend_left="5"/>
     </window>
-    <window size="-1,-1" layout="hbox" extend_top="10">
+    <window size="-1,-1" layout="hbox" >
       <text text="官网:"/>
       <link href="https://soime.cn" text="https://soime.cn"/>
     </window>

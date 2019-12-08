@@ -10,6 +10,7 @@
 #include <shellapi.h>
 #pragma comment(lib,"version.lib")
 #include "AddBlurDlg.h"
+#include "souidlgs.h"
 
 #pragma warning(disable:4244)
 namespace SOUI
@@ -357,6 +358,8 @@ namespace SOUI
 		FindAndSetSpin(R.id.spin_delay_time, g_SettingsG->nDelayTime);
 		
 		FindAndSetSpin(R.id.spin_cand_num,g_SettingsG->nMaxCands);
+
+		FindAndSetText(R.id.edit_font,g_SettingsG->strFontDesc);
 	}
 
 	void CConfigDlg::InitPageHotKey()
@@ -1193,6 +1196,46 @@ SWindow *pCtrl = FindChildByID(id);\
 		__super::OnFinalMessage(hWnd);
 		g_SettingsG->SetModified(true);
 		delete this;
+	}
+
+	void CConfigDlg::OnChangeFont()
+	{
+		LOGFONT lf={0};
+		if(!g_SettingsG->strFontDesc.IsEmpty())
+		{
+			FontInfo fi;
+			CSettingsGlobal::FontInfoFromString(g_SettingsG->strFontDesc,fi);
+			_tcscpy(lf.lfFaceName,fi.strFaceName);
+			lf.lfWeight = fi.style.attr.byWeight*4;
+			if(lf.lfWeight == 0)
+				lf.lfWeight = fi.style.attr.fBold?FW_BOLD:FW_NORMAL;
+			lf.lfCharSet = fi.style.attr.byCharset;
+			lf.lfHeight = (LONG)(short)fi.style.attr.cSize;
+			lf.lfItalic = fi.style.attr.fItalic;
+			lf.lfUnderline = fi.style.attr.fUnderline;
+			lf.lfStrikeOut = fi.style.attr.fStrike;
+		}
+		CFontDialog fontDlg(&lf);
+		if(fontDlg.DoModal()== IDOK)
+		{
+			lf = fontDlg.m_lf;
+			FontInfo fi;
+			fi.strFaceName = lf.lfFaceName;
+			fi.style.attr.cSize = lf.lfHeight;
+			fi.style.attr.byWeight = lf.lfWeight;
+			fi.style.attr.byCharset = lf.lfCharSet;
+			fi.style.attr.fItalic = lf.lfItalic;
+			fi.style.attr.fUnderline = lf.lfUnderline;
+			fi.style.attr.fStrike = lf.lfStrikeOut;
+			if(lf.lfWeight == FW_BOLD)
+			{
+				fi.style.attr.fBold = 1;
+				fi.style.attr.byWeight = 0;
+			}
+			g_SettingsG->strFontDesc = CSettingsGlobal::FontInfoToString(fi);
+			SFontPool::getSingletonPtr()->SetDefFontInfo(fi);
+			FindAndSetText(R.id.edit_font,g_SettingsG->strFontDesc);
+		}
 	}
 
 }
