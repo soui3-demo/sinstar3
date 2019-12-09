@@ -46,10 +46,15 @@
       </window>
     </window>
 
-    <window extend_top="10" layout="hbox" gravity="center" interval="5">
-      <text text="字体："/>
-      <edit name="edit_font" size="200dp,25dp"  readonly="1"/>
-      <button name="btn_change_font" text="更改" padding="10,5,10,5"/>
+    <window extend_top="10" layout="vbox" gravity="center" interval="5">
+      <window layout="hbox" interval="5">
+        <text text="字体："/>
+        <edit name="edit_font" size="250dp,25dp"  readonly="1"/>
+      </window>
+      <window layout="hbox" interval="5">
+        <button name="btn_change_font" text="更改" padding="10,5,10,5"/>
+        <button name="btn_skin_font" text="默认字体" padding="10,5,10,5"/>
+      </window>
     </window>
   </window>
 </include>

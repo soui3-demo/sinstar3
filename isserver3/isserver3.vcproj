@@ -482,11 +482,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\res\resource.h"
+				RelativePath=".\resource.h"
 				>
 			</File>
 			<File
-				RelativePath=".\resource.h"
+				RelativePath=".\res\resource.h"
 				>
 			</File>
 			<File
@@ -559,6 +559,10 @@
 			</File>
 			<File
 				RelativePath=".\controls\SMutexView.h"
+				>
+			</File>
+			<File
+				RelativePath=".\settings\souidlgs.h"
 				>
 			</File>
 			<File

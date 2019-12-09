@@ -40,62 +40,6 @@ const TCHAR * KSession = _T("IME");
 const TCHAR * KUI = _T("UI");
 const TCHAR * KUrl = _T("url");
 
-
-void CSettingsGlobal::FontInfoFromString(const SStringT & strFontDesc,FontInfo & fi)
-{
-	SArray<SStringT> strLst;
-	int nSeg = SplitString(strFontDesc,_T(','),strLst);
-	for(int i=0;i<nSeg;i++)
-	{
-		SArray<SStringT> kv;
-		int n = SplitString(strLst[i],_T(':'),kv);
-		if(n!=2) continue;
-		if(kv[0].CompareNoCase(_T("face"))==0)
-		{
-			if(kv[1][0]==_T('\'') || kv[1][0]==_T('\"'))
-				fi.strFaceName = kv[1].Mid(1,kv[1].GetLength()-2);
-			else
-				fi.strFaceName=kv[1];			
-		}else if(kv[0].CompareNoCase(_T("size"))==0)
-		{
-			fi.style.attr.cSize = _ttoi(kv[1]);
-		}else if(kv[0].CompareNoCase(_T("charset"))==0)
-		{
-			fi.style.attr.byCharset = _ttoi(kv[1]);
-		}else if(kv[0].CompareNoCase(_T("weight"))==0)
-		{
-			fi.style.attr.byWeight=_ttoi(kv[1])/4;
-		}else if(kv[0].CompareNoCase(_T("bold"))==0)
-		{
-			fi.style.attr.fBold = _ttoi(kv[1]);
-		}else if(kv[0].CompareNoCase(_T("italic"))==0)
-		{
-			fi.style.attr.fItalic = _ttoi(kv[1]);
-		}else if(kv[0].CompareNoCase(_T("strike"))==0)
-		{
-			fi.style.attr.fStrike=_ttoi(kv[1]);
-		}else if(kv[0].CompareNoCase(_T("underline"))==0)
-		{
-			fi.style.attr.fUnderline=_ttoi(kv[1]);
-		}
-	}
-}
-
-SStringT CSettingsGlobal::FontInfoToString(const FontInfo & fi)
-{
-	char szBuf[200];
-	Log4zStream s(szBuf,200);
-	s<<"face:\'"<<fi.strFaceName.c_str()<<"\'"<<",";
-	s<<"size:"<<(short)fi.style.attr.cSize<<",";
-	s<<"charset:"<<fi.style.attr.byCharset<<",";
-	s<<"weight:"<<fi.style.attr.byWeight*4<<",";
-	s<<"bold:"<<(fi.style.attr.fBold?"1":"0")<<",";
-	s<<"italic:"<<(fi.style.attr.fItalic?"1":"0")<<",";
-	s<<"strike:"<<(fi.style.attr.fStrike?"1":"0")<<",";
-	s<<"underline:"<<(fi.style.attr.fUnderline?"1":"0");
-	return S_CA2T(szBuf);
-}
-
 void CSettingsGlobal::Save(const SStringT & strDataPath)
 {
 	if(!IsModified())

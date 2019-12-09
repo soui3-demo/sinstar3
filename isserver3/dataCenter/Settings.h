@@ -47,8 +47,6 @@ public:
 
 	void Load(const SStringT & strDataPath);
 	void Save(const SStringT & strDataPath);
-	static void FontInfoFromString(const SStringT & strFontDesc,FontInfo & fi);
-	static SStringT FontInfoToString(const FontInfo & fi);
 	int		compMode;		//当前输入类型
 	BOOL	b23CandKey;			// ;+'选23重码
 	BYTE	by2CandVK;			// 2 Cand key

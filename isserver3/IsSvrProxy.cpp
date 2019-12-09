@@ -25,6 +25,9 @@
 #define TIMERID_PENDING_CMD 600
 #define SPAN_PENDING_CMD    100
 
+#define TIMERID_AUTO_SAVE_SETTING 700
+#define SPAN_AUTO_SAVE_SETTING 60*1000	//1 minute
+
 static void DoSomething()
 {
 	MSG msg;
@@ -143,6 +146,7 @@ int CIsSvrProxy::OnCreate(LPCREATESTRUCT pCS)
 		SetTimer(TIMERID_CHECK_UPDATE, SPAN_CHECK_UPDATE, NULL);
 		SetTimer(TIMERID_DATA_REPORT, SPAN_DATA_REPORT1, NULL);
 		SetTimer(TIMERID_CHECK_CLIENT,SPAN_CHECK_CLIENT,NULL);
+		SetTimer(TIMERID_AUTO_SAVE_SETTING,SPAN_AUTO_SAVE_SETTING,NULL);
 	}
 	return nRet;
 }
@@ -395,6 +399,13 @@ void CIsSvrProxy::OnTimer(UINT_PTR uID)
 			free(m_pPendingCmd);
 			m_pPendingCmd = NULL;
 		}
+	}else if(uID == TIMERID_AUTO_SAVE_SETTING)
+	{
+		SStringT strConfig = m_strSvrPath + _T("\\config.ini");
+		if(g_SettingsG->IsModified())
+			g_SettingsG->Save(strConfig);
+		if(g_SettingsUI->IsModified())
+			g_SettingsUI->Save(strConfig);
 	}
 	else
 	{

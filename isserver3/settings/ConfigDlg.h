@@ -109,9 +109,10 @@ namespace SOUI
 		void OnCbUpdateIntervalSelChange(EventArgs *e);
 
 		void OnChangeFont();
-
+		void OnSkinFont();
 		EVENT_MAP_BEGIN()
 			EVENT_ID_COMMAND(R.id.btn_change_font,OnChangeFont)
+			EVENT_ID_COMMAND(R.id.btn_skin_font,OnSkinFont)
 			EVENT_ID_HANDLER(R.id.cbx_update_interval, EventCBSelChange::EventID, OnCbUpdateIntervalSelChange)
 			EVENT_ID_COMMAND(R.id.chk_auto_update, OnAutoUpdateClick)
 			EVENT_ID_COMMAND(R.id.btn_update_now, OnUpdateNow)

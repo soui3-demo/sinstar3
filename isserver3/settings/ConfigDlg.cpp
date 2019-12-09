@@ -359,7 +359,10 @@ namespace SOUI
 		
 		FindAndSetSpin(R.id.spin_cand_num,g_SettingsG->nMaxCands);
 
-		FindAndSetText(R.id.edit_font,g_SettingsG->strFontDesc);
+		SStringT strFontDesc = g_SettingsG->strFontDesc;
+		if(strFontDesc.IsEmpty())
+			strFontDesc=_T("<Æ¤·ôÄ¬ÈÏ>");
+		FindAndSetText(R.id.edit_font,strFontDesc);
 	}
 
 	void CConfigDlg::InitPageHotKey()
@@ -1203,17 +1206,20 @@ SWindow *pCtrl = FindChildByID(id);\
 		LOGFONT lf={0};
 		if(!g_SettingsG->strFontDesc.IsEmpty())
 		{
-			FontInfo fi;
-			CSettingsGlobal::FontInfoFromString(g_SettingsG->strFontDesc,fi);
-			_tcscpy(lf.lfFaceName,fi.strFaceName);
+			FontInfo fi = SFontPool::FontInfoFromString(g_SettingsG->strFontDesc);
+			_tcscpy(lf.lfFaceName,S_CW2T(fi.strFaceName));
 			lf.lfWeight = fi.style.attr.byWeight*4;
 			if(lf.lfWeight == 0)
 				lf.lfWeight = fi.style.attr.fBold?FW_BOLD:FW_NORMAL;
 			lf.lfCharSet = fi.style.attr.byCharset;
-			lf.lfHeight = (LONG)(short)fi.style.attr.cSize;
+			lf.lfHeight = -(short)fi.style.attr.cSize;
 			lf.lfItalic = fi.style.attr.fItalic;
 			lf.lfUnderline = fi.style.attr.fUnderline;
 			lf.lfStrikeOut = fi.style.attr.fStrike;
+		}else
+		{
+			IFontPtr font = SFontPool::getSingletonPtr()->GetFont(L"",100);
+			memcpy(&lf,font->LogFont(),sizeof(lf));
 		}
 		CFontDialog fontDlg(&lf);
 		if(fontDlg.DoModal()== IDOK)
@@ -1221,8 +1227,8 @@ SWindow *pCtrl = FindChildByID(id);\
 			lf = fontDlg.m_lf;
 			FontInfo fi;
 			fi.strFaceName = lf.lfFaceName;
-			fi.style.attr.cSize = lf.lfHeight;
-			fi.style.attr.byWeight = lf.lfWeight;
+			fi.style.attr.cSize = abs(lf.lfHeight);
+			fi.style.attr.byWeight = lf.lfWeight/4;
 			fi.style.attr.byCharset = lf.lfCharSet;
 			fi.style.attr.fItalic = lf.lfItalic;
 			fi.style.attr.fUnderline = lf.lfUnderline;
@@ -1232,10 +1238,20 @@ SWindow *pCtrl = FindChildByID(id);\
 				fi.style.attr.fBold = 1;
 				fi.style.attr.byWeight = 0;
 			}
-			g_SettingsG->strFontDesc = CSettingsGlobal::FontInfoToString(fi);
+			g_SettingsG->strFontDesc = SFontPool::FontInfoToString(fi);
+			g_SettingsG->SetModified(true);
 			SFontPool::getSingletonPtr()->SetDefFontInfo(fi);
 			FindAndSetText(R.id.edit_font,g_SettingsG->strFontDesc);
 		}
+	}
+
+	void CConfigDlg::OnSkinFont()
+	{
+		FontInfo fi = SUiDef::getSingletonPtr()->GetUiDef()->GetDefFontInfo();
+		FindAndSetText(R.id.edit_font,_T("<Æ¤·ôÄ¬ÈÏ>"));
+		SFontPool::getSingletonPtr()->SetDefFontInfo(fi);
+		g_SettingsG->strFontDesc.Empty();
+		g_SettingsG->SetModified(true);
 	}
 
 }
