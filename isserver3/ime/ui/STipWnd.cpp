@@ -50,4 +50,10 @@ namespace SOUI {
 	{
 		DestroyWindow();
 	}
+
+	int STipWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
+	{
+		return OnRecreateUI(lpCreateStruct);
+	}
+
 }

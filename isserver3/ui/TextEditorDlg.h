@@ -26,9 +26,9 @@ protected:
 	EVENT_MAP_END()
 	BOOL OnInitDialog(HWND hWnd,LPARAM lp);
 	BEGIN_MSG_MAP_EX(CTextEditorDlg)
+		CHAIN_MSG_MAP(SDpiHandler<CTextEditorDlg>)
 		MSG_WM_INITDIALOG(OnInitDialog)
 		CHAIN_MSG_MAP(CWHRoundRectFrameHelper<CTextEditorDlg>)
-		CHAIN_MSG_MAP(SDpiHandler<CTextEditorDlg>)
 		CHAIN_MSG_MAP(SHostDialog)
 	END_MSG_MAP()
 

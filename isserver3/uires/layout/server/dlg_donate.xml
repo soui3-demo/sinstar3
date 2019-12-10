@@ -5,7 +5,8 @@ translucent="1"
 >
   <root width="400" height="550" skin="_skin.sys.wnd.bkgnd" cache="1" layout="vbox" padding="5,5,5,5" intervel="5" font="size:16">
     <caption size="-2,30" layout="hbox" gravity="center">
-      <text size="-1,-1" text="@string/donate"/>
+      <img skin="skin_menu_icons" iconIndex="9"/>
+     <text size="-1,-1" text="@string/donate"/>
       <window size="0,0" weight="1" visible="0"/>
       <imgbtn size="-1,-1" name="btn_close" skin="_skin.sys.btn.close"  id="IDCANCEL" tip="close" animate="1"/>
     </caption>

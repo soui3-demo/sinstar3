@@ -13,10 +13,12 @@ namespace SOUI {
 
 		void SetTip(const SStringT & strTitle, const SStringT & strTip);
 
+		int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	protected:
 		void OnTimer(UINT_PTR idEvent);
 		void OnMouseMove(UINT nFlags, CPoint point);
 		BEGIN_MSG_MAP_EX(STipWnd)
+			MSG_WM_CREATE(OnCreate)
 			MSG_WM_MOUSEMOVE(OnMouseMove)
 			MSG_WM_TIMER(OnTimer)
 			CHAIN_MSG_MAP(CImeWnd)

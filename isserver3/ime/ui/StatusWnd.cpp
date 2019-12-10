@@ -10,10 +10,10 @@
 
 namespace SOUI
 {
-	class CDenoteDlg: public SHostWnd, public SDpiHandler<CDenoteDlg>
+	class CDonateDlg: public SHostWnd, public SDpiHandler<CDonateDlg>
 	{
 	public:
-		CDenoteDlg():SHostWnd(UIRES.LAYOUT.dlg_donate){}
+		CDonateDlg():SHostWnd(UIRES.LAYOUT.dlg_donate){}
 
 		virtual void OnFinalMessage(HWND hWnd){
 			__super::OnFinalMessage(hWnd);
@@ -29,8 +29,8 @@ namespace SOUI
 		EVENT_MAP_END()
 
 	protected:
-		BEGIN_MSG_MAP_EX(CDenoteDlg)
-			CHAIN_MSG_MAP(SDpiHandler<CDenoteDlg>)
+		BEGIN_MSG_MAP_EX(CDonateDlg)
+			CHAIN_MSG_MAP(SDpiHandler<CDonateDlg>)
 			CHAIN_MSG_MAP(SHostWnd)
 		END_MSG_MAP()
 	};
@@ -684,7 +684,7 @@ namespace SOUI
 		}
 		else if (nRet == R.id.menu_donate)
 		{
-			CDenoteDlg *dlgDonate = new CDenoteDlg;
+			CDonateDlg *dlgDonate = new CDonateDlg;
 			dlgDonate->Create(m_hWnd,WS_POPUP,WS_EX_TOPMOST,0,0,0,0);
 			dlgDonate->SendMessage(WM_INITDIALOG);
 			dlgDonate->CenterWindow(GetDesktopWindow());
