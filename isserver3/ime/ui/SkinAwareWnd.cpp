@@ -70,7 +70,7 @@ namespace SOUI{
 
 	void CSkinAwareWnd::OnUserXmlNode(pugi::xml_node xmlUser)
 	{
-		if(wcsicmp(xmlUser.name(),L"user")==0)
+		if(_wcsicmp(xmlUser.name(),L"user")==0)
 		{
 			m_bAutoScale = xmlUser.attribute(L"autoScale").as_bool();
 		}

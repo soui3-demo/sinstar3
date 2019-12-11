@@ -214,7 +214,7 @@ int CWorker::_GetTokensInfo(WPARAM wp,LPARAM lp)
 	HRESULT hr=pTokens->GetCount(&count);
 	if (token == NULL) return count;
 	if(count==0) return 0;
-	if (nBufSize < count) return 0;
+	if (nBufSize < (int)count) return 0;
 
 	for(int i=0;i<(int)count;i++)
 	{
@@ -327,7 +327,7 @@ LRESULT CWorker::OnCheckUpdate(UINT uMsg, WPARAM wp, LPARAM lp)
 	{
 		EventCheckUpdateResult * pEvt = new EventCheckUpdateResult(NULL);
 		pEvt->bServerOK = false;
-		pEvt->bManual = (bool)wp;
+		pEvt->bManual = wp!=0;
 		SNotifyCenter::getSingletonPtr()->FireEventAsync(pEvt);
 		pEvt->Release();
 	}
@@ -337,7 +337,7 @@ LRESULT CWorker::OnCheckUpdate(UINT uMsg, WPARAM wp, LPARAM lp)
 		if (doc.load_buffer(strHtml.c_str(), strHtml.length()))
 		{
 			EventCheckUpdateResult * pEvt = new EventCheckUpdateResult(NULL);
-			pEvt->bManual = (bool)wp;;
+			pEvt->bManual = wp!=0;
 
 			pugi::xml_node update = doc.root().child(L"update");
 			pEvt->strUrl = update.attribute(L"url").as_string();
@@ -393,7 +393,7 @@ LRESULT CWorker::OnDataReport(UINT uMsg, WPARAM wp, LPARAM lp)
 		}
 		else
 		{
-			srand(time(NULL));
+			srand((UINT)time(NULL));
 			_stprintf(szUerID, _T("what_fuck_machine_#%d"), rand());
 		}
 
