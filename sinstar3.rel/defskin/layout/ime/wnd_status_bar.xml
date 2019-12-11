@@ -41,14 +41,14 @@
       <toggle2 size="-1,-1" skin1="btn_sound_enable" extend_left="2" extend_right="5" skin2="btn_sound_disable" name="btn_sound"/>
       <window size="5,-2"/>
       <!--invisible button, used for generate button id-->
-      <button size="0,0" visible="0" name="btn_status_shrink"/>
-      <button size="0,0" visible="0" name="btn_status_extend"/>
-      <button size="0,0" visible="0" name="btn_english"/>
-      <button size="0,0" visible="0" name="btn_filter_gbk"/>
-      <button size="0,0" visible="0" name="btn_menu"/>
-      <button size="0,0" visible="0" name="btn_help"/>
-      <button size="0,0" visible="0" name="btn_query"/>
-      <button size="0,0" visible="0" name="btn_config"/>
+      <imgbtn size="0,0" visible="0" name="btn_status_shrink"/>
+      <imgbtn size="0,0" visible="0" name="btn_status_extend"/>
+      <toggle2 size="0,0" visible="0" name="btn_english"/>
+      <toggle2 size="0,0" visible="0" name="btn_filter_gbk"/>
+      <imgbtn size="0,0" visible="0" name="btn_menu"/>
+      <imgbtn size="0,0" visible="0" name="btn_help"/>
+      <imgbtn size="0,0" visible="0" name="btn_query"/>
+      <imgbtn size="0,0" visible="0" name="btn_config"/>
     </status_bg>
   </root>
 </SOUI>
