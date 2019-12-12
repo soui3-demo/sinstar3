@@ -26,7 +26,7 @@ HRESULT CSinstar3Tsf::CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **pp
 			pName=szModule;
 
 		TCHAR szDumpPath[MAX_PATH];
-		_stprintf(szDumpPath,_T("%s\\log\\%s.dump"),theModule->GetInstallPath(),pName);
+		_stprintf_s(szDumpPath,MAX_PATH,_T("%s\\log\\%s.dmp"),theModule->GetInstallPath(),pName);
 		CMinidump::SetDumpFile(szDumpPath);
 		CMinidump::Enable();
 	}
@@ -180,6 +180,17 @@ DWORD CSinstar3Tsf::GetActiveWnd() const
 	return (DWORD)(ULONG_PTR)hWnd;
 }
 
+void CSinstar3Tsf::_SyncFocus()
+{
+	if(m_pSinstar3)
+	{
+		BOOL bFocus = _bHasFocus && _bInEditDocument;
+		if(bFocus)
+			m_pSinstar3->OnSetFocus(TRUE,GetActiveWnd());
+		else
+			m_pSinstar3->OnSetFocus(FALSE,0);
+	}
+}
 
 STDAPI CSinstar3Tsf::Activate(ITfThreadMgr *pThreadMgr, TfClientId tfClientId)
 {
@@ -333,12 +344,13 @@ BOOL CSinstar3Tsf::_InitSinstar3(HWND hWnd)
 		m_pSinstar3 = NULL;
 		return FALSE;
 	}
+	OnChange(GUID_COMPARTMENT_KEYBOARD_OPENCLOSE);
+	OnChange(GUID_COMPARTMENT_KEYBOARD_INPUTMODE_CONVERSION);
+
 	m_pSinstar3->NotifyScaleInfo(hWnd);
 
 	m_pSinstar3->OnIMESelect(_bHasFocus);
-	m_pSinstar3->OnSetFocus(_bHasFocus && _bInEditDocument);
-	OnChange(GUID_COMPARTMENT_KEYBOARD_OPENCLOSE);
-	OnChange(GUID_COMPARTMENT_KEYBOARD_INPUTMODE_CONVERSION);
+	_SyncFocus();
 	return TRUE;
 }
 

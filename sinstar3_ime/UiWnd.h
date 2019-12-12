@@ -16,6 +16,7 @@ public:
 
 public:
 	BOOL IsDefaultIme(void);
+	void SyncFocus(BOOL bFocus);
 public:
 	//UIWnd
 	LRESULT WindowProc(UINT uMsg,WPARAM wParam,LPARAM lParam);

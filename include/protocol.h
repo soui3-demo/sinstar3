@@ -184,8 +184,9 @@ struct Param_TranslateKey : FunParams_Base
 struct Param_OnSetFocus : FunParams_Base
 {
 	BOOL bFocus;
+	DWORD dwActiveWnd;
 	FUNID(ISinstar_OnSetFocus)
-		PARAMS1(Input, bFocus)
+		PARAMS2(Input, bFocus,dwActiveWnd)
 };
 
 struct Param_GetCompositionSegments : FunParams_Base

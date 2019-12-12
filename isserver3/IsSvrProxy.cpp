@@ -675,6 +675,7 @@ void CIsSvrProxy::OnSetFocus(CSvrConnection * pConn)
 		{
 			Param_OnSetFocus param;
 			param.bFocus = FALSE;
+			param.dwActiveWnd = 0;
 			m_pFocusConn->HandleOnSetFocus(param);
 		}
 	}

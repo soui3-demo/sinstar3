@@ -49,7 +49,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
-				Optimization="2"
+				Optimization="0"
 				AdditionalIncludeDirectories=".;include;&quot;$(SOUI3PATH)/utilities/include&quot;;&quot;$(SOUI3PATH)/soui/include&quot;;&quot;$(SOUI3PATH)/components&quot;;&quot;$(SOUI3PATH)/config&quot;;&quot;..\..\work\soui.git\tools\mkspecs\win32-msvc2008&quot;;..\ipcobject\include"
 				PreprocessorDefinitions="_WINDOWS;UNICODE;WIN32;QT_NO_DYNAMIC_CAST;NDEBUG;_CRT_NON_CONFORMING_SWPRINTFS"
 				GeneratePreprocessedFile="0"
@@ -130,7 +130,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
-				Optimization="2"
+				Optimization="0"
 				AdditionalIncludeDirectories=".;include;&quot;$(SOUI3PATH)/utilities/include&quot;;&quot;$(SOUI3PATH)/soui/include&quot;;&quot;$(SOUI3PATH)/components&quot;;&quot;$(SOUI3PATH)/config&quot;;&quot;..\..\work\soui.git\tools\mkspecs\win32-msvc2008&quot;;..\ipcobject\include"
 				PreprocessorDefinitions="_WINDOWS;UNICODE;WIN32;QT_NO_DYNAMIC_CAST;NDEBUG;_CRT_NON_CONFORMING_SWPRINTFS"
 				GeneratePreprocessedFile="0"

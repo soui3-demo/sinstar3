@@ -138,7 +138,7 @@ BOOL WINAPI ImeSetActiveContext(HIMC hIMC,BOOL fFlag)
  		CUiWnd **ppUiWnd=(CUiWnd**)ImmLockIMCC(lpIMC->hPrivate);
  		if(ppUiWnd && ppUiWnd[0] && !IsBadWritePtr(ppUiWnd[0],sizeof(CUiWnd*)))
  		{
- 			if(ppUiWnd[0]->m_pSinstar3) ppUiWnd[0]->m_pSinstar3->OnSetFocus(fFlag);
+			ppUiWnd[0]->SyncFocus(fFlag);
  		}
  		ImmUnlockIMCC(lpIMC->hPrivate); 
  		ImmUnlockIMC(hIMC);

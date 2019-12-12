@@ -48,11 +48,7 @@ STDAPI CSinstar3Tsf::OnSetFocus(ITfDocumentMgr *pDocMgrFocus, ITfDocumentMgr *pD
 
 	SLOGFMTI("OnSetFocus,_bHasFocus is %d, _bInEditDocument is %d, pDocMgrFocus=%p", _bHasFocus, _bInEditDocument,pDocMgrFocus);
 
-	if(m_pSinstar3)
-	{
-		m_pSinstar3->OnSetFocus(_bHasFocus && _bInEditDocument);
-	}
-
+	_SyncFocus();
     return S_OK;
 }
 
@@ -61,10 +57,7 @@ STDAPI CSinstar3Tsf::OnSetThreadFocus()
 	SLOGFMTI("OnSetThreadFocus");
 
 	_bHasFocus=TRUE;
-	if(m_pSinstar3)
-	{
-		m_pSinstar3->OnSetFocus(_bHasFocus && _bInEditDocument);
-	}
+	_SyncFocus();
 	return S_OK;
 }
 
@@ -79,10 +72,7 @@ STDAPI CSinstar3Tsf::OnKillThreadFocus()
 		ReleaseImeContext(pCtx);
 	}
 	_bHasFocus = FALSE;
-	if (m_pSinstar3)
-	{
-		m_pSinstar3->OnSetFocus(FALSE);
-	}
+	_SyncFocus();
 	return S_OK;
 }
 

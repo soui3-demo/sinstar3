@@ -8,8 +8,6 @@
 #include "InputState.h"
 #include "CmdHandler.h"
 
-#define UM_ASYNC_COPYDATA (WM_USER+2000)
-
 class CSinstar3Impl:
 	public CUnknown,
 	public ISinstar,
@@ -21,6 +19,10 @@ class CSinstar3Impl:
 	public SOUI::SEventSet
 {
 	friend class CCmdHandler;// CCmdHandler need access this private members.
+	enum {
+		UM_ASYNC_COPYDATA = (WM_USER+3000),
+		UM_ASYNC_SETFOCUS,
+	};
 public:
 	CSinstar3Impl(ITextService *pTxtSvr,HWND hSvr);
 	virtual ~CSinstar3Impl(void);
@@ -33,7 +35,7 @@ public:
 	virtual void OnSetFocusSegmentPosition(POINT pt,int nHei);
 	virtual void ProcessKeyStoke(UINT64 imeContext,UINT vkCode,LPARAM lParam,BOOL bKeyDown, BYTE byKeyState[256], BOOL *pbEaten);
 	virtual void TranslateKey(UINT64 imeContext,UINT vkCode,UINT uScanCode,BOOL bKeyDown, BYTE byKeyState[256], BOOL *pbEaten);
-	virtual void OnSetFocus(BOOL bFocus);
+	virtual void OnSetFocus(BOOL bFocus,DWORD hActiveWnd);
 	virtual int  GetCompositionSegments();
 	virtual int  GetCompositionSegmentEnd(int iSeg);
 	virtual int	 GetCompositionSegmentAttr(int iSeg);
@@ -84,10 +86,13 @@ public:
 
 	LRESULT OnSvrNotify(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	LRESULT OnAsyncCopyData(UINT uMsg, WPARAM wParam, LPARAM lParam);
+	LRESULT OnAsyncSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam);
+
 	BOOL OnCopyData(HWND wnd, PCOPYDATASTRUCT pCopyDataStruct);
 	void OnTimer(UINT_PTR id);
 	BEGIN_MSG_MAP_EX(CSinstar3Impl)
 		MESSAGE_HANDLER_EX(UM_ASYNC_COPYDATA,OnAsyncCopyData)
+		MESSAGE_HANDLER_EX(UM_ASYNC_SETFOCUS,OnAsyncSetFocus)
 		MSG_WM_COPYDATA(OnCopyData)
 		MESSAGE_HANDLER_EX(ISComm_GetCommMsgID(),OnSvrNotify)
 		MSG_WM_TIMER(OnTimer)

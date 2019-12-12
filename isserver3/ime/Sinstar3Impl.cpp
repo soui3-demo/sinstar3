@@ -160,13 +160,18 @@ void CSinstar3Impl::OnCompositionTerminated(bool bClearCtx)
 	}
 }
 
-void CSinstar3Impl::OnSetFocus(BOOL bFocus)
+void CSinstar3Impl::OnSetFocus(BOOL bFocus,DWORD dwActiveWnd)
 {
 	SLOG_INFO("GetThreadID="<<GetCurrentThreadId()<<" focus="<<bFocus);
-	m_hasFocus = bFocus;
-	if (bFocus)
+	PostMessage(UM_ASYNC_SETFOCUS,bFocus,dwActiveWnd);
+}
+
+LRESULT CSinstar3Impl::OnAsyncSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	m_hasFocus = (BOOL)wParam;
+	if (m_hasFocus)
 	{
-		HWND hOwner = (HWND)m_pTxtSvr->GetActiveWnd();
+		HWND hOwner = (HWND)lParam;
 		m_pInputWnd->SetOwner(hOwner);
 		m_pStatusWnd->SetOwner(hOwner);
 		m_pStatusWnd->Show(IsStatusVisible());
@@ -186,6 +191,7 @@ void CSinstar3Impl::OnSetFocus(BOOL bFocus)
 			m_pTipWnd = NULL;
 		}
 	}
+	return 0;
 }
 
 int  CSinstar3Impl::GetCompositionSegments()

@@ -190,7 +190,7 @@ void CSvrConnection::HandleOnSetFocus(Param_OnSetFocus &param)
 {
 	SLOG_INFO("OnSetFocus, host:"<<m_strHostPath.c_str()<<" bFocus:"<<param.bFocus);
 	if(!m_pSinstar) return;
-	m_pSinstar->OnSetFocus(param.bFocus);
+	m_pSinstar->OnSetFocus(param.bFocus,param.dwActiveWnd);
 	if(m_pFocusListener)
 	{
 		if(param.bFocus)

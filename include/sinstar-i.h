@@ -12,7 +12,7 @@ interface ISinstar : public IUnknown
 	virtual void OnSetFocusSegmentPosition(POINT pt,int nHei)=NULL;
 	virtual void ProcessKeyStoke(UINT64 imeContext,UINT vkCode,LPARAM lParam,BOOL bKeyDown,BYTE byKeyState[256],BOOL *pbEaten)=NULL;
 	virtual void TranslateKey(UINT64 imeContext,UINT vkCode,UINT uScanCode,BOOL bKeyDown, BYTE byKeyState[256], BOOL *pbEaten)=NULL;
-	virtual void OnSetFocus(BOOL bFocus)=NULL;
+	virtual void OnSetFocus(BOOL bFocus,DWORD dwActiveWnd)=NULL;
 	virtual int  GetCompositionSegments()=NULL;
 	virtual int  GetCompositionSegmentEnd(int iSeg)=NULL;
 	virtual int	 GetCompositionSegmentAttr(int iSeg)=NULL;

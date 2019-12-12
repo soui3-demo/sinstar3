@@ -179,10 +179,11 @@ void CSinstarProxy::TranslateKey(UINT64 imeContext, UINT vkCode, UINT uScanCode,
 	*pbEaten = param.bEaten;
 }
 
-void CSinstarProxy::OnSetFocus(BOOL bFocus)
+void CSinstarProxy::OnSetFocus(BOOL bFocus,DWORD dwActiveWnd)
 {
 	Param_OnSetFocus param;
 	param.bFocus = bFocus;
+	param.dwActiveWnd = dwActiveWnd;
 	m_conn.CallFun(&param);
 }
 

@@ -30,7 +30,7 @@ LRESULT CALLBACK UIWndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 				pName=szModule;
 
 			TCHAR szDumpPath[MAX_PATH];
-			_stprintf(szDumpPath,_T("%s\\log\\%s.dump"),theModule->GetInstallPath(),pName);
+			_stprintf_s(szDumpPath,MAX_PATH,_T("%s\\log\\%s.dmp"),theModule->GetInstallPath(),pName);
 			CMinidump::SetDumpFile(szDumpPath);
 			CMinidump::Enable();
 		}
@@ -231,7 +231,7 @@ LRESULT CUiWnd::OnImeNotify(WPARAM wParam,LPARAM lParam)
 	switch(wParam)
 	{
 	case IMN_OPENSTATUSWINDOW:
-		if(m_pSinstar3) m_pSinstar3->OnSetFocus(TRUE);
+		SyncFocus(TRUE);
 		SLOGFMTI("IMN_OPENSTATUSWINDOW");
 		break;
 	case IMN_CLOSESTATUSWINDOW:
@@ -241,10 +241,7 @@ LRESULT CUiWnd::OnImeNotify(WPARAM wParam,LPARAM lParam)
 			EndComposition(pCtx);
 			ReleaseImeContext(pCtx);
 		}
-		if (m_pSinstar3)
-		{
-			m_pSinstar3->OnSetFocus(FALSE);
-		}
+		SyncFocus(FALSE);
 		SLOGFMTI("IMN_CLOSESTATUSWINDOW");
 		break;
 	case IMN_OPENCANDIDATE:
@@ -414,7 +411,7 @@ BOOL CUiWnd::_InitSinstar3()
 	m_pSinstar3->NotifyScaleInfo(GetActiveWindow());
 	m_pSinstar3->OnIMESelect(m_bActivate);
 	HIMC hIMC=(HIMC)GetWindowLongPtr(m_hWnd,IMMGWLP_IMC);
-	m_pSinstar3->OnSetFocus(hIMC!=0);
+	SyncFocus(hIMC!=0);
 	return TRUE;
 }
 
@@ -537,5 +534,14 @@ BOOL CUiWnd::GetOpenStatus() const
 		ReleaseImeContext(pCtx);
 	}
 	return bOpen;
+}
+
+void CUiWnd::SyncFocus(BOOL bFocus)
+{
+	if(m_pSinstar3)
+	{
+		DWORD dwActiveWnd = bFocus?GetActiveWnd():0;
+		m_pSinstar3->OnSetFocus(bFocus,dwActiveWnd);
+	}
 }
 
