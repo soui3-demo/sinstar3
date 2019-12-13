@@ -23,31 +23,31 @@
        tabskin="nav_config_tab" colorText="@color/black" colorTextPush="@color/white">
         <socrollviewStyle sbArrowSize="0" sbSkin="skin_scrollbar" scrollSpeed="100" updateInterval="0"  colorBkgnd="#f2f2f2" colorBorder="#c6c6c6"/>
         <pages>
-          <pageex title="@string/cfg_habit" tip="@string/cfg_habit"  size="-2,-1">
+          <pageex title="@string/cfg_habit" tip="@string/cfg_habit" layout="vbox" size="-2,-1">
             <include src="layout:page_habit"/>
           </pageex>
-          <pageex title="@string/cfg_hotkey" tip="@string/cfg_hotkey"  size="-2,-1">
+          <pageex title="@string/cfg_hotkey" tip="@string/cfg_hotkey" layout="vbox" size="-2,-1">
             <include src="layout:page_hotkey"/>
           </pageex>
-          <pageex title="@string/cfg_associate" tip="@string/cfg_associate"  size="-2,-1">
+          <pageex title="@string/cfg_associate" tip="@string/cfg_associate" layout="vbox" size="-2,-1">
             <include src="layout:page_associate"/>
           </pageex>
-          <pageex title="@string/cfg_candidate" tip="@string/cfg_candidate" size="-2,-1">
+          <pageex title="@string/cfg_candidate" tip="@string/cfg_candidate" layout="vbox" size="-2,-1">
             <include src="layout:page_candidate"/>
           </pageex>
-          <pageex title="@string/cfg_tts" tip="@string/cfg_tts" size="-2,-1">
+          <pageex title="@string/cfg_tts" tip="@string/cfg_tts" layout="vbox" size="-2,-1">
             <include src="layout:page_tts"/>
           </pageex>
-          <pageex title="@string/cfg_pinyin" tip="@string/cfg_pinyin" size="-2,-1">
+          <pageex title="@string/cfg_pinyin" tip="@string/cfg_pinyin" layout="vbox" size="-2,-1">
             <include src="layout:page_pinyin"/>
           </pageex>
-          <pageex title="@string/cfg_phraselib" layout="vbox" size="-2,-1" padding="10,10,10,10">
+          <pageex title="@string/cfg_phraselib" tip="@string/cfg_phraselib" layout="vbox" size="-2,-1">
             <include src="layout:page_phraselib"/>
           </pageex>
-          <pageex title="@string/cfg_celib" layout="vbox" size="-2,-1" padding="10,10,10,10">
+          <pageex title="@string/cfg_celib" tip="@string/cfg_celib" layout="vbox" size="-2,-1" >
             <include src="layout:page_celib"/>
           </pageex>
-          <pageex title="@string/cfg_misc" tip="@string/cfg_misc" size="-2,-1">
+          <pageex title="@string/cfg_misc" tip="@string/cfg_misc" layout="vbox" size="-2,-1">
             <include src="layout:page_misc"/>
           </pageex>
           <pageex title="@string/cfg_about" tip="@string/cfg_about" layout="vbox" size="-2,-1">

@@ -14,7 +14,7 @@
   <cfg_candidate value="重码"/>
   <cfg_misc value="其它"/>
   <cfg_about value="关于"/>
-  <cfg_tts value="TTS"/>
+  <cfg_tts value="语音朗读"/>
   <cfg_pinyin value="启程拼音"/>
   <cfg_about_title value="关于启程输入法"/>
   <cfg_phraselib value="词库管理"/>

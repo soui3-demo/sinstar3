@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<include>
+<window size="-2,-1" layout="vbox" interval="10" padding="0,0,0,20">
   <window size="-2,-1" layout="hbox" gravity="center">
     <text inset="10,5,5,5">@string/cfg_hotkey</text>
     <hr width="-2" height="1"/>
   </window>
-  <window pos="88,[" layout="vbox">
-    <window layout="gridLayout" xGravity="right" columnCount="2" xInterval="5dp" yInterval="10dp">
+   <window size="-2,-1" padding_left="50" layout="gridLayout" xGravity="right" columnCount="2" xInterval="5dp" yInterval="10dp">
       <text text="音形码切换"/>
       <hotkey name="hk_switch_py" weight="1" width="120dp" height="30dp"/>
       <text text="自定义模式"/>
@@ -27,5 +26,4 @@
       <text text="输入记忆"/>
       <hotkey name="hk_record" width="120dp" height="30dp"/>
     </window>
-  </window>
-</include>
+</window>

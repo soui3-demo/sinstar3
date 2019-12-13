@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<include>
+<window size="-2,-1" layout="vbox" interval="10" padding="0,0,0,20">
   <window size="-2,-1" layout="hbox" gravity="center">
     <text inset="10,5,5,5">@string/cfg_misc</text>
     <hr width="-2" height="1"></hr>
   </window>
-  <window pos="88,[" layout="vbox">
-    <text text="提示音:" extend_top="10dp"/>
+  <window layout="vbox" interval="10" padding="50,0,0,0">
+    <text text="提示音:" />
     <window size="-1,-1" layout="hbox">
       <radio name="sound_disable" text="禁用" id="800"/>
       <radio name="sound_wave" text="WAV提示" id="801"/>
       <radio name="sound_beep" text="蜂鸣器" id="802"/>
     </window>
-    <text text="笔画输入键:" extend_top="10dp"/>
+    <text text="笔画输入键:"/>
     <window size="-1,-1" layout="gridlayout" columnCount="2" xInterval="5" yInterval="5" xGravity="right">
       <text text="横(小键盘1):"/>
       <hotkey name="hk_bihua_heng" id="900" width="80dp" invalidComb="7"/>
@@ -27,4 +27,4 @@
       <hotkey name="hk_bihua_wild" id="905" width="80dp" invalidComb="7"/>
     </window>
   </window>
-</include>
+  </window>

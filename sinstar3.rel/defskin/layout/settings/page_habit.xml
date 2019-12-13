@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<include>
+<window size="-2,-1" layout="vbox" interval="10" padding="0,0,0,20">
   <window size="-2,-1" layout="hbox" gravity="center">
     <text inset="10,5,5,5">@string/cfg_habit</text>
     <hr width="-2" height="1"></hr>
   </window>
-  <window pos="88,[" layout="vbox">
+  <window size="-2,-1" layout="vbox" interval="10" padding_left="50">
     <text >输入法开关:</text>
     <window layout="hbox">
-      <radio text="左Shift" id="100" extend_top="10" name="ime_switch_left_shift"/>
-      <radio text="右Shift" id="101" extend_top="10" extend_left="10" name="ime_switch_right_shift"/>
-      <radio text="禁用" id="102" extend_top="10" extend_left="10" name="ime_switch_disabled"/>
+      <radio text="左Shift" id="100"  name="ime_switch_left_shift"/>
+      <radio text="右Shift" id="101"  extend_left="10" name="ime_switch_right_shift"/>
+      <radio text="禁用" id="102"  extend_left="10" name="ime_switch_disabled"/>
     </window>
-    <text extend_top="10">形码状态回车:</text>
-    <window extend_top="10" layout="hbox">
+    <text >形码状态回车:</text>
+    <window  layout="hbox">
       <radio text="清除编码" id="110" name="enter_for_clear"/>
       <radio text="编码上屏" id="111" extend_left="10" name="enter_for_input"/>
     </window>
-    <window extend_top="10" layout="hbox">
+    <window  layout="hbox">
       <text text="语句模式切换:" name="key_to_sentmode"/>
       <hotkey size="50dp,-1" name="hk_to_sentmode" extend_left="10" invalidComb="7" padding="5,0,5,0"/>
     </window>
-    <text extend_top="10">临时拼音开关:</text>
-    <window extend_top="10" layout="hbox">
+    <text >临时拼音开关:</text>
+    <window  layout="hbox">
       <radio text="左Ctrl" id="120" name="py_switch_left_ctrl"/>
       <radio text="右Ctrl" id="121" name="py_switch_right_ctrl"/>
       <radio text="禁用" id="122" name="py_switch_disabled"/>
     </window>
-    <check extend_top="10" text="重码自动上屏" pos="58,[5" name="cand_auto_input"/>
-    <check extend_top="10" text="拼音重码词组优先" pos="58,[5" name="cand_py_phrase_first"/>
-    <check extend_top="10" text="禁用首码万能键" pos="58,[5" name="chk_disable_first_wild"/>
-    <check extend_top="10" text="显示使用技巧" pos="58,[5" name="chk_show_op_tip"/>
-    <window extend_top="10" layout="hbox" gravity="center">
+    <check  text="重码自动上屏" name="cand_auto_input"/>
+    <check  text="拼音重码词组优先" name="cand_py_phrase_first"/>
+    <check  text="禁用首码万能键" name="chk_disable_first_wild"/>
+    <check  text="显示使用技巧" name="chk_show_op_tip"/>
+    <window  layout="hbox" gravity="center">
       <text text="提示等待时间(秒)："/>
      <window size="-1,-1" class="edit_border" trackMouseEvent="1" layout="hbox" gravity="center">
         <edit size="40dp,25dp" name="edit_delay_time" margin-x="0" margin-y="0" notifyChange="1" readonly="1"/>
@@ -38,7 +38,7 @@
       </window>
     </window>
 
-    <window extend_top="10" layout="hbox" gravity="center">
+    <window  layout="hbox" gravity="center">
       <text text="候选词数量[1-10]："/>
       <window size="-1,-1" class="edit_border" trackMouseEvent="1" layout="hbox" gravity="center">
         <edit size="40dp,25dp" name="edit_cand_num" margin-x="0" margin-y="0" notifyChange="1" readonly="1"/>
@@ -46,15 +46,13 @@
       </window>
     </window>
 
-    <window extend_top="10" layout="vbox" gravity="center" interval="5">
-      <window layout="hbox" interval="5">
-        <text text="字体："/>
-        <edit name="edit_font" size="250dp,25dp"  readonly="1"/>
-      </window>
-      <window layout="hbox" interval="5">
+    <window  layout="gridlayout" size="-2,-1" gravity="fill" yInterval="10" xInterval="10" columnCount="2">
+      <text text="字体：" rowSpan="2" layout_gravity="top"/>
+	  <edit name="edit_font" size="0,25dp" columnWeight="1" readonly="1"/>
+	  <window layout="hbox" interval="10">
         <button name="btn_change_font" text="更改" padding="10,5,10,5"/>
         <button name="btn_skin_font" text="默认字体" padding="10,5,10,5"/>
       </window>
     </window>
   </window>
-</include>
+</window>

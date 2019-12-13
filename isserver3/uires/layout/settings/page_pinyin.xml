@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<include>
+<window size="-2,-1" layout="vbox" interval="10" padding="0,0,0,20">
   <window size="-2,-1" layout="hbox" gravity="center">
     <text inset="10,5,5,5">@string/cfg_pinyin</text>
     <hr width="-2" height="1"></hr>
   </window>
-  <window pos="88,[" layout="vbox">
+  <window size="-2,-1" layout="vbox" interval="10" padding_left="50">
     <text text="模糊音设置"/>
     <window size="-2,-1" layout="hbox">
       <listview size="200dp,200dp" name="lv_blur" sbSkin="skin_scrollbar" >
@@ -25,4 +25,4 @@
     </window>
     <check text="简拼时z=zh,c=ch,s=sh" name="chk_jp_zcs" extend_top="10"/>
   </window>
-</include>
+</window>

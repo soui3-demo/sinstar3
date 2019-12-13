@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<include>
+<window size="-2,-1" layout="vbox" interval="10" padding="0,0,0,20">
   <window size="-2,-1" layout="hbox" gravity="center">
     <text inset="0,5,5,5">@string/cfg_celib</text>
     <hr width="-2" height="1"></hr>
   </window>
-  <window size="-2,-1" layout="gridlayout" gravity="fill" columnCount="4" interval="5">
+  <window size="-2,-1" layout="vbox" padding_left="50" interval="10">
+  <window size="-2,-1" layout="gridlayout" gravity="fill" columnCount="4" interval="10" >
     <text text="文件名:"/>
     <combobox size="100,30" name="cbx_celib">
       <liststyle colorBkgnd="#ffffff"/>
@@ -15,13 +16,13 @@
     <text text="附加信息:"/>
     <edit size="-2,30" name="edit_flm_addtion" readonly="1" columnSpan="3"/>
   </window>
-  <mclistview name="mc_celib" headerHeight="30" size="-2,150" extend_top="10" sbSkin="skin_scrollbar" >
+  <mclistview name="mc_celib" headerHeight="30" size="-2,150"  sbSkin="skin_scrollbar" >
     <header align="center" itemSwapEnable="1" fixWidth="0" colorBkgnd="#ffffff" >
       <items>
         <item width="100">分组名称</item>
-        <item width="95">容量</item>
-        <item width="100">编辑</item>
-        <item width="100">备注</item>
+        <item width="70">容量</item>
+        <item width="80">编辑</item>
+        <item width="80">备注</item>
       </items>
     </header>
     <template itemHeight="30" skin="skin_item_bg" font="size:16">
@@ -39,4 +40,5 @@
       </window>
     </template>
   </mclistview>
-</include>
+  </window>
+</window>

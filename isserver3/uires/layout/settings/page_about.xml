@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<include>
-  <window size="-2,-1" padding="10,10,10,10" layout="vbox" interval="10">
+  <window size="-2,-1" layout="vbox" interval="10" padding="0,0,0,20">
     <window size="-2,-1" layout="hbox" gravity="center">
       <text inset="5,5,5,5">@string/cfg_about_title</text>
       <hr width="-2" height="1"></hr>
     </window>
+	<window size="-2,-1" layout="vbox" padding_left="50" interval="10">
     <window size="-1,-1" layout="hbox">
       <text text="版本:"/>
       <text name="txt_svr_ver"/>
@@ -26,14 +26,16 @@
       </combobox>
       <button name="btn_update_now" text="立即检查" padding="10,5,10,5" extend_left="5"/>
     </window>
-    <window size="-1,-1" layout="hbox" >
+    <window size="-1,-1" layout="hbox" interval="5">
       <text text="官网:"/>
       <link href="https://soime.cn" text="https://soime.cn"/>
     </window>
-    <text text="警告：计算机软件受著作权和国际公约保护"/>
-    <text text="未经授权擅自用于商业用途"/>
-    <text text="将会受到所在地区的最大可能的民事或刑事诉讼"/>
-    <text text="包括但不限于以上 "/>
+	<window size="-2,-1" layout="hbox" interval="5">
+		<text text="警告:" colorText="@color/red"/>
+		<window size="0,-1" weight="1">
+			<text size="-2,-1" multiLines="1" text="计算机软件受著作权和国际公约保护,未经授权擅自用于商业用途!将会受到所在地区的最大可能的民事或刑事诉讼,包括但不限于以上"/>
+		</window>
+	</window>
     <text text="2002-2019（C）启程软件 All right is reserved."/>
     <text text="合作开发：ID008"/>
     <text text="后台技术支持：李平"/>
@@ -43,9 +45,9 @@
       <text text="本产品基于开源UI框架"/>
       <link href="https://github.com/soui3/soui" text="SOUI 3.0"/>
     </window>
-    <window layout="vbox" gravity="center">
+    <window size="-2,-1" layout="vbox" gravity="center">
       <text text="反馈问题QQ群" colorText="@color/red"/>
       <qrctrl size="200,200" text="http://qm.qq.com/cgi-bin/qm/qr?k=wGMykx8zDb_42F9cYi0iLSPq2Pk-4k0y"/>
     </window>
+	</window>
   </window>
-</include>
