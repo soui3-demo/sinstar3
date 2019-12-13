@@ -10,7 +10,7 @@
       <items>
         <item width="90">分组名称</item>
         <item width="70">容量</item>
-        <item width="90">编辑</item>
+        <item width="80">编辑</item>
         <item width="100">备注</item>
       </items>
     </header>
