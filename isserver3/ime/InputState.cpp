@@ -44,7 +44,11 @@ SStringA CInputState::Symbol_Convert(InputContext * lpCntxtPriv,UINT byInput,con
 			cType=bLeft2?1:2;
 			bLeft2=!bLeft2;
 		}
-		if(ISComm_SymbolConvert((char)byInput,cType)==ISACK_SUCCESS)
+		if(byInput == 0x20)
+		{//full space
+			strcpy(pBuf,"　");
+			nRet = 2;
+		}else if(ISComm_SymbolConvert((char)byInput,cType)==ISACK_SUCCESS)
 		{
 			PMSGDATA pMsg=ISComm_GetData();
 			if(pMsg->sSize<20)
@@ -1525,27 +1529,21 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 						LPBYTE pComp=pCand+1+pCand[0];
 						if(pData[0]==RATE_USERDEF)
 						{//自定义编码
-							if(pComp[0]!=0)	
-								strResultA = SStringA((char*)pComp + 1, pComp[0]);
-							else 
-								strResultA = SStringA((char*)pCand + 1, pCand[0]);
 							byMask=0;
-						}else
-						{//不是自定义编码
-							strResultA = SStringA((char*)pCand+1,pCand[0]);
-							if(pData[0]!=RATE_FORECAST)
-							{//不是预测词，词频调整
-								if(lpbKeyState[VK_CONTROL] & 0x80)
-								{
-									ISComm_RateAdjust((char*)pComp+1,pComp[0],(char*)pCand+1,pCand[0],RAM_FAST,m_pListener->GetHwnd());
-								}else if(g_SettingsG->byRateAdjust) 
-								{
-									ISComm_RateAdjust((char*)pComp+1,pComp[0],(char*)pCand+1,pCand[0],g_SettingsG->byRateAdjust==1?RAM_AUTO:RAM_FAST,m_pListener->GetHwnd());
-								}
-							}else
-							{//预测词，自动造词
-								ISComm_MakePhrase((char*)pCand+1,pCand[0]);
+						}
+						strResultA = SStringA((char*)pCand+1,pCand[0]);
+						if(pData[0]!=RATE_FORECAST)
+						{//不是预测词，词频调整
+							if(lpbKeyState[VK_CONTROL] & 0x80)
+							{
+								ISComm_RateAdjust((char*)pComp+1,pComp[0],(char*)pCand+1,pCand[0],RAM_FAST,m_pListener->GetHwnd());
+							}else if(g_SettingsG->byRateAdjust) 
+							{
+								ISComm_RateAdjust((char*)pComp+1,pComp[0],(char*)pCand+1,pCand[0],g_SettingsG->byRateAdjust==1?RAM_AUTO:RAM_FAST,m_pListener->GetHwnd());
 							}
+						}else
+						{//预测词，自动造词
+							ISComm_MakePhrase((char*)pCand+1,pCand[0]);
 						}
 					}
 				}

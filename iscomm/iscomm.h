@@ -11,9 +11,6 @@
 #define MAX_BUF_ACK_MAP		1<<15						//32K
 #define MAX_BUF_ACK			((MAX_BUF_ACK_MAP)-sizeof(HWND))
 
-//输入之星通讯使用的同步事件名称,客户端通过申请lock该Mutex来保证能够获得数据写入权限，以防止多个客户端同时写入
-#define NAME_REQ_SYNCOMMUTEX	_T("_sinstar3 req synchronization mutex")
-
 #define MSG_NAME_SINSTAR3		_T("_sinstar3 communicate msg")	//通讯时使用的消息名称，取代老版本固定的消息ID，方便服务器返回数据
 
 #pragma pack(push,1)

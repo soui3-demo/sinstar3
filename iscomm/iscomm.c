@@ -17,7 +17,6 @@ static HANDLE	s_hMapDataReq=0;		//MapFile Handle
 static HANDLE	s_hMapDataAck=0;		//MapFile Handle
 static PMSGDATA	s_pDataReq=NULL;		//MapFile
 static PMSGDATA	s_pDataAck=NULL;		//MapFile
-static HANDLE	s_hMutexReq=0;			//共享内存访问互斥体,要访问共享内存必须先获得该互斥体的所有权，以防止多个客户端同时写共享内存
 static BYTE	s_byBuf[MAX_BUF_ACK];	//保存在本地的缓冲区
 static COMPINFO s_CompInfo={"载入...",0};			//当前的编码信息
 static FLMINFO  s_flmInfo={0};			//当前的外文库信息
@@ -63,11 +62,9 @@ void ClearComm()
 		CloseHandle(s_hMapDataReq);
 		UnmapViewOfFile((LPBYTE)s_pDataAck-sizeof(DWORD));
 		CloseHandle(s_hMapDataAck);
-		CloseHandle(s_hMutexReq);
 
 		s_pDataReq=NULL;
 		s_hMapDataReq=0;
-		s_hMutexReq=0;
 		s_pDataAck=NULL;
 		s_hMapDataAck=0;
 
@@ -154,7 +151,6 @@ BOOL ISComm_Login(HWND hWnd)
 		if (s_uCount == 0)
 		{
 			LPBYTE pBuf = NULL;
-			s_hMutexReq = OpenMutex(SYNCHRONIZE, FALSE, NAME_REQ_SYNCOMMUTEX);
 			//打开双向通讯数据通道
 			s_hMapDataReq = OpenFileMapping(FILE_MAP_READ | FILE_MAP_WRITE, FALSE, NAME_REQ_MAPFILE);
 			s_pDataReq = (PMSGDATA)MapViewOfFile(s_hMapDataReq, FILE_MAP_READ | FILE_MAP_WRITE, 0, 0, 0);
@@ -194,7 +190,6 @@ DWORD ISComm_SendMsg(DWORD dwType,const LPVOID pData,short sSize,HWND hWnd)
 	if(!IsWindow(s_hWndServer)) return ISACK_SVRCANCEL;
 	if(sSize>MAX_BUF_REQ) return ISACK_ERRBUF;
 
-	WaitForSingleObject(s_hMutexReq,INFINITE);
 	pIsBuf->sSize=sSize;
 	memcpy(pIsBuf->byData,pData,sSize);
 	dwRet=(DWORD)SendMessage(s_hWndServer,ISComm_GetCommMsgID(),dwType,(LPARAM)hWnd);
@@ -204,7 +199,6 @@ DWORD ISComm_SendMsg(DWORD dwType,const LPVOID pData,short sSize,HWND hWnd)
 		memcpy(s_byBuf,pIsBuf,pIsBuf->sSize+sizeof(short));
 	else
 		*(short*)s_byBuf=0;
-	ReleaseMutex(s_hMutexReq);
 	return dwRet;
 }
 

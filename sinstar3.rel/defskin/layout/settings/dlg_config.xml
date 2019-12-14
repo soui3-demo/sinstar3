@@ -19,7 +19,7 @@
         <window size="0,0" weight="1" visible="0"/>
         <imgbtn size="-1,-1" skin="_skin.sys.btn.close" name="btn_close" id="2" animate="1" tip="@string/btn_close" layout_gravity="top"/>
       </caption>
-      <tabctrlex size="-2,0" weight="1" text-x="22" tabPos="10" align="left" clipClient="1" tabInterSize="0" tabWidth="120" colorBkgnd="#f3f6fa"  tabHeight="32" drawFocusRect="0" show="1" curSel="0"
+      <tabctrlex size="-2,0" weight="1" tabPos="10" align="center" clipClient="1" tabInterSize="0" tabWidth="120" colorBkgnd="#f3f6fa"  tabHeight="32" drawFocusRect="0" curSel="0"
        tabskin="nav_config_tab" colorText="@color/black" colorTextPush="@color/white">
         <socrollviewStyle sbArrowSize="0" sbSkin="skin_scrollbar" scrollSpeed="100" updateInterval="0"  colorBkgnd="#f2f2f2" colorBorder="#c6c6c6"/>
         <pages>
