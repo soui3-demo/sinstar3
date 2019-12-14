@@ -381,11 +381,14 @@ void CIsSvrProxy::OnTimer(UINT_PTR uID)
 	}
 	else if (uID == TIMERID_DATA_REPORT)
 	{
-		
 		CWorker::getSingletonPtr()->ReportUserInfo();
 		KillTimer(uID);
 		SetTimer(uID, SPAN_DATA_REPORT2, NULL);
-	}else if(uID == TIMERID_CHECK_CLIENT)
+	}else if(uID == SPAN_DATA_REPORT2)
+	{
+		CWorker::getSingletonPtr()->ReportUserInfo();
+	}
+	else if(uID == TIMERID_CHECK_CLIENT)
 	{
 		m_ipcSvr->CheckConnectivity();
 	}

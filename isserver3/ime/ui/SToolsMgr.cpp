@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "SToolsMgr.h"
 #include "../../../helper/helper.h"
+#include <shellapi.h>
 
 SToolsMgr::SToolsMgr()
 {
@@ -30,7 +31,8 @@ int SToolsMgr::InitToolMenu(HMENU hMenu, const SStringT &strToolPath, int nStart
 				SStringT strFullPath = strToolPath + _T("\\") + findData.cFileName;
 				m_mapTool[nStartId] = strFullPath;
 				SStringT strDesc = ExtractToolInfo(strFullPath);
-				smenu.AppendMenu(MF_STRING, nStartId, strDesc);
+				HICON hIcon =::ExtractIcon(NULL,strFullPath,0);
+				smenu.AppendMenu(MF_STRING, nStartId, strDesc,-1,hIcon);
 			}
 		} while (FindNextFile(hFind, &findData));
 		FindClose(hFind);

@@ -10,7 +10,7 @@ translucent="0"
   <root  width="600" height="400" skin="_skin.sys.wnd.bkgnd" cache="1" padding="5,5,5,5"  font="size:16">
     <window size="-2,-2" layout="vbox" interval="10"   font="size:16">
     <caption size="-2,30" layout="hbox" gravity="center" interval="5">
-    	<icon size="16,16" src="icon_logo:16"/>
+    	<img size="16,16" skin="skin_menu_icons" iconIndex="5"/>
       <window size="-1,-2" layout="vbox">
         <text.title size="-1,30" name="txt_edit_userdef" text="@string/txt_edit_userdef"/>
         <text.title size="-1,30" name="txt_edit_symbol" text="@string/txt_edit_symbol"/>
