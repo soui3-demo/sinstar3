@@ -46,7 +46,7 @@
       <link href="https://github.com/soui3/soui" text="SOUI 3.0"/>
     </window>
     <window size="-2,-1" layout="vbox" gravity="center">
-      <text text="反馈问题QQ群" colorText="@color/red"/>
+      <text text="反馈问题QQ群(扫码加群)" colorText="@color/red"/>
       <qrctrl size="200,200" text="http://qm.qq.com/cgi-bin/qm/qr?k=wGMykx8zDb_42F9cYi0iLSPq2Pk-4k0y"/>
     </window>
 	</window>
