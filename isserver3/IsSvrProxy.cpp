@@ -404,11 +404,10 @@ void CIsSvrProxy::OnTimer(UINT_PTR uID)
 		}
 	}else if(uID == TIMERID_AUTO_SAVE_SETTING)
 	{
-		SStringT strConfig = m_strSvrPath + _T("\\config.ini");
 		if(g_SettingsG->IsModified())
-			g_SettingsG->Save(strConfig);
+			g_SettingsG->Save(m_strSvrPath);
 		if(g_SettingsUI->IsModified())
-			g_SettingsUI->Save(strConfig);
+			g_SettingsUI->Save(m_strSvrPath);
 	}
 	else
 	{
