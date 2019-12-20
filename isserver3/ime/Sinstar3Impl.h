@@ -21,8 +21,8 @@ class CSinstar3Impl:
 	friend class CCmdHandler;// CCmdHandler need access this private members.
 	enum {
 		UM_ASYNC_COPYDATA = (WM_USER+3000),
-		UM_ASYNC_SETFOCUS,
 	};
+
 public:
 	CSinstar3Impl(ITextService *pTxtSvr,HWND hSvr);
 	virtual ~CSinstar3Impl(void);
@@ -86,13 +86,11 @@ public:
 
 	LRESULT OnSvrNotify(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	LRESULT OnAsyncCopyData(UINT uMsg, WPARAM wParam, LPARAM lParam);
-	LRESULT OnAsyncSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 	BOOL OnCopyData(HWND wnd, PCOPYDATASTRUCT pCopyDataStruct);
 	void OnTimer(UINT_PTR id);
 	BEGIN_MSG_MAP_EX(CSinstar3Impl)
 		MESSAGE_HANDLER_EX(UM_ASYNC_COPYDATA,OnAsyncCopyData)
-		MESSAGE_HANDLER_EX(UM_ASYNC_SETFOCUS,OnAsyncSetFocus)
 		MSG_WM_COPYDATA(OnCopyData)
 		MESSAGE_HANDLER_EX(ISComm_GetCommMsgID(),OnSvrNotify)
 		MSG_WM_TIMER(OnTimer)
@@ -124,6 +122,13 @@ private:
 	BOOL			m_hasFocus;
 	BOOL			m_bInputEnable;
 	BOOL			m_bOpen;
+
+	struct DelayFocusInfo
+	{
+		DelayFocusInfo(BOOL _bFocus,HWND _hWnd):bFocus(_bFocus),hWnd(_hWnd){}
+		BOOL bFocus;
+		HWND hWnd;
+	} * m_pDalyFocusInfo;
 };
 
 

@@ -44,10 +44,17 @@ SStringA CInputState::Symbol_Convert(InputContext * lpCntxtPriv,UINT byInput,con
 			cType=bLeft2?1:2;
 			bLeft2=!bLeft2;
 		}
-		if(byInput == 0x20)
-		{//full space
-			strcpy(pBuf,"¡¡");
-			nRet = 2;
+		if(byInput == 0x20 )
+		{
+			if(g_SettingsG->bFullSpace)
+			{//full space
+				strcpy(pBuf,"¡¡");
+				nRet = 2;
+			}else
+			{
+				pBuf[0]=0x20;
+				nRet=1;
+			}
 		}else if(ISComm_SymbolConvert((char)byInput,cType)==ISACK_SUCCESS)
 		{
 			PMSGDATA pMsg=ISComm_GetData();

@@ -353,6 +353,8 @@ namespace SOUI
 
 		FindAndSetCheck(R.id.chk_disable_first_wild,g_SettingsG->bDisableFirstWild);
 
+		FindAndSetCheck(R.id.chk_full_space,g_SettingsG->bFullSpace);
+		
 		FindAndSetHotKey(R.id.hk_to_sentmode, Char2VKey(g_SettingsG->bySentMode));
 
 		FindAndSetSpin(R.id.spin_delay_time, g_SettingsG->nDelayTime);
@@ -834,6 +836,11 @@ SWindow *pCtrl = FindChildByID(id);\
 		g_SettingsG->bDisableFirstWild = FindChildByID(R.id.chk_disable_first_wild)->IsChecked();
 	}
 
+	void CConfigDlg::OnFullSpace()
+	{
+		g_SettingsG->bFullSpace = FindChildByID(R.id.chk_full_space)->IsChecked();
+	}
+
 	void CConfigDlg::OnChkOpTip(EventArgs *e)
 	{
 		SCheckBox *pCheck = sobj_cast<SCheckBox>(e->sender);
@@ -1198,6 +1205,7 @@ SWindow *pCtrl = FindChildByID(id);\
 	{
 		__super::OnFinalMessage(hWnd);
 		g_SettingsG->SetModified(true);
+		g_SettingsUI->SetModified(true);
 		delete this;
 	}
 
@@ -1239,7 +1247,6 @@ SWindow *pCtrl = FindChildByID(id);\
 				fi.style.attr.byWeight = 0;
 			}
 			g_SettingsG->strFontDesc = SFontPool::FontInfoToString(fi);
-			g_SettingsG->SetModified(true);
 			SFontPool::getSingletonPtr()->SetDefFontInfo(fi);
 			FindAndSetText(R.id.edit_font,g_SettingsG->strFontDesc);
 		}
@@ -1251,7 +1258,6 @@ SWindow *pCtrl = FindChildByID(id);\
 		FindAndSetText(R.id.edit_font,_T("<Æ¤·ôÄ¬ÈÏ>"));
 		SFontPool::getSingletonPtr()->SetDefFontInfo(fi);
 		g_SettingsG->strFontDesc.Empty();
-		g_SettingsG->SetModified(true);
 	}
 
 }

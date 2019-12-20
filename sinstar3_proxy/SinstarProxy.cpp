@@ -68,7 +68,7 @@ BOOL CSinstarProxy::Init(HWND hClient, LPCTSTR pszSvrPath)
 		SASSERT(ShExecInfo.hProcess);
 		WaitForInputIdle(ShExecInfo.hProcess, 1000);
 		CloseHandle(ShExecInfo.hProcess);
-		for (int i = 0; i < 100 && !hSvr; i++)
+		for (int i = 0; i < 300 && !hSvr; i++)
 		{
 			Sleep(10);
 			hSvr = FindWindow(NULL, SINSTAR3_SERVER_HWND);

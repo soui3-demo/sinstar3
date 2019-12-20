@@ -27,6 +27,7 @@ const TCHAR * KSinstar3WndName = _T("sinstar3_msg_recv_20180801");
 
 enum{
 	TIMER_CARETLEFT = 200,
+	TIMER_DELAYFOCUS,
 };
 
 CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HWND hSvr)
@@ -41,6 +42,7 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HWND hSvr)
 , m_hasFocus(FALSE)
 , m_bInputEnable(TRUE)
 , m_bOpen(FALSE)
+, m_pDalyFocusInfo(NULL)
 {
 	addEvent(EVENTID(EventSvrNotify));
 	addEvent(EVENTID(EventSetSkin));
@@ -163,35 +165,15 @@ void CSinstar3Impl::OnCompositionTerminated(bool bClearCtx)
 void CSinstar3Impl::OnSetFocus(BOOL bFocus,DWORD dwActiveWnd)
 {
 	SLOG_INFO("GetThreadID="<<GetCurrentThreadId()<<" focus="<<bFocus);
-	PostMessage(UM_ASYNC_SETFOCUS,bFocus,dwActiveWnd);
-}
-
-LRESULT CSinstar3Impl::OnAsyncSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-	m_hasFocus = (BOOL)wParam;
-	if (m_hasFocus)
+	if(!m_pDalyFocusInfo)
 	{
-		HWND hOwner = (HWND)lParam;
-		m_pInputWnd->SetOwner(hOwner);
-		m_pStatusWnd->SetOwner(hOwner);
-		m_pStatusWnd->Show(IsStatusVisible());
-		if (m_bTyping || m_inputState.IsTempSpell()) 
-			m_pInputWnd->Show(IsInputVisible());
-	}
-	else
+		m_pDalyFocusInfo = new DelayFocusInfo(bFocus,(HWND)dwActiveWnd);
+		SetTimer(TIMER_DELAYFOCUS,50,NULL);
+	}else
 	{
-		m_pInputWnd->SetOwner(NULL);
-		m_pStatusWnd->SetOwner(NULL);
-
-		m_pStatusWnd->Show(FALSE);
-		m_pInputWnd->Show(FALSE);
-		if (m_pTipWnd)
-		{
-			m_pTipWnd->DestroyWindow();
-			m_pTipWnd = NULL;
-		}
+		m_pDalyFocusInfo->bFocus = bFocus;
+		m_pDalyFocusInfo->hWnd = (HWND)dwActiveWnd;
 	}
-	return 0;
 }
 
 int  CSinstar3Impl::GetCompositionSegments()
@@ -623,7 +605,36 @@ void CSinstar3Impl::OnTimer(UINT_PTR id)
 		keybd_event(VK_LEFT,MapVirtualKey(VK_LEFT,0),0,0);
 		keybd_event(VK_LEFT,MapVirtualKey(VK_LEFT,0),KEYEVENTF_KEYUP,0);
 		KillTimer(id);
-	}else
+	}else if(id == TIMER_DELAYFOCUS)
+	{
+		m_hasFocus = m_pDalyFocusInfo->bFocus;
+		if (m_hasFocus)
+		{
+			HWND hOwner = m_pDalyFocusInfo->hWnd;
+			m_pInputWnd->SetOwner(hOwner);
+			m_pStatusWnd->SetOwner(hOwner);
+			m_pStatusWnd->Show(IsStatusVisible());
+			if (m_bTyping || m_inputState.IsTempSpell()) 
+				m_pInputWnd->Show(IsInputVisible());
+		}
+		else
+		{
+			m_pInputWnd->SetOwner(NULL);
+			m_pStatusWnd->SetOwner(NULL);
+
+			m_pStatusWnd->Show(FALSE);
+			m_pInputWnd->Show(FALSE);
+			if (m_pTipWnd)
+			{
+				m_pTipWnd->DestroyWindow();
+				m_pTipWnd = NULL;
+			}
+		}
+		delete m_pDalyFocusInfo;
+		m_pDalyFocusInfo = NULL;
+		KillTimer(id);
+	}
+	else
 	{
 		SetMsgHandled(FALSE);
 	}

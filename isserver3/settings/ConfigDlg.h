@@ -61,6 +61,8 @@ namespace SOUI
 		void OnPyPhraseFirst();
 		
 		void OnDislabeFirstWild();
+		
+		void OnFullSpace();
 
 		//show op tip
 		void OnChkOpTip(EventArgs *e);
@@ -126,6 +128,7 @@ namespace SOUI
 			EVENT_ID_COMMAND(R.id.cand_auto_input, OnAutoInput)
 			EVENT_ID_COMMAND(R.id.cand_py_phrase_first, OnPyPhraseFirst)
 			EVENT_ID_COMMAND(R.id.chk_disable_first_wild,OnDislabeFirstWild)
+			EVENT_ID_COMMAND(R.id.chk_full_space,OnFullSpace)
 			EVENT_ID_HANDLER(R.id.chk_show_op_tip,EventCmd::EventID, OnChkOpTip)
 			EVENT_ID_COMMAND_RANGE(400, 403, OnClickAssMode)
 			EVENT_ID_COMMAND_RANGE(600, 602, OnClickForcast)
