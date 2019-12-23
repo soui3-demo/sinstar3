@@ -167,7 +167,10 @@ BOOL WINAPI ImeProcessKey(HIMC hIMC,UINT uVKey,LPARAM lKeyData,CONST LPBYTE lpbK
 		BOOL bKeyDown=(lKeyData&0x80000000)==0;
 		(*ppUiWnd)->m_pSinstar3->ProcessKeyStoke((UINT64)(&ctx),uVKey,lKeyData,bKeyDown, lpbKeyState,&bRet);
 	}
-	(*ppUiWnd)->m_pCurContext=NULL;
+	if(*ppUiWnd)
+	{
+		(*ppUiWnd)->m_pCurContext=NULL;
+	}
 	ImmUnlockIMCC(ctx._lpContext->hPrivate);
 
 exit:

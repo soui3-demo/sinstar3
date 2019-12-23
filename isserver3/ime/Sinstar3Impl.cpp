@@ -623,7 +623,7 @@ void CSinstar3Impl::OnTimer(UINT_PTR id)
 			m_pStatusWnd->SetOwner(NULL);
 
 			m_pStatusWnd->Show(FALSE);
-			m_pInputWnd->Show(FALSE);
+			m_pInputWnd->Show(FALSE,FALSE);
 			if (m_pTipWnd)
 			{
 				m_pTipWnd->DestroyWindow();
