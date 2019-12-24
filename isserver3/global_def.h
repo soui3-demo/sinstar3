@@ -13,6 +13,7 @@
 #define RATE_MIXSP		0xFB	//简拼词组
 #define RATE_WILD		0xFA	//万能键查询结果
 #define RATE_ASSOCIATE	0xF9	//联想重码
+#define RATE_USERJM		0xF8	//user defined jm.
 
 enum{
 	SENDER_SINSTSR3	= 100,

@@ -65,6 +65,7 @@ namespace SOUI
 				crCand = m_crCand[CAND_BLENDPY];
 				break;
 			case RATE_USERDEF:
+			case RATE_USERJM:
 				crCand = m_crCand[CAND_USERDEF];
 				break;
 			case RATE_USERCMD:
