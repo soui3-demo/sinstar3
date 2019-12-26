@@ -5,7 +5,6 @@
 #include "Minidump.h"
 static bool g_bInstallDump = false;
 
-#define TIMERID_CHKDEFIME 100
 
 /* static */
 HRESULT CSinstar3Tsf::CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj)
@@ -152,8 +151,13 @@ STDAPI CSinstar3Tsf::ActivateEx(ITfThreadMgr *pThreadMgr, TfClientId tfClientId,
 
 	OnSetThreadFocus();
 
-	if (!_InitSinstar3((HWND)GetActiveWnd()))
-		goto ExitError;
+	Helper_ChangeWindowMessageFilter(SOUI::UM_CALL_FUN, MSGFLT_ADD);
+	Helper_ChangeWindowMessageFilter(UM_GETPROCPATH, MSGFLT_ADD);
+
+	if(!_InitSinstar3((HWND)GetActiveWnd()))
+	{
+		SetTimer(m_hWnd,TID_INIT,200,NULL);
+	}
 
 
 	return S_OK;
@@ -335,8 +339,6 @@ BOOL CSinstar3Tsf::_InitSinstar3(HWND hWnd)
 {
 	SASSERT(!m_pSinstar3);
 	m_pSinstar3 = new CSinstarProxy(this);
-	Helper_ChangeWindowMessageFilter(SOUI::UM_CALL_FUN, MSGFLT_ADD);
-	Helper_ChangeWindowMessageFilter(UM_GETPROCPATH, MSGFLT_ADD);
 
 	if (!m_pSinstar3->Init(m_hWnd, theModule->GetSvrPath()))
 	{
@@ -357,12 +359,23 @@ BOOL CSinstar3Tsf::_InitSinstar3(HWND hWnd)
 LRESULT CSinstar3Tsf::WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	LRESULT result = 0;
+	if(uMsg == WM_TIMER)
+	{
+		if(wParam == TID_INIT)
+		{
+			if(_InitSinstar3((HWND)GetActiveWnd()))
+			{
+				KillTimer(m_hWnd,wParam);
+			}
+			return 0;
+		}
+	}
 	if (m_pSinstar3)
 	{
 		BOOL bHandled = m_pSinstar3->ProcessWindowMessage(m_hWnd, uMsg, wParam, lParam, result);
 		if (bHandled) return result;
 	}
-	return __super::WindowProc(uMsg, wParam, lParam);
+	return CSimpleWnd::WindowProc(uMsg, wParam, lParam);
 }
 //ITextService
 

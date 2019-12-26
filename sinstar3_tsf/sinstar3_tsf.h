@@ -19,6 +19,9 @@ class CSinstar3Tsf : public CUnknown,
 					 public ITextService,
 					 public CSimpleWnd
 {
+	enum{
+		TID_INIT=100,
+	};
 public:
 	// CClassFactory factory callback
 	static HRESULT CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj);

@@ -170,6 +170,13 @@ LRESULT CUiWnd::WindowProc(UINT uMsg,WPARAM wParam,LPARAM lParam)
 
 LRESULT CUiWnd::OnTimer(WPARAM nEventID)
 {
+	if(nEventID == TID_INIT)
+	{
+		if(_InitSinstar3())
+		{
+			KillTimer(m_hWnd,nEventID);
+		}
+	}
 	return 0;
 }
 
@@ -392,10 +399,8 @@ LRESULT CUiWnd::OnSetContext(BOOL bActivate,LPARAM lParam)
 
 BOOL CUiWnd::_InitSinstar3()
 {
+	SASSERT(!m_pSinstar3);
 	m_pSinstar3 = new CSinstarProxy(this);
-	Helper_ChangeWindowMessageFilter(SOUI::UM_CALL_FUN, MSGFLT_ADD);
-	Helper_ChangeWindowMessageFilter(UM_GETPROCPATH, MSGFLT_ADD);
-
 	if (!m_pSinstar3->Init(m_hWnd, theModule->GetSvrPath()))
 	{
 		delete m_pSinstar3;
@@ -437,7 +442,13 @@ LRESULT CUiWnd::OnCreate()
 	new SOUI::SLogMgr(szPathInstall);
 #endif
 	SLOGFMTI("CUiWnd::OnCreate,hWnd:%p",m_hWnd);
-	_InitSinstar3();
+	Helper_ChangeWindowMessageFilter(SOUI::UM_CALL_FUN, MSGFLT_ADD);
+	Helper_ChangeWindowMessageFilter(UM_GETPROCPATH, MSGFLT_ADD);
+
+	if(!_InitSinstar3())
+	{
+		SetTimer(m_hWnd,TID_INIT,200,NULL);
+	}
 	PostMessage(WM_IME_NOTIFY,IMN_SETCONVERSIONMODE,0);
 	return 0;
 }

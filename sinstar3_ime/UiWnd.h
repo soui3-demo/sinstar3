@@ -7,6 +7,9 @@ class CUiWnd :
 	public CSimpleWnd,
 	public ITextService
 {
+	enum{
+		TID_INIT = 100,
+	};
 public:
 	CUiWnd(void);
 	~CUiWnd(void);
