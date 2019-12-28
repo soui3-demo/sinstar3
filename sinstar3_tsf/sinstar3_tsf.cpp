@@ -210,6 +210,7 @@ STDAPI CSinstar3Tsf::Activate(ITfThreadMgr *pThreadMgr, TfClientId tfClientId)
 STDAPI CSinstar3Tsf::Deactivate()
 {
 	SLOGFMTI("Deactivate");
+	KillTimer(m_hWnd,TID_INIT);
 	//确保输入过程结束
 	if(_IsCompositing())
 	{
