@@ -26,7 +26,7 @@
 #define SPAN_PENDING_CMD    100
 
 #define TIMERID_AUTO_SAVE_SETTING 700
-#define SPAN_AUTO_SAVE_SETTING 60*1000	//1 minute
+#define SPAN_AUTO_SAVE_SETTING 5000	//5 seconds
 
 static void DoSomething()
 {
