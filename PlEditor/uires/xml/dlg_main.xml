@@ -1,0 +1,56 @@
+﻿<SOUI name="mainWindow" title="@string/title" bigIcon="ICON_LOGO:32" smallIcon="ICON_LOGO:16" margin="5,5,5,5"  resizable="1" wndType="appMain"
+appWnd="1"
+translucent="1" 
+>
+  <root skin="_skin.sys.wnd.bkgnd" cache="1"  width="600" height="400" layout="vbox" padding="5,0,5,5">
+    <caption size="-2,30" layout="hbox" gravity="center">
+      <icon src="ICON_LOGO:16"/>
+      <text >@string/title</text>
+      <window size="0,0" weight="1" visible="0"/>
+      <imgbtn name="btn_min" skin="_skin.sys.btn.minimize" animate="1" />
+      <window>
+        <imgbtn name="btn_max" skin="_skin.sys.btn.maximize"  pos="0,0" animate="1" />
+        <imgbtn name="btn_restore" skin="_skin.sys.btn.restore"  pos="0,0" show="0" animate="1" />
+      </window>
+      <imgbtn name="btn_close" skin="_skin.sys.btn.close"  tip="close" animate="1"/>
+    </caption>
+    <menubar size="-2,30">
+      <btnStyle skin="SKIN_MENU_BTN" />
+      <menus>
+        <menuItem src="SMENU:MENU_FILE">文件(&F)</menuItem>
+        <menuItem src="SMENU:MENU_EDIT">编辑(&E)</menuItem>
+      </menus>
+    </menubar>
+    
+    <window size="-2,0" weight="1" layout="hbox">
+      <mclistview name="lv_plgroup" size="0,-2" weight="1" headerHeight="30" >
+        <header align="center" itemSwapEnable="1" fixWidth="0" colorBkgnd="#ffffff" >
+          <items>
+            <item width="90">分组名称</item>
+            <item width="70">容量</item>
+            <item width="80">编辑</item>
+            <item width="100">备注</item>
+          </items>
+        </header>
+        <template itemHeight="30" skin="skin_item_bg"  font="size:16">
+          <window name="col_group" clipClient="1" layout="hbox" gravity="center">
+            <check name="chk_group_name" />
+          </window>
+          <window name="col_size" clipClient="1" layout="hbox" gravity="center">
+            <text name="txt_group_size" />
+          </window>
+          <window name="col_editor" clipClient="1" layout="hbox" gravity="center">
+            <text name="txt_editor" />
+          </window>
+          <window  name="col_remark" clipClient="1" layout="hbox" gravity="center">
+            <text name="txt_remark" />
+          </window>
+        </template>
+      </mclistview>
+      <window size="-1,-2" layout="vbox">
+        
+      </window>
+    </window>
+    <progress name="prog_import" size="-2,10" min="0" max="100" value="0" display="0" visible="0"/>
+  </root>
+</SOUI>

@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<skin>
+  <imglist name="SKIN_MENU_BTN" src="IMG:PNG_TAB_LEFT" states="3" top="3" left="3" right="3" bottom="3" />
+  <imgframe name="skin_item_bg" src="img:png_item_bg" margin="3,3,3,3" states="3"/>
+</skin>
