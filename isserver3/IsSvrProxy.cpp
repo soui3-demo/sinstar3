@@ -26,7 +26,7 @@
 #define SPAN_PENDING_CMD    100
 
 #define TIMERID_AUTO_SAVE_SETTING 700
-#define SPAN_AUTO_SAVE_SETTING 60*1000	//1 minute
+#define SPAN_AUTO_SAVE_SETTING 5000	//5 seconds
 
 static void DoSomething()
 {
@@ -404,10 +404,8 @@ void CIsSvrProxy::OnTimer(UINT_PTR uID)
 		}
 	}else if(uID == TIMERID_AUTO_SAVE_SETTING)
 	{
-		if(g_SettingsG->IsModified())
-			g_SettingsG->Save(m_strSvrPath);
-		if(g_SettingsUI->IsModified())
-			g_SettingsUI->Save(m_strSvrPath);
+		g_SettingsG->Save(m_strDataPath);
+		g_SettingsUI->Save(m_strDataPath);
 	}
 	else
 	{
