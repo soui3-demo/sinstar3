@@ -11,7 +11,6 @@
 
 #include "inputstardoc.h"
 #include "GroupManager.h"
-#include "progcallback.h"
 #include <string>
 #include <vector>
 using namespace std;
@@ -40,6 +39,12 @@ typedef struct tagPHRASEINFO
 	BYTE	byGroup;	//所在组
 	BYTE	byRate;		//词频，初始时为0
 }PHRASEINFO;
+
+struct IProgListener{
+	virtual void OnStart(DWORD dwMax) = 0;
+	virtual void OnProg(DWORD dwProg,DWORD dwMax) = 0;
+	virtual void OnEnd() = 0;
+};
 
 class CPLEditor  :public CGroupManager
 {

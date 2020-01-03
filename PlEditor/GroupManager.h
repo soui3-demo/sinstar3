@@ -31,7 +31,7 @@ public:
 	BOOL Read(FILE *f);
 	BOOL Write(FILE *f);
 	DWORD GetCount();
-	std::vector<GROUPINFO> & GetGroup(){ return m_arrGroup;}
+	const std::vector<GROUPINFO> & GetGroup() const{ return m_arrGroup;}
 protected:
 	std::vector<GROUPINFO>	m_arrGroup;
 

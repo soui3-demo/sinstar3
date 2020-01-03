@@ -78,11 +78,10 @@ void CPLEditor::LoadData(FILE *f)
 	char szWord[MAX_WORDLEN];
 	fseek(f,sizeof(DWORD),SEEK_CUR);//跨过dwDataSize
 	BYTE byGroup=0;
-	if(m_funProgCB) m_funProgCB->OnProg(PT_MAX,dwCount);
-	vector<GROUPINFO> & pGroup=GetGroup();
-	for(int j=0;j<pGroup.size();j++)
+	if(m_funProgCB) m_funProgCB->OnStart(dwCount);
+	for(int j=0;j<m_arrGroup.size();j++)
 	{
-		pGroup[j].dwCount=0;
+		m_arrGroup[j].dwCount=0;
 	}
 	for(DWORD i=0;i<dwCount;i++)
 	{
@@ -91,9 +90,9 @@ void CPLEditor::LoadData(FILE *f)
 		fread(&cLen,1,1,f);
 		fread(szWord,1,cLen,f);
 		AddWord(szWord,cLen,byRate,FALSE,byGroup);
-		if(m_funProgCB) m_funProgCB->OnProg(PT_PROG,i);
+		if(m_funProgCB) m_funProgCB->OnProg(i,dwCount);
 	}
-	if(m_funProgCB) m_funProgCB->OnProg(PT_END,0);
+	if(m_funProgCB) m_funProgCB->OnEnd();
 	m_bModify=FALSE;
 }
 
@@ -136,7 +135,7 @@ void CPLEditor::WriteData(FILE *f)
 
 	DWORD *pdwOffset=(DWORD*)malloc(sizeof(DWORD)*nCount);
 	LONG lBegin=ftell(f);
-	if(m_funProgCB) m_funProgCB->OnProg(PT_MAX,nCount);
+	if(m_funProgCB) m_funProgCB->OnStart(nCount);
 	for(UINT i=0;i<nCount;i++)
 	{
 		pdwOffset[i]=ftell(f)-lBegin;
@@ -145,11 +144,11 @@ void CPLEditor::WriteData(FILE *f)
 		fwrite(&p.byRate,1,1,f);
 		fwrite(&p.cLen,1,1,f);
 		fwrite(p.szWord,1,p.cLen,f);
-	 	if(m_funProgCB) m_funProgCB->OnProg(PT_PROG,i);
+	 	if(m_funProgCB) m_funProgCB->OnProg(i,nCount);
 	}
 	//计算数据长度
 	dwDataSize=ftell(f)-lBegin;
-	if(m_funProgCB) m_funProgCB->OnProg(PT_END,0);
+	if(m_funProgCB) m_funProgCB->OnEnd();
 	//写入索引表
 	fwrite(pdwOffset,sizeof(DWORD),nCount,f);
 	free(pdwOffset);

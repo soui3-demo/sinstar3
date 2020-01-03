@@ -33,16 +33,16 @@ translucent="1"
           </items>
         </header>
         <template itemHeight="30" skin="skin_item_bg"  font="size:16">
-          <window name="col_group" clipClient="1" layout="hbox" gravity="center">
+          <window name="col_group" clipClient="1" layout="hbox" gravity="center" padding="5,0,5,0">
             <check name="chk_group_name" />
           </window>
-          <window name="col_size" clipClient="1" layout="hbox" gravity="center">
+          <window name="col_size" clipClient="1" layout="hbox" gravity="center" padding="5,0,5,0">
             <text name="txt_group_size" />
           </window>
-          <window name="col_editor" clipClient="1" layout="hbox" gravity="center">
+          <window name="col_editor" clipClient="1" layout="hbox" gravity="center" padding="5,0,5,0">
             <text name="txt_editor" />
           </window>
-          <window  name="col_remark" clipClient="1" layout="hbox" gravity="center">
+          <window  name="col_remark" clipClient="1" layout="hbox" gravity="center" padding="5,0,5,0">
             <text name="txt_remark" />
           </window>
         </template>

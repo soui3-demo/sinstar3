@@ -62,10 +62,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="utilitiesd.lib soui3d.lib"
+				AdditionalDependencies="utilitiesd.lib soui3d.lib taskloopd.lib"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="&quot;$(SOUI3PATH)\bin&quot;"
+				AdditionalLibraryDirectories="..\lib;&quot;$(SOUI3PATH)\bin&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 			/>
@@ -136,10 +136,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="utilities.lib soui3.lib"
+				AdditionalDependencies="utilities.lib soui3.lib taskloop.lib"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="&quot;$(SOUI3PATH)\bin&quot;"
+				AdditionalLibraryDirectories="..\lib;&quot;$(SOUI3PATH)\bin&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 			/>
@@ -173,6 +173,10 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm"
 			>
+			<File
+				RelativePath=".\DataCenter.cpp"
+				>
+			</File>
 			<File
 				RelativePath=".\GroupManager.cpp"
 				>
@@ -222,6 +226,10 @@
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc"
 			>
+			<File
+				RelativePath=".\DataCenter.h"
+				>
+			</File>
 			<File
 				RelativePath=".\GroupManager.h"
 				>
@@ -333,10 +341,6 @@
 				</FileConfiguration>
 			</File>
 		</Filter>
-		<File
-			RelativePath=".\license.txt"
-			>
-		</File>
 		<File
 			RelativePath=".\readme.txt"
 			>
