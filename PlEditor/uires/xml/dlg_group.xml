@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SOUI name="groupInfo" title="@string/title" margin="5,5,5,5"  resizable="1" wndType="normal"
+appWnd="0"
+translucent="1"
+>
+  <root skin="_skin.sys.wnd.bkgnd" cache="1"  width="300" height="-1" layout="vbox" padding="5,0,5,5">
+    <caption size="-2,30" layout="hbox" gravity="center">
+      <icon src="ICON_LOGO:16"/>
+      <text >@string/group_info</text>
+      <window size="0,0" weight="1" visible="0"/>
+      <imgbtn id="IDCANCEL" skin="_skin.sys.btn.close"  tip="close" animate="1"/>
+    </caption>
+    <window size="-2,-1" layout="gridLayout" columnCount="2" xInterval="5" yInterval="5" xGravity="right">
+      <text text="组名称:"/>
+      <edit name="edit_group_name" size="100,30" layout_xGravity="fill"/>
+      <text text="编辑人:"/>
+      <edit name="edit_group_editor" size="100,30"  layout_xGravity="fill"/>
+      <text text="备注:"/>
+      <edit name="edit_group_remark" size="200,30" layout_xGravity="fill"/>
+    </window>
+    <window size="-2,-1" padding="10,10,10,10" layout="hbox">
+      <window size="0,0" weight="1"/>
+      <button size="100,30" id="IDOK" text="确定"/>
+      <window size="0,0" weight="1"/>
+      <button size="100,30" id="IDCANCEL" text="取消"/>
+      <window size="0,0" weight="1"/>
+    </window>
+  </root>
+</SOUI>

@@ -58,11 +58,13 @@ public:
 	BOOL AddWord(LPCSTR pszWord,char cLen=-1,BYTE byRate=0,BOOL bCheckNeed=TRUE,BYTE byGroup=0);
 	void LoadData(FILE *f);
 	void WriteData(FILE *f);
+	int Import2Group(LPCTSTR pszFile,BYTE byRateMin, BYTE byRateMax,BYTE iGroup=0xFF);
 private:
+	BOOL ParseLine(LPCSTR pszLine,int &nBegin,int &nEnd);
+
 	SMap<SStringA,PHRASE2> m_mapPhrase;
 	BOOL			m_bModify;
 	IProgListener * m_funProgCB;	//进度回调
-	LPARAM			m_cbParam;		//回调Param
 };
 
 #endif // !defined(AFX_PhraseLIB_H__7857A461_471F_4036_BE8A_7261E48846DB__INCLUDED_)

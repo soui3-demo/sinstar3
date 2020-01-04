@@ -78,7 +78,41 @@ void CDataCenter::OnEnd()
 
 }
 
-const std::vector<GROUPINFO> & CDataCenter::GetGroup() const
+std::vector<GROUPINFO>  CDataCenter::GetGroup() const
 {
+	SAutoLock autoLock(m_cs);
 	return m_plEditor.GetGroup();
+}
+
+void CDataCenter::LoadPL(LPCTSTR pszName)
+{
+	STaskHelper::post(m_taskLoop,this,&CDataCenter::OnLoadPL,pszName,false);	
+}
+
+void CDataCenter::OnLoadPL(const std::tstring &name)
+{
+	m_plEditor.Load(name.c_str());
+}
+
+void CDataCenter::SavePL(LPCTSTR pszName)
+{
+	m_plEditor.Save(pszName);
+}
+
+void CDataCenter::Import2Group(LPCTSTR pszFile,BYTE byRateMin, BYTE byRateMax,BYTE iGroup/*=-1*/)
+{
+	STaskHelper::post(m_taskLoop,this,&CDataCenter::OnImport2Group,pszFile,byRateMin,byRateMax,iGroup,false);
+}
+
+void CDataCenter::OnImport2Group(const std::tstring &strFile,BYTE byMin, BYTE byMax,BYTE iGroup/*=-1*/)
+{
+	m_plEditor.Import2Group(strFile.c_str(),byMin,byMax,iGroup);
+}
+
+void CDataCenter::AddGroup(GROUPINFO groupInfo)
+{
+	SAutoLock autoLock(m_cs);
+	if(!m_bReady)
+		return;
+	m_plEditor.AddGroup(groupInfo.szName,groupInfo.szEditor,groupInfo.szRemark);
 }

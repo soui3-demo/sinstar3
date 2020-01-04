@@ -25,7 +25,7 @@ CGroupManager::~CGroupManager()
 	Free();
 }
 
-char CGroupManager::AddGroup(LPCSTR pszName,LPCSTR pszEditor,LPCSTR pszRemark)
+BYTE CGroupManager::AddGroup(LPCSTR pszName,LPCSTR pszEditor,LPCSTR pszRemark)
 {
 	if(m_arrGroup.size()==0x7F) return -1;
 	if(strlen(pszName)>=50 || strlen(pszEditor)>=50 || strlen(pszRemark)>=200) return -1;
@@ -35,7 +35,7 @@ char CGroupManager::AddGroup(LPCSTR pszName,LPCSTR pszEditor,LPCSTR pszRemark)
 	strcpy(gi.szRemark,pszRemark);
 	gi.dwCount=0;
 	m_arrGroup.push_back(gi);
-	return (char)m_arrGroup.size();
+	return (BYTE)m_arrGroup.size();
 }
 
 BOOL CGroupManager::Write(FILE *f)

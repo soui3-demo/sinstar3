@@ -26,7 +26,7 @@ public:
 	CGroupManager();
 	virtual ~CGroupManager();
 
-	char AddGroup(LPCSTR pszName,LPCSTR pszEditor,LPCSTR pszRemark);
+	BYTE AddGroup(LPCSTR pszName,LPCSTR pszEditor,LPCSTR pszRemark);
 	void Free();
 	BOOL Read(FILE *f);
 	BOOL Write(FILE *f);

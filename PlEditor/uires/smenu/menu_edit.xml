@@ -1,6 +1,6 @@
 ﻿<menu iconSkin="" itemHeight="26" iconMargin="4" textMargin="8" maxWidth="120">
-	<item name="menu_modify_prop" id="21">候选属性</item>
+  <item name="menu_add_group" id="21">增加组</item>
+  <item name="menu_modify_group" id="22">修改组属性</item>
   <sep/>
-	<item name="menu_import_new_group" id="22">导入到新组</item>
   <item name="menu_import_to_group" id="23">导入到当前组</item>
 </menu>

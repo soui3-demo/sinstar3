@@ -178,6 +178,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\GroupInfoDlg.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\GroupManager.cpp"
 				>
 			</File>
@@ -228,6 +232,10 @@
 			>
 			<File
 				RelativePath=".\DataCenter.h"
+				>
+			</File>
+			<File
+				RelativePath=".\GroupInfoDlg.h"
 				>
 			</File>
 			<File
@@ -282,6 +290,10 @@
 			>
 			<File
 				RelativePath=".\uires\values\color.xml"
+				>
+			</File>
+			<File
+				RelativePath=".\uires\xml\dlg_group.xml"
 				>
 			</File>
 			<File
