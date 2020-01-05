@@ -36,12 +36,15 @@ public:
 	bool IsReady() const; 
 	void ExportGroup(LPCTSTR pszFile,BYTE iGroup);
 	void Clear();
+	void EraseGroup(BYTE iGroup);
 protected:
 
 	void OnLoadSysPL();
 	void OnLoadPL(const std::tstring &name);
 	void OnImport2Group(const std::tstring &strFile,BYTE byRateMin, BYTE byRateMax,BYTE iGroup=-1);
 	void OnExportGroup(const std::tstring & strFile,BYTE iGroup);
+	void OnEraseGroup(BYTE iGroup);
+
 	virtual void OnStart(DWORD dwMax);
 
 	virtual void OnProg(DWORD dwValue,DWORD dwMax);

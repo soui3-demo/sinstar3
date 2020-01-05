@@ -60,6 +60,7 @@ public:
 	void WriteData(FILE *f);
 	int Import2Group(LPCTSTR pszFile,BYTE byRateMin, BYTE byRateMax,BYTE iGroup=0xFF);
 	BOOL ExportGroup(LPCTSTR pszFile,BYTE iGroup);
+	BOOL EraseGroup(BYTE iGroup);
 private:
 	BOOL ParseLine(LPCSTR pszLine,int &nBegin,int &nEnd);
 

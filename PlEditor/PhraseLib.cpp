@@ -141,6 +141,9 @@ void CPLEditor::WriteData(FILE *f)
 	fwrite(&dwDataSize,sizeof(DWORD),1,f);
 	//写入经过树排序的词库数据
 	UINT nCount = m_mapPhrase.GetCount();
+	int nSegLen = nCount/100;
+	if(m_funProgCB) m_funProgCB->OnStart(100);
+
 	PHRASE2 *pArr = (PHRASE2*) malloc(sizeof(PHRASE2)*nCount);
 	SPOSITION pos = m_mapPhrase.GetStartPosition();
 	int i=0;
@@ -152,7 +155,6 @@ void CPLEditor::WriteData(FILE *f)
 
 	DWORD *pdwOffset=(DWORD*)malloc(sizeof(DWORD)*nCount);
 	LONG lBegin=ftell(f);
-	if(m_funProgCB) m_funProgCB->OnStart(nCount);
 	for(UINT i=0;i<nCount;i++)
 	{
 		pdwOffset[i]=ftell(f)-lBegin;
@@ -161,7 +163,11 @@ void CPLEditor::WriteData(FILE *f)
 		fwrite(&p.byRate,1,1,f);
 		fwrite(&p.cLen,1,1,f);
 		fwrite(p.szWord,1,p.cLen,f);
-	 	if(m_funProgCB) m_funProgCB->OnProg(i,nCount);
+	 	if(m_funProgCB) 
+		{
+			if(i%nSegLen==0)
+				m_funProgCB->OnProg(i/nSegLen,100);
+		}
 	}
 	//计算数据长度
 	dwDataSize=ftell(f)-lBegin;
@@ -309,5 +315,42 @@ BOOL CPLEditor::ExportGroup(LPCTSTR pszFile,BYTE iGroup)
 	if(m_funProgCB)
 		m_funProgCB->OnEnd(false);
 	fclose(f);
+	return TRUE;
+}
+
+BOOL CPLEditor::EraseGroup(BYTE iGroup)
+{
+	if(iGroup>=m_arrGroup.size())
+		return FALSE;
+
+	DWORD dwCount = m_mapPhrase.GetCount();
+	int   nSegLen = dwCount/100;
+	if(m_funProgCB)
+		m_funProgCB->OnStart(100);
+	DWORD i=0;
+	SPOSITION pos = m_mapPhrase.GetStartPosition();
+	while(pos)
+	{
+		i++;
+		if(m_funProgCB)
+		{
+			if(i%nSegLen == 0)
+			{
+				m_funProgCB->OnProg(i/nSegLen,100);
+			}
+		}
+		SPOSITION posPrev = pos;
+		PHRASE2 & value=m_mapPhrase.GetNextValue(pos);
+		if(value.byGroup == iGroup)
+		{
+			m_mapPhrase.RemoveAtPos(posPrev);
+		}else if(value.byGroup>iGroup)
+		{
+			value.byGroup--;
+		}
+	}
+	m_arrGroup.erase(m_arrGroup.begin()+iGroup);
+	if(m_funProgCB)
+		m_funProgCB->OnEnd(true);
 	return TRUE;
 }

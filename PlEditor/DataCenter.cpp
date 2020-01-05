@@ -154,3 +154,13 @@ void CDataCenter::Clear()
 {
 	m_plEditor.Free();
 }
+
+void CDataCenter::EraseGroup(BYTE iGroup)
+{
+	STaskHelper::post(m_taskLoop,this,&CDataCenter::OnEraseGroup,iGroup,false);
+}
+
+void CDataCenter::OnEraseGroup(BYTE iGroup)
+{
+	m_plEditor.EraseGroup(iGroup);
+}
