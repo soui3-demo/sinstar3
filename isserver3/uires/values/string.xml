@@ -22,12 +22,13 @@
 
   <save value="保存"/>
   <cancel value="取消"/>
+  <export_txt value="导出"/>
 
   <text_editor value="文本编辑器"/>
   <txt_edit_userdef value="编辑自定义词库"/>
   <txt_edit_symbol  value="编辑符号映射表"/>
   <txt_edit_usercmd value="编辑快捷命令"/>
-  <txt_edit_userjm  value="编辑自定义简码"/>
+  <txt_edit_userjm  value="编辑自定义重码"/>
   <txt_edit_userdict value="编辑用户词库"/>
   
   <tip_edit_userdef value="格式:编码+“=”+候选，候选词有多个时用“|”分割"/>

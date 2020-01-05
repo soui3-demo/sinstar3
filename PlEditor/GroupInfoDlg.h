@@ -5,9 +5,9 @@
 class CGroupInfoDlg : public SHostDialog
 {
 
-	GROUPINFO m_groupInfo;
+	GROUPINFO *m_groupInfo;
 public:
-	CGroupInfoDlg(void);
+	CGroupInfoDlg(GROUPINFO * pGroupInfo);
 	~CGroupInfoDlg(void);
 
 protected:

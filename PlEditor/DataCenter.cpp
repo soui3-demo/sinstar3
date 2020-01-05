@@ -67,12 +67,13 @@ void CDataCenter::OnProg(DWORD dwData,DWORD dwMax)
 	e->Release();
 }
 
-void CDataCenter::OnEnd()
+void CDataCenter::OnEnd(bool bUpdateUI)
 {
 	SAutoLock autoLock(m_cs);
 	m_bReady = true;
 
 	EventProgEnd *e = new EventProgEnd(NULL);
+	e->bUpdateUI = bUpdateUI;
 	SNotifyCenter::getSingletonPtr()->FireEventAsync(e);
 	e->Release();
 
@@ -109,10 +110,47 @@ void CDataCenter::OnImport2Group(const std::tstring &strFile,BYTE byMin, BYTE by
 	m_plEditor.Import2Group(strFile.c_str(),byMin,byMax,iGroup);
 }
 
-void CDataCenter::AddGroup(GROUPINFO groupInfo)
+void CDataCenter::AddGroup(const GROUPINFO & groupInfo)
 {
 	SAutoLock autoLock(m_cs);
 	if(!m_bReady)
 		return;
 	m_plEditor.AddGroup(groupInfo.szName,groupInfo.szEditor,groupInfo.szRemark);
+}
+
+void CDataCenter::SetGroup(BYTE iGroup,const GROUPINFO &groupInfo)
+{
+	SAutoLock autoLock(m_cs);
+	if(!m_bReady)
+		return;
+	m_plEditor.SetGroup(iGroup,groupInfo);
+}
+
+void CDataCenter::ValidGroup(BYTE iGroup,BOOL bValid)
+{
+	SAutoLock autoLock(m_cs);
+	if(!m_bReady)
+		return;
+	m_plEditor.ValidGroup(iGroup,bValid);
+}
+
+bool CDataCenter::IsReady() const
+{
+	SAutoLock autoLock(m_cs);
+	return m_bReady;
+}
+
+void CDataCenter::ExportGroup(LPCTSTR pszFile,BYTE iGroup)
+{
+	STaskHelper::post(m_taskLoop,this,&CDataCenter::OnExportGroup,pszFile,iGroup,false);
+}
+
+void CDataCenter::OnExportGroup(const std::tstring & strFile,BYTE iGroup)
+{
+	m_plEditor.ExportGroup(strFile.c_str(),iGroup);
+}
+
+void CDataCenter::Clear()
+{
+	m_plEditor.Free();
 }

@@ -26,6 +26,8 @@ translucent="0"
       <window size="0,0" weight="2" visible="0"/>
       <button size="100,30" name="btn_save" text="@string/save"/>
       <window size="0,0" weight="1" visible="0"/>
+      <button size="100,30" name="btn_export" text="@string/export_txt"/>
+      <window size="0,0" weight="1" visible="0"/>
       <button size="100,30" name="btn_find" text="@string/find"/>
       <window size="0,0" weight="1" visible="0"/>
       <button size="100,30" name="btn_close" text="@string/cancel"/>

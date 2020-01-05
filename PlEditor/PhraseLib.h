@@ -43,7 +43,7 @@ typedef struct tagPHRASEINFO
 struct IProgListener{
 	virtual void OnStart(DWORD dwMax) = 0;
 	virtual void OnProg(DWORD dwProg,DWORD dwMax) = 0;
-	virtual void OnEnd() = 0;
+	virtual void OnEnd(bool bUpdateUI) = 0;
 };
 
 class CPLEditor  :public CGroupManager
@@ -59,6 +59,7 @@ public:
 	void LoadData(FILE *f);
 	void WriteData(FILE *f);
 	int Import2Group(LPCTSTR pszFile,BYTE byRateMin, BYTE byRateMax,BYTE iGroup=0xFF);
+	BOOL ExportGroup(LPCTSTR pszFile,BYTE iGroup);
 private:
 	BOOL ParseLine(LPCSTR pszLine,int &nBegin,int &nEnd);
 

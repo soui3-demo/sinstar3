@@ -5,6 +5,7 @@
   <LAYOUT>
     <file name="XML_MAINWND" path="xml\dlg_main.xml"/>
     <file name="dlg_group" path="xml\dlg_group.xml"/>
+    <file name="dlg_about" path="xml\dlg_about.xml"/>
   </LAYOUT>
   
   <values>
@@ -23,5 +24,6 @@
   <smenu>
       <file name="MENU_FILE" path="smenu\menu_file.xml" />
       <file name="MENU_EDIT" path="smenu\menu_edit.xml" />
+    <file name="MENU_HELP" path="smenu\menu_help.xml" />
   </smenu>
 </resource>

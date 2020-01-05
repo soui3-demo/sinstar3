@@ -3,4 +3,8 @@
     <title value="词库编辑器"/>
     <ver value="3.0"/>
     <group_info value="分组信息"/>
+    <about value="关于"/>
+    <copy_right value="版权所有 2003-2020,启程软件(setoutsoft)"/>
+    <website value="https://soime.cn"/>
+    <help value="https://soime.cn/help"/>
   </string>

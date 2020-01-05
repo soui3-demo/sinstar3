@@ -89,7 +89,9 @@ void CPLEditor::LoadData(FILE *f)
 	char szWord[MAX_WORDLEN];
 	fseek(f,sizeof(DWORD),SEEK_CUR);//跨过dwDataSize
 	BYTE byGroup=0;
-	if(m_funProgCB) m_funProgCB->OnStart(dwCount);
+	if(m_funProgCB) m_funProgCB->OnStart(100);
+	int nSegLen = dwCount/100;
+
 	for(int j=0;j<m_arrGroup.size();j++)
 	{
 		m_arrGroup[j].dwCount=0;
@@ -101,9 +103,13 @@ void CPLEditor::LoadData(FILE *f)
 		fread(&cLen,1,1,f);
 		fread(szWord,1,cLen,f);
 		AddWord(szWord,cLen,byRate,FALSE,byGroup);
-		if(m_funProgCB) m_funProgCB->OnProg(i,dwCount);
+		if(m_funProgCB) 
+		{
+			if(i%nSegLen==0)
+				m_funProgCB->OnProg(i/nSegLen,100);
+		}
 	}
-	if(m_funProgCB) m_funProgCB->OnEnd();
+	if(m_funProgCB) m_funProgCB->OnEnd(true);
 	m_bModify=FALSE;
 }
 
@@ -159,7 +165,7 @@ void CPLEditor::WriteData(FILE *f)
 	}
 	//计算数据长度
 	dwDataSize=ftell(f)-lBegin;
-	if(m_funProgCB) m_funProgCB->OnEnd();
+	if(m_funProgCB) m_funProgCB->OnEnd(false);
 	//写入索引表
 	fwrite(pdwOffset,sizeof(DWORD),nCount,f);
 	free(pdwOffset);
@@ -236,7 +242,8 @@ int CPLEditor::Import2Group(LPCTSTR pszFile,BYTE byMin, BYTE byMax,BYTE iGroup/*
 		}
 		
 		if(m_funProgCB)
-			m_funProgCB->OnStart(f.GetLength());
+			m_funProgCB->OnStart(100);
+		int nSegLen=f.GetLength()/100;
 
 		char szLine[100];
 		LPSTR pszBuf=f.ReadString(szLine,100);
@@ -259,11 +266,48 @@ int CPLEditor::Import2Group(LPCTSTR pszFile,BYTE byMin, BYTE byMax,BYTE iGroup/*
 					nRet+=AddWord(szLine,nEnd,byRate,TRUE,byGroup)?1:0;
 			}
 			if(m_funProgCB)
-				m_funProgCB->OnProg(f.GetPos(),f.GetLength());
+			{
+				if(f.GetPos()%nSegLen == 0)
+				m_funProgCB->OnProg(f.GetPos()/nSegLen,100);
+			}
 			pszBuf=f.ReadString(szLine,100);
 		}
 		if(m_funProgCB)
-			m_funProgCB->OnEnd();
+			m_funProgCB->OnEnd(true);
 	}
 	return 0;
+}
+
+BOOL CPLEditor::ExportGroup(LPCTSTR pszFile,BYTE iGroup)
+{
+	FILE *f = _tfopen(pszFile,_T("w"));
+	if(!f)
+		return FALSE;
+
+	DWORD dwCount = m_mapPhrase.GetCount();
+	int   nSegLen = dwCount/100;
+	if(m_funProgCB)
+		m_funProgCB->OnStart(100);
+	DWORD i=0;
+	SPOSITION pos = m_mapPhrase.GetStartPosition();
+	while(pos)
+	{
+		i++;
+		if(m_funProgCB)
+		{
+			if(i%nSegLen == 0)
+			{
+				m_funProgCB->OnProg(i/nSegLen,100);
+			}
+		}
+		const PHRASE2 & value=m_mapPhrase.GetNextValue(pos);
+		if(value.byGroup == iGroup)
+		{
+			fprintf(f,"%s\t%d\n",value.szWord,(int)value.byRate);
+		}
+	}
+	if(m_funProgCB)
+		m_funProgCB->OnEnd(false);
+	fclose(f);
+	return TRUE;
 }

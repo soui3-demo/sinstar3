@@ -72,6 +72,24 @@ void CGroupManager::Free()
 	m_arrGroup.clear();
 }
 
+BOOL CGroupManager::SetGroup(BYTE iGroup,const GROUPINFO & groupInfo)
+{
+	if(iGroup>=m_arrGroup.size())
+		return FALSE;
+	DWORD dwCount = m_arrGroup[iGroup].dwCount;
+	m_arrGroup[iGroup]=groupInfo;
+	m_arrGroup[iGroup].dwCount = dwCount;
+	return TRUE;
+}
+
+BOOL CGroupManager::ValidGroup(BYTE iGroup,BOOL bValid)
+{
+	if(iGroup>=m_arrGroup.size())
+		return FALSE;
+	m_arrGroup[iGroup].bValid = bValid;
+	return TRUE;
+}
+
 GROUPINFO * Group_Read(FILE *f,char *pcGroups)
 {
 	SASSERT(pcGroups);

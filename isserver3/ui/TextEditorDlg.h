@@ -17,12 +17,13 @@ protected:
 	void OnBtnClose();
 	void OnBtnSave();
 	void OnBtnFind();
-
+	void OnBtnExport();
 
 	EVENT_MAP_BEGIN()
 		EVENT_ID_COMMAND(R.id.btn_close,OnBtnClose)
 		EVENT_ID_COMMAND(R.id.btn_save, OnBtnSave)
 		EVENT_ID_COMMAND(R.id.btn_find,OnBtnFind)
+		EVENT_ID_COMMAND(R.id.btn_export,OnBtnExport)
 	EVENT_MAP_END()
 	BOOL OnInitDialog(HWND hWnd,LPARAM lp);
 	BEGIN_MSG_MAP_EX(CTextEditorDlg)

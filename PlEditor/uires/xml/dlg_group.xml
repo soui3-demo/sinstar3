@@ -10,13 +10,13 @@ translucent="1"
       <window size="0,0" weight="1" visible="0"/>
       <imgbtn id="IDCANCEL" skin="_skin.sys.btn.close"  tip="close" animate="1"/>
     </caption>
-    <window size="-2,-1" layout="gridLayout" columnCount="2" xInterval="5" yInterval="5" xGravity="right">
+    <window size="-2,-1" layout="gridLayout" columnCount="2" xInterval="5" yInterval="5" xGravity="right" yGravity="fill">
       <text text="组名称:"/>
-      <edit name="edit_group_name" size="100,30" layout_xGravity="fill"/>
+      <edit name="edit_group_name" columnWeight="1" size="100,30" layout_xGravity="fill"/>
       <text text="编辑人:"/>
       <edit name="edit_group_editor" size="100,30"  layout_xGravity="fill"/>
       <text text="备注:"/>
-      <edit name="edit_group_remark" size="200,30" layout_xGravity="fill"/>
+      <edit name="edit_group_remark" size="100,30" layout_xGravity="fill"/>
     </window>
     <window size="-2,-1" padding="10,10,10,10" layout="hbox">
       <window size="0,0" weight="1"/>

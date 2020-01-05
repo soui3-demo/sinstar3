@@ -39,7 +39,7 @@
     <item text="编辑自定义词库" name="memu_edit_userdef" id="602"/>
     <item text="编辑符号映射表" name="memu_edit_symbol" id="603"/>
     <item text="编辑快捷命令" name="memu_edit_usercmd" id="604"/>
-    <item text="编辑自定义简码" name="memu_edit_userjm" id="605"/>
+    <item text="编辑自定义重码" name="memu_edit_userjm" id="605"/>
     <item text="编辑用户词库" name="menu_edit_userdict" id="606"/>
     <sep/>
   </item>

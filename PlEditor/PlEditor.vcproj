@@ -140,6 +140,7 @@
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\lib;&quot;$(SOUI3PATH)\bin&quot;"
+				DelayLoadDLLs="soui3.dll;utilities.dll"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 			/>
@@ -293,6 +294,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\uires\xml\dlg_about.xml"
+				>
+			</File>
+			<File
 				RelativePath=".\uires\xml\dlg_group.xml"
 				>
 			</File>
@@ -310,6 +315,10 @@
 			</File>
 			<File
 				RelativePath=".\uires\smenu\menu_file.xml"
+				>
+			</File>
+			<File
+				RelativePath=".\uires\smenu\menu_help.xml"
 				>
 			</File>
 			<File

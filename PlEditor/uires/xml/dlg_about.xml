@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SOUI name="about" title="@string/about" margin="5,5,5,5"  resizable="1" wndType="normal"
+appWnd="0"
+translucent="1"
+>
+  <root skin="_skin.sys.wnd.bkgnd" cache="1"  width="-1" height="-1" layout="vbox" padding="5,0,5,5">
+    <caption size="-2,30" layout="hbox" gravity="center">
+      <icon src="ICON_LOGO:16"/>
+      <text >@string/about</text>
+      <window size="0,0" weight="1" visible="0"/>
+      <imgbtn id="IDCANCEL" skin="_skin.sys.btn.close"  tip="close" animate="1"/>
+    </caption>
+    <window size="-2,-1" layout="gridLayout" xInterval="5" yInterval="10" columnCount="2" xGravity="fill">
+      <text text="版本:"/>
+      <text text="@string/ver" columnWeight="1"/>
+      <text text="官网:"/>
+      <link text="@string/website"/>
+      <text text="@string/copy_right" columnSpan="2"/>
+    </window>
+  </root>
+</SOUI>

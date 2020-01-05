@@ -10,6 +10,7 @@ SEVENT_BEGIN(EventProgRun,EVT_EXTERNAL_BEGIN+2)
 	DWORD dwValue,dwMax;
 SEVENT_END()
 SEVENT_BEGIN(EventProgEnd,EVT_EXTERNAL_BEGIN+3)
+	bool bUpdateUI;
 SEVENT_END()
 
 #ifdef _UNICODE
@@ -29,18 +30,23 @@ public:
 	void SavePL(LPCTSTR pszName);
 	void Import2Group(LPCTSTR pszFile,BYTE byRateMin, BYTE byRateMax,BYTE iGroup=-1);
 	std::vector<GROUPINFO> GetGroup() const;
-	void AddGroup(GROUPINFO groupInfo);
+	void AddGroup(const GROUPINFO &groupInfo);
+	void SetGroup(BYTE iGroup,const GROUPINFO &groupInfo);
+	void ValidGroup(BYTE iGroup,BOOL bValid);
+	bool IsReady() const; 
+	void ExportGroup(LPCTSTR pszFile,BYTE iGroup);
+	void Clear();
 protected:
 
 	void OnLoadSysPL();
 	void OnLoadPL(const std::tstring &name);
 	void OnImport2Group(const std::tstring &strFile,BYTE byRateMin, BYTE byRateMax,BYTE iGroup=-1);
-
+	void OnExportGroup(const std::tstring & strFile,BYTE iGroup);
 	virtual void OnStart(DWORD dwMax);
 
 	virtual void OnProg(DWORD dwValue,DWORD dwMax);
 
-	virtual void OnEnd();
+	virtual void OnEnd(bool bUpdateUI);
 
 protected:
 	mutable SCriticalSection	m_cs;
