@@ -345,9 +345,9 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Building SoUI Resource"
-						CommandLine="&quot;$(SOUI3PATH)\tools\uiresbuilder.exe&quot; -i &quot;$(InputPath)&quot; -p uires -r .\res\soui_res.rc2 -h .\res\resource.h idtable&#x0D;&#x0A;"
-						Outputs=".\res\soui_res.rc2;"
+						Description=""
+						CommandLine=""
+						Outputs=""
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -355,9 +355,9 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Building SoUI Resource"
-						CommandLine="&quot;$(SOUI3PATH)\tools\uiresbuilder.exe&quot; -i &quot;$(InputPath)&quot; -p uires -r .\res\soui_res.rc2 -h .\res\resource.h idtable&#x0D;&#x0A;"
-						Outputs=".\res\soui_res.rc2;"
+						Description=""
+						CommandLine=""
+						Outputs=""
 					/>
 				</FileConfiguration>
 			</File>
