@@ -141,7 +141,7 @@
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="..\lib;&quot;$(SOUI3PATH)\bin&quot;"
 				DelayLoadDLLs="soui3.dll;utilities.dll"
-				GenerateDebugInformation="true"
+				GenerateDebugInformation="false"
 				SubSystem="2"
 			/>
 			<Tool
