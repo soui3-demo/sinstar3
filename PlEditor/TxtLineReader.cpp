@@ -46,6 +46,8 @@ LPSTR CTxtLineReader::ReadString(LPSTR lpsz, UINT nMax)
 		return NULL;
 	do{
 		m_file.getline(lpsz,nMax);
+		if(!m_file.good())
+			return NULL;
 	}while(lpsz[0]==m_cRemarkFlag || lpsz[0]==0);
 
 	return lpsz;
