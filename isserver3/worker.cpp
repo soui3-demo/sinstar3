@@ -449,7 +449,7 @@ void CWorker::PlaySoundFromResource(LPCWSTR pszSoundID)
 	PostMessage(UM_FUN_PLAY_SOUND, 0, (LPARAM)_wcsdup(pszSoundID));
 }
 
-void CWorker::_PlaySoundFromResource(WPARAM wp, LPARAM lp)
+HRESULT CWorker::OnPlaySoundFromResource(UINT uMsg,WPARAM wp, LPARAM lp)
 {
 	LPWSTR pszSoundID = (LPWSTR)lp;
 	LPWSTR pszName = wcschr(pszSoundID,L':');
@@ -467,4 +467,5 @@ void CWorker::_PlaySoundFromResource(WPARAM wp, LPARAM lp)
 		}
 	}	
 	free(pszSoundID);
+	return 0;
 }

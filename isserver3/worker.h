@@ -52,18 +52,19 @@ private:
 	void _Stop();
 	BOOL _SetVoice(WPARAM wp, LPARAM lp);
 	int  _GetTokensInfo(WPARAM wp, LPARAM lp);
-	void _PlaySoundFromResource(WPARAM wp, LPARAM lp);
 protected:
 	virtual UINT Run(LPARAM lp);
 protected:
 	LRESULT OnTTSMessage(UINT uMsg, WPARAM wp, LPARAM lp);
 	LRESULT OnCheckUpdate(UINT uMsg, WPARAM wp, LPARAM lp);
 	LRESULT OnDataReport(UINT uMsg, WPARAM wp, LPARAM lp);
+	LRESULT OnPlaySoundFromResource(UINT uMsg, WPARAM wp, LPARAM lp);
 
 	BEGIN_MSG_MAP_EX(CWorker)
 		MESSAGE_RANGE_HANDLER_EX(UM_TTS_FINISH, UM_FUN_GETTOKENINFO,OnTTSMessage)
 		MESSAGE_HANDLER_EX(UM_FUN_CHECK_UPDATE, OnCheckUpdate)
 		MESSAGE_HANDLER_EX(UM_FUN_DATA_REPORT, OnDataReport)
+		MESSAGE_HANDLER_EX(UM_FUN_PLAY_SOUND, OnPlaySoundFromResource)
 		CHAIN_MSG_MAP(__super)
 	END_MSG_MAP()
 private:
