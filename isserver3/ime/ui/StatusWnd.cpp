@@ -7,6 +7,7 @@
 #include "../../../include/FileHelper.h"
 #include <ShellAPI.h>
 #include "../../ui/TextEditorDlg.h"
+#include "../../worker.h"
 
 namespace SOUI
 {
@@ -789,6 +790,16 @@ namespace SOUI
 			CUtils::SoundPlay(_T("error"));
 		}
 		return 0;
+	}
+
+	void CStatusWnd::OnWndClick(EventArgs *e)
+	{
+		e->bubbleUp=true;
+		SStringW strSound = e->sender->GetAttribute(L"cmd_sound");
+		if(!strSound.IsEmpty())
+		{
+			CWorker::getSingletonPtr()->PlaySoundFromResource(strSound);
+		}
 	}
 
 

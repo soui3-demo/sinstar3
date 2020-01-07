@@ -24,6 +24,7 @@ enum {
 	UM_FUN_GETTOKENINFO,
 	UM_FUN_CHECK_UPDATE,
 	UM_FUN_DATA_REPORT,
+	UM_FUN_PLAY_SOUND,
 };
 
 class CWorker : public SNativeWnd
@@ -44,12 +45,14 @@ public:
 	void SpeakText(LPCSTR pszText,int nLen,BOOL bCh);
 	void ReportUserInfo();
 	void CheckUpdate(LPCSTR pszUri, bool bManual);
+	void PlaySoundFromResource(LPCWSTR pszSoundID);
 private:
 	void _SetSpeed(WPARAM wp);
 	void _SpeakText(WPARAM wp, LPARAM lp);
 	void _Stop();
 	BOOL _SetVoice(WPARAM wp, LPARAM lp);
 	int  _GetTokensInfo(WPARAM wp, LPARAM lp);
+	void _PlaySoundFromResource(WPARAM wp, LPARAM lp);
 protected:
 	virtual UINT Run(LPARAM lp);
 protected:

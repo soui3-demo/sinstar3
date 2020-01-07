@@ -123,5 +123,14 @@ SWND CImeWnd::OnSetSwndCapture(SWND swnd)
 	return ret;
 }
 
+void CImeWnd::OnWindowHover(EventArgs *e)
+{
+	SStringW strSound = e->sender->GetAttribute(L"hover_sound");
+	if(!strSound.IsEmpty())
+	{
+
+	}
+}
+
 
 }

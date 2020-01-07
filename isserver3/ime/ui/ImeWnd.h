@@ -26,8 +26,11 @@ protected:
 protected:
 	virtual void OnReposition(CPoint pt) {}
 	void OnDragStatus(EventArgs *e);
+	void OnWindowHover(EventArgs *e);
+
 	EVENT_MAP_BEGIN()
 		EVENT_HANDLER(EventDragMove::EventID, OnDragStatus)
+		EVENT_HANDLER(EventSwndMouseHover::EventID,OnWindowHover)
 	EVENT_MAP_END()
 
 protected:

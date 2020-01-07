@@ -1,6 +1,7 @@
 #include "StdAfx.h"
 #include "InputWnd.h"
 #include "../utils.h"
+#include "../../worker.h"
 
 #define SIZE_BELOW 5
 #define TIMERID_DELAY 100
@@ -664,4 +665,15 @@ namespace SOUI
 		}
 
 	}
+
+	void CInputWnd::OnWndClick(EventArgs *e)
+	{
+		e->bubbleUp=true;
+		SStringW strSound = e->sender->GetAttribute(L"cmd_sound");
+		if(!strSound.IsEmpty())
+		{
+			CWorker::getSingletonPtr()->PlaySoundFromResource(strSound);
+		}
+	}
+
 }

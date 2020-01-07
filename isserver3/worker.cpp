@@ -443,3 +443,28 @@ LRESULT CWorker::OnDataReport(UINT uMsg, WPARAM wp, LPARAM lp)
 
 	return 0;
 }
+
+void CWorker::PlaySoundFromResource(LPCWSTR pszSoundID)
+{
+	PostMessage(UM_FUN_PLAY_SOUND, 0, (LPARAM)_wcsdup(pszSoundID));
+}
+
+void CWorker::_PlaySoundFromResource(WPARAM wp, LPARAM lp)
+{
+	LPWSTR pszSoundID = (LPWSTR)lp;
+	LPWSTR pszName = wcschr(pszSoundID,L':');
+	if(pszName)
+	{
+		*pszName=0;
+		pszName++;
+		UINT nSize = SApplication::getSingletonPtr()->GetRawBufferSize(pszSoundID,pszName);
+		if(nSize)
+		{
+			char *pBuf = new char[nSize];
+			SApplication::getSingletonPtr()->GetRawBuffer(pszSoundID,pszName,pBuf,nSize);
+			PlaySound((LPCTSTR)pBuf, NULL, SND_MEMORY);
+			delete []pBuf;
+		}
+	}	
+	free(pszSoundID);
+}

@@ -91,7 +91,10 @@ namespace SOUI
 		void OnQueryClick();
 		void OnConfigClick();
 
+		void OnWndClick(EventArgs *e);
+
 		EVENT_MAP_BEGIN()
+			EVENT_HANDLER(EventCmd::EventID, OnWndClick)
 			EVENT_HANDLER(EventSvrNotify::EventID, OnSvrNotify)
 			EVENT_HANDLER(EventSwndUpdateTooltip::EventID, OnUpdateBtnTooltip)
 			EVENT_ID_COMMAND(R.id.btn_status_shrink, OnBtnShrink)
