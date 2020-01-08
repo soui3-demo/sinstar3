@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "ImeWnd.h"
+#include "../../worker.h"
 
 namespace SOUI
 {
@@ -128,7 +129,7 @@ void CImeWnd::OnWindowHover(EventArgs *e)
 	SStringW strSound = e->sender->GetAttribute(L"hover_sound");
 	if(!strSound.IsEmpty())
 	{
-
+		CWorker::getSingletonPtr()->PlaySoundFromResource(strSound);
 	}
 }
 
