@@ -1,6 +1,7 @@
 #include "StdAfx.h"
 #include "Settings.h"
 #include <core/SAccelerator.h>
+#include "dataCenter/DataCenter.h"
 
 CSettingsGlobal	*g_SettingsG = NULL;
 CSettingsUI  *g_SettingsUI = NULL;
@@ -113,6 +114,18 @@ void CSettingsGlobal::Save(const SStringT & strDataPath)
 
 
 	WritePrivateProfileString(KUI,_T("font"),strFontDesc.c_str(),strConfigIni);
+
+	SStringT strComp = SOUI::CDataCenter::getSingleton().GetData().m_compInfo.strCompName;
+	if(strComp != _T("加载...") )
+	{
+		SStringT strHotKeyFile = SStringT().Format(_T("%s\\data\\hotkey_%s.txt"), strDataPath, strComp);
+		//加载特定的自定义状态及语句输入状态开关
+		SStringT strHotKey = SAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_UDMode]);
+		WritePrivateProfileString(_T("hotkey"), _T("umode"), strHotKey, strHotKeyFile);
+		strHotKey = SStringT((TCHAR)g_SettingsG->bySentMode);
+		WritePrivateProfileString(_T("hotkey"), _T("sentence"), strHotKey, strHotKeyFile);
+	}
+
 	SetModified(false);
 }
 
