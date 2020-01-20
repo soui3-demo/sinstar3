@@ -7,7 +7,9 @@
    <window size="-2,-1" padding_left="50" layout="gridLayout" xGravity="right" columnCount="2" xInterval="5dp" yInterval="10dp">
       <text text="音形码切换"/>
       <hotkey name="hk_switch_py" weight="1" width="120dp" height="30dp"/>
-      <text text="自定义模式"/>
+     <text text="临时拼音"/>
+     <hotkey name="hk_switch_tempspell" weight="1" width="120dp" height="30dp"/>
+     <text text="自定义模式"/>
       <hotkey name="hk_to_umode" width="120dp" height="30dp"/>
       <text text="造词"/>
       <hotkey name="hk_make_phrase" width="120dp" height="30dp"/>
