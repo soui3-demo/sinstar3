@@ -81,13 +81,6 @@ CSinstar3Impl::~CSinstar3Impl(void)
 		m_pTipWnd = NULL;
 	}
 
-	SStringT strHotKeyFile = SStringT().Format(_T("%s\\data\\hotkey_%s.txt"), CDataCenter::getSingletonPtr()->GetDataPath(), CDataCenter::getSingleton().GetData().m_compInfo.strCompName);
-	//加载特定的自定义状态及语句输入状态开关
-	SStringT strHotKey = SAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_UDMode]);
-	WritePrivateProfileString(_T("hotkey"), _T("umode"), strHotKey, strHotKeyFile);
-	strHotKey = SStringT((TCHAR)g_SettingsG->bySentMode);
-	WritePrivateProfileString(_T("hotkey"), _T("sentence"), strHotKey, strHotKeyFile);
-
 	if (!m_strLoadedFontFile.IsEmpty())
 	{
 		RemoveFontResourceEx(m_strLoadedFontFile, FR_PRIVATE , NULL);
@@ -255,7 +248,7 @@ LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 		//加载特定的自定义状态及语句输入状态开关
 		GetPrivateProfileString(_T("hotkey"),_T("umode"),_T(""),szBuf,100,strHotKeyFile);
 		g_SettingsG->dwHotkeys[HKI_UDMode]=SAccelerator::TranslateAccelKey(szBuf);
-		if(g_SettingsG->dwHotkeys[HKI_UDMode] ==0)
+		if(g_SettingsG->dwHotkeys[HKI_UDMode] ==0 && _tcslen(szBuf)==0)
 		{
 			short sKey = VkKeyScan(myData.m_compInfo.cWild);
 			g_SettingsG->dwHotkeys[HKI_UDMode] = LOBYTE(sKey);
