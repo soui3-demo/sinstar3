@@ -64,6 +64,8 @@ private:
 	int TestHotKey(UINT uVk, const BYTE * lpbKeyState) const;
 	void Tips_Init();
 	int Tips_Rand(BOOL bSpell, char * pszBuf);
+	
+	void TurnToTempSpell();
 
 	BYTE GetKeyinMask(BOOL bAssociate,BYTE byMask);
 

@@ -2213,6 +2213,37 @@ BOOL CInputState::KeyIn_Line_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 }
 
 
+void CInputState::TurnToTempSpell()
+{
+	if(m_ctx.compMode==IM_SPELL)
+	{//拼音输入状态
+		if(IsTempSpell())
+		{//退出临时拼音状态
+			m_ctx.compMode = IM_SHAPECODE;
+			InputHide(FALSE);
+			InputEnd();
+			StatusbarUpdate();
+			ClearContext(CPC_ALL);
+		}
+	}else if(g_SettingsG->compMode==IM_SHAPECODE && m_ctx.inState==INST_CODING)
+	{//五笔输入状态，进入临时拼音状态
+		ClearContext(CPC_ALL);
+		m_ctx.compMode=IM_SPELL;
+		m_ctx.bShowTip=TRUE;
+		m_ctx.iTip = -1;
+		strcpy(m_ctx.szTip,"临时拼音:上屏后自动提示编码");
+		InputOpen();
+		InputUpdate();
+		StatusbarUpdate();
+		SLOG_INFO("");
+		if (!m_pListener->IsCompositing())
+		{//query cursor position
+			InputStart();
+			InputEnd();
+		}
+	} 
+}
+
 BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState)
 {
 	BOOL bRet=FALSE;
@@ -2303,6 +2334,9 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 			case HKI_Record:
 				m_pListener->OnCommand(CMD_HOTKEY_RECORD, 0);
 				break;
+			case HKI_TempSpell:
+				TurnToTempSpell();
+				break;
 			}
 		}
 		m_bPressOther = TRUE;
@@ -2370,33 +2404,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 			{
 				if(g_SettingsG->byTempSpellKey==byKey)
 				{//临时拼音
-					if(m_ctx.compMode==IM_SPELL)
-					{//拼音输入状态
-						if(IsTempSpell())
-						{//退出临时拼音状态
-							m_ctx.compMode = IM_SHAPECODE;
-							InputHide(FALSE);
-							InputEnd();
-							StatusbarUpdate();
-							ClearContext(CPC_ALL);
-						}
-					}else if(g_SettingsG->compMode==IM_SHAPECODE && m_ctx.inState==INST_CODING)
-					{//五笔输入状态，进入临时拼音状态
-						ClearContext(CPC_ALL);
-						m_ctx.compMode=IM_SPELL;
-						m_ctx.bShowTip=TRUE;
-						m_ctx.iTip = -1;
-						strcpy(m_ctx.szTip,"临时拼音:上屏后自动提示编码");
-						InputOpen();
-						InputUpdate();
-						StatusbarUpdate();
-						SLOG_INFO("");
-						if (!m_pListener->IsCompositing())
-						{//query cursor position
-							InputStart();
-							InputEnd();
-						}
-					} 
+					TurnToTempSpell();
 				}else if(!g_SettingsG->bDisableFnKey && ((g_SettingsG->byTempSpellKey==0 && byKey==0xC1)||g_SettingsG->byTempSpellKey!=0))
 				{//功能键, 0xC1=右Ctrl
 					if(!KeyIn_IsCoding(&m_ctx)) 

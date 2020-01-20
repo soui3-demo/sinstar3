@@ -13,7 +13,7 @@ enum HotKeyIndex{
 	HKI_Record,			// record input
 	HKI_TTS,			// tts
 	HKI_UDMode,			// user define mode
-
+	HKI_TempSpell,		// temp spell
 	HKI_COUNT,
 
 	HKI_AdjustRate,		// 快速调频: ctrl+重码号 

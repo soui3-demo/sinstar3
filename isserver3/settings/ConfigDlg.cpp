@@ -379,6 +379,7 @@ namespace SOUI
 		FindAndSetHotKey(R.id.hk_tts, g_SettingsG->dwHotkeys[HKI_TTS]);
 		FindAndSetHotKey(R.id.hk_record, g_SettingsG->dwHotkeys[HKI_Record]);
 		FindAndSetHotKey(R.id.hk_to_umode, g_SettingsG->dwHotkeys[HKI_UDMode]);
+		FindAndSetHotKey(R.id.hk_switch_tempspell,g_SettingsG->dwHotkeys[HKI_TempSpell]);
 	}
 
 	void CConfigDlg::InitPageAssociate()
@@ -798,7 +799,7 @@ SWindow *pCtrl = FindChildByID(id);\
 			g_SettingsG->byTempSpellKey = 0xC1;
 			break;
 		default:
-			g_SettingsG->byTempSpellKey = FALSE;
+			g_SettingsG->byTempSpellKey = 0;
 			break;
 		}
 	}
@@ -931,6 +932,8 @@ SWindow *pCtrl = FindChildByID(id);\
 			//hotpage
 		case R.id.hk_switch_py:
 			g_SettingsG->dwHotkeys[HKI_Mode] = dwAccel; break;
+		case R.id.hk_switch_tempspell:
+			g_SettingsG->dwHotkeys[HKI_TempSpell] = dwAccel; break;
 		case R.id.hk_make_phrase:
 			g_SettingsG->dwHotkeys[HKI_MakePhrase] = dwAccel; break;
 		case R.id.hk_show_table:

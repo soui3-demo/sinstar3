@@ -21,6 +21,7 @@ const static HotKeyEntry KHotKeyEntryMap[] = {
 	{ HKI_FilterGbk,_T("HotKey_FilterGbk"),_T("ctrl+alt+g") },
 	{ HKI_Record,_T("HotKey_Record"),_T("ctrl+alt+r") },
 	{ HKI_TTS,_T("HotKey_TTS"),_T("ctrl+alt+t") },
+	{ HKI_TempSpell,_T("HotKey_TempSpell"),_T("")},
 };
 
 
