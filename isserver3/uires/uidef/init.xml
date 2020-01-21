@@ -22,7 +22,7 @@
     <listview class="edit_border"/>
     <mclistview class="edit_border"/>
     <group  padding="10,10,10,15"/>
-    <hotkey class="edit_border"  padding="5,0,5,0"/>
+    <hotkey class="edit_border"  padding="5,0,5,0" invalidComb="alt" invalidModifier="ctrl+alt"/>
     <link class="cls_btn_weblink"/>
     <EnCand colorIndex="@color/cand_index" colorCand="@color/cand_text" colorPhonetic="@color/cand_phonetic"/>
     <PhraseCand colorIndex="@color/cand_index" colorCand="@color/cand_text" />

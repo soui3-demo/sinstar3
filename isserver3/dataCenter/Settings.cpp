@@ -144,6 +144,7 @@ void CSettingsGlobal::Load(const SStringT & strDataPath)
 	byTurnPageUpVK=GetPrivateProfileInt(KSession,_T("TurnPageUpVK"),VkKeyScan('-'),strConfigIni);
 	byTurnPageDownVK=GetPrivateProfileInt(KSession,_T("TurnPageDownVK"),VkKeyScan('='),strConfigIni);
 
+	memset(dwHotkeys,0,sizeof(dwHotkeys));
 	for (int i = 0; i < ARRAYSIZE(KHotKeyEntryMap); i++)
 	{
 		GetPrivateProfileString(KSession, KHotKeyEntryMap[i].szName, KHotKeyEntryMap[i].szDefault, szBuf, 100, strConfigIni);
