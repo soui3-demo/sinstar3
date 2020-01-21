@@ -34,6 +34,7 @@ namespace SOUI
 			ATTR_COLOR(L"colorWild", m_crWild, TRUE)
 			ATTR_COLOR(L"shadowColor", m_crShadow, TRUE)
 			ATTR_POINT(L"shadowOffset", m_ptShadowOffset, TRUE);
+			ATTR_LAYOUTSIZE(L"maxCandWidth",m_maxCandWidth,TRUE)
 		SOUI_ATTRS_END()
 
 		TCHAR	 m_cWild;
@@ -41,6 +42,7 @@ namespace SOUI
 		SStringT m_strInput;
 		SStringT m_strCand;
 		SStringT m_strComp;
+		SLayoutSize m_maxCandWidth;
 
 		enum {
 			CAND_NORMAL=0,//normal candidate

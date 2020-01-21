@@ -3,7 +3,7 @@
 
 namespace SOUI
 {
-	SCandView::SCandView(void):m_byRate(0),m_cWild(0), m_crShadow(CR_INVALID), m_ptShadowOffset(1,1)
+	SCandView::SCandView(void):m_byRate(0),m_cWild(0), m_crShadow(CR_INVALID), m_ptShadowOffset(1,1),m_maxCandWidth(250.0f,SLayoutSize::dp)
 	{
 		m_crCand[CAND_NORMAL] = RGBA(0, 0, 0, 255);
 		m_crCand[CAND_GBK] = m_crCand[CAND_FORECAST] = 
@@ -36,18 +36,11 @@ namespace SOUI
 			pt.y = rcText.bottom - szBlock.cy;
 		}
 
+		//draw index
 		pRT->SetTextColor(m_crIndex);
 		pRT->TextOut(pt.x,pt.y,m_strIndex,m_strIndex.GetLength());
 		pRT->MeasureText(m_strIndex,m_strIndex.GetLength(),&szBlock);
 		pt.x += szBlock.cx;
-
-		if (m_crShadow != CR_INVALID)
-		{//draw shadow
-			COLORREF crOld = pRT->SetTextColor(m_crShadow);
-			CPoint pt2 = pt + m_ptShadowOffset;
-			pRT->TextOut(pt2.x, pt2.y, m_strCand, m_strCand.GetLength());
-			pRT->SetTextColor(crOld);
-		}
 
 		COLORREF crCand = CR_INVALID;
 		if(m_bGbk)
@@ -79,8 +72,22 @@ namespace SOUI
 		if (crCand == CR_INVALID)
 			crCand = m_crCand[CAND_NORMAL];
 		pRT->SetTextColor(crCand);
-		pRT->TextOut(pt.x,pt.y,m_strCand,m_strCand.GetLength());
 		pRT->MeasureText(m_strCand,m_strCand.GetLength(),&szBlock);
+		if(m_maxCandWidth.isValid())
+		{
+			szBlock.cx = min(szBlock.cx,m_maxCandWidth.toPixelSize(GetScale()));
+		}
+		if (m_crShadow != CR_INVALID)
+		{//draw shadow
+			COLORREF crOld = pRT->SetTextColor(m_crShadow);
+			pRT->DrawText(m_strCand,m_strCand.GetLength(),CRect(pt+m_ptShadowOffset,szBlock),DT_VCENTER|DT_SINGLELINE|DT_END_ELLIPSIS);
+			pRT->SetTextColor(crOld);
+		}
+		pRT->DrawText(m_strCand,m_strCand.GetLength(),CRect(pt,szBlock),DT_VCENTER|DT_SINGLELINE|DT_END_ELLIPSIS);
+		if (m_crShadow != CR_INVALID)
+		{
+			pt.x += m_ptShadowOffset.x;
+		}
 		pt.x += szBlock.cx;
 
 		if(m_byRate==RATE_MIXSP)
@@ -145,6 +152,10 @@ namespace SOUI
 		szRet.cy = sz.cy;
 
 		pRT->MeasureText(m_strCand,m_strCand.GetLength(),&sz);
+		if(m_maxCandWidth.isValid())
+		{
+			sz.cx = min(sz.cx,m_maxCandWidth.toPixelSize(GetScale()));
+		}
 		if (m_crShadow != CR_INVALID)
 		{
 			szRet.cx += m_ptShadowOffset.x;
