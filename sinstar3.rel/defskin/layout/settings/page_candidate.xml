@@ -8,17 +8,17 @@
     <check name="chk_enable_23cand_hotkey" text="启用快捷2,3重码"/>
     <window  extend_left="5" layout="gridlayout" xInterval="10dp" yInterval="10dp" columnCount="2">
       <text text="第2重码"/>
-      <hotkey name="hk_2_cand" width="50dp" invalidComb="7"/>
+      <hotkey name="hk_2_cand" width="50dp" invalidComb="ctrl+shift+alt" invalidModifier=""/>
       <text text="第3重码"/>
-      <hotkey name="hk_3_cand" width="50dp" invalidComb="7"/>
+      <hotkey name="hk_3_cand" width="50dp" invalidComb="ctrl+shift+alt" invalidModifier=""/>
     </window>
     <check  name="chk_disable_number_to_select_cand" text="禁止数字键选择重码"/>
     <text >重码翻页</text>
     <window  extend_left="5" layout="gridlayout" xInterval="10dp" yInterval="10dp" columnCount="2">
       <text text="前翻页"/>
-      <hotkey name="hk_turn_prev" width="50dp" invalidComb="7"/>
+      <hotkey name="hk_turn_prev" width="50dp" invalidComb="ctrl+shift+alt" invalidModifier=""/>
       <text text="后翻页"/>
-      <hotkey name="hk_turn_next" width="50dp" invalidComb="7"/>
+      <hotkey name="hk_turn_next" width="50dp" invalidComb="ctrl+shift+alt" invalidModifier=""/>
     </window>
     <text >GBK重码显示策略</text>
     <window  layout="vbox">
