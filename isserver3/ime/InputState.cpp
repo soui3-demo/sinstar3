@@ -432,7 +432,7 @@ void CInputState::ClearContext(UINT dwMask)
 	if(dwMask & CPC_TIP)
 	{
 		m_ctx.szTip[0]=0;
-		//m_ctx.iTip = -1;
+		m_ctx.bShowTip=FALSE;
 	}
 	if (dwMask & CPC_UDCOMP)
 	{
@@ -2552,8 +2552,7 @@ BOOL CInputState::OnSvrNotify(UINT wp, PMSGDATA pMsg)
 			InputContext * ctx = &m_ctx;
 			if(INST_CODING== ctx->inState && SBST_ASSOCIATE==ctx->sbState)
 			{//保证当前状态是等待联想数据状态
-
-				ClearContext(CPC_CAND);
+				ClearContext(CPC_CAND|CPC_TIP);
 				if(pMsg->sSize)
 				{
 					LPBYTE pbyData=pMsg->byData;
