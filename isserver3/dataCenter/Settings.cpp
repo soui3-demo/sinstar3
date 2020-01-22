@@ -231,6 +231,8 @@ void CSettingsGlobal::Load(const SStringT & strDataPath)
 	urlComp = szBuf;
 	GetPrivateProfileString(KUrl, _T("statistics"), _T("https://soime.cn/tongji/skTjApi/api.php?soft_id=6&countype_id=4&ditch_id=100"), szBuf, MAX_PATH, strConfigIni);
 	urlStatistics = szBuf;
+	GetPrivateProfileString(KUrl, _T("forum"), _T("http://www.soui.vip/forum.php?gid=51"), szBuf, MAX_PATH, strConfigIni);
+	urlForum = szBuf;
 
 	SetModified(false);
 }

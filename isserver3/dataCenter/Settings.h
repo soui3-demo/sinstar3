@@ -98,6 +98,7 @@ public:
 
 	SStringT urlSkin;
 	SStringT urlComp;
+	SStringT urlForum;
 	SStringT urlStatistics;
 };
 

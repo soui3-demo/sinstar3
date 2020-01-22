@@ -740,6 +740,9 @@ namespace SOUI
 		else if(nRet == R.id.skin_def)
 		{
 			m_pCmdListener->OnCommand(CMD_CHANGESKIN, (LPARAM)&SStringT());
+		}else if(nRet == R.id.menu_forum)
+		{
+			ShellExecute(NULL, _T("open"), g_SettingsG->urlForum, NULL, NULL, SW_SHOWNORMAL);
 		}
 		else
 		{

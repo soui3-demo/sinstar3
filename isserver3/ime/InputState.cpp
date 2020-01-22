@@ -1439,6 +1439,7 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 		SStringA strResultA;
 		if(lpCntxtPriv->inState==INST_CODING)
 		{//普通编码输入
+			lpCntxtPriv->bShowTip=FALSE;
 			if(lpCntxtPriv->sbState==::SBST_NORMAL)
 			{//编码输入状态
 				if(lpCntxtPriv->compMode==IM_SPELL)
@@ -2552,7 +2553,7 @@ BOOL CInputState::OnSvrNotify(UINT wp, PMSGDATA pMsg)
 			InputContext * ctx = &m_ctx;
 			if(INST_CODING== ctx->inState && SBST_ASSOCIATE==ctx->sbState)
 			{//保证当前状态是等待联想数据状态
-				ClearContext(CPC_CAND|CPC_TIP);
+				ClearContext(CPC_CAND);
 				if(pMsg->sSize)
 				{
 					LPBYTE pbyData=pMsg->byData;

@@ -51,5 +51,6 @@
   <item text="打字速度" name="key_speed" id="111" icon="8"/>
   <sep/>
   <item text="查看帮助" name="help" id="112" icon="10"/>
+  <item text="论    坛" name="menu_forum" id="114"/>
   <item text="捐助启程" name="menu_donate" id="113" icon="9"/>
 </menu>
