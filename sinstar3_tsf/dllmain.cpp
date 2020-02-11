@@ -28,7 +28,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
 
 			//check for black list
 			TCHAR szBlacklist[MAX_PATH];
-			_stprintf(szBlacklist,_T("%s\\server\\blacklist.txt"),szPathClient);
+			_stprintf(szBlacklist,_T("%s\\data\\blacklist.txt"),szPathClient);
 			if(CSinstarProxy::isInBlackList(szBlacklist))
 				return FALSE;
 
