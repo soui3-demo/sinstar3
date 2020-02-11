@@ -14,42 +14,53 @@ namespace SOUI{
 	}
 }
 
+static const wchar_t KBuiltinBlackList[]=L"searchui.exe";
 
 bool CSinstarProxy::isInBlackList(LPCTSTR pszBlacklistFile)
 {
 	bool bRet = false;
 
+	wchar_t *wcsBuf=NULL;
 	FILE * f = _tfopen(pszBlacklistFile,_T("r"));
-	if(!f)
-		return bRet;
-	fseek(f,0,SEEK_END);
-	long len = ftell(f);
-	fseek(f,0,SEEK_SET);
-	char * buf=(char*)malloc(len+1);
-	fread(buf,1,len,f);
-	buf[len]=0;
-	fclose(f);
-
-	wchar_t *wcsBuf=(wchar_t*)malloc((len+100)*sizeof(wchar_t));
-	if(buf[0]==0xef && buf[1]==0xbb && buf[2]==0xbf)
-	{//utf8 { 0xef,0xbb,0xbf }
-		len = MultiByteToWideChar(CP_UTF8,0,buf,len,wcsBuf,len+100);
-	}else if(buf[0]==0xfe && buf[1]==0xff)
-	{//utf16
-		memcpy(wcsBuf,buf,len);
-		len/=sizeof(wchar_t);
-	}else
-	{//ansi
-		len = MultiByteToWideChar(CP_ACP,0,buf,len,wcsBuf,len+100);
-	}
-	wcsBuf[len]=0;
-	//make lower
-	for(int i=0;i<len;i++)
+	if(f)
 	{
-		if(isupper(wcsBuf[i]))
-			wcsBuf[i] = tolower(wcsBuf[i]);
+		fseek(f,0,SEEK_END);
+		long len = ftell(f);
+		if(len==0)
+		{
+			return false;
+			fclose(f);
+		}
+		fseek(f,0,SEEK_SET);
+		char * buf=(char*)malloc(len+1);
+		fread(buf,1,len,f);
+		buf[len]=0;
+		fclose(f);
+
+		wcsBuf=(wchar_t*)malloc((len+100)*sizeof(wchar_t));
+		if(buf[0]==0xef && buf[1]==0xbb && buf[2]==0xbf)
+		{//utf8 { 0xef,0xbb,0xbf }
+			len = MultiByteToWideChar(CP_UTF8,0,buf,len,wcsBuf,len+100);
+		}else if(buf[0]==0xfe && buf[1]==0xff)
+		{//utf16
+			memcpy(wcsBuf,buf,len);
+			len/=sizeof(wchar_t);
+		}else
+		{//ansi
+			len = MultiByteToWideChar(CP_ACP,0,buf,len,wcsBuf,len+100);
+		}
+		wcsBuf[len]=0;
+		//make lower
+		for(int i=0;i<len;i++)
+		{
+			if(isupper(wcsBuf[i]))
+				wcsBuf[i] = tolower(wcsBuf[i]);
+		}
+		free(buf);
+	}else
+	{
+		wcsBuf=wcsdup(KBuiltinBlackList);
 	}
-	free(buf);
 
 	wchar_t szPath[MAX_PATH+1];
 	GetModuleFileNameW(NULL,szPath,MAX_PATH);
