@@ -70,7 +70,7 @@ public:
 		return bHandled;
 	}
 
-	static bool isInBlackList();
+	static bool isInBlackList(LPCTSTR pszBlacklistFile);
 public:
 	// Í¨¹ý ISinstar ¼Ì³Ð
 	virtual void OnIMESelect(BOOL bSelect) override;

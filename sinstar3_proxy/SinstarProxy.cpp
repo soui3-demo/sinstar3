@@ -3,6 +3,7 @@
 #include <shellapi.h>
 #include "../helper/helper.h"
 #include <assert.h>
+#include <SIpcObject/ShareMemBuffer.h>
 
 using namespace SOUI;
 
@@ -13,25 +14,60 @@ namespace SOUI{
 	}
 }
 
-const LPCTSTR kBlackList[]=
-{
-_T("SearchUI.exe"),//win10 ¿ªÊ¼²Ëµ¥
-};
 
-bool CSinstarProxy::isInBlackList()
+bool CSinstarProxy::isInBlackList(LPCTSTR pszBlacklistFile)
 {
-	TCHAR szPath[MAX_PATH+1];
-	GetModuleFileName(NULL,szPath,MAX_PATH);
-	LPCTSTR pszName = _tcsrchr(szPath,_T('\\'));
+	bool bRet = false;
+
+	FILE * f = _tfopen(pszBlacklistFile,_T("r"));
+	if(!f)
+		return bRet;
+	fseek(f,0,SEEK_END);
+	long len = ftell(f);
+	fseek(f,0,SEEK_SET);
+	char * buf=(char*)malloc(len+1);
+	fread(buf,1,len,f);
+	buf[len]=0;
+	fclose(f);
+
+	wchar_t *wcsBuf=(wchar_t*)malloc((len+100)*sizeof(wchar_t));
+	if(buf[0]==0xef && buf[1]==0xbb && buf[2]==0xbf)
+	{//utf8 { 0xef,0xbb,0xbf }
+		len = MultiByteToWideChar(CP_UTF8,0,buf,len,wcsBuf,len+100);
+	}else if(buf[0]==0xfe && buf[1]==0xff)
+	{//utf16
+		memcpy(wcsBuf,buf,len);
+		len/=sizeof(wchar_t);
+	}else
+	{//ansi
+		len = MultiByteToWideChar(CP_ACP,0,buf,len,wcsBuf,len+100);
+	}
+	wcsBuf[len]=0;
+	//make lower
+	for(int i=0;i<len;i++)
+	{
+		if(isupper(wcsBuf[i]))
+			wcsBuf[i] = tolower(wcsBuf[i]);
+	}
+	free(buf);
+
+	wchar_t szPath[MAX_PATH+1];
+	GetModuleFileNameW(NULL,szPath,MAX_PATH);
+	LPWSTR pszName = wcsrchr(szPath,L'\\');
 	assert(pszName);
 	pszName++;
-
-	for(int i=0;i<ARRAYSIZE(kBlackList);i++)
+	wchar_t *p=pszName;
+	while(*p)
 	{
-		if(_tcsicmp(kBlackList[i],pszName)==0)
-			return true;
+		if(isupper(*p))
+			*p = tolower(*p);
+		p++;
 	}
-	return false;
+	
+	bRet = wcsstr(wcsBuf,pszName)!=NULL;
+	free(wcsBuf);
+	
+	return bRet;
 }
 
 

@@ -25,14 +25,14 @@ translucent="1"
     
     <window size="-2,0" weight="1" layout="hbox" interval="10">
       <mclistview name="lv_plgroup" size="0,-2" weight="1" headerHeight="30" >
-        <header align="center" itemSwapEnable="1" fixWidth="0" colorBkgnd="#ffffff" >
+        <headerstyle align="center" itemSwapEnable="1" fixWidth="0" colorBkgnd="#ffffff" >
           <items>
             <item width="90">分组名称</item>
             <item width="70">容量</item>
             <item width="80">编辑</item>
             <item width="100">备注</item>
           </items>
-        </header>
+        </headerstyle>
         <template itemHeight="30" skin="skin_item_bg"  font="size:16">
           <window name="col_group" clipClient="1" layout="hbox" gravity="center" padding="5,0,5,0">
             <check name="chk_group_name" />

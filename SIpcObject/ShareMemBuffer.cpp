@@ -46,7 +46,7 @@ BOOL CShareMemBuffer::OpenMemFile(LPCTSTR pszName,DWORD dwMaximumSize , void * p
 	m_pMemBuf=::MapViewOfFile(m_hMap, FILE_MAP_READ | FILE_MAP_WRITE,0,0,0);//map whole file
 	if (!m_pMemBuf) goto error;
 	TCHAR szMutex[MAX_PATH];
-	_stprintf(szMutex, _T("mutex_%s"), pszName);
+	_stprintf(szMutex, _T("%s_mutex"), pszName);
 	m_hMutex = CreateEvent(psa, FALSE, TRUE, szMutex);
 	if (!m_hMutex && GetLastError() == ERROR_ACCESS_DENIED)
 	{

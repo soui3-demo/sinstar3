@@ -13,6 +13,7 @@
   </values>
 
   <IMG>
+    <file name="png_item_bg" path="image\item_bg.png"/>
   </IMG>
   <ICON>
     <file name="ICON_LOGO"  path="image\FindCallerUI.ico"/>

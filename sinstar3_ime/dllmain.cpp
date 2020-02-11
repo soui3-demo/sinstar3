@@ -20,25 +20,29 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 	switch (ul_reason_for_call)
 	{
 	case DLL_PROCESS_ATTACH:
-#ifdef _DEBUG
-		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF|_CRTDBG_LEAK_CHECK_DF);
-#endif
-		//check for black list
-		if(CSinstarProxy::isInBlackList())
-			return FALSE;
 		{
-			TCHAR szPath[MAX_PATH] = { 0 },szPathClient[MAX_PATH]={0};
+#ifdef _DEBUG
+			_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF|_CRTDBG_LEAK_CHECK_DF);
+#endif
+			TCHAR szPathSvr[MAX_PATH] = { 0 },szPathClient[MAX_PATH]={0};
 			CRegKey reg;
 			LONG ret = reg.Open(HKEY_LOCAL_MACHINE,_T("SOFTWARE\\SetoutSoft\\sinstar3"),KEY_READ|KEY_WOW64_64KEY);
 			if(ret == ERROR_SUCCESS)
 			{
 				ULONG len = MAX_PATH;
-				reg.QueryStringValue(_T("path_svr"),szPath,&len);
+				reg.QueryStringValue(_T("path_svr"),szPathSvr,&len);
 				len = MAX_PATH;
 				reg.QueryStringValue(_T("path_client"),szPathClient,&len);
 				reg.Close();
 			}
-			theModule = new CImeModule(hModule,szPath,szPathClient);
+
+			//check for black list
+			TCHAR szBlacklist[MAX_PATH];
+			_stprintf(szBlacklist,_T("%s\\server\\blacklist.txt"),szPathClient);
+			if(CSinstarProxy::isInBlackList(szBlacklist))
+				return FALSE;
+
+			theModule = new CImeModule(hModule,szPathSvr,szPathClient);
 		}
 		break;
 	case DLL_THREAD_ATTACH:

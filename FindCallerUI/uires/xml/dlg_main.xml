@@ -14,14 +14,14 @@ translucent="1"
     <window pos="5,[2,-5,-5" layout="vbox">
       <window size="-2,0" weight="1" layout="hbox" interval="10">
         <mclistview size="0,-2" weight="1" name="mclv_tasks" headerHeight="30">
-            <header align="center" itemSwapEnable="1" fixWidth="0" font="underline:0,adding:-3" sortHeader="1" colorBkgnd="#ffffff" >
+            <headerstyle align="center" itemSwapEnable="1" fixWidth="0" font="underline:0,adding:-3" sortHeader="1" colorBkgnd="#ffffff" >
               <items>
                 <item width="95">进程ID</item>
                 <item width="150">名称</item>
                 <item width="400">路径</item>
               </items>
-            </header>
-            <template itemHeight="40" colorHover="#cccccc" colorSelected="#0000ff">
+            </headerstyle>
+            <template itemHeight="30" skin="skin_item_bg">
               <window name="col_pid" clipClient="1" layout="hbox" gravity="center">
                 <text name="txt_pid">100</text>
               </window>

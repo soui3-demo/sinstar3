@@ -6,14 +6,14 @@
   </window>
   <window size="-2,-1" layout="vbox" interval="10" padding_left="50">
   <mclistview name="mc_phraselib" headerHeight="30" size="-2,130" sbSkin="skin_scrollbar" >
-    <header align="center" itemSwapEnable="1" fixWidth="0" colorBkgnd="#ffffff" >
+    <headerstyle align="center" itemSwapEnable="1" fixWidth="0" colorBkgnd="#ffffff" >
       <items>
         <item width="90">分组名称</item>
         <item width="70">容量</item>
         <item width="80">编辑</item>
         <item width="100">备注</item>
       </items>
-    </header>
+    </headerstyle>
     <template itemHeight="30" skin="skin_item_bg"  font="size:16">
       <window name="col_group" clipClient="1" layout="hbox" gravity="center">
         <check name="chk_group_name" />
