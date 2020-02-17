@@ -335,7 +335,7 @@ DWORD ISComm_TTS(LPCSTR pszText,char cTextLen,BYTE byMask)
 	return ISComm_PostMsg(CT_TTS,s_byBuf,(short)(cTextLen+1),0);
 }
 
-DWORD ISComm_RateAdjust(LPCSTR pszComp,char cCompLen,LPCSTR pszPhrase,unsigned unsigned char cPhraseLen,BYTE byMode,HWND hWnd)
+DWORD ISComm_RateAdjust(LPCSTR pszComp,char cCompLen,LPCSTR pszPhrase, unsigned char cPhraseLen,BYTE byMode,HWND hWnd)
 {
 	BYTE *pBuf=s_byBuf;
 	short sSize=0;
