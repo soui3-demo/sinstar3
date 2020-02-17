@@ -142,10 +142,10 @@ PMSGDATA ISComm_OnSeverNotify(HWND hWnd,WPARAM wParam,LPARAM lParam);
 DWORD ISComm_KeyIn(LPCSTR pszText,short sSize,BYTE byMask,HWND hWnd);
 
 DWORD ISComm_QueryCand(LPCSTR pszComp,char cCompLen,BYTE byMask,HWND hWnd);
-DWORD ISComm_QueryComp(LPCSTR pszPhrase,char cPhraseLen);
+DWORD ISComm_QueryComp(LPCSTR pszPhrase,unsigned char cPhraseLen);
 DWORD ISComm_Forecast(LPCSTR pszComp,char cCompLen);
 
-DWORD ISComm_SpellQueryComp(LPCSTR pszPhrase,char cPhraseLen);
+DWORD ISComm_SpellQueryComp(LPCSTR pszPhrase,unsigned char cPhraseLen);
 DWORD ISComm_SpellForecast(char szPrefix[2],LPBYTE *pbyBlurs,BYTE bySyllables);
 DWORD ISComm_Spell2ID(LPCSTR pszSpell,char cCompLen);
 DWORD ISComm_SpellGetBlur(LPCSTR pszSpell,char cCompLen);
@@ -155,14 +155,14 @@ DWORD ISComm_Ch2En(LPCSTR pszWord,char cWordLen);
 DWORD ISComm_UDQueryCand(LPCSTR pszComp,char cCompLen);
 
 DWORD ISComm_TTS(LPCSTR pszText,char cTextLen,BYTE byMask);
-DWORD ISComm_RateAdjust(LPCSTR pszComp,char cCompLen,LPCSTR pszPhrase,char cPhraseLen,BYTE byMode,HWND hWnd);
+DWORD ISComm_RateAdjust(LPCSTR pszComp,char cCompLen,LPCSTR pszPhrase,unsigned cPhraseLen,BYTE byMode,HWND hWnd);
 DWORD ISComm_EnQueryCand(LPCSTR pszText,char cTextLen);
 DWORD ISComm_MakePhrase(LPCSTR pszText,char cTextLen);
 DWORD ISComm_ShowServer(LPCSTR pszPageName,char cTextLen);
 DWORD ISComm_ServerVersion();
-DWORD ISComm_PhraseDel(LPCSTR pszComp,char cCompLen,LPCSTR pszPhrase,char cPhraseLen,HWND hWnd);
+DWORD ISComm_PhraseDel(LPCSTR pszComp,char cCompLen,LPCSTR pszPhrase,unsigned char cPhraseLen,HWND hWnd);
 DWORD ISComm_LineQueryCand(LPCSTR pszComp,char cCompLen);
-int ISComm_PhraseRate(LPCSTR pszPhrase,char cPhraseLen);
+int ISComm_PhraseRate(LPCSTR pszPhrase,unsigned char cPhraseLen);
 
 DWORD ISComm_QueryUserDict(LPCSTR pszkey,char cKeyLen);
 DWORD ISComm_SortWordByBiHua(LPCSTR pszBiHua,char cBiHuaLen,LPCSTR pszWordList,short nWords);

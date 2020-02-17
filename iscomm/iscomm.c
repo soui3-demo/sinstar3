@@ -251,7 +251,7 @@ DWORD ISComm_QueryCand(LPCSTR pszComp,char cCompLen,BYTE byMask,HWND hWnd)
 	return ISComm_SendMsg(CT_QUERYCAND,(LPVOID)s_byBuf,(short)(cCompLen+1),hWnd);
 }
 
-DWORD ISComm_QueryComp(LPCSTR pszPhrase,char cPhraseLen)
+DWORD ISComm_QueryComp(LPCSTR pszPhrase,unsigned char cPhraseLen)
 {
 	return ISComm_SendMsg(CT_QUERYCOMP,(LPVOID)pszPhrase,cPhraseLen,0);
 }
@@ -266,7 +266,7 @@ DWORD ISComm_Forecast(LPCSTR pszComp,char cCompLen)
 	return ISComm_SendMsg(CT_FORECAST,(LPVOID)pszComp,cCompLen,0);
 }
 
-DWORD ISComm_SpellQueryComp(LPCSTR pszPhrase,char cPhraseLen)
+DWORD ISComm_SpellQueryComp(LPCSTR pszPhrase,unsigned char cPhraseLen)
 {
 	return ISComm_SendMsg(CT_SPELLQUERYCOMP,(LPVOID)pszPhrase,cPhraseLen,0);
 }
@@ -335,7 +335,7 @@ DWORD ISComm_TTS(LPCSTR pszText,char cTextLen,BYTE byMask)
 	return ISComm_PostMsg(CT_TTS,s_byBuf,(short)(cTextLen+1),0);
 }
 
-DWORD ISComm_RateAdjust(LPCSTR pszComp,char cCompLen,LPCSTR pszPhrase,char cPhraseLen,BYTE byMode,HWND hWnd)
+DWORD ISComm_RateAdjust(LPCSTR pszComp,char cCompLen,LPCSTR pszPhrase,unsigned unsigned char cPhraseLen,BYTE byMode,HWND hWnd)
 {
 	BYTE *pBuf=s_byBuf;
 	short sSize=0;
@@ -351,7 +351,7 @@ DWORD ISComm_RateAdjust(LPCSTR pszComp,char cCompLen,LPCSTR pszPhrase,char cPhra
 	return ISComm_SendMsg(CT_RATEADJUST,s_byBuf,sSize,hWnd);
 }
 
-DWORD ISComm_PhraseDel(LPCSTR pszComp,char cCompLen,LPCSTR pszPhrase,char cPhraseLen,HWND hWnd)
+DWORD ISComm_PhraseDel(LPCSTR pszComp,char cCompLen,LPCSTR pszPhrase,unsigned char cPhraseLen,HWND hWnd)
 {
 	BYTE *pBuf=s_byBuf;
 	short sSize=0;
@@ -396,7 +396,7 @@ DWORD ISComm_ServerVersion()
 	return ISComm_SendMsg(CT_SERVERVERSION,NULL,0,0);
 }
 
-int ISComm_PhraseRate(LPCSTR pszPhrase,char cPhraseLen)
+int ISComm_PhraseRate(LPCSTR pszPhrase,unsigned char cPhraseLen)
 {
 	int nRet=-1;
 	if(ISComm_SendMsg(CT_PHRASERATE,(LPVOID)pszPhrase,cPhraseLen,0)==ISACK_SUCCESS)
