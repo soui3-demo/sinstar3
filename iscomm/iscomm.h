@@ -155,7 +155,7 @@ DWORD ISComm_Ch2En(LPCSTR pszWord,char cWordLen);
 DWORD ISComm_UDQueryCand(LPCSTR pszComp,char cCompLen);
 
 DWORD ISComm_TTS(LPCSTR pszText,char cTextLen,BYTE byMask);
-DWORD ISComm_RateAdjust(LPCSTR pszComp,char cCompLen,LPCSTR pszPhrase,unsigned cPhraseLen,BYTE byMode,HWND hWnd);
+DWORD ISComm_RateAdjust(LPCSTR pszComp,char cCompLen,LPCSTR pszPhrase,unsigned char cPhraseLen,BYTE byMode,HWND hWnd);
 DWORD ISComm_EnQueryCand(LPCSTR pszText,char cTextLen);
 DWORD ISComm_MakePhrase(LPCSTR pszText,char cTextLen);
 DWORD ISComm_ShowServer(LPCSTR pszPageName,char cTextLen);
