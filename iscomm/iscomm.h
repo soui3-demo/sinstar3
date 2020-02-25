@@ -175,7 +175,7 @@ DWORD ISComm_Blur_DelAll();
 
 DWORD ISComm_QueryWordSpell(char szWord[2]);
 DWORD ISComm_SpellMemoryEx(LPCSTR pszText,char cTextLen,BYTE (*pbySpellID)[2]);
-DWORD ISComm_SymbolConvert(char cSymbol,char cType);
+DWORD ISComm_SymbolConvert(char cSymbol,char cType,char bChMode);
 
 DWORD ISComm_UserDict_List();
 DWORD ISComm_UserDict_Open(LPCSTR pszUserDict);

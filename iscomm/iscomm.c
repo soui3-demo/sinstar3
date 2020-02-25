@@ -494,10 +494,10 @@ DWORD ISComm_UserDict_Open(LPCSTR pszUserDict)
 	return ISComm_SendMsg(CT_USERDICT_OPEN,(LPVOID)pszUserDict,(short)strlen(pszUserDict),0);
 }
 
-DWORD ISComm_SymbolConvert(char cSymbol,char cType)
+DWORD ISComm_SymbolConvert(char cSymbol,char cType,char bChMode)
 {
-	char szBuf[2]={cSymbol,cType};
-	return ISComm_SendMsg(CT_SYMBOL_CONVERT,(LPVOID)szBuf,2,0);
+	char szBuf[3]={cSymbol,cType,bChMode};
+	return ISComm_SendMsg(CT_SYMBOL_CONVERT,(LPVOID)szBuf,3,0);
 }
 
 DWORD ISComm_UserDict_Max()

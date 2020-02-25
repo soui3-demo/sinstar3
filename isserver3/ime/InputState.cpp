@@ -30,7 +30,6 @@ SStringA CInputState::Symbol_Convert(InputContext * lpCntxtPriv,UINT byInput,con
 {
 	char pBuf[100];
 	int nRet=0;
-	if(g_SettingsUI->bCharMode)
 	{
 		char cType=3;
 		if(byInput=='\'')
@@ -55,7 +54,7 @@ SStringA CInputState::Symbol_Convert(InputContext * lpCntxtPriv,UINT byInput,con
 				pBuf[0]=0x20;
 				nRet=1;
 			}
-		}else if(ISComm_SymbolConvert((char)byInput,cType)==ISACK_SUCCESS)
+		}else if(ISComm_SymbolConvert((char)byInput,cType,g_SettingsUI->bCharMode?1:0)==ISACK_SUCCESS)
 		{
 			PMSGDATA pMsg=ISComm_GetData();
 			if(pMsg->sSize<20)
@@ -231,7 +230,7 @@ int CInputState::TestHotKey(UINT uVk, const BYTE * lpbKeyState) const
 				return HKI_UnloadDebugSkin;
 			}
 		}
-		
+
 		if(m_ctx.sCandCount && ((uVk>='0' && uVk<='9')||(uVk>=VK_NUMPAD0 && uVk<=VK_NUMPAD9)))
 		{//number
 			if(lpbKeyState[VK_CONTROL] & 0x80)
