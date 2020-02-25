@@ -14,11 +14,11 @@ translucent="1"
     </caption>
     <window pos="5,[2,-5,-5" layout="vbox">
       <window size="-2,-1" layout="gridlayout" columnCount="3" xGravity="fill" xInterval="5" yInterval="5">
-        <text text="码表文件:" tip="ini格式ansi文本"  msgTransparent="0"/>
-        <edit size="0,30" name="edit_comp" columnWeight="1"/>
+        <text text="码表文件:" tip="码表生成器格式文本"  msgTransparent="0"/>
+        <edit size="0,30" name="edit_comp" columnWeight="1" cueText="码表生成器格式文本"/>
         <button size="50,30" name="btn_browse_comp" text="..."/>
         <text text="启程码表文件:" tip="cit格式二进制码表"  msgTransparent="0"/>
-        <edit size="0,30" name="edit_cit_save" weight="1"/>
+        <edit size="0,30" name="edit_cit_save" weight="1" cueText="保存为码表文件路径"/>
         <button size="50,30" name="btn_browse_save" text="..."/>
         <text text="字根表图片:" tip="png,gif,jpg格式，可以不提供" msgTransparent="0"/>
         <edit size="0,30" name="edit_keymap" weight="1"/>
@@ -29,8 +29,11 @@ translucent="1"
       </window>
       <window size="-2,-1" layout="hbox" padding="0,5,0,5">
         <check name="chk_symbol_first" text="标点可为首码"/>
+        <window size="0,0" weight="1" visible="0"/>
         <check name="chk_yinxingma" text="音形码优化"/>
+        <window size="0,0" weight="1" visible="0"/>
         <check name="chk_auto_select" text="唯一候选自动上屏"/>
+        <window size="0,0" weight="1" visible="0"/>
         <check name="chk_phrase_full_code" text="词组是全码"/>
       </window>
       <window size="-2,-1" layout="hbox" padding="0,5,0,5" gravity="center">
