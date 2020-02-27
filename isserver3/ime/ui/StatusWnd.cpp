@@ -187,7 +187,7 @@ namespace SOUI
 				int iSelComp = CDataCenter::getSingleton().GetSelectCompIndex();
 				for (int i = 0; i < (int)comps.GetCount(); i++)
 				{
-					SStringA strText = SStringA().Format("%s[%s]", comps[i].strName, comps[i].strType);
+					SStringA strText = SStringA().Format("%s[%s]",comps[i].strType, comps[i].strName);
 					UINT flag = MF_STRING;
 					if (iSelComp == i) flag |= MF_CHECKED;
 					smenuPopup.AppendMenu( flag, idStart + i+1, S_CA2T(strText, CP_GB));
