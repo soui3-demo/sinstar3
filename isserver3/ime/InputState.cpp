@@ -2250,6 +2250,12 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 	BOOL bKeyDown = !(lKeyData & 0x80000000);
 	if (!bKeyDown && (uKey != VK_SHIFT && uKey !=VK_CONTROL))
 		return FALSE;
+	if(uKey==VK_SPACE 
+		&& !g_SettingsG->bFullSpace
+		&& m_ctx.inState==INST_CODING && m_ctx.sbState!=SBST_SENTENCE && m_ctx.sCandCount==0)
+	{
+		return FALSE;
+	}
 	BOOL bOpen = m_pListener->IsInputEnable();
 	if (!bOpen)
 	{
