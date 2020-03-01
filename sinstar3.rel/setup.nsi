@@ -146,7 +146,7 @@ SectionEnd
 Function .onInit
    InitPluginsDir
    SetOutPath $PLUGINSDIR
-   ;File RegisterCore.dll
+   File RegisterCore.dll
    ;System::Call '$PLUGINSDIR\Register::Sinstar_GetCurrentVer2(*i,*i,*i,*i) i (r0r0,r1r1,r2r2,r3r3) .r4'
    ;IntCmp $4 1 0 Exit
    ;MessageBox MB_OK|MB_ICONSTOP  "Current Ver $0.$1.$2.$3 。$\r$\n$\r$\n点击 “确定” 退出安装程序。" IDOK Exit
