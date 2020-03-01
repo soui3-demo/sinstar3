@@ -77,16 +77,27 @@ void Sinstar_SetErrMsg(LPCTSTR szMsg)
 	_tcscpy_s(s_LastMsg,500*sizeof(TCHAR),szMsg);
 }
 
-LPCTSTR Sinstar_GetErrMsg(){
+LPCWSTR WINAPI  Sinstar_GetErrMsgW(){
 	return s_LastMsg;
 }
 
-void Sinstar_Init(LPCTSTR pszPath)
-{
-	_tcscpy_s(g_szPath,MAX_PATH*sizeof(TCHAR),pszPath);
+LPCSTR WINAPI  Sinstar_GetErrMsgA(){
+	static char szErrMsg[1000];
+	WideCharToMultiByte(CP_ACP,0,s_LastMsg,-1,szErrMsg,1000,NULL,NULL);
+	return szErrMsg;
 }
 
-BOOL Sinstar_ShowCaller()
+void WINAPI  Sinstar_InitW(LPCWSTR pszPath)
+{
+	wcscpy_s(g_szPath,MAX_PATH*sizeof(TCHAR),pszPath);
+}
+
+void WINAPI  Sinstar_InitA(LPCSTR pszPath)
+{
+	MultiByteToWideChar(CP_ACP,0,pszPath,strlen(pszPath),g_szPath,MAX_PATH);
+}
+
+BOOL WINAPI  Sinstar_ShowCaller()
 {
 	TCHAR szPath[MAX_PATH];
 	STARTUPINFO si = { sizeof(STARTUPINFO),0 };
@@ -157,7 +168,7 @@ BOOL GetSysWow64Dir(LPTSTR pszDir, int nLen)
 }
 
 
-BOOL Sinstar_IsRunning()
+BOOL WINAPI  Sinstar_IsRunning()
 {
 	HANDLE hMutex = CreateMutex(NULL, FALSE, SINSTAR3_MUTEX);
 	BOOL bRet = GetLastError() == ERROR_ALREADY_EXISTS;
@@ -294,30 +305,46 @@ BOOL Sinstar_UpdateIME()
 	}
 	return bCopied;
 }
+BOOL WINAPI  Sinstar_PEVersionW(LPCWSTR pszFileName,  int wVers[4])
+{
+	return Sinstar_PEVersion2W(pszFileName,wVers+0,wVers+1,wVers+2,wVers+3);
+}
 
-BOOL Sinstar_PEVersion(LPCTSTR pszFileName,  WORD wVers[4])
+BOOL WINAPI  Sinstar_PEVersion2W(LPCWSTR pszFileName,int *v1,int *v2,int *v3,int *v4)
 {
 	DWORD dwResHandle;
 	void *pBuf;
 	BOOL bRet = FALSE;
-	DWORD dwVerInfoSize = GetFileVersionInfoSize(pszFileName, &dwResHandle);
+	DWORD dwVerInfoSize = GetFileVersionInfoSizeW(pszFileName, &dwResHandle);
 	if (!dwVerInfoSize) return FALSE;
 	pBuf = malloc(dwVerInfoSize);
 	GetFileVersionInfo(pszFileName, dwResHandle, dwVerInfoSize, pBuf);
 	UINT nVersionLen;
 	VS_FIXEDFILEINFO *pstFileVersion;
-	if (VerQueryValue(pBuf, _T("\\"), (void**)&pstFileVersion, &nVersionLen) && nVersionLen >= sizeof(VS_FIXEDFILEINFO))
+	if (VerQueryValueW(pBuf, _T("\\"), (void**)&pstFileVersion, &nVersionLen) && nVersionLen >= sizeof(VS_FIXEDFILEINFO))
 	{
-		wVers[3] = LOWORD(pstFileVersion->dwFileVersionLS);
-		wVers[2] = HIWORD(pstFileVersion->dwFileVersionLS);
-		wVers[1] = LOWORD(pstFileVersion->dwFileVersionMS);
-		wVers[0] = HIWORD(pstFileVersion->dwFileVersionMS);
+		*v4 = LOWORD(pstFileVersion->dwFileVersionLS);
+		*v3 = HIWORD(pstFileVersion->dwFileVersionLS);
+		*v2 = LOWORD(pstFileVersion->dwFileVersionMS);
+		*v1 = HIWORD(pstFileVersion->dwFileVersionMS);
 	}
 	free(pBuf);
 	return TRUE;
 }
 
-BOOL Sinstar_GetCurrentVer(WORD wVers[4])
+BOOL WINAPI  Sinstar_PEVersion2A(LPCSTR pszFileName,int *v1,int *v2,int *v3,int *v4)
+{
+	WCHAR szPath[MAX_PATH]={0};
+	MultiByteToWideChar(CP_ACP,0,pszFileName,strlen(pszFileName),szPath,MAX_PATH);
+	return Sinstar_PEVersion2W(szPath,v1,v2,v3,v4);
+}
+
+BOOL WINAPI  Sinstar_PEVersionA(LPCSTR pszFileName,  int wVers[4])
+{
+	return Sinstar_PEVersion2A(pszFileName,wVers+0,wVers+1,wVers+2,wVers+3);
+}
+
+BOOL WINAPI  Sinstar_GetCurrentVer2(int *v1,int *v2,int *v3,int *v4)
 {
 	CRegKey reg;
 	LONG ret = reg.Open(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\SetoutSoft\\sinstar3"), KEY_READ | KEY_WOW64_64KEY);
@@ -333,10 +360,15 @@ BOOL Sinstar_GetCurrentVer(WORD wVers[4])
 
 	TCHAR szSvrPath[MAX_PATH];
 	_stprintf(szSvrPath,_T("%s\\program\\isserver3.exe"),szPath);
-	return Sinstar_PEVersion(szSvrPath,wVers);
+	return Sinstar_PEVersion2W(szSvrPath,v1,v2,v3,v4);
 }
 
-BOOL Sinstar_Update()
+BOOL WINAPI  Sinstar_GetCurrentVer(int wVers[4])
+{
+	return Sinstar_GetCurrentVer2(wVers+0,wVers+1,wVers+2,wVers+3);
+}
+
+BOOL WINAPI  Sinstar_Update()
 {	
 	if(Sinstar_IsRunning())
 	{
@@ -412,7 +444,7 @@ BOOL Sinstar_Update()
 	return TRUE;
 }
 
-BOOL Sinstar_Uninstall()
+BOOL WINAPI  Sinstar_Uninstall()
 {
 	TCHAR szSysPath[MAX_PATH], sysWow64[MAX_PATH];
 	::GetSystemDirectory(szSysPath, MAX_PATH);
@@ -481,7 +513,7 @@ void DeleteFileEx(LPCTSTR pszPath)
 	MoveFileEx(szTmpFile, NULL, MOVEFILE_DELAY_UNTIL_REBOOT);
 }
 
-BOOL Sinstar_ForceUninstall()
+BOOL WINAPI  Sinstar_ForceUninstall()
 {
 	TCHAR szSysPath[MAX_PATH], sysWow64[MAX_PATH];
 	TCHAR szPath[MAX_PATH];
@@ -573,7 +605,7 @@ BOOL MyCopyFile(LPCTSTR pszSour, LPCTSTR pszDest)
 }
 
 
-BOOL Sinstar_Install()
+BOOL WINAPI  Sinstar_Install()
 {
 	TCHAR szSysPath[MAX_PATH];
 	TCHAR szSysWow64[MAX_PATH] = { 0 };
@@ -628,7 +660,7 @@ BOOL Sinstar_Install()
 }
 
 
-BOOL Sinstar_CheckFiles()
+BOOL WINAPI  Sinstar_CheckFiles()
 {
 	for (int i = 0; i<ARRAYSIZE(KFiles); i++)
 	{
