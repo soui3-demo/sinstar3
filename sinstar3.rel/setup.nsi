@@ -27,6 +27,7 @@ Var /GLOBAL bUpdate
 !insertmacro MUI_PAGE_LICENSE "License.rtf"
 ; Components page
 !define MUI_PAGE_HEADER_TEXT "组件选择"
+!define MUI_PAGE_CUSTOMFUNCTION_SHOW fun_comp
 !insertmacro MUI_PAGE_COMPONENTS
 ; Directory page
 !define MUI_PAGE_CUSTOMFUNCTION_SHOW fun_dir
@@ -52,6 +53,14 @@ EnableWindow $0 0
 ;禁止编辑目录
 FindWindow $0 "#32770" "" $HWNDPARENT
 GetDlgItem $0 $0 1019
+EnableWindow $0 0
+Exit:
+FunctionEnd
+
+function fun_comp
+StrCmp $bUpdate "1" 0 Exit
+FindWindow $0 "#32770" "" $HWNDPARENT
+GetDlgItem $0 $0 1032
 EnableWindow $0 0
 Exit:
 FunctionEnd
@@ -158,7 +167,7 @@ SectionEnd
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 Function .onInit
-;StrCpy $bUpdate "0"
+;StrCpy $bUpdate "1"
 ;Goto Run
    InitPluginsDir
    SetOutPath $PLUGINSDIR
@@ -169,8 +178,8 @@ Function .onInit
    System::Call '$PLUGINSDIR\RegisterCore::Sinstar_IsRunning()i.R0'
    IntCmp $R0 1 0 no_run
    MessageBox MB_OKCANCEL|MB_ICONQUESTION  "安装程序检测到 ${PRODUCT_NAME} 正在运行。$\r$\n$\r$\n点击 “确定”查看调用程序，$\r$\n$\r$\n点击 “取消”退出安装程序。" IDOK 0 IDCANCEL Exit
-   System::Call '$PLUGINSDIR\RegisterCore::Sinstar_ShowCaller(i1)i.R0'
-   Goto Exit
+   ;System::Call '$PLUGINSDIR\RegisterCore::Sinstar_ShowCaller(i1)i.R0'
+   ;Goto Exit
    no_run:
    System::Call '$PLUGINSDIR\RegisterCore::Sinstar_GetCurrentVer2(*i,*i,*i,*i)i (.r0,.r1,.r2,.r3).r4'
    IntCmp $4 1 0 NewInstall
@@ -179,7 +188,7 @@ Function .onInit
    IntCmp $R1 $1 0 Degrade Upgrade
    IntCmp $R2 $2 0 Degrade Upgrade
    IntCmp $R3 $3 0 Degrade Upgrade
-   MessageBox MB_OK|MB_ICONSTOP  "您已经安装了${PRODUCT_NAME} $0.$1.$2.$3 。$\r$\n$\r$\n点击 “确定” 退出安装程序。" IDOK Exit
+   ;MessageBox MB_OK|MB_ICONSTOP  "您已经安装了${PRODUCT_NAME} $0.$1.$2.$3 。$\r$\n$\r$\n点击 “确定” 退出安装程序。" IDOK Exit
    Upgrade:
    MessageBox MB_OKCANCEL|MB_ICONSTOP  "确定升级${PRODUCT_NAME} $0.$1.$2.$3 到$R0.$R1.$R2.$R3吗?。$\r$\n$\r$\n点击 “确定” 升级，“取消”退出安装程序。" IDOK 0 IDCANCEL Exit
    StrCpy $bUpdate "1"
@@ -188,6 +197,47 @@ Function .onInit
    System::Call '$PLUGINSDIR\RegisterCore::Sinstar_GetInstallDir(t, *i) i(.r0, r1r1).r2'
    IntCmp $2 1 0 Run
    StrCpy $INSTDIR $0
+   
+   ;auto select sections, only program files and def skin will be updated.
+   IntOp $1 ${SF_SELECTED} ~
+
+   SectionGetFlags ${SEC_CORE} $R0
+   IntOp $0 $R0 | ${SF_SELECTED}
+   SectionSetFlags ${SEC_CORE} $0
+   
+   SectionGetFlags ${SEC_SKIN} $R0
+   IntOp $0 $R0 & $1
+   SectionSetFlags ${SEC_SKIN} $0
+   
+   SectionGetFlags ${SEC_TOOLS} $R0
+   IntOp $0 $R0 & $1
+   SectionSetFlags ${SEC_TOOLS} $0
+
+   SectionGetFlags ${COMP_WB86} $R0
+   IntOp $0 $R0 & $1
+   SectionSetFlags ${COMP_WB86} $0
+   SectionGetFlags ${COMP_WB98} $R0
+   IntOp $0 $R0 & $1
+   SectionSetFlags ${COMP_WB98} $0
+   SectionGetFlags ${COMP_WB2K} $R0
+   IntOp $0 $R0 & $1
+   SectionSetFlags ${COMP_WB2K} $0
+
+   SectionGetFlags ${COMP_BXM26} $R0
+   IntOp $0 $R0 & $1
+   SectionSetFlags ${COMP_BXM26} $0
+   
+   SectionGetFlags ${COMP_BXM31} $R0
+   IntOp $0 $R0 & $1
+   SectionSetFlags ${COMP_BXM31} $0
+   SectionGetFlags ${COMP_ZM66} $R0
+   IntOp $0 $R0 & $1
+   SectionSetFlags ${COMP_ZM66} $0
+
+   SectionGetFlags ${COMP_QS2B} $R0
+   IntOp $0 $R0 & $1
+   SectionSetFlags ${COMP_QS2B} $0
+
    Goto Run
    Degrade:
    MessageBox MB_OK|MB_ICONSTOP  "您已经安装了${PRODUCT_NAME} $0.$1.$2.$3 不能降级到$R0.$R1.$R2.$R3。$\r$\n$\r$\n点击 “确定” 退出安装程序。" IDOK Exit
