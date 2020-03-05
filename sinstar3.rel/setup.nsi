@@ -168,15 +168,15 @@ Section -AdditionalIcons
 SectionEnd
 
 Section -Post
-  System::Call '$PLUGINSDIR\RegisterCore::Sinstar_InitW(t$INSTDIR)'
+  System::Call '$PLUGINSDIR\RegisterCore::Sinstar_InitW(t) ("$INSTDIR")'
 
   StrCmp $bUpdate "1" upgrade install
   upgrade:
   System::Call '$PLUGINSDIR\RegisterCore::Sinstar_Update()'
   Goto finish
-  
+
   install:
-  System::Call '$PLUGINSDIR\RegisterCore::SSinstar_Install()'
+  System::Call '$PLUGINSDIR\RegisterCore::Sinstar_Install()'
   Goto finish
   finish:
 
@@ -224,7 +224,7 @@ Function .onInit
    Goto Exit
    no_run:
    System::Call '$PLUGINSDIR\RegisterCore::Sinstar_GetCurrentVer2(*i,*i,*i,*i)i (.r0,.r1,.r2,.r3).r4'
-   IntCmp $4 1 0 NewInstall
+   IntCmp $4 1 0 Run
    System::Call '$PLUGINSDIR\RegisterCore::Sinstar_PEVersion2W(t,*i,*i,*i,*i)i ("$PLUGINSDIR\isserver3.exe",.R0,.R1,.R2,.R3).R4'
    IntCmp $R0 $0 0 Degrade Upgrade
    IntCmp $R1 $1 0 Degrade Upgrade
@@ -282,10 +282,7 @@ Function .onInit
 
    Goto Run
    Degrade:
-   MessageBox MB_OK|MB_ICONSTOP  "您已经安装了${PRODUCT_NAME} $0.$1.$2.$3 不能降级到$R0.$R1.$R2.$R3。$\r$\n$\r$\n点击 “确定” 退出安装程序。" IDOK Exit
-   NewInstall:
-   ;IntCmp $4 1 0 Exit
-   MessageBox MB_OK|MB_ICONSTOP  "Current Ver $0.$1.$2.$3 。$\r$\n$\r$\n点击 “确定” 退出安装程序。" IDOK Exit
+   MessageBox MB_OK|MB_ICONSTOP  "您已经安装了${PRODUCT_NAME} $0.$1.$2.$3 不能降级到$R0.$R1.$R2.$R3。$\r$\n$\r$\n点击 “确定” 退出安装程序。"
    Exit:
    Quit
    Run:
@@ -301,7 +298,7 @@ FunctionEnd
 
 Function un.onInit
   StrCpy $bForceUninstall "0"
-  System::Call '$INSTDIR\RegisterCore::Sinstar_InitW(t$INSTDIR)'
+  System::Call '$INSTDIR\RegisterCore::Sinstar_InitW(t) ("$INSTDIR")'
   System::Call '$INSTDIR\RegisterCore::Sinstar_IsRunning() i.R0'
   IntCmp $R0 0 uninstall 0
   MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "$(^Name) 正在使用，确定卸载吗？" IDYES 0 IDNO Exit
