@@ -106,7 +106,6 @@ BOOL RC_API  Sinstar_GetInstallDir(LPWSTR  pszPath,int nSize)
 		return FALSE;
 	}
 
-	TCHAR szOriPath[MAX_PATH];
 	ULONG nLen = nSize;
 	reg.QueryStringValue(_T("path_client"),pszPath,&nLen);
 	reg.Close();
@@ -401,17 +400,7 @@ BOOL RC_API  Sinstar_Update()
 	}
 
 	//退出服务器
-	HWND hWndSvr = FindWindow(NULL, SINSTAR3_SERVER_HWND);
-	if (::IsWindow(hWndSvr))
-	{
-		DWORD dwProcID = 0;
-		GetWindowThreadProcessId(hWndSvr, &dwProcID);
-		::PostMessage(hWndSvr, WM_QUIT, 0, 0);
-		if (dwProcID != 0)
-			WaitForSingleObject((HANDLE)dwProcID, INFINITE);
-		else
-			Sleep(500);
-	}
+	Sinstar_QuitServer();
 
 
 	TCHAR szPath[MAX_PATH];
@@ -496,17 +485,7 @@ BOOL RC_API  Sinstar_Uninstall()
 
 
 	//退出服务器
-	HWND hWndSvr = FindWindow(NULL, SINSTAR3_SERVER_HWND);
-	if (IsWindow(hWndSvr))
-	{
-		DWORD dwProcID = 0;
-		GetWindowThreadProcessId(hWndSvr, &dwProcID);
-		PostMessage(hWndSvr, WM_QUIT, 0, 0);
-		if (dwProcID != 0)
-			WaitForSingleObject((HANDLE)dwProcID, INFINITE);
-		else
-			Sleep(500);
-	}
+	Sinstar_QuitServer();
 
 	//step8:reg ime file type.
 	TCHAR szRegCmd[MAX_PATH];
@@ -621,6 +600,20 @@ BOOL MyCopyFile(LPCTSTR pszSour, LPCTSTR pszDest)
 	return nRet == 0;
 }
 
+void RC_API Sinstar_QuitServer()
+{
+	HWND hWndSvr = FindWindow(NULL, SINSTAR3_SERVER_HWND);
+	if (IsWindow(hWndSvr))
+	{
+		DWORD dwProcID = 0;
+		GetWindowThreadProcessId(hWndSvr, &dwProcID);
+		PostMessage(hWndSvr, WM_QUIT, 0, 0);
+		if (dwProcID != 0)
+			WaitForSingleObject((HANDLE)dwProcID, INFINITE);
+		else
+			Sleep(500);
+	}
+}
 
 BOOL RC_API  Sinstar_Install()
 {

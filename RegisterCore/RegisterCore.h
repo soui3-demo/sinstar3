@@ -15,6 +15,7 @@
 EXTERN_C{
 	void REGISTERCORE_API RC_API  Sinstar_InitW(LPCWSTR pszPath);
 	void REGISTERCORE_API RC_API  Sinstar_InitA(LPCSTR pszPath);
+	void REGISTERCORE_API RC_API  Sinstar_QuitServer();
 	BOOL REGISTERCORE_API RC_API  Sinstar_GetInstallDir(LPWSTR  pszPath,int nSize);
 	LPCWSTR REGISTERCORE_API RC_API  Sinstar_GetErrMsgW();
 	LPCSTR REGISTERCORE_API RC_API  Sinstar_GetErrMsgA();
