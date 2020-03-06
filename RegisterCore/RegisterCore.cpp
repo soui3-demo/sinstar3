@@ -87,14 +87,33 @@ LPCSTR RC_API  Sinstar_GetErrMsgA(){
 	return szErrMsg;
 }
 
+typedef BOOL(WINAPI *FunWow64DisableWow64FsRedirection)(
+	PVOID *OldValue
+	);
+
+void MyDisableWow64FsRedirection()
+{
+	HMODULE hMod = LoadLibrary(_T("Kernel32.dll"));
+	FunWow64DisableWow64FsRedirection fWow64DisableWow64FsRedirection = (FunWow64DisableWow64FsRedirection)GetProcAddress(hMod, "Wow64DisableWow64FsRedirection");
+	if (fWow64DisableWow64FsRedirection)
+	{
+		PVOID pData = NULL;
+		fWow64DisableWow64FsRedirection(&pData);
+	}
+	FreeLibrary(hMod);
+}
+
+
 void RC_API  Sinstar_InitW(LPCWSTR pszPath)
 {
 	wcscpy_s(g_szPath,MAX_PATH*sizeof(TCHAR),pszPath);
+	MyDisableWow64FsRedirection();
 }
 
 void RC_API  Sinstar_InitA(LPCSTR pszPath)
 {
 	MultiByteToWideChar(CP_ACP,0,pszPath,strlen(pszPath),g_szPath,MAX_PATH);
+	MyDisableWow64FsRedirection();
 }
 
 BOOL RC_API  Sinstar_GetInstallDir(LPWSTR  pszPath,int nSize)

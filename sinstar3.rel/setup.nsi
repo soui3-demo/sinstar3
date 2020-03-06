@@ -297,9 +297,13 @@ Function un.onUninstSuccess
 FunctionEnd
 
 Function un.onInit
+   InitPluginsDir
+   SetOutPath $PLUGINSDIR
+   File "RegisterCore.dll"
+
   StrCpy $bForceUninstall "0"
-  System::Call '$INSTDIR\RegisterCore::Sinstar_InitW(t) ("$INSTDIR")'
-  System::Call '$INSTDIR\RegisterCore::Sinstar_IsRunning() i.R0'
+  System::Call '$PLUGINSDIR\RegisterCore::Sinstar_InitW(t) ("$INSTDIR")'
+  System::Call '$PLUGINSDIR\RegisterCore::Sinstar_IsRunning() i.R0'
   IntCmp $R0 0 uninstall 0
   MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "$(^Name) 正在使用，确定卸载吗？" IDYES 0 IDNO Exit
   StrCpy $bForceUninstall "1"
@@ -309,19 +313,18 @@ Function un.onInit
   Exit:
   Abort
   unreg:
-  StrCmp $bForceUninstall "1" 0 +2
-  System::Call '$INSTDIR\RegisterCore::Sinstar_ForceUninstall() i.R0'
+  StrCmp $bForceUninstall "1" 0 unreg2
+  System::Call '$PLUGINSDIR\RegisterCore::Sinstar_ForceUninstall()'
   SetRebootFlag true
   Goto end
-  System::Call '$INSTDIR\RegisterCore::Sinstar_Uninstall() i.R0'
+  unreg2:
+  System::Call '$PLUGINSDIR\RegisterCore::Sinstar_Uninstall()'
   end:
 FunctionEnd
 
 Section Uninstall
   RMDir /r "$INSTDIR"
-  Delete "$SMPROGRAMS\启程输入法\Uninstall.lnk"
-  Delete "$SMPROGRAMS\启程输入法\Website.lnk"
-  RMDir "$SMPROGRAMS\启程输入法"
+  RMDir /r "$SMPROGRAMS\启程输入法"
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
   SetAutoClose true
