@@ -20,13 +20,13 @@ struct ICodingRule
 	//pszRule format:ce2=pij+pkl+nij+nkl
 	//p:正序，n:逆序
 	//***********************************************
-	virtual BOOL ParseRule(LPCSTR pszRule) = 0;
-	virtual BOOL ParseRules(char cCodeMax, BYTE byRules, char *pszBuf) = 0;
+	virtual BOOL ParseRule(LPCWSTR pszRule) = 0;
+	virtual BOOL ParseRules(char cCodeMax, BYTE byRules, LPCWSTR pszBuf) = 0;
 
 	//***************************************************
 	//	生成构词规则字符串
 	//***************************************************
-	virtual BOOL MakeRule(int iRule, char *pszRule) = 0;
+	virtual BOOL MakeRule(int iRule, WCHAR *pszRule) = 0;
 
 	//************************************************
 	virtual void WriteEx(FILE *f) = 0;
@@ -40,11 +40,11 @@ struct ICodingRule
 
 typedef struct tagCOMPHEAD
 {
-	char szName[50];	//名称
+	WCHAR szName[50];	//名称
 	char szCode[50];	//码元
 	char cWildChar;		//万能键
 	char cCodeMax;		//最大码长
-	char szUrl[50];		//相关网址
+	WCHAR szUrl[50];		//相关网址
 	DWORD dwWords;		//已经编码字符数
 	BOOL bSymbolFirst;	//标点首编码
 	DWORD dwEncrypt : 1;	//加密标志
@@ -62,25 +62,24 @@ struct ICompBuilder
 	virtual ICodingRule * CreateCodingRule() = 0;
 	virtual void DestroyCodingRule(ICodingRule * pRule) = 0;
 
-	virtual BOOL Make(LPCSTR pszOutput,	//输出文件名
+	virtual BOOL Make(LPCTSTR pszOutput,	//输出文件名
 		COMPHEAD headInfo,	//编码信息
 		ICodingRule *pRule,	//造词规则
-		LPCSTR pszIconFile,//图标文件
+		LPCTSTR pszIconFile,//图标文件
 		COLORREF crKey,		//图标透明色
-		LPCSTR pszKeyMap,	//字根表文件
-		const char	szKeyDllMD5[32]//加密算法dll的MD5值,32字节
+		LPCTSTR pszKeyMap	//字根表文件
 	) = 0;
 
-	virtual BOOL AddWord(char szWord[2], LPCSTR pszComp, char cCompLen = -1) = 0;
-	virtual BOOL AddMakePhraseCode(char szWord[2], LPCSTR pszMakePhraseCode, char cCodeLen = -1) = 0;
+	virtual BOOL AddWord(WCHAR wWord, LPCWSTR pszComp, char cCompLen = -1) = 0;
+	virtual BOOL AddMakePhraseCode(WCHAR wWord, LPCWSTR pszMakePhraseCode, char cCodeLen = -1) = 0;
 	virtual DWORD GetWords() const = 0;
 };
 
 struct ICompReaderEx
 {
 	virtual ~ICompReaderEx() {}
-	virtual BOOL Export(LPCSTR pszFileName) = 0;
-	virtual BOOL Load(LPCSTR pszCompFile) = 0;
+	virtual BOOL Export(LPCTSTR pszFileName) = 0;
+	virtual BOOL Load(LPCTSTR pszCompFile) = 0;
 	virtual const COMPHEAD *GetProps() const = 0;
 };
 

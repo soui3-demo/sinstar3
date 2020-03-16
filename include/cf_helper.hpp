@@ -84,3 +84,23 @@ inline int CF_ReadString(COMFILE &cf, std::string & str)
 	return nRet;
 }
 
+inline int CF_WriteWString(COMFILE & cf, const WCHAR * pszBuf, int nLen = -1)
+{
+	if (nLen < 0) nLen = wcslen(pszBuf);
+	int nRet = CF_WriteT(cf, nLen);
+	nRet += CF_Write(&cf, pszBuf, nLen*sizeof(WCHAR));
+	return nRet;
+}
+
+
+inline int CF_ReadWString(COMFILE &cf, std::wstring & str)
+{
+	int nLen;
+	int nRet = CF_ReadT(cf, &nLen);
+	WCHAR *pBuf = (WCHAR*)malloc((nLen + 1)*sizeof(WCHAR));
+	nRet += CF_Read(&cf, pBuf, nLen*sizeof(WCHAR));
+	pBuf[nLen] = 0;
+	str = pBuf;
+	free(pBuf);
+	return nRet;
+}

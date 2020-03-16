@@ -454,15 +454,15 @@ int Helper_GetProfileSectionInt(
 }
 
 BOOL WritePrivateProfileInt(
-  LPCSTR lpAppName,  // pointer to section name
-  LPCSTR lpKeyName,  // pointer to key name
+  LPCTSTR lpAppName,  // pointer to section name
+  LPCTSTR lpKeyName,  // pointer to key name
   int nKeyValue,   // value to write
-  LPCSTR lpFileName  // pointer to initialization filename
+  LPCTSTR lpFileName  // pointer to initialization filename
 )
 {
-	char szBuf[100];
-	sprintf(szBuf,"%d",nKeyValue);
-	return WritePrivateProfileStringA(lpAppName,lpKeyName,szBuf,lpFileName);
+	TCHAR szBuf[100];
+	_stprintf(szBuf,_T("%d"),nKeyValue);
+	return WritePrivateProfileString(lpAppName,lpKeyName,szBuf,lpFileName);
 }
 
 typedef BOOL (WINAPI *FunSetLayeredWindowAttributes)(HWND,COLORREF,BYTE,DWORD);

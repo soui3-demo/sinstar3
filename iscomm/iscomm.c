@@ -396,10 +396,10 @@ DWORD ISComm_ServerVersion()
 	return ISComm_SendMsg(CT_SERVERVERSION,NULL,0,0);
 }
 
-int ISComm_PhraseRate(LPCSTR pszPhrase,unsigned char cPhraseLen)
+int ISComm_PhraseRate(LPCWSTR pszPhrase,unsigned char cPhraseLen)
 {
 	int nRet=-1;
-	if(ISComm_SendMsg(CT_PHRASERATE,(LPVOID)pszPhrase,cPhraseLen,0)==ISACK_SUCCESS)
+	if(ISComm_SendMsg(CT_PHRASERATE,(LPVOID)pszPhrase,cPhraseLen*sizeof(WCHAR),0)==ISACK_SUCCESS)
 	{
 		PMSGDATA pData=ISComm_GetData();
 		nRet=pData->byData[0];

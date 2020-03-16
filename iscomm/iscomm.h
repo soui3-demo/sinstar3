@@ -43,9 +43,9 @@ typedef struct tagCOMPINFO
 
 typedef struct tagFLMINFO
 {
-	char szName[50];
-	char szAddition[50];
-	char szAddFont[LF_FACESIZE];
+	WCHAR szName[50];
+	WCHAR szAddition[50];
+	WCHAR szAddFont[LF_FACESIZE+1];
 }FLMINFO,*PFLMINFO;
 #pragma pack(pop)
 
@@ -162,7 +162,7 @@ DWORD ISComm_ShowServer(LPCSTR pszPageName,char cTextLen);
 DWORD ISComm_ServerVersion();
 DWORD ISComm_PhraseDel(LPCSTR pszComp,char cCompLen,LPCSTR pszPhrase,unsigned char cPhraseLen,HWND hWnd);
 DWORD ISComm_LineQueryCand(LPCSTR pszComp,char cCompLen);
-int ISComm_PhraseRate(LPCSTR pszPhrase,unsigned char cPhraseLen);
+int ISComm_PhraseRate(LPCWSTR pszPhrase,unsigned char cPhraseLen);
 
 DWORD ISComm_QueryUserDict(LPCSTR pszkey,char cKeyLen);
 DWORD ISComm_SortWordByBiHua(LPCSTR pszBiHua,char cBiHuaLen,LPCSTR pszWordList,short nWords);
