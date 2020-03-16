@@ -5,7 +5,7 @@
 
 #include "stdafx.h"
 #include "PhraseLib.h"
-#include "TxtLineReader.h"
+#include "TxtReader.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -38,7 +38,7 @@ int Phrase2Cmp(void *ctx,const void *p1,const void *p2)
 {
 	const PHRASE2 *pSour=(const PHRASE2*)p1;
 	const PHRASE2 *pDest = (const PHRASE2 *)p2;
-	return strcmp(pSour->szWord,pDest->szWord);
+	return wcscmp(pSour->szWord,pDest->szWord);
 }
 
 //-------------------------------------------------
@@ -46,20 +46,20 @@ int Phrase2Cmp(void *ctx,const void *p1,const void *p2)
 //	BOOL bCheckNeed:检查是否存在的开关,在数据载入时不置为FALSE
 //	BYTE byGroup:所属的词库组
 //---------------------------------------------------
-BOOL CPLEditor::AddWord(LPCSTR pszWord,char cLen/*=-1*/,BYTE byRate/*=0*/,BOOL bCheckNeed/*=TRUE*/,BYTE byGroup/*=0*/)
+BOOL CPLEditor::AddWord(LPCWSTR pszWord,char cLen/*=-1*/,BYTE byRate/*=0*/,BOOL bCheckNeed/*=TRUE*/,BYTE byGroup/*=0*/)
 {
 	if(byGroup>=m_arrGroup.size()) return FALSE;
-	if(cLen==-1) cLen=strlen(pszWord);
-	if(cLen>MAX_WORDLEN) return FALSE;
+	if(cLen==-1) cLen=wcslen(pszWord);
+	if(cLen>MAX_PHRASE) return FALSE;
 
 	PHRASE2 p={byGroup,byRate,cLen};
-	strncpy(p.szWord,pszWord,cLen);
+	wcsncpy(p.szWord,pszWord,cLen);
 	p.szWord[cLen]=0;
 
-	SStringA key(p.szWord,cLen);
+	SStringW key(p.szWord,cLen);
 	if(bCheckNeed)
 	{
-		SMap<SStringA,PHRASE2>::CPair *p = m_mapPhrase.Lookup(key);
+		SMap<SStringW,PHRASE2>::CPair *p = m_mapPhrase.Lookup(key);
 		if(p)
 		{
 			if(byGroup!=p->m_value.byGroup && byGroup<m_arrGroup.size())
@@ -86,7 +86,7 @@ void CPLEditor::LoadData(FILE *f)
 	DWORD dwCount=CGroupManager::GetCount();
 	BYTE byRate;
 	char cLen;
-	char szWord[MAX_WORDLEN];
+	WCHAR szWord[MAX_WORDLEN];
 	fseek(f,sizeof(DWORD),SEEK_CUR);//跨过dwDataSize
 	BYTE byGroup=0;
 	if(m_funProgCB) m_funProgCB->OnStart(100);
@@ -101,7 +101,7 @@ void CPLEditor::LoadData(FILE *f)
 		fread(&byGroup,1,1,f);
 		fread(&byRate,1,1,f);
 		fread(&cLen,1,1,f);
-		fread(szWord,1,cLen,f);
+		fread(szWord,sizeof(WCHAR),cLen,f);
 		AddWord(szWord,cLen,byRate,FALSE,byGroup);
 		if(m_funProgCB) 
 		{
@@ -122,7 +122,7 @@ BOOL CPLEditor::Load(LPCTSTR pszFileName)
 	Free();
 	FILE *f=_tfopen(pszFileName,_T("rb"));
 	if(!f) return FALSE;
-	if(!ISDOC_ReadHeader(f,SSID_CL,SVCL_MAJOR1,SVCL_MINOR2))
+	if(!ISDOC_ReadHeader(f,SSID_CL,SVCL_MAJOR1,SVCL_MINOR3))
 	{
 		fclose(f);
 		return FALSE;
@@ -162,7 +162,7 @@ void CPLEditor::WriteData(FILE *f)
 		fwrite(&p.byGroup,1,1,f);
 		fwrite(&p.byRate,1,1,f);
 		fwrite(&p.cLen,1,1,f);
-		fwrite(p.szWord,1,p.cLen,f);
+		fwrite(p.szWord,sizeof(WCHAR),p.cLen,f);
 	 	if(m_funProgCB) 
 		{
 			if(i%nSegLen==0)
@@ -188,7 +188,7 @@ BOOL CPLEditor::Save(LPCTSTR pszFileName)
 	FILE *f=_tfopen(pszFileName,_T("wb"));
 	if(!f) return FALSE;
 	DWORD dwID=GetTickCount();
-	ISDOC_WriteHeader(f,SSID_CL,SVCL_MAJOR1,SVCL_MINOR2,dwID);
+	ISDOC_WriteHeader(f,SSID_CL,SVCL_MAJOR1,SVCL_MINOR3,dwID);
 	WriteData(f);
 	fclose(f);
 	return TRUE;
@@ -200,17 +200,15 @@ void CPLEditor::SetProgCallBack(IProgListener *funCb)
 }
 
 //解析文本行
-//LPCTSTR pszLine:输入文本行
+//LPCWSTR pszLine:输入文本行
 //int &nBegin:词频开始位置
 //int &nEnd:词结束位置
-BOOL CPLEditor::ParseLine(LPCSTR pszLine,int &nBegin,int &nEnd)
+BOOL CPLEditor::ParseLine(LPCWSTR pszLine,int &nBegin,int &nEnd)
 {
 	int i=0;
 	while(pszLine[i])
 	{
-		if(pszLine[i]&0x80)
-			i+=2;
-		else if(pszLine[i]=='\t' || pszLine[i]==0x20)
+		if(pszLine[i]=='\t' || pszLine[i]==0x20)
 		{
 			nEnd=i;
 			break;
@@ -230,7 +228,7 @@ BOOL CPLEditor::ParseLine(LPCSTR pszLine,int &nBegin,int &nEnd)
 
 int CPLEditor::Import2Group(LPCTSTR pszFile,BYTE byMin, BYTE byMax,BYTE iGroup/*=-1*/)
 {
-	CTxtLineReader f('#');
+	CTxtReader f('#');
 	int nRet = 0;
 	if(f.Open(pszFile))
 	{
@@ -239,7 +237,7 @@ int CPLEditor::Import2Group(LPCTSTR pszFile,BYTE byMin, BYTE byMax,BYTE iGroup/*
 			if(m_arrGroup.size()>=250)
 				return 0;
 			GROUPINFO groupInfo={0};
-			strcpy(groupInfo.szName,"none");
+			wcscpy(groupInfo.szName,L"none");
 			m_arrGroup.push_back(groupInfo);
 			iGroup = m_arrGroup.size()-1;
 		}else if (iGroup>250)
@@ -249,34 +247,34 @@ int CPLEditor::Import2Group(LPCTSTR pszFile,BYTE byMin, BYTE byMax,BYTE iGroup/*
 		
 		if(m_funProgCB)
 			m_funProgCB->OnStart(100);
-		int nSegLen=f.GetLength()/100;
+		int nSegLen=f.getLength()/100;
 
-		char szLine[100];
-		LPSTR pszBuf=f.ReadString(szLine,100);
+		WCHAR szLine[100];
+		BOOL bRead=f.getline(szLine,100);
 		int nEnd,nBegin;
 		BYTE byGroup=(BYTE)iGroup;
-		while(pszBuf)
+		while(bRead)
 		{
 			if(szLine[0]!='@')
 			{
 				BYTE byRate=0;
 				if(ParseLine(szLine,nBegin,nEnd))
 				{
-					byRate=atoi(szLine+nBegin);
+					byRate=_wtoi(szLine+nBegin);
 					if(byRate>MAX_RATE) byRate=MAX_RATE;
 				}else
 				{
-					nEnd=strlen(szLine);
+					nEnd=wcslen(szLine);
 				}
 				if(byMin<=byRate && byRate<=byMax ) 
 					nRet+=AddWord(szLine,nEnd,byRate,TRUE,byGroup)?1:0;
 			}
 			if(m_funProgCB)
 			{
-				if(f.GetPos()%nSegLen == 0)
-				m_funProgCB->OnProg(f.GetPos()/nSegLen,100);
+				if(f.getReadPos()%nSegLen == 0)
+				m_funProgCB->OnProg(f.getReadPos()/nSegLen,100);
 			}
-			pszBuf=f.ReadString(szLine,100);
+			bRead = f.getline(szLine,100);
 		}
 		if(m_funProgCB)
 			m_funProgCB->OnEnd(true);

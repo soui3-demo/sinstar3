@@ -13,9 +13,9 @@
 
 typedef struct tagGROUPINFO
 {//组信息
-	char szName[50];	//名称
-	char szEditor[50];	//编辑
-	char szRemark[200];	//备注
+	WCHAR szName[50];	//名称
+	WCHAR szEditor[50];	//编辑
+	WCHAR szRemark[200];	//备注
 	DWORD dwCount;		//词数
 	BOOL  bValid;		//有效标志
 }GROUPINFO,*PGROUPINFO;
@@ -26,7 +26,7 @@ public:
 	CGroupManager();
 	virtual ~CGroupManager();
 
-	BYTE AddGroup(LPCSTR pszName,LPCSTR pszEditor,LPCSTR pszRemark);
+	BYTE AddGroup(LPCWSTR pszName,LPCWSTR pszEditor,LPCWSTR pszRemark);
 	BOOL SetGroup(BYTE iGroup,const GROUPINFO & groupInfo);
 	BOOL ValidGroup(BYTE iGroup,BOOL bValid);
 	void Free();

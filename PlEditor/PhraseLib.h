@@ -20,10 +20,12 @@ using namespace std;
 #define SSID_CL		'LC'
 #define SVCL_MAJOR1	2005
 #define SVCL_MINOR2	2
+#define SVCL_MINOR3	3	//change to unicode
 
 #define FLAG_INDEX		0xAA	//索引表标志
 #define MAX_WILDMATCH	100		//万能键时最大的重码数
 #define MAX_RATE		250		//允许的最大词频，其它词频数据有特定意义
+#define MAX_PHRASE		255		//max phrase length
 
 #define MAX_WORDLEN		30		//same as iscomm.h
 typedef struct tagPHRASE2
@@ -31,7 +33,7 @@ typedef struct tagPHRASE2
 	BYTE	byGroup;	//所在组
 	BYTE	byRate;		//词频，初始时为0
 	BYTE	cLen;		//词长
-	char 	szWord[MAX_WORDLEN+1];	//缓冲区
+	WCHAR 	szWord[MAX_PHRASE+1];	//缓冲区
 }PHRASE2,*PPHRASE2;
 
 typedef struct tagPHRASEINFO
@@ -55,16 +57,16 @@ public:
 	BOOL Load(LPCTSTR pszFileName);
 	void Free();
 	void SetProgCallBack(IProgListener *funCb);
-	BOOL AddWord(LPCSTR pszWord,char cLen=-1,BYTE byRate=0,BOOL bCheckNeed=TRUE,BYTE byGroup=0);
+	BOOL AddWord(LPCWSTR pszWord,char cLen=-1,BYTE byRate=0,BOOL bCheckNeed=TRUE,BYTE byGroup=0);
 	void LoadData(FILE *f);
 	void WriteData(FILE *f);
 	int Import2Group(LPCTSTR pszFile,BYTE byRateMin, BYTE byRateMax,BYTE iGroup=0xFF);
 	BOOL ExportGroup(LPCTSTR pszFile,BYTE iGroup);
 	BOOL EraseGroup(BYTE iGroup);
 private:
-	BOOL ParseLine(LPCSTR pszLine,int &nBegin,int &nEnd);
+	BOOL ParseLine(LPCWSTR pszLine,int &nBegin,int &nEnd);
 
-	SMap<SStringA,PHRASE2> m_mapPhrase;
+	SMap<SStringW,PHRASE2> m_mapPhrase;
 	BOOL			m_bModify;
 	IProgListener * m_funProgCB;	//进度回调
 };

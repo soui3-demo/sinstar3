@@ -30,7 +30,7 @@ public:
 	void SavePL(LPCTSTR pszName);
 	void Import2Group(LPCTSTR pszFile,BYTE byRateMin, BYTE byRateMax,BYTE iGroup=-1);
 	std::vector<GROUPINFO> GetGroup() const;
-	void AddGroup(const GROUPINFO &groupInfo);
+	int AddGroup(const GROUPINFO &groupInfo);
 	void SetGroup(BYTE iGroup,const GROUPINFO &groupInfo);
 	void ValidGroup(BYTE iGroup,BOOL bValid);
 	bool IsReady() const; 

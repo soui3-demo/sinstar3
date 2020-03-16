@@ -223,7 +223,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\TxtLineReader.cpp"
+				RelativePath=".\TxtReader.cpp"
 				>
 			</File>
 		</Filter>
@@ -264,7 +264,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\TxtLineReader.h"
+				RelativePath=".\TxtReader.h"
 				>
 			</File>
 		</Filter>

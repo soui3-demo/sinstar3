@@ -25,17 +25,17 @@ CGroupManager::~CGroupManager()
 	Free();
 }
 
-BYTE CGroupManager::AddGroup(LPCSTR pszName,LPCSTR pszEditor,LPCSTR pszRemark)
+BYTE CGroupManager::AddGroup(LPCWSTR pszName,LPCWSTR pszEditor,LPCWSTR pszRemark)
 {
 	if(m_arrGroup.size()==0x7F) return -1;
-	if(strlen(pszName)>=50 || strlen(pszEditor)>=50 || strlen(pszRemark)>=200) return -1;
+	if(wcslen(pszName)>=50 || wcslen(pszEditor)>=50 || wcslen(pszRemark)>=200) return -1;
 	GROUPINFO gi={0};
-	strcpy(gi.szName,pszName);
-	strcpy(gi.szEditor,pszEditor);
-	strcpy(gi.szRemark,pszRemark);
+	wcscpy(gi.szName,pszName);
+	wcscpy(gi.szEditor,pszEditor);
+	wcscpy(gi.szRemark,pszRemark);
 	gi.dwCount=0;
 	m_arrGroup.push_back(gi);
-	return (BYTE)m_arrGroup.size();
+	return (BYTE)m_arrGroup.size()-1;
 }
 
 BOOL CGroupManager::Write(FILE *f)

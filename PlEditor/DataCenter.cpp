@@ -110,12 +110,12 @@ void CDataCenter::OnImport2Group(const std::tstring &strFile,BYTE byMin, BYTE by
 	m_plEditor.Import2Group(strFile.c_str(),byMin,byMax,iGroup);
 }
 
-void CDataCenter::AddGroup(const GROUPINFO & groupInfo)
+int CDataCenter::AddGroup(const GROUPINFO & groupInfo)
 {
 	SAutoLock autoLock(m_cs);
 	if(!m_bReady)
-		return;
-	m_plEditor.AddGroup(groupInfo.szName,groupInfo.szEditor,groupInfo.szRemark);
+		return -1;
+	return (int)m_plEditor.AddGroup(groupInfo.szName,groupInfo.szEditor,groupInfo.szRemark);
 }
 
 void CDataCenter::SetGroup(BYTE iGroup,const GROUPINFO &groupInfo)
