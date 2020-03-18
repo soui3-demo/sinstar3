@@ -35,6 +35,7 @@ public:
 	CIsSvrProxy(const SStringT &strDataPath,const SStringT & strSvrPath);
 	~CIsSvrProxy();
 
+	static IServerCore * GetSvrCore();
 protected:
 	virtual void OnNewConnection(IIpcHandle * pIpcHandle, IIpcConnection ** ppConn)
 	{
@@ -69,7 +70,7 @@ protected:
 
 	virtual void OnShowTray(bool bTray) ;
 
-	virtual void OnShowKeyMap(IDataBlock * pCompData, LPCSTR pszName, LPCSTR pszUrl) ;
+	virtual void OnShowKeyMap(IDataBlock * pCompData, LPCWSTR pszName, LPCWSTR pszUrl) ;
 
 	virtual int TtsGetSpeed();
 	virtual int TtsGetVoice(bool bCh);
@@ -138,8 +139,9 @@ protected:
 
 private:
 	int			m_nUpdateInterval;
-
+	BOOL		m_bShowTray;
 private:
+	static CIsSvrProxy * _this;
 	IServerCore * m_pCore;
 	HMODULE		  m_hCoreModule;
 	funIscore_Create m_funIsCore_Create;

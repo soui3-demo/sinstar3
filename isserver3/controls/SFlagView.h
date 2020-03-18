@@ -9,7 +9,7 @@ namespace SOUI
 		SFlagView();
 		~SFlagView();
 
-		void SetImeFlagData(const IMEFLAGDATA *pData);
+		void SetImeFlagData(LPBYTE pData,DWORD dwLen);
 		void ShowSpellFlag(BOOL bSpell);
 
 		SOUI_ATTRS_BEGIN()

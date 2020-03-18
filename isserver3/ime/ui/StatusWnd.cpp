@@ -8,7 +8,7 @@
 #include <ShellAPI.h>
 #include "../../ui/TextEditorDlg.h"
 #include "../../worker.h"
-
+#include "../../IsSvrProxy.h"
 namespace SOUI
 {
 	class CDonateDlg: public SHostWnd, public SDpiHandler<CDonateDlg>
@@ -177,7 +177,7 @@ namespace SOUI
 				smenuPopup.CheckMenuItem(R.id.switch_word_input, MF_BYCOMMAND | g_SettingsUI->bEnglish ? MF_CHECKED : 0);
 				smenuPopup.CheckMenuItem(R.id.switch_filter_gbk, MF_BYCOMMAND | g_SettingsUI->bFilterGbk ? MF_CHECKED : 0);
 				smenuPopup.CheckMenuItem(R.id.switch_char_mode,MF_BYCOMMAND | g_SettingsUI->bCharMode ? MF_CHECKED : 0);
-				smenuPopup.CheckMenuItem(R.id.svr_showicon, MF_BYCOMMAND | ISComm_SvrTray_Get() ? MF_CHECKED : 0);
+				smenuPopup.CheckMenuItem(R.id.svr_showicon, MF_BYCOMMAND | g_SettingsG->bShowTray? MF_CHECKED : 0);
 				break;
 			}
 		case 4://comp select
@@ -268,7 +268,9 @@ namespace SOUI
 			if (pFlagView)
 			{
 				pFlagView->ShowSpellFlag(FALSE);
-				pFlagView->SetImeFlagData(ISComm_GetCompInfo()->pImeFlagData);
+				BYTE *pBuf=NULL;
+				DWORD dwIconLen = CIsSvrProxy::GetSvrCore()->GetCompIconData(&pBuf);
+				pFlagView->SetImeFlagData(pBuf,dwIconLen);
 			}
 		}
 		else
@@ -623,8 +625,7 @@ namespace SOUI
 			CFileDialogEx openDlg(TRUE, _T("cit"), 0, 6, _T("启程码表(*.cit)\0*.cit\0All files (*.*)\0*.*\0\0"));
 			if (openDlg.DoModal() == IDOK)
 			{
-				SStringA strCompUtf8 = S_CT2A(openDlg.m_szFileName, CP_UTF8);
-				if (ISACK_SUCCESS != ISComm_InstallComp(strCompUtf8, 1))
+				if (ISACK_SUCCESS !=CIsSvrProxy::GetSvrCore()->InstallCit(openDlg.m_szFileName))
 				{
 					SMessageBox(GetDesktopWindow(), _T("安装编码失败,可能已经存在该编码"), _T("提示"), MB_OK | MB_ICONSTOP);
 				}
@@ -639,14 +640,14 @@ namespace SOUI
 			int iComp = nRet - (R.id.comp_cloud +1);
 			const SArray<CNameTypePair> & compList = CDataCenter::getSingleton().GetCompList();
 			if (iComp < (int)compList.GetCount())
-			{
-				ISComm_Comp_Open(compList[iComp].strName);
+			{//todo:
+				CIsSvrProxy::GetSvrCore()->CompSwitch(compList[iComp].strName);
 			}
 		}
 		else if (nRet == R.id.svr_showicon)
 		{//show icon
-			BOOL bTray = !ISComm_SvrTray_Get();
-			ISComm_SvrTray_Set(bTray);
+			g_SettingsG->bShowTray= !g_SettingsG->bShowTray;
+			g_SettingsG->SetModified(true);
 		}
 		else if (nRet == R.id.menu_blend_spell)
 		{
@@ -775,18 +776,15 @@ namespace SOUI
 	LPARAM CStatusWnd::OnEditUserDefData(UINT uMsg,WPARAM wp,LPARAM lp)
 	{
 		int nType = (int)wp;
-		if (ISComm_FatctUserDefFileName(nType) == ISACK_SUCCESS)
+		TCHAR szPath[MAX_PATH];
+		if (CIsSvrProxy::GetSvrCore()->ExportDataFile(nType,szPath))
 		{
-			PMSGDATA pMsgData = ISComm_GetData();
-			SStringA strUtf8((char*)pMsgData->byData, pMsgData->sSize);
-			SStringT strFileName = S_CA2T(strUtf8, CP_UTF8);
-			
-			CTextEditorDlg dlg(nType, strFileName);
+			CTextEditorDlg dlg(nType, szPath);
 			if (dlg.DoModal() == IDOK)
 			{
-				ISComm_UpdateUserDefData(nType, strUtf8);
+				CIsSvrProxy::GetSvrCore()->UpdateDataFile(szPath,nType);
 			}
-			DeleteFile(strFileName);
+			DeleteFile(szPath);
 		}
 		else
 		{

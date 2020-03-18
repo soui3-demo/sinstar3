@@ -24,6 +24,8 @@
 // TODO: 在此处引用程序需要的其他头文件
 #include "resource.h"
 
+#include "../include/iscore-i.h"
+#include "../iscomm/commfile.h"
 #include "../include/sinstar-i.h"
 #include "../include/TextService-i.h"
 #include "../include/unknown.h"
@@ -54,8 +56,8 @@
 using namespace SOUI;
 
 #include "../include/reg.h"
-#include "../iscomm/isProtocol.h"
-#include "../iscomm/iscomm.h"
+//#include "../iscomm/isProtocol.h"
+//#include "../iscomm/iscomm.h"
 
 #include "global_def.h"
 

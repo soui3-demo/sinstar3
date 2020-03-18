@@ -2,6 +2,7 @@
 #include "InputState.h"
 #include "Utils.h"
 #include <ShellAPI.h>
+#include "../IsSvrProxy.h"
 
 #pragma warning(disable:4311 4302)
 static const BYTE KCompKey[] ={0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,        // 00-0F
@@ -26,9 +27,9 @@ static const int HKI_LoadDebugSkin	 = -2;
 static const int HKI_UnloadDebugSkin = -3;
 //符号处理
 //BYTE byInput:键盘输入
-SStringA CInputState::Symbol_Convert(InputContext * lpCntxtPriv,UINT byInput,const BYTE * lpbKeyState)
+SStringW CInputState::Symbol_Convert(InputContext * lpCntxtPriv,UINT byInput,const BYTE * lpbKeyState)
 {
-	char pBuf[100];
+	WCHAR pBuf[100];
 	int nRet=0;
 	{
 		char cType=3;
@@ -47,21 +48,22 @@ SStringA CInputState::Symbol_Convert(InputContext * lpCntxtPriv,UINT byInput,con
 		{
 			if(g_SettingsG->bFullSpace)
 			{//full space
-				strcpy(pBuf,"　");
-				nRet = 2;
+				wcscpy(pBuf,L"　");
+				nRet = 1;
 			}else
 			{
 				pBuf[0]=0x20;
 				nRet=1;
 			}
-		}else if(ISComm_SymbolConvert((char)byInput,cType,g_SettingsUI->bCharMode?1:0)==ISACK_SUCCESS)
+		}else if(CIsSvrProxy::GetSvrCore()->ReqSymbolConvert((char)byInput,cType,g_SettingsUI->bCharMode?1:0)==ISACK_SUCCESS)
 		{
-			PMSGDATA pMsg=ISComm_GetData();
+			PMSGDATA pMsg=CIsSvrProxy::GetSvrCore()->GetAck();
 			if(pMsg->sSize<20)
 			{
 				nRet=pMsg->sSize-1;
-				strcpy(pBuf,(char*)pMsg->byData);
-				if(strncmp(pBuf+nRet-5,"$left",5)==0)
+				//todo:hjx
+				wcscpy(pBuf,(WCHAR*)pMsg->byData);
+				if(wcsncmp(pBuf+nRet-5,L"$left",5)==0)
 				{//解释光标移动函数
 					nRet-=5;
 					pBuf[nRet]=0;
@@ -76,7 +78,7 @@ SStringA CInputState::Symbol_Convert(InputContext * lpCntxtPriv,UINT byInput,con
 		nRet=1;
 	}
 
-	return SStringA(pBuf,nRet);
+	return SStringW(pBuf,nRet);
 }
 
 BOOL IsDigitEx(char c)
@@ -96,13 +98,13 @@ BOOL KeyIn_IsNumCode(InputContext * lpCntxtPriv)
 BOOL KeyIn_Code_IsMaxCode(InputContext * lpCntxtPriv)
 {
 	if(lpCntxtPriv->cComp==0) return FALSE;
-	return (lpCntxtPriv->cComp>=ISComm_GetCompInfo()->cCodeMax &&  lpCntxtPriv->byCandType==MCR_NORMAL);
+	return (lpCntxtPriv->cComp>=CIsSvrProxy::GetSvrCore()->GetCompHead()->cCodeMax &&  lpCntxtPriv->byCandType==MCR_NORMAL);
 }
 
 BOOL KeyIn_Code_IsMaxCode2(InputContext * lpCntxtPriv)
 {
 	if (lpCntxtPriv->cComp == 0) return FALSE;
-	return (lpCntxtPriv->cComp >= ISComm_GetCompInfo()->cCodeMax &&  (lpCntxtPriv->byCandType&(MCR_LONGERCOMP|MCR_MIXSP)) == 0);
+	return (lpCntxtPriv->cComp >= CIsSvrProxy::GetSvrCore()->GetCompHead()->cCodeMax &&  (lpCntxtPriv->byCandType&(MCR_LONGERCOMP|MCR_MIXSP)) == 0);
 }
 
 BOOL KeyIn_Code_IsValidComp(InputContext * lpCntxtPriv,char cInput)
@@ -112,7 +114,7 @@ BOOL KeyIn_Code_IsValidComp(InputContext * lpCntxtPriv,char cInput)
 	if(g_SettingsG->bBlendUD) byMask|=MQC_USERDEF;
 	if(g_SettingsG->bBlendSpWord) byMask|=MQC_SPCAND;
 	lpCntxtPriv->szComp[lpCntxtPriv->cComp]=cInput;
-	return ISComm_CheckComp(lpCntxtPriv->szComp,lpCntxtPriv->cComp+1,byMask);
+	return CIsSvrProxy::GetSvrCore()->CheckComp(lpCntxtPriv->szComp,lpCntxtPriv->cComp+1,byMask);
 }
 
 //检查一个编码是否为定义的网址开头
@@ -263,7 +265,7 @@ void CInputState::Tips_Init()
 				pugi::xml_node tip = tips.child(groups[i]).child(L"tip");
 				while (tip)
 				{
-					m_tips[i].Add(S_CW2A(tip.attribute(L"value").as_string()));
+					m_tips[i].Add(S_CW2T(tip.attribute(L"value").as_string()));
 					tip = tip.next_sibling(L"tip");
 				}
 
@@ -273,7 +275,7 @@ void CInputState::Tips_Init()
 	}
 }
 
-int CInputState::Tips_Rand(BOOL bSpell, char *pszBuf)
+int CInputState::Tips_Rand(BOOL bSpell, TCHAR *pszBuf)
 {
 	Tips_Init();
 	if (bSpell)
@@ -281,9 +283,9 @@ int CInputState::Tips_Rand(BOOL bSpell, char *pszBuf)
 		int total = (int) (m_tips[TT_SPELL].GetCount() + m_tips[TT_BOTH].GetCount());
 		int idx = rand() % total;
 		if (idx < (int)m_tips[TT_SPELL].GetCount())
-			strcpy(pszBuf, m_tips[TT_SPELL][idx]);
+			_tcscpy(pszBuf, m_tips[TT_SPELL][idx]);
 		else
-			strcpy(pszBuf, m_tips[TT_BOTH][idx - m_tips[TT_SPELL].GetCount()]);
+			_tcscpy(pszBuf, m_tips[TT_BOTH][idx - m_tips[TT_SPELL].GetCount()]);
 		return idx;
 	}
 	else
@@ -291,14 +293,14 @@ int CInputState::Tips_Rand(BOOL bSpell, char *pszBuf)
 		int total = (int) (m_tips[TT_SHAPE].GetCount() + m_tips[TT_BOTH].GetCount());
 		int idx = rand() % total;
 		if (idx < (int)m_tips[TT_SHAPE].GetCount())
-			strcpy(pszBuf, m_tips[TT_SHAPE][idx]);
+			_tcscpy(pszBuf, m_tips[TT_SHAPE][idx]);
 		else
-			strcpy(pszBuf, m_tips[TT_BOTH][idx - m_tips[TT_SHAPE].GetCount()]);
+			_tcscpy(pszBuf, m_tips[TT_BOTH][idx - m_tips[TT_SHAPE].GetCount()]);
 		return idx;
 	}
 }
 
-int CInputState::Tips_Next(BOOL bSpell,char *pszBuf, int iTip, bool bNext)
+int CInputState::Tips_Next(BOOL bSpell,TCHAR *pszBuf, int iTip, bool bNext)
 {
 	Tips_Init();
 	int idx = 0;
@@ -315,9 +317,9 @@ int CInputState::Tips_Next(BOOL bSpell,char *pszBuf, int iTip, bool bNext)
 		}
 		idx = (idx+total)%total;
 		if (idx < (int)m_tips[TT_SPELL].GetCount())
-			strcpy_s(pszBuf, 200,m_tips[TT_SPELL][idx]);
+			_tcscpy_s(pszBuf, 200,m_tips[TT_SPELL][idx]);
 		else
-			strcpy_s(pszBuf, 200,m_tips[TT_BOTH][idx - m_tips[TT_SPELL].GetCount()]);
+			_tcscpy_s(pszBuf, 200,m_tips[TT_BOTH][idx - m_tips[TT_SPELL].GetCount()]);
 		return idx;
 	}
 	else
@@ -333,24 +335,25 @@ int CInputState::Tips_Next(BOOL bSpell,char *pszBuf, int iTip, bool bNext)
 		}
 		idx = (idx+total)%total;
 		if (idx < (int)m_tips[TT_SHAPE].GetCount())
-			strcpy_s(pszBuf,200, m_tips[TT_SHAPE][idx]);
+			_tcscpy_s(pszBuf,200, m_tips[TT_SHAPE][idx]);
 		else
-			strcpy_s(pszBuf, 200,  m_tips[TT_BOTH][idx - m_tips[TT_SHAPE].GetCount()]);
+			_tcscpy_s(pszBuf, 200,  m_tips[TT_BOTH][idx - m_tips[TT_SHAPE].GetCount()]);
 	}
 	SLOG_INFO("iTip:" << iTip << " bNext:" << bNext<<" idx:"<<idx);
 	return idx;
 }
 
-void CInputState::GetShapeComp(const char *pInput,char cLen)
+void CInputState::GetShapeComp(const WCHAR *pInput,char cLen)
 {
-	if(ISComm_QueryComp(pInput,cLen)==ISACK_SUCCESS)
+	if(CIsSvrProxy::GetSvrCore()->ReqQueryComp(pInput,cLen)==ISACK_SUCCESS)
 	{
-		PMSGDATA pData=ISComm_GetData();
+		PMSGDATA pData=CIsSvrProxy::GetSvrCore()->GetAck();
 		pData->byData[pData->sSize]=0;
-		sprintf(m_ctx.szTip,"词\"%s\"的编码=%s",pInput,(char*)pData->byData);
+		
+		swprintf(m_ctx.szTip,L"词\"%s\"的编码=%s",pInput,(WCHAR*)pData->byData);
 	}else
 	{
-		sprintf(m_ctx.szTip,"查询词\"%s\"的编码失败",pInput);
+		swprintf(m_ctx.szTip,L"查询词\"%s\"的编码失败",pInput);
 	}
 }
 
@@ -756,24 +759,27 @@ BOOL CInputState::KeyIn_RepeatInput(InputContext *  lpCntxtPriv)
 void CInputState::KeyIn_Spell_UpdateCandList(InputContext *  lpCntxtPriv,BYTE byCaret)
 {
 	DWORD dwRet=ISACK_ERROR;
-	BYTE byMask=0;
 	ClearContext(CPC_CAND);
 	if(lpCntxtPriv->spellData[byCaret].bySpellLen==0) return;
-	if(g_SettingsG->bPYPhraseFirst) byMask=0x01;
+
+	BOOL bPhraseFirst = g_SettingsG->bPYPhraseFirst;
+	BOOL bReverse = FALSE;
+	BOOL bAssociate = FALSE;
+
 	if(byCaret==lpCntxtPriv->bySyllables-1)
 	{
-		byMask|=0x02;	//光标在最后，逆向查询词组
-		if(lpCntxtPriv->bySyllables>=4) byMask|=0x04;	//不完整词组联想
-		dwRet=ISComm_SpellQueryCandEx(lpCntxtPriv->pbyBlur,lpCntxtPriv->bySyllables,byMask);
+		bReverse=TRUE;//光标在最后，逆向查询词组
+		if(lpCntxtPriv->bySyllables>=4) bAssociate=TRUE;	//不完整词组联想
+		dwRet=CIsSvrProxy::GetSvrCore()->ReqQueryCandSpellEx((PBLURINFO2 *)lpCntxtPriv->pbyBlur,lpCntxtPriv->bySyllables,bPhraseFirst,bReverse,bAssociate);
 	}else
 	{
-		if(byCaret==0 && lpCntxtPriv->bySyllables>=4) byMask|=0x04;//不完整词组联想
-		dwRet=ISComm_SpellQueryCandEx(lpCntxtPriv->pbyBlur+byCaret,lpCntxtPriv->bySyllables-byCaret,byMask);
+		if(byCaret==0 && lpCntxtPriv->bySyllables>=4) bAssociate=TRUE;//不完整词组联想
+		dwRet=CIsSvrProxy::GetSvrCore()->ReqQueryCandSpellEx((PBLURINFO2 *)lpCntxtPriv->pbyBlur+byCaret,lpCntxtPriv->bySyllables-byCaret,bPhraseFirst,bReverse,bAssociate);
 	}
 
 	if(dwRet==ISACK_SUCCESS)
 	{
-		PMSGDATA pMsgData=ISComm_GetData();
+		PMSGDATA pMsgData=CIsSvrProxy::GetSvrCore()->GetAck();
 		short i,sCount=0,sValidCount=0;
 		LPBYTE pBuf=m_pbyMsgBuf;
 		memcpy(pBuf,pMsgData->byData,pMsgData->sSize);
@@ -781,7 +787,7 @@ void CInputState::KeyIn_Spell_UpdateCandList(InputContext *  lpCntxtPriv,BYTE by
 		pBuf+=2;
 		lpCntxtPriv->ppbyCandInfo=(LPBYTE*)malloc(sCount*sizeof(LPBYTE));
 		for(i=0;i<sCount;i++)
-		{
+		{//todo:hjx
 			char nLen = pBuf[2];
 			if(byCaret==(lpCntxtPriv->bySyllables-1))
 			{
@@ -903,16 +909,17 @@ void CInputState::KeyIn_Spell_Forecast(InputContext * lpCntxtPriv,BYTE byStartPo
 		while(lpCntxtPriv->bySelect[byEnd]==0 && byEnd<lpCntxtPriv->bySyllables) byEnd++;
 		if(byEnd>byBegin)
 		{
-			char szPrefix[2]={0};
+			WCHAR szPrefix=0;//todo:hjx
 			if(byBegin>0 && lpCntxtPriv->bySelect[byBegin-1]==1)
-				memcpy(szPrefix,lpCntxtPriv->szWord[byBegin-1],2);
-			if(ISComm_SpellForecast(szPrefix,lpCntxtPriv->pbyBlur+byBegin,byEnd-byBegin)==ISACK_SUCCESS)
+				szPrefix = lpCntxtPriv->szWord[byBegin-1];
+			if(CIsSvrProxy::GetSvrCore()->ReqForecastSpell(szPrefix,(PBLURINFO2*)lpCntxtPriv->pbyBlur+byBegin,byEnd-byBegin)==ISACK_SUCCESS)
 			{
-				PMSGDATA pMsgData=ISComm_GetData();
+				//todo:hjx
+				PMSGDATA pMsgData=CIsSvrProxy::GetSvrCore()->GetAck();
 				BYTE byPrefix=pMsgData->byData[0];
 				BYTE *pBuf=pMsgData->byData+1;
 				BYTE iPhrase,byPhrases=*pBuf++;
-				char *pszWord=(char*)(lpCntxtPriv->szWord+byBegin);
+				WCHAR *pszWord=lpCntxtPriv->szWord+byBegin;
 				if(byPrefix==1)
 				{//前缀有效
 					memcpy(pszWord,pBuf+2+2,pBuf[1]-2);
@@ -953,7 +960,7 @@ BOOL CInputState::KeyIn_Spell_SyFix(InputContext * lpCntxtPriv,UINT byInput,
 			else
 			{
 				lpCntxtPriv->bShowTip=TRUE;
-				strcpy(lpCntxtPriv->szTip,"音节错误!");
+				_tcscpy(lpCntxtPriv->szTip,_T("音节错误!"));
 			}
 			return TRUE;
 		}else
@@ -1004,18 +1011,17 @@ BOOL CInputState::KeyIn_Spell_SyFix(InputContext * lpCntxtPriv,UINT byInput,
 				{//删除原有数据
 					free(lpCntxtPriv->pbyBlur[lpCntxtPriv->byCaret]);
 					lpCntxtPriv->pbyBlur[lpCntxtPriv->byCaret]=NULL;
-					memset(lpCntxtPriv->szWord[lpCntxtPriv->byCaret],0x20,2);
+					lpCntxtPriv->szWord[lpCntxtPriv->byCaret]=VK_SPACE;
 					ClearContext(CPC_CAND);//清除当前重码
 				}
 				lpCntxtPriv->bySelect[lpCntxtPriv->byCaret]=0;
 				if(lpSpi->bySpellLen==0)
 				{//自动退出音节编辑状态
 					lpCntxtPriv->bySyCaret=0xFF;
-				}else if(ISComm_Spell2ID(lpSpi->szSpell,lpSpi->bySpellLen)==ISACK_SUCCESS)
+				}else if(CIsSvrProxy::GetSvrCore()->ReqSpell2ID(lpSpi->szSpell,lpSpi->bySpellLen)==ISACK_SUCCESS)
 				{//更新当前正在编辑的音节
-					PMSGDATA pData=NULL;
-					ISComm_SpellGetBlur(lpSpi->szSpell,lpSpi->bySpellLen);
-					pData=ISComm_GetData();
+					CIsSvrProxy::GetSvrCore()->ReqSpellGetBlur(lpSpi->szSpell,lpSpi->bySpellLen);
+					PMSGDATA pData=CIsSvrProxy::GetSvrCore()->GetAck();
 					lpCntxtPriv->pbyBlur[lpCntxtPriv->byCaret]=(LPBYTE)malloc(pData->sSize);
 					memcpy(lpCntxtPriv->pbyBlur[lpCntxtPriv->byCaret],pData->byData,pData->sSize);
 					//重新预测本句的候选句
@@ -1037,7 +1043,7 @@ BOOL CInputState::KeyIn_Spell_ChangeComp(InputContext* lpCntxtPriv,UINT byInput,
 	BOOL bRet=FALSE;
 	BOOL bCompChar=FALSE;
 	SPELLINFO* pSpInfo=lpCntxtPriv->spellData+lpCntxtPriv->byCaret;
-	char (*pComp)[2]=lpCntxtPriv->szWord+lpCntxtPriv->byCaret;
+	WCHAR *pComp=lpCntxtPriv->szWord+lpCntxtPriv->byCaret;
 	BYTE byCaret=lpCntxtPriv->byCaret;
 	if(byInput>='a' && byInput<='z')
 	{
@@ -1095,10 +1101,10 @@ BOOL CInputState::KeyIn_Spell_ChangeComp(InputContext* lpCntxtPriv,UINT byInput,
 			InputStart();
 		}
 		pSpInfo->szSpell[pSpInfo->bySpellLen++]=byInput;
-		if(ISComm_Spell2ID(pSpInfo->szSpell,pSpInfo->bySpellLen)==ISACK_SUCCESS)
+		if(CIsSvrProxy::GetSvrCore()->ReqSpell2ID(pSpInfo->szSpell,pSpInfo->bySpellLen)==ISACK_SUCCESS)
 		{//更新当前正在编辑的音节
-			ISComm_SpellGetBlur(pSpInfo->szSpell,pSpInfo->bySpellLen);
-			pData=ISComm_GetData();
+			CIsSvrProxy::GetSvrCore()->ReqSpellGetBlur(pSpInfo->szSpell,pSpInfo->bySpellLen);
+			pData=CIsSvrProxy::GetSvrCore()->GetAck();
 			if(lpCntxtPriv->pbyBlur[byCaret]) free(lpCntxtPriv->pbyBlur[byCaret]);
 			lpCntxtPriv->pbyBlur[byCaret]=(LPBYTE)malloc(pData->sSize);
 			memcpy(lpCntxtPriv->pbyBlur[byCaret],pData->byData,pData->sSize);
@@ -1124,12 +1130,12 @@ BOOL CInputState::KeyIn_Spell_ChangeComp(InputContext* lpCntxtPriv,UINT byInput,
 				if(byInput!='\'')
 				{
 					pSpInfo->szSpell[pSpInfo->bySpellLen++]=byInput;
-					if(ISComm_Spell2ID(pSpInfo->szSpell,1)==ISACK_SUCCESS)
+					if(CIsSvrProxy::GetSvrCore()->ReqSpell2ID(pSpInfo->szSpell,1)==ISACK_SUCCESS)
 					{
-						pData=ISComm_GetData();
+						pData=CIsSvrProxy::GetSvrCore()->GetAck();
 					}else
 					{//不是拼音，但可能通过借声母形成拼音
-						pData=ISComm_GetData();
+						pData=CIsSvrProxy::GetSvrCore()->GetAck();
 						pData->byData[0]=0;
 					}
 					if(pData->byData[0]==0 && 
@@ -1144,23 +1150,23 @@ BOOL CInputState::KeyIn_Spell_ChangeComp(InputContext* lpCntxtPriv,UINT byInput,
 						siCur.szSpell[1]=byInput;
 						siCur.bySpellLen=2;
 						siPrev.bySpellLen--;
-						if(ISComm_Spell2ID(siPrev.szSpell,siPrev.bySpellLen)==ISACK_SUCCESS &&
-							ISComm_Spell2ID(siCur.szSpell,siCur.bySpellLen)==ISACK_SUCCESS)
+						if(CIsSvrProxy::GetSvrCore()->ReqSpell2ID(siPrev.szSpell,siPrev.bySpellLen)==ISACK_SUCCESS &&
+							CIsSvrProxy::GetSvrCore()->ReqSpell2ID(siCur.szSpell,siCur.bySpellLen)==ISACK_SUCCESS)
 						{//借声母成功,修改前一音节数据
 							_ASSERT(lpCntxtPriv->pbyBlur[byCaret-1]);
 							free(lpCntxtPriv->pbyBlur[byCaret-1]);	//注意释放原拼音占用的堆内存
 							SpellBuf_ClearSyllable(lpCntxtPriv,byCaret-1);
-							ISComm_SpellGetBlur(siPrev.szSpell,siPrev.bySpellLen);
-							pData=ISComm_GetData();
+							CIsSvrProxy::GetSvrCore()->ReqSpellGetBlur(siPrev.szSpell,siPrev.bySpellLen);
+							pData=CIsSvrProxy::GetSvrCore()->GetAck();
 							lpCntxtPriv->pbyBlur[byCaret-1]=(LPBYTE)malloc(pData->sSize);
 							memcpy(lpCntxtPriv->pbyBlur[byCaret-1],pData->byData,pData->sSize);
 							lpCntxtPriv->spellData[byCaret-1]=siPrev;
 							lpCntxtPriv->spellData[byCaret]=siCur;
 						}
 					}
-					if(ISComm_SpellGetBlur(pSpInfo->szSpell,pSpInfo->bySpellLen)==ISACK_SUCCESS)
+					if(CIsSvrProxy::GetSvrCore()->ReqSpellGetBlur(pSpInfo->szSpell,pSpInfo->bySpellLen)==ISACK_SUCCESS)
 					{
-						pData=ISComm_GetData();
+						pData=CIsSvrProxy::GetSvrCore()->GetAck();
 						lpCntxtPriv->pbyBlur[byCaret]=(LPBYTE)malloc(pData->sSize);
 						memcpy(lpCntxtPriv->pbyBlur[byCaret],
 							pData->byData,
@@ -1185,8 +1191,8 @@ BOOL CInputState::KeyIn_Spell_ChangeComp(InputContext* lpCntxtPriv,UINT byInput,
 			if(pSpInfo->bySpellLen)
 			{
 				PMSGDATA pData;
-				ISComm_SpellGetBlur(pSpInfo->szSpell,pSpInfo->bySpellLen);
-				pData=ISComm_GetData();
+				CIsSvrProxy::GetSvrCore()->ReqSpellGetBlur(pSpInfo->szSpell,pSpInfo->bySpellLen);
+				pData=CIsSvrProxy::GetSvrCore()->GetAck();
 				lpCntxtPriv->pbyBlur[byCaret]=(LPBYTE)malloc(pData->sSize);
 				memcpy(lpCntxtPriv->pbyBlur[byCaret],
 					pData->byData,
@@ -1264,8 +1270,8 @@ BOOL CInputState::KeyIn_Spell_GetSpellInput(InputContext * lpCntxtPriv,BYTE bySp
 		BOOL  bFind=FALSE;
 		if(lpCntxtPriv->spellData[i].bySpellLen==0) continue;
 		//找到当前用户选择的汉字的拼音，通过多音字与模糊音两者匹配获得
-		ISComm_QueryWordSpell(lpCntxtPriv->szWord[i]);//获得汉字的所有拼音的ID
-		pData=ISComm_GetData();
+		CIsSvrProxy::GetSvrCore()->ReqQueryWordSpell(lpCntxtPriv->szWord[i]);//获得汉字的所有拼音的ID
+		pData=CIsSvrProxy::GetSvrCore()->GetAck();
 
 		for(j=0;j<pData->byData[0];j++)
 		{
@@ -1692,7 +1698,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 			if(lpCntxtPriv->sCandCount)
 			{
 				//防止符号输入时出现错误:标点不能做首编码,退出当前过程,进入标点顶字上屏过程
-				if((byInput<'a' || byInput>'z') && !ISComm_GetCompInfo()->bSymbolFirst)
+				if((byInput<'a' || byInput>'z') && !CIsSvrProxy::GetSvrCore()->GetCompHead()->bSymbolFirst)
 					return FALSE;
 				BYTE *pByCand = lpCntxtPriv->ppbyCandInfo[0];
 				if(pByCand[0]!=RATE_FORECAST && (pByCand[0]!=RATE_GBK || g_SettingsG->nGbkMode!=CSettingsGlobal::GBK_SHOW_MANUAL))
@@ -1707,7 +1713,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 		{
 			if(byInput<'a' || byInput>'z')
 			{//标点：要么不是自定义模式快捷键，或者不支持快捷自定义模式切换
-				if(!ISComm_GetCompInfo()->bSymbolFirst)
+				if(!CIsSvrProxy::GetSvrCore()->GetCompHead()->bSymbolFirst)
 					return FALSE;//符号顶字上屏
 			}
 			if(bWild && g_SettingsG->bDisableFirstWild)//禁止首码万能键
@@ -1821,7 +1827,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 			lpCntxtPriv->sbState=::SBST_NORMAL;	//退出联想状态
 			if(ISComm_QueryCand(lpCntxtPriv->szComp,lpCntxtPriv->cComp,byMask,m_pListener->GetHwnd())==ISACK_SUCCESS)
 			{
-				PMSGDATA pMsgData=ISComm_GetData();
+				PMSGDATA pMsgData=CIsSvrProxy::GetSvrCore()->GetAck();
 				LPBYTE pbyData,pCandData;
 				short i,sCount,sSingleWords=0;
 				memcpy(m_pbyMsgBuf,pMsgData->byData,pMsgData->sSize);
@@ -2058,7 +2064,7 @@ BOOL CInputState::KeyIn_Code_English(InputContext * lpCntxtPriv,UINT byInput,
 		{//编码已经修改
 			if(ISComm_EnQueryCand(lpCntxtPriv->szComp,lpCntxtPriv->cComp)==ISACK_SUCCESS)
 			{
-				PMSGDATA pData=ISComm_GetData();
+				PMSGDATA pData=CIsSvrProxy::GetSvrCore()->GetAck();
 				LPBYTE  pBuf=m_pbyMsgBuf;
 				BYTE i,byCount=0;
 				memcpy(m_pbyMsgBuf,pData->byData,pData->sSize);
@@ -2140,7 +2146,7 @@ BOOL CInputState::KeyIn_UserDef_ChangeComp(InputContext * lpCntxtPriv,UINT byInp
 	ClearContext(CPC_CAND);
 	if(lpCntxtPriv->cComp && ISACK_SUCCESS==ISComm_UDQueryCand(lpCntxtPriv->szComp,lpCntxtPriv->cComp))
 	{//获取自定义词组,支持多个重码
-		PMSGDATA pMsgData=ISComm_GetData();
+		PMSGDATA pMsgData=CIsSvrProxy::GetSvrCore()->GetAck();
 		LPBYTE pbyData;
 		short i;
 		memcpy(m_pbyMsgBuf,pMsgData->byData,pMsgData->sSize);
@@ -2194,7 +2200,7 @@ BOOL CInputState::KeyIn_Line_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 		ClearContext(CPC_CAND);
 		if(lpCntxtPriv->cComp && ISComm_LineQueryCand(lpCntxtPriv->szComp,lpCntxtPriv->cComp)==ISACK_SUCCESS)
 		{//查询重码
-			PMSGDATA pMsgData=ISComm_GetData();
+			PMSGDATA pMsgData=CIsSvrProxy::GetSvrCore()->GetAck();
 			short i,sCount=0;
 			LPBYTE pBuf=m_pbyMsgBuf;
 			memcpy(m_pbyMsgBuf,pMsgData->byData,pMsgData->sSize);

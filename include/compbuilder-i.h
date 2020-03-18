@@ -38,23 +38,6 @@ struct ICodingRule
 
 };
 
-typedef struct tagCOMPHEAD
-{
-	WCHAR szName[50];	//名称
-	char szCode[50];	//码元
-	char cWildChar;		//万能键
-	char cCodeMax;		//最大码长
-	WCHAR szUrl[50];		//相关网址
-	DWORD dwWords;		//已经编码字符数
-	BOOL bSymbolFirst;	//标点首编码
-	DWORD dwEncrypt : 1;	//加密标志
-	DWORD dwYinXingMa : 1;	//音形码优化标志
-	DWORD dwPhraseCompPart : 1;	//词组编码不一定是全码
-	DWORD dwAutoSelect : 1;	//单一重码自动上屏
-	DWORD dwLicense : 1;		//编码需要授权才能使用
-	DWORD dwReserved : 27;	//保留,初始化为0
-}COMPHEAD;
-
 struct ICompBuilder
 {
 	virtual ~ICompBuilder() {}

@@ -79,7 +79,7 @@ struct InputContext
 	BYTE	bySyllables;			//拼音音节数
 	BYTE	byCaret;				//当前编辑的音节
 	BYTE	bySyCaret;				//音节内部编辑光标
-	char	szWord[MAX_SYLLABLES][2];	//拼音对应的汉字
+	WCHAR	szWord[MAX_SYLLABLES];	//拼音对应的汉字
 	SPELLINFO spellData[MAX_SYLLABLES];	//音节信息
 	BYTE	bySelect[MAX_SYLLABLES];	//手动选择重码标志 0-自动预测,1-手动选择单字，其它－手动选择词组
 	LPBYTE  pbyBlur[MAX_SYLLABLES];		//拼音的模糊音
@@ -98,7 +98,7 @@ struct InputContext
 
 	BOOL    bShowTip;				//show tip in comp
 	int		iTip;					//current tip index
-	char	szTip[201];
+	TCHAR	szTip[201];
 
 	TCHAR   szInput[MAX_INPUT];
 	int		cInput;

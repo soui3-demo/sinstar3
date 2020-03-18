@@ -59,11 +59,11 @@ protected:
 	void InputHide(BOOL bDelay = FALSE);
 	void StatusbarUpdate();
 
-	int Tips_Next(BOOL bSpell, char *pszBuf, int iTip, bool bNext = true);
+	int Tips_Next(BOOL bSpell, TCHAR *pszBuf, int iTip, bool bNext = true);
 private:
 	int TestHotKey(UINT uVk, const BYTE * lpbKeyState) const;
 	void Tips_Init();
-	int Tips_Rand(BOOL bSpell, char * pszBuf);
+	int Tips_Rand(BOOL bSpell, TCHAR * pszBuf);
 	
 	void TurnToTempSpell();
 
@@ -85,7 +85,7 @@ private:
 	BOOL KeyIn_All_TurnCandPage(InputContext * lpCntxtPriv,UINT byInput, CONST BYTE * lpbKeyState);
 	BOOL KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,char cCompLen, CONST BYTE * lpbKeyState,bool bKeepVisible=false);
 	BOOL KeyIn_InputAndAssociate(InputContext * lpCntxtPriv,const char *pszInput,short sLen,BYTE byMask);
-	void GetShapeComp(const char *pInput,char cLen);
+	void GetShapeComp(const WCHAR *pInput,char cLen);
 	BOOL KeyIn_Code_Normal(InputContext * lpCntxtPriv,UINT byInput, CONST BYTE * lpbKeyState);
 	BOOL KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput, CONST BYTE * lpbKeyState);
 	BOOL KeyIn_Code_Symbol(InputContext * lpCntxtPriv,UINT byInput, CONST BYTE * lpbKeyState);
@@ -97,7 +97,7 @@ private:
 	BOOL KeyIn_UserDef_ChangeComp(InputContext * lpCntxtPriv,UINT byInput, CONST BYTE* lpbKeyState);
 	BOOL KeyIn_Line_ChangeComp(InputContext * lpCntxtPriv,UINT byInput, CONST BYTE * lpbKeyState);
 
-	SStringA Symbol_Convert(InputContext * lpCntxtPriv,UINT byInput,const BYTE * lpbKeyState);
+	SStringW Symbol_Convert(InputContext * lpCntxtPriv,UINT byInput,const BYTE * lpbKeyState);
 
 	InputContext m_ctx;
 	IInputListener * m_pListener;
@@ -111,7 +111,7 @@ private:
 		TT_COUNT,
 	};
 
-	SArray<SStringA>  m_tips[TT_COUNT];
+	SArray<SStringT>  m_tips[TT_COUNT];
 	BOOL			 m_bUpdateTips;
 
 	DWORD			 m_tmInputStart;

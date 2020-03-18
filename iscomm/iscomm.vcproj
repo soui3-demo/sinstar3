@@ -153,10 +153,6 @@
 				RelativePath=".\commfile.c"
 				>
 			</File>
-			<File
-				RelativePath=".\iscomm.c"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Í·ÎÄ¼þ"
@@ -165,14 +161,6 @@
 			>
 			<File
 				RelativePath=".\commfile.h"
-				>
-			</File>
-			<File
-				RelativePath=".\iscomm.h"
-				>
-			</File>
-			<File
-				RelativePath=".\isProtocol.h"
 				>
 			</File>
 		</Filter>

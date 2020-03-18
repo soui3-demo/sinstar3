@@ -1,6 +1,7 @@
 #include "StdAfx.h"
 #include "DataCenter.h"
 #include "../ime/ui/SkinMananger.h"
+#include "../IsSvrProxy.h"
 
 namespace SOUI
 {
@@ -27,28 +28,81 @@ namespace SOUI
 		LeaveCriticalSection(&m_cs);
 	}
 
+	/*
+LRESULT CServerCore::ReqCompList(HWND hClientWnd, PMSGDATA pMsg)
+{
+	COMFILE cf = CF_Init(m_pMsgAck->byData, MAX_BUF_ACK, 0, 0);
+	CF_WriteChar(&cf, 0);
+	BYTE byCount = 0;
+
+	char szTitle[255];
+	char szFilter[MAX_PATH];
+	char szFullPath[MAX_PATH];
+	COMPHEAD header = { 0 };
+	sprintf(szFilter, "%s\\*.cit", m_data.m_szDataPath);
+	WIN32_FIND_DATAA fd;
+	HANDLE hFind = FindFirstFileA(szFilter, &fd);
+	if (hFind != INVALID_HANDLE_VALUE)
+	{
+		do {
+			if (!(fd.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY))
+			{
+				sprintf(szFullPath, "%s\\%s", m_data.m_szDataPath, fd.cFileName);
+				if (CCompReaderEx::ExtractInfo(szFullPath, &header, NULL))
+				{
+					_splitpath(szFullPath, NULL, NULL, szTitle, NULL);
+					if (strcmp(m_strDefComp, szTitle) == 0)
+						CF_WriteChar(&cf, 1);
+					else
+						CF_WriteChar(&cf, 0);
+					CF_Write(&cf, szTitle, strlen(szTitle) + 1);
+					CF_Write(&cf, header.szName, strlen(header.szName) + 1);
+					byCount++;
+					if (byCount>20) break;
+				}
+			}
+		} while (FindNextFileA(hFind, &fd));
+		FindClose(hFind);
+	}
+	CF_Seek(&cf, 0, SEEK_SET);
+	CF_WriteChar(&cf, byCount);
+	m_pMsgAck->sSize = (short)cf.nLen;
+	return ISACK_SUCCESS;
+}
+*/
 
 	const SArray<CNameTypePair>& CDataCenter::UpdateCompList()
 	{
 		m_compList.RemoveAll();
 		m_iSelComp = -1;
-		if (ISComm_Comp_List() == ISACK_SUCCESS)
+
+
+		TCHAR szTitle[255];
+		TCHAR szFilter[MAX_PATH];
+		TCHAR szFullPath[MAX_PATH];
+		COMPHEAD header = { 0 };
+		_stprintf(szFilter, _T("%s\\*.cit"), GetDataPath());
+		WIN32_FIND_DATA fd;
+		HANDLE hFind = FindFirstFile(szFilter, &fd);
+		if (hFind != INVALID_HANDLE_VALUE)
 		{
-			PMSGDATA pData = ISComm_GetData();
-			BYTE i, byCount = pData->byData[0];
-			char *pBuf = (char*)pData->byData + 1;
-			for (i = 0; i<byCount; i++)
-			{
-				CNameTypePair pair;
-				char *pName = pBuf + 1;
-				pair.strName = pName;
-				char *pType = pName + pair.strName.GetLength() + 1;
-				pair.strType = pType;
-				if (pBuf[0]) m_iSelComp = i;
-				pBuf = pType + pair.strType.GetLength() + 1;
-				m_compList.Add(pair);
-			}
+			do {
+				if (!(fd.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY))
+				{
+					_stprintf(szFullPath, _T("%s\\%s"), GetDataPath(), fd.cFileName);
+					if (CIsSvrProxy::GetSvrCore()->ExtractCompInfo(szFullPath, &header, NULL))
+					{
+						_tsplitpath(szFullPath, NULL, NULL, szTitle, NULL);
+						CNameTypePair item;
+						item.strType=szTitle;
+						item.strName=szFullPath;
+						m_compList.Add(item);//todo:hjx
+					}
+				}
+			} while (FindNextFile(hFind, &fd));
+			FindClose(hFind);
 		}
+
 		return m_compList;
 	}
 
@@ -219,10 +273,10 @@ namespace SOUI
 		return (*c1) - (*c2);
 	}
 
-	void CompInfo::SetSvrCompInfo(const COMPINFO * compInfo)
+	void CompInfo::SetSvrCompInfo(const COMPHEAD * compInfo)
 	{
 		cWild = compInfo->cWildChar;
-		strCompName = S_CA2T(compInfo->szName, CP_GB);
+		strCompName = S_CW2T(compInfo->szName);
 		strcpy(szCode,compInfo->szCode);
 		nCodeNum = (int)strlen(szCode);
 		qsort(szCode,nCodeNum,sizeof(char),CharCmp);

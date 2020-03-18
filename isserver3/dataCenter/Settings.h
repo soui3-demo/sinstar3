@@ -100,6 +100,12 @@ public:
 	SStringT urlComp;
 	SStringT urlForum;
 	SStringT urlStatistics;
+
+	BOOL	bShowTray;
+	BOOL	bAutoQuit;
+	int		nUpdateInterval;
+	TCHAR   szUpdateDate[100];
+	TCHAR	szUpdateUrl[MAX_PATH];
 };
 
 class CSettingsUI: public CModifiedMark

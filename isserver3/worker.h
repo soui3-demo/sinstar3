@@ -44,7 +44,7 @@ public:
 	void SpeakWText(const WCHAR * pwcText,int nLen,BOOL bCh);
 	void SpeakText(LPCSTR pszText,int nLen,BOOL bCh);
 	void ReportUserInfo();
-	void CheckUpdate(LPCSTR pszUri, bool bManual);
+	void CheckUpdate(LPCTSTR pszUri, bool bManual);
 	void PlaySoundFromResource(LPCWSTR pszSoundID);
 private:
 	void _SetSpeed(WPARAM wp);

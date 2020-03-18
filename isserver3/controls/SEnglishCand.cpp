@@ -80,10 +80,10 @@ namespace SOUI
 	{
 		PFLMINFO pflmInfo = (PFLMINFO)lp;
 		SLOG_INFO("font:" << pflmInfo->szAddFont);
-		SStringA strFontInfo="face:";
+		SStringW strFontInfo=L"face:";
 		strFontInfo += pflmInfo->szAddFont;
 
-		m_ftPhonetic = SFontPool::getSingleton().GetFont(S_CA2W(strFontInfo),GetScale());
+		m_ftPhonetic = SFontPool::getSingleton().GetFont(strFontInfo,GetScale());
 		return 1;
 	}
 

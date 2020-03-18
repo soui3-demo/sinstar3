@@ -13,12 +13,12 @@ namespace SOUI {
 	{
 	}
 
-	void SFlagView::SetImeFlagData(const IMEFLAGDATA * pData)
+	void SFlagView::SetImeFlagData(LPBYTE pData,DWORD dwLen)
 	{
 		m_imeFlag = NULL;
 		if (pData)
 		{
-			m_imeFlag.Attach(SResLoadFromMemory::LoadImage(pData->pData, pData->nLen));
+			m_imeFlag.Attach(SResLoadFromMemory::LoadImage(pData, dwLen));
 			if(m_crTheme != CR_INVALID)
 			{
 				SDIBHelper::Colorize(m_imeFlag,m_crTheme);

@@ -63,12 +63,12 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HWND hSvr)
 
 	SLOG_INFO("status:"<<m_pStatusWnd->m_hWnd<<", input:"<<m_pInputWnd->m_hWnd);
 	Create(KSinstar3WndName,WS_DISABLED|WS_POPUP,WS_EX_TOOLWINDOW,0,0,0,0,HWND_MESSAGE,NULL);
-	ISComm_Login(m_hWnd);
+	CIsSvrProxy::GetSvrCore()->ReqLogin(m_hWnd);
 }
 
 CSinstar3Impl::~CSinstar3Impl(void)
 {
-	ISComm_Logout(m_hWnd);
+	CIsSvrProxy::GetSvrCore()->ReqLogout(m_hWnd);
 	DestroyWindow();
 	m_pInputWnd->DestroyWindow();
 	m_pStatusWnd->DestroyWindow();
@@ -234,12 +234,12 @@ void CSinstar3Impl::NotifyScaleInfo(HWND hRefWnd)
 
 LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 {
-	PMSGDATA pMsg=ISComm_OnSeverNotify(m_hWnd,wp,lp);
+	PMSGDATA pMsg = CIsSvrProxy::GetSvrCore()->GetAck();
 	if(wp==NT_COMPINFO)
 	{
 		CDataCenter::getSingleton().Lock();
 		CMyData &myData = CDataCenter::getSingleton().GetData();
-		myData.m_compInfo.SetSvrCompInfo(ISComm_GetCompInfo());
+		myData.m_compInfo.SetSvrCompInfo(CIsSvrProxy::GetSvrCore()->GetCompHead());
 
 		TCHAR szBuf[100]={0};
 		int i=0;
@@ -283,17 +283,18 @@ LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 			RemoveFontResourceEx(m_strLoadedFontFile, FR_PRIVATE, NULL);
 			m_strLoadedFontFile.Empty();
 		}
-		if (ISComm_GetFlmInfo()->szAddFont[0])
+		FLMINFO *pInfo = (FLMINFO*)pMsg->byData;
+		if (pInfo->szAddFont[0])
 		{//需要特殊字体
-			SLOG_INFO("NT_FLMINFO,font:" << ISComm_GetFlmInfo()->szAddFont);
+			SLOG_INFO("NT_FLMINFO,font:" << pInfo->szAddFont);
 
-			SStringW strFontFile = CDataCenter::getSingleton().GetData().getFontFile(S_CA2W(ISComm_GetFlmInfo()->szAddFont));
+			SStringW strFontFile = CDataCenter::getSingleton().GetData().getFontFile(pInfo->szAddFont);
 			if (!strFontFile.IsEmpty())
 			{
 				m_strLoadedFontFile = CDataCenter::getSingletonPtr()->GetDataPath() + _T("\\data\\") + S_CW2T(strFontFile);
 				AddFontResourceEx(m_strLoadedFontFile, FR_PRIVATE , NULL);
 			}
-			m_pInputWnd->OnFlmInfo(ISComm_GetFlmInfo());
+			m_pInputWnd->OnFlmInfo(pInfo);
 		}
 		return 1;
 	}

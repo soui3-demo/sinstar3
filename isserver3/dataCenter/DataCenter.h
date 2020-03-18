@@ -9,7 +9,7 @@ namespace SOUI
 		int  nCodeNum;
 		TCHAR    cWild;
 
-		void SetSvrCompInfo(const COMPINFO * compInfo);
+		void SetSvrCompInfo(const COMPHEAD * compHead);
 
 		BOOL IsCompChar(char cInput);
 
@@ -49,8 +49,8 @@ namespace SOUI
 	class CNameTypePair
 	{
 	public:
-		SStringA strType;
-		SStringA strName;
+		SStringT strType;
+		SStringT strName;
 	};
 
 class CDataCenter : public SSingleton<CDataCenter>

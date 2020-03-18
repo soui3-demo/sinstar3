@@ -45,6 +45,7 @@ namespace SOUI {
 	}
 }
 
+CIsSvrProxy * CIsSvrProxy::_this = NULL;
 CIsSvrProxy::CIsSvrProxy(const SStringT &strDataPath,const SStringT & strSvrPath)
 	:m_strDataPath(strDataPath)
     ,m_strSvrPath(strSvrPath)
@@ -58,6 +59,7 @@ CIsSvrProxy::CIsSvrProxy(const SStringT &strDataPath,const SStringT & strSvrPath
 	, m_pPendingCmd(NULL)
 	,m_pFocusConn(NULL)
 {
+	_this = this;
 	m_uMsgTaskbarCreated = RegisterWindowMessage(TEXT("TaskbarCreated"));
 }
 
@@ -113,7 +115,7 @@ int CIsSvrProxy::OnCreate(LPCREATESTRUCT pCS)
 			nRet = -1;
 			break;
 		}
-		if (!m_pCore->Init(m_hWnd, this, S_CT2A(m_strSvrPath)))
+		if (!m_pCore->Init(m_hWnd, this, m_strSvrPath))
 		{
 			m_funIsCore_Destroy(m_pCore);
 			m_pCore = NULL;
@@ -137,11 +139,7 @@ int CIsSvrProxy::OnCreate(LPCREATESTRUCT pCS)
 		Helper_VersionString(dwVer, szVer);
 		SStringT strTip = SStringT().Format(strTipFmt, szVer);
 		m_trayIcon.Init(m_hWnd, strTip);
-		if(m_pCore->IsShowTray()) m_trayIcon.Show();
-
-		char szConfig[MAX_PATH];
-		m_pCore->GetConfigIni(szConfig, MAX_PATH);
-		m_nUpdateInterval = GetPrivateProfileIntA("update", "interval", 30, szConfig);
+		if(g_SettingsG->bShowTray) m_trayIcon.Show();
 
 		SetTimer(TIMERID_CHECK_UPDATE, SPAN_CHECK_UPDATE, NULL);
 		SetTimer(TIMERID_DATA_REPORT, SPAN_DATA_REPORT1, NULL);
@@ -260,18 +258,16 @@ void CIsSvrProxy::OnKeyMapFree(CKeyMapDlg * pWnd)
 
 int CIsSvrProxy::GetUpdateInterval() const
 {
-	return m_nUpdateInterval;
+	return g_SettingsG->nUpdateInterval;
 }
 
 void CIsSvrProxy::OnUpdateIntervalChanged(int nInterval)
 {
-	m_nUpdateInterval = nInterval;
-	char szConfig[MAX_PATH];
-	m_pCore->GetConfigIni(szConfig, MAX_PATH);
-	WritePrivateProfileStringA("update", "interval", SStringA().Format("%d",m_nUpdateInterval), szConfig);
+	g_SettingsG->nUpdateInterval=nInterval;
+	g_SettingsG->SetModified(true);
 }
 
-void CIsSvrProxy::OnShowKeyMap(IDataBlock * pCompData, LPCSTR pszName, LPCSTR pszUrl) {
+void CIsSvrProxy::OnShowKeyMap(IDataBlock * pCompData, LPCWSTR pszName, LPCWSTR pszUrl) {
 	CAutoRefPtr<IImgDecoderFactory> imgDecoder;
 	SComLoader comLoader;
 	comLoader.CreateInstance(_T("imgdecoder-gdip.dll"), (IObjRef**)&imgDecoder);
@@ -346,7 +342,7 @@ LRESULT CIsSvrProxy::OnTrayNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 				POINT pt;
 				GetCursorPos(&pt);
 				SetForegroundWindow(m_hWnd);
-				::CheckMenuItem(menu.m_hMenu,R.id.menu_auto_exit, MF_BYCOMMAND | (m_pCore->IsAutoQuit()?MF_CHECKED:0));
+				::CheckMenuItem(menu.m_hMenu,R.id.menu_auto_exit, MF_BYCOMMAND | (g_SettingsG->bAutoQuit?MF_CHECKED:0));
 				::CheckMenuItem(menu.m_hMenu, R.id.menu_auto_run, MF_BYCOMMAND | (IsAutoRun() ? MF_CHECKED : 0));
 				int nScale = SDpiHelper::getScale(GetDesktopWindow());
 				//nScale=100;
@@ -361,7 +357,7 @@ LRESULT CIsSvrProxy::OnTrayNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 
 LRESULT CIsSvrProxy::OnTaskbarCreated(UINT uMsg, WPARAM wp, LPARAM lp)
 {
-	if (m_pCore->IsShowTray())
+	if (g_SettingsG->bShowTray)
 	{
 		m_trayIcon.Show();
 	}
@@ -420,8 +416,9 @@ void CIsSvrProxy::OnMenuExit(UINT uNotifyCode, int nID, HWND wndCtl)
 
 void CIsSvrProxy::OnMenuAutoExit(UINT uNotifyCode, int nID, HWND wndCtl)
 {
-	bool bAutoExit = !m_pCore->IsAutoQuit();
-	m_pCore->SetAutoQuit(bAutoExit);
+	BOOL bAutoExit = !g_SettingsG->bAutoQuit;
+	g_SettingsG->bAutoQuit = bAutoExit;
+	g_SettingsG->SetModified(true);
 	if (bAutoExit && IsAutoRun())
 	{
 		SetAutoRun(false);
@@ -439,23 +436,25 @@ void CIsSvrProxy::OnMenuSettings(UINT uNotifyCode, int nID, HWND wndCtl)
 void CIsSvrProxy::OnMenuAutoRun(UINT uNotifyCode, int nID, HWND wndCtl)
 {
 	bool bAutoRun = !IsAutoRun();
-	if (bAutoRun) m_pCore->SetAutoQuit(false);
+	if (bAutoRun)
+	{
+		g_SettingsG->bAutoQuit=FALSE;
+		g_SettingsG->SetModified(true);
+	}
 	SetAutoRun(bAutoRun);
 }
 
 
 void CIsSvrProxy::CheckUpdate(bool bManual)
 {
-	char szConfig[MAX_PATH];
-	char szDate[100];
 	STime timeToday = STime::GetCurrentTime();
-	m_pCore->GetConfigIni(szConfig, MAX_PATH);
 	if (!bManual)
 	{
-		if (m_nUpdateInterval == 0) return;
+		if (g_SettingsG->nUpdateInterval == 0) 
+			return;
 		int nDay, nMonth, nYear;
-		GetPrivateProfileStringA("update", "date", "0-0-0", szDate, 100, szConfig);
-		sscanf(szDate, "%d-%d-%d", &nMonth, &nDay, &nYear);
+		//GetPrivateProfileStringA("update", "date", "0-0-0", szDate, 100, szConfig);
+		_stscanf(g_SettingsG->szUpdateDate, _T("%d-%d-%d"), &nMonth, &nDay, &nYear);
 		int nDays = 360 * (timeToday.GetYear() - nYear);
 		nDays += 30 * (timeToday.GetMonth() - nMonth);
 		nDays += timeToday.GetDay() - nDay;
@@ -463,13 +462,14 @@ void CIsSvrProxy::CheckUpdate(bool bManual)
 	}
 
 	//update date
-	sprintf(szDate, "%d-%d-%d", timeToday.GetMonth(), timeToday.GetDay(), timeToday.GetYear());
-	WritePrivateProfileStringA("update", "date", szDate, szConfig);
+	_stprintf(g_SettingsG->szUpdateDate, _T("%d-%d-%d"), timeToday.GetMonth(), timeToday.GetDay(), timeToday.GetYear());
+	g_SettingsG->SetModified(true);
+	//WritePrivateProfileStringA("update", "date", szDate, szConfig);
 
-	char szUri[500];
-	GetPrivateProfileStringA("update", "url", "http://soime.cm/sinstar3_update.xml", szUri, 500, szConfig);
+	//char szUri[500];
+	//GetPrivateProfileStringA("update", "url", "http://soime.cm/sinstar3_update.xml", szUri, 500, szConfig);
 
-	CWorker::getSingletonPtr()->CheckUpdate(szUri, bManual);
+	CWorker::getSingletonPtr()->CheckUpdate(g_SettingsG->szUpdateUrl, bManual);
 }
 
 
@@ -484,9 +484,8 @@ void CIsSvrProxy::OnCheckUpdateResult(EventArgs *e)
 		}
 		return;
 	}
-	char szConfig[MAX_PATH];
-	m_pCore->GetConfigIni(szConfig, MAX_PATH);
-	WritePrivateProfileStringA("update", "url", S_CW2A(e2->strNewUpdateUrl), szConfig);
+	_tcscpy(g_SettingsG->szUpdateUrl,S_CW2T(e2->strNewUpdateUrl));
+	g_SettingsG->SetModified(true);
 
 	CRegKey reg;
 	LONG ret = reg.Open(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\SetoutSoft\\sinstar3"), KEY_READ | KEY_WOW64_64KEY);
@@ -619,7 +618,7 @@ LRESULT CIsSvrProxy::OnCopyData(HWND hWnd,PCOPYDATASTRUCT lpCopyData)
 	}
 	if(lpCopyData->dwData == CD_CMD_INSTALL_CIT)
 	{//install cit
-		SStringA strPath = S_CW2A((wchar_t*)lpCopyData->lpData);
+		SStringT strPath = S_CW2T((wchar_t*)lpCopyData->lpData);
 		if(m_pCore->InstallCit(strPath))
 		{
 			SMessageBox(GetDesktopWindow(),_T("码表安装成功！"),_T("提示"),MB_OK|MB_ICONINFORMATION);
@@ -629,7 +628,7 @@ LRESULT CIsSvrProxy::OnCopyData(HWND hWnd,PCOPYDATASTRUCT lpCopyData)
 		}
 	}else if(lpCopyData->dwData == CD_CMD_INSTALL_PLT)
 	{//install plt
-		SStringA strPath = S_CW2A((wchar_t*)lpCopyData->lpData);
+		SStringT strPath = S_CW2T((wchar_t*)lpCopyData->lpData);
 		if(m_pCore->InstallPlt(strPath))
 		{
 			SMessageBox(GetDesktopWindow(),_T("词库安装成功！"),_T("提示"),MB_OK|MB_ICONINFORMATION);
@@ -744,4 +743,9 @@ void CIsSvrProxy::CbNotifyConnectionsSkinChanged(IIpcConnection *pConn, ULONG_PT
 {
 	CSvrConnection *pSvrConn = (CSvrConnection*)pConn;
 	pSvrConn->OnSkinChanged();
+}
+
+IServerCore * CIsSvrProxy::GetSvrCore()
+{
+	return _this->m_pCore;
 }

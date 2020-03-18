@@ -126,6 +126,9 @@ void CSettingsGlobal::Save(const SStringT & strDataPath)
 		strHotKey = SStringT((TCHAR)g_SettingsG->bySentMode);
 		WritePrivateProfileString(_T("hotkey"), _T("sentence"), strHotKey, strHotKeyFile);
 	}
+	WritePrivateProfileInt(KSession,_T("showTray"),bShowTray,strConfigIni);
+	WritePrivateProfileInt(KSession,_T("autoQuit"),bAutoQuit,strConfigIni);
+	WritePrivateProfileInt(_T("update"), _T("interval"),nUpdateInterval,strConfigIni);
 
 	SetModified(false);
 }
@@ -233,6 +236,10 @@ void CSettingsGlobal::Load(const SStringT & strDataPath)
 	urlStatistics = szBuf;
 	GetPrivateProfileString(KUrl, _T("forum"), _T("http://www.soui.vip/forum.php?gid=51"), szBuf, MAX_PATH, strConfigIni);
 	urlForum = szBuf;
+
+	bShowTray = GetPrivateProfileInt(KSession,_T("showTray"),1,strConfigIni);
+	bAutoQuit = GetPrivateProfileInt(KSession,_T("autoQuit"),0,strConfigIni);
+	nUpdateInterval = GetPrivateProfileInt(_T("update"), _T("interval"), 30, strConfigIni);
 
 	SetModified(false);
 }

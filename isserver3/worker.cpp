@@ -137,9 +137,9 @@ void CWorker::ReportUserInfo()
 	PostMessage(UM_FUN_DATA_REPORT);
 }
 
-void CWorker::CheckUpdate(LPCSTR pszUri, bool bManual)
+void CWorker::CheckUpdate(LPCTSTR pszUri, bool bManual)
 {
-	PostMessage(UM_FUN_CHECK_UPDATE, bManual, (LPARAM)_strdup(pszUri));
+	PostMessage(UM_FUN_CHECK_UPDATE, bManual, (LPARAM)_tcsdup(pszUri));
 }
 
 
@@ -320,8 +320,9 @@ LRESULT CWorker::OnTTSMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 LRESULT CWorker::OnCheckUpdate(UINT uMsg, WPARAM wp, LPARAM lp)
 {
 	CWinHttp  winHttp;
-	char * pszUri = (char*)lp;
-	string strHtml = winHttp.Request(pszUri, Hr_Get);
+	LPTSTR  pszUri = (LPTSTR)lp;
+	SStringA strUrl=S_CT2A(pszUri);
+	string strHtml = winHttp.Request(strUrl, Hr_Get);
 	free(pszUri);
 	if (strHtml.empty())
 	{

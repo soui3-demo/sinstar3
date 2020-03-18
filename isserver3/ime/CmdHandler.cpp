@@ -4,6 +4,8 @@
 #include "ui/STipWnd.h"
 #include "Utils.h"
 #include <shellapi.h>
+#include "../IsSvrProxy.h"
+#include "../dataCenter/DataCenter.h"
 
 using namespace SOUI;
 #define MAX_UDICTKEY	40	//最大关键字长度
@@ -26,28 +28,26 @@ void CCmdHandler::OnHotkeyMakePhrase(LPARAM lp)
 	int nRet =CUtils::GetClipboardText(m_pSinstar3->m_hWnd, szBuf, MAX_INPUT);
 	if (nRet > 0)
 	{
-		SStringA str = S_CW2A(SStringW(szBuf, nRet));
-		char szMsg[300];
-		if (str.GetLength()<127 && ISComm_MakePhrase(str, (char)str.GetLength()) == ISACK_SUCCESS)
+		SStringT msg;
+		if (nRet<127 && CIsSvrProxy::GetSvrCore()->ReqMakePhrase(szBuf, nRet) == ISACK_SUCCESS)
 		{
-			PMSGDATA pMsg = ISComm_GetData();
+			PMSGDATA pMsg = CIsSvrProxy::GetSvrCore()->GetAck();
 			if (pMsg->byData[0] == 1)
-				sprintf(szMsg, "词\"%s\"已经存在", (LPCSTR)str);
+				msg.Format(_T("词\"%s\"已经存在"), szBuf);
 			else
-				sprintf(szMsg, "词\"%s\"加入词库", (LPCSTR)str);
+				msg.Format(_T("词\"%s\"加入词库"), szBuf);
 		}
 		else
 		{
-			sprintf(szMsg, "造词\"%s\"失败", (LPCSTR)str);
+			msg.Format(_T("造词\"%s\"失败"), szBuf);
 		}
-		SStringT msg = S_CA2T(szMsg);
 		m_pSinstar3->ShowTip(_T("造词"), msg);
 	}
 }
 
 void CCmdHandler::OnHotKeyKeyMap(LPARAM lp)
 {
-	ISComm_SendMsg(CT_SHOWKEYMAP, 0, 0, 0);
+	CIsSvrProxy::GetSvrCore()->ReqShowKeyMap();
 }
 
 void CCmdHandler::OnHotKeyHideStatusBar(LPARAM lp)
@@ -73,74 +73,77 @@ void CCmdHandler::OnHotKeyQueryInfo(LPARAM lp)
 	}
 	if (nGet)
 	{
-		SStringA strBuf = S_CW2A(szBuf);
-		char szRet[128 + 300 + 300 + MAX_UDICTPHRASE] = { 0 };//关键词+拼音+五笔+用户词典
-		char *p = szRet;
-		if (strBuf[0] & 0x80)
+		SStringW strBuf = (szBuf);
+		TCHAR szRet[128 + 300 + 300] = { 0 };//关键词+拼音+五笔
+		TCHAR *p = szRet;
+		if (strBuf[0]>128)
 		{//中文关键词，可以查询编码数据
-			p += sprintf(p, "关键词=%s", (LPCSTR)strBuf);
-			if (ISComm_QueryComp(strBuf, strBuf.GetLength()) == ISACK_SUCCESS)
+			p += _stprintf(p, _T("关键词=%s"), S_CW2T(strBuf));
+			if (CIsSvrProxy::GetSvrCore()->ReqQueryComp(strBuf, strBuf.GetLength()) == ISACK_SUCCESS)
 			{
-				PMSGDATA pData = ISComm_GetData();
+				PMSGDATA pData = CIsSvrProxy::GetSvrCore()->GetAck();
 				pData->byData[pData->sSize] = 0;
-				p += sprintf(p, "\n%s=%s", ISComm_GetCompInfo()->szName, (char*)pData->byData);
+				p += _stprintf(p, _T("\n%s=%s"),CDataCenter::getSingleton().GetData().m_compInfo.strCompName, S_CA2T((char*)pData->byData));
 			}
 			else
 			{
-				p += sprintf(p, "\n%s=查询失败", ISComm_GetCompInfo()->szName);
+				p += _stprintf(p, _T("\n%s=查询失败"), CDataCenter::getSingleton().GetData().m_compInfo.strCompName);
 			}
 
-			if (ISComm_SpellQueryComp(strBuf, strBuf.GetLength()) == ISACK_SUCCESS)
+			if (CIsSvrProxy::GetSvrCore()->ReqQueryCompSpell(strBuf, strBuf.GetLength()) == ISACK_SUCCESS)
 			{
-				PMSGDATA pData = ISComm_GetData();
+				PMSGDATA pData = CIsSvrProxy::GetSvrCore()->GetAck();
 				short i, sCount = 0;
 				BYTE *pbyData = pData->byData;
-				p += sprintf(p, "\n拼音=");
+				p += _stprintf(p, _T("\n拼音="));
 				memcpy(&sCount, pbyData, 2);
-				pbyData += 2;
-				if (sCount>10) sCount = 10;//只取前面10个拼音
-				for (i = 0; i<sCount; i++)
-				{
-					char cSize = pbyData[0];
-					pbyData++;
-					memcpy(p, pbyData, cSize);
-					pbyData += cSize;
-					p += cSize;
-					*p++ = ' ';
-				}
+				//todo:hjx
+				//pbyData += 2;
+
+				//if (sCount>10) sCount = 10;//只取前面10个拼音
+				//for (i = 0; i<sCount; i++)
+				//{
+				//	char cSize = pbyData[0];
+				//	pbyData++;
+				//	memcpy(p, pbyData, cSize);
+				//	pbyData += cSize;
+				//	p += cSize;
+				//	*p++ = ' ';
+				//}
 				*p = 0;
 			}
 			else
 			{
-				p += sprintf(p, "\n拼音=查询失败");
+				p += _stprintf(p, _T("\n拼音=查询失败"));
 			}
 		}
 		else
 		{//查询英文单词
-			p += sprintf(p, "单词=%s", (LPCSTR)strBuf);
-			if (ISComm_En2Ch(strBuf, strBuf.GetLength()) == ISACK_SUCCESS)
+			p += _stprintf(p, _T("单词=%s"), (LPCWSTR)strBuf);
+			
+			if (CIsSvrProxy::GetSvrCore()->ReqEn2Ch(strBuf,strBuf.GetLength()) == ISACK_SUCCESS)
 			{
-				PMSGDATA pData = ISComm_GetData();
-				LPBYTE pbyData = pData->byData;
-				BYTE i = 0, byItems = *pbyData++;
-				pbyData += pbyData[0] + 1;//skip phonetic
-				p += sprintf(p, "\n中文释意");
-				while (i<byItems)
-				{
-					p += sprintf(p, "\n    %d:", i + 1);
-					memcpy(p, pbyData + 1, pbyData[0]); p += pbyData[0]; pbyData += pbyData[0] + 1;
-					i++;
-				}
+				PMSGDATA pData = CIsSvrProxy::GetSvrCore()->GetAck();
+				//todo:hjx
+				//LPBYTE pbyData = pData->byData;
+				//BYTE i = 0, byItems = *pbyData++;
+				//pbyData += pbyData[0] + 1;//skip phonetic
+				//p += sprintf(p, "\n中文释意");
+				//while (i<byItems)
+				//{
+				//	p += sprintf(p, "\n    %d:", i + 1);
+				//	memcpy(p, pbyData + 1, pbyData[0]); p += pbyData[0]; pbyData += pbyData[0] + 1;
+				//	i++;
+				//}
 				*p = 0;
 			}
 			else
 			{
-				p += sprintf(p, "\n外文词库查询失败!");
+				p += _stprintf(p, _T("\n外文词库查询失败!"));
 			}
 		}
 
-		SStringT msg = S_CA2T(szRet);
-		m_pSinstar3->ShowTip(_T("查询"), msg);
+		m_pSinstar3->ShowTip(_T("查询"), szRet);
 	}
 	else
 	{

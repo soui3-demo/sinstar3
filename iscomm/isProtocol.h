@@ -237,11 +237,6 @@
 //----------------------------------------------
 #define CT_DATA_FILENAME    200 //fatch file name
 #define CT_DATA_FILEUPDATE	201	//数据文件更新
-#define FU_USERDEF	1		//更新用户定义文件
-#define FU_SYMBOL   2  //user define symbol
-#define FU_USERCMD	3	//快捷命令文件更新
-#define FU_USERJM   4  //user define jm map
-#define FU_USERDICT 5  //user dict
 //----------------------------------------------
 // 获得/设置外文词库分组信息
 //----------------------------------------------

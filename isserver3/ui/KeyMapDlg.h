@@ -9,7 +9,7 @@ namespace SOUI
 	class CKeyMapDlg: public SHostWnd
 	{
 	public:
-		CKeyMapDlg(IBitmap *pBmp, LPCSTR pszName, LPCSTR pszUrl);
+		CKeyMapDlg(IBitmap *pBmp, LPCWSTR pszName, LPCWSTR pszUrl);
 		~CKeyMapDlg();
 
 		void SetListener(IKeyMapListener *pListener)
