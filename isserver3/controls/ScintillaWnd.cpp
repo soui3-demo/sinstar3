@@ -188,17 +188,17 @@ void CScintillaWnd::InitScintillaWnd(void)
 	SendMessage(SCI_STYLECLEARALL);	// 将全局默认style应用到所有
 	
 	//清空所有默认的Ctrl快捷键消息,避免产生乱码
-	//char key = 'A';
-	//while (key <= 'Z')
-	//{
-	//	int keyDefinition = key + (SCMOD_CTRL << 16);
-	//	SendMessage(SCI_CLEARCMDKEY,(WPARAM)keyDefinition,(LPARAM)0);
-	//	keyDefinition = key + ((SCMOD_CTRL+SCMOD_ALT) << 16);
-	//	SendMessage(SCI_CLEARCMDKEY,(WPARAM)keyDefinition,(LPARAM)0);
-	//	keyDefinition = key + ((SCMOD_CTRL+SCMOD_SHIFT) << 16);
-	//	SendMessage(SCI_CLEARCMDKEY,(WPARAM)keyDefinition,(LPARAM)0);
-	//	key += 1;
-	//}
+	char key = 'A';
+	while (key <= 'Z')
+	{
+		int keyDefinition = key + (SCMOD_CTRL << 16);
+		SendMessage(SCI_CLEARCMDKEY,(WPARAM)keyDefinition,(LPARAM)0);
+		keyDefinition = key + ((SCMOD_CTRL+SCMOD_ALT) << 16);
+		SendMessage(SCI_CLEARCMDKEY,(WPARAM)keyDefinition,(LPARAM)0);
+		keyDefinition = key + ((SCMOD_CTRL+SCMOD_SHIFT) << 16);
+		SendMessage(SCI_CLEARCMDKEY,(WPARAM)keyDefinition,(LPARAM)0);
+		key += 1;
+	}
 	//自动完成
 	SendMessage(SCI_AUTOCSETSEPARATOR, static_cast<WPARAM>(10), 0);
 	//显示当前行的淡灰色背景
@@ -206,7 +206,7 @@ void CScintillaWnd::InitScintillaWnd(void)
 	SendMessage(SCI_SETCARETLINEBACK, RGB(210,210,210),0);
 	SendMessage(SCI_SETCARETLINEBACKALPHA,100,0);
 
-	SetXmlLexer();
+	SetLexer();
 	UpdateLineNumberWidth();
 }
 
@@ -220,9 +220,9 @@ void CScintillaWnd::SetAStyle(int style, COLORREF fore, COLORREF back, int size,
 		SendMessage(SCI_STYLESETFONT, style, reinterpret_cast<LPARAM>(face));
 }
 
-void CScintillaWnd::SetXmlLexer()
+void CScintillaWnd::SetLexer()
 {
-	SendMessage(SCI_SETLEXER, SCLEX_XML);
+	SendMessage(SCI_SETLEXER, SCLEX_NULL);
 	SendMessage(SCI_SETSTYLEBITS, 7);
 
 	// 设置全局style. 这些属性会在无其它选择时被应用.
@@ -247,9 +247,6 @@ void CScintillaWnd::SetXmlLexer()
 	SetAStyle(SCE_H_OTHER, RGB(0x80,0,0x80));
 	SetAStyle(SCE_H_COMMENT, RGB(0,0x80,0));
 	SetAStyle(SCE_H_ENTITY, RGB(0x80,0,0x80));
-
-	SetAStyle(SCE_H_XMLSTART, CR_DARKBLUE);	// <?
-	SetAStyle(SCE_H_XMLEND, CR_DARKBLUE);		// ?>
 
 	SetAStyle(SCE_HB_DEFAULT, black);
 	SetAStyle(SCE_HB_COMMENTLINE, CR_DARKGREEN);

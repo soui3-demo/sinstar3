@@ -32,7 +32,7 @@ protected:
 	void InitScintillaWnd(void);
 	void SetAStyle(int style, COLORREF fore, COLORREF back = RGB(0xff,0xff,0xff), int size = 0, const char* face = NULL);
 	// 设置XML的语法规则
-	void SetXmlLexer();
+	void SetLexer();
 	void GetRange(int start, int end, char* text);
 
 	LRESULT OnNotify(int idCtrl, LPNMHDR pnmh);

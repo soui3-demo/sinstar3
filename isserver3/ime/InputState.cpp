@@ -2252,7 +2252,9 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 		return FALSE;
 	if(uKey==VK_SPACE 
 		&& !g_SettingsG->bFullSpace
-		&& m_ctx.inState==INST_CODING && m_ctx.sbState!=SBST_SENTENCE && m_ctx.sCandCount==0)
+		&& m_ctx.inState==INST_CODING 
+		&& m_ctx.bySyllables==0 && m_ctx.cComp==0
+		&& m_ctx.sbState!=SBST_SENTENCE && m_ctx.sCandCount==0)
 	{
 		return FALSE;
 	}
