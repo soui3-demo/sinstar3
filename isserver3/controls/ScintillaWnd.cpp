@@ -188,17 +188,17 @@ void CScintillaWnd::InitScintillaWnd(void)
 	SendMessage(SCI_STYLECLEARALL);	// 将全局默认style应用到所有
 	
 	//清空所有默认的Ctrl快捷键消息,避免产生乱码
-	char key = 'A';
-	while (key <= 'Z')
-	{
-		int keyDefinition = key + (SCMOD_CTRL << 16);
-		SendMessage(SCI_CLEARCMDKEY,(WPARAM)keyDefinition,(LPARAM)0);
-		keyDefinition = key + ((SCMOD_CTRL+SCMOD_ALT) << 16);
-		SendMessage(SCI_CLEARCMDKEY,(WPARAM)keyDefinition,(LPARAM)0);
-		keyDefinition = key + ((SCMOD_CTRL+SCMOD_SHIFT) << 16);
-		SendMessage(SCI_CLEARCMDKEY,(WPARAM)keyDefinition,(LPARAM)0);
-		key += 1;
-	}
+	//char key = 'A';
+	//while (key <= 'Z')
+	//{
+	//	int keyDefinition = key + (SCMOD_CTRL << 16);
+	//	SendMessage(SCI_CLEARCMDKEY,(WPARAM)keyDefinition,(LPARAM)0);
+	//	keyDefinition = key + ((SCMOD_CTRL+SCMOD_ALT) << 16);
+	//	SendMessage(SCI_CLEARCMDKEY,(WPARAM)keyDefinition,(LPARAM)0);
+	//	keyDefinition = key + ((SCMOD_CTRL+SCMOD_SHIFT) << 16);
+	//	SendMessage(SCI_CLEARCMDKEY,(WPARAM)keyDefinition,(LPARAM)0);
+	//	key += 1;
+	//}
 	//自动完成
 	SendMessage(SCI_AUTOCSETSEPARATOR, static_cast<WPARAM>(10), 0);
 	//显示当前行的淡灰色背景
