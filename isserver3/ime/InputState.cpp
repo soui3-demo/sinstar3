@@ -81,7 +81,7 @@ SStringW CInputState::Symbol_Convert(InputContext * lpCntxtPriv,UINT byInput,con
 	return SStringW(pBuf,nRet);
 }
 
-BOOL IsDigitEx(char c)
+BOOL IsDigitEx(WCHAR c)
 {
 	if(isdigit(c)) return TRUE;
 	return c=='.';
@@ -463,16 +463,16 @@ void CInputState::InputStart()
 	}
 }
 
-void CInputState::InputResult(const SStringT &strResult,BYTE byAstMask)
+void CInputState::InputResult(const SStringW &strResult,BYTE byAstMask)
 {
 	SLOG_INFO("result:"<<strResult<<" astMask:"<<byAstMask);
 
 	SASSERT(m_pListener);
-	SStringT strTemp = strResult;
+	SStringW strTemp = strResult;
 	if (g_SettingsUI->bInputBig5)
 	{
 		int nLen = CUtils::GB2GIB5(strResult, strResult.GetLength(), NULL, 0);
-		TCHAR *pBig5 = new TCHAR[nLen+1];
+		WCHAR *pBig5 = new WCHAR[nLen+1];
 		CUtils::GB2GIB5(strResult, strResult.GetLength(), pBig5, nLen+1);
 		strTemp = SStringW(pBig5);
 		delete[]pBig5;
@@ -497,10 +497,7 @@ void CInputState::InputResult(const SStringT &strResult,BYTE byAstMask)
 	CDataCenter::getSingletonPtr()->GetData().m_cInputCount+= strTemp.GetLength();
 }
 
-void CInputState::InputResult(const SStringA &strResult,BYTE byAstMask)
-{
-	InputResult(S_CA2T(strResult,CP_GB),byAstMask);
-}
+
 
 void CInputState::InputEnd()
 {
@@ -1290,7 +1287,7 @@ BOOL CInputState::KeyIn_Spell_GetSpellInput(InputContext * lpCntxtPriv,BYTE bySp
 			if(bFind) break;
 		}
 		if(!bFind) bRet=FALSE;
-		memcpy(lpCntxtPriv->szComp+iWord*2,lpCntxtPriv->szWord[i],2);
+		lpCntxtPriv->szComp[iWord]=lpCntxtPriv->szWord[i];
 		iWord++;
 	}
 	lpCntxtPriv->cComp=iWord*2;
@@ -1308,11 +1305,11 @@ BOOL CInputState::KeyIn_Spell_InputText(InputContext* lpCntxtPriv,UINT byInput,
 	if(byInput==VK_SPACE)
 	{
 		BYTE bySpellID[MAX_SYLLABLES][2];//用户输入的汉字的拼音的真正ID
-		SStringA strResult;
+		SStringW strResult;
 		BOOL bGetSpID=KeyIn_Spell_GetSpellInput(lpCntxtPriv,bySpellID);
 		if(lpCntxtPriv->cComp)
 		{
-			strResult = SStringA(lpCntxtPriv->szComp,lpCntxtPriv->cComp);
+			strResult = SStringW(lpCntxtPriv->szComp,lpCntxtPriv->cComp);
 		}
 		ClearContext(CPC_ALL);
 		InputResult(strResult,GetKeyinMask(!IsTempSpell(),MKI_ALL));
@@ -1329,22 +1326,22 @@ BOOL CInputState::KeyIn_Spell_InputText(InputContext* lpCntxtPriv,UINT byInput,
 		}
 
 		//将用户输入提交给服务器保存
-		if(bGetSpID) ISComm_SpellMemoryEx(strResult,strResult.GetLength(),bySpellID);
+		if(bGetSpID) CIsSvrProxy::GetSvrCore()->ReqSpellMemEx(strResult,strResult.GetLength(),bySpellID);
 		bRet=TRUE;
 	}else if ( byInput == VK_RETURN && g_SettingsG->compMode == IM_SPELL)
 	{//回车输入编码
 
-		SStringA strResultA;
+		SStringW strResult;
 		BYTE i;
 		for(i=0;i<lpCntxtPriv->bySyllables;i++)
 		{
 			if(lpCntxtPriv->spellData[i].bySpellLen)
 			{
-				strResultA += SStringA(lpCntxtPriv->spellData[i].szSpell,lpCntxtPriv->spellData[i].bySpellLen);
+				strResult += SStringW(lpCntxtPriv->spellData[i].szSpell,lpCntxtPriv->spellData[i].bySpellLen);
 			}
 		}
 		//通知应用程序接收数据
-		InputResult(strResultA,GetKeyinMask(FALSE,MKI_RECORD|MKI_TTSINPUT));
+		InputResult(strResult,GetKeyinMask(FALSE,MKI_RECORD|MKI_TTSINPUT));
 		InputEnd();
 		InputHide(FALSE);
 		ClearContext(CPC_ALL);

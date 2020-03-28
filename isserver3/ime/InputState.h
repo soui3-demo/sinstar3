@@ -51,8 +51,7 @@ public:
 	void ClearContext(UINT ccMask);
 protected:
 	void InputStart();
-	void InputResult(const SStringA &strResult,BYTE byAstMask);
-	void InputResult(const SStringT &strResult,BYTE byAstMask);
+	void InputResult(const SStringW &strResult,BYTE byAstMask);
 	void InputEnd();
 	void InputUpdate();
 	void InputOpen();

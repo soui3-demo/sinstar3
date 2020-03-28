@@ -268,8 +268,8 @@ LRESULT CServerCore::ReqCompList(HWND hClientWnd, PMSGDATA pMsg)
 
 	static int CharCmp(const void * p1, const void * p2)
 	{
-		const char *c1 = (const char*)p1;
-		const char *c2 = (const char*)p2;
+		const WCHAR *c1 = (const WCHAR*)p1;
+		const WCHAR *c2 = (const WCHAR*)p2;
 		return (*c1) - (*c2);
 	}
 
@@ -277,9 +277,9 @@ LRESULT CServerCore::ReqCompList(HWND hClientWnd, PMSGDATA pMsg)
 	{
 		cWild = compInfo->cWildChar;
 		strCompName = S_CW2T(compInfo->szName);
-		strcpy(szCode,compInfo->szCode);
-		nCodeNum = (int)strlen(szCode);
-		qsort(szCode,nCodeNum,sizeof(char),CharCmp);
+		wcscpy(szCode,compInfo->szCode);
+		nCodeNum = (int)wcslen(szCode);
+		qsort(szCode,nCodeNum,sizeof(WCHAR),CharCmp);
 	}
 
 	BOOL CompInfo::IsCompChar(char cInput)

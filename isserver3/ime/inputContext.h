@@ -39,7 +39,7 @@ enum SUBSTATE
 
 struct SPELLINFO
 {
-	char szSpell[7];	//拼音
+	WCHAR szSpell[7];	//拼音
 	BYTE bySpellLen;	//拼音长度
 };
 
@@ -60,7 +60,7 @@ struct SPELLINFO
 
 struct InputContext
 {
-	char  szComp[MAX_INPUT];		//当前输入数据
+	WCHAR szComp[MAX_INPUT];		//当前输入数据
 	int   cComp;
 
 	COMPMODE compMode;				//当前的输入类型：形码输入还是拼音输入。

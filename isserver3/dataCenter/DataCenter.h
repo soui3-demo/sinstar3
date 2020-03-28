@@ -5,7 +5,7 @@ namespace SOUI
 	struct CompInfo
 	{
 		SStringT strCompName;
-		char szCode[50];
+		WCHAR szCode[50];
 		int  nCodeNum;
 		TCHAR    cWild;
 

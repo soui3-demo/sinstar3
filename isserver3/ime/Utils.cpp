@@ -55,10 +55,10 @@ void CUtils::SoundPlay(LPCTSTR pszSound)
 //----------------------------------------------------------------------------
 // GB2312码转GBK码
 // 中华人民共和国 --> 中華人民共和國
-int  CUtils::GB2GIB5(LPCTSTR szBuf, int nBufLen, TCHAR *szBig5, int nOutLen)
+int  CUtils::GB2GIB5(LPCWSTR szBuf, int nBufLen, WCHAR *szBig5, int nOutLen)
 {
 	DWORD wLCID = MAKELCID(MAKELANGID(LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED), SORT_CHINESE_PRC);
-	return LCMapString(wLCID, LCMAP_TRADITIONAL_CHINESE, szBuf, nBufLen*sizeof(TCHAR), szBig5, nOutLen * sizeof(TCHAR));
+	return LCMapStringW(wLCID, LCMAP_TRADITIONAL_CHINESE, szBuf, nBufLen*sizeof(WCHAR), szBig5, nOutLen * sizeof(WCHAR));
 }
 
 BOOL CUtils::CmdExecute(BYTE * pszBuf)

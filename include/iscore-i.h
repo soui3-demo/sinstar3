@@ -104,7 +104,7 @@ struct IServerCore {
 	virtual LRESULT ReqPhraseDel(HWND hClient,LPCWSTR pszComp,char cCompLen,LPCWSTR pszPhrase,BYTE cPhraseLen)=0;
 	virtual LRESULT ReqQueryCandUD(LPCWSTR pszComp,char cCompLen)=0;
 	virtual LRESULT ReqQueryCandLine(LPCWSTR pszComp,char cCompLen)=0;
-	virtual LRESULT ReqSpellMemEx(LPWSTR pszText,char cSentLen,BYTE (*pbySpellID)[2])=0;
+	virtual LRESULT ReqSpellMemEx(LPCWSTR pszText,char cSentLen,BYTE (*pbySpellID)[2])=0;
 	virtual LRESULT ReqMakePhrase(LPCWSTR pszText,BYTE cTextLen)=0;
 	virtual LRESULT ReqRateAdjust(HWND hClientWnd, LPCWSTR pszComp,char cCompLen,LPCWSTR pszPhrase, BYTE cPhraseLen,BYTE byMode)=0;
 	virtual LRESULT ReqSpellGetBlur(LPCSTR pszSpell,int nLen)=0;
