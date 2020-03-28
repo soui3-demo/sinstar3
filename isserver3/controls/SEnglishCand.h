@@ -41,7 +41,7 @@ namespace SOUI
 		COLORREF m_crPhonetic;
 		BOOL	 m_bShowPhonetic;
 
-		CAutoRefPtr<IFont> m_ftPhonetic;
+		SAutoRefPtr<IFont> m_ftPhonetic;
 	};
 
 }

@@ -71,15 +71,6 @@ CIsSvrProxy::~CIsSvrProxy()
 	if(m_pPendingCmd) free(m_pPendingCmd);
 }
 
-static SStringT GetVersionInfo(DWORD &dwVer)
-{
-	TCHAR szFileName[MAX_PATH];
-	GetModuleFileName(NULL, szFileName, MAX_PATH);
-	TCHAR szDesc[200];
-	Helper_PEVersion(szFileName, &dwVer, NULL, szDesc);
-	return SStringT(szDesc);
-}
-
 
 void * CIsSvrProxy::GetSecurityAttr() const
 {
@@ -130,14 +121,15 @@ int CIsSvrProxy::OnCreate(LPCREATESTRUCT pCS)
 	}
 	else
 	{
-		DWORD dwVer = 0;
-		GetVersionInfo(dwVer);
+		TCHAR szExe[MAX_PATH];
+		GetModuleFileName(NULL,szExe,MAX_PATH);
+		WORD wVer[4];
+		SDpiHelper::PEVersion(szExe,wVer[0],wVer[1],wVer[2],wVer[3]);
+		SStringT strVer=SStringT().Format(_T("%u.%u.%u.%u"),wVer[0],wVer[1],wVer[2],wVer[3]);
 		SStringW strTrayTip = GETSTRING(L"@string/tray_tip");
 		strTrayTip.Replace(L"\\n", L"\n");
-		SStringT strTipFmt = S_CW2T(strTrayTip, CP_GB);
-		TCHAR szVer[100];
-		Helper_VersionString(dwVer, szVer);
-		SStringT strTip = SStringT().Format(strTipFmt, szVer);
+		SStringT strTipFmt = S_CW2T(strTrayTip);
+		SStringT strTip = SStringT().Format(strTipFmt, strVer.c_str());
 		m_trayIcon.Init(m_hWnd, strTip);
 		if(g_SettingsG->bShowTray) m_trayIcon.Show();
 
@@ -318,13 +310,6 @@ void CIsSvrProxy::TtsSetVoice(bool bCh, int iToken) {
 
 int CIsSvrProxy::TtsGetTokensInfo(bool bCh, wchar_t token[][MAX_TOKEN_NAME_LENGHT], int nBufSize) { 
 	return CWorker::getSingletonPtr()->GetTokensInfo(bCh, token, nBufSize);
-}
-
-DWORD CIsSvrProxy::OnQueryVersion() const
-{
-	DWORD dwVer;
-	GetVersionInfo(dwVer);
-	return dwVer;
 }
 
 
@@ -748,4 +733,9 @@ void CIsSvrProxy::CbNotifyConnectionsSkinChanged(IIpcConnection *pConn, ULONG_PT
 IServerCore * CIsSvrProxy::GetSvrCore()
 {
 	return _this->m_pCore;
+}
+
+CIsSvrProxy * CIsSvrProxy::GetInstance()
+{
+	return _this;
 }

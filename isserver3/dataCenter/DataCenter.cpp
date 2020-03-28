@@ -28,94 +28,6 @@ namespace SOUI
 		LeaveCriticalSection(&m_cs);
 	}
 
-	/*
-LRESULT CServerCore::ReqCompList(HWND hClientWnd, PMSGDATA pMsg)
-{
-	COMFILE cf = CF_Init(m_pMsgAck->byData, MAX_BUF_ACK, 0, 0);
-	CF_WriteChar(&cf, 0);
-	BYTE byCount = 0;
-
-	char szTitle[255];
-	char szFilter[MAX_PATH];
-	char szFullPath[MAX_PATH];
-	COMPHEAD header = { 0 };
-	sprintf(szFilter, "%s\\*.cit", m_data.m_szDataPath);
-	WIN32_FIND_DATAA fd;
-	HANDLE hFind = FindFirstFileA(szFilter, &fd);
-	if (hFind != INVALID_HANDLE_VALUE)
-	{
-		do {
-			if (!(fd.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY))
-			{
-				sprintf(szFullPath, "%s\\%s", m_data.m_szDataPath, fd.cFileName);
-				if (CCompReaderEx::ExtractInfo(szFullPath, &header, NULL))
-				{
-					_splitpath(szFullPath, NULL, NULL, szTitle, NULL);
-					if (strcmp(m_strDefComp, szTitle) == 0)
-						CF_WriteChar(&cf, 1);
-					else
-						CF_WriteChar(&cf, 0);
-					CF_Write(&cf, szTitle, strlen(szTitle) + 1);
-					CF_Write(&cf, header.szName, strlen(header.szName) + 1);
-					byCount++;
-					if (byCount>20) break;
-				}
-			}
-		} while (FindNextFileA(hFind, &fd));
-		FindClose(hFind);
-	}
-	CF_Seek(&cf, 0, SEEK_SET);
-	CF_WriteChar(&cf, byCount);
-	m_pMsgAck->sSize = (short)cf.nLen;
-	return ISACK_SUCCESS;
-}
-*/
-
-	const SArray<CNameTypePair>& CDataCenter::UpdateCompList()
-	{
-		m_compList.RemoveAll();
-		m_iSelComp = -1;
-
-
-		TCHAR szTitle[255];
-		TCHAR szFilter[MAX_PATH];
-		TCHAR szFullPath[MAX_PATH];
-		COMPHEAD header = { 0 };
-		_stprintf(szFilter, _T("%s\\*.cit"), GetDataPath());
-		WIN32_FIND_DATA fd;
-		HANDLE hFind = FindFirstFile(szFilter, &fd);
-		if (hFind != INVALID_HANDLE_VALUE)
-		{
-			do {
-				if (!(fd.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY))
-				{
-					_stprintf(szFullPath, _T("%s\\%s"), GetDataPath(), fd.cFileName);
-					if (CIsSvrProxy::GetSvrCore()->ExtractCompInfo(szFullPath, &header, NULL))
-					{
-						_tsplitpath(szFullPath, NULL, NULL, szTitle, NULL);
-						CNameTypePair item;
-						item.strType=szTitle;
-						item.strName=szFullPath;
-						m_compList.Add(item);//todo:hjx
-					}
-				}
-			} while (FindNextFile(hFind, &fd));
-			FindClose(hFind);
-		}
-
-		return m_compList;
-	}
-
-	const SArray<CNameTypePair>& CDataCenter::GetCompList() const
-	{
-		return m_compList;
-	}
-
-	int CDataCenter::GetSelectCompIndex() const
-	{
-		return m_iSelComp;
-	}
-
 	SStringT CDataCenter::GetDataPath() const
 	{
 		return m_path;
@@ -153,7 +65,76 @@ LRESULT CServerCore::ReqCompList(HWND hClientWnd, PMSGDATA pMsg)
 				m_cTotalInput = m_tmTotalSpan = 0;
 			}
 		}
+		m_strDataPath = strDataPath+_T("\\server");
+
 	}
+
+	const SArray<CNameTypePair>& CMyData::UpdateCompList()
+	{
+		m_compList.RemoveAll();
+
+		TCHAR szFilter[MAX_PATH];
+		TCHAR szFullPath[MAX_PATH];
+		COMPHEAD header = { 0 };
+		_stprintf(szFilter, _T("%s\\*.cit"), GetDataPath());
+		WIN32_FIND_DATA fd;
+		HANDLE hFind = FindFirstFile(szFilter, &fd);
+		if (hFind != INVALID_HANDLE_VALUE)
+		{
+			do {
+				if (!(fd.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY))
+				{
+					_stprintf(szFullPath, _T("%s\\%s"), GetDataPath(), fd.cFileName);
+					if (CIsSvrProxy::GetSvrCore()->ExtractCompInfo(szFullPath, &header, NULL))
+					{
+						CNameTypePair item;
+						item.strTitle=fd.cFileName;
+						item.strTitle.MakeLower();
+						item.strName=header.szName;
+						m_compList.Add(item);
+					}
+				}
+			} while (FindNextFile(hFind, &fd));
+			FindClose(hFind);
+		}
+
+		return m_compList;
+	}
+
+	const SArray<CNameTypePair>& CMyData::UpdateFlmList()
+	{
+		m_flmList.RemoveAll();
+
+		TCHAR szFilter[MAX_PATH];
+		TCHAR szFullPath[MAX_PATH];
+		FLMINFO header = { 0 };
+		_stprintf(szFilter, _T("%s\\*.flm"), GetDataPath());
+		WIN32_FIND_DATA fd;
+		HANDLE hFind = FindFirstFile(szFilter, &fd);
+		if (hFind != INVALID_HANDLE_VALUE)
+		{
+			do {
+				if (!(fd.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY))
+				{
+					_stprintf(szFullPath, _T("%s\\%s"), GetDataPath(), fd.cFileName);
+					if (CIsSvrProxy::GetSvrCore()->ExtractFlmInfo(szFullPath, &header))
+					{
+						CNameTypePair item;
+						item.strTitle=fd.cFileName;
+						item.strTitle.MakeLower();
+						item.strName=header.szName;
+						m_flmList.Add(item);
+					}
+				}
+			} while (FindNextFile(hFind, &fd));
+			FindClose(hFind);
+		}
+
+		return m_flmList;
+	}
+
+
+
 
 	CMyData::~CMyData()
 	{
@@ -265,6 +246,11 @@ LRESULT CServerCore::ReqCompList(HWND hClientWnd, PMSGDATA pMsg)
 		return true;
 	}
 
+	SStringT CMyData::GetDataPath() const
+	{
+		return m_strDataPath;
+	}
+
 
 	static int CharCmp(const void * p1, const void * p2)
 	{
@@ -282,10 +268,10 @@ LRESULT CServerCore::ReqCompList(HWND hClientWnd, PMSGDATA pMsg)
 		qsort(szCode,nCodeNum,sizeof(WCHAR),CharCmp);
 	}
 
-	BOOL CompInfo::IsCompChar(char cInput)
+	BOOL CompInfo::IsCompChar(WCHAR cInput)
 	{
 		if(cWild == cInput) return TRUE;
-		return NULL != bsearch(&cInput,szCode,nCodeNum,1,CharCmp);
+		return NULL != bsearch(&cInput,szCode,nCodeNum,sizeof(WCHAR),CharCmp);
 	}
 
 }

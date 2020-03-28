@@ -77,7 +77,7 @@ public:
 	BOOL	bAutoDot;			// 智能小数点
 	BOOL	bAutoPrompt;		// 智能重码提示
 	BOOL	bDisableDelWordCand;// 禁止删除单字重码
-	char	szWebHeader[100];	// 自动转为英文输入模式的抬头
+	WCHAR	szWebHeader[100];	// 自动转为英文输入模式的抬头
 
 	BOOL	bCandSelNoNum;		// 禁用数字选择重码
 	BOOL	bOnlySimpleCode;	// 出简不出全

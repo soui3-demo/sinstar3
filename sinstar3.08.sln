@@ -48,8 +48,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TaskLoop", "TaskLoop\TaskLo
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RegisterCore", "RegisterCore\RegisterCore.vcproj", "{1E6637E8-6BBA-4C62-864A-1BB7454676B8}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "soui3", "..\soui3.git\SOUI\soui3.vcproj", "{A278536F-80DF-3C47-A1FD-14BAACB6B8C6}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -234,16 +232,6 @@ Global
 		{1E6637E8-6BBA-4C62-864A-1BB7454676B8}.Release|Win32.ActiveCfg = Release|Win32
 		{1E6637E8-6BBA-4C62-864A-1BB7454676B8}.Release|Win32.Build.0 = Release|Win32
 		{1E6637E8-6BBA-4C62-864A-1BB7454676B8}.Release|x64.ActiveCfg = Release|Win32
-		{A278536F-80DF-3C47-A1FD-14BAACB6B8C6}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{A278536F-80DF-3C47-A1FD-14BAACB6B8C6}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{A278536F-80DF-3C47-A1FD-14BAACB6B8C6}.Debug|Win32.ActiveCfg = Debug|Win32
-		{A278536F-80DF-3C47-A1FD-14BAACB6B8C6}.Debug|Win32.Build.0 = Debug|Win32
-		{A278536F-80DF-3C47-A1FD-14BAACB6B8C6}.Debug|x64.ActiveCfg = Debug|Win32
-		{A278536F-80DF-3C47-A1FD-14BAACB6B8C6}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{A278536F-80DF-3C47-A1FD-14BAACB6B8C6}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{A278536F-80DF-3C47-A1FD-14BAACB6B8C6}.Release|Win32.ActiveCfg = Release|Win32
-		{A278536F-80DF-3C47-A1FD-14BAACB6B8C6}.Release|Win32.Build.0 = Release|Win32
-		{A278536F-80DF-3C47-A1FD-14BAACB6B8C6}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

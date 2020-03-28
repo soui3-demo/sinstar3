@@ -83,7 +83,7 @@ private:
 
 	BOOL KeyIn_All_TurnCandPage(InputContext * lpCntxtPriv,UINT byInput, CONST BYTE * lpbKeyState);
 	BOOL KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,char cCompLen, CONST BYTE * lpbKeyState,bool bKeepVisible=false);
-	BOOL KeyIn_InputAndAssociate(InputContext * lpCntxtPriv,const char *pszInput,short sLen,BYTE byMask);
+	BOOL KeyIn_InputAndAssociate(InputContext * lpCntxtPriv,LPCWSTR pszInput,short sLen,BYTE byMask);
 	void GetShapeComp(const WCHAR *pInput,char cLen);
 	BOOL KeyIn_Code_Normal(InputContext * lpCntxtPriv,UINT byInput, CONST BYTE * lpbKeyState);
 	BOOL KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput, CONST BYTE * lpbKeyState);

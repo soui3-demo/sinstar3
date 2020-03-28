@@ -36,7 +36,6 @@ namespace SOUI
 		void InitPhraseLib();
 		void InitPhraseLibListview();
 		void InitCeLib();
-		void InitCeLibListview();
 		void InitPinyinBlur(COMFILE & cf, CBlurListAdapter * pBlurAdapter, int iGroup);
 		void InitPagePinYin();
 
@@ -45,7 +44,7 @@ namespace SOUI
 
 		void InitPinyinBlurListView(SListView *pLvBLur);
 
-		LPBYTE InitTtsTokenInfo(LPBYTE pBuf, SComboBox *pCbx);
+		void InitTtsTokenInfo(bool bChVoice, SComboBox *pCbx);
 
 		void OnClickInputSwitch(int id);
 		//»Ø³µ
@@ -102,8 +101,6 @@ namespace SOUI
 		void OnAddBlur();
 		void OnDelBlur();
 
-		void OnCbxFlmChange(EventArgs *e);
-
 		void OnSpinValue2String(EventArgs *e);
 
 		void OnUpdateNow();
@@ -147,7 +144,6 @@ namespace SOUI
 			EVENT_ID_HANDLER(R.id.slider_tts_speed,EventSliderPos::EventID,OnTtsSpeedChanged)
 			EVENT_ID_HANDLER(R.id.cbx_tts_ch_token,EventCBSelChange::EventID,OnTtsChTokenChange)
 			EVENT_ID_HANDLER(R.id.cbx_tts_en_token, EventCBSelChange::EventID, OnTtsEnTokenChange)
-			EVENT_ID_HANDLER(R.id.cbx_celib, EventCBSelChange::EventID, OnCbxFlmChange)
 			EVENT_ID_COMMAND(R.id.btn_tts_ch_preview,OnTtsChPreview)
 			EVENT_ID_COMMAND(R.id.btn_tts_en_preview, OnTtsEnPreview)
 			EVENT_ID_HANDLER(R.id.chk_py_blur, EventCmd::EventID, OnPyBlurClick)
@@ -162,11 +158,9 @@ namespace SOUI
 
 	protected:
 		int OnCreate(LPCREATESTRUCT lpCreateStruct);
-		void OnDestroy();
 
 		BEGIN_MSG_MAP_EX(CConfigDlg)
 			MSG_WM_CREATE(OnCreate)
-			MSG_WM_DESTROY(OnDestroy)
 			CHAIN_MSG_MAP(SDpiHandler<CConfigDlg>)
 			CHAIN_MSG_MAP(SHostWnd)
 		END_MSG_MAP()

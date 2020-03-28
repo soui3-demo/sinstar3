@@ -99,7 +99,7 @@ void CSettingsGlobal::Save(const SStringT & strDataPath)
 	WritePrivateProfileInt(KSession,_T("AutoPrompt"),bAutoPrompt,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("DisableDelWordCand"),bDisableDelWordCand,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("CandSelNoNum"),bCandSelNoNum,strConfigIni);
-	WritePrivateProfileString(KSession,_T("WebHeader"),S_CA2T(szWebHeader),strConfigIni);
+	WritePrivateProfileString(KSession,_T("WebHeader"),szWebHeader,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("OnlySimpleCode"),bOnlySimpleCode,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("delayTime"),nDelayTime,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("MaxCandidateNum"),nMaxCands,strConfigIni);
@@ -192,10 +192,7 @@ void CSettingsGlobal::Load(const SStringT & strDataPath)
 	nMaxCands=GetPrivateProfileInt(KSession,_T("MaxCandidateNum"),10,strConfigIni);
 	if(nMaxCands<1) nMaxCands = 1;
 	if(nMaxCands>10) nMaxCands = 10;
-	TCHAR szTmp[100]={0};
-	GetPrivateProfileString(KSession,_T("WebHeader"),_T("www. http mail bbs. ftp:"),szTmp,100,strConfigIni);
-	SStringA strHeader = S_CT2A(szTmp);
-	strcpy(szWebHeader,strHeader);
+	GetPrivateProfileString(KSession,_T("WebHeader"),_T("www. http mail bbs. ftp:"),szWebHeader,100,strConfigIni);
 
 	bOnlySimpleCode=GetPrivateProfileInt(KSession,_T("OnlySimpleCode"),0,strConfigIni);
 	nDelayTime = GetPrivateProfileInt(KSession,_T("delayTime"),5,strConfigIni);

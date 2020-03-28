@@ -180,17 +180,31 @@ namespace SOUI
 				smenuPopup.CheckMenuItem(R.id.svr_showicon, MF_BYCOMMAND | g_SettingsG->bShowTray? MF_CHECKED : 0);
 				break;
 			}
+		case 2:
+			{//skin
+				SStringT strCurSkin = g_SettingsG->strSkin;
+				if (strCurSkin.IsEmpty())
+				{
+					smenuPopup.CheckMenuItem(R.id.skin_def, MF_BYCOMMAND|MF_CHECKED);
+				}
+				m_skinManager.InitSkinMenu(menuPopup, CDataCenter::getSingletonPtr()->GetDataPath() + _T("\\skins"), R.id.skin_def, strCurSkin);
+				break;
+			}
 		case 4://comp select
 			{
-				const SArray<CNameTypePair> &comps = CDataCenter::getSingleton().UpdateCompList();
+				const SArray<CNameTypePair> &comps = CDataCenter::getSingleton().GetData().UpdateCompList();
 				int idStart = R.id.comp_cloud;
-				int iSelComp = CDataCenter::getSingleton().GetSelectCompIndex();
+				TCHAR szCurComp[MAX_PATH]={0};
+				CIsSvrProxy::GetSvrCore()->GetCurrentComp(szCurComp);
+				SStringT strComp=szCurComp;
+				strComp+=_T(".cit");
+				strComp.MakeLower();
 				for (int i = 0; i < (int)comps.GetCount(); i++)
 				{
-					SStringA strText = SStringA().Format("%s[%s]",comps[i].strType, comps[i].strName);
+					SStringT strText = SStringT().Format(_T("%s[%s]"),comps[i].strName,comps[i].strTitle);
 					UINT flag = MF_STRING;
-					if (iSelComp == i) flag |= MF_CHECKED;
-					smenuPopup.AppendMenu( flag, idStart + i+1, S_CA2T(strText, CP_GB));
+					if (strComp == comps[i].strTitle) flag |= MF_CHECKED;
+					smenuPopup.AppendMenu( flag, idStart + i+1, strText);
 				}
 				break;
 			}
@@ -206,14 +220,23 @@ namespace SOUI
 				m_toolManager.InitToolMenu(menuPopup, CDataCenter::getSingletonPtr()->GetDataPath() + _T("\\tools"), R.id.menu_tool_base);
 				break;
 			}
-		case 2:
-			{//skin
-				SStringT strCurSkin = g_SettingsG->strSkin;
-				if (strCurSkin.IsEmpty())
+
+		case 8://flm menu
+			{
+				const SArray<CNameTypePair> &flmDicts = CDataCenter::getSingleton().GetData().UpdateFlmList();
+				int idStart = R.id.menu_flm_close;
+				TCHAR szCurComp[MAX_PATH]={0};
+				CIsSvrProxy::GetSvrCore()->GetCurrentFlmDict(szCurComp);
+				SStringT strComp=szCurComp;
+				strComp+=_T(".flm");
+				strComp.MakeLower();
+				for (int i = 0; i < (int)flmDicts.GetCount(); i++)
 				{
-					smenuPopup.CheckMenuItem(R.id.skin_def, MF_BYCOMMAND|MF_CHECKED);
+					SStringT strText = SStringT().Format(_T("%s[%s]"),flmDicts[i].strName,flmDicts[i].strTitle);
+					UINT flag = MF_STRING;
+					if (strComp == flmDicts[i].strTitle) flag |= MF_CHECKED;
+					smenuPopup.AppendMenu( flag, idStart + i+1, strText);
 				}
-				m_skinManager.InitSkinMenu(menuPopup, CDataCenter::getSingletonPtr()->GetDataPath() + _T("\\skins"), R.id.skin_def, strCurSkin);
 				break;
 			}
 		default:
@@ -638,10 +661,12 @@ namespace SOUI
 		else if (nRet > R.id.comp_cloud && nRet < PopupMenuEndID(R.id.comp_cloud))
 		{//comps
 			int iComp = nRet - (R.id.comp_cloud +1);
-			const SArray<CNameTypePair> & compList = CDataCenter::getSingleton().GetCompList();
+			const SArray<CNameTypePair> & compList = CDataCenter::getSingleton().GetData().m_compList;
 			if (iComp < (int)compList.GetCount())
-			{//todo:
-				CIsSvrProxy::GetSvrCore()->CompSwitch(compList[iComp].strName);
+			{
+				SStringT strName = compList[iComp].strTitle;
+				strName = strName.Left(strName.GetLength()-4);//remove ".cit"
+				CIsSvrProxy::GetSvrCore()->OpenComp(strName);
 			}
 		}
 		else if (nRet == R.id.svr_showicon)
@@ -744,6 +769,20 @@ namespace SOUI
 		}else if(nRet == R.id.menu_forum)
 		{
 			ShellExecute(NULL, _T("open"), g_SettingsG->urlForum, NULL, NULL, SW_SHOWNORMAL);
+		}else if(nRet == R.id.menu_flm_close)
+		{
+			CIsSvrProxy::GetSvrCore()->CloseFlm();
+		}
+		else if (nRet > R.id.menu_flm_close && nRet < (R.id.menu_flm_close + 99) / 100 * 100)
+		{
+			int iComp = nRet - (R.id.menu_flm_close +1);
+			const SArray<CNameTypePair> & flmList = CDataCenter::getSingleton().GetData().m_flmList;
+			if (iComp < (int)flmList.GetCount())
+			{
+				SStringT strName = flmList[iComp].strTitle;
+				strName=strName.Left(strName.GetLength()-4);//remove .flm
+				CIsSvrProxy::GetSvrCore()->OpenFlm(strName);
+			}
 		}
 		else
 		{

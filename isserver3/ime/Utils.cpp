@@ -64,20 +64,29 @@ int  CUtils::GB2GIB5(LPCWSTR szBuf, int nBufLen, WCHAR *szBig5, int nOutLen)
 BOOL CUtils::CmdExecute(BYTE * pszBuf)
 {
 	UINT_PTR uRet = FALSE;
-	char *pParam = NULL;
-	char *pCmd = (char*)pszBuf + pszBuf[2] + 3 + 1;
-	if (pCmd[0] == '\"')
+	LPBYTE pCmd = (pszBuf + pszBuf[2]*2 + 3);//rate+flag+length
+	SStringW strCmd((WCHAR*)(pCmd+1),pCmd[0]);
+	SStringW strParam;
+	if (strCmd[0] == '\"')
 	{
-		pParam = strstr(pCmd, "\" ");
-		if (pParam) { pParam[1] = 0; pParam += 2; }
+		int nPos =strCmd.Find(L"\" ");
+		if(nPos!=-1)
+		{
+			strParam = strCmd.Right(strCmd.GetLength()-nPos-2);
+			strCmd = strCmd.Left(nPos);
+		}
 	}
 	else
 	{
-		pParam = strstr(pCmd, " ");
-		if (pParam) pParam[0] = 0, pParam++;
+		int nPos =strCmd.Find(L" ");
+		if(nPos!=-1)
+		{
+			strParam = strCmd.Right(strCmd.GetLength()-nPos-1);
+			strCmd = strCmd.Left(nPos);
+		}
 	}
-	uRet = (UINT_PTR)ShellExecuteA(NULL, "open", pCmd, pParam, NULL, SW_SHOWDEFAULT);
-	if (uRet <= 32) uRet = (UINT_PTR)ShellExecuteA(NULL, "explorer", pCmd, NULL, NULL, SW_SHOWDEFAULT);
+	uRet = (UINT_PTR)ShellExecuteW(NULL, L"open", strCmd, strParam, NULL, SW_SHOWDEFAULT);
+	if (uRet <= 32) uRet = (UINT_PTR)ShellExecuteW(NULL, L"explorer", strCmd, NULL, NULL, SW_SHOWDEFAULT);
 	return uRet>32;
 }
 

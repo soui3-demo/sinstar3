@@ -46,7 +46,10 @@
   <item text="相关工具" name="menu_data_mgr" contextHelpId="7" icon="6">
     <item text="无" name="menu_tool_base" id="701" enable="0"/>
   </item>
-
+  <item text="外文词典" name="menu_flm_dict" contextHelpId="8">
+    <item text="关闭" name="menu_flm_close" id="801" enable="0"/>
+    <sep/>
+  </item>
   <item text="形码字根" name="key_map" id="110" icon="7"/>
   <item text="打字速度" name="key_speed" id="111" icon="8"/>
   <sep/>

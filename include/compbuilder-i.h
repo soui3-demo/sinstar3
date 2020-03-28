@@ -6,7 +6,7 @@
 #define COMPBUILDER_API __declspec(dllimport)
 #endif
 
-
+#include "global.h"
 #define RULE_MAX	8
 
 struct ICodingRule

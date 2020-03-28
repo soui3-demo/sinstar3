@@ -8,9 +8,9 @@
 
 #define COPYRIGHT_STR "Copy right (C) 2003-2020"
 #define _sinstar3_ime_version_a		3
-#define _sinstar3_ime_version_b		0
-#define _sinstar3_ime_version_c		8
-#define _sinstar3_ime_version_d		7
+#define _sinstar3_ime_version_b		1
+#define _sinstar3_ime_version_c		0
+#define _sinstar3_ime_version_d		1
 
 
 #define _sinstar3_ime_int_version(a,b,c,d)		a,b,c,d

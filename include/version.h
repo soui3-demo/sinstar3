@@ -6,15 +6,15 @@
 // 要改变版本号，只需要对这4个字段进行修改。
 //
 
-#define COPYRIGHT_STR "Copy right (C) 2003-2019"
+#define COPYRIGHT_STR "Copy right (C) 2003-2020"
 #define _sinstar3_ime_version_a		3
-#define _sinstar3_ime_version_b		0
-#define _sinstar3_ime_version_c		8
+#define _sinstar3_ime_version_b		1
+#define _sinstar3_ime_version_c		0
 #define _sinstar3_ime_version_d		1
 
 #define _sinstar3_ime_name			启程输入法
-#define _sinstar3_ime		 		启程输入法IME模块
-#define _sinstar3_tsf				启程输入法TSF模块
+#define _sinstar3_ime		 		启程输入法IME
+#define _sinstar3_tsf				启程输入法TSF
 
 
 #define _sinstar3_ime_string(a)		#a

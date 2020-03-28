@@ -32,13 +32,15 @@ BOOL CTextEditorDlg::OnInitDialog(HWND hWnd, LPARAM lp)
 		int nLen = ftell(f);
 		fseek(f, 0, SEEK_SET);
 
-		char *buf = (char*)malloc(nLen + 1);
+		char *buf = (char*)malloc(nLen);
 		fread(buf, 1, nLen, f);
 		fclose(f);
-		buf[nLen] = 0;
-		SStringA utf8 = S_CA2A(buf, CP_ACP, CP_UTF8);
+		if(memcmp(buf,"\xff\xfe",2)==0)
+		{//utf16
+			SStringA utf8 = S_CW2A(SStringW((WCHAR*)(buf+2),(nLen-2)/2), CP_UTF8);
+			m_pSciter->SendMessage(SCI_SETTEXT, 0, (LPARAM)utf8.c_str());
+		}
 		free(buf);
-		m_pSciter->SendMessage(SCI_SETTEXT, 0, (LPARAM)utf8.c_str());
 	}
 	m_pSciter->UpdateLineNumberWidth();
 
@@ -56,12 +58,13 @@ void CTextEditorDlg::OnBtnSave()
 	char *buf = new char[nLen + 1];
 	m_pSciter->SendMessage(SCI_GETTEXT, nLen+1, (LPARAM)buf);
 	buf[nLen] = 0;
-	SStringA str = S_CA2A(SStringA(buf, nLen), CP_UTF8, CP_ACP);
+	SStringW str = S_CA2W(SStringA(buf, nLen), CP_UTF8);
 	delete[]buf;
 	FILE *f = _tfopen(m_strFileName, _T("wb"));
 	if (f)
 	{
-		fwrite(str.c_str(), 1,str.GetLength(), f);
+		fwrite("\xff\xfe",1,2,f);
+		fwrite(str.c_str(), 2,str.GetLength(), f);
 		fclose(f);
 	}
 	EndDialog(IDOK);

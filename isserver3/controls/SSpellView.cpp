@@ -20,7 +20,12 @@ namespace SOUI
 
 	void SSpellView::OnPaint(IRenderTarget *pRT)
 	{
-		if(!m_ctx || m_ctx->compMode!=IM_SPELL) return;
+		if(!m_ctx) 
+			return;
+		if(m_ctx->compMode!=IM_SPELL)
+			return;
+		if(m_ctx->bySyllables==0) 
+			return;
 
 		SPainter painter;
 		BeforePaint(pRT,painter);
@@ -45,27 +50,29 @@ namespace SOUI
 
 		//分３段显示预测结果
 		pRT->SetTextColor(m_crResult);
-		SStringT strLeft = S_CA2T(SStringA((char*)m_ctx->szWord,m_ctx->byCaret*2), CP_GB);
+		SStringT strLeft = SStringW(m_ctx->szWord,m_ctx->byCaret);
 		SpTextOut(pRT,pt,strLeft);
 		
 		pRT->SetTextColor(m_crEdit);
-		SStringT strEdit = S_CA2T(SStringA((char*)m_ctx->szWord[m_ctx->byCaret],2), CP_GB);
+		SStringT strEdit;
+		if(m_ctx->spellData[m_ctx->byCaret].bySpellLen>0)
+			strEdit=SStringW(m_ctx->szWord[m_ctx->byCaret]);
 		pts[0]=pt;
-		CSize sz = SpTextOut(pRT,pt,strEdit);
+		CSize sz= SpTextOut(pRT,pt,strEdit);
 		pts[1]=pt;
 		pts[0].y+=sz.cy +1;
 		pts[1].y+=sz.cy +1;
 
 		pRT->SetTextColor(m_crResult);
-		SStringT strRight = S_CA2T(SStringA((char*)(m_ctx->szWord+m_ctx->byCaret+1),
-			(m_ctx->bySyllables-m_ctx->byCaret-1)*2), CP_GB);
+		SStringT strRight = SStringW(m_ctx->szWord+m_ctx->byCaret+1,
+			m_ctx->bySyllables-m_ctx->byCaret-1);
 		SpTextOut(pRT,pt,strRight);
 
 		//显示当前音节的拼音
 		if(m_ctx->bySyCaret != 0xFF)
 		{
 			const SPELLINFO *lpSpi=m_ctx->spellData+m_ctx->byCaret;
-			SStringT strLeft = S_CA2T(SStringA(lpSpi->szSpell,m_ctx->bySyCaret), CP_GB);
+			SStringT strLeft = SStringW(lpSpi->szSpell,m_ctx->bySyCaret);
 			CSize sz ;
 			pRT->MeasureText(strLeft,strLeft.GetLength(),&sz);
 			pts[0].x = pt.x + sz.cx;
@@ -74,11 +81,10 @@ namespace SOUI
 			pts[1].y = pt.y + sz.cy;
 		}
 		pRT->SetTextColor(m_crSpell);
-		SStringT strSpell = S_CA2T(SStringA(m_ctx->spellData[m_ctx->byCaret].szSpell,m_ctx->spellData[m_ctx->byCaret].bySpellLen), CP_GB);
+		SStringT strSpell = SStringW(m_ctx->spellData[m_ctx->byCaret].szSpell,m_ctx->spellData[m_ctx->byCaret].bySpellLen);
 		SpTextOut(pRT,pt,strSpell);
-
 		//draw caret
-		CAutoRefPtr<IPen> pen,oldPen;
+		SAutoRefPtr<IPen> pen,oldPen;
 		pRT->CreatePen(PS_SOLID,m_crCaret,1,&pen);
 		pRT->SelectObject(pen,(IRenderObj**)&oldPen);
 		pRT->DrawLines(pts,2);
@@ -104,10 +110,10 @@ namespace SOUI
 		GETRENDERFACTORY->CreateRenderTarget(&pRT,0,0);
 		BeforePaintEx(pRT);
 		CSize sz,szRet;
-		SStringT strResult = S_CA2T(SStringA((char*)m_ctx->szWord,m_ctx->bySyllables*2), CP_GB);
+		SStringT strResult = SStringW(m_ctx->szWord,m_ctx->bySyllables);
 		pRT->MeasureText(strResult,strResult.GetLength(),&sz);
 		szRet = sz;
-		SStringT strSpell = S_CA2T(SStringA(m_ctx->spellData[m_ctx->byCaret].szSpell,m_ctx->spellData[m_ctx->byCaret].bySpellLen), CP_GB);
+		SStringT strSpell = SStringW(m_ctx->spellData[m_ctx->byCaret].szSpell,m_ctx->spellData[m_ctx->byCaret].bySpellLen);
 		pRT->MeasureText(strSpell,strSpell.GetLength(),&sz);
 		szRet.cx += sz.cx;
 		

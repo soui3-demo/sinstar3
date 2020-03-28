@@ -82,8 +82,8 @@ void CCmdHandler::OnHotKeyQueryInfo(LPARAM lp)
 			if (CIsSvrProxy::GetSvrCore()->ReqQueryComp(strBuf, strBuf.GetLength()) == ISACK_SUCCESS)
 			{
 				PMSGDATA pData = CIsSvrProxy::GetSvrCore()->GetAck();
-				pData->byData[pData->sSize] = 0;
-				p += _stprintf(p, _T("\n%s=%s"),CDataCenter::getSingleton().GetData().m_compInfo.strCompName, S_CA2T((char*)pData->byData));
+				SStringW str((WCHAR*)pData->byData,pData->sSize/2);
+				p += _stprintf(p, _T("\n%s=%s"),CDataCenter::getSingleton().GetData().m_compInfo.strCompName, str.c_str());
 			}
 			else
 			{
@@ -97,19 +97,18 @@ void CCmdHandler::OnHotKeyQueryInfo(LPARAM lp)
 				BYTE *pbyData = pData->byData;
 				p += _stprintf(p, _T("\n拼音="));
 				memcpy(&sCount, pbyData, 2);
-				//todo:hjx
-				//pbyData += 2;
+				pbyData += 2;
 
-				//if (sCount>10) sCount = 10;//只取前面10个拼音
-				//for (i = 0; i<sCount; i++)
-				//{
-				//	char cSize = pbyData[0];
-				//	pbyData++;
-				//	memcpy(p, pbyData, cSize);
-				//	pbyData += cSize;
-				//	p += cSize;
-				//	*p++ = ' ';
-				//}
+				if (sCount>10) sCount = 10;//只取前面10个拼音
+				for (i = 0; i<sCount; i++)
+				{
+					char cSize = pbyData[0];
+					pbyData++;
+					wcsncpy(p, (WCHAR*)pbyData, cSize);
+					pbyData += cSize*2;
+					p += cSize;
+					*p++ = ' ';
+				}
 				*p = 0;
 			}
 			else
@@ -124,17 +123,18 @@ void CCmdHandler::OnHotKeyQueryInfo(LPARAM lp)
 			if (CIsSvrProxy::GetSvrCore()->ReqEn2Ch(strBuf,strBuf.GetLength()) == ISACK_SUCCESS)
 			{
 				PMSGDATA pData = CIsSvrProxy::GetSvrCore()->GetAck();
-				//todo:hjx
-				//LPBYTE pbyData = pData->byData;
-				//BYTE i = 0, byItems = *pbyData++;
-				//pbyData += pbyData[0] + 1;//skip phonetic
-				//p += sprintf(p, "\n中文释意");
-				//while (i<byItems)
-				//{
-				//	p += sprintf(p, "\n    %d:", i + 1);
-				//	memcpy(p, pbyData + 1, pbyData[0]); p += pbyData[0]; pbyData += pbyData[0] + 1;
-				//	i++;
-				//}
+				LPBYTE pbyData = pData->byData;
+				BYTE i = 0, byItems = *pbyData++;
+				pbyData += pbyData[0]*2+1;//skip phonetic
+				p += _stprintf(p, _T("\n中文释意"));
+				while (i<byItems)
+				{
+					p += _stprintf(p, _T("\n    %d:"), i + 1);
+					wcsncpy(p, (WCHAR*)(pbyData + 1), pbyData[0]);
+					p += pbyData[0]; 
+					pbyData += pbyData[0]*2+1;
+					i++;
+				}
 				*p = 0;
 			}
 			else

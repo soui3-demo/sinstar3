@@ -11,14 +11,14 @@
 #pragma comment(lib,"version.lib")
 #include "AddBlurDlg.h"
 #include "souidlgs.h"
+#include "../IsSvrProxy.h"
 
 #pragma warning(disable:4244)
 namespace SOUI
 {
-	SStringT DwordVer2String(DWORD dwVer)
+	SStringT Ver2String(WORD wVer[4])
 	{
-		BYTE * pByte = (BYTE*)&dwVer;
-		return SStringT().Format(_T("%u.%u.%u.%u"), UINT(pByte[3]), UINT(pByte[2]), UINT(pByte[1]), UINT(pByte[0]));
+		return SStringT().Format(_T("%u.%u.%u.%u"), wVer[0],wVer[1],wVer[2],wVer[3]);
 	}
 
 	class CGroupAdapter : public SMcAdapterBase
@@ -99,8 +99,7 @@ namespace SOUI
 			{
 				SWindow *pSender = sobj_cast<SWindow>(e->sender);
 				int idx = pSender->GetUserData();
-				SStringA strName = S_CT2A(m_arrGroupInfo[idx].strName);
-				ISComm_EnablePhraseGroup(strName, (e2->dwNewState & WndState_Check)?1:0);
+				CIsSvrProxy::GetSvrCore()->ReqEnablePhraseGroup(m_arrGroupInfo[idx].strName,e2->CheckState(WndState_Check));
 			}
 			return false;
 		}
@@ -123,12 +122,9 @@ namespace SOUI
 			{
 				SWindow *pSender = sobj_cast<SWindow>(e->sender);
 				int idx = pSender->GetUserData();
-				SStringA strName = S_CT2A(m_arrGroupInfo[idx].strName);
-				char bEnable = (e2->dwNewState & WndState_Check)?1:0;
-				if(ISACK_SUCCESS == ISComm_Flm_EnableGroup(strName,bEnable ))
-				{
+				BOOL bEnable = (e2->dwNewState & WndState_Check)?1:0;
+				if(ISACK_SUCCESS == CIsSvrProxy::GetSvrCore()->ReqFlmEnableGroup(m_arrGroupInfo[idx].strName,bEnable))
 					m_arrGroupInfo[idx].bEnable = bEnable;
-				}
 			}
 			return false;
 		}
@@ -401,26 +397,15 @@ namespace SOUI
 		FindAndSetCheck(R.id.chk_auto_dot, g_SettingsG->bAutoDot);
 		FindAndSetCheck(R.id.chk_auto_select_cand, g_SettingsG->bAutoMatch);
 
-		FindAndSetText(R.id.edit_webmode_header, S_CA2T(g_SettingsG->szWebHeader));
+		FindAndSetText(R.id.edit_webmode_header, g_SettingsG->szWebHeader);
+		
+		int nSentMax = CIsSvrProxy::GetSvrCore()->GetSentRecordMax();
+		FindAndSetText(R.id.edit_sent_record_max, SStringT().Format(_T("%d"), nSentMax));
+		int nPredictLength = CIsSvrProxy::GetSvrCore()->GetMaxPhrasePreictLength();
+		FindAndSetSpin(R.id.spin_predict_phrase_maxlength, nPredictLength);
 
-		if (ISComm_GetSentRecordMax() == ISACK_SUCCESS)
-		{
-			PMSGDATA pMsgData = ISComm_GetData();
-			int nSentMax = *(int*)pMsgData->byData;
-			FindAndSetText(R.id.edit_sent_record_max, SStringT().Format(_T("%d"), nSentMax));
-		}
-		if (ISComm_GetMaxPhrasePredictLength() == ISACK_SUCCESS)
-		{
-			PMSGDATA pMsgData = ISComm_GetData();
-			int nPredictLength = *(int*)pMsgData->byData;
-			FindAndSetSpin(R.id.spin_predict_phrase_maxlength, nPredictLength);
-		}
-		if (ISComm_GetMaxPhraseAssociateDeepness() == ISACK_SUCCESS)
-		{
-			PMSGDATA pMsgData = ISComm_GetData();
-			int nDeepness = *(int*)pMsgData->byData;
-			FindAndSetSpin(R.id.spin_phrase_ast_deepness_max, nDeepness);
-		}
+		int nDeepness = CIsSvrProxy::GetSvrCore()->GetMaxPhraseAstDeepness();
+		FindAndSetSpin(R.id.spin_phrase_ast_deepness_max, nDeepness);
 	}
 
 
@@ -466,12 +451,12 @@ namespace SOUI
 		SStringT strTm = time.Format(_T("%Y-%m-%d %H:%M:%S %A"));
 		FindChildByID(R.id.txt_build_time)->SetWindowText(strTm);
 		
-		if (ISComm_ServerVersion() == ISACK_SUCCESS)
-		{
-			PMSGDATA pData = ISComm_GetData();
-			SStringT strVer = DwordVer2String(*(DWORD*)pData->byData);
-			FindChildByID(R.id.txt_svr_ver)->SetWindowText(strVer);
-		}
+		TCHAR szExe[MAX_PATH];
+		GetModuleFileName(NULL,szExe,MAX_PATH);
+		WORD ver[4];
+		SDpiHelper::PEVersion(szExe,ver[0],ver[1],ver[2],ver[3]);
+		SStringT strVer = Ver2String(ver);
+		FindChildByID(R.id.txt_svr_ver)->SetWindowText(strVer);
 
 		SWindow *pCheck = FindChildByID(R.id.chk_auto_update);
 		int nCheckUpdateInterval = m_pObserver->GetUpdateInterval();
@@ -494,65 +479,37 @@ namespace SOUI
 		}
 	}
 
-	static LPBYTE ExtractTtsToken(LPBYTE pBuf, SStringAList & tokens, int &iSelToken)
+	void CConfigDlg::InitTtsTokenInfo(bool bChVoice, SComboBox *pCbx)
 	{
-		int nCount = 0;
-		memcpy(&nCount, pBuf, sizeof(int));
-		pBuf += sizeof(int);
-		for (int i = 0; i < nCount; i++)
+		int nTokens= CIsSvrProxy::GetInstance()->TtsGetTokensInfo(true,NULL,0);
+		if (nTokens)
 		{
-			int nLen = 0;
-			memcpy(&nLen, pBuf, sizeof(int));
-			pBuf += sizeof(int);
-			SStringA str;
-			char *p = str.GetBufferSetLength(nLen);
-			memcpy(p, pBuf, nLen);
-			str.ReleaseBuffer();
-			tokens.Add(str);
-			pBuf += nLen;
-		}
-		memcpy(&iSelToken, pBuf, sizeof(int));
-		pBuf += sizeof(int);
-		return pBuf;
-	}
+			WCHAR (*szToken)[MAX_TOKEN_NAME_LENGHT] = new WCHAR[nTokens][MAX_TOKEN_NAME_LENGHT];
+			CIsSvrProxy::GetInstance()->TtsGetTokensInfo(bChVoice,szToken,nTokens);
 
-	LPBYTE CConfigDlg::InitTtsTokenInfo(LPBYTE pBuf, SComboBox *pCbx)
-	{
-		SStringAList lstToken;
-		int iSelToken = -1;
-		LPBYTE p = ExtractTtsToken(pBuf, lstToken, iSelToken);
-
-		if (lstToken.GetCount())
-		{
-			for (UINT i = 0; i < lstToken.GetCount(); i++)
+			for (UINT i = 0; i < nTokens; i++)
 			{
-				pCbx->InsertItem(-1, S_CA2T(lstToken[i]), 0, 0);
+				pCbx->InsertItem(-1, S_CW2T(szToken[i]), 0, 0);
 			}
-			if (iSelToken < (int)lstToken.GetCount())
+			int iSel=CIsSvrProxy::GetInstance()->TtsGetVoice(bChVoice);
+		
+			if (iSel>=0 && iSel<nTokens)
 			{
 				pCbx->GetEventSet()->setMutedState(true);
-				pCbx->SetCurSel(iSelToken);
+				pCbx->SetCurSel(iSel);
 				pCbx->GetEventSet()->setMutedState(false);
 			}
+			delete []szToken;
 		}
-		return p;
 	}
 
 	void CConfigDlg::InitPageTTS()
 	{
-		if (ISComm_GetTtsTokens() == ISACK_SUCCESS)
-		{
-			PMSGDATA pMsgData = ISComm_GetData();
-			LPBYTE p = InitTtsTokenInfo(pMsgData->byData, FindChildByID2<SComboBox>(R.id.cbx_tts_en_token));
-			InitTtsTokenInfo(p, FindChildByID2<SComboBox>(R.id.cbx_tts_ch_token));
-		}
-		if (ISComm_GetTtsSpeed() == ISACK_SUCCESS)
-		{
-			PMSGDATA pMsgData = ISComm_GetData();
-			int nSpeed = *(int*)pMsgData->byData;
-			FindChildByID(R.id.txt_tts_speed)->SetWindowText(SStringT().Format(_T("%d"), nSpeed));
-			FindChildByID2<SSliderBar>(R.id.slider_tts_speed)->SetValue(nSpeed);
-		}
+		InitTtsTokenInfo(false, FindChildByID2<SComboBox>(R.id.cbx_tts_en_token));
+		InitTtsTokenInfo(true, FindChildByID2<SComboBox>(R.id.cbx_tts_ch_token));
+		int nTtsSpeed = CIsSvrProxy::GetInstance()->TtsGetSpeed();
+		FindChildByID(R.id.txt_tts_speed)->SetWindowText(SStringT().Format(_T("%d"), nTtsSpeed));
+		FindChildByID2<SSliderBar>(R.id.slider_tts_speed)->SetValue(nTtsSpeed);
 	}
 
 	void CConfigDlg::InitPinyinBlur(COMFILE & cf, CBlurListAdapter * pBlurAdapter, int iGroup)
@@ -572,9 +529,10 @@ namespace SOUI
 	{
 		CBlurListAdapter *pAdapter = (CBlurListAdapter*)pLvBLur->GetAdapter();
 		pAdapter->RemoveAll();
-		if (ISComm_Blur_Query() == ISACK_SUCCESS)
+		
+		if (CIsSvrProxy::GetSvrCore()->ReqBlurQuery() == ISACK_SUCCESS)
 		{
-			PMSGDATA pMsgData = ISComm_GetData();
+			PMSGDATA pMsgData = CIsSvrProxy::GetSvrCore()->GetAck();
 			COMFILE cf = CF_Init(pMsgData->byData, MAX_BUF_ACK, pMsgData->sSize, 0);
 			int bEnableBlur = 0, bZcsBlur = 0;
 			CF_Read(&cf, &bEnableBlur, sizeof(int));
@@ -611,28 +569,21 @@ namespace SOUI
 
 	void CConfigDlg::InitPhraseLibListview()
 	{
-		if (ISACK_SUCCESS == ISComm_QueryPhraseGroup())
+		int nPhraseGroup = CIsSvrProxy::GetSvrCore()->GetPhraseGroupCount();
+		PGROUPINFO pGroupInfo = new GROUPINFO[nPhraseGroup];
+		if (CIsSvrProxy::GetSvrCore()->QueryPhraseGroup(pGroupInfo,nPhraseGroup))
 		{
 			SMCListView * pLvPhraseLib = FindChildByID2<SMCListView>(R.id.mc_phraselib);
 			CPhraseGroupAdapter *pAdapter = (CPhraseGroupAdapter*)pLvPhraseLib->GetAdapter();
 			pAdapter->RemoveAll();
-
-			PMSGDATA pMsgData = ISComm_GetData();
-			COMFILE cf = CF_Init(pMsgData->byData, MAX_BUF_ACK, pMsgData->sSize, 0);
-			BYTE byCount;
-			CF_ReadT(cf, &byCount);
-			for (BYTE i = 0; i < byCount; i++)
+			for (int i = 0; i < nPhraseGroup; i++)
 			{
 				CGroupAdapter::GroupInfo gi;
-				CF_ReadT(cf, &gi.bEnable);
-				std::string buf;
-				CF_ReadString(cf, buf);
-				gi.strName = S_CA2T(buf.c_str());
-				CF_ReadT(cf, &gi.dwCount);
-				CF_ReadString(cf, buf);
-				gi.strEditor = S_CA2T(buf.c_str());
-				CF_ReadString(cf, buf);
-				gi.strRemark = S_CA2T(buf.c_str());
+				gi.dwCount = pGroupInfo[i].dwCount;
+				gi.bEnable = pGroupInfo[i].bValid;
+				gi.strName = pGroupInfo[i].szName;
+				gi.strEditor = pGroupInfo[i].szEditor;
+				gi.strRemark = pGroupInfo[i].szRemark;
 				pAdapter->AddGroup(gi);
 			}
 			pAdapter->notifyDataSetChanged();
@@ -641,99 +592,48 @@ namespace SOUI
 
 	void CConfigDlg::InitCeLib()
 	{
-		SComboBox * pCbxCelib = FindChildByID2<SComboBox>(R.id.cbx_celib);
-		pCbxCelib->InsertItem(0,_T("Close"),0,0);
-		if(ISACK_SUCCESS == ISComm_Flm_List())
-		{
-			PMSGDATA pMsgData = ISComm_GetData();
-			COMFILE cf = CF_Init(pMsgData->byData, MAX_BUF_ACK, pMsgData->sSize, 0);
-
-			for(;;)
-			{
-				std::string strCelib;
-				CF_ReadString(cf,strCelib);
-				if(strCelib.empty()) break;
-				pCbxCelib->InsertItem(-1,S_CA2T(strCelib.c_str()),0,0);
-			}
-			std::string strCurCelib;
-			CF_ReadString(cf,strCurCelib);
-			pCbxCelib->GetEventSet()->setMutedState(true);
-			if(strCurCelib.empty())
-			{
-				pCbxCelib->SetCurSel(0);
-			}else
-			{
-				int iItem = pCbxCelib->GetListBox()->FindString(-1,S_CA2T(strCurCelib.c_str()));
-				pCbxCelib->SetCurSel(iItem);
-			}
-			pCbxCelib->GetEventSet()->setMutedState(false);
-		}
-
 		SMCListView * pLvCeLib = FindChildByID2<SMCListView>(R.id.mc_celib);
 		CCelibGroupAdapter *pAdapter = new CCelibGroupAdapter();
 		pLvCeLib->SetAdapter(pAdapter);
-		pAdapter->Release();
-		InitCeLibListview();
-	}
 
-	void CConfigDlg::InitCeLibListview()
-	{
-		if (ISACK_SUCCESS == ISComm_Flm_GetInfo())
+		CIsSvrProxy::GetSvrCore()->ReqFlmGetInfo();
+		PMSGDATA pMsgData = CIsSvrProxy::GetSvrCore()->GetAck();
+		COMFILE cf = CF_Init(pMsgData->byData, MAX_BUF_ACK, pMsgData->sSize, 0);
+		BOOL bOpen=FALSE;
+		CF_ReadT(cf,&bOpen);
+		if(bOpen)
 		{
-			SMCListView * pLvCeLib = FindChildByID2<SMCListView>(R.id.mc_celib);
-			CCelibGroupAdapter *pAdapter = (CCelibGroupAdapter*)pLvCeLib->GetAdapter();
-			pAdapter->RemoveAll();
+			FLMINFO flmInfo;
+			CF_ReadT(cf,&flmInfo);
+			FindChildByID(R.id.edit_flm_name)->SetWindowText(flmInfo.szName);
+			FindChildByID(R.id.edit_flm_addtion)->SetWindowText(flmInfo.szAddition);
 
-			PMSGDATA pMsgData = ISComm_GetData();
-			COMFILE cf = CF_Init(pMsgData->byData, MAX_BUF_ACK, pMsgData->sSize, 0);
-			int bOpen;
-			CF_ReadT(cf,&bOpen);
-			if(!bOpen)
+			BYTE byGroup = 0;
+			CF_ReadT(cf, &byGroup);
+			for (BYTE i = 0; i < byGroup; i++)
 			{
-				FindChildByID(R.id.edit_flm_name)->SetWindowText(NULL);
-				FindChildByID(R.id.edit_flm_addtion)->SetWindowText(NULL);
-			}else
-			{
-				FLMINFO flmInfo;
-				CF_ReadT(cf,&flmInfo);
-				FindChildByID(R.id.edit_flm_name)->SetWindowText(S_CA2T(flmInfo.szName));
-				FindChildByID(R.id.edit_flm_addtion)->SetWindowText(S_CA2T(flmInfo.szAddition));
-				BYTE byCount;
-				CF_ReadT(cf, &byCount);
-				for (BYTE i = 0; i < byCount; i++)
-				{
-					CGroupAdapter::GroupInfo gi;
-					CF_ReadT(cf, &gi.bEnable);
-					std::string buf;
-					CF_ReadString(cf, buf);
-					gi.strName = S_CA2T(buf.c_str());
-					CF_ReadT(cf, &gi.dwCount);
-					CF_ReadString(cf, buf);
-					gi.strEditor = S_CA2T(buf.c_str());
-					CF_ReadString(cf, buf);
-					gi.strRemark = S_CA2T(buf.c_str());
-					pAdapter->AddGroup(gi);
-				}
+				CGroupAdapter::GroupInfo gi;
+				CF_ReadT(cf, &gi.bEnable);
+				std::wstring buf;
+				CF_ReadWString(cf, buf);
+				gi.strName = buf.c_str();
+				CF_ReadT(cf, &gi.dwCount);
+				CF_ReadWString(cf, buf);
+				gi.strEditor = buf.c_str();
+				CF_ReadWString(cf, buf);
+				gi.strRemark = buf.c_str();
+				pAdapter->AddGroup(gi);
 			}
 			pAdapter->notifyDataSetChanged();
-		}
-	}
-
-	void CConfigDlg::OnCbxFlmChange(EventArgs * e)
-	{
-		EventCBSelChange *e2 = sobj_cast<EventCBSelChange>(e);
-		if(e2->nCurSel == 0)
-		{//close flm
-			ISComm_Flm_Open(NULL);
 		}else
 		{
-			SComboBox *pCbx = sobj_cast<SComboBox>(e->sender);
-			SStringT strFlm = pCbx->GetLBText(e2->nCurSel,TRUE);
-			SStringA strFlmUtf8=S_CT2A(strFlm,CP_UTF8);
-			ISComm_Flm_Open(strFlmUtf8);
+			FindChildByID(R.id.edit_flm_name)->SetWindowText(_T("none"));
 		}
-		InitCeLibListview();
+
+		pAdapter->Release();
+
 	}
+
 
 	void CConfigDlg::InitPages()
 	{		
@@ -988,10 +888,9 @@ SWindow *pCtrl = FindChildByID(id);\
 		{
 			SWindow *pEdit = sobj_cast<SWindow>(e2->sender);
 			SStringT str = pEdit->GetWindowText();
-			SStringA strA = S_CT2A(str);
-			if (strA.GetLength() < 100)
+			if (str.GetLength() < 100)
 			{
-				strcpy(g_SettingsG->szWebHeader, strA);
+				wcscpy(g_SettingsG->szWebHeader, str);
 			}
 			
 		}
@@ -1002,46 +901,46 @@ SWindow *pCtrl = FindChildByID(id);\
 		EventSliderPos *e2 = sobj_cast<EventSliderPos>(e);
 		SASSERT(e2);
 		FindChildByID(R.id.txt_tts_speed)->SetWindowText(SStringT().Format(_T("%d"), e2->nPos));
-		ISComm_SetTtsSpeed(e2->nPos);
+		CIsSvrProxy::GetInstance()->TtsSetSpeed(e2->nPos);
 	}
 
-	const char KTTS_SAMPLE_CH[] = "中文朗读速度测试。";
-	const char KTTS_SAMPLE_EN[] = "speed test for English speaking.";
+	const WCHAR KTTS_SAMPLE_CH[] = L"中文朗读速度测试。";
+	const WCHAR KTTS_SAMPLE_EN[] = L"speed test for English speaking.";
 
 	void CConfigDlg::OnTtsChPreview()
 	{
-		ISComm_TTS(KTTS_SAMPLE_CH, sizeof(KTTS_SAMPLE_CH) - 1, MTTS_CH);
+		CIsSvrProxy::GetInstance()->TtsSpeakText(KTTS_SAMPLE_CH,-1,true);
 	}
 
 	void CConfigDlg::OnTtsEnPreview()
 	{
-		ISComm_TTS(KTTS_SAMPLE_EN, sizeof(KTTS_SAMPLE_EN) - 1, MTTS_EN);
+		CIsSvrProxy::GetInstance()->TtsSpeakText(KTTS_SAMPLE_EN,-1,true);
 	}
 
 	void CConfigDlg::OnPyBlurClick(EventArgs * e)
 	{
 		SCheckBox *pCheck = sobj_cast<SCheckBox>(e->sender);
 		BOOL bCheck = pCheck->IsChecked();
-		ISComm_Blur_Set(bCheck);
+		CIsSvrProxy::GetSvrCore()->BlurEnable(bCheck);
 	}
 
 	void CConfigDlg::OnJPBlurClick(EventArgs * e)
 	{
 		SCheckBox *pCheck = sobj_cast<SCheckBox>(e->sender);
 		BOOL bCheck = pCheck->IsChecked();
-		ISComm_BlurZCS(bCheck);
+		CIsSvrProxy::GetSvrCore()->BlurZCS(bCheck);
 	}
 
 	void CConfigDlg::OnTtsChTokenChange(EventArgs * e)
 	{
 		EventCBSelChange *e2 = sobj_cast<EventCBSelChange>(e);
-		ISComm_SetTtsToken(1, e2->nCurSel);
+		CIsSvrProxy::GetInstance()->TtsSetVoice(true,e2->nCurSel);
 	}
 
 	void CConfigDlg::OnTtsEnTokenChange(EventArgs * e)
 	{
 		EventCBSelChange *e2 = sobj_cast<EventCBSelChange>(e);
-		ISComm_SetTtsToken(0, e2->nCurSel);
+		CIsSvrProxy::GetInstance()->TtsSetVoice(false,e2->nCurSel);
 	}
 
 	void CConfigDlg::OnReNotify(EventArgs * e)
@@ -1056,7 +955,7 @@ SWindow *pCtrl = FindChildByID(id);\
 			case R.id.edit_sent_record_max:
 				{
 					int nSentMax = _ttoi(str);
-					ISComm_SetSentRecordMax(nSentMax);
+					CIsSvrProxy::GetSvrCore()->SetSentRecordMax(nSentMax);
 				}
 				break;
 			}
@@ -1072,13 +971,13 @@ SWindow *pCtrl = FindChildByID(id);\
 		case R.id.spin_predict_phrase_maxlength:
 			{
 				int nPredictLength = e2->nValue;
-				ISComm_SetMaxPhrasePredictLength(nPredictLength);
+				CIsSvrProxy::GetSvrCore()->SetMaxPhrasePreictLength(nPredictLength);
 			}
 			break;
 		case R.id.spin_phrase_ast_deepness_max:
 			{
 				int nDeepness =  e2->nValue;
-				ISComm_SetMaxPhraseAssociateDeepness(nDeepness);
+				CIsSvrProxy::GetSvrCore()->SetMaxPhraseAstDeepness(nDeepness);
 			}
 			break;
 		case R.id.spin_delay_time:
@@ -1095,22 +994,17 @@ SWindow *pCtrl = FindChildByID(id);\
 		CFileDialogEx dlg(TRUE, _T("spl"), 0, 6, _T("启程词库文件(*.spl)\0*.spl\0All files (*.*)\0*.*\0\0"));
 		if (dlg.DoModal() == IDOK)
 		{
-			SStringA strNameUtf8 = S_CT2A(dlg.m_szFileName, CP_UTF8);
 			::SetCursor(SApplication::getSingleton().LoadCursor(_T("wait")));
-			DWORD dwRet = ISComm_InstallPhraseLib(strNameUtf8);
+			BOOL bRet = CIsSvrProxy::GetSvrCore()->InstallPlt(dlg.m_szFileName);
 			::SetCursor(SApplication::getSingleton().LoadCursor(_T("arrow")));
-			if (dwRet == ISACK_ERROR)
-			{
-				SMessageBox(m_hWnd,_T("安装失败"),_T("提示"),MB_OK|MB_ICONSTOP);
-			}
-			else if (dwRet == ISACK_UNINIT)
-			{
-				SMessageBox(m_hWnd, _T("服务器正在加载数据，请稍后重试"), _T("提示"), MB_OK | MB_ICONSTOP);
-			}
-			else if (dwRet == ISACK_SUCCESS)
+			if (bRet)
 			{
 				InitPhraseLibListview();
 				SMessageBox(m_hWnd, _T("安装成功"), _T("提示"), MB_OK);
+			}
+			else
+			{
+				SMessageBox(m_hWnd,_T("安装失败"),_T("提示"),MB_OK|MB_ICONSTOP);
 			}
 		}
 	}
@@ -1120,7 +1014,8 @@ SWindow *pCtrl = FindChildByID(id);\
 		CAddBlurDlg addBlurDlg;
 		if (addBlurDlg.DoModal() == IDOK)
 		{
-			if (ISACK_SUCCESS == ISComm_Blur_Add(addBlurDlg.m_strFrom, addBlurDlg.m_strTo))
+			
+			if (-1 != CIsSvrProxy::GetSvrCore()->BlurAdd(addBlurDlg.m_strFrom, addBlurDlg.m_strTo))
 			{
 				SListView *pLvBlur = FindChildByID2<SListView>(R.id.lv_blur);
 				InitPinyinBlurListView(pLvBlur);
@@ -1138,7 +1033,7 @@ SWindow *pCtrl = FindChildByID(id);\
 			char szFrom[7], szTo[7];
 			if (pAdapter->getBlur(iSel, szFrom, szTo))
 			{
-				if (ISACK_SUCCESS == ISComm_Blur_Del(szFrom, szTo))
+				if (ISACK_SUCCESS == CIsSvrProxy::GetSvrCore()->BlurDel(szFrom, szTo))
 				{
 					InitPinyinBlurListView(pLvBlur);
 				}
@@ -1146,17 +1041,11 @@ SWindow *pCtrl = FindChildByID(id);\
 		}
 	}
 
-	void CConfigDlg::OnDestroy()
-	{
-		ISComm_Logout(m_hWnd);
-		__super::OnDestroy();
-	}
 
 	int CConfigDlg::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	{
 		int nRet = __super::OnCreate(lpCreateStruct);
 		if (nRet != 0) return nRet;	
-		ISComm_Login(m_hWnd);
 		InitPages();
 		return 0;
 	}

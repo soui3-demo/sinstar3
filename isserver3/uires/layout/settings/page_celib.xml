@@ -5,16 +5,12 @@
     <hr width="-2" height="1"></hr>
   </window>
   <window size="-2,-1" layout="vbox" padding_left="50" interval="10">
-  <window size="-2,-1" layout="gridlayout" gravity="fill" columnCount="4" interval="10" >
-    <text text="文件名:"/>
-    <combobox size="100,30" name="cbx_celib">
-      <liststyle colorBkgnd="#ffffff"/>
-    </combobox>
+  <window size="-2,-1" layout="gridlayout" gravity="fill" columnCount="2" interval="10" >
     <text text="名称:"/>
     <edit size="100,30" name="edit_flm_name" readonly="1"/>
     
     <text text="附加信息:"/>
-    <edit size="-2,30" name="edit_flm_addtion" readonly="1" columnSpan="3"/>
+    <edit size="-2,30" name="edit_flm_addtion" readonly="1"/>
   </window>
   <mclistview name="mc_celib" headerHeight="30" size="-2,150"  sbSkin="skin_scrollbar" >
     <headerstyle align="center" itemSwapEnable="1" fixWidth="0" colorBkgnd="#ffffff" >

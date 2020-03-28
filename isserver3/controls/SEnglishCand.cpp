@@ -49,7 +49,7 @@ namespace SOUI
 		pt.x += szBlock.cx;
 
 		if(!m_strPhonetic.IsEmpty() && m_bShowPhonetic)
-		{//todo:select phontic font
+		{
 			pRT->SetTextColor(m_crPhonetic);
 			pRT->TextOut(pt.x, pt.y, KPhoneticLeft, ARRAYSIZE(KPhoneticLeft) - 1);
 			pRT->MeasureText(KPhoneticLeft, ARRAYSIZE(KPhoneticLeft) - 1, &szBlock);
@@ -79,22 +79,28 @@ namespace SOUI
 	LRESULT SEnglishCand::OnFlmInfo(UINT uMsg, WPARAM, LPARAM lp)
 	{
 		PFLMINFO pflmInfo = (PFLMINFO)lp;
-		SLOG_INFO("font:" << pflmInfo->szAddFont);
-		SStringW strFontInfo=L"face:";
-		strFontInfo += pflmInfo->szAddFont;
+		if(pflmInfo)
+		{
+			SLOG_INFO("font:" << pflmInfo->szAddFont);
+			SStringW strFontInfo=L"face:";
+			strFontInfo += pflmInfo->szAddFont;
 
-		m_ftPhonetic = SFontPool::getSingleton().GetFont(strFontInfo,GetScale());
+			m_ftPhonetic = SFontPool::getSingleton().GetFont(strFontInfo,GetScale());
+		}else
+		{
+			m_ftPhonetic=NULL;
+		}
 		return 1;
 	}
 
 
 	void SEnglishCand::SetCandData(const BYTE* pbyCandData)
 	{
-		const char * p = (const char *)pbyCandData;		
-		m_strCand = S_CA2T(SStringA(p+1,p[0]), CP_GB);
-		p += p[0] + 1;
+		const BYTE* p=pbyCandData;
+		m_strCand = SStringW((const WCHAR*)(p+1),p[0]);
+		p += p[0]*2 + 1;
 		if (p[0] > 0)
-			m_strPhonetic = S_CA2T(SStringA(p + 1, p[0]), CP_GB);
+			m_strPhonetic = SStringW((const WCHAR*)(p+1),p[0]);
 		else
 			m_strPhonetic.Empty();
 		RequestRelayout();

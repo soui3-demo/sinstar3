@@ -36,6 +36,7 @@ public:
 	~CIsSvrProxy();
 
 	static IServerCore * GetSvrCore();
+	static CIsSvrProxy * GetInstance();
 protected:
 	virtual void OnNewConnection(IIpcHandle * pIpcHandle, IIpcConnection ** ppConn)
 	{
@@ -72,14 +73,13 @@ protected:
 
 	virtual void OnShowKeyMap(IDataBlock * pCompData, LPCWSTR pszName, LPCWSTR pszUrl) ;
 
-	virtual int TtsGetSpeed();
-	virtual int TtsGetVoice(bool bCh);
-	virtual void TtsSetSpeed(int nSpeed) ;
-	virtual void TtsSpeakText(const wchar_t* pText, int nLen, bool bChinese) ;
-	virtual void TtsSetVoice(bool bCh, int iToken) ;
-	virtual int TtsGetTokensInfo(bool bCh, wchar_t token[][MAX_TOKEN_NAME_LENGHT], int nBufSize);
-
-	virtual DWORD OnQueryVersion() const;
+public:
+	int TtsGetSpeed();
+	int TtsGetVoice(bool bCh);
+	void TtsSetSpeed(int nSpeed) ;
+	void TtsSpeakText(const wchar_t* pText, int nLen, bool bChinese) ;
+	void TtsSetVoice(bool bCh, int iToken) ;
+	int TtsGetTokensInfo(bool bCh, wchar_t token[][MAX_TOKEN_NAME_LENGHT], int nBufSize);
 
 protected:
 	void OnCheckUpdateResult(EventArgs *e);

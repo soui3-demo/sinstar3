@@ -2,6 +2,7 @@
 #include "InputWnd.h"
 #include "../utils.h"
 #include "../../worker.h"
+#include "../../IsSvrProxy.h"
 
 #define SIZE_BELOW 5
 #define TIMERID_DELAY 100
@@ -169,7 +170,7 @@ namespace SOUI
 		STipView *pTipView = sobj_cast<STipView>(e->sender);
 		SASSERT(pTipView);
 		m_pInputWndListener->OnSwitchTip(m_pInputContext, e2->bNext);
-		pTipView->SetWindowText(S_CA2T(m_pInputContext->szTip));
+		pTipView->SetWindowText(m_pInputContext->szTip);
 	}
 
 	void CInputWnd::OnContextMenu(EventArgs * e)
@@ -207,7 +208,7 @@ namespace SOUI
 				{
 					pMutexView = FindChildByID(R.id.comp_normal);
 					pMutexView->SetVisible(TRUE, TRUE);
-					pMutexView->FindChildByID(R.id.txt_comps)->SetWindowText(S_CA2T(SStringA(m_pInputContext->szComp, m_pInputContext->cComp), CP_GB));
+					pMutexView->FindChildByID(R.id.txt_comps)->SetWindowText(SStringW(m_pInputContext->szComp, m_pInputContext->cComp));
 				}
 				//update tips
 				SWindow *pTip = pMutexView->FindChildByID(R.id.txt_tip);
@@ -216,7 +217,7 @@ namespace SOUI
 					if (m_pInputContext->sbState == ::SBST_NORMAL && m_pInputContext->bShowTip)
 					{
 						pTip->SetVisible(TRUE);
-						pTip->SetWindowText(S_CA2T(m_pInputContext->szTip, CP_GB));
+						pTip->SetWindowText(m_pInputContext->szTip);
 					}
 					else
 					{
@@ -233,11 +234,8 @@ namespace SOUI
 				SASSERT(pStvSent);
 
 				SStringT strInput(m_pInputContext->szInput, m_pInputContext->cInput);
-				int nSelLen = int(m_pInputContext->pbySentWord[m_pInputContext->sSentCaret] - m_pInputContext->pbySentWord[0]);
-				SStringA strLeftA((char*)m_pInputContext->pbySentWord[0], nSelLen);
-				SStringA strRightA((char*)m_pInputContext->pbySentWord[m_pInputContext->sSentCaret], m_pInputContext->sSentLen - nSelLen);
-				SStringT strLeft = S_CA2T(strLeftA, CP_GB);
-				SStringT strRight = S_CA2T(strRightA, CP_GB);
+				SStringT strLeft(m_pInputContext->szSentText, m_pInputContext->sSentCaret);
+				SStringT strRight(m_pInputContext->szSentText+m_pInputContext->sSentCaret, m_pInputContext->sSentLen - m_pInputContext->sSentCaret);
 
 				SStringT strAll = strInput + strLeft + strRight;
 				pStvSent->SetActive(m_pInputContext->sbState == SBST_SENTENCE);
@@ -250,19 +248,19 @@ namespace SOUI
 			{
 				SWindow * compUmode = FindChildByID(R.id.comp_umode);
 				compUmode->SetVisible(TRUE,TRUE);
-				compUmode->FindChildByID(R.id.txt_comps)->SetWindowText(S_CA2T(SStringA(m_pInputContext->szComp,m_pInputContext->cComp), CP_GB));
+				compUmode->FindChildByID(R.id.txt_comps)->SetWindowText(SStringW(m_pInputContext->szComp,m_pInputContext->cComp));
 				SWindow *pCompAutoComplete = compUmode->FindChildByID(R.id.txt_auto_complete);
 				if (pCompAutoComplete)
 				{
 					if (m_pInputContext->cComp > 0)
 					{
-						SStringA strCompAutoComplete;
+						SStringW strCompAutoComplete;
 						if (m_pInputContext->cCompACLen > m_pInputContext->cComp)
 						{
-							strCompAutoComplete = SStringA(m_pInputContext->szCompAutoComplete + m_pInputContext->cComp,
+							strCompAutoComplete = SStringW(m_pInputContext->szCompAutoComplete + m_pInputContext->cComp,
 								m_pInputContext->cCompACLen - m_pInputContext->cComp);
 						}
-						pCompAutoComplete->SetWindowText(S_CA2T(strCompAutoComplete, CP_GB));
+						pCompAutoComplete->SetWindowText(strCompAutoComplete);
 					}
 					else
 					{
@@ -275,7 +273,7 @@ namespace SOUI
 			{
 				SWindow * compLineIme = FindChildByID(R.id.comp_lineime);
 				compLineIme->SetVisible(TRUE, TRUE);
-				compLineIme->FindChildByID(R.id.txt_comps)->SetWindowText(S_CA2T(SStringA(m_pInputContext->szComp, m_pInputContext->cComp), CP_GB));
+				compLineIme->FindChildByID(R.id.txt_comps)->SetWindowText(SStringW(m_pInputContext->szComp, m_pInputContext->cComp));
 			}
 			break;
 		case INST_ENGLISH:
@@ -283,13 +281,13 @@ namespace SOUI
 				SWindow * compEnglish = FindChildByID(R.id.comp_english);
 				compEnglish->SetVisible(TRUE, TRUE);
 
-				SStringA strComp(m_pInputContext->szComp, m_pInputContext->cComp);
-				compEnglish->FindChildByID(R.id.txt_comps)->SetWindowText(S_CA2T(strComp, CP_GB));
+				SStringW strComp(m_pInputContext->szComp, m_pInputContext->cComp);
+				compEnglish->FindChildByID(R.id.txt_comps)->SetWindowText(strComp);
 				SWindow * autoComp = compEnglish->FindChildByID(R.id.txt_auto_complete);
 				if (m_pInputContext->pbyEnSpell)
 				{//ÓÐÓ¢ÎÄµ¥´Ê
-					SStringA strWord((char *)m_pInputContext->pbyEnSpell + 1 + m_pInputContext->cComp, m_pInputContext->pbyEnSpell[0] - m_pInputContext->cComp);
-					autoComp->SetWindowText(S_CA2T(strWord, CP_GB));
+					SStringW strWord((WCHAR *)(m_pInputContext->pbyEnSpell + 1)+ m_pInputContext->cComp, m_pInputContext->pbyEnSpell[0] - m_pInputContext->cComp);
+					autoComp->SetWindowText(strWord);
 				}
 				else
 				{
@@ -368,7 +366,7 @@ namespace SOUI
 				{
 					SCandView *pCand2 = (SCandView*)pCand;
 					pCand2->SetVisible(TRUE, TRUE);
-					pCand2->SetCandData(cWild, S_CA2T(SStringA(m_pInputContext->szComp, m_pInputContext->cComp), CP_GB), m_pInputContext->ppbyCandInfo[iCand]);
+					pCand2->SetCandData(cWild, SStringW(m_pInputContext->szComp, m_pInputContext->cComp), m_pInputContext->ppbyCandInfo[iCand]);
 					iCand++;
 				}
 				pCand = pCand->GetWindow(GSW_NEXTSIBLING);
@@ -395,7 +393,7 @@ namespace SOUI
 
 				if(m_pInputContext->bShowTip)
 				{
-					pTip->SetWindowText(S_CA2T(m_pInputContext->szTip, CP_GB));
+					pTip->SetWindowText(m_pInputContext->szTip);
 				}
 				else
 				{
@@ -408,7 +406,7 @@ namespace SOUI
 				pCandEnglish->SetVisible(TRUE, TRUE);
 				SWindow * pCandContainer = pCandEnglish->FindChildByID(R.id.cand_container);
 
-				pCandEnglish->FindChildByID(R.id.txt_en_header)->SetWindowText(SStringT(m_pInputContext->szInput, m_pInputContext->cInput));
+				pCandEnglish->FindChildByID(R.id.txt_en_header)->SetWindowText(SStringT((WCHAR*)(m_pInputContext->pbyEnAstPhrase+1), m_pInputContext->pbyEnAstPhrase[0]));
 
 				int nCandMax = GetCandMax(pCandContainer, SEnglishCand::GetClassName());
 				int nPageSize = GetCandMax2(nCandMax);
@@ -549,14 +547,14 @@ namespace SOUI
 
 	void CInputWnd::OnFlmInfo(PFLMINFO pFlmInfo)
 	{
-		//SDispatchMessage(UM_FLMINFO, 0, (LPARAM)pFlmInfo);
+		SDispatchMessage(UM_FLMINFO, 0, (LPARAM)pFlmInfo);
 	}
 
 	void CInputWnd::OnSetSkin(EventArgs * e)
 	{
 		__super::OnSetSkin(e);
-		//todo:hjx
-		//OnFlmInfo(ISComm_GetFlmInfo());
+		PFLMINFO flmInfo = CIsSvrProxy::GetSvrCore()->GetCurrentFlmInfo();
+		OnFlmInfo(flmInfo);
 	}
 
 	BOOL CInputWnd::GoPrevCandidatePage()

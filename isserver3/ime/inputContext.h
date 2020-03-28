@@ -32,7 +32,7 @@ enum INSTATE
 
 enum SUBSTATE
 {
-	SBST_NORMAL=0,	//一般状态
+	SBST_NORMALSTATE=0,	//一般状态
 	SBST_ASSOCIATE,	//联想信息
 	SBST_SENTENCE,	//语句输入状态
 };
@@ -84,9 +84,8 @@ struct InputContext
 	BYTE	bySelect[MAX_SYLLABLES];	//手动选择重码标志 0-自动预测,1-手动选择单字，其它－手动选择词组
 	LPBYTE  pbyBlur[MAX_SYLLABLES];		//拼音的模糊音
 	//智能语句
-	LPBYTE  pbySentWord[MAX_SENTLEN];	//单字地址
+	WCHAR   szSentText[MAX_SENTLEN];	//单字地址
 	short   sSentLen;				//句子长度
-	short   sSentWords;				//词数
 	short	sSentCaret;				//当前编辑位置
 
 	//英文联想
@@ -103,6 +102,6 @@ struct InputContext
 	TCHAR   szInput[MAX_INPUT];
 	int		cInput;
 
-	char   szCompAutoComplete[MAX_COMP];	//auto complete composition string. valid for umode.
-	int    cCompACLen;						//auto complete composition string length
+	WCHAR   szCompAutoComplete[MAX_COMP];	//auto complete composition string. valid for umode.
+	int     cCompACLen;						//auto complete composition string length
 };
