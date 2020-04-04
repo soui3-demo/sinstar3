@@ -45,9 +45,10 @@ const UpdateInfo KUpdateInfo[] =
 {
 	{_T("program"),true},
 	{_T("defskin"),true },
-	{ _T("sound"),true },
+	{_T("sound"),true },
+	{_T("data"),false},
 	{_T("skins"),false},
-	{ _T("tools"),false },	
+	{_T("tools"),false },	
 	{_T("register.exe"),false },
 	{_T("RegisterCore.dll"),false },
 	{_T("license.rtf"),false },
