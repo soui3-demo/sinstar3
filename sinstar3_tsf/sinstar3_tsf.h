@@ -106,6 +106,7 @@ public:
 	BOOL _GetSegRange(TfEditCookie ec,ITfRange **pRange,int nLeft,int nRight);
 
 	void _SyncFocus();
+	void OnAsyncFocus();
 protected:
 	virtual LRESULT WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	

@@ -4,7 +4,7 @@
 #include "../helper/helper.h"
 #include "Minidump.h"
 static bool g_bInstallDump = false;
-
+#define UM_ASYNC_FOCUS	(WM_USER+8000)
 
 /* static */
 HRESULT CSinstar3Tsf::CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj)
@@ -185,6 +185,11 @@ DWORD CSinstar3Tsf::GetActiveWnd() const
 }
 
 void CSinstar3Tsf::_SyncFocus()
+{
+	PostMessage(UM_ASYNC_FOCUS,0,0);
+}
+
+void CSinstar3Tsf::OnAsyncFocus()
 {
 	if(m_pSinstar3)
 	{
@@ -370,6 +375,10 @@ LRESULT CSinstar3Tsf::WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 			}
 			return 0;
 		}
+	}else if(uMsg == UM_ASYNC_FOCUS)
+	{
+		OnAsyncFocus();
+		return 0;
 	}
 	if (m_pSinstar3)
 	{

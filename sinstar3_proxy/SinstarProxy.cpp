@@ -59,7 +59,7 @@ bool CSinstarProxy::isInBlackList(LPCTSTR pszBlacklistFile)
 		free(buf);
 	}else
 	{
-		wcsBuf=wcsdup(KBuiltinBlackList);
+		wcsBuf=_wcsdup(KBuiltinBlackList);
 	}
 
 	wchar_t szPath[MAX_PATH+1];

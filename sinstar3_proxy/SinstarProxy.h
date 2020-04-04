@@ -52,7 +52,6 @@ private:
 class CSinstarProxy : public ISinstar, public CUnknown
 {
 private:
-	ITextService * m_pTxtService;
 	CClientConnection	m_conn;
 
 public:
