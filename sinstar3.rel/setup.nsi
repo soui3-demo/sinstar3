@@ -2,7 +2,7 @@
 Unicode true
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "启程输入法"
-!define PRODUCT_VERSION "3.0"
+!define PRODUCT_VERSION "3.1"
 !define PRODUCT_PUBLISHER "启程软件"
 !define PRODUCT_WEB_SITE "http://soime.cn"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
@@ -146,11 +146,12 @@ Section "表形码31" COMP_BXM31
    SetOutPath "$INSTDIR\server"
    File /a "server\表形31符.cit"
 SectionEnd
-Section "郑码6.6" COMP_ZM66
+Section "郑码" COMP_ZM
    SetOverwrite ifnewer
    SetOutPath "$INSTDIR\server"
    File /a "server\郑码GBK.cit"
    File /a "server\郑码GBK.scm"
+   File /a "server\超集郑码.cit"
 SectionEnd
 Section "权氏两笔" COMP_QS2B
    SetOverwrite ifnewer
@@ -201,7 +202,7 @@ SectionEnd
   !insertmacro MUI_DESCRIPTION_TEXT ${COMP_WB2K} "五笔字型2000版"
   !insertmacro MUI_DESCRIPTION_TEXT ${COMP_BXM26} "表型码26键版本"
   !insertmacro MUI_DESCRIPTION_TEXT ${COMP_BXM31} "表型码31键版本"
-  !insertmacro MUI_DESCRIPTION_TEXT ${COMP_ZM66} "郑码6.6版本"
+  !insertmacro MUI_DESCRIPTION_TEXT ${COMP_ZM} "郑码"
   !insertmacro MUI_DESCRIPTION_TEXT ${COMP_QS2B} "权氏两笔"
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC_SKIN} "扩展皮肤，美化界面。"
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC_TOOLS} "包含码表编辑器，词库编辑器"
@@ -271,9 +272,9 @@ Function .onInit
    SectionGetFlags ${COMP_BXM31} $R0
    IntOp $0 $R0 & $1
    SectionSetFlags ${COMP_BXM31} $0
-   SectionGetFlags ${COMP_ZM66} $R0
+   SectionGetFlags ${COMP_ZM} $R0
    IntOp $0 $R0 & $1
-   SectionSetFlags ${COMP_ZM66} $0
+   SectionSetFlags ${COMP_ZM} $0
 
    SectionGetFlags ${COMP_QS2B} $R0
    IntOp $0 $R0 & $1
