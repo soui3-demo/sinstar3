@@ -80,7 +80,6 @@ Section "核心程序" SEC_CORE
   SetOverwrite ifnewer
   
   File /a "register.exe"
-  File /a "RegisterCore.dll"
   File /a "license.rtf"
   File /a "使用说明.txt"
   File /a "license.rtf"
@@ -98,7 +97,7 @@ Section "核心程序" SEC_CORE
   File /r "server\config.ini"
   File /r "server\default.spl"
   File /r "server\en-ch.flm"
-  File /r "server\line.dat"
+  File /r "server\wordline.dat"
   File /r "server\spell.dat"
   File /r "server\spell.pit"
   File /r "server\symbol.txt"
@@ -213,7 +212,7 @@ Function .onInit
 ;Goto Run
    InitPluginsDir
    SetOutPath $PLUGINSDIR
-   File "RegisterCore.dll"
+   File "Program\RegisterCore.dll"
    File "Program\isserver3.exe"
    
    StrCpy $bUpdate "0"
@@ -299,7 +298,7 @@ FunctionEnd
 Function un.onInit
    InitPluginsDir
    SetOutPath $PLUGINSDIR
-   File "RegisterCore.dll"
+   File "Program\RegisterCore.dll"
 
   StrCpy $bForceUninstall "0"
   System::Call '$PLUGINSDIR\RegisterCore::Sinstar_InitW(t) ("$INSTDIR")'
