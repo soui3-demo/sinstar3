@@ -1,1 +1,2 @@
 searchui.exe
+igfxhk.exe
