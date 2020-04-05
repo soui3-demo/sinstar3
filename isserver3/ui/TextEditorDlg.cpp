@@ -43,7 +43,7 @@ BOOL CTextEditorDlg::OnInitDialog(HWND hWnd, LPARAM lp)
 		free(buf);
 	}
 	m_pSciter->UpdateLineNumberWidth();
-
+	SetWindowPos(HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE);
 	return 0;
 }
 

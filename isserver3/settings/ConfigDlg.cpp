@@ -95,11 +95,15 @@ namespace SOUI
 		bool OnGroupEnableChanged(EventArgs *e)
 		{
 			EventSwndStateChanged *e2 = sobj_cast<EventSwndStateChanged>(e);
-			if ((e2->dwOldState & WndState_Check) != (e2->dwNewState & WndState_Check))
+			if (e2->CheckState(WndState_Check))
 			{
 				SWindow *pSender = sobj_cast<SWindow>(e->sender);
 				int idx = pSender->GetUserData();
-				CIsSvrProxy::GetSvrCore()->ReqEnablePhraseGroup(m_arrGroupInfo[idx].strName,e2->CheckState(WndState_Check));
+				BOOL bEnable = (e2->dwNewState & WndState_Check)?1:0;
+				if(ISACK_SUCCESS==CIsSvrProxy::GetSvrCore()->ReqEnablePhraseGroup(m_arrGroupInfo[idx].strName,bEnable))
+				{
+					m_arrGroupInfo[idx].bEnable=bEnable;
+				}
 			}
 			return false;
 		}
@@ -118,7 +122,7 @@ namespace SOUI
 		bool OnGroupEnableChanged(EventArgs *e)
 		{
 			EventSwndStateChanged *e2 = sobj_cast<EventSwndStateChanged>(e);
-			if ((e2->dwOldState & WndState_Check) != (e2->dwNewState & WndState_Check))
+			if (e2->CheckState(WndState_Check))
 			{
 				SWindow *pSender = sobj_cast<SWindow>(e->sender);
 				int idx = pSender->GetUserData();

@@ -168,7 +168,7 @@ LRESULT CIsSvrProxy::OnBuildIndexProg(UINT uMsg, WPARAM wp, LPARAM lp)
 	{
 		m_pBuildIndexProg = new CBuildIndexProgWnd();
 		m_pBuildIndexProg->Create(NULL, WS_POPUP, WS_EX_TOOLWINDOW, 0, 0, 0, 0);
-		m_pBuildIndexProg->CenterWindow(GetDesktopWindow());
+		m_pBuildIndexProg->CenterWindow();
 		m_pBuildIndexProg->SetPage(iPage,nProg);
 		m_pBuildIndexProg->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
 	}
