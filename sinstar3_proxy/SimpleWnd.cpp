@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "SimpleWnd.h"
+#include "../include/global.h"
 
 CSimpleWnd::CSimpleWnd(void)
 {
@@ -41,6 +42,11 @@ LRESULT CALLBACK CSimpleWnd::SimpleWndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPA
 
 LRESULT CSimpleWnd::WindowProc(UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
+	if(uMsg == UM_RECONN)
+	{
+		OnReconnReady();
+		return 0;
+	}
 	if (uMsg == UM_GETPROCPATH)
 	{
 		HWND hSender = (HWND)lParam;

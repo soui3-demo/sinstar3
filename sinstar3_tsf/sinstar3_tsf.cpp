@@ -2,6 +2,7 @@
 #include "sinstar3_tsf.h"
 #include "editsession.h"
 #include "../helper/helper.h"
+#include "../include/global.h"
 #include "Minidump.h"
 static bool g_bInstallDump = false;
 #define UM_ASYNC_FOCUS	(WM_USER+8000)
@@ -153,6 +154,7 @@ STDAPI CSinstar3Tsf::ActivateEx(ITfThreadMgr *pThreadMgr, TfClientId tfClientId,
 
 	Helper_ChangeWindowMessageFilter(SOUI::UM_CALL_FUN, MSGFLT_ADD);
 	Helper_ChangeWindowMessageFilter(UM_GETPROCPATH, MSGFLT_ADD);
+	Helper_ChangeWindowMessageFilter(UM_RECONN, MSGFLT_ADD);
 
 	if(!_InitSinstar3((HWND)GetActiveWnd()))
 	{
@@ -360,6 +362,17 @@ BOOL CSinstar3Tsf::_InitSinstar3(HWND hWnd)
 	m_pSinstar3->OnIMESelect(_bHasFocus);
 	_SyncFocus();
 	return TRUE;
+}
+
+void CSinstar3Tsf::OnReconnReady()
+{
+	if(m_pSinstar3)
+	{
+		delete m_pSinstar3;
+		m_pSinstar3=NULL;
+	}
+	_InitSinstar3(m_hWnd);
+	_SyncFocus();
 }
 
 LRESULT CSinstar3Tsf::WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam)

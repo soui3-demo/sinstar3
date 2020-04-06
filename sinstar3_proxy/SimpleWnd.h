@@ -1,8 +1,5 @@
 #pragma once
 
-#define  CLS_SINSTAR3_IME_WND _T("sinstar3_uiwnd")	//the class name must like this. otherwise the ime module maybe crash!!!
-#define  UM_GETPROCPATH  (WM_USER+5000)
-#define  CDT_RET_PROCPATH (2134)
 struct PROC_INFO
 {
 	DWORD dwProcID;
@@ -21,6 +18,7 @@ public:
 	BOOL PostMessage(UINT uMsg,WPARAM wp,LPARAM lp){return ::PostMessage(m_hWnd,uMsg,wp,lp);}
 	BOOL ShowWindow(int nCmdShow) {return ::ShowWindow(m_hWnd,nCmdShow);}
 
+	virtual void OnReconnReady()=0;
 	virtual LRESULT WindowProc(UINT uMsg,WPARAM wParam,LPARAM lParam);
 	static BOOL RegisterWndClass(HINSTANCE hInstance);
 	static void UnregisterWndClass(HINSTANCE hInstance);

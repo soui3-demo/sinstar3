@@ -19,7 +19,7 @@ public:
 
 public:
 	BOOL IsDefaultIme(void);
-	void SyncFocus(BOOL bFocus);
+	void SetFocus(BOOL bFocus);
 public:
 	//UIWnd
 	LRESULT WindowProc(UINT uMsg,WPARAM wParam,LPARAM lParam);
@@ -31,6 +31,9 @@ public:
 	LRESULT OnCreate();
 	LRESULT OnDestroy();
 	LRESULT OnTimer(WPARAM nEventID);
+	LRESULT OnAsyncFocus();
+protected:
+	virtual void OnReconnReady();
 
 public:
 	//ITextService
@@ -60,12 +63,14 @@ protected:
 	void SetOpenStatus(CImeContext * imeContext,BOOL bOpen);
 	BOOL GetOpenStatus(CImeContext * imeContext) const;
 
+	void _SyncFocus();
 
 	BOOL		m_bCompositing;
 
 	int        m_nFontHei;
 	HFONT		m_fntComp;
 	BOOL		m_bActivate;
+	BOOL		m_bHasFocus;
 private:
 	BOOL _InitSinstar3();
 	BOOL _UninitSinstar3();

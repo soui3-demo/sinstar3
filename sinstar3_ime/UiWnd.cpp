@@ -2,8 +2,11 @@
 #include "UiWnd.h"
 #include "CompStrEx.h"
 #include "../helper/helper.h"
+#include "../include/global.h"
+
 #define HEI_LINEMARGIN	3
 #define TIMERID_CHKDEFIME	200
+#define UM_ASYNCFOCUS	(WM_USER+10000)
 
 #include "Minidump.h"
 static bool g_bInstallDump = false;
@@ -79,6 +82,7 @@ CUiWnd::CUiWnd(void)
 	, m_nFontHei(20)
 	, m_fntComp(0)
 	, m_bActivate(TRUE)
+	, m_bHasFocus(FALSE)
 {
 }
 
@@ -121,14 +125,12 @@ LRESULT CUiWnd::OnPaint()
 
 LRESULT CUiWnd::WindowProc(UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
-	if (uMsg == WM_DESTROY)
-	{
-		SLOG_INFO("CUiWnd::WindowProc");
-	}
 	HIMC hIMC=(HIMC)GetWindowLongPtr(m_hWnd,IMMGWLP_IMC);
 	if(!hIMC && IsIMEMessage(uMsg)) return 0;
 	switch(uMsg)
 	{
+	case UM_ASYNCFOCUS:
+		return OnAsyncFocus();
 	case WM_MOUSEACTIVATE:
 		return MA_NOACTIVATE;
 	case WM_CREATE:
@@ -238,11 +240,11 @@ LRESULT CUiWnd::OnImeNotify(WPARAM wParam,LPARAM lParam)
 	switch(wParam)
 	{
 	case IMN_OPENSTATUSWINDOW:
-		SyncFocus(TRUE);
+		SetFocus(TRUE);
 		SLOGFMTI("IMN_OPENSTATUSWINDOW");
 		break;
 	case IMN_CLOSESTATUSWINDOW:
-		SyncFocus(FALSE);
+		SetFocus(FALSE);
 		SLOGFMTI("IMN_CLOSESTATUSWINDOW");
 		break;
 	case IMN_OPENCANDIDATE:
@@ -409,8 +411,6 @@ BOOL CUiWnd::_InitSinstar3()
 	}
 	m_pSinstar3->NotifyScaleInfo(GetActiveWindow());
 	m_pSinstar3->OnIMESelect(m_bActivate);
-	HIMC hIMC=(HIMC)GetWindowLongPtr(m_hWnd,IMMGWLP_IMC);
-	SyncFocus(hIMC!=0);
 	return TRUE;
 }
 
@@ -444,6 +444,7 @@ LRESULT CUiWnd::OnCreate()
 	SLOGFMTI("CUiWnd::OnCreate,hWnd:%p",m_hWnd);
 	Helper_ChangeWindowMessageFilter(SOUI::UM_CALL_FUN, MSGFLT_ADD);
 	Helper_ChangeWindowMessageFilter(UM_GETPROCPATH, MSGFLT_ADD);
+	Helper_ChangeWindowMessageFilter(UM_RECONN, MSGFLT_ADD);
 
 	if(!_InitSinstar3())
 	{
@@ -541,12 +542,35 @@ BOOL CUiWnd::GetOpenStatus() const
 	return bOpen;
 }
 
-void CUiWnd::SyncFocus(BOOL bFocus)
+void CUiWnd::_SyncFocus()
+{
+	PostMessage(UM_ASYNCFOCUS,0,0);
+}
+
+LRESULT CUiWnd::OnAsyncFocus()
 {
 	if(m_pSinstar3)
 	{
-		DWORD dwActiveWnd = bFocus?GetActiveWnd():0;
-		m_pSinstar3->OnSetFocus(bFocus,dwActiveWnd);
+		DWORD dwActiveWnd = m_bHasFocus?GetActiveWnd():0;
+		m_pSinstar3->OnSetFocus(m_bHasFocus,dwActiveWnd);
 	}
+	return 0;
+}
+
+void CUiWnd::OnReconnReady()
+{
+	if(m_pSinstar3)
+	{
+		delete m_pSinstar3;
+		m_pSinstar3 = NULL;
+	}
+	_InitSinstar3();
+	_SyncFocus();
+}
+
+void CUiWnd::SetFocus(BOOL bFocus)
+{
+	m_bHasFocus = bFocus;
+	_SyncFocus();
 }
 

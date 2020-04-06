@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "CompStrEx.h"
 #include "uiwnd.h"
+#include "../include/global.h"
 
 BOOL WINAPI ImeInquire(LPIMEINFO lpIMEInfo,LPTSTR lpszUIClass,DWORD dwSystemInfoFlags)
 {
@@ -138,7 +139,7 @@ BOOL WINAPI ImeSetActiveContext(HIMC hIMC,BOOL fFlag)
  		CUiWnd **ppUiWnd=(CUiWnd**)ImmLockIMCC(lpIMC->hPrivate);
  		if(ppUiWnd && ppUiWnd[0] && !IsBadWritePtr(ppUiWnd[0],sizeof(CUiWnd*)))
  		{
-			ppUiWnd[0]->SyncFocus(fFlag);
+			ppUiWnd[0]->SetFocus(fFlag);
  		}
  		ImmUnlockIMCC(lpIMC->hPrivate); 
  		ImmUnlockIMC(hIMC);

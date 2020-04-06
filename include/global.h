@@ -31,6 +31,11 @@ typedef struct tagGROUPINFO
 
 #define MSG_NAME_SINSTAR3		_T("_sinstar3 communicate msg")	//通讯时使用的消息名称，取代老版本固定的消息ID，方便服务器返回数据
 
+#define  CLS_SINSTAR3_IME_WND _T("sinstar3_uiwnd")	//the class name must like this. otherwise the ime module maybe crash!!!
+#define  UM_GETPROCPATH  (WM_USER+5000)
+#define  CDT_RET_PROCPATH (2134)
+#define  UM_RECONN		 (WM_USER+5001)
+
 #pragma pack(push,1)
 
 typedef struct tagMSGDATA{
@@ -78,6 +83,7 @@ typedef struct tagCOMPHEAD
 #define RATE_WILD		0xFA	//万能键查询结果
 #define RATE_ASSOCIATE	0xF9	//联想重码
 #define RATE_USERJM		0xF8	//user defined jm.
+#define RATE_USERDICT	0xF7	//user lib
 
 //系统回应
 #define ISACK_SUCCESS	0

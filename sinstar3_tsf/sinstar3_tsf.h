@@ -109,7 +109,8 @@ public:
 	void OnAsyncFocus();
 protected:
 	virtual LRESULT WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
-	
+	virtual void OnReconnReady();
+
 	ITfContext * GetImeContext();
 	void   ReleaseImeContext(ITfContext * imeContext);
 	void SetOpenStatus(BOOL bOpen);
