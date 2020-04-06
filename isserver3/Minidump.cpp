@@ -2,11 +2,11 @@
 #include "Minidump.h"
 #include <windows.h>
 #include <DbgHelp.h>
-
+#include <ShellAPI.h>
 #pragma comment(lib, "DbgHelp.lib")
 
 static TCHAR s_dumpFile[MAX_PATH]=_T("minidump.dmp");
-
+static TCHAR s_crashReporter[MAX_PATH]={0};
 // 创建Dump文件  
 //   
 void CreateDumpFile(LPCTSTR lpstrDumpFilePathName, EXCEPTION_POINTERS *pException)
@@ -27,6 +27,7 @@ void CreateDumpFile(LPCTSTR lpstrDumpFilePathName, EXCEPTION_POINTERS *pExceptio
 	MiniDumpWriteDump(GetCurrentProcess(), GetCurrentProcessId(), hDumpFile, MiniDumpNormal, &dumpInfo, NULL, NULL);
 
 	CloseHandle(hDumpFile);
+	ShellExecute(NULL,_T("open"),s_crashReporter,NULL,NULL,SW_SHOWNORMAL);
 }
 
 // 处理Unhandled Exception的回调函数  
@@ -50,4 +51,9 @@ void CMinidump::Enable()
 void CMinidump::SetDumpFile(LPCTSTR pszDumpFile)
 {
 	_tcscpy_s(s_dumpFile,MAX_PATH,pszDumpFile);
+}
+
+void CMinidump::SetCrashReporter(LPCTSTR pszCrashReporter)
+{
+	_tcscpy_s(s_crashReporter,MAX_PATH,pszCrashReporter);
 }

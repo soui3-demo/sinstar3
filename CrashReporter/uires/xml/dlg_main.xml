@@ -1,0 +1,37 @@
+﻿<SOUI name="mainWindow" title="@string/title" bigIcon="ICON_LOGO:32" smallIcon="ICON_LOGO:16" margin="5,5,5,5"  resizable="1" wndType="appMain"
+appWnd="1"
+translucent="1" 
+>
+  <style>
+    <link.web cursor="hand" colorText="#1e78d5" colorTextHover="#1e78d5"  fontHover="underline:1" />
+  </style>
+  <root skin="_skin.sys.wnd.bkgnd" cache="1"  width="600" height="390" >
+    <caption pos="0,0,-0,30">
+      <icon pos="10,8" src="ICON_LOGO:16"/>
+      <text pos="29,9">@string/title</text>
+      <imgbtn name="btn_close" skin="_skin.sys.btn.close"    pos="-45,0" tip="close" animate="1"/>
+      <imgbtn name="btn_max" skin="_skin.sys.btn.maximize"  pos="-83,0" animate="1" />
+      <imgbtn name="btn_restore" skin="_skin.sys.btn.restore"  pos="-83,0" show="0" animate="1" />
+      <imgbtn name="btn_min" skin="_skin.sys.btn.minimize" pos="-121,0" animate="1" />
+    </caption>
+    <window pos="5,[2,-5,-5" layout="vbox" gravity="center" interval="5">
+      <window size="-2,-1" layout="hbox">
+        <text text="服务器版本:"/>
+        <text name="txt_ver" colorText="@color/red"/>
+      </window>
+      <text multilines="1" size="-2,-1" text="很抱歉，输入法的服务进程崩溃了！请用手机QQ扫描下面二维码加群，向作者报告崩溃情况。崩溃正常情况下会在输入法安装目录的log目录下生成dmp文件。请将log目录打包发给作者分析崩溃情况，谢谢！"/>
+      <qrctrl size="200,200" text="http://qm.qq.com/cgi-bin/qm/qr?k=wGMykx8zDb_42F9cYi0iLSPq2Pk-4k0y"/>
+      <window size="0,0" weight="1" visible="0"/>
+      <window size="-2,-1" layout="hbox">
+        <window size="0,0" weight="2" visible="0"/>
+        <button padding="20,10,20,10" name="btn_restart" text="重启服务进程"/>
+        <window size="0,0" weight="1" visible="0"/>
+        <button padding="20,10,20,10" name="btn_opendir" text="打开安装目录"/>
+        <window size="0,0" weight="1" visible="0"/>
+        <button padding="20,10,20,10" name="btn_close" text="退出"/>
+        <window size="0,0" weight="2" visible="0"/>
+      </window>
+      <link.web text="打开启程输入法论坛" href="http://www.soui.vip/forum.php?gid=51" layout_gravity="right"/>
+    </window>
+  </root>
+</SOUI>
