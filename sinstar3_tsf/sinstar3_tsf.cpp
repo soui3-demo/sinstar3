@@ -371,7 +371,7 @@ void CSinstar3Tsf::OnReconnReady()
 		delete m_pSinstar3;
 		m_pSinstar3=NULL;
 	}
-	_InitSinstar3(m_hWnd);
+	_InitSinstar3((HWND)GetActiveWnd());
 	_SyncFocus();
 }
 

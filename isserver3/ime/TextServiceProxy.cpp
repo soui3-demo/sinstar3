@@ -120,8 +120,10 @@ void CSvrConnection::HandleScaleInfo(Param_ScaleInfo &param)
 	if(IsWindow(hRefWnd))
 	{
 		GetWindowRect((HWND)param.hRefWnd,&rcWnd);
-		m_xScale = rcWnd.Width()*1.0f/param.szWnd.cx;
-		m_yScale = rcWnd.Height()*1.0f/param.szWnd.cy;
+		if(rcWnd.Width()!=0 && param.szWnd.cx!=0)
+			m_xScale = rcWnd.Width()*1.0f/param.szWnd.cx;
+		if(rcWnd.Height()!=0 && param.szWnd.cy!=0)
+			m_yScale = rcWnd.Height()*1.0f/param.szWnd.cy;
 	}else
 	{
 		SLOG_ERROR("ref hwnd is invalid");

@@ -29,7 +29,7 @@ struct IUiMsgHandler : IBuildIndexProgressListener
 	virtual void OnClientActive() = 0;
 	virtual void OnClientLogin() = 0;
 	virtual void OnClientLogout() = 0;
-
+	virtual void OnDataLoaded() = 0;
 	virtual void OnShowKeyMap(IDataBlock * pCompData, LPCWSTR pszName, LPCWSTR pszUrl) = 0;
 	virtual void TtsSpeakText(const wchar_t* pText, int nLen, bool bChinese) = 0;
 

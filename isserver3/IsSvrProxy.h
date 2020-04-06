@@ -72,7 +72,7 @@ protected:
 	virtual void OnShowTray(bool bTray) ;
 
 	virtual void OnShowKeyMap(IDataBlock * pCompData, LPCWSTR pszName, LPCWSTR pszUrl) ;
-
+	virtual void OnDataLoaded();
 public:
 	int TtsGetSpeed();
 	int TtsGetVoice(bool bCh);
@@ -113,6 +113,7 @@ protected:
 	void Quit(int nCode);
 	bool IsAutoRun() const;
 	bool SetAutoRun(bool bAutoRun) const;
+	void OnCheckReconn();
 
 	void OnEndSession(BOOL bEnding, UINT uLogOff);
 	BEGIN_MSG_MAP_EX(CIsSvrProxy)

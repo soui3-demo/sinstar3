@@ -28,6 +28,9 @@
 #define TIMERID_AUTO_SAVE_SETTING 700
 #define SPAN_AUTO_SAVE_SETTING 5000	//5 seconds
 
+#define TIMERID_RECONN 800
+#define SPAN_RECONN 5000	//5 seconds
+
 static void DoSomething()
 {
 	MSG msg;
@@ -387,6 +390,10 @@ void CIsSvrProxy::OnTimer(UINT_PTR uID)
 	{
 		g_SettingsG->Save(m_strDataPath);
 		g_SettingsUI->Save(m_strDataPath);
+	}else if(uID==TIMERID_RECONN)
+	{
+		KillTimer(uID);
+		OnCheckReconn();
 	}
 	else
 	{
@@ -737,4 +744,26 @@ IServerCore * CIsSvrProxy::GetSvrCore()
 CIsSvrProxy * CIsSvrProxy::GetInstance()
 {
 	return _this;
+}
+
+void CIsSvrProxy::OnDataLoaded()
+{
+	SetTimer(TIMERID_RECONN,SPAN_RECONN,NULL);
+}
+
+void CIsSvrProxy::OnCheckReconn()
+{
+	HWND hAfter = NULL;
+	while(true)
+	{
+		HWND hFind = FindWindowEx(HWND_MESSAGE,hAfter,CLS_SINSTAR3_IME_WND,NULL);
+		if(!hFind)
+			break;
+		if(!m_ipcSvr->FindConnection((ULONG_PTR)hFind))
+		{
+			SLOG_INFO("onDataLoaded, notify client to reconnect:"<<hFind);
+			::PostMessage(hFind,UM_RECONN,0,0);
+		}
+		hAfter = hFind;
+	}
 }

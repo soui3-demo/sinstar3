@@ -420,8 +420,8 @@ BOOL RC_API  Sinstar_GetCurrentVer(int wVers[4])
 BOOL RC_API  Sinstar_Update()
 {	
 	BOOL bUpgradeIme = Sinstar_IsUpdateIME();
-
-	if(bUpgradeIme && Sinstar_IsRunning())
+	BOOL bRunning = Sinstar_IsRunning();
+	if(bUpgradeIme && bRunning)
 	{
 		Sinstar_SetErrMsg(_T("输入法正在使用，不能安装"));
 		return FALSE;
@@ -482,7 +482,7 @@ BOOL RC_API  Sinstar_Update()
 	_stprintf(szSvrCmd,_T("%s\\program\\isserver3.exe"),szPath);
 	ShellExecute(NULL, _T("open"), szSvrCmd, _T("-reg"), NULL, 0);
 	
-	if(!bUpgradeIme)
+	if(!bUpgradeIme && bRunning)
 	{
 		ShellExecute(NULL, _T("open"), szSvrCmd, NULL, NULL, 0);
 	}
