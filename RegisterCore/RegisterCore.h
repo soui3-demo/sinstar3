@@ -20,6 +20,7 @@ EXTERN_C{
 	LPCWSTR REGISTERCORE_API RC_API  Sinstar_GetErrMsgW();
 	LPCSTR REGISTERCORE_API RC_API  Sinstar_GetErrMsgA();
 	BOOL REGISTERCORE_API RC_API  Sinstar_ShowCaller(BOOL bOrg);
+	BOOL REGISTERCORE_API RC_API  Sinstar_IsUpdateIME();
 	BOOL REGISTERCORE_API RC_API  Sinstar_IsRunning();
 	BOOL REGISTERCORE_API RC_API  Sinstar_Update();
 	BOOL REGISTERCORE_API RC_API  Sinstar_Uninstall();
@@ -33,7 +34,6 @@ EXTERN_C{
 	BOOL REGISTERCORE_API RC_API  Sinstar_PEVersion2A(LPCSTR pszFileName, int *v1,int *v2,int *v3,int *v4);
 	BOOL REGISTERCORE_API RC_API  Sinstar_CheckFiles();
 };
-
 #ifdef _UNICODE
 #define Sinstar_PEVersion Sinstar_PEVersionW
 #define Sinstar_Init	  Sinstar_InitW

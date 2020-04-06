@@ -2,11 +2,11 @@
 #include "Minidump.h"
 #include <windows.h>
 #include <DbgHelp.h>
-#include <ShellAPI.h>
 #pragma comment(lib, "DbgHelp.lib")
 
 static TCHAR s_dumpFile[MAX_PATH]=_T("minidump.dmp");
 static TCHAR s_crashReporter[MAX_PATH]={0};
+static BOOL  s_showCrash = FALSE;
 // 创建Dump文件  
 //   
 void CreateDumpFile(LPCTSTR lpstrDumpFilePathName, EXCEPTION_POINTERS *pException)
@@ -27,17 +27,26 @@ void CreateDumpFile(LPCTSTR lpstrDumpFilePathName, EXCEPTION_POINTERS *pExceptio
 	MiniDumpWriteDump(GetCurrentProcess(), GetCurrentProcessId(), hDumpFile, MiniDumpNormal, &dumpInfo, NULL, NULL);
 
 	CloseHandle(hDumpFile);
-	ShellExecute(NULL,_T("open"),s_crashReporter,NULL,NULL,SW_SHOWNORMAL);
 }
 
 // 处理Unhandled Exception的回调函数  
 //  
-LONG ApplicationCrashHandler(EXCEPTION_POINTERS *pException)
+LONG WINAPI ApplicationCrashHandler(EXCEPTION_POINTERS *pException)
 {
-	// 这里弹出一个错误对话框并退出程序  
-	//  
-	//FatalAppExit(-1, _T("*** Unhandled Exception! ***"));
 	CreateDumpFile(s_dumpFile, pException);
+
+	{
+		STARTUPINFO         si = { 0 };
+		PROCESS_INFORMATION pi;
+		si.cb = sizeof(si);
+		si.dwFlags = STARTF_USESHOWWINDOW;
+		si.wShowWindow = SW_SHOW;
+		CreateProcess(s_crashReporter, NULL, NULL, NULL, FALSE, CREATE_NEW_PROCESS_GROUP, NULL, NULL, &si, &pi);
+		CloseHandle(pi.hProcess);
+		CloseHandle(pi.hThread);
+	}
+	TerminateProcess(OpenProcess(PROCESS_ALL_ACCESS,0,GetCurrentProcessId()),1);
+
 	return EXCEPTION_EXECUTE_HANDLER;
 }
 

@@ -212,6 +212,19 @@ BOOL GetSysWow64Dir(LPTSTR pszDir, int nLen)
 }
 
 
+BOOL RC_API Sinstar_IsUpdateIME()
+{
+	TCHAR szPath[MAX_PATH],szSysPath[MAX_PATH];
+	::GetSystemDirectory(szSysPath, MAX_PATH);
+	_stprintf(szPath,_T("%s\\%s"),szSysPath,KSrcX86Files[0].pszDest);
+	int v1[4]={0};
+	Sinstar_PEVersion2W(szPath,v1+0,v1+1,v1+2,v1+3);
+	_stprintf(szPath,_T("%s\\%s"),g_szPath,KSrcX86Files[0].pszSrc);
+	int v2[4]={0};
+	Sinstar_PEVersion2W(szPath,v2+0,v2+1,v2+2,v2+3);
+	return memcmp(v1,v2,sizeof(v1))!=0;
+}
+
 BOOL RC_API  Sinstar_IsRunning()
 {
 	HANDLE hMutex = CreateMutex(NULL, FALSE, SINSTAR3_MUTEX);
@@ -406,7 +419,9 @@ BOOL RC_API  Sinstar_GetCurrentVer(int wVers[4])
 
 BOOL RC_API  Sinstar_Update()
 {	
-	if(Sinstar_IsRunning())
+	BOOL bUpgradeIme = Sinstar_IsUpdateIME();
+
+	if(bUpgradeIme && Sinstar_IsRunning())
 	{
 		Sinstar_SetErrMsg(_T("输入法正在使用，不能安装"));
 		return FALSE;
@@ -460,13 +475,17 @@ BOOL RC_API  Sinstar_Update()
 		}
 	}
 
-	Sinstar_UpdateIME();
+	if(bUpgradeIme) Sinstar_UpdateIME();
 
 	//step8:reg ime file type.
 	TCHAR szSvrCmd[MAX_PATH];
 	_stprintf(szSvrCmd,_T("%s\\program\\isserver3.exe"),szPath);
 	ShellExecute(NULL, _T("open"), szSvrCmd, _T("-reg"), NULL, 0);
 	
+	if(!bUpgradeIme)
+	{
+		ShellExecute(NULL, _T("open"), szSvrCmd, NULL, NULL, 0);
+	}
 	return TRUE;
 }
 
@@ -643,14 +662,16 @@ BOOL RC_API  Sinstar_Install()
 	GetSystemDirectory(szSysPath, MAX_PATH);
 	GetSysWow64Dir(szSysWow64, MAX_PATH);
 
-	if(Sinstar_IsRunning())
+	BOOL bCopyIme = Sinstar_IsUpdateIME();
+
+	if(bCopyIme && Sinstar_IsRunning())
 	{
 		Sinstar_SetErrMsg( _T("输入法正在使用，不能安装"));
 		return FALSE;
 	}
 
 	//step2 copy files.
-	if (!Sinstar_UpdateIME())
+	if (bCopyIme && !Sinstar_UpdateIME())
 	{
 		return FALSE;
 	}
