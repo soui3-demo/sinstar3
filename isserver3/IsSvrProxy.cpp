@@ -226,7 +226,7 @@ void CIsSvrProxy::OnClientLogin() {
 }
 
 void CIsSvrProxy::OnClientLogout() {
-	if (m_pCore->CanQuitNow())
+	if (m_pCore->CanQuitNow() && g_SettingsG->bAutoQuit)
 	{
 		SetTimer(TIMERID_DELAY_EXIT, SPAN_DELAY_EXIT, NULL);
 	}
@@ -401,10 +401,9 @@ void CIsSvrProxy::OnMenuExit(UINT uNotifyCode, int nID, HWND wndCtl)
 
 void CIsSvrProxy::OnMenuAutoExit(UINT uNotifyCode, int nID, HWND wndCtl)
 {
-	BOOL bAutoExit = !g_SettingsG->bAutoQuit;
-	g_SettingsG->bAutoQuit = bAutoExit;
+	g_SettingsG->bAutoQuit = !g_SettingsG->bAutoQuit;
 	g_SettingsG->SetModified(true);
-	if (bAutoExit && IsAutoRun())
+	if (g_SettingsG->bAutoQuit && IsAutoRun())
 	{
 		SetAutoRun(false);
 	}
