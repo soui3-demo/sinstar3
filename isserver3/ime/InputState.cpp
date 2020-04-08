@@ -346,10 +346,8 @@ void CInputState::GetShapeComp(const WCHAR *pInput,char cLen)
 {
 	if(CIsSvrProxy::GetSvrCore()->ReqQueryComp(pInput,cLen)==ISACK_SUCCESS)
 	{
-		PMSGDATA pData=CIsSvrProxy::GetSvrCore()->GetAck();
-		pData->byData[pData->sSize]=0;
-		
-		swprintf(m_ctx.szTip,L"词\"%s\"的编码=%s",pInput,(WCHAR*)pData->byData);
+		PMSGDATA pData=CIsSvrProxy::GetSvrCore()->GetAck();		
+		swprintf(m_ctx.szTip,L"词\"%s\"的编码=%s",pInput,SStringW((WCHAR*)pData->byData,pData->sSize/2));
 	}else
 	{
 		swprintf(m_ctx.szTip,L"查询词\"%s\"的编码失败",pInput);
@@ -1640,8 +1638,13 @@ BOOL CInputState::KeyIn_All_TurnCandPage(InputContext * lpCntxtPriv,UINT byInput
 			if(iCand!=-1)
 			{//将翻页结果更新到预测，等同于手动选字
 				LPBYTE pCand=lpCntxtPriv->ppbyCandInfo[iCand];
-				memcpy(lpCntxtPriv->szWord+lpCntxtPriv->byCaret,pCand+2,2);
-				lpCntxtPriv->bySelect[lpCntxtPriv->byCaret]=1;
+				BYTE byPhraseLen = pCand[2];
+				BYTE byCaret= lpCntxtPriv->byCaret;
+				wcsncpy(lpCntxtPriv->szWord+byCaret,(WCHAR*)(pCand+3),byPhraseLen);
+				for(BYTE i=0;i<byPhraseLen;i++)
+				{
+					lpCntxtPriv->bySelect[i+byCaret]=byPhraseLen;
+				}
 				KeyIn_Spell_Forecast(lpCntxtPriv,lpCntxtPriv->byCaret);
 			}
 		}

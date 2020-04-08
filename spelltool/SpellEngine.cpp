@@ -196,7 +196,7 @@ int CSpellEngine::Context_Export(LPCTSTR pszFileName)
 			fwrite(pt->szBuf+j,sizeof(WCHAR),1,f);		//写入汉字
 			if(pwp->cpp!=1) //多音字则写入拼音
 			{
-				WCHAR wzSpell[8];
+				WCHAR wzSpell[7];
 				int nLen = strlen(szSpell[j]);
 				CUtils::CopyCompFromAStr2WStr(wzSpell,szSpell[j],nLen);
 				fwrite(wzSpell,sizeof(WCHAR),nLen,f);
@@ -276,7 +276,7 @@ int CSpellEngine::Context_Import(LPCTSTR pszFileName)
 								{
 									PPCONTEXT2 *pcntxt=pCntxt->GetPtAt(k);
 									WCHAR *pResult=wcsstr(newContext.szPhrase,pcntxt->szPhrase);
-									if(pResult && newContext.cLocate-(pResult-newContext.szPhrase)/2 == pcntxt->cLocate )
+									if(pResult && newContext.cLocate-(pResult-newContext.szPhrase) == pcntxt->cLocate )
 									{//新的上下文有有效部分已经存在
 										bExist=TRUE;
 										break;
@@ -494,8 +494,8 @@ BOOL CSpellEngine::CalcPolyPhone(LPCWSTR pszSent,int nLen,int iWord,BYTE byPhone
 		{//搜索上下文
 			PPCONTEXT *pCntxt=pwp->pi[i].pArrCntxt->GetPtAt(j);
 			WString *pt=m_arrContext.GetPtAt(pCntxt->dwIndex);
-			if(pt->cLen<cMatchLen || pCntxt->cLocate>iWord || nLen-2*(iWord-pCntxt->cLocate)<pt->cLen) continue;
-			if(memcmp(pszSent+(iWord-pCntxt->cLocate)*2,pt->szBuf,pt->cLen)==0)
+			if(pt->cLen<cMatchLen || pCntxt->cLocate>iWord || nLen-(iWord-pCntxt->cLocate)<pt->cLen) continue;
+			if(wcsncmp(pszSent+(iWord-pCntxt->cLocate),pt->szBuf,pt->cLen)==0)
 			{
 				memcpy(byPhone,pwp->pi[i].byPhone,2);
 				cMatchLen=pt->cLen;
@@ -522,7 +522,7 @@ int CSpellEngine::MakeSpell(LPCWSTR pszSent,int nLen, BYTE byPhoneIDs[][2],int n
 	{
 		if(i==nSize)
 			break;
-		if(pszSent[i]>0)//ascii code
+		if(!CWordID::IsHanzi(pszSent[i]))//ascii code
 			break;
 		if(!CalcPolyPhone(pszSent,nLen,i,byPhoneIDs[i],bPolyPhoneDef)) 
 			break;

@@ -26,10 +26,10 @@ Var /GLOBAL bUpdate
 !insertmacro MUI_PAGE_LICENSE "License.rtf"
 ; Components page
 !define MUI_PAGE_HEADER_TEXT "组件选择"
-!define MUI_PAGE_CUSTOMFUNCTION_SHOW fun_comp
+!define MUI_PAGE_CUSTOMFUNCTION_PRE  fun_skip4update
 !insertmacro MUI_PAGE_COMPONENTS
 ; Directory page
-!define MUI_PAGE_CUSTOMFUNCTION_SHOW fun_dir
+!define MUI_PAGE_CUSTOMFUNCTION_PRE  fun_skip4update
 !insertmacro MUI_PAGE_DIRECTORY
 ; Instfiles page
 !insertmacro MUI_PAGE_INSTFILES
@@ -45,31 +45,17 @@ Var /GLOBAL bUpdate
 ; Language files
 !insertmacro MUI_LANGUAGE "SimpChinese"
 
-function fun_dir
-StrCmp $bUpdate "1" 0 Exit
-;禁用浏览按钮
-FindWindow $0 "#32770" "" $HWNDPARENT
-GetDlgItem $0 $0 1001
-EnableWindow $0 0
-;禁止编辑目录
-FindWindow $0 "#32770" "" $HWNDPARENT
-GetDlgItem $0 $0 1019
-EnableWindow $0 0
+function fun_skip4update
+   StrCmp $bUpdate "1" 0 Exit
+   Abort
 Exit:
 FunctionEnd
 
-function fun_comp
-StrCmp $bUpdate "1" 0 Exit
-FindWindow $0 "#32770" "" $HWNDPARENT
-GetDlgItem $0 $0 1032
-EnableWindow $0 0
-Exit:
-FunctionEnd
 
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "Sinstar3.exe"
+OutFile "Sinstar${PRODUCT_VERSION}.exe"
 InstallDir "$PROGRAMFILES\sinstar3"
 ShowInstDetails show
 ShowUnInstDetails show
@@ -131,7 +117,7 @@ Section "五笔98" COMP_WB98
    SetOutPath "$INSTDIR\server"
    File /a "server\五笔98.cit"
 SectionEnd
-Section "五笔2000" COMP_WB2k
+Section "五笔新世纪" COMP_WB2k
    SetOverwrite ifnewer
    SetOutPath "$INSTDIR\server"
    File /a "server\新世纪.cit"
@@ -199,7 +185,7 @@ SectionEnd
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC_COMP} "输入法码表"
   !insertmacro MUI_DESCRIPTION_TEXT ${COMP_WB86} "五笔字型86版"
   !insertmacro MUI_DESCRIPTION_TEXT ${COMP_WB98} "五笔字型98版"
-  !insertmacro MUI_DESCRIPTION_TEXT ${COMP_WB2K} "五笔字型2000版"
+  !insertmacro MUI_DESCRIPTION_TEXT ${COMP_WB2K} "五笔新世纪版"
   !insertmacro MUI_DESCRIPTION_TEXT ${COMP_BXM26} "表型码26键版本"
   !insertmacro MUI_DESCRIPTION_TEXT ${COMP_BXM31} "表型码31键版本"
   !insertmacro MUI_DESCRIPTION_TEXT ${COMP_ZM} "郑码"
@@ -209,8 +195,8 @@ SectionEnd
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 Function .onInit
-;StrCpy $bUpdate "1"
-;Goto Run
+StrCpy $bUpdate "1"
+Goto Run
    InitPluginsDir
    SetOutPath $PLUGINSDIR
    File "Program\RegisterCore.dll"

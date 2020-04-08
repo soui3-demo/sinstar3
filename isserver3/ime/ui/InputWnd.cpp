@@ -569,6 +569,7 @@ namespace SOUI
 		{
 			m_pInputContext->iCandBegin -= m_cPageSize;
 		}
+		UpdateUI();
 		return TRUE;
 	}
 
@@ -585,6 +586,7 @@ namespace SOUI
 		{
 			CUtils::SoundPlay(_T("error"));
 		}
+		UpdateUI();
 		return TRUE;
 	}
 
