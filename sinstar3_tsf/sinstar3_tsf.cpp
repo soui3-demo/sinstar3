@@ -368,9 +368,12 @@ BOOL CSinstar3Tsf::_InitSinstar3(HWND hWnd)
 
 void CSinstar3Tsf::OnReconnReady()
 {
-	_UninitSinstar3();
-	_InitSinstar3((HWND)GetActiveWnd());
-	SetOpenStatus(TRUE);//auto open ime
+	if(_pThreadMgr)
+	{
+		_UninitSinstar3();
+		_InitSinstar3((HWND)GetActiveWnd());
+		SetOpenStatus(TRUE);//auto open ime
+	}
 }
 
 LRESULT CSinstar3Tsf::WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam)

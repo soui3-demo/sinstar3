@@ -2616,7 +2616,7 @@ BOOL CInputState::OnSvrNotify(UINT wp, PMSGDATA pMsg)
 						short sLen=0,iWord=0,sOffset=0;
 						pbyData++;
 						memcpy(&sLen,pbyData,2);
-						SASSERT(sLen<MAX_SENTLEN);
+						SASSERT(sLen<=MAX_SENTLEN);
 						pbyData+=2;
 						wcsncpy(ctx->szSentText,(WCHAR*)pbyData,sLen);
 						ctx->sSentCaret=0;

@@ -559,11 +559,14 @@ LRESULT CUiWnd::OnAsyncFocus()
 
 void CUiWnd::OnReconnReady()
 {
-	_UninitSinstar3();
-	_InitSinstar3();
-	SetOpenStatus(TRUE);
-	OnImeNotify(IMN_SETOPENSTATUS,0);
-	_SyncFocus();
+	if(m_pSinstar3)
+	{
+		_UninitSinstar3();
+		_InitSinstar3();
+		SetOpenStatus(TRUE);
+		OnImeNotify(IMN_SETOPENSTATUS,0);
+		_SyncFocus();
+	}
 }
 
 void CUiWnd::SetFocus(BOOL bFocus)
