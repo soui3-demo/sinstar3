@@ -485,7 +485,7 @@ namespace SOUI
 
 	void CConfigDlg::InitTtsTokenInfo(bool bChVoice, SComboBox *pCbx)
 	{
-		int nTokens= CIsSvrProxy::GetInstance()->TtsGetTokensInfo(true,NULL,0);
+		int nTokens= CIsSvrProxy::GetInstance()->TtsGetTokensInfo(bChVoice,NULL,0);
 		if (nTokens)
 		{
 			WCHAR (*szToken)[MAX_TOKEN_NAME_LENGHT] = new WCHAR[nTokens][MAX_TOKEN_NAME_LENGHT];

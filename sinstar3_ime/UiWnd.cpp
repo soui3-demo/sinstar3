@@ -411,6 +411,7 @@ BOOL CUiWnd::_InitSinstar3()
 	}
 	m_pSinstar3->NotifyScaleInfo(GetActiveWindow());
 	m_pSinstar3->OnIMESelect(m_bActivate);
+	PostMessage(WM_IME_NOTIFY,IMN_SETCONVERSIONMODE,0);
 	return TRUE;
 }
 
@@ -450,7 +451,6 @@ LRESULT CUiWnd::OnCreate()
 	{
 		SetTimer(m_hWnd,TID_INIT,200,NULL);
 	}
-	PostMessage(WM_IME_NOTIFY,IMN_SETCONVERSIONMODE,0);
 	return 0;
 }
 
@@ -559,12 +559,10 @@ LRESULT CUiWnd::OnAsyncFocus()
 
 void CUiWnd::OnReconnReady()
 {
-	if(m_pSinstar3)
-	{
-		delete m_pSinstar3;
-		m_pSinstar3 = NULL;
-	}
+	_UninitSinstar3();
 	_InitSinstar3();
+	SetOpenStatus(TRUE);
+	OnImeNotify(IMN_SETOPENSTATUS,0);
 	_SyncFocus();
 }
 

@@ -29,7 +29,7 @@
 #define SPAN_AUTO_SAVE_SETTING 5000	//5 seconds
 
 #define TIMERID_RECONN 800
-#define SPAN_RECONN 5000	//5 seconds
+#define SPAN_RECONN 2000	//2 seconds
 
 static void DoSomething()
 {
@@ -455,10 +455,6 @@ void CIsSvrProxy::CheckUpdate(bool bManual)
 	//update date
 	_stprintf(g_SettingsG->szUpdateDate, _T("%d-%d-%d"), timeToday.GetMonth(), timeToday.GetDay(), timeToday.GetYear());
 	g_SettingsG->SetModified(true);
-	//WritePrivateProfileStringA("update", "date", szDate, szConfig);
-
-	//char szUri[500];
-	//GetPrivateProfileStringA("update", "url", "http://soime.cm/sinstar3_update.xml", szUri, 500, szConfig);
 
 	CWorker::getSingletonPtr()->CheckUpdate(g_SettingsG->szUpdateUrl, bManual);
 }

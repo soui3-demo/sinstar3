@@ -57,6 +57,8 @@ namespace SOUI
 		SStringT strEdit;
 		if(m_ctx->spellData[m_ctx->byCaret].bySpellLen>0)
 			strEdit=SStringW(m_ctx->szWord[m_ctx->byCaret]);
+		else
+			strEdit=L"¡¡";
 		pts[0]=pt;
 		CSize sz= SpTextOut(pRT,pt,strEdit);
 		pts[1]=pt;

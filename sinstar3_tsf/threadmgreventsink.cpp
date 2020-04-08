@@ -48,16 +48,14 @@ STDAPI CSinstar3Tsf::OnSetFocus(ITfDocumentMgr *pDocMgrFocus, ITfDocumentMgr *pD
 
 	SLOGFMTI("OnSetFocus,_bHasFocus is %d, _bInEditDocument is %d, pDocMgrFocus=%p", _bHasFocus, _bInEditDocument,pDocMgrFocus);
 
-	_SyncFocus();
+	_SyncFocus(_bHasFocus);
     return S_OK;
 }
 
 STDAPI CSinstar3Tsf::OnSetThreadFocus()
 {
 	SLOGFMTI("OnSetThreadFocus");
-
-	_bHasFocus=TRUE;
-	_SyncFocus();
+	_SyncFocus(TRUE);
 	return S_OK;
 }
 
@@ -71,8 +69,7 @@ STDAPI CSinstar3Tsf::OnKillThreadFocus()
 		_EndComposition(pCtx);
 		ReleaseImeContext(pCtx);
 	}
-	_bHasFocus = FALSE;
-	_SyncFocus();
+	_SyncFocus(FALSE);
 	return S_OK;
 }
 

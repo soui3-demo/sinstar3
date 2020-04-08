@@ -237,6 +237,7 @@ void CSettingsGlobal::Load(const SStringT & strDataPath)
 	bShowTray = GetPrivateProfileInt(KSession,_T("showTray"),1,strConfigIni);
 	bAutoQuit = GetPrivateProfileInt(KSession,_T("autoQuit"),0,strConfigIni);
 	nUpdateInterval = GetPrivateProfileInt(_T("update"), _T("interval"), 30, strConfigIni);
+	GetPrivateProfileString(_T("update"), _T("url"), _T("https://soime.cn/sinstar3_update.xml"), szUpdateUrl, MAX_PATH, strConfigIni);
 
 	SetModified(false);
 }

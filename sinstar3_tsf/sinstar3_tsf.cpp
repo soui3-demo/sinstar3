@@ -186,8 +186,9 @@ DWORD CSinstar3Tsf::GetActiveWnd() const
 	return (DWORD)(ULONG_PTR)hWnd;
 }
 
-void CSinstar3Tsf::_SyncFocus()
+void CSinstar3Tsf::_SyncFocus(BOOL bFocus)
 {
+	_bHasFocus=bFocus;
 	PostMessage(UM_ASYNC_FOCUS,0,0);
 }
 
@@ -196,6 +197,7 @@ void CSinstar3Tsf::OnAsyncFocus()
 	if(m_pSinstar3)
 	{
 		BOOL bFocus = _bHasFocus && _bInEditDocument;
+		SLOG_INFO("OnAsyncFocus,hasFocus:"<<_bHasFocus<<" inEdit:"<<_bInEditDocument);
 		if(bFocus)
 			m_pSinstar3->OnSetFocus(TRUE,GetActiveWnd());
 		else
@@ -360,19 +362,15 @@ BOOL CSinstar3Tsf::_InitSinstar3(HWND hWnd)
 	m_pSinstar3->NotifyScaleInfo(hWnd);
 
 	m_pSinstar3->OnIMESelect(_bHasFocus);
-	_SyncFocus();
+	_SyncFocus(_bHasFocus);
 	return TRUE;
 }
 
 void CSinstar3Tsf::OnReconnReady()
 {
-	if(m_pSinstar3)
-	{
-		delete m_pSinstar3;
-		m_pSinstar3=NULL;
-	}
+	_UninitSinstar3();
 	_InitSinstar3((HWND)GetActiveWnd());
-	_SyncFocus();
+	SetOpenStatus(TRUE);//auto open ime
 }
 
 LRESULT CSinstar3Tsf::WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam)

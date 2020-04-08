@@ -105,7 +105,7 @@ public:
 	BOOL _IsCompositing() const;
 	BOOL _GetSegRange(TfEditCookie ec,ITfRange **pRange,int nLeft,int nRight);
 
-	void _SyncFocus();
+	void _SyncFocus(BOOL bFocus);
 	void OnAsyncFocus();
 protected:
 	virtual LRESULT WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam);

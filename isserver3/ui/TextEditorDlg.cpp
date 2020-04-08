@@ -32,12 +32,20 @@ BOOL CTextEditorDlg::OnInitDialog(HWND hWnd, LPARAM lp)
 		int nLen = ftell(f);
 		fseek(f, 0, SEEK_SET);
 
-		char *buf = (char*)malloc(nLen);
+		char *buf = (char*)malloc(nLen+1);
 		fread(buf, 1, nLen, f);
+		buf[nLen]=0;
 		fclose(f);
 		if(memcmp(buf,"\xff\xfe",2)==0)
 		{//utf16
 			SStringA utf8 = S_CW2A(SStringW((WCHAR*)(buf+2),(nLen-2)/2), CP_UTF8);
+			m_pSciter->SendMessage(SCI_SETTEXT, 0, (LPARAM)utf8.c_str());
+		}else if(buf[0]==0xef && buf[1]==0xbb && buf[2]==0xbf)
+		{//utf8
+			m_pSciter->SendMessage(SCI_SETTEXT, 0, (LPARAM)(buf+3));
+		}else
+		{//ansi
+			SStringA utf8 = S_CA2A(SStringA(buf,nLen),CP_ACP, CP_UTF8);
 			m_pSciter->SendMessage(SCI_SETTEXT, 0, (LPARAM)utf8.c_str());
 		}
 		free(buf);

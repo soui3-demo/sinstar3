@@ -343,6 +343,7 @@ STDAPI CSinstar3Tsf::OnChange(REFGUID rguidCompartment)
 		}
 		if(m_pSinstar3)
 		{
+			SLOG_INFO("####OnOpenStatusChanged:"<<bOpen);
 			m_pSinstar3->OnOpenStatusChanged(bOpen);
 		}
 	}

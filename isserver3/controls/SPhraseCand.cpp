@@ -51,7 +51,7 @@ namespace SOUI
 	void SPhraseCand::SetCandData(const BYTE* pbyCandData)
 	{
 		const char * p = (const char *)pbyCandData;		
-		m_strCand = S_CA2T(SStringA(p+3+p[0],p[2]-p[0]), CP_GB);
+		m_strCand = S_CW2T(SStringW((WCHAR*)(p+3)+p[0],p[2]-p[0]));
 		RequestRelayout();
 	}
 

@@ -1562,7 +1562,7 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 				if(g_SettingsG->byAstMode==AST_CAND)
 				{//当前是词组联想
 					InputStart();
-					strResult= SStringW((WCHAR*)(pCandInfo+3+pCandInfo[0]),pCandInfo[2]-pCandInfo[0]);
+					strResult= SStringW((WCHAR*)(pCandInfo+3)+pCandInfo[0],pCandInfo[2]-pCandInfo[0]);
 				}else if(g_SettingsG->byAstMode==AST_ENGLISH)
 				{//当前是英文联想
 					InputStart();
@@ -2574,9 +2574,9 @@ BOOL CInputState::OnSvrNotify(UINT wp, PMSGDATA pMsg)
 						pbyData+=2;
 						ctx->ppbyCandInfo=(LPBYTE*)malloc(sCount*sizeof(LPBYTE));
 						for(iCand=0;iCand<sCount;iCand++)
-						{//枚举所有联想词组：词头长度(1BYTE)+词组
+						{//枚举所有联想词组：词头长度(1BYTE)+rate+length+wsWord[length]
 							ctx->ppbyCandInfo[iCand]=pbyData;
-							pbyData+=pbyData[2]+3;
+							pbyData+=pbyData[2]*2+3;
 						}
 						ctx->sCandCount=sCount;
 						SLOG_INFO("词组联想:"<<ctx->sCandCount);
