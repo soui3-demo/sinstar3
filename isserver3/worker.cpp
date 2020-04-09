@@ -17,11 +17,6 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-const TCHAR * KConfigIni = _T("\\server\\config.ini");
-const TCHAR * KTtsEntry = _T("TTS");
-const TCHAR * KTtsSpeed = _T("speed");
-const TCHAR * KTtsChVoice = _T("ChVoice");
-const TCHAR * KTtsEnVoice = _T("EnVoice");
 
 template<>
 CWorker * SSingleton<CWorker>::ms_Singleton = NULL;
@@ -29,9 +24,6 @@ CWorker * SSingleton<CWorker>::ms_Singleton = NULL;
 CWorker::CWorker(LPCTSTR pszDataPath):m_bInitOK(FALSE), m_CurVoice(VOICE_NULL)
 {
 	SNotifyCenter::getSingletonPtr()->addEvent(EVENTID(EventCheckUpdateResult));
-	m_strConfigIni = pszDataPath;
-	m_strConfigIni += _T("\\");
-	m_strConfigIni += KConfigIni;
 	BeginThread();
 }
 
@@ -68,13 +60,8 @@ BOOL CWorker::Init()
 			if (hr != S_OK) break;
 			m_bInitOK = TRUE;
 
-			m_iChVoice = GetPrivateProfileInt(KTtsEntry, KTtsChVoice, 0, m_strConfigIni);
-			m_iEnVoice = GetPrivateProfileInt(KTtsEntry, KTtsEnVoice, 0, m_strConfigIni);
-			m_nSpeed = GetPrivateProfileInt(KTtsEntry, KTtsSpeed, 0, m_strConfigIni);
 
-			_SetSpeed(m_nSpeed);
-			_SetVoice(TRUE, m_iChVoice);
-			_SetVoice(FALSE, m_iEnVoice);
+			_SetSpeed(0);
 
 			SetMsgOwner(SPEI_END_INPUT_STREAM, m_hWnd, UM_TTS_FINISH);
 		} while (0);
@@ -93,9 +80,6 @@ BOOL CWorker::Init()
 
 void CWorker::Uninit()
 {
-	WritePrivateProfileString(KTtsEntry, KTtsSpeed, SStringT().Format(_T("%d"),m_nSpeed),m_strConfigIni);
-	WritePrivateProfileString(KTtsEntry, KTtsChVoice, SStringT().Format(_T("%d"), m_iChVoice), m_strConfigIni);
-	WritePrivateProfileString(KTtsEntry, KTtsEnVoice, SStringT().Format(_T("%d"), m_iEnVoice), m_strConfigIni);
 
 	m_cpVoiceEn = NULL;
 	m_cpVoiceCh = NULL;
@@ -153,13 +137,6 @@ BOOL CWorker::IsTTSBusy()
 	return bBusy;
 }
 
-
-int CWorker::GetVoice(BOOL bCh)
-{
-	return bCh?m_iChVoice:m_iEnVoice;
-}
-
-
 void CWorker::SetVoice(BOOL bCh, int nToken)
 {
 	::PostMessage(m_hWnd, UM_FUN_SETVOICE, (WPARAM)bCh, (LPARAM)nToken);
@@ -185,12 +162,10 @@ BOOL CWorker::_SetVoice(WPARAM wp, LPARAM lp)
 	if (bCh)
 	{
 		hr = m_cpVoiceCh->SetVoice(pToken);
-		m_iChVoice = nToken;
 	}
 	else
 	{
 		hr = m_cpVoiceEn->SetVoice(pToken);
-		m_iEnVoice = nToken;
 	}
 	pToken->Release();
 	return TRUE;
@@ -252,10 +227,6 @@ void CWorker::SetMsgOwner(ULONGLONG ullEvent, HWND hWnd, UINT uMsg)
 	m_cpVoiceEn->SetNotifyWindowMessage( hWnd, uMsg, 1, 0 );
 }
 
-int CWorker::GetSpeed()
-{
-	return m_nSpeed;
-}
 
 void CWorker::SetSpeed(int nSpeed)
 {

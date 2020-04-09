@@ -1037,7 +1037,7 @@ SWindow *pCtrl = FindChildByID(id);\
 			char szFrom[7], szTo[7];
 			if (pAdapter->getBlur(iSel, szFrom, szTo))
 			{
-				if (ISACK_SUCCESS == CIsSvrProxy::GetSvrCore()->BlurDel(szFrom, szTo))
+				if (-1 != CIsSvrProxy::GetSvrCore()->BlurDel(szFrom, szTo))
 				{
 					InitPinyinBlurListView(pLvBlur);
 				}
