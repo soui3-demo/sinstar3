@@ -18,9 +18,12 @@ namespace SOUI
 		CConfigDlg(IUpdateIntervalObserver *pObserver);
 		~CConfigDlg(void);		
 
+		static CConfigDlg* GetInstance();
+
 		virtual void OnFinalMessage(HWND hWnd);
 	private:
 		IUpdateIntervalObserver * m_pObserver;
+		static CConfigDlg * _instance;
 	protected:
 		void FindAndSetCheck(int id, BOOL bcheck);
 		void FindAndSetText(int id, LPCTSTR text);

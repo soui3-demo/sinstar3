@@ -259,14 +259,19 @@ namespace SOUI
 		SArray<INDEXINFO> m_lstIndex;
 	};
 
+	
+	CConfigDlg * CConfigDlg::_instance = NULL;
 	CConfigDlg::CConfigDlg(IUpdateIntervalObserver *pObserver)
 		:SHostWnd(UIRES.LAYOUT.dlg_config)
 		,m_pObserver(pObserver)
 	{
+		SASSERT(_instance==NULL);
+		_instance=this;
 	}
 
 	CConfigDlg::~CConfigDlg(void)
 	{
+		_instance=NULL;
 	}
 
 	void CConfigDlg::FindAndSetCheck(int id,BOOL bcheck)
@@ -1154,6 +1159,11 @@ SWindow *pCtrl = FindChildByID(id);\
 		FindAndSetText(R.id.edit_font,_T("<Æ¤·ôÄ¬ÈÏ>"));
 		SFontPool::getSingletonPtr()->SetDefFontInfo(fi);
 		g_SettingsG->strFontDesc.Empty();
+	}
+
+	CConfigDlg* CConfigDlg::GetInstance()
+	{
+		return _instance;
 	}
 
 }

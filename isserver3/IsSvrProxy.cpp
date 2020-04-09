@@ -423,9 +423,13 @@ void CIsSvrProxy::OnMenuAutoExit(UINT uNotifyCode, int nID, HWND wndCtl)
 
 void CIsSvrProxy::OnMenuSettings(UINT uNotifyCode, int nID, HWND wndCtl)
 {
-	CConfigDlg * pConfig = new CConfigDlg(this);
-	pConfig->Create(m_hWnd,WS_POPUP,WS_EX_TOPMOST,0,0,0,0);
-	pConfig->SendMessage(WM_INITDIALOG);
+	CConfigDlg * pConfig = CConfigDlg::GetInstance();
+	if(!pConfig)
+	{
+		pConfig = new CConfigDlg(this);
+		pConfig->Create(m_hWnd,WS_POPUP,WS_EX_TOPMOST,0,0,0,0);
+		pConfig->SendMessage(WM_INITDIALOG);
+	}
 	pConfig->SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
 }
 
@@ -636,7 +640,7 @@ LRESULT CIsSvrProxy::OnCopyData(HWND hWnd,PCOPYDATASTRUCT lpCopyData)
 		SStringT strDst = m_strDataPath + _T("\\skins")+strName;
 		if(CopyFile(strPath,strDst,FALSE))
 		{
-			if(IDOK==SMessageBox(GetDesktopWindow(),_T("词库皮肤成功！现在使用吗?"),_T("提示"),MB_OKCANCEL|MB_ICONQUESTION))
+			if(IDOK==SMessageBox(GetDesktopWindow(),_T("安装皮肤成功！现在使用吗?"),_T("提示"),MB_OKCANCEL|MB_ICONQUESTION))
 			{
 				if(!CDataCenter::getSingletonPtr()->GetData().changeSkin(strDst))
 				{
@@ -650,7 +654,7 @@ LRESULT CIsSvrProxy::OnCopyData(HWND hWnd,PCOPYDATASTRUCT lpCopyData)
 			}
 		}else
 		{
-			SMessageBox(GetDesktopWindow(),SStringT().Format(_T("词库皮肤失败！错误码:%d"),GetLastError()),_T("提示"),MB_OK|MB_ICONSTOP);
+			SMessageBox(GetDesktopWindow(),SStringT().Format(_T("安装皮肤失败！错误码:%d"),GetLastError()),_T("提示"),MB_OK|MB_ICONSTOP);
 		}
 
 	}
