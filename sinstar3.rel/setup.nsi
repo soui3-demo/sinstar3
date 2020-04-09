@@ -203,14 +203,21 @@ Goto Run
    File "Program\isserver3.exe"
    
    StrCpy $bUpdate "0"
+   
+   System::Call '$PLUGINSDIR\RegisterCore::Sinstar_GetCurrentVer2(*i,*i,*i,*i)i (.r0,.r1,.r2,.r3).r4'
+   IntCmp $4 1 0 Run
+   ;check for current 3.0
+   IntCmp $R0 3 0 CanUpdate
+   IntCmp $R1 1 0 CanUpdate
+   MessageBox MB_OK|MB_ICONSTOP  "您已经安装了${PRODUCT_NAME} $0.$1.$2.$3 。$\r$\n$\r$\n，不能从该版本升级，请先卸载现有版本再重新安装。$\r$\n$\r$\n点击 “确定” 退出安装程序。" IDOK Exit
+   CanUpdate:
+   
    System::Call '$PLUGINSDIR\RegisterCore::Sinstar_IsRunning()i.R0'
    IntCmp $R0 1 0 no_run
    MessageBox MB_OKCANCEL|MB_ICONQUESTION  "安装程序检测到 ${PRODUCT_NAME} 正在运行。$\r$\n$\r$\n点击 “确定”查看调用程序，$\r$\n$\r$\n点击 “取消”退出安装程序。" IDOK 0 IDCANCEL Exit
    System::Call '$PLUGINSDIR\RegisterCore::Sinstar_ShowCaller(i1)i.R0'
    Goto Exit
    no_run:
-   System::Call '$PLUGINSDIR\RegisterCore::Sinstar_GetCurrentVer2(*i,*i,*i,*i)i (.r0,.r1,.r2,.r3).r4'
-   IntCmp $4 1 0 Run
    System::Call '$PLUGINSDIR\RegisterCore::Sinstar_PEVersion2W(t,*i,*i,*i,*i)i ("$PLUGINSDIR\isserver3.exe",.R0,.R1,.R2,.R3).R4'
    IntCmp $R0 $0 0 Degrade Upgrade
    IntCmp $R1 $1 0 Degrade Upgrade
