@@ -3,7 +3,7 @@
           maxWidth="300" minWidth="150"
           textMargin="8"
           iconSkin="skin_menu_icons"
-          font="size:15,face:微软雅黑">
+          font="size:15,face:微软雅黑,bold:0">
   <item text="设置" name="menu_settings" id="101" icon="0"/>
   <item text="开机启动" name="menu_auto_run" id="104"/>
   <item text="自动退出" name="menu_auto_exit" id="103"/>
