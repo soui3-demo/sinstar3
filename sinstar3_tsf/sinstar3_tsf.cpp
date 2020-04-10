@@ -25,9 +25,9 @@ HRESULT CSinstar3Tsf::CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **pp
 		else
 			pName=szModule;
 
-		TCHAR szDumpPath[MAX_PATH];
-		_stprintf_s(szDumpPath,MAX_PATH,_T("%s\\log\\%s.dmp"),theModule->GetInstallPath(),pName);
-		CMinidump::SetDumpFile(szDumpPath);
+		TCHAR szPath[MAX_PATH];
+		_stprintf_s(szPath,MAX_PATH,_T("%s\\log\\%s.dmp"),theModule->GetInstallPath(),pName);
+		CMinidump::SetDumpFile(szPath);
 		CMinidump::Enable();
 	}
 
