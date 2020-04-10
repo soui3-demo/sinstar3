@@ -81,7 +81,6 @@ namespace SOUI
 		PFLMINFO pflmInfo = (PFLMINFO)lp;
 		if(pflmInfo)
 		{
-			SLOG_INFO("font:" << pflmInfo->szAddFont);
 			SStringW strFontInfo=L"face:";
 			strFontInfo += pflmInfo->szAddFont;
 

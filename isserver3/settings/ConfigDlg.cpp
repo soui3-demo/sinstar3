@@ -923,7 +923,7 @@ SWindow *pCtrl = FindChildByID(id);\
 
 	void CConfigDlg::OnTtsEnPreview()
 	{
-		CIsSvrProxy::GetInstance()->TtsSpeakText(KTTS_SAMPLE_EN,-1,true);
+		CIsSvrProxy::GetInstance()->TtsSpeakText(KTTS_SAMPLE_EN,-1,false);
 	}
 
 	void CConfigDlg::OnPyBlurClick(EventArgs * e)

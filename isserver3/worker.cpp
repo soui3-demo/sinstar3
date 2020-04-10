@@ -56,13 +56,14 @@ BOOL CWorker::Init()
 			if (hr != S_OK) break;
 			hr = cpSpCategory->EnumTokens(L"Language=804", NULL, &m_cpChTokens);
 			if (hr != S_OK) break;
-			hr = cpSpCategory->EnumTokens(L"Language=9", NULL, &m_cpEnTokens);
+			hr = cpSpCategory->EnumTokens(L"Language=409", NULL, &m_cpEnTokens);
 			if (hr != S_OK) break;
 			m_bInitOK = TRUE;
 
 
-			_SetSpeed(0);
-
+			_SetSpeed(g_SettingsG->nTtsSpeed);
+			_SetVoice(TRUE,g_SettingsG->iTtsChVoice);
+			_SetVoice(FALSE,g_SettingsG->iTtsEnVoice);
 			SetMsgOwner(SPEI_END_INPUT_STREAM, m_hWnd, UM_TTS_FINISH);
 		} while (0);
 
@@ -146,7 +147,7 @@ BOOL CWorker::_SetVoice(WPARAM wp, LPARAM lp)
 {
 	BOOL bCh = (BOOL)wp;
 	int nToken = (int)lp;
-	if (m_bInitOK) return FALSE;
+	if (!m_bInitOK) return FALSE;
 
 	
 	SComPtr<IEnumSpObjectTokens> pTokens = bCh ? m_cpChTokens : m_cpEnTokens;

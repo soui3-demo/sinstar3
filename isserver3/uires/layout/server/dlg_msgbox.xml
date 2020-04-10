@@ -12,7 +12,7 @@
     <ignore>忽略</ignore>
   </buttonText>
 
-  <root size="-1,-1" skin="_skin.sys.wnd.bkgnd" font="size:16" layout="vbox"  font="size:16">
+  <root size="-1,-1" skin="_skin.sys.wnd.bkgnd" font="size:16" layout="vbox">
     <caption size="-2,29">
       <text pos="10,9,@100,@20" class="cls_txt_red" name="msgtitle"  font="size:16">title</text>
       <imgbtn id="2" skin="_skin.sys.btn.close"    pos="-45,0" tip="close"/>
