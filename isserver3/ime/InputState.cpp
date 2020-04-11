@@ -2029,8 +2029,11 @@ BOOL CInputState::KeyIn_Code_English(InputContext * lpCntxtPriv,UINT byInput,
 	SASSERT(lpCntxtPriv->inState==INST_ENGLISH);
 	if(byInput==VK_RETURN)
 	{//输入当前英文
+		if(g_SettingsUI->bSound)
+		{
+			CIsSvrProxy::GetInstance()->TtsSpeakText(lpCntxtPriv->szComp,lpCntxtPriv->cComp,false);
+		}
 		SStringW strResult = SStringW(lpCntxtPriv->szComp, lpCntxtPriv->cComp);
-		CIsSvrProxy::GetInstance()->TtsSpeakText(strResult.c_str(),strResult.GetLength(),false);
 		InputResult(strResult,0);
 		InputEnd();
 		InputHide(FALSE);
