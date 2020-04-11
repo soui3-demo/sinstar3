@@ -235,7 +235,7 @@ void CIsSvrProxy::OnClientLogout() {
 	}
 }
 
-void CIsSvrProxy::OnShowTray(bool bTray) {
+void CIsSvrProxy::ShowTray(bool bTray) {
 	if (bTray)
 	{
 		m_trayIcon.Show();

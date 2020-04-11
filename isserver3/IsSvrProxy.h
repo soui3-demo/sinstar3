@@ -69,8 +69,6 @@ protected:
 	virtual void OnClientLogin() ;
 	virtual void OnClientLogout() ;
 
-	virtual void OnShowTray(bool bTray) ;
-
 	virtual void OnShowKeyMap(IDataBlock * pCompData, LPCWSTR pszName, LPCWSTR pszUrl) ;
 	virtual void OnDataLoaded();
 public:
@@ -80,6 +78,7 @@ public:
 	void TtsSpeakText(const wchar_t* pText, int nLen, bool bChinese) ;
 	void TtsSetVoice(bool bCh, int iToken) ;
 	int TtsGetTokensInfo(bool bCh, wchar_t token[][MAX_TOKEN_NAME_LENGHT], int nBufSize);
+	void ShowTray(bool bTray) ;
 
 protected:
 	void OnCheckUpdateResult(EventArgs *e);
