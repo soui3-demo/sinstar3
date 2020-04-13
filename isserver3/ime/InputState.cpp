@@ -713,21 +713,18 @@ void SpellBuf_ClearSyllable(InputContext * lpCntxtPriv,BYTE bySyllable)
 
 BOOL CInputState::KeyIn_Test_RepeatInput(InputContext *  lpCntxtPriv,const BYTE * lpbKeyState)
 {
-	if(lpCntxtPriv->sbState == SBST_NORMALSTATE)
+	if(KeyIn_IsCoding(lpCntxtPriv))
 	{
 		return lpCntxtPriv->cComp>0;
-	}else if(lpCntxtPriv->sbState == SBST_ASSOCIATE)
-	{
-		return lpCntxtPriv->cInput>0;
 	}else
 	{
-		return FALSE;
+		return lpCntxtPriv->cInput>0;
 	}
 }
 
 BOOL CInputState::KeyIn_RepeatInput(InputContext *  lpCntxtPriv,const BYTE * lpbKeyState)
 {
-	if(lpCntxtPriv->sbState == SBST_NORMALSTATE)
+	if(KeyIn_IsCoding(lpCntxtPriv))
 	{//±àÂëÉÏÆÁ
 		BYTE byMask=0;
 		SStringW strResult;
@@ -751,7 +748,7 @@ BOOL CInputState::KeyIn_RepeatInput(InputContext *  lpCntxtPriv,const BYTE * lpb
 		ClearContext(CPC_ALL);
 		return TRUE;
 	}
-	else if (lpCntxtPriv->sbState == SBST_ASSOCIATE && lpCntxtPriv->cInput > 0)
+	else if (lpCntxtPriv->cInput > 0)
 	{
 		InputStart();
 		InputResult(SStringT(lpCntxtPriv->szInput,lpCntxtPriv->cInput), GetKeyinMask(FALSE, MKI_ALL));
