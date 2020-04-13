@@ -68,7 +68,8 @@ private:
 
 	BYTE GetKeyinMask(BOOL bAssociate,BYTE byMask);
 
-	BOOL KeyIn_RepeatInput(InputContext * lpCntxtPriv);
+	BOOL KeyIn_RepeatInput(InputContext * lpCntxtPriv,const BYTE * lpbKeyState);
+	BOOL KeyIn_Test_RepeatInput(InputContext * lpCntxtPriv,const BYTE * lpbKeyState);
 
 	void KeyIn_Spell_UpdateCandList(InputContext * lpCntxtPriv,BYTE byCaret);
 	void KeyIn_Spell_Forecast(InputContext * lpCntxtPriv,BYTE byStartPos);
@@ -97,7 +98,6 @@ private:
 	BOOL KeyIn_Line_ChangeComp(InputContext * lpCntxtPriv,UINT byInput, CONST BYTE * lpbKeyState);
 
 	SStringW Symbol_Convert(InputContext * lpCntxtPriv,UINT byInput,const BYTE * lpbKeyState);
-
 	InputContext m_ctx;
 	IInputListener * m_pListener;
 	BYTE * m_pbyMsgBuf;

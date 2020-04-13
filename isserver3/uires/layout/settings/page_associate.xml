@@ -27,10 +27,6 @@
     <check name="chk_auto_dot" text="智能小数点"/>
     <check name="chk_auto_select_cand" text="智能选词"/>
     <check name="chk_auto_comp_promp" text="智能编码提示"/>
-    <window layout="hbox" size="-2,-1">
-      <text text="网址模式识别:"/>
-      <edit name="edit_webmode_header" size="250,-1" notifyChange="1" maxBuf="100"/>
-    </window>
 
     <window layout="hbox" gravity="center">
       <text text="词组预测长度："/>

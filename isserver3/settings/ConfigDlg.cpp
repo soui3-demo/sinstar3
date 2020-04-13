@@ -374,6 +374,7 @@ namespace SOUI
 
 	void CConfigDlg::InitPageHotKey()
 	{
+		FindAndSetHotKey(R.id.hk_repeat, g_SettingsG->dwHotkeys[HKI_Repeat]);
 		FindAndSetHotKey(R.id.hk_switch_py, g_SettingsG->dwHotkeys[HKI_Mode]);
 		FindAndSetHotKey(R.id.hk_make_phrase, g_SettingsG->dwHotkeys[HKI_MakePhrase]);
 		FindAndSetHotKey(R.id.hk_show_table, g_SettingsG->dwHotkeys[HKI_ShowRoot]);
@@ -405,8 +406,6 @@ namespace SOUI
 		FindAndSetCheck(R.id.chk_auto_comp_promp, g_SettingsG->bAutoPrompt);
 		FindAndSetCheck(R.id.chk_auto_dot, g_SettingsG->bAutoDot);
 		FindAndSetCheck(R.id.chk_auto_select_cand, g_SettingsG->bAutoMatch);
-
-		FindAndSetText(R.id.edit_webmode_header, g_SettingsG->szWebHeader);
 		
 		int nSentMax = CIsSvrProxy::GetSvrCore()->GetSentRecordMax();
 		FindAndSetText(R.id.edit_sent_record_max, SStringT().Format(_T("%d"), nSentMax));
@@ -838,7 +837,9 @@ SWindow *pCtrl = FindChildByID(id);\
 		SLOG_INFO("id:" << pHotKeyCtrl->GetID() << " accel:" << SAccelerator::FormatAccelKey(dwAccel));
 		switch (pHotKeyCtrl->GetID())
 		{
-			//hotpage
+			//hotkey page
+		case R.id.hk_repeat:
+			g_SettingsG->dwHotkeys[HKI_Repeat] = dwAccel; break;
 		case R.id.hk_switch_py:
 			g_SettingsG->dwHotkeys[HKI_Mode] = dwAccel; break;
 		case R.id.hk_switch_tempspell:
@@ -860,7 +861,7 @@ SWindow *pCtrl = FindChildByID(id);\
 		case R.id.hk_record:
 			g_SettingsG->dwHotkeys[HKI_Record] = dwAccel; break;
 		case R.id.hk_to_umode:
-			g_SettingsG->dwHotkeys[HKI_UDMode] = dwAccel;
+			g_SettingsG->dwHotkeys[HKI_UDMode] = dwAccel;break;
 		case R.id.hk_2_cand:
 			g_SettingsG->by2CandVK = pHotKeyEvt->vKey; break;
 		case R.id.hk_3_cand:
@@ -887,22 +888,6 @@ SWindow *pCtrl = FindChildByID(id);\
 	void CConfigDlg::OnClose()
 	{
 		DestroyWindow();
-	}
-
-	void CConfigDlg::OnWebHeaderNotify(EventArgs * e)
-	{
-		EventRENotify *e2 = sobj_cast<EventRENotify>(e);
-		SASSERT(e2);
-		if (e2->iNotify == EN_CHANGE)
-		{
-			SWindow *pEdit = sobj_cast<SWindow>(e2->sender);
-			SStringT str = pEdit->GetWindowText();
-			if (str.GetLength() < 100)
-			{
-				wcscpy(g_SettingsG->szWebHeader, str);
-			}
-			
-		}
 	}
 
 	void CConfigDlg::OnTtsSpeedChanged(EventArgs * e)

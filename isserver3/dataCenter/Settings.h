@@ -14,6 +14,7 @@ enum HotKeyIndex{
 	HKI_TTS,			// tts
 	HKI_UDMode,			// user define mode
 	HKI_TempSpell,		// temp spell
+	HKI_Repeat,			// repeat input
 	HKI_COUNT,
 
 	HKI_AdjustRate,		// 快速调频: ctrl+重码号 
@@ -77,7 +78,6 @@ public:
 	BOOL	bAutoDot;			// 智能小数点
 	BOOL	bAutoPrompt;		// 智能重码提示
 	BOOL	bDisableDelWordCand;// 禁止删除单字重码
-	WCHAR	szWebHeader[100];	// 自动转为英文输入模式的抬头
 
 	BOOL	bCandSelNoNum;		// 禁用数字选择重码
 	BOOL	bOnlySimpleCode;	// 出简不出全

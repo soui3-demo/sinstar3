@@ -66,7 +66,6 @@ struct InputContext
 	COMPMODE compMode;				//当前的输入类型：形码输入还是拼音输入。
 	INSTATE	inState;				//当前输入状态
 	SUBSTATE sbState;				//输入子状态
-	BOOL	bWebMode;				//网址输入模式
 
 	//重码数据
 	short   sCandCount;				//重码数

@@ -23,6 +23,7 @@ const static HotKeyEntry KHotKeyEntryMap[] = {
 	{ HKI_Record,_T("HotKey_Record"),_T("ctrl+alt+r") },
 	{ HKI_TTS,_T("HotKey_TTS"),_T("ctrl+alt+t") },
 	{ HKI_TempSpell,_T("HotKey_TempSpell"),_T("")},
+	{ HKI_Repeat,_T("HotKey_Repeat"),_T("shift+enter")},
 };
 
 
@@ -105,7 +106,6 @@ void CSettingsGlobal::Save(const SStringT & strDataPath)
 	WritePrivateProfileInt(KSession,_T("AutoPrompt"),bAutoPrompt,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("DisableDelWordCand"),bDisableDelWordCand,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("CandSelNoNum"),bCandSelNoNum,strConfigIni);
-	WritePrivateProfileString(KSession,_T("WebHeader"),szWebHeader,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("OnlySimpleCode"),bOnlySimpleCode,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("delayTime"),nDelayTime,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("MaxCandidateNum"),nMaxCands,strConfigIni);
@@ -202,7 +202,6 @@ void CSettingsGlobal::Load(const SStringT & strDataPath)
 	nMaxCands=GetPrivateProfileInt(KSession,_T("MaxCandidateNum"),10,strConfigIni);
 	if(nMaxCands<1) nMaxCands = 1;
 	if(nMaxCands>10) nMaxCands = 10;
-	GetPrivateProfileString(KSession,_T("WebHeader"),_T("www. http mail bbs. ftp:"),szWebHeader,100,strConfigIni);
 
 	bOnlySimpleCode=GetPrivateProfileInt(KSession,_T("OnlySimpleCode"),0,strConfigIni);
 	nDelayTime = GetPrivateProfileInt(KSession,_T("delayTime"),5,strConfigIni);

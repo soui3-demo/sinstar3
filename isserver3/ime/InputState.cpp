@@ -116,31 +116,6 @@ BOOL KeyIn_Code_IsValidComp(InputContext * lpCntxtPriv,char cInput)
 	return CIsSvrProxy::GetSvrCore()->CheckComp(lpCntxtPriv->szComp,lpCntxtPriv->cComp+1,byMask);
 }
 
-//检查一个编码是否为定义的网址开头
-BOOL KeyIn_IsWebHeader(LPCWSTR pszHeader,int nLen)
-{
-	BOOL bRet=FALSE;
-	int i=0,iBegin=0,iEnd;
-	while(g_SettingsG->szWebHeader[i])
-	{
-		iEnd=iBegin;
-		for(;;)
-		{
-			if(g_SettingsG->szWebHeader[iEnd]==0) break;
-			if(g_SettingsG->szWebHeader[iEnd]==0x20) break;
-			iEnd++;
-		}
-		if(nLen==iEnd-iBegin && wcsncmp(pszHeader,g_SettingsG->szWebHeader+iBegin,nLen)==0)
-		{
-			bRet=TRUE;
-			break;
-		}
-		if(g_SettingsG->szWebHeader[iEnd]==0) break;//定义的字符串结束
-		iBegin=iEnd+1;
-	}
-	return bRet;
-}
-
 BOOL KeyIn_IsCoding(InputContext * lpCntxtPriv)
 {
 	BOOL bOpen=FALSE;
@@ -215,7 +190,7 @@ int CInputState::TestHotKey(UINT uVk, const BYTE * lpbKeyState) const
 	}
 	if(iRet != -1)
 	{
-		if (m_ctx.cComp > 0 || m_ctx.inState == INST_USERDEF)
+		if ((m_ctx.cComp > 0 && iRet!=HKI_Repeat) || m_ctx.inState == INST_USERDEF)
 			iRet = -1;
 		if(iRet == HKI_UDMode && (g_SettingsG->compMode == IM_SPELL || IsTempSpell()))
 			iRet = -1;
@@ -392,7 +367,6 @@ void CInputState::ClearContext(UINT dwMask)
 	{
 		m_ctx.inState=INST_CODING;
 		m_ctx.sbState=SBST_NORMALSTATE;
-		m_ctx.bWebMode=FALSE;
 	}
 	if(dwMask&CPC_CAND)
 	{
@@ -550,6 +524,9 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 				InputOpen();
 			}
 			InputUpdate();
+		}else if(iHotKey == HKI_Repeat)
+		{
+			return KeyIn_RepeatInput(&m_ctx,lpbKeyState);
 		}
 		if(iHotKey != HKI_AdjustRate && iHotKey != HKI_DelCandidate)//调频，删词交给后面逻辑处理。
 			return TRUE;
@@ -601,11 +578,6 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 	{
 		bHandle=KeyIn_Spell_MoveCaret(lpCntxtPriv,uVKey,lpbKeyState);
 		if(!bHandle && uVKey==VK_DELETE) bHandle=KeyIn_Spell_SyFix(lpCntxtPriv,uVKey,lpbKeyState);//处理VK_DELETE
-	}
-
-	if(uVKey==VK_RETURN && lpbKeyState[VK_SHIFT]&0x80)
-	{
-		bHandle=KeyIn_RepeatInput(lpCntxtPriv);
 	}
 
 	WCHAR wChar = 0;
@@ -739,14 +711,56 @@ void SpellBuf_ClearSyllable(InputContext * lpCntxtPriv,BYTE bySyllable)
 	memset(lpCntxtPriv->szWord+bySyllable,VK_SPACE,2);
 }
 
-BOOL CInputState::KeyIn_RepeatInput(InputContext *  lpCntxtPriv)
+BOOL CInputState::KeyIn_Test_RepeatInput(InputContext *  lpCntxtPriv,const BYTE * lpbKeyState)
 {
-	if (lpCntxtPriv->cInput == 0)
+	if(lpCntxtPriv->sbState == SBST_NORMALSTATE)
+	{
+		return lpCntxtPriv->cComp>0;
+	}else if(lpCntxtPriv->sbState == SBST_ASSOCIATE)
+	{
+		return lpCntxtPriv->cInput>0;
+	}else
+	{
 		return FALSE;
-	InputStart();
-	InputResult(SStringT(lpCntxtPriv->szInput,lpCntxtPriv->cInput), GetKeyinMask(FALSE, MKI_ALL));
-	InputEnd();
-	return TRUE;
+	}
+}
+
+BOOL CInputState::KeyIn_RepeatInput(InputContext *  lpCntxtPriv,const BYTE * lpbKeyState)
+{
+	if(lpCntxtPriv->sbState == SBST_NORMALSTATE)
+	{//编码上屏
+		BYTE byMask=0;
+		SStringW strResult;
+		if (lpCntxtPriv->cComp == 1 && (lpCntxtPriv->szComp[0]<'a' || lpCntxtPriv->szComp[0]>'z'))
+		{
+			strResult += Symbol_Convert(&m_ctx, lpCntxtPriv->szComp[0], lpbKeyState);
+		}
+		else
+		{
+			strResult=SStringW(lpCntxtPriv->szComp, lpCntxtPriv->cComp);
+		}
+
+		if(g_SettingsUI->bRecord)
+			byMask|=MKI_RECORD;
+		if(g_SettingsUI->bSound)
+			byMask|=MKI_TTSINPUT;
+		InputResult(strResult,byMask);
+
+		InputEnd();
+		InputHide(FALSE);
+		ClearContext(CPC_ALL);
+		return TRUE;
+	}
+	else if (lpCntxtPriv->sbState == SBST_ASSOCIATE && lpCntxtPriv->cInput > 0)
+	{
+		InputStart();
+		InputResult(SStringT(lpCntxtPriv->szInput,lpCntxtPriv->cInput), GetKeyinMask(FALSE, MKI_ALL));
+		InputEnd();
+		return TRUE;
+	}else
+	{
+		return FALSE;
+	}
 }
 
 //拼音状态下更新候选词窗口
@@ -1603,7 +1617,6 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 		}
 	}
 end:
-	if(bRet && lpCntxtPriv->bWebMode) lpCntxtPriv->bWebMode=FALSE;
 	return bRet;
 }
 
@@ -1692,8 +1705,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 
 		if(KeyIn_Code_IsMaxCode2(lpCntxtPriv)
 			&& !KeyIn_Code_IsValidComp(lpCntxtPriv,byInput)
-			&& g_SettingsG->bAutoInput 
-			&& !lpCntxtPriv->bWebMode)
+			&& g_SettingsG->bAutoInput)
 		{
 			if(lpCntxtPriv->sCandCount)
 			{
@@ -1735,75 +1747,27 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 	}else if(byInput==VK_BACK)
 	{
 		if(lpCntxtPriv->cComp>0) lpCntxtPriv->cComp--;
-		if(lpCntxtPriv->bWebMode && lpCntxtPriv->cComp<=2) lpCntxtPriv->bWebMode=FALSE;
 		bRet=TRUE;
 	}else if(byInput==VK_ESCAPE)
 	{
 		lpCntxtPriv->cComp=0;
 		lpCntxtPriv->sbState=SBST_NORMALSTATE;
-		lpCntxtPriv->bWebMode=FALSE;
 		lpCntxtPriv->bShowTip=FALSE;
 		bRet=TRUE;
 	}else if(byInput==VK_RETURN)
 	{
-		BOOL bClearComp= lpCntxtPriv->bWebMode==FALSE 
-			&& ((g_SettingsG->bEnterClear && !(lpbKeyState[VK_SHIFT]&0x80))||(!g_SettingsG->bEnterClear && lpbKeyState[VK_SHIFT]&0x80 ));
+		BOOL bClearComp= ((g_SettingsG->bEnterClear && !(lpbKeyState[VK_SHIFT]&0x80))||(!g_SettingsG->bEnterClear && lpbKeyState[VK_SHIFT]&0x80 ));
 		if(bClearComp)
 		{//清空编码
 			lpCntxtPriv->cComp=0;
 			lpCntxtPriv->sbState=SBST_NORMALSTATE;
 			bRet=TRUE;
-		}else 
-		{//编码上屏
-			if(lpCntxtPriv->bWebMode && lpbKeyState[VK_SHIFT]&0x80)
-			{//网址模式下打开浏览器
-				lpCntxtPriv->szComp[lpCntxtPriv->cComp]=0;
-				ShellExecuteW(NULL,L"open",lpCntxtPriv->szComp,NULL,NULL,SW_SHOWDEFAULT);
-			}else
-			{
-				BYTE byMask=0;
-				SStringW strResult;
-				if (lpCntxtPriv->cComp == 1 && (lpCntxtPriv->szComp[0]<'a' || lpCntxtPriv->szComp[0]>'z'))
-				{
-					strResult += Symbol_Convert(&m_ctx, lpCntxtPriv->szComp[0], lpbKeyState);
-				}
-				else
-				{
-					strResult=SStringW(lpCntxtPriv->szComp, lpCntxtPriv->cComp);
-				}
-
-				if(g_SettingsUI->bRecord)
-					byMask|=MKI_RECORD;
-				if(g_SettingsUI->bSound)
-					byMask|=MKI_TTSINPUT;
-				InputResult(strResult,byMask);
-			}
-			InputEnd();
-			InputHide(FALSE);
-			ClearContext(CPC_ALL);
-			return TRUE;
 		}
 	}else if(lpCntxtPriv->cComp < MAX_COMP)
 	{
 		lpCntxtPriv->szComp[lpCntxtPriv->cComp++]=byInput;
-		if(lpCntxtPriv->bWebMode || (!g_SettingsG->bAutoInput && byInput>='a' && byInput<='z')) bRet=TRUE;
-	}
-	if(!lpCntxtPriv->bWebMode)
-	{//处理网址模式转换
-		if(!bCompChar)
-		{
-			if(KeyIn_IsWebHeader(lpCntxtPriv->szComp,lpCntxtPriv->cComp))
-			{
-				lpCntxtPriv->bWebMode=TRUE;
-				bRet=TRUE;
-			}else if(byInput!=VK_BACK && byInput!=VK_ESCAPE && byInput!=VK_RETURN)
-			{
-				lpCntxtPriv->cComp--;
-			}
-		}else
-		{
-			lpCntxtPriv->bWebMode=KeyIn_IsWebHeader(lpCntxtPriv->szComp,lpCntxtPriv->cComp);
-		}
+		if((!g_SettingsG->bAutoInput && byInput>='a' && byInput<='z')) 
+			bRet=TRUE;
 	}
 
 	if(bRet)
@@ -1869,13 +1833,8 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 		if(lpCntxtPriv->sCandCount)
 		{
 			lpbyCand=lpCntxtPriv->ppbyCandInfo[0];
-		}else if(lpCntxtPriv->bWebMode)
-		{
-			lpCntxtPriv->bShowTip=TRUE;
-			lpCntxtPriv->iTip = -1;
-			_tcscpy(lpCntxtPriv->szTip,_T("网址模式:\n 回车=网址上屏\n Shift+回车=浏览"));
 		}
-		if((lpCntxtPriv->byCandType&MCR_AUTOSELECT ||(KeyIn_Code_IsMaxCode(lpCntxtPriv) && g_SettingsG->bAutoInput)) && !lpCntxtPriv->bWebMode)
+		if((lpCntxtPriv->byCandType&MCR_AUTOSELECT ||(KeyIn_Code_IsMaxCode(lpCntxtPriv) && g_SettingsG->bAutoInput)))
 		{
 			BYTE *pByCand = lpCntxtPriv->ppbyCandInfo[0];
 			if(lpCntxtPriv->sCandCount==1 && pByCand[0]!=RATE_FORECAST && (pByCand[0]!=RATE_GBK || g_SettingsG->nGbkMode!=CSettingsGlobal::GBK_SHOW_MANUAL))
@@ -2303,7 +2262,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 	int iHotKey = TestHotKey(uKey, lpbKeyState);
 	if (iHotKey != -1)
 	{
-		bRet = TRUE;
+		BOOL bRet = TRUE;
 		if ( m_pListener)
 		{
 			switch (iHotKey)
@@ -2353,10 +2312,13 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 			case HKI_TempSpell:
 				TurnToTempSpell();
 				break;
+			case HKI_Repeat:
+				bRet = KeyIn_Test_RepeatInput(&m_ctx,lpbKeyState);
+				break;
 			}
 		}
 		m_bPressOther = TRUE;
-		if(bRet) return TRUE;
+		return bRet;
 	}
 
 	if(uKey==VK_CAPITAL)
@@ -2522,24 +2484,19 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 				}
 				if(!bCoding) 
 				{//不是编码输入过程
-					if(uKey==VK_BACK || uKey==VK_RETURN || uKey==VK_ESCAPE 
+					if(uKey==VK_BACK ||  uKey==VK_ESCAPE 
 						|| uKey==VK_LEFT || uKey==VK_RIGHT 
 						|| uKey==VK_UP || uKey==VK_DOWN //重码翻页键，不需要翻页的时候
 						|| uKey==VK_HOME || uKey==VK_END )//编辑器移动光标，结束当前句
 					{
-						if(uKey==VK_RETURN && lpbKeyState[VK_SHIFT]&0x80)
-						{//Shift+Return:重复输入
-							bRet=TRUE;
-						}else
-						{//编辑器移动光标
-							bRet=FALSE;
-							ClearContext(CPC_ALL);
-							InputHide(FALSE);
-							if(uKey==VK_BACK) 
-								CIsSvrProxy::GetSvrCore()->ReqKeyIn(m_pListener->GetHwnd(),L"\b",1,0);
-							else
-								CIsSvrProxy::GetSvrCore()->ReqKeyIn(m_pListener->GetHwnd(),L".",1,g_SettingsUI->bRecord?MKI_RECORD:0);
-						}
+						//编辑器移动光标
+						bRet=FALSE;
+						ClearContext(CPC_ALL);
+						InputHide(FALSE);
+						if(uKey==VK_BACK) 
+							CIsSvrProxy::GetSvrCore()->ReqKeyIn(m_pListener->GetHwnd(),L"\b",1,0);
+						else
+							CIsSvrProxy::GetSvrCore()->ReqKeyIn(m_pListener->GetHwnd(),L".",1,g_SettingsUI->bRecord?MKI_RECORD:0);
 					}
 				}
 				if(!bRet && !bCoding)
