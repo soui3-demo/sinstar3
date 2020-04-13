@@ -2484,7 +2484,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 				}
 				if(!bCoding) 
 				{//不是编码输入过程
-					if(uKey==VK_BACK ||  uKey==VK_ESCAPE 
+					if(uKey==VK_BACK || uKey==VK_RETURN|| uKey==VK_ESCAPE 
 						|| uKey==VK_LEFT || uKey==VK_RIGHT 
 						|| uKey==VK_UP || uKey==VK_DOWN //重码翻页键，不需要翻页的时候
 						|| uKey==VK_HOME || uKey==VK_END )//编辑器移动光标，结束当前句
