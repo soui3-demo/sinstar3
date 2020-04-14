@@ -8,33 +8,42 @@
     <text >联想类型:</text>
     <window layout="hbox">
       <radio name="ass_mode_none" id="400" text="禁用"/>
-      <radio name="ass_mode_phrase" id="401" text="词组联想"/>
-      <radio name="ass_mode_english_prompt" id="402" text="单词提示"/>
-      <radio name="ass_mode_phrase_prompt" id="403" text="词组提示"/>
+      <radio name="ass_mode_phrase" id="401" text="词组联想" tip="普通的词组联想功能，适合初级用户"/>
+      <radio name="ass_mode_english_prompt" id="402" text="单词提示" tip="提示外文词库中与输入的文字最匹配的结果"/>
+      <radio name="ass_mode_phrase_prompt" id="403" text="词组提示" tip="如果您连续输入的内容在词库中，则提示是一个词"/>
     </window>
     <text>词频调整:</text>
     <window layout="hbox">
       <radio name="rate_adjust_disable" id="500" text="禁用"/>
-      <radio name="rate_adjust_auto" id="501" text="智能"/>
-      <radio name="rate_adjust_fast" id="502" text="快速"/>
+      <radio name="rate_adjust_auto" id="501" text="智能" tip="智能调频，多次选择同一个词，这个词才会调到首位，适合启程老用户"/>
+      <radio name="rate_adjust_fast" id="502" text="快速" tip="选择一次该候选词就调到首位，适合启程新用户"/>
     </window>
-    <text>全码词组预测:</text>
+    <text>智能造词:</text>
     <window layout="hbox">
       <radio name="forcast_disable" id="600" text="禁用"/>
       <radio name="forcast_always" id="601" text="总是启用"/>
       <radio name="forcast_no_cand" id="602" text="无重码时启用"/>
     </window>
-    <check name="chk_auto_dot" text="智能小数点"/>
-    <check name="chk_auto_select_cand" text="智能选词"/>
-    <check name="chk_auto_comp_promp" text="智能编码提示"/>
-
     <window layout="hbox" gravity="center">
-      <text text="词组预测长度："/>
+      <text text="智能造词最大长度："/>
       <window size="-1,-1" class="edit_border" trackMouseEvent="1" layout="hbox" gravity="center">
         <edit size="40dp,25dp" name="edit_predict_phrase_maxlength" margin-x="0" margin-y="0" notifyChange="1" readonly="1"/>
         <spinButton size="20dp,-2" max="8" min="2" value="4" buddy="edit_predict_phrase_maxlength" name="spin_predict_phrase_maxlength"/>
       </window>
     </window>
+    <window layout="hbox" gravity="bottom">
+    	<check name="chk_auto_dot" text="智能小数点"/>
+       <text text="(数字后输入.及,自动识别为数字)" colorText="@color/gray" font="adding:-4"/>
+    </window>
+    <window layout="hbox" gravity="bottom">
+       <check name="chk_auto_select_cand" text="智能选词"/>
+       <text text="(根据输入历史匹配候选词)" colorText="@color/gray" font="adding:-4"/>
+    </window>
+    <window layout="hbox" gravity="bottom">
+       <check name="chk_auto_comp_promp" text="智能编码提示"/>
+       <text text="(自动在编码后匹配一次万能键查询)" colorText="@color/gray" font="adding:-4"/>
+    </window>
+
 
     <window layout="hbox" gravity="center">
       <text text="词组联想深度："/>

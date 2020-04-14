@@ -11,7 +11,7 @@
         <item width="90">分组名称</item>
         <item width="70">容量</item>
         <item width="80">编辑</item>
-        <item width="100">备注</item>
+        <item width="50" weight="1">备注</item>
       </items>
     </headerstyle>
     <template itemHeight="30" skin="skin_item_bg"  font="size:16">
