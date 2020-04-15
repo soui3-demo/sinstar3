@@ -8,6 +8,7 @@
   <tray_tip value="启程输入法后台服务\n版本:%s"/>
   <title_config value="系统设置"/>
   <btn_close value="关闭"/>
+  <btn_help value="查看帮助"/>
   <cfg_habit value="使用习惯"/>
   <cfg_hotkey value="快捷键"/>
   <cfg_associate value="联想"/>
