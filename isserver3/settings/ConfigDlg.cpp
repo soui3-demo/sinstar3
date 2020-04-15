@@ -1151,4 +1151,9 @@ SWindow *pCtrl = FindChildByID(id);\
 		return _instance;
 	}
 
+	void CConfigDlg::OnHelp()
+	{
+		ShellExecute(NULL, _T("open"), _T("https://soime.cn/help"), NULL, NULL, SW_SHOWNORMAL);
+	}
+
 }

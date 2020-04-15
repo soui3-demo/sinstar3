@@ -25,6 +25,9 @@ namespace SOUI
 		IUpdateIntervalObserver * m_pObserver;
 		static CConfigDlg * _instance;
 	protected:
+		void OnClose();
+		void OnHelp();
+
 		void FindAndSetCheck(int id, BOOL bcheck);
 		void FindAndSetText(int id, LPCTSTR text);
 		void FindAndSetSpin(int id, int nValue);
@@ -85,7 +88,6 @@ namespace SOUI
 		void OnDisableNumSelCand();
 		void OnEnable23Cand();
 		void OnHotKeyEvent(EventArgs *pEvt);
-		void OnClose();
 
 		void OnTtsSpeedChanged(EventArgs *e);
 		void OnTtsChPreview();
@@ -112,6 +114,8 @@ namespace SOUI
 		void OnChangeFont();
 		void OnSkinFont();
 		EVENT_MAP_BEGIN()
+			EVENT_ID_COMMAND(R.id.btn_close,OnClose)
+			EVENT_ID_COMMAND(R.id.btn_help,OnHelp)
 			EVENT_ID_COMMAND(R.id.btn_change_font,OnChangeFont)
 			EVENT_ID_COMMAND(R.id.btn_skin_font,OnSkinFont)
 			EVENT_ID_HANDLER(R.id.cbx_update_interval, EventCBSelChange::EventID, OnCbUpdateIntervalSelChange)
@@ -140,7 +144,6 @@ namespace SOUI
 			EVENT_ID_COMMAND(R.id.chk_auto_select_cand, OnClickAutoSelectCand)
 			EVENT_ID_COMMAND(R.id.chk_disable_number_to_select_cand, OnDisableNumSelCand)
 			EVENT_ID_COMMAND(R.id.chk_enable_23cand_hotkey, OnEnable23Cand)
-			EVENT_ID_COMMAND(R.id.btn_close,OnClose)
 			EVENT_HANDLER(EventSetHotKey::EventID, OnHotKeyEvent)
 			EVENT_ID_HANDLER(R.id.slider_tts_speed,EventSliderPos::EventID,OnTtsSpeedChanged)
 			EVENT_ID_HANDLER(R.id.cbx_tts_ch_token,EventCBSelChange::EventID,OnTtsChTokenChange)

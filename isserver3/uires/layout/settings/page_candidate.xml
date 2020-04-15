@@ -21,11 +21,14 @@
       <hotkey name="hk_turn_next" width="50dp" invalidComb="ctrl+shift+alt" invalidModifier=""/>
     </window>
     <text >GBK重码显示策略</text>
-    <window  layout="vbox">
+    <window  layout="vbox" interval="10" >
       <radio name="gbk_show_only" id="700" text="显示唯一重码"/>
       <radio name="gbk_show_manual" id="701" text="显示手动上屏"/>
       <radio name="gbk_show_as_gb" id="702" text="显示自动上屏"/>
     </window>
-    <check  name="chk_full_skip_simple" text="出简不出全"/>
+    <window layout="hbox" gravity="bottom">
+       <check  name="chk_full_skip_simple" text="出简不出全"/>
+       <text text="(只有最简码能打出包含简码的字)" colorText="@color/gray" font="size:12"/>
+    </window>
   </window>
 </window>
