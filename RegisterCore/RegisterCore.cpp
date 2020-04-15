@@ -647,9 +647,20 @@ void RC_API Sinstar_QuitServer()
 		GetWindowThreadProcessId(hWndSvr, &dwProcID);
 		PostMessage(hWndSvr, WM_QUIT, 0, 0);
 		if (dwProcID != 0)
-			WaitForSingleObject((HANDLE)dwProcID, INFINITE);
-		else
+		{
+			HANDLE processHandle = OpenProcess(SYNCHRONIZE , FALSE, dwProcID);
+			if(processHandle!=0)
+			{
+				WaitForSingleObject(processHandle, INFINITE);
+				CloseHandle(processHandle); 
+			}else
+			{
+				Sleep(500);
+			}
+		}else
+		{
 			Sleep(500);
+		}
 	}
 }
 
