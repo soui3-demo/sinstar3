@@ -284,10 +284,10 @@ int CPLEditor::Import2Group(LPCTSTR pszFile,BYTE byMin, BYTE byMax,BYTE iGroup/*
 
 BOOL CPLEditor::ExportGroup(LPCTSTR pszFile,BYTE iGroup)
 {
-	FILE *f = _tfopen(pszFile,_T("w"));
+	FILE *f = _tfopen(pszFile,_T("wb"));
 	if(!f)
 		return FALSE;
-
+	fwrite("\xff\xfe",1,2,f);//bom
 	DWORD dwCount = m_mapPhrase.GetCount();
 	int   nSegLen = dwCount/100;
 	if(m_funProgCB)
@@ -307,7 +307,8 @@ BOOL CPLEditor::ExportGroup(LPCTSTR pszFile,BYTE iGroup)
 		const PHRASE2 & value=m_mapPhrase.GetNextValue(pos);
 		if(value.byGroup == iGroup)
 		{
-			fprintf(f,"%s\t%d\n",value.szWord,(int)value.byRate);
+			fwrite(value.szWord,sizeof(WCHAR),value.cLen,f);
+			fwprintf(f,L"\t%d\r\n",(int)value.byRate);
 		}
 	}
 	if(m_funProgCB)
