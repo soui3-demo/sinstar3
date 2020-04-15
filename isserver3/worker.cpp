@@ -310,7 +310,7 @@ LRESULT CWorker::OnCheckUpdate(UINT uMsg, WPARAM wp, LPARAM lp)
 		{
 			EventCheckUpdateResult * pEvt = new EventCheckUpdateResult(NULL);
 			pEvt->bManual = wp!=0;
-
+			pEvt->bServerOK = true;
 			pugi::xml_node update = doc.root().child(L"update");
 			pEvt->strUrl = update.attribute(L"url").as_string();
 			pEvt->strNewUpdateUrl = update.attribute(L"newUpdateUrl").as_string();
