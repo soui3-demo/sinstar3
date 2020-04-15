@@ -121,7 +121,7 @@ BOOL KeyIn_IsCoding(InputContext * lpCntxtPriv)
 	BOOL bOpen=FALSE;
 	if(lpCntxtPriv->inState==INST_CODING)
 	{//±àÂëÊäÈë
-		if(lpCntxtPriv->sbState==::SBST_NORMAL)
+		if(lpCntxtPriv->sbState==SBST_NORMALSTATE)
 		{
 			if(lpCntxtPriv->compMode==IM_SHAPECODE)
 			{//ÐÎÂë
@@ -590,7 +590,7 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 		{//ÏÈ×ö×´Ì¬×ª»»Ç°´¦Àí
 			BOOL bReadyEn=FALSE;
 			BOOL bReadyDgt=FALSE;
-			if(lpCntxtPriv->sbState==::SBST_NORMAL)
+			if(lpCntxtPriv->sbState==SBST_NORMALSTATE)
 			{
 				if(lpCntxtPriv->compMode==IM_SPELL)
 				{
@@ -640,7 +640,7 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 		}
 		if(lpCntxtPriv->inState==INST_CODING)
 		{
-			if(lpCntxtPriv->sbState==::SBST_NORMAL)
+			if(lpCntxtPriv->sbState==SBST_NORMALSTATE)
 			{//±àÂëÊäÈë
 				if(lpCntxtPriv->compMode==IM_SPELL)
 				{//Æ´Òô×´Ì¬
@@ -726,7 +726,6 @@ BOOL CInputState::KeyIn_RepeatInput(InputContext *  lpCntxtPriv,const BYTE * lpb
 {
 	if(KeyIn_IsCoding(lpCntxtPriv))
 	{//±àÂëÉÏÆÁ
-		BYTE byMask=0;
 		SStringW strResult;
 		if (lpCntxtPriv->cComp == 1 && (lpCntxtPriv->szComp[0]<'a' || lpCntxtPriv->szComp[0]>'z'))
 		{
@@ -736,12 +735,7 @@ BOOL CInputState::KeyIn_RepeatInput(InputContext *  lpCntxtPriv,const BYTE * lpb
 		{
 			strResult=SStringW(lpCntxtPriv->szComp, lpCntxtPriv->cComp);
 		}
-
-		if(g_SettingsUI->bRecord)
-			byMask|=MKI_RECORD;
-		if(g_SettingsUI->bSound)
-			byMask|=MKI_TTSINPUT;
-		InputResult(strResult,byMask);
+		InputResult(strResult,GetKeyinMask(FALSE,MKI_RECORD|MKI_TTSINPUT));
 
 		InputEnd();
 		InputHide(FALSE);
@@ -751,7 +745,7 @@ BOOL CInputState::KeyIn_RepeatInput(InputContext *  lpCntxtPriv,const BYTE * lpb
 	else if (lpCntxtPriv->cInput > 0)
 	{
 		InputStart();
-		InputResult(SStringT(lpCntxtPriv->szInput,lpCntxtPriv->cInput), GetKeyinMask(FALSE, MKI_ALL));
+		InputResult(SStringT(lpCntxtPriv->szInput,lpCntxtPriv->cInput), GetKeyinMask(FALSE,MKI_RECORD|MKI_TTSINPUT));
 		InputEnd();
 		return TRUE;
 	}else
@@ -1319,7 +1313,7 @@ BOOL CInputState::KeyIn_Spell_InputText(InputContext* lpCntxtPriv,UINT byInput,
 			strResult = SStringW(lpCntxtPriv->szComp,lpCntxtPriv->cComp);
 		}
 		ClearContext(CPC_ALL);
-		InputResult(strResult,GetKeyinMask(!IsTempSpell(),MKI_ALL));
+		InputResult(strResult,GetKeyinMask(!IsTempSpell(),MKI_RECORD|MKI_TTSINPUT));
 		InputEnd();
 		InputHide(TRUE);
 
@@ -1398,7 +1392,7 @@ BOOL CInputState::KeyIn_Spell_Symbol(InputContext* lpCntxtPriv,UINT byInput,
 		}
 		strResult += Symbol_Convert(&m_ctx,byInput,lpbKeyState);
 		InputStart();
-		InputResult(strResult,0);
+		InputResult(strResult,GetKeyinMask(FALSE,MKI_RECORD));
 		InputEnd();
 		InputHide(FALSE);
 		ClearContext(CPC_ALL);
@@ -1753,12 +1747,19 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 		bRet=TRUE;
 	}else if(byInput==VK_RETURN)
 	{
-		BOOL bClearComp= ((g_SettingsG->bEnterClear && !(lpbKeyState[VK_SHIFT]&0x80))||(!g_SettingsG->bEnterClear && lpbKeyState[VK_SHIFT]&0x80 ));
-		if(bClearComp)
+		if(g_SettingsG->bEnterClear)
 		{//Çå¿Õ±àÂë
 			lpCntxtPriv->cComp=0;
 			lpCntxtPriv->sbState=SBST_NORMALSTATE;
 			bRet=TRUE;
+		}else if(lpCntxtPriv->cComp>0)
+		{//
+			SStringW strResult(lpCntxtPriv->szComp,lpCntxtPriv->cComp);
+			ClearContext(CPC_ALL);
+			InputResult(strResult,GetKeyinMask(FALSE,MKI_ALL));
+			InputEnd();
+			InputHide(TRUE);
+			bRet = TRUE;
 		}
 	}else if(lpCntxtPriv->cComp < MAX_COMP)
 	{
@@ -1854,12 +1855,10 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 BOOL CInputState::KeyIn_Code_Symbol(InputContext * lpCntxtPriv,UINT byInput,
 									CONST BYTE * lpbKeyState)
 {
-	BYTE byMask=0;
-
 	SStringW strResult;
 	if(lpCntxtPriv->sCandCount && 
 		lpCntxtPriv->inState==INST_CODING && 
-		lpCntxtPriv->sbState==::SBST_NORMAL)
+		lpCntxtPriv->sbState==SBST_NORMALSTATE)
 	{
 		short iCand = m_pListener->SelectCandidate(0);
 		if(iCand!=-1)
@@ -1871,14 +1870,9 @@ BOOL CInputState::KeyIn_Code_Symbol(InputContext * lpCntxtPriv,UINT byInput,
 
 	strResult += Symbol_Convert(&m_ctx,byInput,lpbKeyState);
 
-	if(g_SettingsUI->bRecord)
-		byMask|=MKI_RECORD;
-	if(g_SettingsUI->bSound)
-		byMask|=MKI_TTSINPUT;
-
 	ClearContext(CPC_ALL);
 	InputStart();
-	InputResult(strResult,byMask);
+	InputResult(strResult,GetKeyinMask(FALSE,MKI_RECORD|MKI_TTSINPUT));
 	InputEnd();
 	InputHide(FALSE);
 	return TRUE;
@@ -1985,12 +1979,8 @@ BOOL CInputState::KeyIn_Code_English(InputContext * lpCntxtPriv,UINT byInput,
 	SASSERT(lpCntxtPriv->inState==INST_ENGLISH);
 	if(byInput==VK_RETURN)
 	{//ÊäÈëµ±Ç°Ó¢ÎÄ
-		if(g_SettingsUI->bSound)
-		{
-			CIsSvrProxy::GetInstance()->TtsSpeakText(lpCntxtPriv->szComp,lpCntxtPriv->cComp,false);
-		}
 		SStringW strResult = SStringW(lpCntxtPriv->szComp, lpCntxtPriv->cComp);
-		InputResult(strResult,0);
+		InputResult(strResult,GetKeyinMask(FALSE,MKI_TTSINPUT));
 		InputEnd();
 		InputHide(FALSE);
 		ClearContext(CPC_ALL);
@@ -2058,7 +2048,7 @@ BOOL CInputState::KeyIn_Digital_ChangeComp(InputContext * lpCntxtPriv,UINT byInp
 	{
 		SStringW strResult((WCHAR)byInput);
 		InputStart();
-		InputResult(strResult,g_SettingsUI->bRecord?MKI_RECORD:0);
+		InputResult(strResult,GetKeyinMask(FALSE,MKI_TTSINPUT));
 		InputEnd();
 		bRet=TRUE;
 	}else
@@ -2090,7 +2080,7 @@ BOOL CInputState::KeyIn_UserDef_ChangeComp(InputContext * lpCntxtPriv,UINT byInp
 		{//ÊäÈë±àÂë
 			//ÇÐ»»»ØÕý³£×´Ì¬
 			SStringW strResult(lpCntxtPriv->szComp,lpCntxtPriv->cComp);
-			InputResult(strResult,0);
+			InputResult(strResult,GetKeyinMask(FALSE,MKI_RECORD|MKI_TTSINPUT));
 			InputEnd();
 			InputHide(FALSE);
 			ClearContext(CPC_ALL);
@@ -2347,7 +2337,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 					if (m_ctx.cComp != 0)
 					{
 						SStringW result(m_ctx.szComp, m_ctx.cComp);
-						InputResult(result, 0);
+						InputResult(result, GetKeyinMask(FALSE,MKI_TTSINPUT));
 						ClearContext(CPC_ALL);
 					}
 					InputEnd();

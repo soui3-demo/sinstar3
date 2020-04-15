@@ -192,7 +192,7 @@ namespace SOUI
 		{
 		case INST_CODING:
 		{
-			if(m_pInputContext->sbState == ::SBST_NORMAL)
+			if(m_pInputContext->sbState == SBST_NORMALSTATE)
 			{
 				SWindow *pMutexView = NULL;
 				if (m_pInputContext->compMode == IM_SPELL)
@@ -214,7 +214,7 @@ namespace SOUI
 				SWindow *pTip = pMutexView->FindChildByID(R.id.txt_tip);
 				if (pTip)
 				{
-					if (m_pInputContext->sbState == ::SBST_NORMAL && m_pInputContext->bShowTip)
+					if (m_pInputContext->sbState == SBST_NORMALSTATE && m_pInputContext->bShowTip)
 					{
 						pTip->SetVisible(TRUE);
 						pTip->SetWindowText(m_pInputContext->szTip);
@@ -228,7 +228,7 @@ namespace SOUI
 			}else
 			{//update sentence input state
 				SWindow * compSent = FindChildByID(R.id.comp_sent);
-				compSent->SetVisible(m_pInputContext->sbState != ::SBST_NORMAL, TRUE);
+				compSent->SetVisible(m_pInputContext->sbState != SBST_NORMALSTATE, TRUE);
 
 				SSentView *pStvSent = compSent->FindChildByID2<SSentView>(R.id.stv_sent);
 				SASSERT(pStvSent);
@@ -340,7 +340,7 @@ namespace SOUI
 				pCand = pCand->GetWindow(GSW_NEXTSIBLING);
 			}
 		}
-		else if (m_pInputContext->sbState == SBST_NORMAL)
+		else if (m_pInputContext->sbState == SBST_NORMALSTATE)
 		{//正在输入状态下的重码.
 			SWindow * pCandNormal = FindChildByID(R.id.cand_normal);
 			pCandNormal->SetVisible(TRUE, TRUE);

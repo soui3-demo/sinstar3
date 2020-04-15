@@ -64,7 +64,7 @@ BOOL CWorker::Init()
 			_SetSpeed(g_SettingsG->nTtsSpeed);
 			_SetVoice(TRUE,g_SettingsG->iTtsChVoice);
 			_SetVoice(FALSE,g_SettingsG->iTtsEnVoice);
-			SetMsgOwner(SPEI_END_INPUT_STREAM, m_hWnd, UM_TTS_FINISH);
+			SetMsgOwner(SPFEI(SPEI_END_INPUT_STREAM), m_hWnd, UM_TTS_FINISH);
 		} while (0);
 
 		if (!m_bInitOK)
@@ -266,7 +266,6 @@ LRESULT CWorker::OnTTSMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	switch (uMsg)
 	{
 	case UM_TTS_FINISH:
-		STRACEA("UM_TTS_FINISH");
 		break;
 	case UM_FUN_SPEAK:
 		_SpeakText(wParam, lParam);
