@@ -12,7 +12,7 @@
     <colorrect name="nav_config_tab" normal="#f3f6fa" hover="#ebebeb" pushdown="rgb(88,167,239)"/>
   </skin>
   <root size="600,400" skin="_skin.sys.wnd.bkgnd" >
-    <window pos="1,1,-1,-1" font="size:16" layout="vbox">
+    <window pos="1,1,-1,-5" font="size:16" layout="vbox">
       <caption size="-2,38" layout="hbox" gravity="center" padding_left="5">
       	<img skin="skin_menu_icons" iconIndex="0"/>
         <text extend_left="6" size="-1,-1" text="@string/title_config"/>
