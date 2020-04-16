@@ -46,7 +46,8 @@ STDAPI CSinstar3Tsf::OnCompositionTerminated(TfEditCookie ecWrite, ITfCompositio
 	{
 		SLOG_INFO("CSinstar3Tsf::OnCompositionTerminated,TfEditCookie:"<<ecWrite<< " pComposition:"<<pComposition);
 		ITfContext *pCtx = GetImeContext();
-		_TerminateComposition(ecWrite,pCtx,true);
+		//_TerminateComposition(ecWrite,pCtx,true);
+		_EndComposition(pCtx,true);
 		ReleaseImeContext(pCtx);
 	}else
 	{
@@ -56,11 +57,11 @@ STDAPI CSinstar3Tsf::OnCompositionTerminated(TfEditCookie ecWrite, ITfCompositio
 }
 
 
-void CSinstar3Tsf::_EndComposition(ITfContext *pContext)
+void CSinstar3Tsf::_EndComposition(ITfContext *pContext,bool bClearCtx)
 {
 	SLOG_INFO("_EndComposition IsCompositing()="<<_IsCompositing()<<" inKeyProc:"<<_bInKeyProc);
 	if(!_IsCompositing()) return;
-    CEsEndComposition *pEditSession = new CEsEndComposition(this, pContext);
+    CEsEndComposition *pEditSession = new CEsEndComposition(this, pContext,bClearCtx);
     HRESULT hr;
 	pContext->RequestEditSession(_tfClientId, pEditSession, (_bInKeyProc?TF_ES_SYNC:TF_ES_ASYNCDONTCARE) | TF_ES_READWRITE, &hr);
 	pEditSession->Release();

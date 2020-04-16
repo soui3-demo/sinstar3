@@ -92,8 +92,9 @@ STDMETHODIMP CEsStartComposition::DoEditSession(TfEditCookie ec)
 }
 
 //////////////////////////////////////////////////////////////////////////
-CEsEndComposition::CEsEndComposition(CSinstar3Tsf *pTextService, ITfContext *pContext) 
+CEsEndComposition::CEsEndComposition(CSinstar3Tsf *pTextService, ITfContext *pContext,bool bClearCtx) 
 : CEditSessionBase(pTextService, pContext)
+, _bClearCtx(bClearCtx)
 {
 
 }
@@ -121,16 +122,18 @@ STDMETHODIMP CEsEndComposition::DoEditSession(TfEditCookie ec)
 		_pContext->SetSelection(ec,1,&sel);
 	}
 
-	//trigger layout changed
-	SOUI::SComPtr<ITfContextView> pCtxView;
-	HRESULT hr = _pContext->GetActiveView(&pCtxView);
-	if (SUCCEEDED(hr))
+	if(!_bClearCtx)
 	{
-		_pTextService->OnLayoutChange(_pContext, TF_LC_CHANGE, pCtxView);
+		//trigger layout changed
+		SOUI::SComPtr<ITfContextView> pCtxView;
+		HRESULT hr = _pContext->GetActiveView(&pCtxView);
+		if (SUCCEEDED(hr))
+		{
+			_pTextService->OnLayoutChange(_pContext, TF_LC_CHANGE, pCtxView);
+		}
 	}
-
 	pComposition->EndComposition(ec);
-	_pTextService->_TerminateComposition(ec,_pContext,false);
+	_pTextService->_TerminateComposition(ec,_pContext,_bClearCtx);
 	return S_OK;
 }
 
@@ -161,8 +164,11 @@ STDMETHODIMP CEsGetTextExtent::DoEditSession(TfEditCookie ec)
 		_pContextView->GetTextExt(ec, range, &rc, &fClip);
 		POINT pt = { rc.left,rc.top };
 		int nHei = rc.bottom - rc.top;
-		pSinstar3->OnSetCaretPosition( pt, nHei);
-		SLOGFMTI("SetCaret pos:%d,%d, height: %d",pt.x,pt.y, nHei);
+		if(nHei>0)
+		{
+			pSinstar3->OnSetCaretPosition( pt, nHei);
+			SLOGFMTI("SetCaret pos:%d,%d, height: %d",pt.x,pt.y, nHei);
+		}
 	}
 
 	return S_OK;

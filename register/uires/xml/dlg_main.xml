@@ -26,7 +26,7 @@ translucent="1"
           <button.donate name="btn_donate" text="捐助"/>
           <link.web text="访问启程输入法官网" href="soime.cn"/>
         </window>
-        <text size="-2,-1" multiLines="1" text="启程输入法是一款良心制作的免费绿色输入法产品，10以后再度更新，完美支持win10。您的支持是输入法持续更新的最大动力！"/>
+        <text size="-2,-1" multiLines="1" text="启程输入法是一款良心制作的免费绿色输入法产品，10年以后再度更新，完美支持win10。您的支持是输入法持续更新的最大动力！"/>
       </window>
     </window>
   </root>

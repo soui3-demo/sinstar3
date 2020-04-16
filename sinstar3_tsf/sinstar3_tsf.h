@@ -100,7 +100,7 @@ public:
 	void _StartComposition(ITfContext *pContext);
 	void _ChangeComposition(ITfContext *pContext,int nLeft,int nRight,const WCHAR* wszComp,int nLen);
 	void _UpdateResultAndCompositionStringW(ITfContext * pContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen);
-	void _EndComposition(ITfContext *pContext);
+	void _EndComposition(ITfContext *pContext,bool bClearCtx=false);
 	void _TerminateComposition(TfEditCookie ecWrite,ITfContext *pContext,bool bClearCtx);
 	BOOL _IsCompositing() const;
 	BOOL _GetSegRange(TfEditCookie ec,ITfRange **pRange,int nLeft,int nRight);

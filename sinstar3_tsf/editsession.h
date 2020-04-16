@@ -49,9 +49,12 @@ public:
 class CEsEndComposition : public CEditSessionBase
 {
 public:
-	CEsEndComposition(CSinstar3Tsf *pTextService, ITfContext *pContext);
+	CEsEndComposition(CSinstar3Tsf *pTextService, ITfContext *pContext,bool bClearCtx);
 	// ITfEditSession
 	STDMETHODIMP DoEditSession(TfEditCookie ec);
+
+private:
+	bool _bClearCtx;
 };
 
 
