@@ -195,13 +195,16 @@ SectionEnd
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 Function .onInit
-StrCpy $bUpdate "1"
-Goto Run
+;StrCpy $bUpdate "1"
+;Goto Run
    InitPluginsDir
    SetOutPath $PLUGINSDIR
    File "Program\RegisterCore.dll"
    File "Program\isserver3.exe"
-   
+   ;output sinstar3_ime.dll to temp and using it to get new version.
+   SetOutPath "$PLUGINSDIR\Program"
+   File "Program\sinstar3_ime.dll"
+
    StrCpy $bUpdate "0"
    
    System::Call '$PLUGINSDIR\RegisterCore::Sinstar_GetCurrentVer2(*i,*i,*i,*i)i (.r0,.r1,.r2,.r3).r4'
@@ -212,8 +215,13 @@ Goto Run
    MessageBox MB_OK|MB_ICONSTOP  "您已经安装了${PRODUCT_NAME} $0.$1.$2.$3 。$\r$\n$\r$\n，不能从该版本升级，请先卸载现有版本再重新安装。$\r$\n$\r$\n点击 “确定” 退出安装程序。" IDOK Exit
    CanUpdate:
    
+   System::Call '$PLUGINSDIR\RegisterCore::Sinstar_InitW(t) ("$PLUGINSDIR")'
    System::Call '$PLUGINSDIR\RegisterCore::Sinstar_IsRunning()i.R0'
    IntCmp $R0 1 0 no_run
+   ;check for ime update, if not upgrade than don't care whether ime is running
+   System::Call '$PLUGINSDIR\RegisterCore::Sinstar_IsUpdateIME()i.R1'
+   IntCmp $R1 1 0 no_run
+   ;ime need update, can't update directly.
    MessageBox MB_OKCANCEL|MB_ICONQUESTION  "安装程序检测到 ${PRODUCT_NAME} 正在运行。$\r$\n$\r$\n点击 “确定”查看调用程序，$\r$\n$\r$\n点击 “取消”退出安装程序。" IDOK 0 IDCANCEL Exit
    System::Call '$PLUGINSDIR\RegisterCore::Sinstar_ShowCaller(i1)i.R0'
    Goto Exit
@@ -223,9 +231,10 @@ Goto Run
    IntCmp $R1 $1 0 Degrade Upgrade
    IntCmp $R2 $2 0 Degrade Upgrade
    IntCmp $R3 $3 0 Degrade Upgrade
-   MessageBox MB_OK|MB_ICONSTOP  "您已经安装了${PRODUCT_NAME} $0.$1.$2.$3 。$\r$\n$\r$\n点击 “确定” 退出安装程序。" IDOK Exit
+   ;same version
+   MessageBox MB_OK|MB_ICONEXCLAMATION  "您已经安装了${PRODUCT_NAME} $0.$1.$2.$3 。$\r$\n$\r$\n点击 “确定” 退出安装程序。" IDOK Exit
    Upgrade:
-   MessageBox MB_OKCANCEL|MB_ICONSTOP  "确定升级${PRODUCT_NAME} $0.$1.$2.$3 到$R0.$R1.$R2.$R3吗?。$\r$\n$\r$\n点击 “确定” 升级，“取消”退出安装程序。" IDOK 0 IDCANCEL Exit
+   MessageBox MB_OKCANCEL|MB_ICONQUESTION  "确定升级${PRODUCT_NAME} $0.$1.$2.$3 到$R0.$R1.$R2.$R3吗?。$\r$\n$\r$\n点击 “确定” 升级，“取消”退出安装程序。" IDOK 0 IDCANCEL Exit
    StrCpy $bUpdate "1"
    ;get install dir
    StrCpy $1 ${NSIS_MAX_STRLEN}          ; assign memory to $0
