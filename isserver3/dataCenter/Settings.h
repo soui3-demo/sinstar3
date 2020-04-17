@@ -64,7 +64,7 @@ public:
 	BOOL	bAutoMatch;			// 智能选词
 
 	BOOL	bBlendUD;			// 混合检索自定义编码表
-	BOOL	bBlendSpWord;		// 混合输入拼音单字
+	BOOL	bBlendSpell;		// 混合输入拼音
 	BOOL	bAutoInput;			// 重码自动上屏
 
 	BYTE	byTurnPageUpVK;		// 重码上翻键

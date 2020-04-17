@@ -495,7 +495,7 @@ namespace SOUI
 			WCHAR (*szToken)[MAX_TOKEN_NAME_LENGHT] = new WCHAR[nTokens][MAX_TOKEN_NAME_LENGHT];
 			CIsSvrProxy::GetInstance()->TtsGetTokensInfo(bChVoice,szToken,nTokens);
 
-			for (UINT i = 0; i < nTokens; i++)
+			for (int i = 0; i < nTokens; i++)
 			{
 				pCbx->InsertItem(-1, S_CW2T(szToken[i]), 0, 0);
 			}

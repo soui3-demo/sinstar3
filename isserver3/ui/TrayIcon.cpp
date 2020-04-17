@@ -13,7 +13,7 @@ namespace SOUI
 #define TIMERID_ANI_LOGO	100
 #define IDC_LOGOTRAY		1324	//TRAY ID
 
-	const int LogoID[]={IDI_LOGO1,IDI_LOGO2,IDI_LOGO3,IDI_LOGO4};
+	const int LogoID[]={IDI_LOGO1,IDI_LOGO2,IDI_LOGO3,IDI_LOGO4,IDI_LOGO5,IDI_LOGO6};
 	const int ANI_ICON_NUM = ARRAYSIZE(LogoID);
 
 	CTrayIcon::CTrayIcon():m_iIcon(0), m_bVisible(FALSE)

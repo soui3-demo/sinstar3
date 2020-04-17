@@ -93,7 +93,7 @@ void CSettingsGlobal::Save(const SStringT & strDataPath)
 
 	WritePrivateProfileInt(KSession,_T("GBKMODE"),nGbkMode,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("BlendUD"),bBlendUD,strConfigIni);
-	WritePrivateProfileInt(KSession,_T("BlendSpWord"),bBlendSpWord,strConfigIni);
+	WritePrivateProfileInt(KSession,_T("BlendSpWord"),bBlendSpell,strConfigIni);
 
 	WritePrivateProfileInt(KSession,_T("AutoInput"),bAutoInput,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("PYPhraseFirst"),bPYPhraseFirst,strConfigIni);
@@ -185,7 +185,7 @@ void CSettingsGlobal::Load(const SStringT & strDataPath)
 	bAutoMatch=GetPrivateProfileInt(KSession,_T("AutoMatch"),1,strConfigIni);
 	nGbkMode=(GbkMode)GetPrivateProfileInt(KSession,_T("GBKMODE"),1,strConfigIni);
 	bBlendUD=GetPrivateProfileInt(KSession,_T("BlendUD"),1,strConfigIni);
-	bBlendSpWord=GetPrivateProfileInt(KSession,_T("BlendSpWord"),0,strConfigIni);
+	bBlendSpell=GetPrivateProfileInt(KSession,_T("BlendSpWord"),1,strConfigIni);
 	bAutoInput=GetPrivateProfileInt(KSession,_T("AutoInput"),1,strConfigIni);
 
 	bPYPhraseFirst=GetPrivateProfileInt(KSession,_T("PYPhraseFirst"),1,strConfigIni);

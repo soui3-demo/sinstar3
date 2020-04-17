@@ -210,7 +210,7 @@ namespace SOUI
 			}
 		case 5://blend input
 			{
-				smenuPopup.CheckMenuItem(R.id.menu_blend_spell,MF_BYCOMMAND | (g_SettingsG->bBlendSpWord ? MF_CHECKED : 0));
+				smenuPopup.CheckMenuItem(R.id.menu_blend_spell,MF_BYCOMMAND | (g_SettingsG->bBlendSpell ? MF_CHECKED : 0));
 				smenuPopup.CheckMenuItem(R.id.menu_blend_userdef, MF_BYCOMMAND | (g_SettingsG->bBlendUD ? MF_CHECKED : 0));
 
 				break;
@@ -672,12 +672,12 @@ namespace SOUI
 		else if (nRet == R.id.svr_showicon)
 		{//show icon
 			g_SettingsG->bShowTray= !g_SettingsG->bShowTray;
-			CIsSvrProxy::GetInstance()->ShowTray(g_SettingsG->bShowTray);
+			CIsSvrProxy::GetInstance()->ShowTray(!!g_SettingsG->bShowTray);
 			g_SettingsG->SetModified(true);
 		}
 		else if (nRet == R.id.menu_blend_spell)
 		{
-			g_SettingsG->bBlendSpWord = !g_SettingsG->bBlendSpWord;
+			g_SettingsG->bBlendSpell = !g_SettingsG->bBlendSpell;
 			g_SettingsG->SetModified(true);
 		}
 		else if (nRet == R.id.menu_blend_userdef)

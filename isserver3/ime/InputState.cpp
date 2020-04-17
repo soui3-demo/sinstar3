@@ -111,7 +111,7 @@ BOOL KeyIn_Code_IsValidComp(InputContext * lpCntxtPriv,char cInput)
 	BYTE byMask=0;
 	if(lpCntxtPriv->cComp==MAX_COMP-1) return FALSE;
 	if(g_SettingsG->bBlendUD) byMask|=MQC_USERDEF;
-	if(g_SettingsG->bBlendSpWord) byMask|=MQC_SPCAND;
+	if(g_SettingsG->bBlendSpell) byMask|=MQC_SPCAND;
 	lpCntxtPriv->szComp[lpCntxtPriv->cComp]=cInput;
 	return CIsSvrProxy::GetSvrCore()->CheckComp(lpCntxtPriv->szComp,lpCntxtPriv->cComp+1,byMask);
 }
@@ -1774,7 +1774,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 		BYTE byMask=MQC_NORMAL|g_SettingsG->byForecast;
 		if(g_SettingsG->bAutoMatch) byMask|=MQC_MATCH;
 		if(g_SettingsG->bBlendUD) byMask|=MQC_USERDEF;
-		if(g_SettingsG->bBlendSpWord) byMask|=MQC_SPCAND;
+		if(g_SettingsG->bBlendSpell) byMask|=MQC_SPCAND;
 		if(g_SettingsG->bAutoPrompt) byMask|=MQC_AUTOPROMPT;
 		if(g_SettingsG->bOnlySimpleCode) byMask|=MQC_ONLYSC;
 
