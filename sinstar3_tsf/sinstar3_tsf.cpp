@@ -361,7 +361,7 @@ BOOL CSinstar3Tsf::_InitSinstar3(HWND hWnd)
 
 	m_pSinstar3->NotifyScaleInfo(hWnd);
 
-	m_pSinstar3->OnIMESelect(_bHasFocus);
+	m_pSinstar3->OnIMESelect(TRUE);
 	_SyncFocus(_bHasFocus);
 	return TRUE;
 }
