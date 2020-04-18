@@ -18,7 +18,6 @@ namespace SOUI
 		CInputWnd(SEventSet *pEvtSets, InputContext * pCtx,IInputWndListener *pListener);
 		~CInputWnd(void);
 
-		void SetFollowCaret(BOOL bFollowCaret);
 		void SetStatusWnd(CStatusWnd * pWnd);
 		void SetAnchorPosition(CPoint ptAnchor);
 
@@ -87,7 +86,6 @@ namespace SOUI
 		CPoint			m_ptClick;
 		BOOL			m_bDraging;
 
-		BOOL			m_bFollowCaret;
 		CPoint			m_ptAnchor;
 	};
 

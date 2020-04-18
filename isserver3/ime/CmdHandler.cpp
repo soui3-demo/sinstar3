@@ -224,7 +224,6 @@ void CCmdHandler::OnFollowCaret(LPARAM lp)
 {
 	g_SettingsUI->bMouseFollow = !g_SettingsUI->bMouseFollow;
 	g_SettingsUI->SetModified(true);
-	m_pSinstar3->m_pInputWnd->SetFollowCaret(g_SettingsUI->bMouseFollow);
 }
 
 void CCmdHandler::OnUpdateMode(LPARAM lp)

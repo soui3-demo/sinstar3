@@ -164,11 +164,8 @@ STDMETHODIMP CEsGetTextExtent::DoEditSession(TfEditCookie ec)
 		_pContextView->GetTextExt(ec, range, &rc, &fClip);
 		POINT pt = { rc.left,rc.top };
 		int nHei = rc.bottom - rc.top;
-		if(nHei>0)
-		{
-			pSinstar3->OnSetCaretPosition( pt, nHei);
-			SLOGFMTI("SetCaret pos:%d,%d, height: %d",pt.x,pt.y, nHei);
-		}
+		pSinstar3->OnSetCaretPosition( pt, nHei);
+		SLOGFMTI("SetCaret pos:%d,%d, height: %d",pt.x,pt.y, nHei);
 	}
 
 	return S_OK;

@@ -58,7 +58,6 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HWND hSvr)
 	m_inputState.SetInputListener(this);
 	
 	m_pInputWnd->SetAnchorPosition(g_SettingsG->ptInput);
-	m_pInputWnd->SetFollowCaret(g_SettingsUI->bMouseFollow);
 	m_pInputWnd->SetStatusWnd(m_pStatusWnd);
 
 	SLOG_INFO("status:"<<m_pStatusWnd->m_hWnd<<", input:"<<m_pInputWnd->m_hWnd);

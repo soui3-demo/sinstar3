@@ -18,23 +18,12 @@ namespace SOUI
 		,m_cPageSize(0)
 		,m_bShow(FALSE)
 		, m_bDraging(FALSE)
-		, m_bFollowCaret(TRUE)
 		, m_pStateWnd(NULL)
 	{
 	}
 
 	CInputWnd::~CInputWnd(void)
 	{
-	}
-
-	void CInputWnd::SetFollowCaret(BOOL bFollowCaret)
-	{
-		m_bFollowCaret = bFollowCaret;
-		if (GetNative()->IsWindowVisible() && !bFollowCaret)
-		{
-			UpdateAnchorPosition();
-			SetWindowPos(HWND_TOPMOST, m_ptAnchor.x, m_ptAnchor.y, 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
-		}
 	}
 
 	void CInputWnd::SetStatusWnd(CStatusWnd *pWnd)
@@ -50,18 +39,21 @@ namespace SOUI
 
 	void CInputWnd::MoveTo(CPoint pt,int nCaretHeight)
 	{
-		SLOG_INFO("pt:" << pt.x <<","<<pt.y<<" caretHeight:"<<nCaretHeight<<" followCaret:"<< m_bFollowCaret);
+		SLOG_INFO("pt:" << pt.x <<","<<pt.y<<" caretHeight:"<<nCaretHeight<<" followCaret:"<< g_SettingsUI->bMouseFollow);
 
-		m_ptCaret = pt;
-		m_nCaretHeight = nCaretHeight;
+		if(nCaretHeight>0)
+		{
+			m_ptCaret = pt;
+			m_nCaretHeight = nCaretHeight;
+		}
 
-		if (!m_bFollowCaret)
+		if (!g_SettingsUI->bMouseFollow)
 		{
 			return;
 		}
 
 		m_bLocated = TRUE;		
-		CPoint pos = pt - CDataCenter::getSingleton().GetData().m_ptSkinOffset;
+		CPoint pos = m_ptCaret - CDataCenter::getSingleton().GetData().m_ptSkinOffset;
 		CRect rcWnd = GetClientRect();
 		
 		CRect rcWorkArea;
@@ -104,9 +96,9 @@ namespace SOUI
 	void CInputWnd::Show(BOOL bShow, BOOL bClearLocateInfo)
 	{
 		SLOG_INFO("bShow:"<<bShow<<" located:"<<m_bLocated);
-		if(m_bLocated || !m_bFollowCaret)
+		if(m_bLocated || !g_SettingsUI->bMouseFollow)
 		{
-			if (!m_bFollowCaret && bShow)
+			if (!g_SettingsUI->bMouseFollow && bShow)
 			{
 				UpdateAnchorPosition();
 			}
@@ -619,7 +611,7 @@ namespace SOUI
 
 	void CInputWnd::OnLButtonDown(UINT nFlags, CPoint point)
 	{
-		if (m_bFollowCaret)
+		if (g_SettingsUI->bMouseFollow)
 		{
 			SetMsgHandled(FALSE);
 			return;
@@ -632,7 +624,7 @@ namespace SOUI
 
 	void CInputWnd::OnLButtonUp(UINT nFlags, CPoint point)
 	{
-		if (m_bFollowCaret)
+		if (g_SettingsUI->bMouseFollow)
 		{
 			SetMsgHandled(FALSE);
 			return;
@@ -650,7 +642,7 @@ namespace SOUI
 
 	void CInputWnd::OnMouseMove(UINT nFlags, CPoint point)
 	{
-		if (m_bFollowCaret)
+		if (g_SettingsUI->bMouseFollow)
 		{
 			SetMsgHandled(FALSE);
 			return;
