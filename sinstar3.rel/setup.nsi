@@ -291,6 +291,10 @@ Function .onInit
    System::Call '$PLUGINSDIR\RegisterCore::Sinstar_QuitServer()'
 FunctionEnd
 
+Function .onInstSuccess
+   System::Call '$PLUGINSDIR\RegisterCore::Sinstar_SetFileACL(t) ("$INSTDIR")'
+FunctionEnd
+
 Var /Global bForceUninstall
 
 Function un.onUninstSuccess

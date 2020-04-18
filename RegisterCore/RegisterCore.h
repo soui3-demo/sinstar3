@@ -33,6 +33,7 @@ EXTERN_C{
 	BOOL REGISTERCORE_API RC_API  Sinstar_PEVersion2W(LPCWSTR pszFileName, int *v1,int *v2,int *v3,int *v4);
 	BOOL REGISTERCORE_API RC_API  Sinstar_PEVersion2A(LPCSTR pszFileName, int *v1,int *v2,int *v3,int *v4);
 	BOOL REGISTERCORE_API RC_API  Sinstar_CheckFiles();
+	BOOL REGISTERCORE_API RC_API  Sinstar_SetFileACL(LPCTSTR pszPath);
 };
 #ifdef _UNICODE
 #define Sinstar_PEVersion Sinstar_PEVersionW
