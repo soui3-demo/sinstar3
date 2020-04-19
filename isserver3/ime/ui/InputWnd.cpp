@@ -37,25 +37,10 @@ namespace SOUI
 	}
 
 
-	void CInputWnd::MoveTo(CPoint pt,int nCaretHeight)
+	CPoint CInputWnd::UpdatePosition(CPoint pt,int wid,int hei)
 	{
-		SLOG_INFO("pt:" << pt.x <<","<<pt.y<<" caretHeight:"<<nCaretHeight<<" followCaret:"<< g_SettingsUI->bMouseFollow);
+		CPoint pos = pt - CDataCenter::getSingleton().GetData().m_ptSkinOffset;
 
-		if(nCaretHeight>0)
-		{
-			m_ptCaret = pt;
-			m_nCaretHeight = nCaretHeight;
-		}
-
-		if (!g_SettingsUI->bMouseFollow)
-		{
-			return;
-		}
-
-		m_bLocated = TRUE;		
-		CPoint pos = m_ptCaret - CDataCenter::getSingleton().GetData().m_ptSkinOffset;
-		CRect rcWnd = GetClientRect();
-		
 		CRect rcWorkArea;
 		if(::IsWindow(m_hOwner))
 		{
@@ -73,19 +58,41 @@ namespace SOUI
 		{
 			pos.x = rcWorkArea.left;
 		}
-		else if (pos.x + rcWnd.Width() > rcWorkArea.right)
+		else if (pos.x + wid > rcWorkArea.right)
 		{
-			pos.x = rcWorkArea.right - rcWnd.Width();
+			pos.x = rcWorkArea.right - wid;
 		}
-		if (pos.y + m_nCaretHeight + SIZE_BELOW + rcWnd.Height() > rcWorkArea.bottom)
+		if (pos.y + m_nCaretHeight + SIZE_BELOW + hei > rcWorkArea.bottom)
 		{
-			pos.y = pt.y - rcWnd.Height() - SIZE_BELOW;
+			pos.y = pt.y - hei - SIZE_BELOW;
 		}
 		else
 		{
 			pos.y = pos.y + m_nCaretHeight + SIZE_BELOW;
 		}
-		SetWindowPos(HWND_TOPMOST, pos.x, pos.y , 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
+		return pos;
+	}
+
+	void CInputWnd::MoveTo(CPoint pt,int nCaretHeight)
+	{
+		SLOG_INFO("pt:" << pt.x <<","<<pt.y<<" caretHeight:"<<nCaretHeight<<" followCaret:"<< g_SettingsUI->bMouseFollow);
+
+		if(nCaretHeight>0)
+		{
+			m_ptCaret = pt;
+			m_nCaretHeight = nCaretHeight;
+		}
+
+		if (!g_SettingsUI->bMouseFollow)
+		{
+			return;
+		}
+
+		m_bLocated = TRUE;		
+		
+		CRect rcWnd = GetClientRect();
+		pt = UpdatePosition(m_ptCaret,rcWnd.Width(),rcWnd.Height());
+		SetWindowPos(HWND_TOPMOST, pt.x, pt.y , 0, 0, SWP_NOSIZE | SWP_NOACTIVATE);
 
 		if(m_bShow && !IsWindowVisible())
 		{
@@ -666,6 +673,19 @@ namespace SOUI
 		if(!strSound.IsEmpty())
 		{
 			CWorker::getSingletonPtr()->PlaySoundFromResource(strSound);
+		}
+	}
+
+	void CInputWnd::OnWindowPosChanging(LPWINDOWPOS lpWndPos)
+	{
+		__super::OnWindowPosChanging(lpWndPos);
+		if(!(lpWndPos->flags&SWP_NOSIZE) && g_SettingsUI->bMouseFollow)
+		{
+			CPoint pt = UpdatePosition(m_ptCaret,lpWndPos->cx,lpWndPos->cy);
+			//auto change pos
+			lpWndPos->x=pt.x;
+			lpWndPos->y=pt.y;
+			lpWndPos->flags&=~SWP_NOMOVE;
 		}
 	}
 

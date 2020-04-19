@@ -35,6 +35,7 @@ namespace SOUI
 		virtual int OnRecreateUI(LPCREATESTRUCT lpCreateStruct);
 
 		void UpdateAnchorPosition();
+		CPoint UpdatePosition(CPoint pt,int wid,int hei);
 		int GetCandMax(SWindow *pWnd, LPCWSTR pszCandClass) const;
 
 		int GetCandMax2(int nCands);
@@ -62,11 +63,13 @@ namespace SOUI
 		void OnLButtonDown(UINT nFlags, CPoint point);
 		void OnLButtonUp(UINT nFlags, CPoint point);
 		void OnMouseMove(UINT nFlags, CPoint point);
+		void OnWindowPosChanging(LPWINDOWPOS lpWndPos);
 
 		BEGIN_MSG_MAP_EX(CInputWnd)
 			MSG_WM_LBUTTONDOWN(OnLButtonDown)
 			MSG_WM_LBUTTONUP(OnLButtonUp)
 			MSG_WM_MOUSEMOVE(OnMouseMove)
+			MSG_WM_WINDOWPOSCHANGING(OnWindowPosChanging)
 			MSG_WM_TIMER(OnTimer)
 			MSG_WM_CREATE(OnCreate)
 			CHAIN_MSG_MAP(__super)
