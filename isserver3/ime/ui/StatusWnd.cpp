@@ -173,11 +173,16 @@ namespace SOUI
 				smenuPopup.CheckMenuItem(R.id.switch_hide_statusbar, MF_BYCOMMAND | g_SettingsUI->bHideStatus ? MF_CHECKED : 0);
 				smenuPopup.CheckMenuItem(R.id.switch_input_big5, MF_BYCOMMAND | g_SettingsUI->bInputBig5 ? MF_CHECKED : 0);
 				smenuPopup.CheckMenuItem(R.id.switch_read_input, MF_BYCOMMAND | g_SettingsUI->bSound ? MF_CHECKED : 0);
-				smenuPopup.CheckMenuItem(R.id.switch_record_input, MF_BYCOMMAND | g_SettingsUI->bRecord ? MF_CHECKED : 0);
 				smenuPopup.CheckMenuItem(R.id.switch_word_input, MF_BYCOMMAND | g_SettingsUI->bEnglish ? MF_CHECKED : 0);
 				smenuPopup.CheckMenuItem(R.id.switch_filter_gbk, MF_BYCOMMAND | g_SettingsUI->bFilterGbk ? MF_CHECKED : 0);
 				smenuPopup.CheckMenuItem(R.id.switch_char_mode,MF_BYCOMMAND | g_SettingsUI->bCharMode ? MF_CHECKED : 0);
 				smenuPopup.CheckMenuItem(R.id.svr_showicon, MF_BYCOMMAND | g_SettingsG->bShowTray? MF_CHECKED : 0);
+				break;
+			}
+		case 10://sent menu
+			{
+				smenuPopup.CheckMenuItem(R.id.sent_record, MF_BYCOMMAND | g_SettingsUI->bRecord ? MF_CHECKED : 0);
+				smenuPopup.CheckMenuItem(R.id.sent_associate, MF_BYCOMMAND | g_SettingsUI->bSentAssocite ? MF_CHECKED : 0);
 				break;
 			}
 		case 2:
@@ -550,7 +555,7 @@ namespace SOUI
 		case R.id.btn_record:
 			e2->bUpdated = TRUE;
 			strAccel = SAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_Record]);
-			e2->strToolTip = SStringT().Format(_T("记录输入状态:%s"), g_SettingsUI->bRecord ? _T("启用") : _T("禁用"));
+			e2->strToolTip = SStringT().Format(_T("记忆历史记录:%s"), g_SettingsUI->bRecord ? _T("启用") : _T("禁用"));
 			break;
 		case R.id.btn_sound:
 			e2->bUpdated = TRUE;
@@ -746,11 +751,22 @@ namespace SOUI
 			g_SettingsUI->SetModified(true);
 			m_pCmdListener->OnCommand(CMD_SYNCUI, BTN_SOUND);
 		}
-		else if (nRet == R.id.switch_record_input)
+		else if (nRet == R.id.sent_record)
 		{
 			g_SettingsUI->bRecord = !g_SettingsUI->bRecord;
 			g_SettingsUI->SetModified(true);
 			m_pCmdListener->OnCommand(CMD_SYNCUI, BTN_RECORD);
+		}else if(nRet == R.id.sent_associate)
+		{
+			g_SettingsUI->bSentAssocite = !g_SettingsUI->bSentAssocite;
+			g_SettingsUI->SetModified(true);
+		}
+		else if(nRet == R.id.sent_record_clear_all)
+		{
+			CIsSvrProxy::GetSvrCore()->ClearRecord(false);
+		}else if(nRet == R.id.sent_record_clear_today)
+		{
+			CIsSvrProxy::GetSvrCore()->ClearRecord(true);
 		}
 		else if (nRet == R.id.switch_word_input)
 		{

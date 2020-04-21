@@ -13,10 +13,16 @@
     <item text="光标跟随" name="switch_follow_caret" id="102"/>
     <item text="输出繁体" name="switch_input_big5" id="103"/>
     <item text="语音校对" name="switch_read_input" id="104"/>
-    <item text="智能记忆" name="switch_record_input" id="105"/>
     <item text="单词补全" name="switch_word_input" id="106"/>
     <item text="GBK过滤" name="switch_filter_gbk" id="107"/>
     <item text="中文标点" name="switch_char_mode" id="108"/>
+  </item>
+  <item text="智能语句" name="menu_sent" contextHelpId="10">
+    <item text="记忆历史记录" name="sent_record" id="1001"/>
+    <item text="语句联想" name="sent_associate" id="1002"/>
+    <sep/>
+    <item text="清空历史记录" name="sent_record_clear_all" id="1003"/>
+    <item text="清空今日记录" name="sent_record_clear_today" id="1004"/>
   </item>
   <sep/>
   <item text="皮      肤" name="menu_skin" id="2000" contextHelpId="2" icon="2">

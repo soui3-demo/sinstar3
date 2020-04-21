@@ -266,6 +266,7 @@ void CSettingsUI::Load(const SStringT & strDataPath)
 	bFullStatus=GetPrivateProfileInt(KSession,_T("FullStatus"),TRUE,strConfigIni);
 	bSound=GetPrivateProfileInt(KSession,_T("Sound"),TRUE,strConfigIni);
 	bRecord=GetPrivateProfileInt(KSession,_T("Record"),TRUE,strConfigIni);
+	bSentAssocite = GetPrivateProfileInt(KSession,_T("SentAssociate"),TRUE,strConfigIni);
 	bEnglish=GetPrivateProfileInt(KSession,_T("English"),FALSE,strConfigIni);
 	bMouseFollow=GetPrivateProfileInt(KSession,_T("MouseFollow"),TRUE,strConfigIni);
 	bHideStatus=GetPrivateProfileInt(KSession,_T("HideStatus"),0,strConfigIni);
@@ -283,6 +284,7 @@ void CSettingsUI::Save(const SStringT & strDataPath)
 	WritePrivateProfileInt(KSession,_T("FullStatus"),bFullStatus,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("Sound"),bSound,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("Record"),bRecord,strConfigIni);
+	WritePrivateProfileInt(KSession,_T("SentAssociate"),bSentAssocite,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("English"),bEnglish,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("MouseFollow"),bMouseFollow,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("HideStatus"),bHideStatus,strConfigIni);

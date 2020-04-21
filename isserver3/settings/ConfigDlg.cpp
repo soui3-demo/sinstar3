@@ -407,6 +407,7 @@ namespace SOUI
 		FindAndSetCheck(R.id.chk_auto_dot, g_SettingsG->bAutoDot);
 		FindAndSetCheck(R.id.chk_auto_select_cand, g_SettingsG->bAutoMatch);
 		
+		FindAndSetCheck(R.id.chk_sent_associate,g_SettingsUI->bSentAssocite);
 		int nSentMax = CIsSvrProxy::GetSvrCore()->GetSentRecordMax();
 		FindAndSetText(R.id.edit_sent_record_max, SStringT().Format(_T("%d"), nSentMax));
 		int nPredictLength = CIsSvrProxy::GetSvrCore()->GetMaxPhrasePreictLength();
@@ -818,6 +819,10 @@ SWindow *pCtrl = FindChildByID(id);\
 	void CConfigDlg::OnClickAutoSelectCand()
 	{
 		g_SettingsG->bAutoMatch = FindChildByID(R.id.chk_auto_select_cand)->IsChecked();
+	}
+	void CConfigDlg::OnClickSentAssociate()
+	{
+		g_SettingsUI->bSentAssocite = FindChildByID(R.id.chk_sent_associate)->IsChecked();
 	}
 
 	void CConfigDlg::OnDisableNumSelCand()

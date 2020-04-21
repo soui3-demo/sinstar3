@@ -333,12 +333,16 @@ void CInputState::GetShapeComp(const WCHAR *pInput,char cLen)
 BYTE CInputState::GetKeyinMask(BOOL bAssociate,BYTE byMask)
 {
 	BYTE byRet=0;
-	if(g_SettingsG->bAutoMatch) byRet|=(MKI_AUTOPICK&byMask);
-	if(g_SettingsUI->bRecord) byRet|=(MKI_RECORD&byMask);
-	if(g_SettingsUI->bSound) byRet|=(MKI_TTSINPUT&byMask);
+	if(g_SettingsG->bAutoMatch) 
+		byRet|=(MKI_AUTOPICK&byMask);
+	if(g_SettingsUI->bRecord) 
+		byRet|=(MKI_RECORD&byMask);
+	if(g_SettingsUI->bSound) 
+		byRet|=(MKI_TTSINPUT&byMask);
 	if(bAssociate)
 	{
-		if(g_SettingsUI->bRecord) byRet|=MKI_ASTSENT;
+		if(g_SettingsUI->bSentAssocite) 
+			byRet|=MKI_ASTSENT;
 		switch(g_SettingsG->byAstMode)
 		{
 		case AST_CAND:byRet |= MKI_ASTCAND; break;
@@ -1955,17 +1959,11 @@ void  CInputState::KeyIn_Sent_Input(InputContext* lpCntxtPriv)
 {
 	if(lpCntxtPriv->sSentLen && lpCntxtPriv->sSentCaret)
 	{
-		BYTE byMask=0;
-		if(g_SettingsUI->bRecord)
-			byMask|=MKI_RECORD;
-		if(g_SettingsUI->bSound)
-			byMask|=MKI_TTSINPUT;
-
 		SStringW strResult(lpCntxtPriv->szSentText,lpCntxtPriv->sSentCaret);
 
 		ClearContext(CPC_ALL);
 		InputStart();
-		InputResult(strResult,byMask);
+		InputResult(strResult,GetKeyinMask(FALSE,MKI_RECORD|MKI_TTSINPUT));
 		InputEnd();
 		InputHide(FALSE);
 	}
@@ -2483,7 +2481,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 						if(uKey==VK_BACK) 
 							CIsSvrProxy::GetSvrCore()->ReqKeyIn(m_pListener->GetHwnd(),L"\b",1,0);
 						else
-							CIsSvrProxy::GetSvrCore()->ReqKeyIn(m_pListener->GetHwnd(),L".",1,g_SettingsUI->bRecord?MKI_RECORD:0);
+							CIsSvrProxy::GetSvrCore()->ReqKeyIn(m_pListener->GetHwnd(),L".",1,GetKeyinMask(FALSE,MKI_RECORD));
 					}
 				}
 				if(!bRet && !bCoding)

@@ -77,7 +77,7 @@ struct IServerCore {
 	virtual int BlurAdd(LPCSTR pszSpell1,LPCSTR pszSpell2)=0;
 	virtual int BlurDel(LPCSTR pszSpell1,LPCSTR pszSpell2)=0;
 	virtual bool CheckComp(LPCWSTR pszComp,char cCompLen,BYTE byMask)=0;
-
+	virtual void ClearRecord(bool bToday) = 0;
 	virtual bool UpdateDataFile(LPCTSTR pszPath,int fType)=0;
 	virtual bool ExportDataFile(int fType,TCHAR pszTxtFileName[MAX_PATH])=0;
 

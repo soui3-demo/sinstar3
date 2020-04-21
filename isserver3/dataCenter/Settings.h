@@ -125,6 +125,7 @@ public:
 	BOOL	bCharMode;			// 标点模式
 	BOOL	bSound;				// 语音较对
 	BOOL	bRecord;			// 记录输入语句
+	BOOL	bSentAssocite;		// 语句联想开关
 	BOOL	bInputBig5;			// 繁体输出标志
 	BOOL    bFilterGbk;			// filter gbk
 

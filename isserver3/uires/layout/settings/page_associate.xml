@@ -12,17 +12,22 @@
       <radio name="ass_mode_english_prompt" id="402" text="单词提示" tip="提示外文词库中与输入的文字最匹配的结果"/>
       <radio name="ass_mode_phrase_prompt" id="403" text="词组提示" tip="如果您连续输入的内容在词库中，则提示是一个词"/>
     </window>
-    <text>词频调整:</text>
-    <window layout="hbox">
-      <radio name="rate_adjust_disable" id="500" text="禁用"/>
-      <radio name="rate_adjust_auto" id="501" text="智能" tip="智能调频，多次选择同一个词，这个词才会调到首位，适合启程老用户"/>
-      <radio name="rate_adjust_fast" id="502" text="快速" tip="选择一次该候选词就调到首位，适合启程新用户"/>
+    <check name="chk_sent_associate" text="语句联想"/>
+    <window layout="hbox" gravity="center">
+      <text text="语句记忆库容量(句)："/>
+      <edit size="80dp,25dp" name="edit_sent_record_max" notifyChange="1" number="1"/>
     </window>
     <text>智能造词:</text>
     <window layout="hbox">
       <radio name="forcast_disable" id="600" text="禁用"/>
       <radio name="forcast_always" id="601" text="总是启用"/>
       <radio name="forcast_no_cand" id="602" text="无重码时启用"/>
+    </window>
+    <text>词频调整:</text>
+    <window layout="hbox">
+      <radio name="rate_adjust_disable" id="500" text="禁用"/>
+      <radio name="rate_adjust_auto" id="501" text="智能" tip="智能调频，多次选择同一个词，这个词才会调到首位，适合启程老用户"/>
+      <radio name="rate_adjust_fast" id="502" text="快速" tip="选择一次该候选词就调到首位，适合启程新用户"/>
     </window>
     <window layout="hbox" gravity="center">
       <text text="智能造词最大长度："/>
@@ -51,10 +56,6 @@
         <edit size="40dp,25dp" name="edit_phrase_ast_deepness_max" margin-x="0" margin-y="0" notifyChange="1" readonly="1"/>
         <spinButton size="20dp,-2" max="5" min="-1" value="4" buddy="edit_phrase_ast_deepness_max" name="spin_phrase_ast_deepness_max"/>
       </window>
-    </window>
-    <window layout="hbox" gravity="center">
-      <text text="语句记录库容量："/>
-      <edit size="80dp,25dp" name="edit_sent_record_max" notifyChange="1" number="1"/>
     </window>
   </window>
 </window>
