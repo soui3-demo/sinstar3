@@ -55,7 +55,7 @@ FunctionEnd
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "Sinstar${PRODUCT_VERSION}.exe"
+OutFile "sinstar3_setup.exe"
 InstallDir "$PROGRAMFILES\sinstar3"
 ShowInstDetails show
 ShowUnInstDetails show
