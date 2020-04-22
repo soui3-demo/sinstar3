@@ -120,15 +120,9 @@ private:
 	HWND			m_hSvr;
 	BOOL			m_bTyping;
 	BOOL			m_hasFocus;
+	HWND			m_hOwner;
 	BOOL			m_bInputEnable;
 	BOOL			m_bOpen;
-
-	struct DelayFocusInfo
-	{
-		DelayFocusInfo(BOOL _bFocus,HWND _hWnd):bFocus(_bFocus),hWnd(_hWnd){}
-		BOOL bFocus;
-		HWND hWnd;
-	} * m_pDalyFocusInfo;
 };
 
 

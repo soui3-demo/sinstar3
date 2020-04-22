@@ -40,9 +40,9 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HWND hSvr)
 , m_hSvr(hSvr)
 , m_bTyping(FALSE)
 , m_hasFocus(FALSE)
+, m_hOwner(NULL)
 , m_bInputEnable(TRUE)
 , m_bOpen(FALSE)
-, m_pDalyFocusInfo(NULL)
 {
 	addEvent(EVENTID(EventSvrNotify));
 	addEvent(EVENTID(EventSetSkin));
@@ -156,16 +156,10 @@ void CSinstar3Impl::OnCompositionTerminated(bool bClearCtx)
 
 void CSinstar3Impl::OnSetFocus(BOOL bFocus,DWORD dwActiveWnd)
 {
-	SLOG_INFO("GetThreadID="<<GetCurrentThreadId()<<" focus="<<bFocus);
-	if(!m_pDalyFocusInfo)
-	{
-		m_pDalyFocusInfo = new DelayFocusInfo(bFocus,(HWND)dwActiveWnd);
-		SetTimer(TIMER_DELAYFOCUS,50,NULL);
-	}else
-	{
-		m_pDalyFocusInfo->bFocus = bFocus;
-		m_pDalyFocusInfo->hWnd = (HWND)dwActiveWnd;
-	}
+	SLOG_INFO("focus="<<bFocus);
+	m_hasFocus = bFocus;
+	m_hOwner = (HWND)dwActiveWnd;
+	SetTimer(TIMER_DELAYFOCUS,50,NULL);
 }
 
 int  CSinstar3Impl::GetCompositionSegments()
@@ -598,12 +592,10 @@ void CSinstar3Impl::OnTimer(UINT_PTR id)
 		KillTimer(id);
 	}else if(id == TIMER_DELAYFOCUS)
 	{
-		m_hasFocus = m_pDalyFocusInfo->bFocus;
 		if (m_hasFocus)
 		{
-			HWND hOwner = m_pDalyFocusInfo->hWnd;
-			m_pInputWnd->SetOwner(hOwner);
-			m_pStatusWnd->SetOwner(hOwner);
+			m_pInputWnd->SetOwner(m_hOwner);
+			m_pStatusWnd->SetOwner(m_hOwner);
 			m_pStatusWnd->Show(IsStatusVisible());
 			if (m_bTyping || m_inputState.IsTempSpell()) 
 				m_pInputWnd->Show(IsInputVisible());
@@ -621,8 +613,6 @@ void CSinstar3Impl::OnTimer(UINT_PTR id)
 				m_pTipWnd = NULL;
 			}
 		}
-		delete m_pDalyFocusInfo;
-		m_pDalyFocusInfo = NULL;
 		KillTimer(id);
 	}
 	else
