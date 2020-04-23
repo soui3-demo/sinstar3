@@ -1,2 +1,3 @@
 searchui.exe
 igfxhk.exe
+winlogon.exe

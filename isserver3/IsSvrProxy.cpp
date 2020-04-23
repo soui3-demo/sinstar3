@@ -452,13 +452,13 @@ void CIsSvrProxy::CheckUpdate(bool bManual)
 	{
 		if (g_SettingsG->nUpdateInterval == 0) 
 			return;
-		int nDay, nMonth, nYear;
-		//GetPrivateProfileStringA("update", "date", "0-0-0", szDate, 100, szConfig);
+		int nDay=0, nMonth=0, nYear=0;
 		_stscanf(g_SettingsG->szUpdateDate, _T("%d-%d-%d"), &nMonth, &nDay, &nYear);
 		int nDays = 360 * (timeToday.GetYear() - nYear);
 		nDays += 30 * (timeToday.GetMonth() - nMonth);
 		nDays += timeToday.GetDay() - nDay;
-		if (nDays<m_nUpdateInterval) return;
+		if (nDays<g_SettingsG->nUpdateInterval) 
+			return;
 	}
 
 	//update date

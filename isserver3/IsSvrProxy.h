@@ -136,10 +136,6 @@ protected:
 		REFLECT_NOTIFICATIONS_EX()
 	END_MSG_MAP()
 
-
-private:
-	int			m_nUpdateInterval;
-	BOOL		m_bShowTray;
 private:
 	static CIsSvrProxy * _this;
 	IServerCore * m_pCore;

@@ -135,6 +135,7 @@ void CSettingsGlobal::Save(const SStringT & strDataPath)
 	WritePrivateProfileInt(KSession,_T("showTray"),bShowTray,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("autoQuit"),bAutoQuit,strConfigIni);
 	WritePrivateProfileInt(_T("update"), _T("interval"),nUpdateInterval,strConfigIni);
+	WritePrivateProfileString(_T("update"), _T("date"), szUpdateDate, strConfigIni);
 
 	WritePrivateProfileInt(KTtsEntry, KTtsSpeed, nTtsSpeed,strConfigIni);
 	WritePrivateProfileInt(KTtsEntry, KTtsChVoice, iTtsChVoice, strConfigIni);
@@ -246,12 +247,14 @@ void CSettingsGlobal::Load(const SStringT & strDataPath)
 	bShowTray = GetPrivateProfileInt(KSession,_T("showTray"),1,strConfigIni);
 	bAutoQuit = GetPrivateProfileInt(KSession,_T("autoQuit"),0,strConfigIni);
 	nUpdateInterval = GetPrivateProfileInt(_T("update"), _T("interval"), 30, strConfigIni);
+	GetPrivateProfileString(_T("update"), _T("date"), _T("0-0-0"), szUpdateDate, 100, strConfigIni);
 	GetPrivateProfileString(_T("update"), _T("url"), _T("https://soime.cn/sinstar3_update.xml"), szUpdateUrl, MAX_PATH, strConfigIni);
 
 	iTtsChVoice = GetPrivateProfileInt(KTtsEntry, KTtsChVoice, 0, strConfigIni);
 	iTtsEnVoice = GetPrivateProfileInt(KTtsEntry, KTtsEnVoice, 0, strConfigIni);
 	nTtsSpeed = GetPrivateProfileInt(KTtsEntry, KTtsSpeed, 0, strConfigIni);
 	nTtsSpeed = smax(smin(nTtsSpeed,10),-10);
+
 
 	SetModified(false);
 }
