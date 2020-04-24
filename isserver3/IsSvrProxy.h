@@ -14,7 +14,7 @@ typedef void(*funIscore_Destroy)(IServerCore* pCore);
 #define UM_BUILD_INDEX_PROG2	(WM_USER+2002)
 #define UM_IMPORT_USER_LIB		(WM_USER+2003)
 #define UM_CHANGE_SKIN			(WM_USER+2010)
-
+#define UM_DELAY_COPYDATA		(WM_USER+2011)
 enum{
 	CD_CMD_NULL = 0,
 	CD_CMD_INSTALL_CIT=100,
@@ -98,6 +98,7 @@ protected:
 	LRESULT OnTaskbarCreated(UINT uMsg, WPARAM wp, LPARAM lp);
 	LRESULT OnBuildIndexProg(UINT uMsg, WPARAM wp, LPARAM lp);
 	LRESULT OnCopyData(HWND hWnd,PCOPYDATASTRUCT lpCopyData);
+	LRESULT OnDelayCopyData(UINT uMsg,WPARAM wp,LPARAM lp);
 	void OnTimer(UINT_PTR uID);
 
 	void OnMenuExit(UINT uNotifyCode, int nID, HWND wndCtl);
@@ -122,6 +123,7 @@ protected:
 		MSG_WM_DESTROY(OnDestroy)
 		MSG_WM_TIMER(OnTimer)
 		MSG_WM_COPYDATA(OnCopyData)
+		MESSAGE_HANDLER_EX(UM_DELAY_COPYDATA,OnDelayCopyData)
 		MESSAGE_HANDLER_EX(m_uMsgTaskbarCreated,OnTaskbarCreated)
 		MESSAGE_RANGE_HANDLER_EX(UM_BUILD_INDEX_PROG0, UM_IMPORT_USER_LIB,OnBuildIndexProg)
 		COMMAND_ID_HANDLER_EX(R.id.menu_force_exit, OnMenuExit)

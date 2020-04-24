@@ -387,8 +387,7 @@ void CIsSvrProxy::OnTimer(UINT_PTR uID)
 		if (m_pCore->IsDataReady())
 		{
 			KillTimer(TIMERID_PENDING_CMD);
-			OnCopyData(NULL, m_pPendingCmd);
-			free(m_pPendingCmd);
+			OnDelayCopyData(0, 0,(LPARAM)m_pPendingCmd);
 			m_pPendingCmd = NULL;
 		}
 	}else if(uID == TIMERID_AUTO_SAVE_SETTING)
@@ -586,28 +585,21 @@ void CIsSvrProxy::OnUpdateNow()
 }
 
 extern const TCHAR * KSinstar3WndName;
-LRESULT CIsSvrProxy::OnCopyData(HWND hWnd,PCOPYDATASTRUCT lpCopyData)
+
+
+LRESULT CIsSvrProxy::OnDelayCopyData(UINT uMsg,WPARAM wp,LPARAM lp)
 {
-	if(!(lpCopyData->dwData == CD_CMD_INSTALL_CIT
-		|| lpCopyData->dwData == CD_CMD_INSTALL_PLT
-		|| lpCopyData->dwData == CD_CMD_INSTALL_SKIN))
-	{
-		SetMsgHandled(FALSE);
-		return 0;
-	}
+	PCOPYDATASTRUCT lpCopyData = (PCOPYDATASTRUCT)lp;
 	if(!m_pCore->IsDataReady())
 	{
 		if(m_pPendingCmd)
 		{
 			SLOG_WARN("discard shell cmd:"<<lpCopyData->dwData);
+			free(lpCopyData);
 			return 3;
 		}else	
 		{
-			m_pPendingCmd = (PCOPYDATASTRUCT)malloc(sizeof(COPYDATASTRUCT)+lpCopyData->cbData);
-			m_pPendingCmd->dwData = lpCopyData->dwData;
-			m_pPendingCmd->cbData = lpCopyData->cbData;
-			m_pPendingCmd->lpData = m_pPendingCmd+1;
-			memcpy(m_pPendingCmd->lpData,lpCopyData->lpData,lpCopyData->cbData);
+			m_pPendingCmd = lpCopyData;
 			SetTimer(TIMERID_PENDING_CMD,SPAN_PENDING_CMD);
 			return 2;
 		}
@@ -642,15 +634,11 @@ LRESULT CIsSvrProxy::OnCopyData(HWND hWnd,PCOPYDATASTRUCT lpCopyData)
 		{
 			if(IDOK==SMessageBox(GetDesktopWindow(),_T("安装皮肤成功！现在使用吗?"),_T("提示"),MB_OKCANCEL|MB_ICONQUESTION))
 			{
-				if(!CDataCenter::getSingletonPtr()->GetData().changeSkin(strDst))
+				if(!ChangeSkin(strDst))
 				{
 					DeleteFile(strDst);
 					SMessageBox(GetDesktopWindow(),_T("应用皮肤失败!不支持的皮肤格式"),_T("错误"),MB_OK|MB_ICONSTOP);
-				}else
-				{
-					ChangeSkin(strDst);
 				}
-
 			}
 		}else
 		{
@@ -658,6 +646,25 @@ LRESULT CIsSvrProxy::OnCopyData(HWND hWnd,PCOPYDATASTRUCT lpCopyData)
 		}
 
 	}
+	free(lpCopyData);
+	return 0;
+}
+
+LRESULT CIsSvrProxy::OnCopyData(HWND hWnd,PCOPYDATASTRUCT lpCopyData)
+{
+	if(!(lpCopyData->dwData == CD_CMD_INSTALL_CIT
+		|| lpCopyData->dwData == CD_CMD_INSTALL_PLT
+		|| lpCopyData->dwData == CD_CMD_INSTALL_SKIN))
+	{
+		SetMsgHandled(FALSE);
+		return 0;
+	}
+	PCOPYDATASTRUCT pData = (PCOPYDATASTRUCT)malloc(sizeof(COPYDATASTRUCT)+lpCopyData->cbData);
+	pData->dwData = lpCopyData->dwData;
+	pData->cbData = lpCopyData->cbData;
+	pData->lpData = pData+1;
+	memcpy(pData->lpData,lpCopyData->lpData,lpCopyData->cbData);
+	PostMessage(UM_DELAY_COPYDATA,0,(LPARAM)pData);
 	return 1;
 }
 
