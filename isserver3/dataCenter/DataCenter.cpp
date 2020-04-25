@@ -202,7 +202,7 @@ namespace SOUI
 
 			SLOG_INFO("step3, load external skin ok");
 
-			if (!g_SettingsG->strSkin.IsEmpty())
+			if (!g_SettingsG->strSkin.IsEmpty() && g_SettingsG->strSkin!= strSkin)
 			{//清除正在使用的外置皮肤。
 				SLOG_INFO("step4, remove current in using external skin");
 
