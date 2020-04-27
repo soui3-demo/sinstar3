@@ -129,6 +129,7 @@ namespace SOUI
 		m_bGbk = pbyCandData[1]!=0;
 		const BYTE * p = pbyCandData+2;
 		m_strCand = SStringW((const wchar_t*)(p+1),p[0]);
+		m_strCand.Replace(_T('\n'),_T('¡ý'));
 		if(cWild!=0 && m_byRate != RATE_USERCMD)
 		{
 			p+=p[0]*2+1;
