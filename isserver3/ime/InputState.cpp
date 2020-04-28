@@ -1699,10 +1699,9 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 		}
 
 		if(KeyIn_Code_IsMaxCode2(lpCntxtPriv)
-			&& !KeyIn_Code_IsValidComp(lpCntxtPriv,byInput)
-			&& g_SettingsG->bAutoInput)
+			&& !KeyIn_Code_IsValidComp(lpCntxtPriv,byInput))
 		{
-			if(lpCntxtPriv->sCandCount)
+			if(lpCntxtPriv->sCandCount && g_SettingsG->bAutoInput)
 			{
 				//防止符号输入时出现错误:标点不能做首编码,退出当前过程,进入标点顶字上屏过程
 				if((byInput<'a' || byInput>'z') && !CIsSvrProxy::GetSvrCore()->GetCompHead()->bSymbolFirst)

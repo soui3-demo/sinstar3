@@ -140,7 +140,7 @@
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(SOUI3PATH)\bin;"
 				DelayLoadDLLs="soui3.dll;utilities.dll"
-				GenerateDebugInformation="false"
+				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
