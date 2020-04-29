@@ -1120,7 +1120,7 @@ SWindow *pCtrl = FindChildByID(id);\
 			IFontPtr font = SFontPool::getSingletonPtr()->GetFont(L"",100);
 			memcpy(&lf,font->LogFont(),sizeof(lf));
 		}
-		CFontDialog fontDlg(&lf);
+		CFontDialog fontDlg(&lf, CF_SCREENFONTS|CF_NOVERTFONTS);
 		if(fontDlg.DoModal()== IDOK)
 		{
 			lf = fontDlg.m_lf;
