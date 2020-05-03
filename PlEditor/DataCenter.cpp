@@ -11,6 +11,8 @@ namespace TASKLOOP
 CDataCenter::CDataCenter(void):m_bReady(true)
 {
 	m_plEditor.SetProgCallBack(this);
+	m_plEditor.SetQueryRate(this);
+
 	SNotifyCenter::getSingletonPtr()->addEvent(EVENTID(EventProgStart));
 	SNotifyCenter::getSingletonPtr()->addEvent(EVENTID(EventProgRun));
 	SNotifyCenter::getSingletonPtr()->addEvent(EVENTID(EventProgEnd));
@@ -100,14 +102,14 @@ void CDataCenter::SavePL(LPCTSTR pszName)
 	m_plEditor.Save(pszName);
 }
 
-void CDataCenter::Import2Group(LPCTSTR pszFile,BYTE byRateMin, BYTE byRateMax,BYTE iGroup/*=-1*/)
+void CDataCenter::Import2Group(LPCTSTR pszFile,BYTE byRateMin, BYTE byRateMax,BYTE byDefRate,BYTE iGroup/*=-1*/)
 {
-	STaskHelper::post(m_taskLoop,this,&CDataCenter::OnImport2Group,pszFile,byRateMin,byRateMax,iGroup,false);
+	STaskHelper::post(m_taskLoop,this,&CDataCenter::OnImport2Group,pszFile,byRateMin,byRateMax,byDefRate,iGroup,false);
 }
 
-void CDataCenter::OnImport2Group(const std::tstring &strFile,BYTE byMin, BYTE byMax,BYTE iGroup/*=-1*/)
+void CDataCenter::OnImport2Group(const std::tstring &strFile,BYTE byMin, BYTE byMax,BYTE byDefRate,BYTE iGroup/*=-1*/)
 {
-	m_plEditor.Import2Group(strFile.c_str(),byMin,byMax,iGroup);
+	m_plEditor.Import2Group(strFile.c_str(),byMin,byMax,byDefRate,iGroup);
 }
 
 int CDataCenter::AddGroup(const GROUPINFO & groupInfo)
@@ -163,4 +165,20 @@ void CDataCenter::EraseGroup(BYTE iGroup)
 void CDataCenter::OnEraseGroup(BYTE iGroup)
 {
 	m_plEditor.EraseGroup(iGroup);
+}
+
+BOOL CDataCenter::LoadRateProvider(LPCTSTR pszName)
+{
+	return m_plRateProvider.Load(pszName);
+}
+
+BYTE CDataCenter::QueryPhraseRate(LPCWSTR pszPhrase,BYTE byLen) 
+{
+	PPHRASE p=m_plRateProvider.IsPhraseExist2(pszPhrase,byLen);
+	return p?p->byRate:0;
+}
+
+DWORD CDataCenter::GetRateDbSize()
+{
+	return m_plRateProvider.GetWords();
 }

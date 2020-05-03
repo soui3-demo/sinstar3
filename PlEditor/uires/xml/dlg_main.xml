@@ -52,7 +52,9 @@ translucent="1"
         <text text="最小值:"/>
         <edit name="edit_rate_min" size="50,30" text="0"/>
         <text text="最大值:"/>
-        <edit name="edit_rate_max" size="50,30" text="255"/>
+        <edit name="edit_rate_max" size="50,30" text="250"/>
+        <text text="默认值:"/>
+        <edit name="edit_rate_default" size="50,30" text="0"/>
       </group>
     </window>
     <progress name="prog_import" size="-2,10" min="0" max="100" value="0" display="0" visible="0"/>

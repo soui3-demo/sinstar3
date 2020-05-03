@@ -19,16 +19,18 @@ SEVENT_END()
 #define tstring string
 #endif
 
-class CDataCenter : IProgListener
+class CDataCenter : IProgListener, CPLEditor::IQueryRate
 {
 public:
 	CDataCenter(void);
 	~CDataCenter(void);
 
 	void LoadSysPL();
+	BOOL LoadRateProvider(LPCTSTR pszName);
+	DWORD  GetRateDbSize();
 	void LoadPL(LPCTSTR pszName);
 	void SavePL(LPCTSTR pszName);
-	void Import2Group(LPCTSTR pszFile,BYTE byRateMin, BYTE byRateMax,BYTE iGroup=-1);
+	void Import2Group(LPCTSTR pszFile,BYTE byRateMin, BYTE byRateMax,BYTE byDefRate,BYTE iGroup=-1);
 	std::vector<GROUPINFO> GetGroup() const;
 	int AddGroup(const GROUPINFO &groupInfo);
 	void SetGroup(BYTE iGroup,const GROUPINFO &groupInfo);
@@ -41,7 +43,7 @@ protected:
 
 	void OnLoadSysPL();
 	void OnLoadPL(const std::tstring &name);
-	void OnImport2Group(const std::tstring &strFile,BYTE byRateMin, BYTE byRateMax,BYTE iGroup=-1);
+	void OnImport2Group(const std::tstring &strFile,BYTE byRateMin, BYTE byRateMax,BYTE byDefRate,BYTE iGroup=-1);
 	void OnExportGroup(const std::tstring & strFile,BYTE iGroup);
 	void OnEraseGroup(BYTE iGroup);
 
@@ -51,9 +53,12 @@ protected:
 
 	virtual void OnEnd(bool bUpdateUI);
 
+	virtual BYTE QueryPhraseRate(LPCWSTR pszPhrase,BYTE byLen) override;
+
 protected:
 	mutable SCriticalSection	m_cs;
 	bool				m_bReady;
 	CPLEditor			m_plEditor;
 	SAutoRefPtr<ITaskLoop> m_taskLoop;
+	CPLReader			m_plRateProvider;
 };
