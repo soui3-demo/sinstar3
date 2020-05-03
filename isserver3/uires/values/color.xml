@@ -6,8 +6,8 @@
   <blue value="rgb(0,0,255)"/>
   <white value="rgb(255,255,255)"/>
   <gray value="#808080"/>
-  <border value="#cfe3ae"/>
-  <comp value="#00a514"/>
+  <border value="#009B4C"/>
+  <comp value="#009B4C"/>
   <associate_english_prefix value="#808080"/>
   <temp_spell_flag value="rgb(255,0,0)"/>
   <configborder value="#fecc01"/>
@@ -35,9 +35,9 @@
   <tip_cand value="#808080"/>
 
   <spell_comp value="#f65f28"/>
-  <spell_result value="#00a514"/>
+  <spell_result value="#009B4C"/>
   <spell_caret value="#000000"/>
 
-  <theme value="#cfe3aeff"/>
+  <theme value="#009B4Cff"/>
 </color> 
  
