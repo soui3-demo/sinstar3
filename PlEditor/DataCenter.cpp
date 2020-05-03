@@ -174,8 +174,11 @@ BOOL CDataCenter::LoadRateProvider(LPCTSTR pszName)
 
 BYTE CDataCenter::QueryPhraseRate(LPCWSTR pszPhrase,BYTE byLen) 
 {
-	PPHRASE p=m_plRateProvider.IsPhraseExist2(pszPhrase,byLen);
-	return p?p->byRate:0;
+	DWORD dwIndex=m_plRateProvider.IsPhraseExist(pszPhrase,byLen);
+	if(dwIndex==-1) return 0;
+	PPHRASE pp=m_plRateProvider.GetPhrase(dwIndex);
+	if(pp->cLen!=byLen) return 0;
+	return pp->byRate;
 }
 
 DWORD CDataCenter::GetRateDbSize()
