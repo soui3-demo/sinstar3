@@ -2073,16 +2073,22 @@ BOOL CInputState::KeyIn_UserDef_ChangeComp(InputContext * lpCntxtPriv,UINT byInp
 		InputHide(FALSE);
 	}else if(byInput==VK_RETURN)
 	{
-		if(lpCntxtPriv->cComp)
-		{//ÊäÈë±àÂë
-			//ÇÐ»»»ØÕý³£×´Ì¬
-			SStringW strResult(lpCntxtPriv->szComp,lpCntxtPriv->cComp);
-			InputResult(strResult,GetKeyinMask(FALSE,MKI_RECORD|MKI_TTSINPUT));
+		if(g_SettingsG->bEnterClear)
+		{//Çå¿Õ±àÂë
+			lpCntxtPriv->cComp=0;
+			InputUpdate();
+		}else 
+		{	
+			if(lpCntxtPriv->cComp>0)
+			{//
+				SStringW strResult(lpCntxtPriv->szComp,lpCntxtPriv->cComp);
+				InputResult(strResult,GetKeyinMask(FALSE,MKI_RECORD|MKI_TTSINPUT));
+			}
 			InputEnd();
 			InputHide(FALSE);
 			ClearContext(CPC_ALL);
-			return TRUE;
 		}
+		return TRUE;
 	}else
 	{
 		lpCntxtPriv->szComp[lpCntxtPriv->cComp++]=byInput;
