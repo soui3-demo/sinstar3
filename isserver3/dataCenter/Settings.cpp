@@ -42,9 +42,9 @@ const TCHAR * KSettingINI =  _T("config.ini");
 const TCHAR * KSession = _T("IME");
 const TCHAR * KUI = _T("UI");
 const TCHAR * KUrl = _T("url");
-
-const TCHAR * KConfigIni = _T("\\server\\config.ini");
 const TCHAR * KTtsEntry = _T("TTS");
+const TCHAR * KBackup = _T("backup");
+
 const TCHAR * KTtsSpeed = _T("speed");
 const TCHAR * KTtsChVoice = _T("ChVoice");
 const TCHAR * KTtsEnVoice = _T("EnVoice");
@@ -125,7 +125,7 @@ void CSettingsGlobal::Save(const SStringT & strDataPath)
 	SStringT strComp = SOUI::CDataCenter::getSingleton().GetData().m_compInfo.strCompName;
 	if(strComp != _T("加载...") )
 	{
-		SStringT strHotKeyFile = SStringT().Format(_T("%s\\data\\hotkey_%s.txt"), strDataPath, strComp);
+		SStringT strHotKeyFile = SStringT().Format(_T("%s\\server\\hotkey_%s.txt"), strDataPath, strComp);
 		//加载特定的自定义状态及语句输入状态开关
 		SStringT strHotKey = SAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_UDMode]);
 		WritePrivateProfileString(_T("hotkey"), _T("umode"), strHotKey, strHotKeyFile);
@@ -141,6 +141,7 @@ void CSettingsGlobal::Save(const SStringT & strDataPath)
 	WritePrivateProfileInt(KTtsEntry, KTtsChVoice, iTtsChVoice, strConfigIni);
 	WritePrivateProfileInt(KTtsEntry, KTtsEnVoice, iTtsEnVoice, strConfigIni);
 
+	WritePrivateProfileString(KBackup,_T("dir"),szBackupDir,strConfigIni);
 	SetModified(false);
 }
 
@@ -255,7 +256,11 @@ void CSettingsGlobal::Load(const SStringT & strDataPath)
 	nTtsSpeed = GetPrivateProfileInt(KTtsEntry, KTtsSpeed, 0, strConfigIni);
 	nTtsSpeed = smax(smin(nTtsSpeed,10),-10);
 
-
+	GetPrivateProfileString(KBackup,_T("dir"),_T(""),szBackupDir,MAX_PATH,strConfigIni);
+	if(GetFileAttributes(szBackupDir)==INVALID_FILE_ATTRIBUTES)
+	{
+		szBackupDir[0]=0;
+	}
 	SetModified(false);
 }
 

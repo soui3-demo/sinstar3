@@ -114,6 +114,8 @@ namespace SOUI
 
 		void OnChangeFont();
 		void OnSkinFont();
+		void OnPickBackupDir();
+
 		EVENT_MAP_BEGIN()
 			EVENT_ID_COMMAND(R.id.btn_close,OnClose)
 			EVENT_ID_COMMAND(R.id.btn_help,OnHelp)
@@ -159,6 +161,7 @@ namespace SOUI
 			EVENT_ID_HANDLER(R.id.spin_delay_time,EventSpinValue2String::EventID, OnSpinValue2String)
 			EVENT_ID_HANDLER(R.id.spin_cand_num,EventSpinValue2String::EventID, OnSpinValue2String)
 			EVENT_ID_HANDLER(R.id.edit_sent_record_max, EventRENotify::EventID, OnReNotify)
+			EVENT_ID_COMMAND(R.id.btn_pick_backup_dir,OnPickBackupDir)
 		EVENT_MAP_END()
 
 

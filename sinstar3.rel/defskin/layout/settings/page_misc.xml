@@ -26,5 +26,10 @@
       <text text="万能键(小键盘6):"/>
       <hotkey name="hk_bihua_wild" id="905" width="80dp" invalidComb="7"/>
     </window>
+    <text text="数据备份:"/>
+    <window size="-1,-1" layout="hbox" gravity="center">
+      <edit size="320,30"  name="edit_backup" readonly="1"/>
+      <button size="80,30" name="btn_pick_backup_dir" text="..."/>
+    </window>
   </window>
   </window>

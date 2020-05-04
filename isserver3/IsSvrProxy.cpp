@@ -31,6 +31,8 @@
 #define TIMERID_RECONN 800
 #define SPAN_RECONN 2000	//2 seconds
 
+#define TIMERID_BACKUP	900
+#define SPAN_BACKUP		60*60*1000	//60 minutes.
 static void DoSomething()
 {
 	MSG msg;
@@ -140,6 +142,7 @@ int CIsSvrProxy::OnCreate(LPCREATESTRUCT pCS)
 		SetTimer(TIMERID_DATA_REPORT, SPAN_DATA_REPORT1, NULL);
 		SetTimer(TIMERID_CHECK_CLIENT,SPAN_CHECK_CLIENT,NULL);
 		SetTimer(TIMERID_AUTO_SAVE_SETTING,SPAN_AUTO_SAVE_SETTING,NULL);
+		SetTimer(TIMERID_BACKUP,SPAN_BACKUP,NULL);
 	}
 	return nRet;
 }
@@ -159,6 +162,9 @@ void CIsSvrProxy::OnDestroy()
 	}
 	g_SettingsG->Save(m_strDataPath);
 	g_SettingsUI->Save(m_strDataPath);
+
+	BackupData();
+
 	CDataCenter::getSingletonPtr()->GetData().saveSpeed();
 }
 
@@ -398,6 +404,9 @@ void CIsSvrProxy::OnTimer(UINT_PTR uID)
 	{
 		KillTimer(uID);
 		OnCheckReconn();
+	}else if(uID == TIMERID_BACKUP)
+	{
+		BackupData();
 	}
 	else
 	{
@@ -777,5 +786,36 @@ void CIsSvrProxy::OnCheckReconn()
 			::PostMessage(hFind,UM_RECONN,0,0);
 		}
 		hAfter = hFind;
+	}
+}
+
+void CIsSvrProxy::BackupData()
+{
+	if(GetFileAttributes(g_SettingsG->szBackupDir)!=INVALID_FILE_ATTRIBUTES)
+	{
+		const LPCTSTR KBackupDirs[]={
+			_T("server"),_T("skins")
+		};
+		for(int i=0;i<ARRAYSIZE(KBackupDirs);i++)
+		{
+			TCHAR szSour[MAX_PATH]={0},szDest[MAX_PATH]={0};
+			_stprintf(szSour,_T("%s\\%s"),m_strDataPath,KBackupDirs[i]);
+			_stprintf(szDest,_T("%s\\%s"),g_SettingsG->szBackupDir,KBackupDirs[i]);
+
+			SHFILEOPSTRUCT fileOp = { 0 };
+
+			fileOp.wFunc = FO_DELETE;
+			fileOp.fFlags = FOF_NOCONFIRMATION | FOF_SILENT | FOF_FILESONLY;
+			fileOp.pFrom = szDest;
+			int nRet = SHFileOperation(&fileOp);
+			SLOG_INFO("delete "<<szDest<<" return "<<nRet);
+
+			fileOp.wFunc = FO_COPY;
+			fileOp.fFlags = FOF_NOCONFIRMATION | FOF_SILENT|FOF_NOCOPYSECURITYATTRIBS|FOF_NOCONFIRMMKDIR ;
+			fileOp.pFrom = szSour;
+			fileOp.pTo = szDest;
+			nRet = SHFileOperation(&fileOp);
+			SLOG_INFO("backup "<<KBackupDirs[i]<<" return "<<nRet);
+		}
 	}
 }

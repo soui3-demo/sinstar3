@@ -116,6 +116,8 @@ protected:
 	void OnCheckReconn();
 
 	void OnEndSession(BOOL bEnding, UINT uLogOff);
+	void BackupData();
+
 	BEGIN_MSG_MAP_EX(CIsSvrProxy)
 		CHAIN_MSG_MAP_2_IPC(m_ipcSvr)
 		if (m_pCore) CHAIN_MSG_MAP_MEMBER(*m_pCore)

@@ -237,7 +237,7 @@ LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 		TCHAR szBuf[100]={0};
 		int i=0;
 
-		SStringT strHotKeyFile = SStringT().Format(_T("%s\\data\\hotkey_%s.txt"), CDataCenter::getSingletonPtr()->GetDataPath(),myData.m_compInfo.strCompName);
+		SStringT strHotKeyFile = SStringT().Format(_T("%s\\server\\hotkey_%s.txt"), CDataCenter::getSingletonPtr()->GetDataPath(),myData.m_compInfo.strCompName);
 		//加载特定的自定义状态及语句输入状态开关
 		GetPrivateProfileString(_T("hotkey"),_T("umode"),_T(""),szBuf,100,strHotKeyFile);
 		g_SettingsG->dwHotkeys[HKI_UDMode]=SAccelerator::TranslateAccelKey(szBuf);

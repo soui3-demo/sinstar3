@@ -442,6 +442,8 @@ namespace SOUI
 		{
 			FindAndSetHotKey(R.id.hk_bihua_heng+i, Char2VKey(g_SettingsG->byLineKey[i]));
 		}
+
+		FindAndSetText(R.id.edit_backup,g_SettingsG->szBackupDir);
 	}
 
 	void CConfigDlg::InitPageAbout()
@@ -1159,6 +1161,32 @@ SWindow *pCtrl = FindChildByID(id);\
 	void CConfigDlg::OnHelp()
 	{
 		ShellExecute(NULL, _T("open"), _T("https://soime.cn/help"), NULL, NULL, SW_SHOWNORMAL);
+	}
+
+	void CConfigDlg::OnPickBackupDir()
+	{
+		BROWSEINFO bi; 
+		ZeroMemory(&bi,sizeof(BROWSEINFO)); 
+		bi.hwndOwner = m_hWnd; 
+		TCHAR szBuf[MAX_PATH];
+		_tcscpy(szBuf,g_SettingsG->szBackupDir);
+		bi.pszDisplayName = szBuf; 
+		bi.lpszTitle = _T("选择数据备份文件夹:"); 
+		bi.ulFlags = BIF_RETURNFSANCESTORS|BIF_DONTGOBELOWDOMAIN|BIF_BROWSEFORCOMPUTER|BIF_USENEWUI; 
+		LPITEMIDLIST idl = SHBrowseForFolder(&bi); 
+		if (NULL == idl) 
+		{ 
+			return; 
+		}
+		SHGetPathFromIDList(idl,szBuf);
+		if(GetFileAttributes(szBuf)!=INVALID_FILE_ATTRIBUTES)
+		{
+			_tcscpy(g_SettingsG->szBackupDir,szBuf);
+			FindAndSetText(R.id.edit_backup,g_SettingsG->szBackupDir);
+		}else
+		{
+			SMessageBox(m_hWnd,_T("无效路径"),_T("错误"),MB_OK|MB_ICONSTOP);
+		}
 	}
 
 }
