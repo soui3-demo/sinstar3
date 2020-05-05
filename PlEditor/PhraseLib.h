@@ -29,8 +29,9 @@ using namespace std;
 #define MAX_RATE		250		//允许的最大词频，其它词频数据有特定意义
 #define MAX_PHRASE		250		//max phrase length
 #define MAX_ASSO_CANDS	100		//联想词最大数
+#define RATE_DELETE		255
 
-#define MAX_WORDLEN		30		//same as iscomm.h
+//#define MAX_WORDLEN		30		//same as iscomm.h
 typedef struct tagPHRASE2
 {
 	BYTE	byGroup;	//所在组

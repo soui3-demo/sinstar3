@@ -791,6 +791,12 @@ void CIsSvrProxy::OnCheckReconn()
 
 void CIsSvrProxy::BackupData()
 {
+	if(m_strDataPath.CompareNoCase(g_SettingsG->szBackupDir)==0)
+	{
+		SLOG_WARN("backup dir is same as instal dir");
+		return;
+	}
+
 	if(GetFileAttributes(g_SettingsG->szBackupDir)!=INVALID_FILE_ATTRIBUTES)
 	{
 		const LPCTSTR KBackupDirs[]={
@@ -801,7 +807,6 @@ void CIsSvrProxy::BackupData()
 			TCHAR szSour[MAX_PATH]={0},szDest[MAX_PATH]={0};
 			_stprintf(szSour,_T("%s\\%s"),m_strDataPath,KBackupDirs[i]);
 			_stprintf(szDest,_T("%s\\%s"),g_SettingsG->szBackupDir,KBackupDirs[i]);
-
 			SHFILEOPSTRUCT fileOp = { 0 };
 
 			fileOp.wFunc = FO_DELETE;

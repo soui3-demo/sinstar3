@@ -11,7 +11,7 @@
   <btn_help value="查看帮助"/>
   <cfg_habit value="使用习惯"/>
   <cfg_hotkey value="快捷键"/>
-  <cfg_associate value="联想"/>
+  <cfg_associate value="智能联想"/>
   <cfg_candidate value="重码"/>
   <cfg_misc value="其它"/>
   <cfg_about value="关于"/>

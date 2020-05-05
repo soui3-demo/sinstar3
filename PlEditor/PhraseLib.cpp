@@ -56,8 +56,13 @@ BOOL CPLEditor::AddWord(LPCWSTR pszWord,BYTE cLen/*=-1*/,BYTE byRate/*=0*/,BOOL 
 	if(nLen==0xff) nLen=wcslen(pszWord);
 	if(nLen>MAX_PHRASE)
 		return FALSE;
-	if(!CWordID::IsHanzi(pszWord[0]) || !CWordID::IsValidWord(pszWord[0]))
-		return 0;
+	if(nLen<2)
+		return FALSE;
+	for(int i=0;i<nLen;i++)
+	{
+		if(!CWordID::IsHanzi(pszWord[i]) || !CWordID::IsValidWord(pszWord[i]))
+			return FALSE;
+	}
 	cLen = (BYTE)nLen;
 
 	PHRASE2 p={byGroup,byRate,cLen};
@@ -319,7 +324,7 @@ BOOL CPLEditor::ExportGroup(LPCTSTR pszFile,BYTE iGroup)
 			}
 		}
 		const PHRASE2 & value=m_mapPhrase.GetNextValue(pos);
-		if(value.byGroup == iGroup)
+		if(value.byGroup == iGroup && value.byRate!=RATE_DELETE)
 		{
 			fwrite(value.szWord,sizeof(WCHAR),value.cLen,f);
 			fwprintf(f,L"\t%d\r\n",(int)value.byRate);
@@ -592,7 +597,6 @@ int PhraseFindCmp(DWORD *pIndex1,DWORD *pIndex2,LPARAM lParam)
 //查询联想词组
 int CPLReader::QueryAssociate(LPCWSTR pszHead, BYTE cSize,CSArray<PPHRASE>  *pArray)
 {
-	if(cSize>MAX_WORDLEN) return 0;
 	PHRASE p;
 	p.cLen=cSize;
 	wcsncpy(p.szWord,pszHead,cSize);

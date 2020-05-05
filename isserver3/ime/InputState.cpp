@@ -538,7 +538,7 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 
 	BOOL bHandle=FALSE;
 	InputContext * lpCntxtPriv = &m_ctx;
-	if(!bHandle && lpCntxtPriv && lpCntxtPriv->sCandCount && lpCntxtPriv->sbState!=SBST_SENTENCE)
+	if(!bHandle && KeyIn_IsCoding(lpCntxtPriv) && lpCntxtPriv->sbState!=SBST_SENTENCE)
 	{//处理重码
 		BYTE byCandIndex=0;
 		if(uVKey==VK_SPACE) 
@@ -1431,8 +1431,6 @@ BOOL CInputState::KeyIn_InputAndAssociate(InputContext * lpCntxtPriv,LPCWSTR psz
 BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,char cCompLen,
 									   CONST BYTE * lpbKeyState,bool bKeepVisible)
 {
-	BOOL bRet=FALSE;
-
 	short iCand = -1;
 	if(byInput>='0' && byInput<='9')
 	{
@@ -1442,7 +1440,6 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 	{//有效的重码
 		BYTE byMask=GetKeyinMask(cCompLen==0,MKI_ALL);
 		LPBYTE pCandInfo=lpCntxtPriv->ppbyCandInfo[iCand];//rate + gbk flag+ len + phrase + len + comp
-		bRet=TRUE;
 		SStringW strResult;
 		if(lpCntxtPriv->inState==INST_CODING)
 		{//普通编码输入
@@ -1610,9 +1607,11 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 		{
 			InputHide(byMask &(MKI_ASTENGLISH | MKI_ASTCAND | MKI_ASTSENT | MKI_PHRASEREMIND) || lpCntxtPriv->bShowTip);
 		}
+	}else{
+		CUtils::SoundPlay(_T("error"));
 	}
 end:
-	return bRet;
+	return TRUE;
 }
 
 
@@ -1764,11 +1763,13 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 			InputHide(TRUE);
 			bRet = TRUE;
 		}
-	}else if(lpCntxtPriv->cComp < MAX_COMP)
+	}else if(lpCntxtPriv->cComp < MAX_COMP
+		&& !g_SettingsG->bAutoInput 
+		&& byInput>='a' 
+		&& byInput<='z')
 	{
 		lpCntxtPriv->szComp[lpCntxtPriv->cComp++]=byInput;
-		if((!g_SettingsG->bAutoInput && byInput>='a' && byInput<='z')) 
-			bRet=TRUE;
+		bRet=TRUE;
 	}
 
 	if(bRet)

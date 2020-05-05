@@ -1181,8 +1181,14 @@ SWindow *pCtrl = FindChildByID(id);\
 		SHGetPathFromIDList(idl,szBuf);
 		if(GetFileAttributes(szBuf)!=INVALID_FILE_ATTRIBUTES)
 		{
-			_tcscpy(g_SettingsG->szBackupDir,szBuf);
-			FindAndSetText(R.id.edit_backup,g_SettingsG->szBackupDir);
+			if(_tcsicmp(szBuf,CDataCenter::getSingleton().GetDataPath().c_str())==0)
+			{
+				SMessageBox(m_hWnd,_T("不能备份到启程输入法安装目录"),_T("错误"),MB_OK|MB_ICONSTOP);
+			}else
+			{
+				_tcscpy(g_SettingsG->szBackupDir,szBuf);
+				FindAndSetText(R.id.edit_backup,g_SettingsG->szBackupDir);
+			}
 		}else
 		{
 			SMessageBox(m_hWnd,_T("无效路径"),_T("错误"),MB_OK|MB_ICONSTOP);
