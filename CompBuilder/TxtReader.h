@@ -9,6 +9,7 @@ public:
 	~CTxtReader(void);
 
 	BOOL Open(LPCTSTR pszFileName);
+	BOOL Save(LPCTSTR pszFileName);
 	void Close();
 
 	BOOL getline(WCHAR *pBuf,int nLineMax);

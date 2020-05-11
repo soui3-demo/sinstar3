@@ -1,5 +1,6 @@
 #include "StdAfx.h"
 #include "TxtReader.h"
+#include <fstream>
 
 CTxtReader::CTxtReader(WCHAR cRemarkFlag):m_remarkFlag(cRemarkFlag),m_length(0)
 {
@@ -94,5 +95,17 @@ long CTxtReader::getLength() const
 long CTxtReader::getReadPos() const
 {
 	return m_data.tellg();
+}
+
+BOOL CTxtReader::Save(LPCTSTR pszFileName)
+{
+	if(m_length == 0)
+		return FALSE;
+	std::fstream f(pszFileName,std::ios::out|std::ios::binary);
+	if(!f.good())
+		return FALSE;
+	f<<"\xff\xfe";
+	f.write((const char*)m_data.str().c_str(),m_data.str().size()*2);
+	return TRUE;
 }
 
