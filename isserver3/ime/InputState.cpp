@@ -2342,8 +2342,13 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 					{
 						SStringW result(m_ctx.szComp, m_ctx.cComp);
 						InputResult(result, GetKeyinMask(FALSE,MKI_TTSINPUT));
-						ClearContext(CPC_ALL);
 					}
+					ClearContext(CPC_ALL);
+					if(IsTempSpell())
+					{//quit temp spell state.
+						m_ctx.compMode = IM_SHAPECODE;
+					}
+					InputUpdate();
 					InputEnd();
 					m_pListener->EnableInput(FALSE);
 				}
