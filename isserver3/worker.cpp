@@ -21,7 +21,7 @@
 template<>
 CWorker * SSingleton<CWorker>::ms_Singleton = NULL;
 
-CWorker::CWorker(LPCTSTR pszDataPath):m_bInitOK(FALSE), m_CurVoice(VOICE_NULL)
+CWorker::CWorker(LPCTSTR pszDataPath):m_bInitOK(FALSE)
 {
 	SNotifyCenter::getSingletonPtr()->addEvent(EVENTID(EventCheckUpdateResult));
 	BeginThread();
@@ -61,10 +61,10 @@ BOOL CWorker::Init()
 			m_bInitOK = TRUE;
 
 
-			_SetSpeed(g_SettingsG->nTtsSpeed);
+			_SetSpeed(0);
 			_SetVoice(TRUE,g_SettingsG->iTtsChVoice);
 			_SetVoice(FALSE,g_SettingsG->iTtsEnVoice);
-			SetMsgOwner(SPFEI(SPEI_END_INPUT_STREAM), m_hWnd, UM_TTS_FINISH);
+			MoniterTtsEvent(SPFEI(SPEI_END_INPUT_STREAM)|SPFEI(SPEI_WORD_BOUNDARY), m_hWnd, UM_TTS_EVENT);
 		} while (0);
 
 		if (!m_bInitOK)
@@ -81,7 +81,7 @@ BOOL CWorker::Init()
 
 void CWorker::Uninit()
 {
-
+	_Stop();
 	m_cpVoiceEn = NULL;
 	m_cpVoiceCh = NULL;
 	m_cpChTokens = NULL;
@@ -94,18 +94,32 @@ void CWorker::Uninit()
 void CWorker::SpeakWText(const WCHAR * pwcText,int nLen,BOOL bCh)
 {
 	if (nLen == -1) nLen = wcslen(pwcText);
-	SStringW *pStr = new SStringW(pwcText,nLen);
+	std::wstring *pStr = new std::wstring(pwcText,nLen);
 	::PostMessage(m_hWnd, UM_FUN_SPEAK, bCh, (LPARAM)pStr);
 }
 
+#define MAX_TTS_SPEED 10
 void CWorker::_SpeakText(WPARAM wp, LPARAM lp)
 {
 	BOOL bCh = (BOOL)wp;
-	SStringW *pStr = (SStringW*)lp;
-	if (IsTTSBusy())
-		_Stop();
-	m_CurVoice = bCh ? VOICE_CH : VOICE_EN;
-	HRESULT	hr = (m_CurVoice == VOICE_CH ? m_cpVoiceCh : m_cpVoiceEn)->Speak((*pStr), SPF_ASYNC | SPF_IS_NOT_XML, 0);
+	std::wstring *pStr = (std::wstring*)lp;
+	LONG nBuf=m_ttsBuffer.OnSpeakText(*pStr);
+	if(nBuf>CTtsBuffer::MAX_BUFSIZE)
+	{//increase speed.
+		if(m_nTtsSpeed==MAX_TTS_SPEED)
+		{
+			_Stop();
+			m_ttsBuffer.Clear();
+			m_ttsBuffer.OnSpeakText(*pStr);
+		}else
+		{
+			_SetSpeed(m_nTtsSpeed+1);
+		}
+	}else if(nBuf<CTtsBuffer::MAX_BUFSIZE/4 && m_nTtsSpeed>0)
+	{
+		_SetSpeed(m_nTtsSpeed-1);
+	}
+	HRESULT	hr = (bCh ? m_cpVoiceCh : m_cpVoiceEn)->Speak(pStr->c_str(), SPF_ASYNC | SPF_IS_NOT_XML, 0);
 	delete pStr;
 }
 
@@ -131,11 +145,19 @@ void CWorker::CheckUpdate(LPCTSTR pszUri, bool bManual)
 BOOL CWorker::IsTTSBusy()
 {
 	ASSERT(m_bInitOK);
-	if(m_CurVoice==VOICE_NULL) return FALSE;
-	SPVOICESTATUS  spVoiceStatus;
-	(m_CurVoice==VOICE_CH?m_cpVoiceCh:m_cpVoiceEn)->GetStatus(&spVoiceStatus,NULL);
-	BOOL bBusy=spVoiceStatus.dwRunningState!=SPRS_DONE;
-	return bBusy;
+	{
+		SPVOICESTATUS  spVoiceStatus;
+		m_cpVoiceCh->GetStatus(&spVoiceStatus,NULL);
+		if(spVoiceStatus.dwRunningState!=SPRS_DONE)
+			return TRUE;
+	}
+	{
+		SPVOICESTATUS  spVoiceStatus;
+		m_cpVoiceEn->GetStatus(&spVoiceStatus,NULL);
+		if(spVoiceStatus.dwRunningState!=SPRS_DONE)
+			return TRUE;
+	}
+	return FALSE;
 }
 
 void CWorker::SetVoice(BOOL bCh, int nToken)
@@ -212,14 +234,12 @@ void CWorker::Stop()
 
 void CWorker::_Stop()
 {
-	if (m_CurVoice != VOICE_NULL)
-	{
-		(m_CurVoice == VOICE_CH ? m_cpVoiceCh : m_cpVoiceEn)->Speak(NULL, SPF_PURGEBEFORESPEAK, 0);
-	}
+	m_cpVoiceCh->Speak(NULL, SPF_PURGEBEFORESPEAK, 0);
+	m_cpVoiceEn->Speak(NULL, SPF_PURGEBEFORESPEAK, 0);
 }
 
 
-void CWorker::SetMsgOwner(ULONGLONG ullEvent, HWND hWnd, UINT uMsg)
+void CWorker::MoniterTtsEvent(ULONGLONG ullEvent, HWND hWnd, UINT uMsg)
 {
 	_ASSERT(m_bInitOK);
 	m_cpVoiceCh->SetInterest( ullEvent,ullEvent );
@@ -228,18 +248,11 @@ void CWorker::SetMsgOwner(ULONGLONG ullEvent, HWND hWnd, UINT uMsg)
 	m_cpVoiceEn->SetNotifyWindowMessage( hWnd, uMsg, 1, 0 );
 }
 
-
-void CWorker::SetSpeed(int nSpeed)
+void CWorker::_SetSpeed(int nSpeed)
 {
-	PostMessage(UM_FUN_SETSPEED, (WPARAM)nSpeed, 0);
-}
-
-void CWorker::_SetSpeed(WPARAM lp)
-{
-	if(!m_bInitOK) return;
-	int nSpeed = (int)lp;
-	m_cpVoiceEn->SetRate(nSpeed);
-	m_cpVoiceCh->SetRate(nSpeed);
+	m_nTtsSpeed = nSpeed;
+	m_cpVoiceEn->SetRate(m_nTtsSpeed);
+	m_cpVoiceCh->SetRate(m_nTtsSpeed);
 }
 
 
@@ -260,13 +273,39 @@ UINT CWorker::Run(LPARAM lp)
 	return 0;
 }
 
+LRESULT CWorker::OnTTSEvent(UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	SComPtr<ISpVoice> spVoice = wParam==0?m_cpVoiceCh:m_cpVoiceEn;
+
+	SPEVENT eventItem ={0};
+	while( spVoice->GetEvents(1, &eventItem, NULL ) == S_OK )
+	{
+		switch(eventItem.eEventId )
+		{
+		case SPEI_WORD_BOUNDARY :
+			{
+				SPVOICESTATUS eventStatus;
+				spVoice->GetStatus( &eventStatus, NULL );
+				m_ttsBuffer.OnTtsWordBoundary(eventStatus.ulInputWordPos,eventStatus.ulInputWordLen);
+			}
+			break;
+		case SPEI_END_INPUT_STREAM:
+			m_ttsBuffer.OnTtsEndInputStream();
+			break;
+		default:
+			break;
+		}
+
+		SpClearEvent( &eventItem );
+	}
+	return 0;
+}
+
 LRESULT CWorker::OnTTSMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	LRESULT lRet= 1;
 	switch (uMsg)
 	{
-	case UM_TTS_FINISH:
-		break;
 	case UM_FUN_SPEAK:
 		_SpeakText(wParam, lParam);
 		break;
@@ -275,9 +314,6 @@ LRESULT CWorker::OnTTSMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 		break;
 	case UM_FUN_SETVOICE:
 		_SetVoice(wParam, lParam);
-		break;
-	case UM_FUN_SETSPEED:
-		_SetSpeed(wParam);
 		break;
 	case UM_FUN_GETTOKENINFO:
 		lRet = _GetTokensInfo(wParam, lParam);
@@ -440,4 +476,42 @@ HRESULT CWorker::OnPlaySoundFromResource(UINT uMsg,WPARAM wp, LPARAM lp)
 	}	
 	free(pszSoundID);
 	return 0;
+}
+
+//////////////////////////////////////////////////////////////////////////
+CTtsBuffer::CTtsBuffer():m_nReadingPos(0),m_nBufSize(0)
+{
+
+}
+
+LONG CTtsBuffer::OnSpeakText(const std::wstring &input)
+{
+	m_lstBuf.push_back(input);
+	m_nBufSize+=input.length();
+	return m_nBufSize - m_nReadingPos;
+}
+
+void CTtsBuffer::OnTtsWordBoundary(ULONG nBegin,ULONG nLen)
+{
+	m_nReadingPos = nBegin+nLen;
+	SLOG_INFO("OnTTSEvent, SPEI_WORD_BOUNDARY, start:"<<nBegin<<" end:"<<nLen);
+}
+
+void CTtsBuffer::OnTtsEndInputStream()
+{
+	SASSERT(!m_lstBuf.empty());
+	if(m_lstBuf.empty())
+		return ;
+
+	std::wstring seg = m_lstBuf.front();
+	m_lstBuf.pop_front();
+	m_nBufSize -= seg.length();
+	m_nReadingPos = 0;
+}
+
+void CTtsBuffer::Clear()
+{
+	m_nReadingPos = 0;
+	m_nBufSize = 0;
+	m_lstBuf.clear();
 }

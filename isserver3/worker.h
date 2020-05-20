@@ -13,18 +13,35 @@
 #include <iscore-i.h>
 #include <core/SSingleton.h>
 #include "threadobject.h"
-
+#include <list>
+#include <string>
 
 enum {
-	UM_TTS_FINISH = (WM_USER + 100),
+	UM_TTS_EVENT = (WM_USER + 100),
 	UM_FUN_SPEAK,
 	UM_FUN_STOP,
 	UM_FUN_SETVOICE,
-	UM_FUN_SETSPEED,
 	UM_FUN_GETTOKENINFO,
 	UM_FUN_CHECK_UPDATE,
 	UM_FUN_DATA_REPORT,
 	UM_FUN_PLAY_SOUND,
+};
+
+
+class CTtsBuffer
+{
+public:
+	enum {MAX_BUFSIZE=20};
+
+	CTtsBuffer();
+	LONG OnSpeakText(const std::wstring &input);
+	void OnTtsWordBoundary(ULONG nBegin,ULONG nLen);
+	void OnTtsEndInputStream();
+	void Clear();
+private:
+	LONG					m_nReadingPos;
+	LONG					m_nBufSize;
+	std::list<std::wstring>   m_lstBuf;
 };
 
 class CWorker : public SNativeWnd
@@ -35,7 +52,6 @@ public:
 	CWorker(LPCTSTR pszDataPath);
 	virtual ~CWorker();
 
-	void SetSpeed(int nSpeed);
 	void Stop();
 	int GetTokensInfo(bool bCh, wchar_t token[][MAX_TOKEN_NAME_LENGHT], int nBufSize);
 	void SetVoice(BOOL bCh,int nToken);
@@ -45,7 +61,7 @@ public:
 	void CheckUpdate(LPCTSTR pszUri, bool bManual);
 	void PlaySoundFromResource(LPCWSTR pszSoundID);
 private:
-	void _SetSpeed(WPARAM wp);
+	void _SetSpeed(int nSpeed);
 	void _SpeakText(WPARAM wp, LPARAM lp);
 	void _Stop();
 	BOOL _SetVoice(WPARAM wp, LPARAM lp);
@@ -53,20 +69,22 @@ private:
 protected:
 	virtual UINT Run(LPARAM lp);
 protected:
+	LRESULT OnTTSEvent(UINT uMsg,WPARAM wp,LPARAM lp);
 	LRESULT OnTTSMessage(UINT uMsg, WPARAM wp, LPARAM lp);
 	LRESULT OnCheckUpdate(UINT uMsg, WPARAM wp, LPARAM lp);
 	LRESULT OnDataReport(UINT uMsg, WPARAM wp, LPARAM lp);
 	LRESULT OnPlaySoundFromResource(UINT uMsg, WPARAM wp, LPARAM lp);
 
 	BEGIN_MSG_MAP_EX(CWorker)
-		MESSAGE_RANGE_HANDLER_EX(UM_TTS_FINISH, UM_FUN_GETTOKENINFO,OnTTSMessage)
+		MESSAGE_HANDLER_EX(UM_TTS_EVENT,OnTTSEvent)
+		MESSAGE_RANGE_HANDLER_EX(UM_FUN_SPEAK, UM_FUN_GETTOKENINFO,OnTTSMessage)
 		MESSAGE_HANDLER_EX(UM_FUN_CHECK_UPDATE, OnCheckUpdate)
 		MESSAGE_HANDLER_EX(UM_FUN_DATA_REPORT, OnDataReport)
 		MESSAGE_HANDLER_EX(UM_FUN_PLAY_SOUND, OnPlaySoundFromResource)
 		CHAIN_MSG_MAP(__super)
 	END_MSG_MAP()
 private:
-	void SetMsgOwner(ULONGLONG ullEvent, HWND hWnd, UINT uMsg);
+	void MoniterTtsEvent(ULONGLONG ullEvent, HWND hWnd, UINT uMsg);
 	BOOL Init();
 	void Uninit();
 	BOOL IsTTSBusy();
@@ -77,8 +95,10 @@ private:
 
 	SComPtr<IEnumSpObjectTokens> m_cpChTokens;	//中文语音
 	SComPtr<IEnumSpObjectTokens> m_cpEnTokens;	//英文语音
+
+	CTtsBuffer			m_ttsBuffer;
+	int					m_nTtsSpeed;
 	BOOL	m_bInitOK;
-	enum {VOICE_NULL,VOICE_CH,VOICE_EN} m_CurVoice;	//当前正在使用的语音
 };
 
 #endif // !defined(AFX_MYTTS_H__C7E6BDC8_CD08_4D07_8EA4_9F404B9E0C18__INCLUDED_)

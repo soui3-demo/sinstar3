@@ -295,21 +295,12 @@ void CIsSvrProxy::OnShowKeyMap(IDataBlock * pCompData, LPCWSTR pszName, LPCWSTR 
 	}
 }
 
-int CIsSvrProxy::TtsGetSpeed()
-{
-	return g_SettingsG->nTtsSpeed;
-}
 
 int CIsSvrProxy::TtsGetVoice(bool bCh)
 {
 	return bCh?g_SettingsG->iTtsChVoice:g_SettingsG->iTtsEnVoice;
 }
 
-void CIsSvrProxy::TtsSetSpeed(int nSpeed) {
-	g_SettingsG->nTtsSpeed = nSpeed;
-	g_SettingsG->SetModified(true);
-	CWorker::getSingletonPtr()->SetSpeed(nSpeed);
-}
 
 void CIsSvrProxy::TtsSpeakText(const wchar_t* pText, int nLen, bool bChinese) {
 	CWorker::getSingletonPtr()->SpeakWText(pText, nLen, bChinese);
