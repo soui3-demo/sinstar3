@@ -1195,4 +1195,27 @@ SWindow *pCtrl = FindChildByID(id);\
 		}
 	}
 
+	void CConfigDlg::OnBackup()
+	{
+		SStringT strFrom = CDataCenter::getSingleton().GetDataPath();
+		SStringT strTo = g_SettingsG->szBackupDir;
+		int nRet = CIsSvrProxy::BackupDir(strFrom,strTo);
+		if(nRet==0)
+		{
+			SMessageBox(m_hWnd,_T("数据备份成功"),_T("提示"),MB_OK|MB_ICONINFORMATION);
+		}else
+		{
+			SStringT strMsg = SStringT().Format(_T("数据备份失败,错误码:%d"),nRet);
+			SMessageBox(m_hWnd,_T("数据备份失败"),_T("提示"),MB_OK|MB_ICONSTOP);
+		}
+	}
+
+	void CConfigDlg::OnRestore()
+	{
+		if(SMessageBox(m_hWnd,_T("确定要从备份目录恢复数据吗？服务器将自动重启!"),_T("危险操作!"),MB_OKCANCEL|MB_ICONQUESTION)==IDOK)
+		{
+			PostQuitMessage(CODE_RESTORE);
+		}
+	}
+
 }

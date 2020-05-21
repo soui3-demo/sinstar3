@@ -8,6 +8,7 @@
 #include "../helper/helper.h"
 #include "../include/reg.h"
 #include "worker.h"
+#include <process.h>
 
 #define TIMERID_DELAY_EXIT	200
 #define SPAN_DELAY_EXIT		5000
@@ -162,8 +163,6 @@ void CIsSvrProxy::OnDestroy()
 	}
 	g_SettingsG->Save(m_strDataPath);
 	g_SettingsUI->Save(m_strDataPath);
-
-	BackupData();
 
 	CDataCenter::getSingletonPtr()->GetData().saveSpeed();
 }
@@ -407,6 +406,7 @@ void CIsSvrProxy::OnTimer(UINT_PTR uID)
 	}else if(uID == TIMERID_BACKUP)
 	{
 		BackupData();
+		KillTimer(uID);
 	}
 	else
 	{
@@ -789,6 +789,13 @@ void CIsSvrProxy::OnCheckReconn()
 	}
 }
 
+struct BackupParam
+{
+	BackupParam(SStringT from,SStringT to):strFrom(from),strTo(to){}
+	SStringT strFrom;
+	SStringT strTo;
+};
+
 void CIsSvrProxy::BackupData()
 {
 	if(m_strDataPath.CompareNoCase(g_SettingsG->szBackupDir)==0)
@@ -799,28 +806,49 @@ void CIsSvrProxy::BackupData()
 
 	if(GetFileAttributes(g_SettingsG->szBackupDir)!=INVALID_FILE_ATTRIBUTES)
 	{
-		const LPCTSTR KBackupDirs[]={
-			_T("server"),_T("skins")
-		};
-		for(int i=0;i<ARRAYSIZE(KBackupDirs);i++)
-		{
-			TCHAR szSour[MAX_PATH]={0},szDest[MAX_PATH]={0};
-			_stprintf(szSour,_T("%s\\%s"),m_strDataPath,KBackupDirs[i]);
-			_stprintf(szDest,_T("%s\\%s"),g_SettingsG->szBackupDir,KBackupDirs[i]);
-			SHFILEOPSTRUCT fileOp = { 0 };
+		_beginthread(backupProc,NULL,new BackupParam(m_strDataPath,g_SettingsG->szBackupDir));
+	}
+}
 
+void CIsSvrProxy::backupProc(LPVOID pData)
+{
+	BackupParam *param = (BackupParam*)pData;
+	BackupDir(param->strFrom,param->strTo);
+	delete param;
+}
+
+int CIsSvrProxy::BackupDir(const SStringT &strFrom,const SStringT & strTo)
+{
+	const LPCTSTR KBackupDirs[]={
+		_T("server"),_T("skins")
+	};
+	SLOG_INFO("backup dir from "<<strFrom<<" to"<<strTo);
+
+	for(int i=0;i<ARRAYSIZE(KBackupDirs);i++)
+	{
+		TCHAR szSour[MAX_PATH]={0},szDest[MAX_PATH]={0};
+		_stprintf(szSour,_T("%s\\%s"),strFrom,KBackupDirs[i]);
+		_stprintf(szDest,_T("%s\\%s"),strTo,KBackupDirs[i]);
+		SHFILEOPSTRUCT fileOp = { 0 };
+
+		if(GetFileAttributes(szDest)!=INVALID_FILE_ATTRIBUTES)
+		{
 			fileOp.wFunc = FO_DELETE;
 			fileOp.fFlags = FOF_NOCONFIRMATION | FOF_SILENT | FOF_FILESONLY;
 			fileOp.pFrom = szDest;
 			int nRet = SHFileOperation(&fileOp);
 			SLOG_INFO("delete "<<szDest<<" return "<<nRet);
-
-			fileOp.wFunc = FO_COPY;
-			fileOp.fFlags = FOF_NOCONFIRMATION | FOF_SILENT|FOF_NOCOPYSECURITYATTRIBS|FOF_NOCONFIRMMKDIR ;
-			fileOp.pFrom = szSour;
-			fileOp.pTo = szDest;
-			nRet = SHFileOperation(&fileOp);
-			SLOG_INFO("backup "<<KBackupDirs[i]<<" return "<<nRet);
+			if(nRet != 0)
+				return nRet;
 		}
+		fileOp.wFunc = FO_COPY;
+		fileOp.fFlags = FOF_NOCONFIRMATION | FOF_SILENT|FOF_NOCOPYSECURITYATTRIBS|FOF_NOCONFIRMMKDIR ;
+		fileOp.pFrom = szSour;
+		fileOp.pTo = szDest;
+		int nRet = SHFileOperation(&fileOp);
+		SLOG_INFO("backup "<<KBackupDirs[i]<<" return "<<nRet);
+		if(nRet != 0)
+			return nRet;
 	}
+	return 0;
 }

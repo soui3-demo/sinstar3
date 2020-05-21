@@ -79,6 +79,7 @@ public:
 	void TtsSetVoice(bool bCh, int iToken) ;
 	int TtsGetTokensInfo(bool bCh, wchar_t token[][MAX_TOKEN_NAME_LENGHT], int nBufSize);
 	void ShowTray(bool bTray) ;
+	static int BackupDir(const SStringT &strFrom,const SStringT & strTo);
 
 protected:
 	void OnCheckUpdateResult(EventArgs *e);
@@ -117,6 +118,7 @@ protected:
 
 	void OnEndSession(BOOL bEnding, UINT uLogOff);
 	void BackupData();
+	static void backupProc(LPVOID pData);
 
 	BEGIN_MSG_MAP_EX(CIsSvrProxy)
 		CHAIN_MSG_MAP_2_IPC(m_ipcSvr)

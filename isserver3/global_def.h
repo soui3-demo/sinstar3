@@ -1,5 +1,7 @@
 #pragma once
 
+#define CODE_RESTORE	100
+
 #define CISIZE_BASE		164		//基本编码信息数据量
 
 #define MAX_SENTLEN		50		//语句最大长度

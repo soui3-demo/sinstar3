@@ -5,6 +5,15 @@
     <hr width="-2" height="1"></hr>
   </window>
   <window layout="vbox" interval="10" padding="50,0,0,0">
+    <text text="数据备份:"/>
+    <window size="-1,-1" layout="hbox" gravity="center">
+      <edit size="320,30"  name="edit_backup" readonly="1" cueText="每小时自动备份用户数据"/>
+      <button size="80,30" name="btn_pick_backup_dir" text="..."/>
+    </window>
+    <window size="-2,-1" layout="hbox" gravity="center" padding="50,0,50,0">
+      <button size="80,30" name="btn_backup" text="立即备份"/>
+      <button size="100,30" extend_left="50" name="btn_restore" text="从备份恢复"/>
+    </window>
     <text text="提示音:" />
     <window size="-1,-1" layout="hbox">
       <radio name="sound_disable" text="禁用" id="800"/>
@@ -25,11 +34,6 @@
       <hotkey name="hk_bihua_zhe" id="904" width="80dp" invalidComb="7"/>
       <text text="万能键(小键盘6):"/>
       <hotkey name="hk_bihua_wild" id="905" width="80dp" invalidComb="7"/>
-    </window>
-    <text text="数据备份:"/>
-    <window size="-1,-1" layout="hbox" gravity="center">
-      <edit size="320,30"  name="edit_backup" readonly="1" cueText="每小时自动备份用户数据"/>
-      <button size="80,30" name="btn_pick_backup_dir" text="..."/>
     </window>
   </window>
   </window>
