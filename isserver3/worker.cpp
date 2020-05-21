@@ -5,14 +5,13 @@
 #include "stdafx.h"
 #include "worker.h"
 #include <sphelper.h>
-#include "WinHttp\HttpClient.h"
+#include "WinHttp/HttpClient.h"
 #include "ui/UpdateInfoDlg.h"
 #include "IsSvrProxy.h"
 #include "../helper/helper.h"
 #include "Base64.h"
 #pragma warning(disable:4995)
 #define ASSERT SASSERT
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -61,7 +60,7 @@ BOOL CWorker::Init()
 			m_bInitOK = TRUE;
 
 
-			_SetSpeed(0);
+			_SetSpeed(g_SettingsG->nTtsSpeed);
 			_SetVoice(TRUE,g_SettingsG->iTtsChVoice);
 			_SetVoice(FALSE,g_SettingsG->iTtsEnVoice);
 			MoniterTtsEvent(SPFEI(SPEI_END_INPUT_STREAM)|SPFEI(SPEI_WORD_BOUNDARY), m_hWnd, UM_TTS_EVENT);
@@ -99,6 +98,8 @@ void CWorker::SpeakWText(const WCHAR * pwcText,int nLen,BOOL bCh)
 }
 
 #define MAX_TTS_SPEED 10
+#define MIN_TTS_SPEED 0
+
 void CWorker::_SpeakText(WPARAM wp, LPARAM lp)
 {
 	if(!m_bInitOK)
@@ -115,11 +116,11 @@ void CWorker::_SpeakText(WPARAM wp, LPARAM lp)
 			m_ttsBuffer.OnSpeakText(*pStr);
 		}else
 		{
-			_SetSpeed(m_nTtsSpeed+1);
+			_AdjustSpeed(1);
 		}
-	}else if(nBuf<CTtsBuffer::MAX_BUFSIZE/4 && m_nTtsSpeed>0)
+	}else if(nBuf<CTtsBuffer::MAX_BUFSIZE/4 && m_nTtsSpeed>m_nTtsBaseSpeed)
 	{
-		_SetSpeed(m_nTtsSpeed-1);
+		_AdjustSpeed(-1);
 	}
 	HRESULT	hr = (bCh ? m_cpVoiceCh : m_cpVoiceEn)->Speak(pStr->c_str(), SPF_ASYNC | SPF_IS_NOT_XML, 0);
 	delete pStr;
@@ -257,11 +258,22 @@ void CWorker::MoniterTtsEvent(ULONGLONG ullEvent, HWND hWnd, UINT uMsg)
 
 void CWorker::_SetSpeed(int nSpeed)
 {
+	m_nTtsBaseSpeed = nSpeed;
 	m_nTtsSpeed = nSpeed;
 	m_cpVoiceEn->SetRate(m_nTtsSpeed);
 	m_cpVoiceCh->SetRate(m_nTtsSpeed);
 }
 
+void CWorker::_AdjustSpeed(int delta)
+{
+	m_nTtsSpeed += delta;
+	m_nTtsSpeed = smin(m_nTtsSpeed,MAX_TTS_SPEED);
+	m_nTtsSpeed = smax(m_nTtsSpeed,m_nTtsBaseSpeed);
+	
+	m_cpVoiceEn->SetRate(m_nTtsSpeed);
+	m_cpVoiceCh->SetRate(m_nTtsSpeed);
+
+}
 
 UINT CWorker::Run(LPARAM lp)
 {
@@ -313,6 +325,9 @@ LRESULT CWorker::OnTTSMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	LRESULT lRet= 1;
 	switch (uMsg)
 	{
+	case UM_FUN_SETSPEED:
+		_SetSpeed(int(wParam));
+		break;
 	case UM_FUN_SPEAK:
 		_SpeakText(wParam, lParam);
 		break;
@@ -484,6 +499,14 @@ HRESULT CWorker::OnPlaySoundFromResource(UINT uMsg,WPARAM wp, LPARAM lp)
 	free(pszSoundID);
 	return 0;
 }
+
+void CWorker::SetSpeed(int nSpeed)
+{
+	nSpeed = smax(nSpeed,MIN_TTS_SPEED);
+	nSpeed = smin(nSpeed,MAX_TTS_SPEED);
+	::PostMessage(m_hWnd, UM_FUN_SETSPEED, nSpeed, 0);
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 CTtsBuffer::CTtsBuffer():m_nReadingPos(0),m_nBufSize(0)

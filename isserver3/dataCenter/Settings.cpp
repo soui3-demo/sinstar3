@@ -137,6 +137,7 @@ void CSettingsGlobal::Save(const SStringT & strDataPath)
 	WritePrivateProfileInt(_T("update"), _T("interval"),nUpdateInterval,strConfigIni);
 	WritePrivateProfileString(_T("update"), _T("date"), szUpdateDate, strConfigIni);
 
+	WritePrivateProfileInt(KTtsEntry, KTtsSpeed, nTtsSpeed,strConfigIni);
 	WritePrivateProfileInt(KTtsEntry, KTtsChVoice, iTtsChVoice, strConfigIni);
 	WritePrivateProfileInt(KTtsEntry, KTtsEnVoice, iTtsEnVoice, strConfigIni);
 
@@ -252,6 +253,9 @@ void CSettingsGlobal::Load(const SStringT & strDataPath)
 
 	iTtsChVoice = GetPrivateProfileInt(KTtsEntry, KTtsChVoice, 0, strConfigIni);
 	iTtsEnVoice = GetPrivateProfileInt(KTtsEntry, KTtsEnVoice, 0, strConfigIni);
+	nTtsSpeed = GetPrivateProfileInt(KTtsEntry, KTtsSpeed, 0, strConfigIni);
+	nTtsSpeed = smax(smin(nTtsSpeed,10),-10);
+
 	GetPrivateProfileString(KBackup,_T("dir"),_T(""),szBackupDir,MAX_PATH,strConfigIni);
 	if(GetFileAttributes(szBackupDir)==INVALID_FILE_ATTRIBUTES)
 	{

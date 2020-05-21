@@ -518,6 +518,9 @@ namespace SOUI
 	{
 		InitTtsTokenInfo(false, FindChildByID2<SComboBox>(R.id.cbx_tts_en_token));
 		InitTtsTokenInfo(true, FindChildByID2<SComboBox>(R.id.cbx_tts_ch_token));
+		int nTtsSpeed = CIsSvrProxy::GetInstance()->TtsGetSpeed();
+		FindChildByID(R.id.txt_tts_speed)->SetWindowText(SStringT().Format(_T("%d"), nTtsSpeed));
+		FindChildByID2<SSliderBar>(R.id.slider_tts_speed)->SetValue(nTtsSpeed);
 	}
 
 	void CConfigDlg::InitPinyinBlur(COMFILE & cf, CBlurListAdapter * pBlurAdapter, int iGroup)
@@ -894,9 +897,16 @@ SWindow *pCtrl = FindChildByID(id);\
 		DestroyWindow();
 	}
 
+	void CConfigDlg::OnTtsSpeedChanged(EventArgs * e)
+	{
+		EventSliderPos *e2 = sobj_cast<EventSliderPos>(e);
+		SASSERT(e2);
+		FindChildByID(R.id.txt_tts_speed)->SetWindowText(SStringT().Format(_T("%d"), e2->nPos));
+		CIsSvrProxy::GetInstance()->TtsSetSpeed(e2->nPos);
+	}
 
-	const WCHAR KTTS_SAMPLE_CH[] = L"欢迎使用启程输入法。";
-	const WCHAR KTTS_SAMPLE_EN[] = L"Wish you have a good experience with Qicheng Input Method.";
+	const WCHAR KTTS_SAMPLE_CH[] = L"中文朗读速度测试。";
+	const WCHAR KTTS_SAMPLE_EN[] = L"speed test for English speaking.";
 
 	void CConfigDlg::OnTtsChPreview()
 	{

@@ -21,6 +21,7 @@ enum {
 	UM_FUN_SPEAK,
 	UM_FUN_STOP,
 	UM_FUN_SETVOICE,
+	UM_FUN_SETSPEED,
 	UM_FUN_GETTOKENINFO,
 	UM_FUN_CHECK_UPDATE,
 	UM_FUN_DATA_REPORT,
@@ -55,6 +56,7 @@ public:
 	void Stop();
 	int GetTokensInfo(bool bCh, wchar_t token[][MAX_TOKEN_NAME_LENGHT], int nBufSize);
 	void SetVoice(BOOL bCh,int nToken);
+	void SetSpeed(int nSpeed);
 	void SpeakWText(const WCHAR * pwcText,int nLen,BOOL bCh);
 	void SpeakText(LPCSTR pszText,int nLen,BOOL bCh);
 	void ReportUserInfo();
@@ -62,6 +64,7 @@ public:
 	void PlaySoundFromResource(LPCWSTR pszSoundID);
 private:
 	void _SetSpeed(int nSpeed);
+	void _AdjustSpeed(int delta);
 	void _SpeakText(WPARAM wp, LPARAM lp);
 	void _Stop();
 	BOOL _SetVoice(WPARAM wp, LPARAM lp);
@@ -98,6 +101,7 @@ private:
 
 	CTtsBuffer			m_ttsBuffer;
 	int					m_nTtsSpeed;
+	int					m_nTtsBaseSpeed;
 	BOOL	m_bInitOK;
 };
 

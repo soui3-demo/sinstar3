@@ -72,7 +72,9 @@ protected:
 	virtual void OnShowKeyMap(IDataBlock * pCompData, LPCWSTR pszName, LPCWSTR pszUrl) ;
 	virtual void OnDataLoaded();
 public:
+	int TtsGetSpeed();
 	int TtsGetVoice(bool bCh);
+	void TtsSetSpeed(int nSpeed) ;
 	void TtsSpeakText(const wchar_t* pText, int nLen, bool bChinese) ;
 	void TtsSetVoice(bool bCh, int iToken) ;
 	int TtsGetTokensInfo(bool bCh, wchar_t token[][MAX_TOKEN_NAME_LENGHT], int nBufSize);

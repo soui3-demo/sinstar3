@@ -107,6 +107,7 @@ public:
 	TCHAR   szUpdateDate[100];
 	TCHAR	szUpdateUrl[MAX_PATH];
 	TCHAR	szBackupDir[MAX_PATH];
+	int		nTtsSpeed;
 	int		iTtsChVoice, iTtsEnVoice;
 
 };

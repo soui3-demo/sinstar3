@@ -90,6 +90,7 @@ namespace SOUI
 		void OnEnable23Cand();
 		void OnHotKeyEvent(EventArgs *pEvt);
 
+		void OnTtsSpeedChanged(EventArgs *e);
 		void OnTtsChPreview();
 		void OnTtsEnPreview();
 
@@ -148,6 +149,7 @@ namespace SOUI
 			EVENT_ID_COMMAND(R.id.chk_disable_number_to_select_cand, OnDisableNumSelCand)
 			EVENT_ID_COMMAND(R.id.chk_enable_23cand_hotkey, OnEnable23Cand)
 			EVENT_HANDLER(EventSetHotKey::EventID, OnHotKeyEvent)
+			EVENT_ID_HANDLER(R.id.slider_tts_speed,EventSliderPos::EventID,OnTtsSpeedChanged)
 			EVENT_ID_HANDLER(R.id.cbx_tts_ch_token,EventCBSelChange::EventID,OnTtsChTokenChange)
 			EVENT_ID_HANDLER(R.id.cbx_tts_en_token, EventCBSelChange::EventID, OnTtsEnTokenChange)
 			EVENT_ID_COMMAND(R.id.btn_tts_ch_preview,OnTtsChPreview)

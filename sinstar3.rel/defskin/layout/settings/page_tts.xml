@@ -19,5 +19,10 @@
       </combobox>
       <button size="70dp,30dp" name="btn_tts_en_preview" text="试听" extend_left="10"/>
     </window>
+    <window size="-1,-1" layout="hbox" gravity="center">
+      <text text="语速:[0,10]"/>
+      <sliderbar size="200dp,-1" name="slider_tts_speed" min="0" max="10" value="0" />
+      <text size="30dp,-1" name="txt_tts_speed"/>
+    </window>
   </window>
 </window>
