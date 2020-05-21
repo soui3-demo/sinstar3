@@ -101,6 +101,8 @@ void CWorker::SpeakWText(const WCHAR * pwcText,int nLen,BOOL bCh)
 #define MAX_TTS_SPEED 10
 void CWorker::_SpeakText(WPARAM wp, LPARAM lp)
 {
+	if(!m_bInitOK)
+		return;
 	BOOL bCh = (BOOL)wp;
 	std::wstring *pStr = (std::wstring*)lp;
 	LONG nBuf=m_ttsBuffer.OnSpeakText(*pStr);
@@ -167,11 +169,12 @@ void CWorker::SetVoice(BOOL bCh, int nToken)
 
 BOOL CWorker::_SetVoice(WPARAM wp, LPARAM lp)
 {
+	if (!m_bInitOK) 
+		return FALSE;
+
 	BOOL bCh = (BOOL)wp;
 	int nToken = (int)lp;
-	if (!m_bInitOK) return FALSE;
 
-	
 	SComPtr<IEnumSpObjectTokens> pTokens = bCh ? m_cpChTokens : m_cpEnTokens;
 	ISpObjectToken* pToken = NULL;
 	ULONG count;
@@ -201,6 +204,8 @@ int CWorker::GetTokensInfo(bool bCh, wchar_t token[][MAX_TOKEN_NAME_LENGHT], int
 
 int CWorker::_GetTokensInfo(WPARAM wp,LPARAM lp)
 {
+	if(!m_bInitOK)
+		return 0;
 	BOOL bCh = LOWORD(wp);
 	int nBufSize = HIWORD(wp);
 
@@ -234,6 +239,8 @@ void CWorker::Stop()
 
 void CWorker::_Stop()
 {
+	if(!m_bInitOK)
+		return;
 	m_cpVoiceCh->Speak(NULL, SPF_PURGEBEFORESPEAK, 0);
 	m_cpVoiceEn->Speak(NULL, SPF_PURGEBEFORESPEAK, 0);
 }
