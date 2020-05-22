@@ -13,9 +13,9 @@
       <text text="编译时间:"/>
       <text name="txt_build_time"/>
     </window>
-    <check name="chk_auto_update" text="启用自动更新"/>
+    <check name="chk_auto_update" text="启用自动检查新版本"/>
     <window size="-1,-1" layout="hbox" gravity="center">
-      <text text="检查更新周期:"/>
+      <text text="检查周期:"/>
       <combobox name="cbx_update_interval" size="60,25">
         <liststyle colorBkgnd="#ffffff" font="size:16"/>
         <items>
