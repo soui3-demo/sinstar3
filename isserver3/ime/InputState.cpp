@@ -150,7 +150,6 @@ CInputState::CInputState(void)
 ,m_bPressOther(FALSE)
 ,m_bPressShift(FALSE)
 ,m_bPressCtrl(FALSE)
-,m_lastTestKeyData(0)
 {
 	memset(&m_ctx,0,sizeof(InputContext));
 	ClearContext(CPC_ALL);
@@ -541,27 +540,7 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 	if(!bHandle && KeyIn_IsCoding(lpCntxtPriv) && lpCntxtPriv->sbState!=SBST_SENTENCE)
 	{//处理重码
 		BYTE byCandIndex=0;
-		KeyFunction fun = Fun_None;
-		if(uVKey == VK_SHIFT)
-		{
-			uScanCode = (m_lastTestKeyData>>16)&0x0000ffff;
-			if(uScanCode == Right_Shift)
-				fun = g_SettingsG->m_funRightShift;
-			else
-				fun = g_SettingsG->m_funLeftShift;
-		}else if(uVKey == VK_CONTROL)
-		{
-			uScanCode = (m_lastTestKeyData>>16)&0x0000ffff;
-			if(uScanCode == Right_Ctrl)
-				fun = g_SettingsG->m_funRightCtrl;
-			else
-				fun = g_SettingsG->m_funLeftCtrl;
-		}
-		if(fun == Fun_Sel_2nd_Cand  && lpCntxtPriv->sCandCount>=2)
-			byCandIndex = '2';
-		else if(fun == Fun_Sel_3rd_Cand  && lpCntxtPriv->sCandCount>=3)
-			byCandIndex = '3';
-		else if(uVKey==VK_SPACE) 
+		if(uVKey==VK_SPACE) 
 		{//空格
 			byCandIndex='1';
 		}else if((uVKey>='0' && uVKey<='9') || (uVKey>=VK_NUMPAD0 && uVKey<=VK_NUMPAD9))
@@ -2307,14 +2286,29 @@ BOOL CInputState::KeyIn_Test_FuncKey(UINT uKey,LPARAM lKeyData,const BYTE * lpbK
 		}
 	}
 	
+	BOOL bRet=TRUE;
 	if(fun == Fun_Ime_Switch)
 	{
 		SetOpenStatus(FALSE);
 	}else if(fun == Fun_Tmpsp_Switch)
 	{
 		TurnToTempSpell();
+	}else if(fun >= Fun_Sel_2nd_Cand)
+	{
+		BYTE byCandIndex = 0;
+		if(fun == Fun_Sel_2nd_Cand  && m_ctx.sCandCount>=2)
+			byCandIndex = '2';
+		else if(fun == Fun_Sel_3rd_Cand  && m_ctx.sCandCount>=3)
+			byCandIndex = '3';
+		if(byCandIndex)
+		{
+			bRet=KeyIn_All_SelectCand(&m_ctx,byCandIndex,0,lpbKeyState);
+		}else
+		{
+			bRet = FALSE;
+		}
 	}
-	return TRUE;
+	return bRet;
 }
 
 BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState)
@@ -2331,7 +2325,6 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 	{
 		return FALSE;
 	}
-	m_lastTestKeyData = lKeyData;
 	SLOGFMTI(_T("TestKeyDown, uKey=%x,lKeyData=%x,bDown:%d"),uKey,lKeyData,bKeyDown);
 	BOOL bOpen = m_pListener->IsInputEnable();
 	if (!bOpen)

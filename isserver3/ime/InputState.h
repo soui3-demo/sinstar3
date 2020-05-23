@@ -122,5 +122,4 @@ private:
 	BOOL m_bPressOther;
 	BOOL m_bPressShift;
 	BOOL m_bPressCtrl;
-	LPARAM			m_lastTestKeyData;
 };
