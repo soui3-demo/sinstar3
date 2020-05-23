@@ -21,6 +21,22 @@ enum HotKeyIndex{
 	HKI_DelCandidate,	// 在线删词: Ctrl+Shift+重码号 
 };
 
+enum KeyFunction
+{//shift键功能定义
+	Fun_None=0,	//无
+	Fun_Ime_Switch,//输入法开关
+	Fun_Tmpsp_Switch,//
+	Fun_Sel_2nd_Cand,//选择2重
+	Fun_Sel_3rd_Cand,//选择3重
+};
+
+enum KeyID{
+	Left_Shift = 0x2a,
+	Right_Shift = 0x36,
+	Left_Ctrl = 0xc0,
+	Right_Ctrl = 0xc1,
+};
+
 class CModifiedMark
 {
 public:
@@ -86,6 +102,12 @@ public:
 	BYTE    bySentMode;
 	int		nMaxCands;			// max candidate number.
 	int		nDelayTime;			//delay timer for closing composition window in seconds.
+	
+	KeyFunction m_funLeftShift;
+	KeyFunction m_funRightShift;
+
+	KeyFunction m_funLeftCtrl;
+	KeyFunction m_funRightCtrl;
 
 	SStringT strFontDesc;		//font description.
 

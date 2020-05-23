@@ -313,6 +313,14 @@ namespace SOUI
 				pCtrl->SetHotKey(LOWORD(accel), HIWORD(accel));
 	}
 
+	void CConfigDlg::FindAndSetCombobox(int id,int nSel)
+	{
+		SComboBox *pCtrl = FindChildByID2<SComboBox>(id);
+		SASSERT(pCtrl);
+		if (pCtrl)
+			pCtrl->SetCurSel(nSel);
+	}
+
 	WORD Char2VKey(TCHAR wChar)
 	{
 		TCHAR szBuf[2] = { wChar,0 };
@@ -328,27 +336,15 @@ namespace SOUI
 
 	void CConfigDlg::InitPageHabit()
 	{
-		int CtrlId;
-		CtrlId = R.id.ime_switch_disabled;
-		//输入法开关
-		if (g_SettingsG->bySwitchKey == 0x2a)
-			CtrlId = R.id.ime_switch_left_shift;
-		else if (g_SettingsG->bySwitchKey == 0x36)
-			CtrlId = R.id.ime_switch_right_shift;
-		FindAndSetCheck(CtrlId,TRUE);
+		FindAndSetCombobox(R.id.cbx_left_shift_func,g_SettingsG->m_funLeftShift);
+		FindAndSetCombobox(R.id.cbx_right_shift_func,g_SettingsG->m_funRightShift);
+		FindAndSetCombobox(R.id.cbx_left_ctrl_func,g_SettingsG->m_funLeftCtrl);
+		FindAndSetCombobox(R.id.cbx_right_ctrl_func,g_SettingsG->m_funRightCtrl);
 
 		//形码状态回车
-		CtrlId = g_SettingsG->bEnterClear ? R.id.enter_for_clear : R.id.enter_for_input;
+		int CtrlId = g_SettingsG->bEnterClear ? R.id.enter_for_clear : R.id.enter_for_input;
 		FindAndSetCheck(CtrlId, TRUE);
-		//临时拼音开关
-		CtrlId = R.id.py_switch_disabled;
-		switch (g_SettingsG->byTempSpellKey)
-		{
-		case 0xc0:CtrlId = R.id.py_switch_left_ctrl; break;
-		case 0xc1:CtrlId = R.id.py_switch_right_ctrl; break;
-		default:g_SettingsG->byTempSpellKey = 0; break;
-		}
-		FindAndSetCheck(CtrlId, TRUE);
+
 		//重码自动上屏
 		FindAndSetCheck(R.id.cand_auto_input, g_SettingsG->bAutoInput);
 		//拼音重码词组优先
@@ -668,19 +664,28 @@ SWindow *pCtrl = FindChildByID(id);\
 	SASSERT(pCtrl);\
 	CheckId=pCtrl->GetID()
 
-	void CConfigDlg::OnClickInputSwitch(int id)
+	void CConfigDlg::OnLeftShiftFun(EventArgs *e)
 	{
-		GetGroupCheck(id);
-		switch (CheckId)
-		{
-		case 100:
-			g_SettingsG->bySwitchKey = 0x2a;
-			break;
-		case 101:
-			g_SettingsG->bySwitchKey = 0x36;
-			break;
-		default:g_SettingsG->bySwitchKey = 0; break;
-		}
+		EventCBSelChange *e2 = sobj_cast<EventCBSelChange>(e);
+		g_SettingsG->m_funLeftShift = (KeyFunction)(Fun_None + e2->nCurSel);
+	}
+
+	void CConfigDlg::OnRightShiftFun(EventArgs *e)
+	{
+		EventCBSelChange *e2 = sobj_cast<EventCBSelChange>(e);
+		g_SettingsG->m_funRightShift = (KeyFunction)(Fun_None + e2->nCurSel);
+	}
+
+	void CConfigDlg::OnLeftCtrlFun(EventArgs *e)
+	{
+		EventCBSelChange *e2 = sobj_cast<EventCBSelChange>(e);
+		g_SettingsG->m_funLeftCtrl = (KeyFunction)(Fun_None + e2->nCurSel);
+	}
+
+	void CConfigDlg::OnRightCtrlFun(EventArgs *e)
+	{
+		EventCBSelChange *e2 = sobj_cast<EventCBSelChange>(e);
+		g_SettingsG->m_funRightCtrl = (KeyFunction)(Fun_None + e2->nCurSel);
 	}
 
 	void CConfigDlg::OnClickEnter(int id)
@@ -698,22 +703,6 @@ SWindow *pCtrl = FindChildByID(id);\
 		}
 	}
 
-	void CConfigDlg::OnClickPYTemp(int id)
-	{
-		GetGroupCheck(id);
-		switch (CheckId)
-		{
-		case R.id.py_switch_left_ctrl:
-			g_SettingsG->byTempSpellKey = 0xC0;
-			break;
-		case R.id.py_switch_right_ctrl:
-			g_SettingsG->byTempSpellKey = 0xC1;
-			break;
-		default:
-			g_SettingsG->byTempSpellKey = 0;
-			break;
-		}
-	}
 
 	void CConfigDlg::OnClickAlertMode(int id)
 	{

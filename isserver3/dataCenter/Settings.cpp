@@ -109,6 +109,11 @@ void CSettingsGlobal::Save(const SStringT & strDataPath)
 	WritePrivateProfileInt(KSession,_T("OnlySimpleCode"),bOnlySimpleCode,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("delayTime"),nDelayTime,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("MaxCandidateNum"),nMaxCands,strConfigIni);
+	WritePrivateProfileInt(KSession,L"left_shift",m_funLeftShift,strConfigIni);
+	WritePrivateProfileInt(KSession,L"right_shift",m_funRightShift,strConfigIni);
+	WritePrivateProfileInt(KSession,L"left_ctrl",m_funLeftCtrl,strConfigIni);
+	WritePrivateProfileInt(KSession,L"right_ctrl",m_funRightCtrl,strConfigIni);
+
 	SStringT strSkinDir = strDataPath + _T("\\skins\\");
 	SStringT strSkin2;
 
@@ -202,8 +207,13 @@ void CSettingsGlobal::Load(const SStringT & strDataPath)
 	bDisableDelWordCand=GetPrivateProfileInt(KSession,_T("DisableDelWordCand"),1,strConfigIni);
 	bCandSelNoNum=GetPrivateProfileInt(KSession,_T("CandSelNoNum"),0,strConfigIni);
 	nMaxCands=GetPrivateProfileInt(KSession,_T("MaxCandidateNum"),10,strConfigIni);
-	if(nMaxCands<1) nMaxCands = 1;
-	if(nMaxCands>10) nMaxCands = 10;
+	nMaxCands = smax(nMaxCands,1);
+	nMaxCands = smin(nMaxCands,10);
+	m_funLeftShift = (KeyFunction)GetPrivateProfileInt(KSession,L"left_shift",Fun_None,strConfigIni);
+	m_funRightShift =(KeyFunction)GetPrivateProfileInt(KSession,L"right_shift",Fun_Ime_Switch,strConfigIni);
+
+	m_funLeftCtrl = (KeyFunction)GetPrivateProfileInt(KSession,L"left_ctrl",Fun_None,strConfigIni);
+	m_funRightCtrl =(KeyFunction)GetPrivateProfileInt(KSession,L"right_ctrl",Fun_Tmpsp_Switch,strConfigIni);
 
 	bOnlySimpleCode=GetPrivateProfileInt(KSession,_T("OnlySimpleCode"),0,strConfigIni);
 	nDelayTime = GetPrivateProfileInt(KSession,_T("delayTime"),5,strConfigIni);

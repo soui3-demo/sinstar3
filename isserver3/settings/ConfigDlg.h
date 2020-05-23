@@ -32,6 +32,7 @@ namespace SOUI
 		void FindAndSetText(int id, LPCTSTR text);
 		void FindAndSetSpin(int id, int nValue);
 		void FindAndSetHotKey(int id, DWORD accel);
+		void FindAndSetCombobox(int id, int nSel);
 		void InitPageHabit();
 		void InitPageHotKey();
 		void InitPageAssociate();
@@ -52,11 +53,12 @@ namespace SOUI
 
 		void InitTtsTokenInfo(bool bChVoice, SComboBox *pCbx);
 
-		void OnClickInputSwitch(int id);
+		void OnLeftShiftFun(EventArgs *e);
+		void OnRightShiftFun(EventArgs *e);
+		void OnLeftCtrlFun(EventArgs *e);
+		void OnRightCtrlFun(EventArgs *e);
 		//ªÿ≥µ
 		void OnClickEnter(int id);
-		//¡Ÿ ±∆¥“Ù
-		void OnClickPYTemp(int id);
 
 		void OnClickAlertMode(int id);
 
@@ -130,9 +132,11 @@ namespace SOUI
 			EVENT_ID_COMMAND(R.id.btn_add_blur,OnAddBlur)
 			EVENT_ID_COMMAND(R.id.btn_del_blur, OnDelBlur)
 			EVENT_ID_COMMAND(R.id.btn_install_sys_phrase,OnInstallSysPhraseLib)
-			EVENT_ID_COMMAND_RANGE(100, 102, OnClickInputSwitch)
-			EVENT_ID_COMMAND_RANGE(110, 111, OnClickEnter)
-			EVENT_ID_COMMAND_RANGE(120, 122, OnClickPYTemp)
+			EVENT_ID_HANDLER(R.id.cbx_left_shift_func,EventCBSelChange::EventID,OnLeftShiftFun)
+			EVENT_ID_HANDLER(R.id.cbx_right_shift_func,EventCBSelChange::EventID,OnRightShiftFun)
+			EVENT_ID_HANDLER(R.id.cbx_left_ctrl_func,EventCBSelChange::EventID,OnLeftCtrlFun)
+			EVENT_ID_HANDLER(R.id.cbx_right_ctrl_func,EventCBSelChange::EventID,OnRightCtrlFun)
+			EVENT_ID_COMMAND_RANGE(R.id.enter_for_clear, R.id.enter_for_input, OnClickEnter)
 			EVENT_ID_COMMAND(R.id.cand_auto_input, OnAutoInput)
 			EVENT_ID_COMMAND(R.id.cand_py_phrase_first, OnPyPhraseFirst)
 			EVENT_ID_COMMAND(R.id.chk_disable_first_wild,OnDislabeFirstWild)

@@ -2364,8 +2364,6 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 		}
 	}else if(uKey==VK_CONTROL)
 	{
-		if(!m_pListener->GetOpenStatus())
-			return FALSE;
 		if(m_bPressShift)
 		{
 			m_bPressOther=TRUE;
@@ -2376,6 +2374,9 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 			BYTE byKey=(BYTE)(lKeyData>>24);
 			if(!m_bPressOther && m_bPressCtrl)//Ctrl键按下后没有按下其它键，表示使用快捷关闭功能
 			{
+				if(!m_pListener->GetOpenStatus())
+					return FALSE;
+
 				if(g_SettingsG->byTempSpellKey==byKey)
 				{//临时拼音
 					TurnToTempSpell();
