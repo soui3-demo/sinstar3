@@ -150,7 +150,7 @@ CInputState::CInputState(void)
 ,m_bPressOther(FALSE)
 ,m_bPressShift(FALSE)
 ,m_bPressCtrl(FALSE)
-
+,m_lastTestKeyData(0)
 {
 	memset(&m_ctx,0,sizeof(InputContext));
 	ClearContext(CPC_ALL);
@@ -509,7 +509,7 @@ void CInputState::StatusbarUpdate()
 
 BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeyState)
 {
-	SLOG_INFO("uVKey:"<<uVKey<<" uScanCode:"<<uScanCode);
+	SLOGFMTI(_T("HandleKeyDown, uKey=%x,uScanCode=%x,bDown:%d"),uVKey,uScanCode);
 	//首先使用VK处理快捷键及重码翻页键
 	int iHotKey = TestHotKey(uVKey, lpbKeyState);
 	if (iHotKey != -1)
@@ -541,7 +541,27 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 	if(!bHandle && KeyIn_IsCoding(lpCntxtPriv) && lpCntxtPriv->sbState!=SBST_SENTENCE)
 	{//处理重码
 		BYTE byCandIndex=0;
-		if(uVKey==VK_SPACE) 
+		KeyFunction fun = Fun_None;
+		if(uVKey == VK_SHIFT)
+		{
+			uScanCode = (m_lastTestKeyData>>16)&0x0000ffff;
+			if(uScanCode == Right_Shift)
+				fun = g_SettingsG->m_funRightShift;
+			else
+				fun = g_SettingsG->m_funLeftShift;
+		}else if(uVKey == VK_CONTROL)
+		{
+			uScanCode = (m_lastTestKeyData>>16)&0x0000ffff;
+			if(uScanCode == Right_Ctrl)
+				fun = g_SettingsG->m_funRightCtrl;
+			else
+				fun = g_SettingsG->m_funLeftCtrl;
+		}
+		if(fun == Fun_Sel_2nd_Cand  && lpCntxtPriv->sCandCount>=2)
+			byCandIndex = '2';
+		else if(fun == Fun_Sel_3rd_Cand  && lpCntxtPriv->sCandCount>=3)
+			byCandIndex = '3';
+		else if(uVKey==VK_SPACE) 
 		{//空格
 			byCandIndex='1';
 		}else if((uVKey>='0' && uVKey<='9') || (uVKey>=VK_NUMPAD0 && uVKey<=VK_NUMPAD9))
@@ -2202,6 +2222,101 @@ void CInputState::TurnToTempSpell()
 	} 
 }
 
+
+void CInputState::SetOpenStatus(BOOL bOpen)
+{
+	if(bOpen)
+	{
+		m_pListener->EnableInput(TRUE);
+		if (KeyIn_IsCoding(&m_ctx))
+		{
+			InputOpen();
+		}
+	}else
+	{
+		//关闭输入，如果当前有输入内容,则将当前的输入内容输出到编辑器中
+		if (m_ctx.cComp != 0)
+		{
+			SStringW result(m_ctx.szComp, m_ctx.cComp);
+			InputResult(result, GetKeyinMask(FALSE,MKI_TTSINPUT));
+		}
+		ClearContext(CPC_ALL);
+		if(IsTempSpell())
+		{//quit temp spell state.
+			m_ctx.compMode = IM_SHAPECODE;
+		}
+		InputUpdate();
+		InputEnd();
+		m_pListener->EnableInput(FALSE);
+	}
+}
+
+BOOL CInputState::KeyIn_Test_FuncKey(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState)
+{
+	if(uKey != VK_SHIFT && uKey !=VK_CONTROL)
+		return FALSE;
+	if(!m_pListener->GetOpenStatus())
+		return FALSE;
+
+	BOOL bKeyDown = !(lKeyData & 0x80000000);
+	KeyFunction fun = Fun_None;
+	UINT byScanCode = (UINT)(lKeyData >> 16)&0x0000ffff;//scan code
+	if(uKey == VK_SHIFT)
+	{
+		if (bKeyDown)
+		{//按下SHIFT
+			if(m_bPressCtrl)
+			{
+				m_bPressOther = TRUE;
+			}else
+			{//初始化状态
+				m_bPressShift = TRUE;
+				m_bPressOther = FALSE;
+			}
+		}else if(m_bPressShift)
+		{
+			m_bPressShift = FALSE;
+			if(m_bPressOther ||m_bPressCtrl || lpbKeyState[VK_SPACE]&0x80)
+				return FALSE;
+			if(byScanCode == Right_Shift)
+				fun = g_SettingsG->m_funRightShift;
+			else
+				fun = g_SettingsG->m_funLeftShift;
+		}
+	}else //(uKey == VK_CONTROL)
+	{
+		if (bKeyDown)
+		{//按下SHIFT
+			if(m_bPressShift)
+			{
+				m_bPressOther = TRUE;
+			}else
+			{//初始化状态
+				m_bPressCtrl = TRUE;
+				m_bPressOther = FALSE;
+			}
+		}else if(m_bPressCtrl)
+		{
+			m_bPressCtrl=FALSE; 
+			if(m_bPressOther ||m_bPressShift)
+				return FALSE;
+			if(byScanCode == Right_Ctrl)
+				fun = g_SettingsG->m_funRightCtrl;
+			else
+				fun = g_SettingsG->m_funLeftCtrl;
+		}
+	}
+	
+	if(fun == Fun_Ime_Switch)
+	{
+		SetOpenStatus(FALSE);
+	}else if(fun == Fun_Tmpsp_Switch)
+	{
+		TurnToTempSpell();
+	}
+	return TRUE;
+}
+
 BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState)
 {
 	BOOL bRet=FALSE;
@@ -2216,6 +2331,8 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 	{
 		return FALSE;
 	}
+	m_lastTestKeyData = lKeyData;
+	SLOGFMTI(_T("TestKeyDown, uKey=%x,lKeyData=%x,bDown:%d"),uKey,lKeyData,bKeyDown);
 	BOOL bOpen = m_pListener->IsInputEnable();
 	if (!bOpen)
 	{
@@ -2229,14 +2346,30 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 			if (!bKeyDown && m_bPressShift)
 			{
 				m_bPressShift = FALSE;
-				BYTE byKey = (BYTE)(lKeyData >> 16);
-				if (!m_bPressOther && !m_bPressCtrl && g_SettingsG->bySwitchKey == byKey)
+				UINT uScanCode = (lKeyData >> 16)&0x0000ffff;
+				if (!m_bPressOther && !m_bPressCtrl
+					&& ((uScanCode==Left_Shift && g_SettingsG->m_funLeftShift==Fun_Ime_Switch)||(uScanCode == Right_Shift && g_SettingsG->m_funRightShift==Fun_Ime_Switch)))
 				{//激活输入
-					m_pListener->EnableInput(TRUE);
-					if (KeyIn_IsCoding(&m_ctx))
-					{
-						InputOpen();
-					}
+					SetOpenStatus(TRUE);
+					return TRUE;
+				}
+			}
+			return FALSE;
+		}else if(uKey == VK_CONTROL)
+		{
+			if (bKeyDown)
+			{
+				m_bPressCtrl = TRUE;
+				m_bPressOther = FALSE;
+			}
+			if (!bKeyDown && m_bPressCtrl)
+			{
+				m_bPressCtrl = FALSE;
+				UINT uScanCode = (lKeyData >> 16)&0x0000ffff;
+				if (!m_bPressOther && !m_bPressShift
+					&& ((uScanCode==Left_Ctrl && g_SettingsG->m_funLeftCtrl==Fun_Ime_Switch)||(uScanCode == Right_Ctrl && g_SettingsG->m_funRightCtrl==Fun_Ime_Switch)))
+				{//激活输入
+					SetOpenStatus(TRUE);
 					return TRUE;
 				}
 			}
@@ -2321,121 +2454,10 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 			InputHide(FALSE);
 		}
 		return FALSE;
-	}else if(uKey==VK_SHIFT)
+	}
+	else if(uKey==VK_SHIFT || uKey == VK_CONTROL)
 	{
-		if(m_bPressCtrl)
-		{
-			m_bPressOther=TRUE;
-			return FALSE;
-		}
-		if(!bKeyDown)//弹起SHIFT键
-		{
-			if(!m_bPressOther && m_bPressShift)//右SHIFT键按下后没有按下其它键，表示使用快捷关闭功能
-			{
-				BYTE byKey=(BYTE)(lKeyData>>16);
-				m_bPressShift=FALSE; 
-				if(!(lpbKeyState[VK_SPACE]&0x80) &&
-					g_SettingsG->bySwitchKey==byKey)
-				{ //check the scan code
-					//关闭输入，如果当前有输入内容,则将当前的输入内容输出到编辑器中
-					if (m_ctx.cComp != 0)
-					{
-						SStringW result(m_ctx.szComp, m_ctx.cComp);
-						InputResult(result, GetKeyinMask(FALSE,MKI_TTSINPUT));
-					}
-					ClearContext(CPC_ALL);
-					if(IsTempSpell())
-					{//quit temp spell state.
-						m_ctx.compMode = IM_SHAPECODE;
-					}
-					InputUpdate();
-					InputEnd();
-					m_pListener->EnableInput(FALSE);
-				}
-			}else//还原状态
-			{
-				m_bPressShift=FALSE;
-				m_bPressOther=FALSE;
-			}	
-		}else
-		{//按下SHIFT键，初始化状态
-			m_bPressShift=TRUE;
-			m_bPressOther=FALSE;
-		}
-	}else if(uKey==VK_CONTROL)
-	{
-		if(m_bPressShift)
-		{
-			m_bPressOther=TRUE;
-			return FALSE;
-		}
-		if(!bKeyDown)//弹起Ctrl键
-		{
-			BYTE byKey=(BYTE)(lKeyData>>24);
-			if(!m_bPressOther && m_bPressCtrl)//Ctrl键按下后没有按下其它键，表示使用快捷关闭功能
-			{
-				if(!m_pListener->GetOpenStatus())
-					return FALSE;
-
-				if(g_SettingsG->byTempSpellKey==byKey)
-				{//临时拼音
-					TurnToTempSpell();
-				}else if(!g_SettingsG->bDisableFnKey && ((g_SettingsG->byTempSpellKey==0 && byKey==0xC1)||g_SettingsG->byTempSpellKey!=0))
-				{//功能键, 0xC1=右Ctrl
-					if(!KeyIn_IsCoding(&m_ctx)) 
-					{
-						if(m_ctx.inState==INST_CODING && m_ctx.sbState==SBST_ASSOCIATE
-							&& ((m_ctx.compMode==IM_SHAPECODE &&  m_ctx.sSentLen) || (m_ctx.compMode==IM_SPELL && m_ctx.bySyllables==1 && m_ctx.spellData[0].bySpellLen==0) )
-							)
-						{//进入语句联想状态
-							m_ctx.sbState=SBST_SENTENCE;
-							ClearContext(CPC_CAND);//clear candidate list
-							m_ctx.sSentCaret=0;
-							InputStart();
-							InputOpen();
-							if(g_SettingsG->bShowOpTip)
-							{
-								m_ctx.bShowTip=TRUE;
-								m_ctx.iTip = -1;
-								_tcscpy(m_ctx.szTip,_T("语句输入模式"));
-							}
-
-							bRet=TRUE;
-						}else
-						{//进入用户自定义输入状态
-							ClearContext(CPC_ALL);
-							m_ctx.inState=INST_USERDEF;
-							InputStart();
-							bRet=TRUE;
-						}
-					}else
-					{
-						if(m_ctx.inState==INST_CODING && m_ctx.sbState==SBST_SENTENCE
-							&& ((m_ctx.compMode==IM_SHAPECODE &&  m_ctx.sSentLen) || (m_ctx.compMode==IM_SPELL && m_ctx.bySyllables==1 && m_ctx.spellData[0].bySpellLen==0) )
-							)
-						{//语句联想状态
-							m_ctx.sbState=SBST_ASSOCIATE;
-							InputEnd();
-							bRet=TRUE;
-						}else if(m_ctx.inState==INST_USERDEF)
-						{//状态还原
-							m_ctx.inState=INST_CODING;
-							InputEnd();
-							bRet=TRUE;
-						}
-					}
-				}
-				m_bPressCtrl=FALSE; 
-			}else//还原状态
-			{
-				m_bPressCtrl=FALSE;
-				m_bPressOther=FALSE;
-			}		
-		}else
-		{//按下Ctrl键，初始化状态
-			m_bPressCtrl=TRUE;
-			m_bPressOther=FALSE;
-		}
+		bRet = KeyIn_Test_FuncKey(uKey,lKeyData,lpbKeyState);
 	}else if(!(lpbKeyState[VK_CAPITAL]&0x01)) 
 	{
 		m_bPressOther=TRUE;

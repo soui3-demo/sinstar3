@@ -30,11 +30,11 @@ enum KeyFunction
 	Fun_Sel_3rd_Cand,//选择3重
 };
 
-enum KeyID{
-	Left_Shift = 0x2a,
-	Right_Shift = 0x36,
-	Left_Ctrl = 0xc0,
-	Right_Ctrl = 0xc1,
+enum KeyScanCode{
+	Left_Shift = 0xc02a,
+	Right_Shift = 0xc036,
+	Left_Ctrl = 0xc01d,
+	Right_Ctrl = 0xc11d,
 };
 
 class CModifiedMark
@@ -68,8 +68,6 @@ public:
 	BOOL	b23CandKey;			// ;+'选23重码
 	BYTE	by2CandVK;			// 2 Cand key
 	BYTE	by3CandVK;			// 3 Cand Key
-	BYTE	bySwitchKey;		// 输入法开关
-	BYTE	byTempSpellKey;		// 临时拼音开关
 	BYTE	byForecast;			// forecast mask
 	TCHAR	byLineKey[6];		// 笔画输入法转换键值
 	BOOL	bShowOpTip;			// 显示操作提示开关
@@ -90,7 +88,6 @@ public:
 	BOOL	bPYPhraseFirst;		// 拼音词组优先
 	BOOL	bEnterClear;		// 回车清空编码
 	int		nSoundAlert;		// 声音提示
-	BOOL	bDisableFnKey;		// 禁用功能键
 	BOOL	bAutoDot;			// 智能小数点
 	BOOL	bAutoPrompt;		// 智能重码提示
 	BOOL	bDisableDelWordCand;// 禁止删除单字重码

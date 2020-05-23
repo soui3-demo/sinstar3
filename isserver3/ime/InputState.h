@@ -49,6 +49,9 @@ public:
 	BOOL IsTempSpell() const;
 
 	void ClearContext(UINT ccMask);
+
+protected:
+	void SetOpenStatus(BOOL bOpen);
 protected:
 	void InputStart();
 	void InputResult(const SStringW &strResult,BYTE byAstMask);
@@ -70,7 +73,7 @@ private:
 
 	BOOL KeyIn_RepeatInput(InputContext * lpCntxtPriv,const BYTE * lpbKeyState);
 	BOOL KeyIn_Test_RepeatInput(InputContext * lpCntxtPriv,const BYTE * lpbKeyState);
-
+	BOOL KeyIn_Test_FuncKey(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState);
 	void KeyIn_Spell_UpdateCandList(InputContext * lpCntxtPriv,BYTE byCaret);
 	void KeyIn_Spell_Forecast(InputContext * lpCntxtPriv,BYTE byStartPos);
 	BOOL KeyIn_Spell_MoveCaret(InputContext *lpCntxtPriv,UINT byInput, CONST BYTE * lpbKeyState);
@@ -119,4 +122,5 @@ private:
 	BOOL m_bPressOther;
 	BOOL m_bPressShift;
 	BOOL m_bPressCtrl;
+	LPARAM			m_lastTestKeyData;
 };

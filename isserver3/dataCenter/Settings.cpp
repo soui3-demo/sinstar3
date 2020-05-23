@@ -72,8 +72,6 @@ void CSettingsGlobal::Save(const SStringT & strDataPath)
 	}
 
 	WritePrivateProfileInt(KSession,_T("Associate"),byAstMode,strConfigIni);
-	WritePrivateProfileInt(KSession,_T("SwitchKey"),bySwitchKey,strConfigIni);
-	WritePrivateProfileInt(KSession,_T("TempSpellKey"),byTempSpellKey,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("Forecast"),byForecast,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("ShowTip"),bShowOpTip,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("AutoMatch"),bAutoMatch,strConfigIni);
@@ -99,7 +97,6 @@ void CSettingsGlobal::Save(const SStringT & strDataPath)
 	WritePrivateProfileInt(KSession,_T("PYPhraseFirst"),bPYPhraseFirst,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("EnterClear"),bEnterClear,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("SoundAlert"),nSoundAlert,strConfigIni);
-	WritePrivateProfileInt(KSession,_T("DisableFnKey"),bDisableFnKey,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("DisableFirstWild"),bDisableFirstWild,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("FullSpace"),bFullSpace,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("AutoDot"),bAutoDot,strConfigIni);
@@ -172,8 +169,6 @@ void CSettingsGlobal::Load(const SStringT & strDataPath)
 	}
 
 	byAstMode=GetPrivateProfileInt(KSession,_T("Associate"),2,strConfigIni);//2=english
-	bySwitchKey=GetPrivateProfileInt(KSession,_T("SwitchKey"),0x36,strConfigIni);//”“SHIFT
-	byTempSpellKey=GetPrivateProfileInt(KSession,_T("TempSpellKey"),0xC1,strConfigIni);//”“Ctrl
 	GetPrivateProfileString(KSession,_T("LineKey1"),_T("g"),szBuf,2,strConfigIni);
 	byLineKey[0]=szBuf[0];
 	GetPrivateProfileString(KSession,_T("LineKey2"),_T("h"),szBuf,2,strConfigIni);
@@ -199,7 +194,6 @@ void CSettingsGlobal::Load(const SStringT & strDataPath)
 	bEnterClear=GetPrivateProfileInt(KSession,_T("EnterClear"),1,strConfigIni);
 	nSoundAlert=GetPrivateProfileInt(KSession,_T("SoundAlert"),1,strConfigIni);
 
-	bDisableFnKey=GetPrivateProfileInt(KSession,_T("DisableFnKey"),1,strConfigIni);
 	bAutoDot=GetPrivateProfileInt(KSession,_T("AutoDot"),1,strConfigIni);
 	bAutoPrompt=GetPrivateProfileInt(KSession,_T("AutoPrompt"),0,strConfigIni);
 	bDisableFirstWild = GetPrivateProfileInt(KSession,_T("DisableFirstWild"),0,strConfigIni);
