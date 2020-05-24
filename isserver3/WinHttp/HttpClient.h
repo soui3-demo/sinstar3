@@ -10,7 +10,6 @@ public:
 	virtual ~CWinHttp(void);
 	
 	virtual void	SetTimeOut(int dwConnectTime,  int dwSendTime, int dwRecvTime);
-	virtual string	Request(LPCSTR lpUrl, HttpRequest type, LPCSTR lpPostData = NULL, LPCSTR lpHeader=NULL);
 	virtual string	Request(LPCWSTR lpUrl, HttpRequest type, LPCSTR lpPostData = NULL, LPCWSTR lpHeader=NULL);
 	virtual HttpInterfaceError GetErrorCode()										{ return m_error;	}
 	virtual void	SetDownloadCallback(IHttpCallback* pCallback, void* pParam)		{ m_pCallback = pCallback; m_lpParam = pParam; }

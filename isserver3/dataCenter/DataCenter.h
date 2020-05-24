@@ -36,7 +36,7 @@ namespace SOUI
 		SArray<CNameTypePair> m_compList;
 		SArray<CNameTypePair> m_flmList;
 
-		CAutoRefPtr<IUiDefInfo> m_defUiDefine;	//uidef info of builtin skin.
+		SAutoRefPtr<IUiDefInfo> m_defUiDefine;	//uidef info of builtin skin.
 
 		DWORD getTotalInput() const;
 		DWORD getTotalSpan() const;

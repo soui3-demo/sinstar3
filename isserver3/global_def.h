@@ -30,34 +30,20 @@ enum{
 	EVENT_SETSKIN,
 	EVENT_SVRNOTIFY,
 	EVENT_CHECK_UPDATE_RESULT,
+	EVENT_CAND_CLICK,
 };
 
 namespace SOUI
 {
-	class EventSvrNotify : public TplEventArgs<EventSvrNotify>
-	{
-		SOUI_CLASS_NAME(EventSvrNotify,L"on_svr_notify")
-	public:
-		EventSvrNotify(SObject *pSender):TplEventArgs<EventSvrNotify>(pSender){}
-		enum{EventID=EVENT_SVRNOTIFY};
+	SEVENT_BEGIN(EventSvrNotify,EVENT_SVRNOTIFY)
 		WPARAM wp;
 		LPARAM lp;
-	};
+	SEVENT_END()
 
-	class EventSetSkin : public TplEventArgs<EventSetSkin>
-	{
-		SOUI_CLASS_NAME(EventSetSkin,L"on_set_skin")
-	public:
-		EventSetSkin(SObject *pSender):TplEventArgs<EventSetSkin>(pSender){}
-		enum{EventID=EVENT_SETSKIN};
-	};
+	SEVENT_BEGIN(EventSetSkin,EVENT_SETSKIN)
+	SEVENT_END()
 
-	class EventCheckUpdateResult : public TplEventArgs<EventCheckUpdateResult>
-	{
-		SOUI_CLASS_NAME(EventCheckUpdateResult,L"on_check_update_result")
-	public:
-		EventCheckUpdateResult(SObject *pSender):TplEventArgs<EventCheckUpdateResult>(pSender){}
-		enum{EventID=EVENT_CHECK_UPDATE_RESULT};
+	SEVENT_BEGIN(EventCheckUpdateResult,EVENT_CHECK_UPDATE_RESULT)
 		bool    bServerOK;
 		bool	bManual;
 		SStringW strUrl;
@@ -65,7 +51,12 @@ namespace SOUI
 		SStringW strNewUpdateUrl;
 		DWORD	 dwNewVer;
 		DWORD    dwCurVer;
-	};
+	SEVENT_END()
+
+	SEVENT_BEGIN(EventCandClick,EVENT_CAND_CLICK)
+		SStringW strText;
+		BYTE	 byRate;
+	SEVENT_END()
 
 }
 

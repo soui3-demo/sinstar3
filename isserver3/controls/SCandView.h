@@ -14,9 +14,11 @@ namespace SOUI
 		virtual CSize GetDesiredSize(int nParentWid, int nParentHei);
 
 		void OnPaint(IRenderTarget *pRT);
+		void OnLButtonUp(UINT nFlags,CPoint pt);
 
 		SOUI_MSG_MAP_BEGIN()
 			MSG_WM_PAINT_EX(OnPaint)
+			MSG_WM_LBUTTONUP(OnLButtonUp)
 		SOUI_MSG_MAP_END()
 	protected:
 		SOUI_ATTRS_BEGIN()

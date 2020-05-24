@@ -350,7 +350,7 @@ LRESULT CWorker::OnCheckUpdate(UINT uMsg, WPARAM wp, LPARAM lp)
 {
 	CWinHttp  winHttp;
 	LPTSTR  pszUri = (LPTSTR)lp;
-	SStringA strUrl=S_CT2A(pszUri);
+	SStringW strUrl=S_CT2W(pszUri);
 	string strHtml = winHttp.Request(strUrl, Hr_Get);
 	free(pszUri);
 	if (strHtml.empty())
@@ -465,7 +465,7 @@ LRESULT CWorker::OnDataReport(UINT uMsg, WPARAM wp, LPARAM lp)
 	SStringT strVer = SStringT().Format(_T("%u.%u.%u.%u"), byVer[3], byVer[2], byVer[1], byVer[0]);
 
 	SStringT strInfo = SStringT().Format(_T("&user_mac=%s&soft_version=%s&user_osversion=%s"), szUerID, strVer,strOsVer);
-	std::string url = S_CT2A(g_SettingsG->urlStatistics+strInfo);
+	SStringT url = g_SettingsG->urlStatistics+strInfo;
 
 	CWinHttp  winHttp;
 	string strResp = winHttp.Request(url.c_str(), Hr_Post);

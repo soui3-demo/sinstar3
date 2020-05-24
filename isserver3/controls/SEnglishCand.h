@@ -16,10 +16,12 @@ namespace SOUI
 
 		void OnPaint(IRenderTarget *pRT);
 		LRESULT OnFlmInfo(UINT uMsg, WPARAM, LPARAM lp);
+		void OnLButtonUp(UINT nFlags,CPoint pt);
 
 		SOUI_MSG_MAP_BEGIN()
 			MESSAGE_HANDLER_EX(UM_FLMINFO,OnFlmInfo)
 			MSG_WM_PAINT_EX(OnPaint)
+			MSG_WM_LBUTTONUP(OnLButtonUp)
 		SOUI_MSG_MAP_END()
 	protected:
 		SOUI_ATTRS_BEGIN()

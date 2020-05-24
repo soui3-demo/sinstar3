@@ -47,6 +47,7 @@ namespace SOUI
 		void OnSwitchTip(EventArgs *e);
 		void OnContextMenu(EventArgs *e);
 		void OnWndClick(EventArgs *e);
+		void OnCandClick(EventArgs *e);
 		EVENT_MAP_BEGIN()
 			EVENT_HANDLER(EventCmd::EventID,OnWndClick)
 			EVENT_ID_HANDLER(R.id.txt_tip,EventSwitchTip::EventID, OnSwitchTip)
@@ -54,6 +55,7 @@ namespace SOUI
 			EVENT_ID_COMMAND(R.id.btn_nextpage,OnBtnNextPage)
 			EVENT_HANDLER(EventSwndUpdateTooltip::EventID, OnUpdateBtnTooltip)
 			EVENT_HANDLER(EventCtxMenu::EventID,OnContextMenu)
+			EVENT_HANDLER(EventCandClick::EventID,OnCandClick)
 		EVENT_MAP_END()
 
 	protected:

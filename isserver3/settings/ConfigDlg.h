@@ -119,6 +119,7 @@ namespace SOUI
 		void OnPickBackupDir();
 		void OnBackup();
 		void OnRestore();
+		void OnSearchEngineChange(EventArgs *e);
 
 		EVENT_MAP_BEGIN()
 			EVENT_ID_COMMAND(R.id.btn_close,OnClose)
@@ -170,6 +171,7 @@ namespace SOUI
 			EVENT_ID_COMMAND(R.id.btn_pick_backup_dir,OnPickBackupDir)
 			EVENT_ID_COMMAND(R.id.btn_backup,OnBackup)
 			EVENT_ID_COMMAND(R.id.btn_restore,OnRestore)
+			EVENT_ID_HANDLER(R.id.cbx_search_engine,EventCBSelChange::EventID,OnSearchEngineChange)
 		EVENT_MAP_END()
 
 

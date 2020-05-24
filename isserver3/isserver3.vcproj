@@ -204,6 +204,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\UrlEncoder\Encoder.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ui\FindDlg.cpp"
 				>
 			</File>
@@ -269,6 +273,10 @@
 			</File>
 			<File
 				RelativePath=".\controls\SCompView.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\dataCenter\SearchCfg.cpp"
 				>
 			</File>
 			<File
@@ -422,15 +430,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\WinHttp\Common.h"
-				>
-			</File>
-			<File
 				RelativePath=".\settings\ConfigDlg.h"
 				>
 			</File>
 			<File
 				RelativePath=".\dataCenter\DataCenter.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UrlEncoder\Encoder.h"
 				>
 			</File>
 			<File
@@ -482,11 +490,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\resource.h"
+				RelativePath=".\res\resource.h"
 				>
 			</File>
 			<File
-				RelativePath=".\res\resource.h"
+				RelativePath=".\resource.h"
 				>
 			</File>
 			<File
@@ -519,6 +527,10 @@
 			</File>
 			<File
 				RelativePath=".\controls\SCompView.h"
+				>
+			</File>
+			<File
+				RelativePath=".\dataCenter\SearchCfg.h"
 				>
 			</File>
 			<File

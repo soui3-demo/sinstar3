@@ -90,6 +90,7 @@ Section "ºËÐÄ³ÌÐò" SEC_CORE
   File /r "server\usercmd.ud"
   File /r "server\userdef.ud"
   File /r "server\wordrate.dat"
+  File /r "server\search.xml"
 SectionEnd
 
 Section "À©Õ¹Æ¤·ô" SEC_SKIN

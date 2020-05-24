@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<root selected="0">
+	<item name="dict.cn"><![CDATA[
+		http://dict.cn/%s
+		]]></item>
+	<item name="baidu"><![CDATA[
+		https://www.baidu.com/s?wd=%s
+		]]></item>
+</root>

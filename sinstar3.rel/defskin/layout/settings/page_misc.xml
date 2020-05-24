@@ -14,6 +14,10 @@
       <button size="80,30" name="btn_backup" text="立即备份"/>
       <button size="100,30" extend_left="50" name="btn_restore" text="从备份恢复"/>
     </window>
+    <text text="搜索引擎:"/>
+    <combobox size="300,30" name="cbx_search_engine" dropdown="1">
+      <liststyle colorBkgnd="#ffffff" margin="1,1,1,1" colorBorder="@color/black"/>
+    </combobox>
     <text text="提示音:" />
     <window size="-1,-1" layout="hbox">
       <radio name="sound_disable" text="禁用" id="800"/>

@@ -10,6 +10,7 @@ namespace SOUI
 			m_crCand[CAND_BLENDPY] = m_crCand[CAND_USERDEF] = 
 			m_crCand[CAND_USERCMD] = CR_INVALID;
 		m_bDisplay=0;
+		GetEventSet()->addEvent(EVENTID(EventCandClick));
 	}
 
 	SCandView::~SCandView(void)
@@ -185,6 +186,19 @@ namespace SOUI
 		}
 		pRT->Release();
 		return szRet;
+	}
+
+	void SCandView::OnLButtonUp(UINT nFlags,CPoint pt)
+	{
+		BOOL bDown = GetState()&WndState_PushDown;
+		SWindow::OnLButtonUp(nFlags,pt);
+		if(bDown)
+		{
+			EventCandClick click(this);
+			click.strText = m_strCand;
+			click.byRate = m_byRate;
+			FireEvent(click);
+		}
 	}
 
 }

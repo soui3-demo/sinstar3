@@ -12,6 +12,7 @@
 #include "AddBlurDlg.h"
 #include "souidlgs.h"
 #include "../IsSvrProxy.h"
+#include "../dataCenter/SearchCfg.h"
 
 #pragma warning(disable:4244)
 namespace SOUI
@@ -432,6 +433,18 @@ namespace SOUI
 	
 	void CConfigDlg::InitPageMisc()
 	{
+		SComboBox *cbxSearchEngine = FindChildByID2<SComboBox>(R.id.cbx_search_engine);
+		int iSearch=0;
+		const SArray<CSearchCfg::SearchInfo> & urls = CSearchCfg::getSingleton().GetUrls();
+		for(int i=0;i<urls.GetCount();i++)
+		{
+			SStringT value = SStringT().Format(_T("%s|%s"),urls[i].name,urls[i].url);
+			cbxSearchEngine->InsertItem(i,value,0,0);
+		}
+		cbxSearchEngine->GetEventSet()->setMutedState(true);
+		cbxSearchEngine->SetCurSel(CSearchCfg::getSingleton().GetSel());
+		cbxSearchEngine->GetEventSet()->setMutedState(false);
+
 		FindAndSetCheck(R.id.sound_disable + g_SettingsG->nSoundAlert, TRUE);
 
 		for (int i = 0; i < 6; i++)
@@ -1205,6 +1218,12 @@ SWindow *pCtrl = FindChildByID(id);\
 		{
 			PostQuitMessage(CODE_RESTORE);
 		}
+	}
+
+	void CConfigDlg::OnSearchEngineChange(EventArgs *e)
+	{
+		EventCBSelChange *e2=sobj_cast<EventCBSelChange>(e);
+		CSearchCfg::getSingleton().SetSel(e2->nCurSel);
 	}
 
 }

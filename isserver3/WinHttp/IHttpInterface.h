@@ -76,7 +76,6 @@ class IWininetHttp
 {
 public:
 	//HTTPÇëÇó¹¦ÄÜ
-	virtual string	Request(LPCSTR lpUrl, HttpRequest type, LPCSTR lpPostData = NULL, LPCSTR lpHeader = NULL)			= 0;
 	virtual string	Request(LPCWSTR lpUrl, HttpRequest type, LPCSTR lpPostData = NULL, LPCWSTR lpHeader = NULL)			= 0;
 };
 

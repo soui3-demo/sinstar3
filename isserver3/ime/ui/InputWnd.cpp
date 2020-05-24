@@ -3,6 +3,8 @@
 #include "../utils.h"
 #include "../../worker.h"
 #include "../../IsSvrProxy.h"
+#include "../../UrlEncoder/Encoder.h"
+#include "../../dataCenter/SearchCfg.h"
 
 #define SIZE_BELOW 5
 #define TIMERID_DELAY 100
@@ -687,6 +689,20 @@ namespace SOUI
 			lpWndPos->y=pt.y;
 			lpWndPos->flags&=~SWP_NOMOVE;
 		}
+	}
+
+	void CInputWnd::OnCandClick(EventArgs *e)
+	{
+		SStringT strSearchEngine = CSearchCfg::getSingletonPtr()->GetSelUrl();
+		if(strSearchEngine.IsEmpty())
+			return;
+		EventCandClick *e2=sobj_cast<EventCandClick>(e);
+		//static SStringA KUrl=("http://dict.cn/%s");
+		SStringA strKey = S_CT2A(e2->strText);
+		SStringA fmt = S_CT2A(strSearchEngine);
+		std::string urlKey = Encoder::UTF8UrlEncode(strKey.c_str());
+		SStringA strUrl = SStringA().Format(fmt,urlKey.c_str());
+		ShellExecute(NULL,_T("open"),S_CA2T(strUrl),NULL,NULL,SW_SHOWNORMAL);
 	}
 
 }

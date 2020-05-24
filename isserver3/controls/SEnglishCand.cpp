@@ -12,6 +12,7 @@ namespace SOUI
 		,m_crPhonetic(RGBA(0,0,255,255))
 	{
 		m_bDisplay=0;
+		GetEventSet()->addEvent(EVENTID(EventCandClick));
 	}
 
 	SEnglishCand::~SEnglishCand(void)
@@ -142,6 +143,19 @@ namespace SOUI
 		}
 		pRT->Release();
 		return szRet;
+	}
+
+	void SEnglishCand::OnLButtonUp(UINT nFlags,CPoint pt)
+	{
+		BOOL bDown = GetState()&WndState_PushDown;
+		SWindow::OnLButtonUp(nFlags,pt);
+		if(bDown)
+		{
+			EventCandClick click(this);
+			click.strText = m_strCand;
+			click.byRate = RATE_ASSOCIATE;
+			FireEvent(click);
+		}
 	}
 
 }

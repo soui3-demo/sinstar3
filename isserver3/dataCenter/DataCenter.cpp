@@ -41,14 +41,16 @@ namespace SOUI
 		m_compInfo.cWild = 'z';
 		m_compInfo.strCompName = _T("╪сть...");
 
-		pugi::xml_document fontMap;
-		if (fontMap.load_file(strDataPath + _T("\\data\\fontmap.xml")))
 		{
-			pugi::xml_node font = fontMap.child(L"fontmap").child(L"font");
-			while (font)
+			pugi::xml_document fontMap;
+			if (fontMap.load_file(strDataPath + _T("\\data\\fontmap.xml")))
 			{
-				m_fontMap[font.attribute(L"face").as_string()] = font.attribute(L"file").as_string();
-				font = font.next_sibling(L"font");
+				pugi::xml_node font = fontMap.child(L"fontmap").child(L"font");
+				while (font)
+				{
+					m_fontMap[font.attribute(L"face").as_string()] = font.attribute(L"file").as_string();
+					font = font.next_sibling(L"font");
+				}
 			}
 		}
 

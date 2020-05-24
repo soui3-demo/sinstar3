@@ -2,7 +2,6 @@
 #include "HttpClient.h"
 #include "Winhttp.h"
 #include <assert.h>
-#include "Common.h"
 
 #pragma comment(lib, "Winhttp")
 
@@ -226,39 +225,6 @@ bool CWinHttp::DownloadToMem(LPCWSTR lpUrl, OUT void** ppBuffer, OUT int* nSize)
 	return bResult;
 }
 
-string CWinHttp::Request( LPCSTR lpUrl, HttpRequest type, LPCSTR lpPostData /*= NULL*/, LPCSTR lpHeader/*=NULL*/ )
-{
-	string strRet;
-	wstring strUrl = A2U(string(lpUrl));
-	if ( !InitConnect(strUrl.c_str(), type, lpPostData, (lpHeader==NULL)?NULL:A2U(string(lpHeader)).c_str()) )
-		return strRet;
-	DWORD dwBytesToRead, dwReadSize;
-	void* lpBuff = malloc(HTTP_READBUF_LEN);
-	bool bFinish = false;
-	while ( true )
-	{
-		if ( !::WinHttpQueryDataAvailable(m_hRequest, &dwBytesToRead) )
-			break;
-		if ( dwBytesToRead<= 0 )
-		{
-			bFinish = true;
-			break;
-		}
-		if ( dwBytesToRead>HTTP_READBUF_LEN )
-		{
-			free(lpBuff);
-			lpBuff = malloc(dwBytesToRead);
-		}
-		if ( !::WinHttpReadData(m_hRequest, lpBuff, dwBytesToRead, &dwReadSize) )
-			break;
-		strRet.append((const char*)lpBuff, dwReadSize);
-	}
-	free(lpBuff);
-	if ( !bFinish )
-		strRet.clear();
-	return strRet;
-}
-
 string CWinHttp::Request( LPCWSTR lpUrl, HttpRequest type, LPCSTR lpPostData /*= NULL*/, LPCWSTR lpHeader/*=NULL*/ )
 {
 	string strRet;
@@ -322,6 +288,41 @@ bool CWinHttp::QueryContentLength( OUT DWORD& dwLength )
 		bRet = true;
 	}
 	return bRet;
+}
+
+static void MyParseUrlW( LPCWSTR lpUrl, wstring& strHostName, wstring& strPage, WORD& sPort )
+{
+	sPort = 80;
+	wstring strTemp(lpUrl);
+	int headerLen = 7;
+	int nPos=strTemp.find(L"http://");
+
+	if(wstring::npos == nPos)
+	{
+		nPos=strTemp.find(L"https://");
+		if(nPos != wstring::npos)
+		{
+			sPort = INTERNET_DEFAULT_HTTPS_PORT;
+			headerLen =8;
+		}
+	}
+	if (wstring::npos != nPos )
+		strTemp=strTemp.substr(nPos+headerLen, strTemp.size()-nPos-headerLen);
+	nPos=strTemp.find('/');
+	if ( wstring::npos == nPos )//ц╩спур╣╫ /
+		strHostName=strTemp;
+	else
+		strHostName = strTemp.substr(0, nPos);
+	int nPos1 = strHostName.find(':');
+	if ( nPos1 != wstring::npos )
+	{
+		wstring strPort = strTemp.substr(nPos1+1, strHostName.size()-nPos1-1);
+		strHostName = strHostName.substr(0, nPos1);
+		sPort = (WORD)_wtoi(strPort.c_str());
+	}
+	if ( wstring::npos == nPos )
+		return ;
+	strPage=strTemp.substr(nPos, strTemp.size()-nPos);
 }
 
 bool CWinHttp::InitConnect( LPCWSTR lpUrl, HttpRequest type, LPCSTR lpPostData/*=NULL*/, LPCWSTR lpHeader/*=NULL*/ )
