@@ -9,7 +9,7 @@ namespace SOUI
     #define TIMERID_SPAN2     2
 
     STipCtrlEx::STipCtrlEx(void):SHostWnd(UIRES.LAYOUT.wnd_tooltip),m_nDelay(50),m_nShowSpan(5000)
-		, m_Tick(0)
+		, m_Tick(0),m_bUpdated(FALSE)
 		
     {
         m_id.dwHi = m_id.dwLow = 0;
@@ -21,7 +21,7 @@ namespace SOUI
 
     BOOL STipCtrlEx::CreateWnd()
     {
-		this->Create(NULL, WS_CLIPCHILDREN | WS_TABSTOP | WS_OVERLAPPED | WS_POPUP, WS_EX_NOACTIVATE, 0, 0, 0, 0);
+		this->Create(NULL, WS_CLIPCHILDREN | WS_TABSTOP | WS_OVERLAPPED | WS_POPUP, WS_EX_NOACTIVATE|WS_EX_TOPMOST, 0, 0, 0, 0);
         return TRUE;
     }
 
@@ -68,6 +68,7 @@ namespace SOUI
         m_id = id;
         m_rcTarget=rc;
         m_strTip=pszTip;
+		m_bUpdated = TRUE;
 		if(m_nScale != nScale)
 		{
 			m_nScale = nScale;
@@ -92,12 +93,26 @@ namespace SOUI
             m_rcTarget.SetRect(0,0,0,0);
             m_strTip=_T("");
         }
-        else if(!IsWindowVisible() && !m_strTip.IsEmpty())
+        else if(!IsWindowVisible() && m_bUpdated)
         {
+			m_bUpdated = FALSE;
 			pugi::xml_document xmlDoc;
+			DestroyAllChildren();
+			GetRoot()->SetWindowText(L"");
+
 			if(xmlDoc.load_string(m_strTip))
 			{
-				InitFromXml(xmlDoc.first_child());
+				pugi::xml_node root = xmlDoc.first_child();
+				if(wcsicmp(root.name(),L"soui")==0)
+				{
+					InitFromXml(xmlDoc.first_child());
+				}else
+				{
+					pugi::xml_document xmlDoc2;
+					SApplication::getSingletonPtr()->LoadXmlDocment(xmlDoc2,m_strXmlLayout);
+					InitFromXml(xmlDoc2.first_child());
+					CreateChildren(xmlDoc);
+				}
 			}else
 			{
 				SApplication::getSingletonPtr()->LoadXmlDocment(xmlDoc,m_strXmlLayout);

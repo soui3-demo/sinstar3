@@ -13,6 +13,7 @@
     <file name="wnd_composition" path="layout\ime\wnd_composition.xml"/>
     <file name="wnd_status_bar" path="layout\ime\wnd_status_bar.xml"/>
     <file name="wnd_tip" path="layout\ime\wnd_tip.xml"/>
+    <file name="wnd_tooltip" path="layout\ime\wnd_tooltip.xml"/>
 
     <file name="dlg_addblur" path="layout\settings\dlg_addblur.xml"/>
     <file name="dlg_config" path="layout\settings\dlg_config.xml"/>

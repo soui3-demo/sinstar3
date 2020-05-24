@@ -1,5 +1,9 @@
 cd /d %~dp0
-copy release\*.dll /y sinstar3.rel\program\
+copy release\iscore.dll /y sinstar3.rel\program\
+copy release\sinstar3_ime.dll /y sinstar3.rel\program\
+copy release\sinstar3_tsf.dll /y sinstar3.rel\program\
+copy release\RegisterCore.dll /y sinstar3.rel\program\
+copy release\tipdict.dll /y sinstar3.rel\server\
 copy release\isserver3.exe /y sinstar3.rel\program\
 copy release\FindCaller.exe /y sinstar3.rel\program\
 copy release\FindCallerUI.exe /y sinstar3.rel\program\

@@ -46,6 +46,7 @@ namespace SOUI
         int            m_nScale;
         CRect          m_rcTarget;
         TIPID          m_id;
+		BOOL		   m_bUpdated;
     };
 
 	class SToolTipFactory : public TObjRefImpl<IToolTipFactory>

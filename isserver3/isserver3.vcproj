@@ -396,6 +396,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\TipDict.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ui\TrayIcon.cpp"
 				>
 			</File>
@@ -659,6 +663,10 @@
 			</File>
 			<File
 				RelativePath=".\ThreadObject.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TipDict.h"
 				>
 			</File>
 			<File

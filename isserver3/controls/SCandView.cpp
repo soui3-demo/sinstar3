@@ -208,8 +208,7 @@ namespace SOUI
 
 		EventQueryTip queryTip(this);
 		queryTip.strText = m_strCand;
-		FireEvent(queryTip);
-		if(queryTip.handled)
+		if(FireEvent(queryTip))
 		{
 			tipInfo.strTip = queryTip.strTip;
 		}

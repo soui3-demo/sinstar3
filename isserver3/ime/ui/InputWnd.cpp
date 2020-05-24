@@ -5,6 +5,7 @@
 #include "../../IsSvrProxy.h"
 #include "../../UrlEncoder/Encoder.h"
 #include "../../dataCenter/SearchCfg.h"
+#include "../../TipDict.h"
 
 #define SIZE_BELOW 5
 #define TIMERID_DELAY 100
@@ -697,12 +698,21 @@ namespace SOUI
 		if(strSearchEngine.IsEmpty())
 			return;
 		EventCandClick *e2=sobj_cast<EventCandClick>(e);
-		//static SStringA KUrl=("http://dict.cn/%s");
 		SStringA strKey = S_CT2A(e2->strText);
 		SStringA fmt = S_CT2A(strSearchEngine);
 		std::string urlKey = Encoder::UTF8UrlEncode(strKey.c_str());
 		SStringA strUrl = SStringA().Format(fmt,urlKey.c_str());
 		ShellExecute(NULL,_T("open"),S_CA2T(strUrl),NULL,NULL,SW_SHOWNORMAL);
+	}
+
+	void CInputWnd::OnQueryTip(EventArgs*e)
+	{
+		EventQueryTip *e2 = sobj_cast<EventQueryTip>(e);
+		int nLen = CTipDict::getSingletonPtr()->TipDict(e2->strText.c_str(),e2->strText.GetLength(),NULL,0);
+		WCHAR *pBuf = new WCHAR[nLen+1];
+		nLen = CTipDict::getSingletonPtr()->TipDict(e2->strText.c_str(),e2->strText.GetLength(),pBuf,nLen);
+		e2->strTip = SStringW(pBuf,nLen);
+		delete []pBuf;
 	}
 
 }
