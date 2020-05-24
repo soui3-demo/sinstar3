@@ -40,7 +40,7 @@
     <text text="合作开发：ID008"/>
     <text text="后台技术支持：李平"/>
     <text text="美术兼测试：晴天"/>
-    <text text="皮肤开发：木已成舟"/>
+    <text text="皮肤开发：木已成舟, King2020"/>
     <window layout="hbox">
       <text text="本产品基于开源UI框架"/>
       <link href="https://github.com/soui3/soui" text="SOUI 3.0"/>
