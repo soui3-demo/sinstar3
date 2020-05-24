@@ -709,10 +709,16 @@ namespace SOUI
 	{
 		EventQueryTip *e2 = sobj_cast<EventQueryTip>(e);
 		int nLen = CTipDict::getSingletonPtr()->TipDict(e2->strText.c_str(),e2->strText.GetLength(),NULL,0);
-		WCHAR *pBuf = new WCHAR[nLen+1];
-		nLen = CTipDict::getSingletonPtr()->TipDict(e2->strText.c_str(),e2->strText.GetLength(),pBuf,nLen);
-		e2->strTip = SStringW(pBuf,nLen);
-		delete []pBuf;
+		if(nLen>0)
+		{
+			WCHAR *pBuf = new WCHAR[nLen+1];
+			nLen = CTipDict::getSingletonPtr()->TipDict(e2->strText.c_str(),e2->strText.GetLength(),pBuf,nLen);
+			e2->strTip = SStringW(pBuf,nLen);
+			delete []pBuf;
+		}else
+		{
+			e2->strTip = e2->strText;
+		}
 	}
 
 }
