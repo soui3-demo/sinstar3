@@ -2286,13 +2286,15 @@ BOOL CInputState::KeyIn_Test_FuncKey(UINT uKey,LPARAM lKeyData,const BYTE * lpbK
 		}
 	}
 	
-	BOOL bRet=TRUE;
+	BOOL bRet=FALSE;
 	if(fun == Fun_Ime_Switch)
 	{
 		SetOpenStatus(FALSE);
+		bRet=TRUE;
 	}else if(fun == Fun_Tmpsp_Switch)
 	{
 		TurnToTempSpell();
+		bRet=TRUE;
 	}else if(fun >= Fun_Sel_2nd_Cand)
 	{
 		BYTE byCandIndex = 0;
@@ -2303,9 +2305,6 @@ BOOL CInputState::KeyIn_Test_FuncKey(UINT uKey,LPARAM lKeyData,const BYTE * lpbK
 		if(byCandIndex)
 		{
 			bRet=KeyIn_All_SelectCand(&m_ctx,byCandIndex,0,lpbKeyState);
-		}else
-		{
-			bRet = FALSE;
 		}
 	}
 	return bRet;

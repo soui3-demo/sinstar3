@@ -13,8 +13,8 @@
           <item text="无"/>
           <item text="输入法开关"/>
           <item text="临时拼音开关"/>
-          <item text="选择二重码"/>
-          <item text="选择三重码"/>
+          <item text="选择第二重码"/>
+          <item text="选择第三重码"/>
         </items>
       </combobox>
       <text >右Shift功能:</text>
@@ -24,8 +24,8 @@
           <item text="无"/>
           <item text="输入法开关"/>
           <item text="临时拼音开关"/>
-          <item text="选择二重码"/>
-          <item text="选择三重码"/>
+          <item text="选择第二重码"/>
+          <item text="选择第三重码"/>
         </items>
       </combobox>
       <text >左Ctrl功能:</text>
@@ -35,8 +35,8 @@
           <item text="无"/>
           <item text="输入法开关"/>
           <item text="临时拼音开关"/>
-          <item text="选择二重码"/>
-          <item text="选择三重码"/>
+          <item text="选择第二重码"/>
+          <item text="选择第三重码"/>
         </items>
       </combobox>
       <text >右Ctrl功能:</text>
@@ -46,8 +46,8 @@
           <item text="无"/>
           <item text="输入法开关"/>
           <item text="临时拼音开关"/>
-          <item text="选择二重码"/>
-          <item text="选择三重码"/>
+          <item text="选择第二重码"/>
+          <item text="选择第三重码"/>
         </items>
       </combobox>
     </window>
