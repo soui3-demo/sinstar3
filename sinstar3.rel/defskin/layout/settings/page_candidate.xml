@@ -20,11 +20,11 @@
       <text text="后翻页"/>
       <hotkey name="hk_turn_next" width="50dp" invalidComb="ctrl+shift+alt" invalidModifier=""/>
     </window>
-    <text >GBK重码显示策略</text>
+    <text >GBK重码显示方式</text>
     <window  layout="vbox" interval="10" >
-      <radio name="gbk_show_only" id="700" text="显示唯一重码"/>
-      <radio name="gbk_show_manual" id="701" text="显示手动上屏"/>
-      <radio name="gbk_show_as_gb" id="702" text="显示自动上屏"/>
+      <radio name="gbk_show_only" id="700" text="无GB重码时显示"/>
+      <radio name="gbk_show_manual" id="701" text="显示仅手动上屏"/>
+      <radio name="gbk_show_as_gb" id="702" text="显示且正常上屏"/>
     </window>
     <window layout="hbox" gravity="bottom">
        <check  name="chk_full_skip_simple" text="出简不出全"/>

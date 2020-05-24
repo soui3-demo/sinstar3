@@ -64,6 +64,7 @@
   <img2>
     <file name="png_scrollbar" path="image2\scrollbar.png"/>
     <file name="png_tip_bg" path="image2\tip_bg.png"/>
+    <file name="png_tooltip_bg" path="image2\tooltip_bg.png"/>
     <file name="png_item_bg" path="image2\item_bg.png"/>
     <file name="png_menu_icons" path="image2\menu_icons.png"/>
     <file name="png_btn_help" path="image2\btn_help.png"/>

@@ -8,7 +8,7 @@ namespace SOUI
     #define TIMERID_DELAY2   1
     #define TIMERID_SPAN2     2
 
-    STipCtrlEx::STipCtrlEx(void):SHostWnd(UIRES.LAYOUT.wnd_tooltip),m_nDelay(50),m_nShowSpan(5000)
+    STipCtrlEx::STipCtrlEx(void):SHostWnd(UIRES.LAYOUT.wnd_tooltip),m_nDelay(200),m_nShowSpan(5000)
 		, m_Tick(0),m_bUpdated(FALSE)
 		
     {
@@ -93,7 +93,7 @@ namespace SOUI
             m_rcTarget.SetRect(0,0,0,0);
             m_strTip=_T("");
         }
-        else if(!IsWindowVisible() && m_bUpdated)
+        else if(!IsWindowVisible() && m_bUpdated && !m_strTip.IsEmpty())
         {
 			m_bUpdated = FALSE;
 			pugi::xml_document xmlDoc;

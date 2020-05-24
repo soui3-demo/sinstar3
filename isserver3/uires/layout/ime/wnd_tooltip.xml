@@ -6,7 +6,7 @@
   translucent="1"
   toolwindow="1"
 >
-  <root size="-1,-1" padding="5,5,5,5" colorBkgnd="#00ff00" margin="1,1,1,1" colorBorder="#000000">
+  <root size="-1,-1" padding="5,5,5,5" skin="skin_tooltip_bg">
     
   </root>
 </SOUI>

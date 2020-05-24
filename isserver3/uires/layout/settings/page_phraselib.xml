@@ -29,6 +29,6 @@
       </window>
     </template>
   </mclistview>
-    <button name="btn_install_sys_phrase" padding="10,5,10,5" text="安装系统词库" layout_gravity="center"/>
+    <button name="btn_install_sys_phrase" padding="10,5,10,5" text="更换系统词库" layout_gravity="center"/>
   </window>
 </window>

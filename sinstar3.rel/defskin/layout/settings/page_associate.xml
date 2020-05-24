@@ -14,7 +14,7 @@
     </window>
     <check name="chk_sent_associate" text="语句联想"/>
     <window layout="hbox" gravity="center">
-      <text text="语句记忆库容量(句)：[100,50000]"/>
+      <text text="语句记忆库容量(句)：[100-50000]"/>
       <edit size="80dp,25dp" name="edit_sent_record_max" notifyChange="1" number="1"/>
     </window>
     <text>智能造词:</text>
@@ -38,7 +38,7 @@
     </window>
     <window layout="hbox" gravity="bottom">
     	<check name="chk_auto_dot" text="智能小数点"/>
-       <text text="(数字后输入.及,自动识别为数字)" colorText="@color/gray" font="size:12"/>
+       <text text="(数字后输入.及,自动转为半角)" colorText="@color/gray" font="size:12"/>
     </window>
     <window layout="hbox" gravity="bottom">
        <check name="chk_auto_select_cand" text="智能选词"/>

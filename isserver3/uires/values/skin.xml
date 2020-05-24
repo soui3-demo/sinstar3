@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <skin>
   <imgframe name="skin_tip_bg" src="img2:png_tip_bg" margin="50,20,50,20" alpha="200"/>
+  <imgframe name="skin_tooltip_bg" src="img2:png_tooltip_bg" margin="10,8,10,8" alpha="200"/>
   <imgframe name="skin_item_bg" src="img2:png_item_bg" margin="3,3,3,3" states="3"/>
   <imglist name="skin_menu_icons" src="img2:png_menu_icons" states="12"/>
   <scrollbar name="skin_scrollbar" src="img2:png_scrollbar" margin="5" hasgripper="0"/>
