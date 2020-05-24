@@ -13,6 +13,7 @@ namespace SOUI
 		void SetCandData(const BYTE* pbyCandData);
 	protected:
 		virtual CSize GetDesiredSize(int nParentWid, int nParentHei);
+		virtual BOOL OnUpdateToolTip(CPoint pt, SwndToolTipInfo &tipInfo);
 
 		void OnPaint(IRenderTarget *pRT);
 		LRESULT OnFlmInfo(UINT uMsg, WPARAM, LPARAM lp);
@@ -33,7 +34,6 @@ namespace SOUI
 			ATTR_COLOR(L"colorPhonetic", m_crPhonetic,TRUE)
 			ATTR_BOOL(L"showPhonetic",m_bShowPhonetic,TRUE)
 		SOUI_ATTRS_END()
-
 		SStringT m_strIndex;
 		SStringT m_strCand;
 		SStringT m_strPhonetic;

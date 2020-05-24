@@ -13,6 +13,7 @@ namespace SOUI
 	{
 		m_bDisplay=0;
 		GetEventSet()->addEvent(EVENTID(EventCandClick));
+		GetEventSet()->addEvent(EVENTID(EventQueryTip));
 	}
 
 	SEnglishCand::~SEnglishCand(void)
@@ -158,4 +159,17 @@ namespace SOUI
 		}
 	}
 
+	BOOL SEnglishCand::OnUpdateToolTip(CPoint pt, SwndToolTipInfo &tipInfo)
+	{
+		SWindow::OnUpdateToolTip(pt,tipInfo);
+
+		EventQueryTip queryTip(this);
+		queryTip.strText = m_strCand;
+		FireEvent(queryTip);
+		if(queryTip.handled)
+		{
+			tipInfo.strTip = queryTip.strTip;
+		}
+		return TRUE;
+	}
 }

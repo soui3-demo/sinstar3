@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SOUI
+  name="wnd_tooltip"
+  resizable="0"
+  wndType="normal"
+  translucent="1"
+  toolwindow="1"
+>
+  <root size="-1,-1" padding="5,5,5,5" colorBkgnd="#ff0000">
+    
+  </root>
+</SOUI>

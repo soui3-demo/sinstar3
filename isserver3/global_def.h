@@ -31,6 +31,7 @@ enum{
 	EVENT_SVRNOTIFY,
 	EVENT_CHECK_UPDATE_RESULT,
 	EVENT_CAND_CLICK,
+	EVENT_QUERY_TIP,
 };
 
 namespace SOUI
@@ -56,6 +57,11 @@ namespace SOUI
 	SEVENT_BEGIN(EventCandClick,EVENT_CAND_CLICK)
 		SStringW strText;
 		BYTE	 byRate;
+	SEVENT_END()
+
+	SEVENT_BEGIN(EventQueryTip,EVENT_QUERY_TIP)
+		SStringW strText;
+		SStringW strTip;
 	SEVENT_END()
 
 }
