@@ -494,7 +494,7 @@ void CSinstar3Impl::OpenConfig()
 }
 
 
-void CSinstar3Impl::ShowTip(LPCTSTR pszTitle, LPCTSTR pszContent)
+void CSinstar3Impl::ShowTip(LPCTSTR pszTitle, LPCTSTR pszContent,LPCTSTR pszKey)
 {
 	if (m_pTipWnd == NULL)
 	{
@@ -502,7 +502,7 @@ void CSinstar3Impl::ShowTip(LPCTSTR pszTitle, LPCTSTR pszContent)
 		m_pTipWnd->Create();
 		m_pTipWnd->SetDestroyListener(this, IME_TIP);
 	}
-	m_pTipWnd->SetTip(pszTitle, pszContent);
+	m_pTipWnd->SetTip(pszTitle, pszContent,pszKey);
 }
 
 void CSinstar3Impl::InputSpchar(LPCTSTR pszText)

@@ -1,5 +1,8 @@
 #include "stdafx.h"
 #include "STipWnd.h"
+#include "../../dataCenter/SearchCfg.h"
+#include "../../UrlEncoder/Encoder.h"
+#include <ShellAPI.h>
 
 namespace SOUI {
 
@@ -12,8 +15,10 @@ namespace SOUI {
 	{
 	}
 
-	void STipWnd::SetTip(const SStringT & strTitle, const SStringT & strTip)
+	void STipWnd::SetTip(const SStringT & strTitle, const SStringT & strTip,const SStringT &strKey)
 	{
+		m_strKey = strKey;
+		FindChildByID(R.id.btn_search)->SetVisible(!strKey.IsEmpty());
 		FindChildByID(R.id.txt_tip_title)->SetWindowTextW(strTitle);
 		FindChildByID(R.id.txt_tip_content)->SetWindowTextW(strTip);
 		UpdateLayout();
@@ -54,6 +59,18 @@ namespace SOUI {
 	int STipWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	{
 		return OnRecreateUI(lpCreateStruct);
+	}
+
+	void STipWnd::OnSearch()
+	{
+		SStringT strSearchEngine = CSearchCfg::getSingletonPtr()->GetSelUrl();
+		if(strSearchEngine.IsEmpty())
+			return;
+		SStringA strKey = S_CT2A(m_strKey);
+		SStringA fmt = S_CT2A(strSearchEngine);
+		std::string urlKey = Encoder::UTF8UrlEncode(strKey.c_str());
+		SStringA strUrl = SStringA().Format(fmt,urlKey.c_str());
+		ShellExecute(NULL,_T("open"),S_CA2T(strUrl),NULL,NULL,SW_SHOWNORMAL);
 	}
 
 }

@@ -11,7 +11,7 @@ namespace SOUI {
 		STipWnd(SEventSet *pEvtSets);
 		~STipWnd();
 
-		void SetTip(const SStringT & strTitle, const SStringT & strTip);
+		void SetTip(const SStringT & strTitle, const SStringT & strTip,const SStringT &strKey);
 
 		int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	protected:
@@ -26,10 +26,14 @@ namespace SOUI {
 
 	protected:
 		void OnClose();
+		void OnSearch();
 		EVENT_MAP_BEGIN()
 			EVENT_ID_COMMAND(R.id.btn_close, OnClose)
+			EVENT_ID_COMMAND(R.id.btn_search,OnSearch)
 		EVENT_MAP_END()
 
+	private:
+		SStringT m_strKey;
 	};
 }
 

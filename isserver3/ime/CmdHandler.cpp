@@ -41,7 +41,7 @@ void CCmdHandler::OnHotkeyMakePhrase(LPARAM lp)
 		{
 			msg.Format(_T("造词\"%s\"失败"), szBuf);
 		}
-		m_pSinstar3->ShowTip(_T("造词"), msg);
+		m_pSinstar3->ShowTip(_T("造词"), msg,NULL);
 	}
 }
 
@@ -144,7 +144,7 @@ void CCmdHandler::OnHotKeyQueryInfo(LPARAM lp)
 			}
 		}
 
-		m_pSinstar3->ShowTip(_T("查询"), szRet);
+		m_pSinstar3->ShowTip(_T("查询"), szRet,S_CW2T(strBuf));
 	}
 	else
 	{
@@ -158,7 +158,7 @@ void CCmdHandler::OnHotKeyInputMode(LPARAM lp)
 	InputContext * pCtx = m_pSinstar3->m_inputState.GetInputContext();
 	if (g_SettingsG->compMode != pCtx->compMode)
 	{
-		m_pSinstar3->ShowTip(_T("提示"), _T("临时拼音模式不能切换！请先退出临时拼音"));
+		m_pSinstar3->ShowTip(_T("提示"), _T("临时拼音模式不能切换！请先退出临时拼音"),NULL);
 	}else
 	{
 		m_pSinstar3->m_inputState.ClearContext(CPC_ALL);
@@ -183,7 +183,7 @@ void CCmdHandler::OnKeySpeed(LPARAM lp)
 		if (data.m_cInputCount > 0 && data.m_tmInputSpan>0)
 			msg+=SStringT().Format(_T("\n本次输入汉字: %d 个\n打字速度:%d 字/分钟"), data.m_cInputCount, data.m_cInputCount * 60000 / data.m_tmInputSpan);
 	}
-	m_pSinstar3->ShowTip(_T("提示"), msg);
+	m_pSinstar3->ShowTip(_T("提示"), msg,NULL);
 }
 
 void CCmdHandler::OnHotKeyCharMode(LPARAM lp)
@@ -254,7 +254,7 @@ void CCmdHandler::OnOpenSkinDir(LPARAM lp)
 void CCmdHandler::OnShowTip(LPARAM lp)
 {
 	TIPINFO *pTi = (TIPINFO*)lp;
-	m_pSinstar3->ShowTip(pTi->strTitle, pTi->strTip);
+	m_pSinstar3->ShowTip(pTi->strTitle, pTi->strTip,NULL);
 }
 
 void CCmdHandler::OnExecuteTool(LPARAM lp)

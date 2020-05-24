@@ -16,6 +16,7 @@
 	    	<text size="-1,-1" maxWidth="350dp" multiLines="1" name="txt_tip_content"/>
 	    	<window size="250,0"/>
 	    </caption2>
+      <button size="80,30" name="btn_search" text="网络查询" layout_gravity="center" display="0"/>
     </caption2>
   </root>
 </SOUI>

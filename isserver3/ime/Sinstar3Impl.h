@@ -79,7 +79,7 @@ public:
 	void OnSkinChanged();
 
 	void OpenConfig();
-	void ShowTip(LPCTSTR pszTitle, LPCTSTR pszContent);
+	void ShowTip(LPCTSTR pszTitle, LPCTSTR pszContent,LPCTSTR pszKey);
 
 	void InputSpchar(LPCTSTR pszText);
 	void Broadcast(UINT uCmd, LPVOID pData, DWORD nLen);
