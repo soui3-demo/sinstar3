@@ -12,6 +12,6 @@ TIPDICT_API int TipDict(LPCWSTR pszKey,int nKeyLen,LPWSTR pszBuf,int nBufLen)
 {
 	if(nBufLen<1000)
 		return 1000;
-	static const wchar_t * KFmt=L"<text size=\"-1,-1\" colorText=\"#ff0000\">µã»÷ËÑË÷:%s</text>";
+	static const wchar_t * KFmt=L"<text size=\"-1,-1\" colorText=\"#000000\">µã»÷ËÑË÷:</text><text size=\"-1,-1\" colorText=\"#ff0000\">%s</text>";
 	return swprintf_s(pszBuf,nBufLen,KFmt,pszKey);
 }
