@@ -54,7 +54,20 @@ namespace SOUI
 						m_Tick = t;
 					}
                     ::ClientToScreen(pMsg->hwnd,&pt);
-                    SetWindowPos(0,pt.x  ,pt.y + 18,0,0,SWP_NOSIZE|SWP_NOZORDER|SWP_NOSENDCHANGING|SWP_NOACTIVATE);
+					pt.y+=18;
+
+					HMONITOR hMonitor;
+					MONITORINFO mi;
+					hMonitor = MonitorFromRect(&m_rcTarget, MONITOR_DEFAULTTONEAREST);	 
+					mi.cbSize = sizeof(mi);
+					GetMonitorInfo(hMonitor, &mi);
+					CRect rcWnd = GetWindowRect();
+					if(pt.x+rcWnd.Width()>mi.rcMonitor.right)
+						pt.x = mi.rcMonitor.right-rcWnd.Width();
+					if(pt.y+rcWnd.Height()>mi.rcMonitor.bottom)
+						pt.y = mi.rcMonitor.bottom-rcWnd.Height();
+
+                    SetWindowPos(HWND_TOPMOST,pt.x,pt.y,0,0,SWP_NOSIZE|SWP_NOACTIVATE);
                 }
             }
             break;
@@ -103,7 +116,7 @@ namespace SOUI
 			if(xmlDoc.load_string(m_strTip))
 			{
 				pugi::xml_node root = xmlDoc.first_child();
-				if(wcsicmp(root.name(),L"soui")==0)
+				if(_wcsicmp(root.name(),L"soui")==0)
 				{
 					InitFromXml(xmlDoc.first_child());
 				}else
@@ -164,14 +177,7 @@ namespace SOUI
 	void STipCtrlEx::OnWindowPosChanging(LPWINDOWPOS lpWndPos)
 	{
 		SHostWnd::OnWindowPosChanging(lpWndPos);
-		//if(!(lpWndPos->flags&SWP_NOSIZE) && g_SettingsUI->bMouseFollow)
-		//{
-		//	CPoint pt = UpdatePosition(m_ptCaret,lpWndPos->cx,lpWndPos->cy);
-		//	//auto change pos
-		//	lpWndPos->x=pt.x;
-		//	lpWndPos->y=pt.y;
-		//	lpWndPos->flags&=~SWP_NOMOVE;
-		//}
+		SLOG_INFO("STipCtrlEx::OnWindowPosChanging,x:"<<lpWndPos->x<<" y:"<<lpWndPos->y<<" cx:"<<lpWndPos->cx<<" cy:"<<lpWndPos->cy);
 	}
 
 
