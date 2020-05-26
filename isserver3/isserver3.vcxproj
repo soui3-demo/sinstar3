@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -11,103 +11,88 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{72EB3283-11E0-4274-8D6C-27E413F23CA4}</ProjectGuid>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <ProjectGuid>{C63875CC-075E-49A9-8D9C-2F263D67FBAA}</ProjectGuid>
+    <RootNamespace>isserver3</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
-  <ImportGroup Label="Shared">
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>16.0.30028.132</_ProjectFileVersion>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IntDir>$(Configuration)\</IntDir>
     <OutDir>$(SolutionDir)data\program\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IntDir>$(Configuration)\</IntDir>
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>.;..\include;$(SOUI3PATH)\config;$(SOUI3PATH)\components;$(SOUI3PATH)\SOUI\include;$(SOUI3PATH)\utilities\include;$(SOUI3PATH)\third-part\Scintilla\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;STRICT;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <BrowseInformation>true</BrowseInformation>
       <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>.;$(SOUI3PATH)\config;$(SOUI3PATH)\components;$(SOUI3PATH)\SOUI\include;$(SOUI3PATH)\utilities\include;$(SolutionDir)include;$(SolutionDir)ipcobject\include;$(SOUI3PATH)\third-part\Scintilla\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
+      <AdditionalDependencies>imm32.lib;utilitiesd.lib;soui3d.lib;helperd.lib;Scintillad.lib;iscommd.lib;sipcobjectd.lib;slog4zd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib;$(SOUI3PATH)\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>..\lib;$(SOUI3PATH)\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>helperd.lib;iscommd.lib;utilitiesd.lib;soui3d.lib;scintillad.lib;imm32.lib;SIpcObjectd.lib;slog4zd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
     </Link>
-    <ResourceCompile>
-      <Culture>0x0804</Culture>
-      <PreprocessorDefinitions>_UNICODE;UNICODE;_DEBUG;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ResourceCompile>
-    <Manifest>
-      <AdditionalManifestFiles>res\DeclareDPIAware.manifest</AdditionalManifestFiles>
-    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>.;..\include;$(SOUI3PATH)\config;$(SOUI3PATH)\components;$(SOUI3PATH)\SOUI\include;$(SOUI3PATH)\utilities\include;$(SOUI3PATH)\third-part\Scintilla\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <WholeProgramOptimization>true</WholeProgramOptimization>
       <Optimization>Disabled</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>.;$(SOUI3PATH)\config;$(SOUI3PATH)\components;$(SOUI3PATH)\SOUI\include;$(SOUI3PATH)\utilities\include;$(SolutionDir)include;$(SolutionDir)ipcobject\include;$(SOUI3PATH)\third-part\Scintilla\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader />
+      <BrowseInformation>true</BrowseInformation>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
+      <AdditionalDependencies>imm32.lib;utilities.lib;soui3.lib;helper.lib;iscomm.lib;Scintilla.lib;sipcobject.lib;slog4z.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib;$(SOUI3PATH)\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>..\lib;$(SOUI3PATH)\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>helper.lib;iscomm.lib;utilities.lib;soui3.lib;scintilla.lib;imm32.lib;sipcobject.lib;slog4z.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
     </Link>
-    <ResourceCompile>
-      <Culture>0x0804</Culture>
-    </ResourceCompile>
-    <Manifest>
-      <AdditionalManifestFiles>res\DeclareDPIAware.manifest</AdditionalManifestFiles>
-    </Manifest>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <Text Include="license.txt" />
-    <Text Include="readme.txt" />
-  </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Base64.cpp" />
     <ClCompile Include="controls\QR_Encode.cpp" />
@@ -132,8 +117,10 @@
     <ClCompile Include="controls\SSpellView.cpp" />
     <ClCompile Include="controls\SStatusBackground.cpp" />
     <ClCompile Include="controls\STabCtrlEx.cpp" />
+    <ClCompile Include="controls\STipView.cpp" />
     <ClCompile Include="controls\SToggle2.cpp" />
     <ClCompile Include="dataCenter\DataCenter.cpp" />
+    <ClCompile Include="dataCenter\SearchCfg.cpp" />
     <ClCompile Include="dataCenter\Settings.cpp" />
     <ClCompile Include="ime\CmdHandler.cpp" />
     <ClCompile Include="ime\InputState.cpp" />
@@ -147,44 +134,37 @@
     <ClCompile Include="ime\ui\STipWnd.cpp" />
     <ClCompile Include="ime\ui\SToolsMgr.cpp" />
     <ClCompile Include="ime\Utils.cpp" />
-    <ClCompile Include="isserver3.cpp">
-      <ShowIncludes Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ShowIncludes>
-    </ClCompile>
+    <ClCompile Include="isserver3.cpp" />
     <ClCompile Include="IsSvrProxy.cpp" />
     <ClCompile Include="Minidump.cpp" />
     <ClCompile Include="settings\AddBlurDlg.cpp" />
     <ClCompile Include="settings\ConfigDlg.cpp" />
     <ClCompile Include="ShellTypeReg.cpp" />
-    <ClCompile Include="controls\STipView.cpp" />
+    <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="ThreadObject.cpp" />
+    <ClCompile Include="TipDict.cpp" />
     <ClCompile Include="ui\BuildIndexProgWnd.cpp" />
     <ClCompile Include="ui\FindDlg.cpp" />
     <ClCompile Include="ui\KeyMapDlg.cpp" />
+    <ClCompile Include="ui\SToolTipEx.cpp" />
     <ClCompile Include="ui\TextEditorDlg.cpp" />
     <ClCompile Include="ui\TrayIcon.cpp" />
     <ClCompile Include="ui\UpdateInfoDlg.cpp" />
-    <ClCompile Include="worker.cpp" />
-    <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-    </ClCompile>
+    <ClCompile Include="UrlEncoder\Encoder.cpp" />
     <ClCompile Include="WinHttp\HttpClient.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="isserver3.rc" />
+    <ClCompile Include="worker.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Base64.h" />
     <ClInclude Include="controls\QR_Encode.h" />
-    <ClInclude Include="controls\ScintillaWnd.h" />
-    <ClInclude Include="controls\SCompView.h" />
-    <ClInclude Include="controls\SRealWndHandler_Scintilla.h" />
-    <ClInclude Include="controls\SSkinAni.h" />
+    <ClInclude Include="controls\SAniImgFrame.h" />
     <ClInclude Include="controls\SApngPlayer.h" />
     <ClInclude Include="controls\SCandView.h" />
     <ClInclude Include="controls\SCaption2.h" />
     <ClInclude Include="controls\SChatEdit.h" />
+    <ClInclude Include="controls\ScintillaWnd.h" />
     <ClInclude Include="controls\SCompBackground.h" />
+    <ClInclude Include="controls\SCompView.h" />
     <ClInclude Include="controls\SEnglishCand.h" />
     <ClInclude Include="controls\SFlagView.h" />
     <ClInclude Include="controls\SLineComp.h" />
@@ -192,14 +172,18 @@
     <ClInclude Include="controls\SMutexView.h" />
     <ClInclude Include="controls\SPhraseCand.h" />
     <ClInclude Include="controls\SQrCtrl.h" />
+    <ClInclude Include="controls\SRealWndHandler_Scintilla.h" />
     <ClInclude Include="controls\SSentView.h" />
+    <ClInclude Include="controls\SSkinAni.h" />
     <ClInclude Include="controls\SSkinAPNG.h" />
     <ClInclude Include="controls\SSkinPNGX.h" />
     <ClInclude Include="controls\SSpellView.h" />
     <ClInclude Include="controls\SStatusBackground.h" />
     <ClInclude Include="controls\STabCtrlEx.h" />
+    <ClInclude Include="controls\STipView.h" />
     <ClInclude Include="controls\SToggle2.h" />
     <ClInclude Include="dataCenter\DataCenter.h" />
+    <ClInclude Include="dataCenter\SearchCfg.h" />
     <ClInclude Include="dataCenter\Settings.h" />
     <ClInclude Include="global_def.h" />
     <ClInclude Include="ime\CmdHandler.h" />
@@ -217,80 +201,67 @@
     <ClInclude Include="ime\Utils.h" />
     <ClInclude Include="IsSvrProxy.h" />
     <ClInclude Include="Minidump.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="res\resource.h" />
     <ClInclude Include="res\version.h" />
     <ClInclude Include="settings\AddBlurDlg.h" />
     <ClInclude Include="settings\ConfigDlg.h" />
+    <ClInclude Include="settings\souidlgs.h" />
     <ClInclude Include="ShellTypeReg.h" />
-    <ClInclude Include="controls\STipView.h" />
+    <ClInclude Include="stdafx.h" />
     <ClInclude Include="ThreadObject.h" />
+    <ClInclude Include="TipDict.h" />
     <ClInclude Include="ui\BuildIndexProgWnd.h" />
     <ClInclude Include="ui\FindDlg.h" />
     <ClInclude Include="ui\KeyMapDlg.h" />
+    <ClInclude Include="ui\SToolTipEx.h" />
     <ClInclude Include="ui\TextEditorDlg.h" />
     <ClInclude Include="ui\TrayIcon.h" />
     <ClInclude Include="ui\UpdateInfoDlg.h" />
-    <ClInclude Include="ui\whwindow.h" />
-    <ClInclude Include="worker.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="WinHttp\Common.h" />
+    <ClInclude Include="UrlEncoder\Encoder.h" />
     <ClInclude Include="WinHttp\HttpClient.h" />
     <ClInclude Include="WinHttp\IHttpInterface.h" />
     <ClInclude Include="WinHttp\winhttp.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="res\soui_res.rc2" />
-    <CustomBuild Include="uires\uires.idx">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(SOUI3PATH)\tools\uiresbuilder.exe" -i "%(FullPath)" -p uires -r .\res\soui_res.rc2 -h .\res\resource.h idtable</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building SoUI Resource</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\res\soui_res.rc2;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(SOUI3PATH)\tools\uiresbuilder.exe" -i "%(FullPath)" -p uires -r .\res\soui_res.rc2 -h .\res\resource.h idtable</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building SoUI Resource</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\res\soui_res.rc2;%(Outputs)</Outputs>
-    </CustomBuild>
-    <None Include="res\version.rc2" />
-  </ItemGroup>
-  <ItemGroup>
-    <Xml Include="uires\layout\server\dlg_texteditor.xml" />
-    <Xml Include="uires\smenu\context.xml" />
-    <Xml Include="uires\uidef\init.xml" />
-    <Xml Include="uires\values\color.xml" />
-    <Xml Include="uires\values\dim.xml" />
-    <Xml Include="uires\values\skin.xml" />
-    <Xml Include="uires\values\string.xml" />
-    <Xml Include="uires\xml\dlg_addblur.xml" />
-    <Xml Include="uires\xml\dlg_config.xml" />
-    <Xml Include="uires\xml\dlg_keymap.xml" />
-    <Xml Include="uires\xml\dlg_update_info.xml" />
-    <Xml Include="uires\xml\page_about.xml" />
-    <Xml Include="uires\xml\page_associate.xml" />
-    <Xml Include="uires\xml\page_candidate.xml" />
-    <Xml Include="uires\xml\page_celib.xml" />
-    <Xml Include="uires\xml\page_habit.xml" />
-    <Xml Include="uires\xml\page_hotkey.xml" />
-    <Xml Include="uires\xml\page_misc.xml" />
-    <Xml Include="uires\xml\page_phraselib.xml" />
-    <Xml Include="uires\xml\page_pinyin.xml" />
-    <Xml Include="uires\xml\page_tts.xml" />
-    <Xml Include="uires\xml\wnd_build_index_prog.xml" />
-    <Xml Include="uires\xml\wnd_composition.xml" />
-    <Xml Include="uires\xml\wnd_spchar.xml" />
-    <Xml Include="uires\xml\wnd_status_bar.xml" />
-    <Xml Include="uires\xml\wnd_tip.xml" />
+    <ClInclude Include="worker.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\cit.ico" />
     <Image Include="res\logo.ico" />
+    <Image Include="res\logo1.ico" />
+    <Image Include="res\logo2.ico" />
+    <Image Include="res\logo3.ico" />
+    <Image Include="res\logo4.ico" />
+    <Image Include="res\logo5.ico" />
+    <Image Include="res\logo6.ico" />
     <Image Include="res\plt.ico" />
-    <Image Include="uires\icon\logo.ico" />
-    <Image Include="uires\icon\logo1.ico" />
-    <Image Include="uires\icon\logo2.ico" />
-    <Image Include="uires\icon\logo3.ico" />
-    <Image Include="uires\icon\logo4.ico" />
+    <Image Include="res\skin.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="isserver3.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\soui_res.rc2" />
+    <None Include="res\version.rc2" />
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="res\DeclareDPIAware.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="license.txt" />
+    <Text Include="readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="uires\layout\ime\wnd_tooltip.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\helper\helper.vcxproj">
+      <Project>{223d1db1-c67b-4b54-bee8-b60f24d7e8ce}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\SIpcObject\SIpcObject.vcxproj">
+      <Project>{1a661c8f-0665-31b3-9106-86cecb8a047d}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
