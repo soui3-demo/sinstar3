@@ -80,7 +80,7 @@ public:
 	int TtsGetTokensInfo(bool bCh, wchar_t token[][MAX_TOKEN_NAME_LENGHT], int nBufSize);
 	void ShowTray(bool bTray) ;
 	static int BackupDir(const SStringT &strFrom,const SStringT & strTo);
-
+	static bool IsBackupDirValid(const SStringT & strDir);
 protected:
 	void OnCheckUpdateResult(EventArgs *e);
 	EVENT_MAP_BEGIN()

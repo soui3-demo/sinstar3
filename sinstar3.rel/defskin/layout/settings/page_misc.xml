@@ -16,7 +16,7 @@
     </window>
     <text text="搜索引擎:"/>
     <combobox size="300,30" name="cbx_search_engine" dropdown="1">
-      <liststyle colorBkgnd="#ffffff" margin="1,1,1,1" colorBorder="@color/black"/>
+      <liststyle colorBkgnd="#ffffff" margin="1,1,1,1" colorBorder="@color/black" font="size:16"/>
     </combobox>
     <text text="提示音:" />
     <window size="-1,-1" layout="hbox">

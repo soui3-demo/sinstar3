@@ -817,11 +817,11 @@ void CIsSvrProxy::backupProc(LPVOID pData)
 	delete param;
 }
 
+static const LPCTSTR KBackupDirs[]={
+		_T("server"),_T("skins")
+};
 int CIsSvrProxy::BackupDir(const SStringT &strFrom,const SStringT & strTo)
 {
-	const LPCTSTR KBackupDirs[]={
-		_T("server"),_T("skins")
-	};
 	SLOG_INFO("backup dir from "<<strFrom<<" to"<<strTo);
 
 	for(int i=0;i<ARRAYSIZE(KBackupDirs);i++)
@@ -851,4 +851,16 @@ int CIsSvrProxy::BackupDir(const SStringT &strFrom,const SStringT & strTo)
 			return nRet;
 	}
 	return 0;
+}
+
+bool CIsSvrProxy::IsBackupDirValid(const SStringT & strDir)
+{
+	for(int i=0;i<ARRAYSIZE(KBackupDirs);i++)
+	{
+		TCHAR szDest[MAX_PATH]={0};
+		_stprintf(szDest,_T("%s\\%s"),strDir,KBackupDirs[i]);
+		if(GetFileAttributes(szDest)==INVALID_FILE_ATTRIBUTES)
+			return false;
+	}
+	return true;
 }

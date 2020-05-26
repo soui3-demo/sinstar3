@@ -9,7 +9,7 @@
       <text >左Shift功能:</text>
       <text >右Shift功能:</text>
       <combobox size="150,30" name="cbx_left_shift_func" dropdown="1">
-        <liststyle colorBkgnd="#ffffff" margin="1,1,1,1" colorBorder="@color/black"/>
+        <liststyle colorBkgnd="#ffffff" margin="1,1,1,1" colorBorder="@color/black"  font="size:16" />
         <items>
           <item text="无"/>
           <item text="输入法开关"/>
@@ -19,7 +19,7 @@
         </items>
       </combobox>
       <combobox size="150,30" name="cbx_right_shift_func" dropdown="1">
-        <liststyle colorBkgnd="#ffffff" margin="1,1,1,1" colorBorder="@color/black"/>
+        <liststyle colorBkgnd="#ffffff" margin="1,1,1,1" colorBorder="@color/black"  font="size:16" />
         <items>
           <item text="无"/>
           <item text="输入法开关"/>
@@ -31,7 +31,7 @@
       <text >左Ctrl功能:</text>
       <text >右Ctrl功能:</text>
       <combobox size="150,30" name="cbx_left_ctrl_func" dropdown="1">
-        <liststyle colorBkgnd="#ffffff" margin="1,1,1,1" colorBorder="@color/black"/>
+        <liststyle colorBkgnd="#ffffff" margin="1,1,1,1" colorBorder="@color/black"  font="size:16" />
         <items>
           <item text="无"/>
           <item text="输入法开关"/>
@@ -41,7 +41,7 @@
         </items>
       </combobox>
       <combobox size="150,30" name="cbx_right_ctrl_func" dropdown="1">
-        <liststyle colorBkgnd="#ffffff" margin="1,1,1,1" colorBorder="@color/black"/>
+        <liststyle colorBkgnd="#ffffff" margin="1,1,1,1" colorBorder="@color/black"  font="size:16" />
         <items>
           <item text="无"/>
           <item text="输入法开关"/>

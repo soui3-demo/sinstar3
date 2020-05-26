@@ -1214,6 +1214,11 @@ SWindow *pCtrl = FindChildByID(id);\
 
 	void CConfigDlg::OnRestore()
 	{
+		if(!CIsSvrProxy::IsBackupDirValid(g_SettingsG->szBackupDir))
+		{
+			SMessageBox(m_hWnd,_T("无备份或者备份损坏!"),_T("提示"),MB_OK|MB_ICONSTOP);
+			return;
+		}
 		if(SMessageBox(m_hWnd,_T("确定要从备份目录恢复数据吗？服务器将自动重启!"),_T("危险操作!"),MB_OKCANCEL|MB_ICONQUESTION)==IDOK)
 		{
 			PostQuitMessage(CODE_RESTORE);
