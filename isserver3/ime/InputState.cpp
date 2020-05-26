@@ -2239,9 +2239,9 @@ BOOL CInputState::KeyIn_Test_FuncKey(UINT uKey,LPARAM lKeyData,const BYTE * lpbK
 
 	BOOL bKeyDown = !(lKeyData & 0x80000000);
 	KeyFunction fun = Fun_None;
-	UINT byScanCode = (UINT)(lKeyData >> 16)&0x0000ffff;//scan code
 	if(uKey == VK_SHIFT)
 	{
+		UINT byScanCode = (UINT)(lKeyData >> 16) & 0x000000ff;//scan code
 		if (bKeyDown)
 		{//按下SHIFT
 			if(m_bPressCtrl)
@@ -2264,6 +2264,7 @@ BOOL CInputState::KeyIn_Test_FuncKey(UINT uKey,LPARAM lKeyData,const BYTE * lpbK
 		}
 	}else //(uKey == VK_CONTROL)
 	{
+		UINT byScanCode = (UINT)(lKeyData >> 24) & 0x000000ff;//scan code
 		if (bKeyDown)
 		{//按下SHIFT
 			if(m_bPressShift)
@@ -2338,7 +2339,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 			if (!bKeyDown && m_bPressShift)
 			{
 				m_bPressShift = FALSE;
-				UINT uScanCode = (lKeyData >> 16)&0x0000ffff;
+				UINT uScanCode = (lKeyData >> 16)&0x000000ff;
 				if (!m_bPressOther && !m_bPressCtrl
 					&& ((uScanCode==Left_Shift && g_SettingsG->m_funLeftShift==Fun_Ime_Switch)||(uScanCode == Right_Shift && g_SettingsG->m_funRightShift==Fun_Ime_Switch)))
 				{//激活输入
@@ -2357,7 +2358,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 			if (!bKeyDown && m_bPressCtrl)
 			{
 				m_bPressCtrl = FALSE;
-				UINT uScanCode = (lKeyData >> 16)&0x0000ffff;
+				UINT uScanCode = (lKeyData >> 24)&0x000000ff;
 				if (!m_bPressOther && !m_bPressShift
 					&& ((uScanCode==Left_Ctrl && g_SettingsG->m_funLeftCtrl==Fun_Ime_Switch)||(uScanCode == Right_Ctrl && g_SettingsG->m_funRightCtrl==Fun_Ime_Switch)))
 				{//激活输入

@@ -31,10 +31,10 @@ enum KeyFunction
 };
 
 enum KeyScanCode{
-	Left_Shift = 0xc02a,
-	Right_Shift = 0xc036,
-	Left_Ctrl = 0xc01d,
-	Right_Ctrl = 0xc11d,
+	Left_Shift = 0x2a,
+	Right_Shift = 0x36,
+	Left_Ctrl = 0xc0,
+	Right_Ctrl = 0xc1,
 };
 
 class CModifiedMark
