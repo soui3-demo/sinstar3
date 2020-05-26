@@ -29,12 +29,11 @@ namespace SOUI
 	protected:
         void OnTimer(UINT_PTR idEvent);
         void ShowTip(BOOL bShow);
-		void OnWindowPosChanging(LPWINDOWPOS lpWndPos);
+		CPoint AdjustTipPos(CPoint pt) const;
 
         BEGIN_MSG_MAP_EX(STipCtrlEx)
 			MSG_WM_CREATE(OnCreate)
             MSG_WM_TIMER(OnTimer)
-			MSG_WM_WINDOWPOSCHANGING(OnWindowPosChanging)
 			CHAIN_MSG_MAP(SHostWnd)
         END_MSG_MAP()
 
@@ -47,6 +46,7 @@ namespace SOUI
         CRect          m_rcTarget;
         TIPID          m_id;
 		BOOL		   m_bUpdated;
+		CPoint		   m_ptTip;
     };
 
 	class SToolTipFactory : public TObjRefImpl<IToolTipFactory>

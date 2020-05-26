@@ -39,8 +39,8 @@ namespace SOUI
             break;
         case WM_MOUSEMOVE:
             {
-                CPoint pt(GET_X_LPARAM(pMsg->lParam),GET_Y_LPARAM(pMsg->lParam));
-                if(!m_rcTarget.PtInRect(pt))
+                m_ptTip = CPoint(GET_X_LPARAM(pMsg->lParam),GET_Y_LPARAM(pMsg->lParam));
+                if(!m_rcTarget.PtInRect(m_ptTip))
                 {
                     OnTimer(TIMERID_SPAN2);//hide tip
                 }
@@ -53,20 +53,9 @@ namespace SOUI
 						SetTimer(TIMERID_DELAY2, m_nDelay);
 						m_Tick = t;
 					}
-                    ::ClientToScreen(pMsg->hwnd,&pt);
-					pt.y+=18;
-
-					HMONITOR hMonitor;
-					MONITORINFO mi;
-					hMonitor = MonitorFromRect(&m_rcTarget, MONITOR_DEFAULTTONEAREST);	 
-					mi.cbSize = sizeof(mi);
-					GetMonitorInfo(hMonitor, &mi);
-					CRect rcWnd = GetWindowRect();
-					if(pt.x+rcWnd.Width()>mi.rcMonitor.right)
-						pt.x = mi.rcMonitor.right-rcWnd.Width();
-					if(pt.y+rcWnd.Height()>mi.rcMonitor.bottom)
-						pt.y = mi.rcMonitor.bottom-rcWnd.Height();
-
+                    ::ClientToScreen(pMsg->hwnd,&m_ptTip);
+					m_ptTip.y+=18;
+					CPoint pt = AdjustTipPos(m_ptTip);
                     SetWindowPos(HWND_TOPMOST,pt.x,pt.y,0,0,SWP_NOSIZE|SWP_NOACTIVATE);
                 }
             }
@@ -125,6 +114,7 @@ namespace SOUI
 					SApplication::getSingletonPtr()->LoadXmlDocment(xmlDoc2,m_strXmlLayout);
 					InitFromXml(xmlDoc2.first_child());
 					CreateChildren(xmlDoc);
+					UpdateLayout();
 				}
 			}else
 			{
@@ -132,7 +122,8 @@ namespace SOUI
 				InitFromXml(xmlDoc.first_child());
 				GetRoot()->SetWindowText(m_strTip);
 			}
-			SetWindowPos(HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW|SWP_NOACTIVATE);
+			CPoint pt = AdjustTipPos(m_ptTip);
+			SetWindowPos(HWND_TOPMOST,pt.x,pt.y,0,0,SWP_NOSIZE|SWP_SHOWWINDOW|SWP_NOACTIVATE);
         }
     }
 
@@ -174,10 +165,20 @@ namespace SOUI
 	{
 	}
 
-	void STipCtrlEx::OnWindowPosChanging(LPWINDOWPOS lpWndPos)
+	CPoint STipCtrlEx::AdjustTipPos(CPoint pt) const
 	{
-		SHostWnd::OnWindowPosChanging(lpWndPos);
-		SLOG_INFO("STipCtrlEx::OnWindowPosChanging,x:"<<lpWndPos->x<<" y:"<<lpWndPos->y<<" cx:"<<lpWndPos->cx<<" cy:"<<lpWndPos->cy);
+
+		HMONITOR hMonitor;
+		MONITORINFO mi;
+		hMonitor = MonitorFromRect(&m_rcTarget, MONITOR_DEFAULTTONEAREST);	 
+		mi.cbSize = sizeof(mi);
+		GetMonitorInfo(hMonitor, &mi);
+		CRect rcWnd = GetWindowRect();
+		if(pt.x+rcWnd.Width()>mi.rcMonitor.right)
+			pt.x = mi.rcMonitor.right-rcWnd.Width();
+		if(pt.y+rcWnd.Height()>mi.rcMonitor.bottom)
+			pt.y = mi.rcMonitor.bottom-rcWnd.Height();
+		return pt;
 	}
 
 
