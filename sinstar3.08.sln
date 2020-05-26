@@ -1,45 +1,58 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30114.105
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sinstar3_ime", "sinstar3_ime\sinstar3_ime.vcxproj", "{9CD9D0D2-9A72-4EBB-A459-8229E224B02C}"
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sinstar3_ime", "sinstar3_ime\sinstar3_ime.vcproj", "{9CD9D0D2-9A72-4EBB-A459-8229E224B02C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{72550488-BEC8-46F2-8F31-6C4D3DF1A749} = {72550488-BEC8-46F2-8F31-6C4D3DF1A749}
+		{4EA43A9C-113F-4EFF-B006-AC8020482D6A} = {4EA43A9C-113F-4EFF-B006-AC8020482D6A}
+	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sinstar3_tsf", "sinstar3_tsf\sinstar3_tsf.vcxproj", "{4893E464-3664-442B-8BFB-6D13679EAB23}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sinstar3_tsf", "sinstar3_tsf\sinstar3_tsf.vcproj", "{4893E464-3664-442B-8BFB-6D13679EAB23}"
+	ProjectSection(ProjectDependencies) = postProject
+		{72550488-BEC8-46F2-8F31-6C4D3DF1A749} = {72550488-BEC8-46F2-8F31-6C4D3DF1A749}
+		{4EA43A9C-113F-4EFF-B006-AC8020482D6A} = {4EA43A9C-113F-4EFF-B006-AC8020482D6A}
+	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "register", "register\register.vcxproj", "{864AB83B-8697-4D7A-A956-269609D9D1CC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "register", "register\register.vcproj", "{864AB83B-8697-4D7A-A956-269609D9D1CC}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "helper", "helper\helper.vcxproj", "{223D1DB1-C67B-4B54-BEE8-B60F24D7E8CE}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "helper", "helper\helper.vcproj", "{223D1DB1-C67B-4B54-BEE8-B60F24D7E8CE}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iscomm", "iscomm\iscomm.vcxproj", "{A69CA2FD-05D2-4C27-B106-B2EF0BFCFA51}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iscomm", "iscomm\iscomm.vcproj", "{A69CA2FD-05D2-4C27-B106-B2EF0BFCFA51}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CompBuilder", "CompBuilder\CompBuilder.vcxproj", "{13C135A7-8B18-4746-8495-672D8F286B92}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CompBuilder", "CompBuilder\CompBuilder.vcproj", "{13C135A7-8B18-4746-8495-672D8F286B92}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FindCaller", "FindCaller\FindCaller.vcxproj", "{57D17CAC-20CB-4F1A-8408-BB0181AF1695}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FindCaller", "FindCaller\FindCaller.vcproj", "{57D17CAC-20CB-4F1A-8408-BB0181AF1695}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FindCallerUI", "FindCallerUI\FindCallerUI.vcxproj", "{49C492B3-B2D6-4048-BFB1-AB89D334C42E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FindCallerUI", "FindCallerUI\FindCallerUI.vcproj", "{49C492B3-B2D6-4048-BFB1-AB89D334C42E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "isserver3", "isserver3\isserver3.vcxproj", "{C63875CC-075E-49A9-8D9C-2F263D67FBAA}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "isserver3", "isserver3\isserver3.vcproj", "{C63875CC-075E-49A9-8D9C-2F263D67FBAA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1A661C8F-0665-31B3-9106-86CECB8A047D} = {1A661C8F-0665-31B3-9106-86CECB8A047D}
+		{223D1DB1-C67B-4B54-BEE8-B60F24D7E8CE} = {223D1DB1-C67B-4B54-BEE8-B60F24D7E8CE}
+	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sinstar3_proxy", "sinstar3_proxy\sinstar3_proxy.vcxproj", "{72550488-BEC8-46F2-8F31-6C4D3DF1A749}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sinstar3_proxy", "sinstar3_proxy\sinstar3_proxy.vcproj", "{72550488-BEC8-46F2-8F31-6C4D3DF1A749}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iscore", "iscore\iscore.vcxproj", "{2CBFA93E-21BF-49C1-8583-A8DE1319DED9}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iscore", "iscore\iscore.vcproj", "{2CBFA93E-21BF-49C1-8583-A8DE1319DED9}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SIpcObject", "SIpcObject\SIpcObject.vcxproj", "{1A661C8F-0665-31B3-9106-86CECB8A047D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SIpcObject", "SIpcObject\SIpcObject.vcproj", "{1A661C8F-0665-31B3-9106-86CECB8A047D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SLog4Z", "SLog4Z\SLog4Z.vcxproj", "{4EA43A9C-113F-4EFF-B006-AC8020482D6A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SLog4Z", "SLog4Z\SLog4Z.vcproj", "{4EA43A9C-113F-4EFF-B006-AC8020482D6A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PlEditor", "PlEditor\PlEditor.vcxproj", "{49486128-C430-41B9-B787-885B8267DD0A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PlEditor", "PlEditor\PlEditor.vcproj", "{49486128-C430-41B9-B787-885B8267DD0A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A6071B67-D4E1-3777-9F66-E3264AA9ABAA} = {A6071B67-D4E1-3777-9F66-E3264AA9ABAA}
+	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TaskLoop", "TaskLoop\TaskLoop.vcxproj", "{A6071B67-D4E1-3777-9F66-E3264AA9ABAA}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TaskLoop", "TaskLoop\TaskLoop.vcproj", "{A6071B67-D4E1-3777-9F66-E3264AA9ABAA}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RegisterCore", "RegisterCore\RegisterCore.vcxproj", "{1E6637E8-6BBA-4C62-864A-1BB7454676B8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RegisterCore", "RegisterCore\RegisterCore.vcproj", "{1E6637E8-6BBA-4C62-864A-1BB7454676B8}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CrashReporter", "CrashReporter\CrashReporter.vcxproj", "{662BB87E-E016-4610-87F4-8DECCB0CB085}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CrashReporter", "CrashReporter\CrashReporter.vcproj", "{662BB87E-E016-4610-87F4-8DECCB0CB085}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "soui3", "..\soui3.git\SOUI\soui3.vcxproj", "{A278536F-80DF-3C47-A1FD-14BAACB6B8C6}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "soui3", "..\soui3.git\SOUI\soui3.vcproj", "{A278536F-80DF-3C47-A1FD-14BAACB6B8C6}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tipdict", "tipdict\tipdict.vcxproj", "{920715D9-FC61-496E-A0FF-0601FFA60620}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tipdict", "tipdict\tipdict.vcproj", "{920715D9-FC61-496E-A0FF-0601FFA60620}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -258,8 +271,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {DBA4E63E-FB4B-4AD3-B898-146CFB42632E}
 	EndGlobalSection
 EndGlobal
