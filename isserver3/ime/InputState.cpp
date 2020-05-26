@@ -2161,7 +2161,7 @@ BOOL CInputState::KeyIn_Line_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 			for(i=0;i<sCount;i++)
 			{
 				lpCntxtPriv->ppbyCandInfo[i]=pBuf;
-				pBuf+=pBuf[2]+3;
+				pBuf+=pBuf[2]*sizeof(WCHAR)+3;
 			}
 			lpCntxtPriv->sCandCount=sCount;
 		}
