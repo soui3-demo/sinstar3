@@ -91,6 +91,7 @@ Section "ºËÐÄ³ÌÐò" SEC_CORE
   File /r "server\userdef.ud"
   File /r "server\wordrate.dat"
   File /r "server\search.xml"
+  File /r "server\tipdict.dll"
 SectionEnd
 
 Section "À©Õ¹Æ¤·ô" SEC_SKIN
