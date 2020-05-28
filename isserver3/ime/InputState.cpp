@@ -2580,7 +2580,7 @@ BOOL CInputState::OnSvrNotify(UINT wp, PMSGDATA pMsg)
 						_tcscpy(ctx->szTip,_T("系统词组:"));
 						wcsncpy(ctx->szTip+5,(WCHAR*)(pbyData+2),pbyData[1]);
 						ctx->szTip[5+pbyData[1]]=0;
-						pbyData+=2+pbyData[1];
+						pbyData+=2+pbyData[1]*2;
 						SLOG_INFO("已有词组提示:"<<ctx->szTip);
 					}
 					if(pbyData-pMsg->byData<pMsg->sSize && pbyData[0]==MKI_ASTSENT)
