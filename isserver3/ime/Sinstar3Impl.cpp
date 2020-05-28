@@ -496,6 +496,8 @@ void CSinstar3Impl::OpenConfig()
 
 void CSinstar3Impl::ShowTip(LPCTSTR pszTitle, LPCTSTR pszContent,LPCTSTR pszKey)
 {
+	if(!m_hasFocus)
+		return;
 	if (m_pTipWnd == NULL)
 	{
 		m_pTipWnd = new STipWnd(this);
