@@ -342,6 +342,9 @@ namespace SOUI
 		FindAndSetCombobox(R.id.cbx_left_ctrl_func,g_SettingsG->m_funLeftCtrl);
 		FindAndSetCombobox(R.id.cbx_right_ctrl_func,g_SettingsG->m_funRightCtrl);
 
+		FindAndSetCheck(R.id.chk_blend_for_spell,g_SettingsG->bBlendSpell);
+		FindAndSetCheck(R.id.chk_blend_for_userdef,g_SettingsG->bBlendUD);
+
 		//ÐÎÂë×´Ì¬»Ø³µ
 		int CtrlId = g_SettingsG->bEnterClear ? R.id.enter_for_clear : R.id.enter_for_input;
 		FindAndSetCheck(CtrlId, TRUE);
@@ -1229,6 +1232,16 @@ SWindow *pCtrl = FindChildByID(id);\
 	{
 		EventCBSelChange *e2=sobj_cast<EventCBSelChange>(e);
 		CSearchCfg::getSingleton().SetSel(e2->nCurSel);
+	}
+
+	void CConfigDlg::OnBlendForSpell()
+	{
+		g_SettingsG->bBlendSpell = FindChildByID(R.id.chk_blend_for_spell)->IsChecked();
+	}
+
+	void CConfigDlg::OnBlendForUD()
+	{
+		g_SettingsG->bBlendUD = FindChildByID(R.id.chk_blend_for_userdef)->IsChecked();
 	}
 
 }

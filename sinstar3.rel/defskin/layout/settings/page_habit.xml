@@ -52,10 +52,13 @@
       </combobox>
     </window>
 
-    <text >形码状态回车:</text>
-    <window  layout="hbox">
+	<window size="-2,-1" layout="gridlayout" xInterval="10" yInterval="10" columnCount="2" gravity="left">
+      <text columnSpan="2" layout_gravity="left">形码状态回车:</text>
       <radio text="清除编码" id="120" name="enter_for_clear"/>
-      <radio text="编码上屏" id="121" extend_left="10" name="enter_for_input"/>
+      <radio text="编码上屏" id="121" name="enter_for_input"/>
+      <text columnSpan="2" layout_gravity="left">形码混合输入:</text>
+      <check text="拼音" name="chk_blend_for_spell"/>
+      <check text="自定义" name="chk_blend_for_userdef"/>
     </window>
     <window  layout="hbox">
       <text text="语句模式切换:" name="key_to_sentmode"/>

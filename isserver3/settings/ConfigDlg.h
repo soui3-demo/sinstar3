@@ -121,7 +121,12 @@ namespace SOUI
 		void OnRestore();
 		void OnSearchEngineChange(EventArgs *e);
 
+		void OnBlendForSpell();
+		void OnBlendForUD();
+
 		EVENT_MAP_BEGIN()
+			EVENT_ID_COMMAND(R.id.chk_blend_for_spell,OnBlendForSpell)
+			EVENT_ID_COMMAND(R.id.chk_blend_for_userdef,OnBlendForUD)
 			EVENT_ID_COMMAND(R.id.btn_close,OnClose)
 			EVENT_ID_COMMAND(R.id.btn_help,OnHelp)
 			EVENT_ID_COMMAND(R.id.btn_change_font,OnChangeFont)
