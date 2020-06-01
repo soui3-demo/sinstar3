@@ -116,7 +116,7 @@ void CPLEditor::LoadData(FILE *f)
 		fread(&cLen,1,1,f);
 		fread(szWord,sizeof(WCHAR),cLen,f);
 		AddWord(szWord,cLen,byRate,FALSE,byGroup);
-		if(m_funProgCB) 
+		if(m_funProgCB && nSegLen>0) 
 		{
 			if(i%nSegLen==0)
 				m_funProgCB->OnProg(i/nSegLen,100);
@@ -176,7 +176,7 @@ void CPLEditor::WriteData(FILE *f)
 		fwrite(&p.byRate,1,1,f);
 		fwrite(&p.cLen,1,1,f);
 		fwrite(p.szWord,sizeof(WCHAR),p.cLen,f);
-	 	if(m_funProgCB) 
+	 	if(m_funProgCB && nSegLen>0) 
 		{
 			if(i%nSegLen==0)
 				m_funProgCB->OnProg(i/nSegLen,100);
@@ -287,7 +287,7 @@ int CPLEditor::Import2Group(LPCTSTR pszFile,BYTE byMin, BYTE byMax,BYTE byDefaul
 				if(byMin<=byRate && byRate<=byMax ) 
 					nRet+=AddWord(szLine,nEnd,byRate,TRUE,byGroup)?1:0;
 			}
-			if(m_funProgCB)
+			if(m_funProgCB && nSegLen>0)
 			{
 				if(f.getReadPos()%nSegLen == 0)
 				m_funProgCB->OnProg(f.getReadPos()/nSegLen,100);
@@ -316,7 +316,7 @@ BOOL CPLEditor::ExportGroup(LPCTSTR pszFile,BYTE iGroup)
 	while(pos)
 	{
 		i++;
-		if(m_funProgCB)
+		if(m_funProgCB && nSegLen>0)
 		{
 			if(i%nSegLen == 0)
 			{
@@ -352,7 +352,7 @@ BOOL CPLEditor::EraseGroup(BYTE iGroup)
 		i++;
 		if(m_funProgCB)
 		{
-			if(i%nSegLen == 0)
+			if(i%nSegLen == 0 && nSegLen>0)
 			{
 				m_funProgCB->OnProg(i/nSegLen,100);
 			}
