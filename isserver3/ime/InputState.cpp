@@ -537,7 +537,9 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 
 	BOOL bHandle=FALSE;
 	InputContext * lpCntxtPriv = &m_ctx;
-	if(!bHandle && KeyIn_IsCoding(lpCntxtPriv) && lpCntxtPriv->sbState!=SBST_SENTENCE)
+	if((KeyIn_IsCoding(lpCntxtPriv) && lpCntxtPriv->sbState!=SBST_SENTENCE)//输入状态
+		|| (lpCntxtPriv->sbState == SBST_ASSOCIATE && lpCntxtPriv->sCandCount>0)//联想状态
+		)
 	{//处理重码
 		BYTE byCandIndex=0;
 		if(uVKey==VK_SPACE) 
@@ -2317,14 +2319,18 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 	BOOL bKeyDown = !(lKeyData & 0x80000000);
 	if (!bKeyDown && (uKey != VK_SHIFT && uKey !=VK_CONTROL))
 		return FALSE;
-	if(uKey==VK_SPACE 
-		&& !g_SettingsG->bFullSpace
-		&& m_ctx.inState==INST_CODING 
-		&& m_ctx.bySyllables==0 && m_ctx.cComp==0
-		&& m_ctx.sbState!=SBST_SENTENCE && m_ctx.sCandCount==0)
+	if(uKey==VK_SPACE)
 	{
-		return FALSE;
+		if(!g_SettingsG->bFullSpace
+			&& m_ctx.inState==INST_CODING 
+			&& m_ctx.bySyllables==0 && m_ctx.cComp==0)
+		{
+			if((m_ctx.sbState!=SBST_SENTENCE && m_ctx.sCandCount==0)
+				||(m_ctx.sbState==SBST_ASSOCIATE && g_SettingsG->byAstMode==AST_ENGLISH && !(lpbKeyState[VK_CONTROL]&0x80)))
+				return FALSE;
+		}
 	}
+
 	SLOGFMTI(_T("TestKeyDown, uKey=%x,lKeyData=%x,bDown:%d"),uKey,lKeyData,bKeyDown);
 	BOOL bOpen = m_pListener->IsInputEnable();
 	if (!bOpen)
