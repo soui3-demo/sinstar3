@@ -4,6 +4,9 @@
 #include "../helper/helper.h"
 #include "../include/global.h"
 #include "Minidump.h"
+#include "EnumDisplayAttributeInfo.h"
+#include "DisplayAttributeInfo.h"
+
 static bool g_bInstallDump = false;
 #define UM_ASYNC_FOCUS	(WM_USER+8000)
 
@@ -96,6 +99,8 @@ CSinstar3Tsf::CSinstar3Tsf()
 	
 	_bCompositing = FALSE;
 
+	_gaDisplayAttributeInput = 0;
+
 	Create(theModule->GetModule());
 }
 
@@ -148,6 +153,9 @@ STDAPI CSinstar3Tsf::ActivateEx(ITfThreadMgr *pThreadMgr, TfClientId tfClientId,
 		goto ExitError;
 
 	if (!_InitThreadCompartment())
+		goto ExitError;
+
+	if (!_InitDisplayAttributeGuidAtom())
 		goto ExitError;
 
 	OnSetThreadFocus();
@@ -348,6 +356,8 @@ BOOL CSinstar3Tsf::_UninitSinstar3()
 BOOL CSinstar3Tsf::_InitSinstar3(HWND hWnd)
 {
 	SASSERT(!m_pSinstar3);
+	if(GetFileAttributes(theModule->GetSvrPath()) == INVALID_FILE_ATTRIBUTES)
+		return FALSE;
 	m_pSinstar3 = new CSinstarProxy(this);
 
 	if (!m_pSinstar3->Init(m_hWnd, theModule->GetSvrPath()))
@@ -529,4 +539,104 @@ void CSinstar3Tsf::OnStartComposition(TfEditCookie ec,ITfComposition *pCompositi
 	SASSERT(!_pComposition);
 	_pComposition = pComposition;
 	if(m_pSinstar3) m_pSinstar3->OnCompositionStarted();
+}
+
+
+STDAPI CSinstar3Tsf::EnumDisplayAttributeInfo(IEnumTfDisplayAttributeInfo **ppEnum)
+{
+	CEnumDisplayAttributeInfo* pAttributeEnum = NULL;
+
+	if (ppEnum == NULL)
+	{
+		return E_INVALIDARG;
+	}
+
+	*ppEnum = NULL;
+
+	pAttributeEnum = new  CEnumDisplayAttributeInfo();
+	if (pAttributeEnum == NULL)
+	{
+		return E_OUTOFMEMORY;
+	}
+
+	*ppEnum = pAttributeEnum;
+
+	return S_OK;
+}
+
+//+---------------------------------------------------------------------------
+//
+// ITfDisplayAttributeProvider::GetDisplayAttributeInfo
+//
+//----------------------------------------------------------------------------
+
+STDAPI CSinstar3Tsf::GetDisplayAttributeInfo( REFGUID guidInfo, ITfDisplayAttributeInfo **ppInfo)
+{
+	if (ppInfo == NULL)
+	{
+		return E_INVALIDARG;
+	}
+
+	*ppInfo = NULL;
+
+	// Which display attribute GUID?
+	if (IsEqualGUID(guidInfo, c_guidDispAttrInput))
+	{
+		*ppInfo = new  CDisplayAttributeInfoInput();
+		if ((*ppInfo) == NULL)
+		{
+			return E_OUTOFMEMORY;
+		}
+	}
+	else
+	{
+		return E_INVALIDARG;
+	}
+
+
+	return S_OK;
+}
+
+BOOL CSinstar3Tsf::_InitDisplayAttributeGuidAtom()
+{
+	ITfCategoryMgr* pCategoryMgr = NULL;
+	HRESULT hr = CoCreateInstance(CLSID_TF_CategoryMgr, NULL, CLSCTX_INPROC_SERVER, IID_ITfCategoryMgr, (void**)&pCategoryMgr);
+
+	if (FAILED(hr))
+	{
+		return FALSE;
+	}
+
+	// register the display attribute for input text.
+	hr = pCategoryMgr->RegisterGUID(c_guidDispAttrInput, &_gaDisplayAttributeInput);
+	if (FAILED(hr))
+	{
+		goto Exit;
+	}
+
+Exit:
+	pCategoryMgr->Release();
+
+	return (hr == S_OK);
+}
+
+BOOL CSinstar3Tsf::_SetCompositionDisplayAttributes(TfEditCookie ec, _In_ ITfContext *pContext, ITfRange* pRangeComposition)
+{
+	ITfProperty* pDisplayAttributeProperty = NULL;
+	HRESULT hr = S_OK;
+	// get our the display attribute property
+	if (SUCCEEDED(pContext->GetProperty(GUID_PROP_ATTRIBUTE, &pDisplayAttributeProperty)))
+	{
+		VARIANT var;
+		// set the value over the range
+		// the application will use this guid atom to lookup the acutal rendering information
+		var.vt = VT_I4; // we're going to set a TfGuidAtom
+		var.lVal = _gaDisplayAttributeInput; 
+
+		hr = pDisplayAttributeProperty->SetValue(ec, pRangeComposition, &var);
+
+		pDisplayAttributeProperty->Release();
+	}
+
+	return (hr == S_OK);
 }

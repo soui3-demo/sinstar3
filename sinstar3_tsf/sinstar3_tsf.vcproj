@@ -351,11 +351,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\DisplayAttributeInfo.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\dllmain.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\editsession.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\EnumDisplayAttributeInfo.cpp"
 				>
 			</File>
 			<File
@@ -413,7 +421,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\DisplayAttributeInfo.h"
+				>
+			</File>
+			<File
 				RelativePath=".\editsession.h"
+				>
+			</File>
+			<File
+				RelativePath=".\EnumDisplayAttributeInfo.h"
 				>
 			</File>
 			<File

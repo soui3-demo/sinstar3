@@ -65,6 +65,8 @@ STDMETHODIMP CEsStartComposition::DoEditSession(TfEditCookie ec)
 
 	// insert a dummy blank
 	pRangeInsert->SetText(ec, TF_ST_CORRECTION, L" ", 1);
+	_pTextService->_SetCompositionDisplayAttributes(ec,_pContext,pRangeInsert);
+
 	pRangeInsert->Collapse(ec, TF_ANCHOR_START);
 
 	// 

@@ -21,7 +21,7 @@ bool CSinstarProxy::isInBlackList(LPCTSTR pszBlacklistFile)
 	bool bRet = false;
 
 	wchar_t *wcsBuf=NULL;
-	FILE * f = _tfopen(pszBlacklistFile,_T("r"));
+	FILE * f = _tfopen(pszBlacklistFile,_T("rb"));
 	if(f)
 	{
 		fseek(f,0,SEEK_END);

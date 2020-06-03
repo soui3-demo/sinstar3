@@ -16,6 +16,7 @@ class CSinstar3Tsf : public CUnknown,
 					 public ITfTextLayoutSink,
 					 public ITfFnConfigure,
 					 public ITfCompartmentEventSink,
+					 public ITfDisplayAttributeProvider,
 					 public ITextService,
 					 public CSimpleWnd
 {
@@ -72,6 +73,9 @@ public:
 	// ITfCompartmentEventSink
     STDMETHODIMP OnChange(REFGUID rguidCompartment);
 
+	// ITfDisplayAttributeProvider
+	STDMETHODIMP EnumDisplayAttributeInfo(IEnumTfDisplayAttributeInfo **ppEnum);
+	STDMETHODIMP GetDisplayAttributeInfo(REFGUID guidInfo, ITfDisplayAttributeInfo **ppInfo);
 
 	//ITextService
 	BOOL InputStringW(LPCWSTR pszBuf, int nLen) override;
@@ -104,6 +108,7 @@ public:
 	void _TerminateComposition(TfEditCookie ecWrite,ITfContext *pContext,bool bClearCtx);
 	BOOL _IsCompositing() const;
 	BOOL _GetSegRange(TfEditCookie ec,ITfRange **pRange,int nLeft,int nRight);
+	BOOL _SetCompositionDisplayAttributes(TfEditCookie ec, _In_ ITfContext *pContext, ITfRange* pRangeComposition);
 
 	void _SyncFocus(BOOL bFocus);
 	void OnAsyncFocus();
@@ -132,6 +137,7 @@ private:
     BOOL _InitKeyEventSink();
     void _UninitKeyEventSink();
 
+	BOOL _InitDisplayAttributeGuidAtom();
 
 	// 
 	HRESULT _AdviseTextLayoutSink(ITfContext *pContext);
@@ -167,6 +173,7 @@ private:
 	BOOL _bKeyDownTested;
 	BOOL _bKeyUpTested;
 
+	TfGuidAtom _gaDisplayAttributeInput;
 public:
 	CSinstarProxy*   m_pSinstar3;
 	BOOL		_bHasFocus;
@@ -183,7 +190,7 @@ public:
 		IUNKNOWN_ADD_IID(ITfFnConfigure)
 		IUNKNOWN_ADD_IID(ITfFunction)
 		IUNKNOWN_ADD_IID(ITfCompartmentEventSink)
+		IUNKNOWN_ADD_IID(ITfDisplayAttributeProvider)
 	IUNKNOWN_END()
-
 };
 

@@ -402,6 +402,8 @@ LRESULT CUiWnd::OnSetContext(BOOL bActivate,LPARAM lParam)
 BOOL CUiWnd::_InitSinstar3()
 {
 	SASSERT(!m_pSinstar3);
+	if(GetFileAttributes(theModule->GetSvrPath()) == INVALID_FILE_ATTRIBUTES)
+		return FALSE;
 	m_pSinstar3 = new CSinstarProxy(this);
 	if (!m_pSinstar3->Init(m_hWnd, theModule->GetSvrPath()))
 	{
