@@ -13,13 +13,12 @@
       <radio name="ass_mode_phrase_prompt" id="403" text="词组提示" tip="如果您连续输入的内容在词库中，则提示是一个词"/>
     </window>
     <window layout="hbox" gravity="center">
-      <text text="词组联想深度："/>
+      <text text="词组联想深度[1-4]："/>
       <window size="-1,-1" class="edit_border" trackMouseEvent="1" layout="hbox" gravity="center">
         <edit size="40dp,25dp" name="edit_phrase_ast_deepness_max" margin-x="0" margin-y="0" notifyChange="1" readonly="1"/>
         <spinButton size="20dp,-2" max="5" min="1" value="4" buddy="edit_phrase_ast_deepness_max" name="spin_phrase_ast_deepness_max"/>
       </window>
     </window>
-  </window>
     <check name="chk_sent_associate" text="语句联想"/>
     <window layout="hbox" gravity="center">
       <text text="语句记忆库容量(句)：[100-50000]"/>
@@ -45,16 +44,16 @@
       </window>
     </window>
     <window layout="hbox" gravity="bottom">
-    	<check name="chk_auto_dot" text="智能小数点"/>
-       <text text="(数字后输入.及,自动转为半角)" colorText="@color/gray" font="size:12"/>
+      <check name="chk_auto_dot" text="智能小数点"/>
+      <text text="(数字后输入.及,自动转为半角)" colorText="@color/gray" font="size:12"/>
     </window>
     <window layout="hbox" gravity="bottom">
-       <check name="chk_auto_select_cand" text="智能选词"/>
-       <text text="(根据输入历史匹配候选词)" colorText="@color/gray" font="size:12"/>
+      <check name="chk_auto_select_cand" text="智能选词"/>
+      <text text="(根据输入历史匹配候选词)" colorText="@color/gray" font="size:12"/>
     </window>
     <window layout="hbox" gravity="bottom">
-       <check name="chk_auto_comp_promp" text="智能编码提示"/>
-       <text text="(自动在编码后匹配一次万能键查询)" colorText="@color/gray" font="size:12"/>
+      <check name="chk_auto_comp_promp" text="智能编码提示"/>
+      <text text="(自动在编码后匹配一次万能键查询)" colorText="@color/gray" font="size:12"/>
     </window>
-
+  </window>
 </window>
