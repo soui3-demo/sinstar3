@@ -1622,18 +1622,15 @@ BOOL CInputState::KeyIn_All_TurnCandPage(InputContext * lpCntxtPriv,UINT byInput
 										 CONST BYTE * lpbKeyState)
 {
 	BOOL bRet=FALSE;
-	if(lpCntxtPriv->sCandCount )
+	//联想状态及单词输入状态只能使用上下箭头翻页,以避免与符号输入冲突
+	if(byInput==VK_DOWN || byInput ==VK_PRIOR 
+		|| (!(lpbKeyState[VK_SHIFT]&0x80) && byInput==g_SettingsG->byTurnPageDownVK && lpCntxtPriv->sbState!=SBST_ASSOCIATE))
 	{
-		//联想状态及单词输入状态只能使用上下箭头翻页,以避免与符号输入冲突
-		if(byInput==VK_DOWN || byInput ==VK_PRIOR 
-			|| (!(lpbKeyState[VK_SHIFT]&0x80) && byInput==g_SettingsG->byTurnPageDownVK && lpCntxtPriv->sbState!=SBST_ASSOCIATE && lpCntxtPriv->inState != INST_ENGLISH))
-		{
-			bRet = m_pListener->GoNextCandidatePage();
-		}else if(byInput==VK_UP || byInput == VK_NEXT
-			|| (!(lpbKeyState[VK_SHIFT]&0x80) && byInput==g_SettingsG->byTurnPageUpVK&& lpCntxtPriv->sbState!=SBST_ASSOCIATE && lpCntxtPriv->inState != INST_ENGLISH))
-		{
-			bRet = m_pListener->GoPrevCandidatePage();
-		}
+		bRet = m_pListener->GoNextCandidatePage();
+	}else if(byInput==VK_UP || byInput == VK_NEXT
+		|| (!(lpbKeyState[VK_SHIFT]&0x80) && byInput==g_SettingsG->byTurnPageUpVK&& lpCntxtPriv->sbState!=SBST_ASSOCIATE))
+	{
+		bRet = m_pListener->GoPrevCandidatePage();
 	}
 	if(bRet){
 		if(lpCntxtPriv->inState==INST_CODING && lpCntxtPriv->sbState==SBST_ASSOCIATE)
