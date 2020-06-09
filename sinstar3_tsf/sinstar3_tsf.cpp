@@ -6,6 +6,7 @@
 #include "Minidump.h"
 #include "EnumDisplayAttributeInfo.h"
 #include "DisplayAttributeInfo.h"
+#include "Shlwapi.h"
 
 static bool g_bInstallDump = false;
 #define UM_ASYNC_FOCUS	(WM_USER+8000)
@@ -160,7 +161,8 @@ STDAPI CSinstar3Tsf::ActivateEx(ITfThreadMgr *pThreadMgr, TfClientId tfClientId,
 
 	OnSetThreadFocus();
 
-	Helper_ChangeWindowMessageFilter(SOUI::UM_CALL_FUN, MSGFLT_ADD);
+	Helper_ChangeWindowMessageFilter(SOUI::UM_REQ_FUN, MSGFLT_ADD);
+	Helper_ChangeWindowMessageFilter(SOUI::UM_ACK_FUN, MSGFLT_ADD);
 	Helper_ChangeWindowMessageFilter(UM_GETPROCPATH, MSGFLT_ADD);
 	Helper_ChangeWindowMessageFilter(UM_RECONN, MSGFLT_ADD);
 
@@ -356,7 +358,7 @@ BOOL CSinstar3Tsf::_UninitSinstar3()
 BOOL CSinstar3Tsf::_InitSinstar3(HWND hWnd)
 {
 	SASSERT(!m_pSinstar3);
-	if(GetFileAttributes(theModule->GetSvrPath()) == INVALID_FILE_ATTRIBUTES)
+	if(!PathFileExists(theModule->GetSvrPath()) && GetLastError()!=5)//last error 5 is access deny
 		return FALSE;
 	m_pSinstar3 = new CSinstarProxy(this);
 

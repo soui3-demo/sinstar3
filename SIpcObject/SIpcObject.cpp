@@ -43,7 +43,7 @@ namespace SOUI
 		bHandled = FALSE;
 		if ((HWND)idLocal != m_hLocalId)
 			return 0;
-		if (UM_CALL_FUN != uMsg)
+		if (UM_REQ_FUN != uMsg)
 			return 0;
 		bHandled = TRUE;
 		IShareBuffer *pBuf = GetRecvBuffer();
@@ -59,6 +59,7 @@ namespace SOUI
 		SParamStream ps(pBuf);
 		SLOG_INFO("handle call, this:"<<this<<" seq="<<nCallSeq<<" fun id="<<uFunId<<" wp="<<wp);
 		bool bReqHandled = m_pConn->HandleFun(uFunId, ps);
+		::PostMessage(m_hRemoteId, UM_ACK_FUN, bReqHandled ? 1 : 0, nCallSeq);
 		return  bReqHandled?1:0;
 	}
 
@@ -71,7 +72,7 @@ namespace SOUI
 		if (!IsWindow(hRemote))
 			return E_INVALIDARG;
 		ULONG_PTR dwResult = 0;
-		LRESULT lRet = ::SendMessageTimeout(hRemote, UM_CALL_FUN, FUN_ID_CONNECT, (LPARAM)hLocal, SMTO_ABORTIFHUNG,100,&dwResult);
+		LRESULT lRet = ::SendMessageTimeout(hRemote, UM_REQ_FUN, FUN_ID_CONNECT, (LPARAM)hLocal, SMTO_ABORTIFHUNG,100,&dwResult);
 		if (lRet == 0)
 		{
 			return E_FAIL;
@@ -90,7 +91,7 @@ namespace SOUI
 			return E_UNEXPECTED;
 		if (m_hRemoteId == NULL)
 			return E_UNEXPECTED;
-		::PostMessage(m_hRemoteId, UM_CALL_FUN, FUN_ID_DISCONNECT, (LPARAM)m_hLocalId);
+		::PostMessage(m_hRemoteId, UM_REQ_FUN, FUN_ID_DISCONNECT, (LPARAM)m_hLocalId);
 		m_hRemoteId = NULL;
 		m_recvBuf.Close();
 		m_hLocalId = NULL;
@@ -105,11 +106,11 @@ namespace SOUI
 
 		//make sure msg queue is empty.
 		MSG msg;
-		while(::PeekMessage(&msg, NULL, UM_CALL_FUN, UM_CALL_FUN, PM_REMOVE))
+		while(::PeekMessage(&msg, NULL, UM_REQ_FUN, UM_ACK_FUN, PM_REMOVE))
 		{
 			if(msg.message == WM_QUIT)
 			{
-				PostQuitMessage(msg.wParam);
+				PostQuitMessage((int)msg.wParam);
 				return false;
 			}
 			DispatchMessage(&msg);
@@ -129,8 +130,35 @@ namespace SOUI
 		pBuf->Write(&uFunId,4);
 		ToStream4Input(pParam, pBuf);
 		DWORD dwPos = pBuf->Tell();
-		LRESULT lRet = SendMessage(m_hRemoteId, UM_CALL_FUN, (WPARAM)m_nCallStack-1, (LPARAM)m_hLocalId);
-		if (lRet != 0)
+		bool  bHandled = FALSE;
+		PostMessage(m_hRemoteId, UM_REQ_FUN, (WPARAM)m_nCallStack - 1, (LPARAM)m_hLocalId);
+		for(;;)
+		{
+			if(::PeekMessage(&msg, NULL, UM_REQ_FUN, UM_ACK_FUN,PM_REMOVE))
+			{
+				if (msg.message == WM_QUIT)
+				{
+					PostQuitMessage((int)msg.wParam);
+					return false;
+				}
+				if (msg.message == UM_ACK_FUN)
+				{
+					assert(msg.lParam == nCallSeq);
+					bHandled = msg.wParam!=0;
+					break;
+				}
+				else
+				{
+					TranslateMessage(&msg);
+					DispatchMessage(&msg);
+				}
+			}else
+			{
+				if(!::IsWindow(m_hRemoteId))
+					break;
+			}
+		}
+		if (bHandled)
 		{
 			pBuf->Seek(IShareBuffer::seek_set,dwPos);//output param must be follow input params.
 			BOOL bRet = FromStream4Output(pParam,&m_sendBuf);
@@ -139,7 +167,7 @@ namespace SOUI
 		//clear params.
 		m_nCallStack--;
 
-		return lRet!=0;
+		return bHandled;
 	}
 
 	void SIpcHandle::SetIpcConnection(IIpcConnection *pConn)
@@ -233,7 +261,7 @@ namespace SOUI
 		bHandled = FALSE;
 		if ((HWND)idLocal != m_hSvr)
 			return 0;
-		if (UM_CALL_FUN != uMsg)
+		if (UM_REQ_FUN != uMsg)
 			return 0;
 		bHandled = TRUE;
 		return OnClientMsg(uMsg, wp, lp);

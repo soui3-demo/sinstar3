@@ -135,8 +135,8 @@ UINT CShareMemBuffer::Seek(SEEK mode, int nOffset)
 	default:
 		break;
 	}
-	assert(nOffset >= 0 && nOffset < pHeader->dwSize);
-	if (nOffset > pHeader->dwTailPos)
+	assert(nOffset >= 0 && nOffset < (int)pHeader->dwSize);
+	if (nOffset > (int)pHeader->dwTailPos)
 	{//auto expend buffer used size.
 		pHeader->dwTailPos = nOffset;
 	}

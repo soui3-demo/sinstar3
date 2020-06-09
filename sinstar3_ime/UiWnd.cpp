@@ -445,7 +445,8 @@ LRESULT CUiWnd::OnCreate()
 	new SOUI::SLogMgr(szPathInstall);
 #endif
 	SLOGFMTI("CUiWnd::OnCreate,hWnd:%p",m_hWnd);
-	Helper_ChangeWindowMessageFilter(SOUI::UM_CALL_FUN, MSGFLT_ADD);
+	Helper_ChangeWindowMessageFilter(SOUI::UM_REQ_FUN, MSGFLT_ADD);
+	Helper_ChangeWindowMessageFilter(SOUI::UM_ACK_FUN, MSGFLT_ADD);
 	Helper_ChangeWindowMessageFilter(UM_GETPROCPATH, MSGFLT_ADD);
 	Helper_ChangeWindowMessageFilter(UM_RECONN, MSGFLT_ADD);
 
