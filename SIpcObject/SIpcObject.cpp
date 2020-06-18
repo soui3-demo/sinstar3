@@ -59,7 +59,7 @@ namespace SOUI
 		SParamStream ps(pBuf);
 		SLOG_INFO("handle call, this:"<<this<<" seq="<<nCallSeq<<" fun id="<<uFunId<<" wp="<<wp);
 		bool bReqHandled = m_pConn->HandleFun(uFunId, ps);
-		::PostMessage(m_hRemoteId, UM_ACK_FUN, bReqHandled ? 1 : 0, nCallSeq);
+		::PostMessage(m_hRemoteId, UM_ACK_FUN, MAKEWPARAM(nCallSeq,bReqHandled ? 1 : 0), (LPARAM)m_hLocalId);
 		return  bReqHandled?1:0;
 	}
 
@@ -123,7 +123,7 @@ namespace SOUI
 		m_nCallStack++;
 
 		int nCallSeq = m_uCallSeq ++;
-		if(m_uCallSeq>100000) m_uCallSeq=0;
+		if(m_uCallSeq>=0xFFFF) m_uCallSeq=0;
 		SLOG_WARN("call function, this:"<<this<<" seq="<<nCallSeq<<" id="<<pParam->GetID());
 		pBuf->Write(&nCallSeq,4);//write call seq first.
 		UINT uFunId = pParam->GetID();
@@ -143,13 +143,19 @@ namespace SOUI
 				}
 				if (msg.message == UM_ACK_FUN)
 				{
-					assert(msg.lParam == nCallSeq);
-					bHandled = msg.wParam!=0;
-					break;
+					if(msg.lParam == (LPARAM)m_hRemoteId)
+					{
+						int seq = msg.wParam&0xFFFF;
+						assert(seq == nCallSeq);
+						bHandled = (msg.wParam&0xFFFF0000)!=0;
+						break;
+					}else
+					{
+						PostMessage(m_hLocalId,msg.message,msg.wParam,msg.lParam);
+					}
 				}
 				else
 				{
-					TranslateMessage(&msg);
 					DispatchMessage(&msg);
 				}
 			}else
