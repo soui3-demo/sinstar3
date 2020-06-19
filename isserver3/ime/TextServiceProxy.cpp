@@ -10,10 +10,12 @@ CSvrConnection::CSvrConnection(IIpcHandle *pIpcHandle,HWND hSvr,IConntionFocusLi
 ,m_yScale(1.0f)
 ,m_pFocusListener(pFocusListener)
 {
+	Create(L"svr_conn_wnd",0,0,0,0,0,0,HWND_MESSAGE,NULL);
 }
 
 CSvrConnection::~CSvrConnection(void)
 {
+	DestroyWindow();
 }
 
 BOOL CSvrConnection::InputStringW(LPCWSTR pszBuf, int nLen)
@@ -117,9 +119,9 @@ void CSvrConnection::HandleScaleInfo(Param_ScaleInfo &param)
 {
 	CRect rcWnd;
 	HWND hRefWnd = (HWND)param.hRefWnd;
-	if(IsWindow(hRefWnd))
+	if(::IsWindow(hRefWnd))
 	{
-		GetWindowRect((HWND)param.hRefWnd,&rcWnd);
+		::GetWindowRect((HWND)param.hRefWnd,&rcWnd);
 		if(rcWnd.Width()!=0 && param.szWnd.cx!=0)
 			m_xScale = rcWnd.Width()*1.0f/param.szWnd.cx;
 		if(rcWnd.Height()!=0 && param.szWnd.cy!=0)
@@ -273,4 +275,10 @@ int CSvrConnection::GetBufSize() const
 int CSvrConnection::GetStackSize() const 
 {
 	return 10;
+}
+
+LRESULT CSvrConnection::OnReq(UINT msg,WPARAM wp,LPARAM lp)
+{
+	BOOL bHandled = FALSE;
+	return GetIpcHandle()->OnMessage((ULONG_PTR)m_hWnd,msg,wp,lp,bHandled);
 }

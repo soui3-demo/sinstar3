@@ -63,16 +63,15 @@ namespace SOUI
 		return  bReqHandled?1:0;
 	}
 
-	HRESULT SIpcHandle::ConnectTo(ULONG_PTR idLocal, ULONG_PTR idRemote)
+	HRESULT SIpcHandle::ConnectTo(ULONG_PTR idLocal, ULONG_PTR idSvr)
 	{
-		HWND hLocal = (HWND)idLocal;
-		HWND hRemote = (HWND)idRemote;
-		if (!IsWindow(hLocal))
+		HWND hSvr = (HWND)idSvr;
+		if (!IsWindow((HWND)idLocal))
 			return E_INVALIDARG;
-		if (!IsWindow(hRemote))
+		if (!IsWindow(hSvr))
 			return E_INVALIDARG;
-		ULONG_PTR dwResult = 0;
-		LRESULT lRet = ::SendMessageTimeout(hRemote, UM_REQ_FUN, FUN_ID_CONNECT, (LPARAM)hLocal, SMTO_ABORTIFHUNG,100,&dwResult);
+		DWORD_PTR dwResult = 0;
+		LRESULT lRet = ::SendMessageTimeout(hSvr, UM_REQ_FUN, FUN_ID_CONNECT, (LPARAM)idLocal, SMTO_ABORTIFHUNG,100,&dwResult);
 		if (lRet == 0)
 		{
 			return E_FAIL;
@@ -81,17 +80,17 @@ namespace SOUI
 		{
 			return E_FAIL;
 		}
-		InitShareBuf(idLocal, idRemote, 0, NULL);
+		InitShareBuf(idLocal, dwResult, 0, NULL);
 		return S_OK;
 	}
 
-	HRESULT SIpcHandle::Disconnect()
+	HRESULT SIpcHandle::Disconnect(ULONG_PTR idSvr)
 	{
 		if (m_hLocalId == NULL)
 			return E_UNEXPECTED;
 		if (m_hRemoteId == NULL)
 			return E_UNEXPECTED;
-		::PostMessage(m_hRemoteId, UM_REQ_FUN, FUN_ID_DISCONNECT, (LPARAM)m_hLocalId);
+		::PostMessage((HWND)idSvr, UM_REQ_FUN, FUN_ID_DISCONNECT, (LPARAM)m_hLocalId);
 		m_hRemoteId = NULL;
 		m_recvBuf.Close();
 		m_hLocalId = NULL;
@@ -106,7 +105,7 @@ namespace SOUI
 
 		//make sure msg queue is empty.
 		MSG msg;
-		while(::PeekMessage(&msg, NULL, UM_REQ_FUN, UM_ACK_FUN, PM_REMOVE))
+		while(::PeekMessage(&msg, NULL, UM_REQ_FUN, UM_REQ_FUN, PM_REMOVE))
 		{
 			if(msg.message == WM_QUIT)
 			{
@@ -134,7 +133,7 @@ namespace SOUI
 		PostMessage(m_hRemoteId, UM_REQ_FUN, (WPARAM)m_nCallStack - 1, (LPARAM)m_hLocalId);
 		for(;;)
 		{
-			if(::PeekMessage(&msg, NULL, UM_REQ_FUN, UM_ACK_FUN,PM_REMOVE))
+			if(::PeekMessage(&msg, m_hLocalId, UM_REQ_FUN, UM_ACK_FUN,PM_REMOVE))
 			{
 				if (msg.message == WM_QUIT)
 				{
@@ -143,16 +142,10 @@ namespace SOUI
 				}
 				if (msg.message == UM_ACK_FUN)
 				{
-					if(msg.lParam == (LPARAM)m_hRemoteId)
-					{
-						int seq = msg.wParam&0xFFFF;
-						assert(seq == nCallSeq);
-						bHandled = (msg.wParam&0xFFFF0000)!=0;
-						break;
-					}else
-					{
-						PostMessage(m_hLocalId,msg.message,msg.wParam,msg.lParam);
-					}
+					int seq = msg.wParam&0xFFFF;
+					assert(seq == nCallSeq);
+					bHandled = (msg.wParam&0xFFFF0000)!=0;
+					break;
 				}
 				else
 				{
@@ -270,21 +263,12 @@ namespace SOUI
 		if (UM_REQ_FUN != uMsg)
 			return 0;
 		bHandled = TRUE;
-		return OnClientMsg(uMsg, wp, lp);
-	}
-
-	LRESULT SIpcServer::OnClientMsg(UINT uMsg, WPARAM wp, LPARAM lp)
-	{
 		if (wp == FUN_ID_CONNECT)
 			return OnConnect((HWND)lp);
 		else if (wp == FUN_ID_DISCONNECT)
 			return OnDisconnect((HWND)lp);
-		HWND hClient = (HWND)lp;
-		std::map<HWND, IIpcConnection*>::iterator it = m_mapClients.find(hClient);
-		if (it == m_mapClients.end())
+		else
 			return 0;
-		BOOL bHandled=FALSE;
-		return it->second->GetIpcHandle()->OnMessage((ULONG_PTR)m_hSvr,uMsg,wp,lp,bHandled);
 	}
 
 	void SIpcServer::EnumClient(FunEnumConnection funEnum, ULONG_PTR data)
@@ -316,12 +300,12 @@ namespace SOUI
 		pIpcHandle.Attach(new SIpcHandle);
 
 		IIpcConnection *pConn = NULL;
-		m_pCallback->OnNewConnection(pIpcHandle, &pConn);
+		ULONG_PTR connId = m_pCallback->OnNewConnection(pIpcHandle, &pConn);
 		assert(pConn);
 		pIpcHandle->SetIpcConnection(pConn);
 
 		void * pSa = m_pCallback->GetSecurityAttr();
-		if (!pIpcHandle->InitShareBuf((ULONG_PTR)m_hSvr, (ULONG_PTR)hClient, pConn->GetBufSize()* pConn->GetStackSize(), pSa))
+		if (!pIpcHandle->InitShareBuf(connId, (ULONG_PTR)hClient, pConn->GetBufSize()* pConn->GetStackSize(), pSa))
 		{
 			m_pCallback->ReleaseSecurityAttr(pSa);
 			pConn->Release();
@@ -331,7 +315,7 @@ namespace SOUI
 
 		m_mapClients[hClient] = pConn;
 		m_pCallback->OnConnected(pConn);
-		return 1;
+		return connId;
 	}
 
 	LRESULT SIpcServer::OnDisconnect(HWND hClient)

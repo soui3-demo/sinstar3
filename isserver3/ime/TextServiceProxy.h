@@ -5,6 +5,7 @@
 #include "../include/protocol.h"
 
 #include <unknown/obj-ref-impl.hpp>
+#include <core/SNativeWnd.h>
 
 class CSvrConnection;
 struct IConntionFocusListener
@@ -13,7 +14,7 @@ struct IConntionFocusListener
 	virtual void OnKillFocus(CSvrConnection * pConn) = 0;
 };
 
-class CSvrConnection : public ITextService, public TObjRefImpl<SOUI::IIpcConnection> {
+class CSvrConnection : public ITextService, public TObjRefImpl<SOUI::IIpcConnection>, public SNativeWnd  {
 	friend class CIsSvrProxy;
 public:
 	CSvrConnection(IIpcHandle *pIpcHandle,HWND hSvr,IConntionFocusListener * pFocusListener);
@@ -29,6 +30,12 @@ public:
 
 	bool CallFun(IFunParams *params) const;
 	void OnSkinChanged();
+
+protected:
+	LRESULT OnReq(UINT msg,WPARAM wp,LPARAM lp);
+	BEGIN_MSG_MAP_EX(CSvrConnection)
+		MESSAGE_HANDLER_EX(UM_REQ_FUN,OnReq)
+	END_MSG_MAP()
 public:
 	virtual BOOL InputStringW(LPCWSTR pszBuf, int nLen);
 

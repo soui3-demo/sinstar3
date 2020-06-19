@@ -77,7 +77,7 @@ bool CSinstarProxy::isInBlackList(LPCTSTR pszBlacklistFile)
 }
 
 
-CSinstarProxy::CSinstarProxy(ITextService *pTxtService):m_conn(pTxtService)
+CSinstarProxy::CSinstarProxy(ITextService *pTxtService):m_conn(pTxtService),m_hSvr(0)
 {
 
 }
@@ -87,7 +87,7 @@ CSinstarProxy::~CSinstarProxy()
 {
 	Param_Destroy param;
 	m_conn.CallFun(&param);
-	m_conn.GetIpcHandle()->Disconnect();
+	m_conn.GetIpcHandle()->Disconnect((ULONG_PTR)m_hSvr);
 }
 
 BOOL CSinstarProxy::Init(HWND hClient, LPCTSTR pszSvrPath)
@@ -124,7 +124,7 @@ BOOL CSinstarProxy::Init(HWND hClient, LPCTSTR pszSvrPath)
 	{
 		return FALSE;
 	}
-
+	m_hSvr = hSvr;
 	Param_Create param;
 	HMODULE hMod = GetModuleHandle(NULL);
 	if (hMod)

@@ -38,10 +38,7 @@ public:
 	static IServerCore * GetSvrCore();
 	static CIsSvrProxy * GetInstance();
 protected:
-	virtual void OnNewConnection(IIpcHandle * pIpcHandle, IIpcConnection ** ppConn)
-	{
-		*ppConn = new CSvrConnection(pIpcHandle,m_hWnd,this);
-	}
+	virtual ULONG_PTR OnNewConnection(IIpcHandle * pIpcHandle, IIpcConnection ** ppConn);
 
 	virtual void * GetSecurityAttr() const;
 	virtual void ReleaseSecurityAttr(void* psa) const;

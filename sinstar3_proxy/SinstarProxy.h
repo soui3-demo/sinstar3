@@ -53,7 +53,7 @@ class CSinstarProxy : public ISinstar, public CUnknown
 {
 private:
 	CClientConnection	m_conn;
-
+	HWND				m_hSvr;
 public:
 	CSinstarProxy(ITextService *pTxtService);
 	~CSinstarProxy();
