@@ -5,7 +5,7 @@ namespace SOUI
 {
 	SIpcHandle::SIpcHandle() 
 		:m_pConn(NULL), m_hLocalId(0),m_hRemoteId(0)
-		,m_uCallSeq(0),m_nCallStack(0)
+		,m_uCallSeq(0),m_nCallStack(0),m_bSameThread(false)
 	{
 	}
 
@@ -15,6 +15,7 @@ namespace SOUI
 	{
 		assert(m_hRemoteId == NULL);
 		assert(m_hLocalId == NULL);
+
 
 		TCHAR szName[MAX_PATH];
 		
@@ -34,7 +35,11 @@ namespace SOUI
 
 		m_hLocalId = (HWND)idLocal;
 		m_hRemoteId = (HWND)idRemote;
-
+		
+		DWORD dwProcLocal=0,dwProcRemote=0;
+		DWORD dwTrdLocal = GetWindowThreadProcessId(m_hLocalId,&dwProcLocal);
+		DWORD dwTrdRemote = GetWindowThreadProcessId(m_hRemoteId,&dwProcRemote);
+		m_bSameThread = (dwProcLocal == dwProcRemote) && (dwTrdLocal == dwTrdRemote);
 		return TRUE;
 	}
 
@@ -59,7 +64,10 @@ namespace SOUI
 		SParamStream ps(pBuf);
 		SLOG_INFO("handle call, this:"<<this<<" seq="<<nCallSeq<<" fun id="<<uFunId<<" wp="<<wp);
 		bool bReqHandled = m_pConn->HandleFun(uFunId, ps);
-		::PostMessage(m_hRemoteId, UM_ACK_FUN, MAKEWPARAM(nCallSeq,bReqHandled ? 1 : 0), (LPARAM)m_hLocalId);
+		if(!m_bSameThread)
+		{
+			::PostMessage(m_hRemoteId, UM_ACK_FUN, MAKEWPARAM(nCallSeq,bReqHandled ? 1 : 0), (LPARAM)m_hLocalId);
+		}
 		return  bReqHandled?1:0;
 	}
 
@@ -129,32 +137,39 @@ namespace SOUI
 		pBuf->Write(&uFunId,4);
 		ToStream4Input(pParam, pBuf);
 		DWORD dwPos = pBuf->Tell();
+
 		bool  bHandled = FALSE;
-		PostMessage(m_hRemoteId, UM_REQ_FUN, (WPARAM)m_nCallStack - 1, (LPARAM)m_hLocalId);
-		for(;;)
+		if(m_bSameThread)
 		{
-			if(::PeekMessage(&msg, m_hLocalId, UM_REQ_FUN, UM_ACK_FUN,PM_REMOVE))
+			bHandled = 0!=SendMessage(m_hRemoteId, UM_REQ_FUN, (WPARAM)m_nCallStack - 1, (LPARAM)m_hLocalId);
+		}else
+		{
+			PostMessage(m_hRemoteId, UM_REQ_FUN, (WPARAM)m_nCallStack - 1, (LPARAM)m_hLocalId);
+			for(;;)
 			{
-				if (msg.message == WM_QUIT)
+				if(::PeekMessage(&msg, m_hLocalId, UM_REQ_FUN, UM_ACK_FUN,PM_REMOVE))
 				{
-					PostQuitMessage((int)msg.wParam);
-					return false;
-				}
-				if (msg.message == UM_ACK_FUN)
+					if (msg.message == WM_QUIT)
+					{
+						PostQuitMessage((int)msg.wParam);
+						return false;
+					}
+					if (msg.message == UM_ACK_FUN)
+					{
+						int seq = msg.wParam&0xFFFF;
+						assert(seq == nCallSeq);
+						bHandled = (msg.wParam&0xFFFF0000)!=0;
+						break;
+					}
+					else
+					{
+						DispatchMessage(&msg);
+					}
+				}else
 				{
-					int seq = msg.wParam&0xFFFF;
-					assert(seq == nCallSeq);
-					bHandled = (msg.wParam&0xFFFF0000)!=0;
-					break;
+					if(!::IsWindow(m_hRemoteId))
+						break;
 				}
-				else
-				{
-					DispatchMessage(&msg);
-				}
-			}else
-			{
-				if(!::IsWindow(m_hRemoteId))
-					break;
 			}
 		}
 		if (bHandled)

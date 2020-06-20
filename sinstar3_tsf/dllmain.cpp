@@ -31,7 +31,6 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
 			_stprintf(szBlacklist,_T("%s\\data\\blacklist.txt"),szPathClient);
 			if(CSinstarProxy::isInBlackList(szBlacklist))
 				return FALSE;
-
 			theModule = new CTsfModule(hInstance,szPathSvr,szPathClient);
 		}
 		break;

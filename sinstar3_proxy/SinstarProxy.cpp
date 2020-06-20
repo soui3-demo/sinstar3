@@ -17,6 +17,20 @@ namespace SOUI{
 bool CSinstarProxy::isInBlackList(LPCTSTR pszBlacklistFile)
 {
 	bool bRet = false;
+	wchar_t szPath[MAX_PATH+1];
+	GetModuleFileNameW(NULL,szPath,MAX_PATH);
+	LPWSTR pszName = wcsrchr(szPath,L'\\');
+	assert(pszName);
+	pszName++;
+	wchar_t *p=pszName;
+	while(*p)
+	{
+		if(isupper(*p))
+			*p = tolower(*p);
+		p++;
+	}
+	if(wcsicmp(pszName,L"LogonUI.exe") == 0)
+		return true;
 
 	wchar_t *wcsBuf=NULL;
 	FILE * f = _tfopen(pszBlacklistFile,_T("rb"));
@@ -56,19 +70,6 @@ bool CSinstarProxy::isInBlackList(LPCTSTR pszBlacklistFile)
 			wcsBuf[i] = tolower(wcsBuf[i]);
 	}
 	free(buf);
-
-	wchar_t szPath[MAX_PATH+1];
-	GetModuleFileNameW(NULL,szPath,MAX_PATH);
-	LPWSTR pszName = wcsrchr(szPath,L'\\');
-	assert(pszName);
-	pszName++;
-	wchar_t *p=pszName;
-	while(*p)
-	{
-		if(isupper(*p))
-			*p = tolower(*p);
-		p++;
-	}
 
 	bRet = wcsstr(wcsBuf,pszName)!=NULL;
 	free(wcsBuf);
