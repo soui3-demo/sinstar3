@@ -488,6 +488,7 @@ namespace SOUI
 			}
 			
 		}
+		SetWindowPos(HWND_TOPMOST,0,0,0,0,SWP_NOSIZE|SWP_NOMOVE|SWP_NOACTIVATE);
 	}
 
 	void CInputWnd::UpdateAnchorPosition()

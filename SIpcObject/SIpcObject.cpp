@@ -113,7 +113,7 @@ namespace SOUI
 
 		//make sure msg queue is empty.
 		MSG msg;
-		while(::PeekMessage(&msg, NULL, UM_REQ_FUN, UM_REQ_FUN, PM_REMOVE))
+		while(::PeekMessage(&msg, NULL, UM_REQ_FUN, UM_ACK_FUN, PM_REMOVE))
 		{
 			if(msg.message == WM_QUIT)
 			{
@@ -145,7 +145,8 @@ namespace SOUI
 		}else
 		{
 			PostMessage(m_hRemoteId, UM_REQ_FUN, (WPARAM)m_nCallStack - 1, (LPARAM)m_hLocalId);
-			for(;;)
+			DWORD dwTime = GetTickCount();
+			for(;GetTickCount()-dwTime<500;)//set timeout for 500 ms.
 			{
 				if(::PeekMessage(&msg, m_hLocalId, UM_REQ_FUN, UM_ACK_FUN,PM_REMOVE))
 				{
@@ -165,10 +166,9 @@ namespace SOUI
 					{
 						DispatchMessage(&msg);
 					}
-				}else
+				}else if(!::IsWindow(m_hRemoteId) || ! IsWindow(m_hLocalId))
 				{
-					if(!::IsWindow(m_hRemoteId))
-						break;
+					break;
 				}
 			}
 		}

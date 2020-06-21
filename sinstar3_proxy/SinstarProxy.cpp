@@ -29,8 +29,17 @@ bool CSinstarProxy::isInBlackList(LPCTSTR pszBlacklistFile)
 			*p = tolower(*p);
 		p++;
 	}
-	if(wcsicmp(pszName,L"LogonUI.exe") == 0)
-		return true;
+
+	const LPCWSTR KBuiltinBlackList[]={
+		L"logonui.exe",
+		L"svchost.exe",
+	};
+
+	for(int i=0;i<ARRAYSIZE(KBuiltinBlackList);i++)
+	{
+		if(wcscmp(pszName,KBuiltinBlackList[i])==0)
+			return true;
+	}
 
 	wchar_t *wcsBuf=NULL;
 	FILE * f = _tfopen(pszBlacklistFile,_T("rb"));
