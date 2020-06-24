@@ -33,6 +33,7 @@ bool CSinstarProxy::isInBlackList(LPCTSTR pszBlacklistFile)
 	const LPCWSTR KBuiltinBlackList[]={
 		L"logonui.exe",
 		L"svchost.exe",
+		L"searchui.exe",
 	};
 
 	for(int i=0;i<ARRAYSIZE(KBuiltinBlackList);i++)
@@ -297,43 +298,36 @@ EInputMethod CSinstarProxy::GetDefInputMode()
 void CClientConnection::OnInputStringW( Param_InputStringW & param)
 {
 	m_pTxtService->InputStringW(param.buf.c_str(), (int)param.buf.length());
-
-}
-
-void CClientConnection::OnIsCompositing( Param_IsCompositing & param)
-{
-	param.bRet = m_pTxtService->IsCompositing();
-
 }
 
 void CClientConnection::OnStartComposition( Param_StartComposition & param)
 {
 	m_pTxtService->StartComposition(param.lpImeContext);
-
 }
 
 void CClientConnection::OnReplaceSelCompositionW( Param_ReplaceSelCompositionW & param)
 {
 	m_pTxtService->ReplaceSelCompositionW(param.lpImeContext, param.nLeft, param.nRight, param.buf.c_str(), (int)param.buf.length());
-
 }
 
 void CClientConnection::OnUpdateResultAndCompositionStringW( Param_UpdateResultAndCompositionStringW & param)
 {
 	m_pTxtService->UpdateResultAndCompositionStringW(param.lpImeContext, param.resultStr.c_str(), (int)param.resultStr.length(), param.compStr.c_str(), (int)param.compStr.length());
-
 }
 
 void CClientConnection::OnEndComposition( Param_EndComposition & param)
 {
 	m_pTxtService->EndComposition(param.lpImeContext);
-
 }
 
 void CClientConnection::OnSetConversionMode( Param_SetConversionMode & param)
 {
 	m_pTxtService->SetConversionMode(param.mode);
+}
 
+void CClientConnection::OnIsCompositing( Param_IsCompositing & param)
+{
+	param.bRet = m_pTxtService->IsCompositing();
 }
 
 void CClientConnection::OnGetConversionMode( Param_GetConversionMode & param)
@@ -345,13 +339,11 @@ void CClientConnection::OnGetConversionMode( Param_GetConversionMode & param)
 void CClientConnection::OnSetOpenStatus( Param_SetOpenStatus & param)
 {
 	m_pTxtService->SetOpenStatus(param.bOpen);
-
 }
 
 void CClientConnection::OnGetOpenStatus( Param_GetOpenStatus & param)
 {
 	param.bOpen = m_pTxtService->GetOpenStatus();
-
 }
 
 void CClientConnection::OnGetActiveWnd(Param_GetActiveWnd &param)

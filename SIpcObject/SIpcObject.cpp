@@ -64,10 +64,7 @@ namespace SOUI
 		SParamStream ps(pBuf);
 		SLOG_INFO("handle call, this:"<<this<<" seq="<<nCallSeq<<" fun id="<<uFunId<<" wp="<<wp);
 		bool bReqHandled = m_pConn->HandleFun(uFunId, ps);
-		if(!m_bSameThread)
-		{
-			::PostMessage(m_hRemoteId, UM_ACK_FUN, MAKEWPARAM(nCallSeq,bReqHandled ? 1 : 0), (LPARAM)m_hLocalId);
-		}
+
 		return  bReqHandled?1:0;
 	}
 
@@ -138,40 +135,8 @@ namespace SOUI
 		ToStream4Input(pParam, pBuf);
 		DWORD dwPos = pBuf->Tell();
 
-		bool  bHandled = FALSE;
-		if(m_bSameThread)
-		{
-			bHandled = 0!=SendMessage(m_hRemoteId, UM_REQ_FUN, (WPARAM)m_nCallStack - 1, (LPARAM)m_hLocalId);
-		}else
-		{
-			PostMessage(m_hRemoteId, UM_REQ_FUN, (WPARAM)m_nCallStack - 1, (LPARAM)m_hLocalId);
-			DWORD dwTime = GetTickCount();
-			for(;GetTickCount()-dwTime<500;)//set timeout for 500 ms.
-			{
-				if(::PeekMessage(&msg, m_hLocalId, UM_REQ_FUN, UM_ACK_FUN,PM_REMOVE))
-				{
-					if (msg.message == WM_QUIT)
-					{
-						PostQuitMessage((int)msg.wParam);
-						return false;
-					}
-					if (msg.message == UM_ACK_FUN)
-					{
-						int seq = msg.wParam&0xFFFF;
-						assert(seq == nCallSeq);
-						bHandled = (msg.wParam&0xFFFF0000)!=0;
-						break;
-					}
-					else
-					{
-						DispatchMessage(&msg);
-					}
-				}else if(!::IsWindow(m_hRemoteId) || ! IsWindow(m_hLocalId))
-				{
-					break;
-				}
-			}
-		}
+		bool  bHandled = 0!=SendMessage(m_hRemoteId, UM_REQ_FUN, (WPARAM)m_nCallStack - 1, (LPARAM)m_hLocalId);
+
 		if (bHandled)
 		{
 			pBuf->Seek(IShareBuffer::seek_set,dwPos);//output param must be follow input params.
