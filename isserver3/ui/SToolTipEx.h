@@ -13,7 +13,7 @@ namespace SOUI
         STipCtrlEx(void);
         virtual ~STipCtrlEx(void);
 
-        BOOL CreateWnd();
+        BOOL CreateWnd(HWND hHost);
     public://IToolTip
         /*virtual*/ void RelayEvent(const MSG *pMsg);
 
@@ -47,6 +47,7 @@ namespace SOUI
         TIPID          m_id;
 		BOOL		   m_bUpdated;
 		CPoint		   m_ptTip;
+		HWND		   m_hHost;
     };
 
 	class SToolTipFactory : public TObjRefImpl<IToolTipFactory>

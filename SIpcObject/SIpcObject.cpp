@@ -161,6 +161,8 @@ namespace SOUI
 				}
 				DispatchMessage(&msg);
 			}
+			if(!IsWindow(m_hRemoteId))
+				break;
 		}
 
 

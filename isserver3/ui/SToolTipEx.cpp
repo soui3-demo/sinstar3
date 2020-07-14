@@ -19,8 +19,9 @@ namespace SOUI
     {
     }
 
-    BOOL STipCtrlEx::CreateWnd()
+    BOOL STipCtrlEx::CreateWnd(HWND hHost)
     {
+		m_hHost = hHost;
 		this->Create(NULL, WS_CLIPCHILDREN | WS_TABSTOP | WS_OVERLAPPED | WS_POPUP, WS_EX_NOACTIVATE|WS_EX_TOPMOST, 0, 0, 0, 0);
         return TRUE;
     }
@@ -170,7 +171,7 @@ namespace SOUI
 
 		HMONITOR hMonitor;
 		MONITORINFO mi;
-		hMonitor = MonitorFromRect(&m_rcTarget, MONITOR_DEFAULTTONEAREST);	 
+		hMonitor = MonitorFromWindow(m_hHost, MONITOR_DEFAULTTONEAREST);	 
 		mi.cbSize = sizeof(mi);
 		GetMonitorInfo(hMonitor, &mi);
 		CRect rcWnd = GetWindowRect();
@@ -185,7 +186,7 @@ namespace SOUI
 	IToolTip * SToolTipFactory::CreateToolTip(HWND hHost)
 	{
 		STipCtrlEx *pTipCtrl = new STipCtrlEx;
-		if (!pTipCtrl->CreateWnd())
+		if (!pTipCtrl->CreateWnd(hHost))
 		{
 			delete pTipCtrl;
 			return NULL;
