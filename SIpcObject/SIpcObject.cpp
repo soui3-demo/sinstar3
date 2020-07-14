@@ -9,7 +9,9 @@ namespace SOUI
 	{
 	}
 
-	SIpcHandle::~SIpcHandle() {}
+	SIpcHandle::~SIpcHandle() {
+	}
+
 
 	BOOL SIpcHandle::InitShareBuf(ULONG_PTR idLocal, ULONG_PTR idRemote, UINT uBufSize, void* pSa)
 	{
@@ -103,6 +105,17 @@ namespace SOUI
 		return S_OK;
 	}
 
+	struct MsgRet{
+		bool bRet;
+		LRESULT ret;
+	};
+	void SIpcHandle::OnSendMessageResult(HWND hwnd, UINT msg, ULONG_PTR data, LRESULT res)
+	{
+		MsgRet *msgRet = (MsgRet*)data;
+		msgRet->ret = res;
+		msgRet->bRet = true;
+	}
+
 	bool SIpcHandle::CallFun(IFunParams * pParam) const
 	{
 		if (m_hRemoteId == NULL)
@@ -110,7 +123,7 @@ namespace SOUI
 
 		//make sure msg queue is empty.
 		MSG msg;
-		while(::PeekMessage(&msg, NULL, UM_REQ_FUN, UM_ACK_FUN, PM_REMOVE))
+		while(::PeekMessage(&msg, m_hLocalId, UM_REQ_FUN, UM_ACK_FUN, PM_REMOVE))
 		{
 			if(msg.message == WM_QUIT)
 			{
@@ -135,9 +148,23 @@ namespace SOUI
 		ToStream4Input(pParam, pBuf);
 		DWORD dwPos = pBuf->Tell();
 
-		bool  bHandled = 0!=SendMessage(m_hRemoteId, UM_REQ_FUN, (WPARAM)m_nCallStack - 1, (LPARAM)m_hLocalId);
+		MsgRet msgRet={false,0};
+		SendMessageCallback(m_hRemoteId, UM_REQ_FUN, (WPARAM)m_nCallStack - 1, (LPARAM)m_hLocalId,OnSendMessageResult,(ULONG_PTR)&msgRet);
+		while(!msgRet.bRet)
+		{
+			if(::PeekMessage(&msg, m_hLocalId, UM_REQ_FUN, UM_ACK_FUN, PM_REMOVE))
+			{
+				if(msg.message == WM_QUIT)
+				{
+					PostQuitMessage((int)msg.wParam);
+					return false;
+				}
+				DispatchMessage(&msg);
+			}
+		}
 
-		if (bHandled)
+
+		if (msgRet.ret!=0)
 		{
 			pBuf->Seek(IShareBuffer::seek_set,dwPos);//output param must be follow input params.
 			BOOL bRet = FromStream4Output(pParam,&m_sendBuf);
@@ -146,7 +173,7 @@ namespace SOUI
 		//clear params.
 		m_nCallStack--;
 
-		return bHandled;
+		return msgRet.ret!=0;
 	}
 
 	void SIpcHandle::SetIpcConnection(IIpcConnection *pConn)

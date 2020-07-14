@@ -56,8 +56,9 @@ namespace SOUI
 		virtual BOOL ToStream4Output(IFunParams * pParams,IShareBuffer * pBuf) const;
 
 		virtual BOOL FromStream4Output(IFunParams * pParams,IShareBuffer * pBuf) const;
-
 	protected:
+		static void CALLBACK OnSendMessageResult(HWND hwnd, UINT msg, ULONG_PTR data, LRESULT res);
+
 		HWND	m_hLocalId;
 		mutable CShareMemBuffer	m_sendBuf;
 		HWND	m_hRemoteId;

@@ -33,7 +33,7 @@ bool CSinstarProxy::isInBlackList(LPCTSTR pszBlacklistFile)
 	const LPCWSTR KBuiltinBlackList[]={
 		L"logonui.exe",
 		L"svchost.exe",
-		L"searchui.exe",
+		//L"searchui.exe",
 	};
 
 	for(int i=0;i<ARRAYSIZE(KBuiltinBlackList);i++)
