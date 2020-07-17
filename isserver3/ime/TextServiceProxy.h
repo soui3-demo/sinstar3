@@ -34,7 +34,7 @@ public:
 protected:
 	LRESULT OnReq(UINT msg,WPARAM wp,LPARAM lp);
 	BEGIN_MSG_MAP_EX(CSvrConnection)
-		MESSAGE_HANDLER_EX(UM_REQ_FUN,OnReq)
+		MESSAGE_HANDLER_EX(UM_CALL_FUN,OnReq)
 	END_MSG_MAP()
 public:
 	virtual BOOL InputStringW(LPCWSTR pszBuf, int nLen);

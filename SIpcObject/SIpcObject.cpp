@@ -50,7 +50,7 @@ namespace SOUI
 		bHandled = FALSE;
 		if ((HWND)idLocal != m_hLocalId)
 			return 0;
-		if (UM_REQ_FUN != uMsg)
+		if (UM_CALL_FUN != uMsg)
 			return 0;
 		bHandled = TRUE;
 		IShareBuffer *pBuf = GetRecvBuffer();
@@ -64,7 +64,7 @@ namespace SOUI
 		UINT uFunId = 0;
 		pBuf->Read(&uFunId,4);
 		SParamStream ps(pBuf);
-		SLOG_INFO("handle call, this:"<<this<<" seq="<<nCallSeq<<" fun id="<<uFunId<<" wp="<<wp);
+		//SLOG_INFO("handle call, this:"<<this<<" seq="<<nCallSeq<<" fun id="<<uFunId<<" wp="<<wp);
 		bool bReqHandled = m_pConn->HandleFun(uFunId, ps);
 
 		return  bReqHandled?1:0;
@@ -78,7 +78,7 @@ namespace SOUI
 		if (!IsWindow(hSvr))
 			return E_INVALIDARG;
 		DWORD_PTR dwResult = 0;
-		LRESULT lRet = ::SendMessageTimeout(hSvr, UM_REQ_FUN, FUN_ID_CONNECT, (LPARAM)idLocal, SMTO_ABORTIFHUNG,100,&dwResult);
+		LRESULT lRet = ::SendMessageTimeout(hSvr, UM_CALL_FUN, FUN_ID_CONNECT, (LPARAM)idLocal, SMTO_ABORTIFHUNG,100,&dwResult);
 		if (lRet == 0)
 		{
 			return E_FAIL;
@@ -97,7 +97,7 @@ namespace SOUI
 			return E_UNEXPECTED;
 		if (m_hRemoteId == NULL)
 			return E_UNEXPECTED;
-		::PostMessage((HWND)idSvr, UM_REQ_FUN, FUN_ID_DISCONNECT, (LPARAM)m_hLocalId);
+		::PostMessage((HWND)idSvr, UM_CALL_FUN, FUN_ID_DISCONNECT, (LPARAM)m_hLocalId);
 		m_hRemoteId = NULL;
 		m_recvBuf.Close();
 		m_hLocalId = NULL;
@@ -123,7 +123,7 @@ namespace SOUI
 
 		//make sure msg queue is empty.
 		MSG msg;
-		while(::PeekMessage(&msg, m_hLocalId, UM_REQ_FUN, UM_ACK_FUN, PM_REMOVE))
+		while(::PeekMessage(&msg, m_hLocalId, UM_CALL_FUN, UM_CALL_FUN, PM_REMOVE))
 		{
 			if(msg.message == WM_QUIT)
 			{
@@ -141,7 +141,7 @@ namespace SOUI
 
 		int nCallSeq = m_uCallSeq ++;
 		if(m_uCallSeq>=0xFFFF) m_uCallSeq=0;
-		SLOG_WARN("call function, this:"<<this<<" seq="<<nCallSeq<<" id="<<pParam->GetID());
+		//SLOG_WARN("call function, this:"<<this<<" seq="<<nCallSeq<<" id="<<pParam->GetID());
 		pBuf->Write(&nCallSeq,4);//write call seq first.
 		UINT uFunId = pParam->GetID();
 		pBuf->Write(&uFunId,4);
@@ -149,22 +149,26 @@ namespace SOUI
 		DWORD dwPos = pBuf->Tell();
 
 		MsgRet msgRet={false,0};
-		SendMessageCallback(m_hRemoteId, UM_REQ_FUN, (WPARAM)m_nCallStack - 1, (LPARAM)m_hLocalId,OnSendMessageResult,(ULONG_PTR)&msgRet);
-		while(!msgRet.bRet)
+		if(m_bSameThread)
 		{
-			if(::PeekMessage(&msg, m_hLocalId, UM_REQ_FUN, UM_ACK_FUN, PM_REMOVE))
+			msgRet.ret = SendMessage(m_hRemoteId,UM_CALL_FUN, (WPARAM)m_nCallStack - 1, (LPARAM)m_hLocalId);
+		}else{
+			SendMessageCallback(m_hRemoteId, UM_CALL_FUN, (WPARAM)m_nCallStack - 1, (LPARAM)m_hLocalId,OnSendMessageResult,(ULONG_PTR)&msgRet);
+			while(!msgRet.bRet)
 			{
-				if(msg.message == WM_QUIT)
+				if(::PeekMessage(&msg, m_hLocalId, UM_CALL_FUN, UM_CALL_FUN, PM_REMOVE))
 				{
-					PostQuitMessage((int)msg.wParam);
-					return false;
+					if(msg.message == WM_QUIT)
+					{
+						PostQuitMessage((int)msg.wParam);
+						return false;
+					}
+					DispatchMessage(&msg);
 				}
-				DispatchMessage(&msg);
+				if(!IsWindow(m_hRemoteId))
+					break;
 			}
-			if(!IsWindow(m_hRemoteId))
-				break;
 		}
-
 
 		if (msgRet.ret!=0)
 		{
@@ -269,7 +273,7 @@ namespace SOUI
 		bHandled = FALSE;
 		if ((HWND)idLocal != m_hSvr)
 			return 0;
-		if (UM_REQ_FUN != uMsg)
+		if (UM_CALL_FUN != uMsg)
 			return 0;
 		bHandled = TRUE;
 		if (wp == FUN_ID_CONNECT)
