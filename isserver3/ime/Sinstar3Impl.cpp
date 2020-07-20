@@ -293,7 +293,6 @@ LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 	}
 	else if (wp == NT_SERVEREXIT)
 	{
-		m_pTxtSvr->SetOpenStatus(FALSE);
 		EventSvrNotify evt(this);
 		evt.wp = wp;
 		evt.lp = lp;

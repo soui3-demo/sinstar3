@@ -10,7 +10,7 @@
 #define _sinstar3_ime_version_a		3
 #define _sinstar3_ime_version_b		1
 #define _sinstar3_ime_version_c		5
-#define _sinstar3_ime_version_d		5
+#define _sinstar3_ime_version_d		6
 
 
 #define _sinstar3_ime_int_version(a,b,c,d)		a,b,c,d
