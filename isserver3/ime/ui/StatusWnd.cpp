@@ -42,9 +42,9 @@ namespace SOUI
 		else return (nStart + 99) / 100 * 100;
 	}
 
-	CStatusWnd::CStatusWnd(SEventSet *pEvtSets, ICmdListener *pListener)
+	CStatusWnd::CStatusWnd(SEventSet *pEvtSets, IInputListener *pListener)
 		:CImeWnd(pEvtSets,UIRES.LAYOUT.wnd_status_bar)
-		, m_pCmdListener(pListener)
+		, m_pInputListener(pListener)
 		,m_anchorMode(AMH_NULL|AMV_NULL)
 	{
 	}
@@ -270,7 +270,7 @@ namespace SOUI
 			pStatus->SetVisible(TRUE, TRUE);
 			UpdateLayout();
 		}
-		m_pCmdListener->OnCommand(CMD_SYNCUI, BTN_STATUSMODE);
+		m_pInputListener->OnCommand(CMD_SYNCUI, BTN_STATUSMODE);
 	}
 
 	void CStatusWnd::OnBtnShrink()
@@ -283,14 +283,18 @@ namespace SOUI
 			pStatus->SetVisible(TRUE,TRUE);
 			UpdateLayout();
 		}
-		m_pCmdListener->OnCommand(CMD_SYNCUI, BTN_STATUSMODE);
+		m_pInputListener->OnCommand(CMD_SYNCUI, BTN_STATUSMODE);
 	}
 
 	void CStatusWnd::UpdateCompInfo2(SWindow *pParent)
 	{
 		SWindow *pText = pParent->FindChildByID(R.id.txt_comp);
 		SFlagView * pFlagView = pParent->FindChildByID2<SFlagView>(R.id.img_logo);
-		if (m_pCmdListener->GetInputContext()->compMode == IM_SHAPECODE)
+		if(!m_pInputListener->IsInputEnable())
+		{
+			if (pText) pText->SetWindowText(_T("英文"));
+		}
+		else if (m_pInputListener->GetInputContext()->compMode == IM_SHAPECODE)
 		{
 			if (pText) pText->SetWindowText(CDataCenter::getSingletonPtr()->GetData().m_compInfo.strCompName);
 			if (pFlagView)
@@ -405,50 +409,50 @@ namespace SOUI
 		}
 		if(flags & BTN_CHARMODE){
 			bool bUpdated = SwitchToggle(R.id.btn_charmode,g_SettingsUI->bCharMode);
-			if (m_pCmdListener && !bInit && !bUpdated)
+			if (m_pInputListener && !bInit && !bUpdated)
 			{
 				TIPINFO ti(_T("标点模式改变"));
 				ti.strTip.Format(_T("当前标点:%s"), g_SettingsUI->bCharMode ? _T("中文标点") : _T("英文标点"));
-				m_pCmdListener->OnCommand(CMD_SHOWTIP,(LPARAM)&ti);
+				m_pInputListener->OnCommand(CMD_SHOWTIP,(LPARAM)&ti);
 			}
 		}
 		if(flags & BTN_SOUND){
 			bool bUpdated = SwitchToggle(R.id.btn_sound,!g_SettingsUI->bSound);
-			if (m_pCmdListener && !bInit && !bUpdated)
+			if (m_pInputListener && !bInit && !bUpdated)
 			{
 				TIPINFO ti(_T("语音较对改变"));
 				ti.strTip.Format(_T("当前语音较对:%s"), g_SettingsUI->bSound ? _T("打开") : _T("关闭"));
-				m_pCmdListener->OnCommand(CMD_SHOWTIP, (LPARAM)&ti);
+				m_pInputListener->OnCommand(CMD_SHOWTIP, (LPARAM)&ti);
 			}
 		}
 		if (flags & BTN_RECORD) {
 			bool bUpdated = SwitchToggle(R.id.btn_record,!g_SettingsUI->bRecord);
-			if (m_pCmdListener && !bInit && !bUpdated)
+			if (m_pInputListener && !bInit && !bUpdated)
 			{
 				TIPINFO ti(_T("记忆输入改变"));
 				ti.strTip.Format(_T("当前记忆状态:%s"), g_SettingsUI->bRecord ? _T("启用") : _T("关闭"));
-				m_pCmdListener->OnCommand(CMD_SHOWTIP, (LPARAM)&ti);
+				m_pInputListener->OnCommand(CMD_SHOWTIP, (LPARAM)&ti);
 			}
 
 		}
 		if (flags & BTN_ENGLISHMODE)
 		{
 			bool bUpdated = SwitchToggle(R.id.btn_english,!g_SettingsUI->bEnglish);
-			if (m_pCmdListener && !bInit && !bUpdated)
+			if (m_pInputListener && !bInit && !bUpdated)
 			{
 				TIPINFO ti(_T("单词补全改变"));
 				ti.strTip.Format(_T("当前单词补全状态:%s"), g_SettingsUI->bEnglish ? _T("启用") : _T("关闭"));
-				m_pCmdListener->OnCommand(CMD_SHOWTIP, (LPARAM)&ti);
+				m_pInputListener->OnCommand(CMD_SHOWTIP, (LPARAM)&ti);
 			}
 		}
 		if (flags & BTN_FILTERGBK)
 		{
 			bool bUpdated = SwitchToggle(R.id.btn_filter_gbk,!g_SettingsUI->bFilterGbk);
-			if (m_pCmdListener && !bInit && !bUpdated)
+			if (m_pInputListener && !bInit && !bUpdated)
 			{
 				TIPINFO ti(_T("GBK过滤策略改变"));
 				ti.strTip.Format(_T("当前GBK过滤:%s"), g_SettingsUI->bFilterGbk ? _T("启用") : _T("关闭"));
-				m_pCmdListener->OnCommand(CMD_SHOWTIP, (LPARAM)&ti);
+				m_pInputListener->OnCommand(CMD_SHOWTIP, (LPARAM)&ti);
 			}
 
 		}
@@ -465,10 +469,6 @@ namespace SOUI
 		{
 			UpdateCompInfo();
 		}
-		else if (e2->wp == NT_SERVEREXIT)
-		{
-			ShowServerExit();
-		}
 	}
 
 	void CStatusWnd::OnSwitchCharMode(EventArgs *e)
@@ -478,7 +478,7 @@ namespace SOUI
 		{
 			g_SettingsUI->bCharMode = toggle->GetToggle();
 			g_SettingsUI->SetModified(true);
-			m_pCmdListener->OnCommand(CMD_SYNCUI, BTN_CHARMODE);
+			m_pInputListener->OnCommand(CMD_SYNCUI, BTN_CHARMODE);
 		}
 	}
 
@@ -489,7 +489,7 @@ namespace SOUI
 		{
 			g_SettingsUI->bRecord = !toggle->GetToggle();
 			g_SettingsUI->SetModified(true);
-			m_pCmdListener->OnCommand(CMD_SYNCUI, BTN_RECORD);
+			m_pInputListener->OnCommand(CMD_SYNCUI, BTN_RECORD);
 		}
 	}
 
@@ -500,7 +500,7 @@ namespace SOUI
 		{
 			g_SettingsUI->bSound = !toggle->GetToggle();
 			g_SettingsUI->SetModified(true);
-			m_pCmdListener->OnCommand(CMD_SYNCUI, BTN_SOUND);
+			m_pInputListener->OnCommand(CMD_SYNCUI, BTN_SOUND);
 		}
 
 	}
@@ -512,7 +512,7 @@ namespace SOUI
 		{
 			g_SettingsUI->bEnglish = !toggle->GetToggle();
 			g_SettingsUI->SetModified(true);
-			m_pCmdListener->OnCommand(CMD_SYNCUI, BTN_ENGLISHMODE);
+			m_pInputListener->OnCommand(CMD_SYNCUI, BTN_ENGLISHMODE);
 		}
 	}
 
@@ -523,7 +523,7 @@ namespace SOUI
 		{
 			g_SettingsUI->bFilterGbk = !toggle->GetToggle();
 			g_SettingsUI->SetModified(true);
-			m_pCmdListener->OnCommand(CMD_SYNCUI, BTN_FILTERGBK);
+			m_pInputListener->OnCommand(CMD_SYNCUI, BTN_FILTERGBK);
 		}
 	}
 
@@ -611,12 +611,12 @@ namespace SOUI
 	}
 	void CStatusWnd::OnBtnMakePhrase()
 	{
-		m_pCmdListener->OnCommand(CMD_HOTKEY_MAKEPHRASE,0);
+		m_pInputListener->OnCommand(CMD_HOTKEY_MAKEPHRASE,0);
 	}
 
 	void CStatusWnd::OnLogoClick()
 	{
-		m_pCmdListener->OnCommand(CMD_HOTKEY_INPUTMODE, 0);
+		m_pInputListener->OnCommand(CMD_HOTKEY_INPUTMODE, 0);
 	}
 
 	void CStatusWnd::OnMenuClick()
@@ -639,10 +639,10 @@ namespace SOUI
 		SLOG_INFO("after trackpopupmenu" << " nRet:" << nRet);
 		if (nRet == R.id.config)
 		{//system config
-			m_pCmdListener->OnCommand(CMD_OPENCONFIG, 0);
+			m_pInputListener->OnCommand(CMD_OPENCONFIG, 0);
 		}else if(nRet == R.id.skin_mgr)
 		{
-			m_pCmdListener->OnCommand(CMD_OPENSKINDIR, 0);
+			m_pInputListener->OnCommand(CMD_OPENSKINDIR, 0);
 		}
 		else if (nRet == R.id.skin_cloud)
 		{
@@ -692,15 +692,15 @@ namespace SOUI
 		}
 		else if (nRet == R.id.key_map)
 		{
-			m_pCmdListener->OnCommand(CMD_HOTKEY_KEYMAP, 0);
+			m_pInputListener->OnCommand(CMD_HOTKEY_KEYMAP, 0);
 		}
 		else if (nRet == R.id.switch_follow_caret)
 		{
-			m_pCmdListener->OnCommand(CMD_FOLLOWCARET, 0);
+			m_pInputListener->OnCommand(CMD_FOLLOWCARET, 0);
 		}
 		else if (nRet == R.id.switch_hide_statusbar)
 		{
-			m_pCmdListener->OnCommand(CMD_HOTKEY_HIDESTATUSBAR, 0);
+			m_pInputListener->OnCommand(CMD_HOTKEY_HIDESTATUSBAR, 0);
 		}
 		else if (nRet == R.id.switch_input_big5)
 		{
@@ -709,7 +709,7 @@ namespace SOUI
 		}
 		else if (nRet == R.id.key_speed)
 		{
-			m_pCmdListener->OnCommand(CMD_KEYSPEED, 0);
+			m_pInputListener->OnCommand(CMD_KEYSPEED, 0);
 		}
 		else if (nRet == R.id.help)
 		{
@@ -737,25 +737,25 @@ namespace SOUI
 		else if (nRet > R.id.menu_tool_base && nRet < (R.id.menu_tool_base + 99) / 100 * 100)
 		{//open tools.
 			SStringT strToolPath = m_toolManager.ToolPathFromID(nRet);
-			m_pCmdListener->OnCommand(CMD_EXECUTETOOL, (LPARAM)&strToolPath);
+			m_pInputListener->OnCommand(CMD_EXECUTETOOL, (LPARAM)&strToolPath);
 		}
 		else if (nRet == R.id.switch_filter_gbk)
 		{
 			g_SettingsUI->bFilterGbk = !g_SettingsUI->bFilterGbk;
 			g_SettingsUI->SetModified(true);
-			m_pCmdListener->OnCommand(CMD_SYNCUI, BTN_FILTERGBK);
+			m_pInputListener->OnCommand(CMD_SYNCUI, BTN_FILTERGBK);
 		}
 		else if (nRet == R.id.switch_read_input)
 		{
 			g_SettingsUI->bSound = !g_SettingsUI->bSound;
 			g_SettingsUI->SetModified(true);
-			m_pCmdListener->OnCommand(CMD_SYNCUI, BTN_SOUND);
+			m_pInputListener->OnCommand(CMD_SYNCUI, BTN_SOUND);
 		}
 		else if (nRet == R.id.sent_record)
 		{
 			g_SettingsUI->bRecord = !g_SettingsUI->bRecord;
 			g_SettingsUI->SetModified(true);
-			m_pCmdListener->OnCommand(CMD_SYNCUI, BTN_RECORD);
+			m_pInputListener->OnCommand(CMD_SYNCUI, BTN_RECORD);
 		}else if(nRet == R.id.sent_associate)
 		{
 			g_SettingsUI->bSentAssocite = !g_SettingsUI->bSentAssocite;
@@ -772,17 +772,17 @@ namespace SOUI
 		{
 			g_SettingsUI->bEnglish = !g_SettingsUI->bEnglish;
 			g_SettingsUI->SetModified(true);
-			m_pCmdListener->OnCommand(CMD_SYNCUI, BTN_ENGLISHMODE);
+			m_pInputListener->OnCommand(CMD_SYNCUI, BTN_ENGLISHMODE);
 		}
 		else if(nRet == R.id.switch_char_mode)
 		{
 			g_SettingsUI->bCharMode = !g_SettingsUI->bCharMode;
 			g_SettingsUI->SetModified(true);
-			m_pCmdListener->OnCommand(CMD_SYNCUI, BTN_CHARMODE);
+			m_pInputListener->OnCommand(CMD_SYNCUI, BTN_CHARMODE);
 		}
 		else if(nRet == R.id.skin_def)
 		{
-			m_pCmdListener->OnCommand(CMD_CHANGESKIN, (LPARAM)&SStringT());
+			m_pInputListener->OnCommand(CMD_CHANGESKIN, (LPARAM)&SStringT());
 		}else if(nRet == R.id.menu_forum)
 		{
 			ShellExecute(NULL, _T("open"), g_SettingsG->urlForum, NULL, NULL, SW_SHOWNORMAL);
@@ -806,7 +806,7 @@ namespace SOUI
 			SStringT strSkinPath = m_skinManager.SkinPathFromID(nRet);
 			if(!strSkinPath.IsEmpty())
 			{//select skin menu
-				m_pCmdListener->OnCommand(CMD_CHANGESKIN, (LPARAM)&strSkinPath);
+				m_pInputListener->OnCommand(CMD_CHANGESKIN, (LPARAM)&strSkinPath);
 			}
 		}
 
@@ -816,17 +816,17 @@ namespace SOUI
 
 	void CStatusWnd::OnHelpClick()
 	{
-		m_pCmdListener->OnCommand(CMD_OPENHELP, 0);
+		m_pInputListener->OnCommand(CMD_OPENHELP, 0);
 	}
 
 	void CStatusWnd::OnQueryClick()
 	{
-		m_pCmdListener->OnCommand(CMD_HOTKEY_QUERYINFO, 0);
+		m_pInputListener->OnCommand(CMD_HOTKEY_QUERYINFO, 0);
 	}
 
 	void CStatusWnd::OnConfigClick()
 	{
-		m_pCmdListener->OnCommand(CMD_OPENCONFIG, 0);
+		m_pInputListener->OnCommand(CMD_OPENCONFIG, 0);
 	}
 
 	LPARAM CStatusWnd::OnEditUserDefData(UINT uMsg,WPARAM wp,LPARAM lp)

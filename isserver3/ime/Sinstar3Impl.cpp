@@ -428,6 +428,7 @@ void CSinstar3Impl::EnableInput(BOOL bEnable)
 		}
 	}
 	m_pStatusWnd->Show(IsStatusVisible());
+	m_pStatusWnd->UpdateCompInfo();
 }
 
 BOOL CSinstar3Impl::IsInputEnable() const
@@ -565,7 +566,7 @@ BOOL CSinstar3Impl::IsInputVisible() const
 
 BOOL CSinstar3Impl::IsStatusVisible() const
 {
-	return m_hasFocus && m_bOpen && m_bInputEnable && !g_SettingsUI->bHideStatus;
+	return !g_SettingsUI->bHideStatus && m_bOpen && m_hasFocus;
 }
 
 void CSinstar3Impl::DelayCaretLeft()

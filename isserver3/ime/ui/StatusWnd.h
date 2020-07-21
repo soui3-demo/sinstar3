@@ -4,7 +4,7 @@
 #include "SkinMananger.h"
 #include "SToolsMgr.h"
 
-interface ICmdListener;
+interface IInputListener;
 
 namespace SOUI
 {
@@ -38,7 +38,7 @@ namespace SOUI
 		};
 		friend class CInputWnd;
 
-		CStatusWnd(SEventSet *pEvtSets, ICmdListener *pListener);
+		CStatusWnd(SEventSet *pEvtSets, IInputListener *pListener);
 		~CStatusWnd(void);
 
 		HWND Create();
@@ -118,7 +118,7 @@ namespace SOUI
 	protected:
 		CSkinMananger       m_skinManager;
 		SToolsMgr			m_toolManager;
-		ICmdListener     *  m_pCmdListener;
+		IInputListener     *  m_pInputListener;
 
 		int					m_anchorMode;
 	};
