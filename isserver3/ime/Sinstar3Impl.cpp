@@ -117,6 +117,7 @@ void CSinstar3Impl::OnIMESelect(BOOL bSelect)
 	if(bSelect)
 	{
 		m_pTxtSvr->SetConversionMode(FullNative);
+		EnableInput(!g_SettingsG->bInitEnglish);
 	}
 }
 
@@ -289,14 +290,6 @@ LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 			}
 			m_pInputWnd->OnFlmInfo(pInfo);
 		}
-		return 1;
-	}
-	else if (wp == NT_SERVEREXIT)
-	{
-		EventSvrNotify evt(this);
-		evt.wp = wp;
-		evt.lp = lp;
-		FireEvent(evt);
 		return 1;
 	}
 	else

@@ -51,8 +51,12 @@
         </items>
       </combobox>
     </window>
-
-	<window size="-2,-1" layout="gridlayout" xInterval="10" yInterval="10" columnCount="2" gravity="left">
+    <text >启动状态:</text>
+    <window size="-1,-1" layout="hbox" interval="10">
+      <radio name="radio_init_ch" text="中文输入" tip="默认英文输入法适用"/>
+      <radio name="radio_init_en" text="英文输入" tip="启程是默认输入法适用"/>
+    </window> 
+    <window size="-2,-1" layout="gridlayout" xInterval="10" yInterval="10" columnCount="2" gravity="left">
       <text columnSpan="2" layout_gravity="left">形码状态回车:</text>
       <radio text="清除编码" id="120" name="enter_for_clear"/>
       <radio text="编码上屏" id="121" name="enter_for_input"/>

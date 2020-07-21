@@ -370,6 +370,8 @@ namespace SOUI
 		if(strFontDesc.IsEmpty())
 			strFontDesc=_T("<Æ¤·ôÄ¬ÈÏ>");
 		FindAndSetText(R.id.edit_font,strFontDesc);
+
+		FindAndSetCheck(R.id.radio_init_ch+g_SettingsG->bInitEnglish,TRUE);
 	}
 
 	void CConfigDlg::InitPageHotKey()
@@ -1242,6 +1244,11 @@ SWindow *pCtrl = FindChildByID(id);\
 	void CConfigDlg::OnBlendForUD()
 	{
 		g_SettingsG->bBlendUD = FindChildByID(R.id.chk_blend_for_userdef)->IsChecked();
+	}
+
+	void CConfigDlg::OnInitMode(int id)
+	{
+		g_SettingsG->bInitEnglish = id==R.id.radio_init_en;
 	}
 
 }

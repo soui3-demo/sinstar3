@@ -136,6 +136,8 @@ void CSettingsGlobal::Save(const SStringT & strDataPath)
 	}
 	WritePrivateProfileInt(KSession,_T("showTray"),bShowTray,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("autoQuit"),bAutoQuit,strConfigIni);
+	WritePrivateProfileInt(KSession,_T("initEnglish"),bInitEnglish,strConfigIni);
+
 	WritePrivateProfileInt(_T("update"), _T("interval"),nUpdateInterval,strConfigIni);
 	WritePrivateProfileString(_T("update"), _T("date"), szUpdateDate, strConfigIni);
 
@@ -144,6 +146,7 @@ void CSettingsGlobal::Save(const SStringT & strDataPath)
 	WritePrivateProfileInt(KTtsEntry, KTtsEnVoice, iTtsEnVoice, strConfigIni);
 
 	WritePrivateProfileString(KBackup,_T("dir"),szBackupDir,strConfigIni);
+
 	SetModified(false);
 }
 
@@ -251,6 +254,8 @@ void CSettingsGlobal::Load(const SStringT & strDataPath)
 
 	bShowTray = GetPrivateProfileInt(KSession,_T("showTray"),1,strConfigIni);
 	bAutoQuit = GetPrivateProfileInt(KSession,_T("autoQuit"),0,strConfigIni);
+	bInitEnglish = GetPrivateProfileInt(KSession,_T("initEnglish"),0,strConfigIni);
+
 	nUpdateInterval = GetPrivateProfileInt(_T("update"), _T("interval"), 30, strConfigIni);
 	GetPrivateProfileString(_T("update"), _T("date"), _T("0-0-0"), szUpdateDate, 100, strConfigIni);
 	GetPrivateProfileString(_T("update"), _T("url"), _T("https://soime.cn/sinstar3_update.xml"), szUpdateUrl, MAX_PATH, strConfigIni);
@@ -265,6 +270,7 @@ void CSettingsGlobal::Load(const SStringT & strDataPath)
 	{
 		szBackupDir[0]=0;
 	}
+
 	SetModified(false);
 }
 

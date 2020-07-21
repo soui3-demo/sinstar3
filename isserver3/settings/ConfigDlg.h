@@ -83,6 +83,7 @@ namespace SOUI
 		void OnChkFullSkipSimple();
 		//´ÊÆµµ÷Õû
 		void OnClickRateAdjust(int id);
+		void OnInitMode(int id);
 
 		void OnClickAutoCompPromp();
 		void OnClickAutoDot();
@@ -177,6 +178,7 @@ namespace SOUI
 			EVENT_ID_COMMAND(R.id.btn_backup,OnBackup)
 			EVENT_ID_COMMAND(R.id.btn_restore,OnRestore)
 			EVENT_ID_HANDLER(R.id.cbx_search_engine,EventCBSelChange::EventID,OnSearchEngineChange)
+			EVENT_ID_COMMAND_RANGE(R.id.radio_init_ch, R.id.radio_init_en, OnInitMode)
 		EVENT_MAP_END()
 
 
