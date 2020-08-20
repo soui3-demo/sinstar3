@@ -116,7 +116,6 @@ void CSinstar3Impl::OnIMESelect(BOOL bSelect)
 	m_inputState.OnImeSelect(bSelect);
 	if(bSelect)
 	{
-		m_pTxtSvr->SetConversionMode(FullNative);
 		EnableInput(!g_SettingsG->bInitEnglish);
 	}
 }
@@ -429,6 +428,7 @@ void CSinstar3Impl::EnableInput(BOOL bEnable)
 	}
 	m_pStatusWnd->Show(IsStatusVisible());
 	m_pStatusWnd->UpdateCompInfo();
+	m_pTxtSvr->SetConversionMode(bEnable?FullNative:HalfAlphanumeric);
 }
 
 BOOL CSinstar3Impl::IsInputEnable() const

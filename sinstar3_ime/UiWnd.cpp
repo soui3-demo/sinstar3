@@ -271,12 +271,6 @@ LRESULT CUiWnd::OnImeNotify(WPARAM wParam,LPARAM lParam)
 		}
 		break;
 	case IMN_SETCONVERSIONMODE:
-		if(m_pSinstar3)
-		{
-			EInputMethod mode=GetConversionMode();
-			if(ImmGetOpenStatus(hIMC)==FALSE) mode=HalfAlphanumeric;
-			m_pSinstar3->OnConversionModeChanged(mode);
-		}
 		break;
 	case IMN_SETCOMPOSITIONWINDOW:
 		if(m_pSinstar3 && hIMC && m_bActivate)

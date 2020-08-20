@@ -155,95 +155,13 @@ HRESULT CSinstar3Tsf::_SetKeyboardOpen(BOOL fOpen)
 EInputMethod CSinstar3Tsf::GetConversionMode()
 {
 	assert( _pThreadMgr != NULL);
-
-	HRESULT hr = S_OK;
-	EInputMethod eInputMode =m_pSinstar3?m_pSinstar3->GetDefInputMode():FullNative;
-	ITfCompartmentMgr *pCompMgr = NULL;
-	
-
-	hr = _pThreadMgr->QueryInterface(IID_ITfCompartmentMgr, (void **)&pCompMgr);
-	if ( SUCCEEDED(hr) && pCompMgr != NULL)
-	{
-		ITfCompartment *pCompartmentInputMode = NULL;
-		hr = pCompMgr->GetCompartment( GUID_COMPARTMENT_KEYBOARD_INPUTMODE_CONVERSION, &pCompartmentInputMode);
-		if ( SUCCEEDED(hr) && pCompartmentInputMode != NULL)
-		{
-			VARIANT var;
-			HRESULT hr = pCompartmentInputMode->GetValue(&var);
-			if( SUCCEEDED(hr) && var.vt == VT_I4)
-			{
-				switch( var.lVal)
-				{
-				case TF_CONVERSIONMODE_ROMAN:																				// 0x10
-					eInputMode = HalfAlphanumeric;
-					break;
-
-				case TF_CONVERSIONMODE_ROMAN | TF_CONVERSIONMODE_FULLSHAPE | TF_CONVERSIONMODE_NATIVE:						// 0x19
-					eInputMode = FullNative;
-					break;
-
-				case TF_CONVERSIONMODE_ROMAN | TF_CONVERSIONMODE_NATIVE:						
-					eInputMode = HalfNative;
-					break;
-				}
-			}
-
-			pCompartmentInputMode->Release();
-		}
-
-		pCompMgr->Release();
-	}
-
-	return eInputMode;
+	return FullNative;
 }
 
 void CSinstar3Tsf::SetConversionMode( EInputMethod eInputMode)
 {
-	assert( _pThreadMgr != NULL);
-
-	HRESULT hr = S_OK;
-	ITfCompartmentMgr *pCompMgr = NULL; 
-
-	hr = _pThreadMgr->QueryInterface(IID_ITfCompartmentMgr, (void **)&pCompMgr);
-	if ( SUCCEEDED(hr) && pCompMgr != NULL)
-	{
-		ITfCompartment *pCompartmentInputMode = NULL;
-		hr = pCompMgr->GetCompartment( GUID_COMPARTMENT_KEYBOARD_INPUTMODE_CONVERSION, &pCompartmentInputMode);
-		if ( SUCCEEDED(hr) && pCompartmentInputMode != NULL)
-		{
-			VARIANT var;
-			var.vt = VT_I4;
-
-			switch( eInputMode)
-			{
-			case HalfAlphanumeric:
-				var.lVal = TF_CONVERSIONMODE_ROMAN;				
-				break;
-
-			case HalfNative:
-				var.lVal = TF_CONVERSIONMODE_ROMAN | IME_CMODE_NATIVE;
-				break;
-
-			case FullNative:
-				var.lVal = TF_CONVERSIONMODE_ROMAN | TF_CONVERSIONMODE_FULLSHAPE | IME_CMODE_NATIVE;													// 0x18
-				break;
-
-			}
-			//首先保证键盘状态同步
-			if(eInputMode != HalfAlphanumeric)
-			{
-				if(!_IsKeyboardOpen()) _SetKeyboardOpen(TRUE);
-				hr = pCompartmentInputMode->SetValue( _tfClientId, &var);
-			}else
-			{
-				if(_IsKeyboardOpen()) _SetKeyboardOpen(FALSE);
-			}
-
-			pCompartmentInputMode->Release();
-		}
-
-		pCompMgr->Release();
-	}
+	if(_pLangBarItem)
+		_pLangBarItem->SetStatus(eInputMode==FullNative);
 }
 
 BOOL CSinstar3Tsf::_InitThreadCompartment()

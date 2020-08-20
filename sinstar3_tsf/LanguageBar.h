@@ -21,6 +21,9 @@ public:
 	CLangBarItemButton(int iconOn,int iconOff,LPCWSTR pszIconDesc);
 	~CLangBarItemButton();
 
+	static CLangBarItemButton* _InitLanguageBar(ITfThreadMgr *pThreadMgr);
+	static bool _UninitLanguageBar(ITfThreadMgr *pThreadMgr,CLangBarItemButton *pLangBarItem);
+
 	void SetStatus(bool bOn);
 
 	// ITfLangBarItem

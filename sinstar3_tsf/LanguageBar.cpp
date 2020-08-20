@@ -5,13 +5,14 @@
 //
 // Copyright (c) Microsoft Corporation. All rights reserved
 #include "stdafx.h"
-#include "sinstar3_tsf.h"
+//#include "sinstar3_tsf.h"
 #include "LanguageBar.h"
 #include "Globals.h"
 #include "TsfModule.h"
 #include "resource.h"
 
-#define LANGBAR_ITEM_DESC   L"Sample Text Service Button"
+const GUID GUID_LBI_INPUTMODE =
+{ 0x2C77A81E, 0x41CC, 0x4178, { 0xA3, 0xA7, 0x5F, 0x8A, 0x98, 0x75, 0x68, 0xE6 } };	
 
 //+---------------------------------------------------------------------------
 //
@@ -30,8 +31,8 @@ CLangBarItemButton::CLangBarItemButton(int iconOn,int iconOff,LPCWSTR pszIconDes
 	// initialize TF_LANGBARITEMINFO structure.
 	//
 	_tfLangBarItemInfo.clsidService = c_clsidSinstar3TSF;    // This LangBarItem belongs to this TextService.
-	_tfLangBarItemInfo.guidItem = c_guidLangBarItemButton;   // GUID of this LangBarItem.
-	_tfLangBarItemInfo.dwStyle = TF_LBI_STYLE_BTN_MENU;      // This LangBar is a button type with a menu.
+	_tfLangBarItemInfo.guidItem = GUID_LBI_INPUTMODE;   // GUID of this LangBarItem.
+	_tfLangBarItemInfo.dwStyle = TF_LBI_STYLE_BTN_BUTTON|TF_LBI_STYLE_SHOWNINTRAY;   
 	_tfLangBarItemInfo.ulSort = 0;                           // The position of this LangBar Item is not specified.
 	wcscpy_s(_tfLangBarItemInfo.szDescription, ARRAYSIZE(_tfLangBarItemInfo.szDescription), pszIconDesc);                        // Set the description of this LangBar Item.
 
@@ -94,7 +95,7 @@ STDAPI CLangBarItemButton::Show(BOOL fShow)
 
 STDAPI CLangBarItemButton::GetTooltipString(BSTR *pbstrToolTip)
 {
-	*pbstrToolTip = SysAllocString(LANGBAR_ITEM_DESC);
+	*pbstrToolTip = SysAllocString(_tfLangBarItemInfo.szDescription);
 
 	return (*pbstrToolTip == NULL) ? E_OUTOFMEMORY : S_OK;
 }
@@ -155,7 +156,7 @@ STDAPI CLangBarItemButton::GetIcon(HICON *phIcon)
 
 STDAPI CLangBarItemButton::GetText(BSTR *pbstrText)
 {
-	*pbstrText = SysAllocString(LANGBAR_ITEM_DESC);
+	*pbstrText = SysAllocString(_tfLangBarItemInfo.szDescription);
 
 	return (*pbstrText == NULL) ? E_OUTOFMEMORY : S_OK;
 }
@@ -226,7 +227,7 @@ STDAPI CLangBarItemButton::UnadviseSink(DWORD dwCookie)
 
 void CLangBarItemButton::SetStatus(bool bOn)
 {
-	if(_status = bOn)
+	if(_status == bOn)
 		return;
 	_status = bOn;
 	if (_pLangBarItemSink) 
@@ -243,31 +244,27 @@ void CLangBarItemButton::SetStatus(bool bOn)
 //
 //----------------------------------------------------------------------------
 
-BOOL CSinstar3Tsf::_InitLanguageBar()
+CLangBarItemButton* CLangBarItemButton::_InitLanguageBar(ITfThreadMgr *pThreadMgr)
 {
 	ITfLangBarItemMgr *pLangBarItemMgr;
-	BOOL fRet;
+	CLangBarItemButton *pRet=NULL;
 
-	if (_pThreadMgr->QueryInterface(IID_ITfLangBarItemMgr, (void **)&pLangBarItemMgr) != S_OK)
-		return FALSE;
+	if (pThreadMgr->QueryInterface(IID_ITfLangBarItemMgr, (void **)&pLangBarItemMgr) != S_OK)
+		return pRet;
 
-	fRet = FALSE;
-
-	if ((_pLangBarItem = new CLangBarItemButton(IDI_IME_ON,IDI_IME_OFF,L"input state")) == NULL)
+	if ((pRet = new CLangBarItemButton(IDI_IME_ON,IDI_IME_OFF,L"input state")) == NULL)
 		goto Exit;
 
-	if (pLangBarItemMgr->AddItem(_pLangBarItem) != S_OK)
+	if (pLangBarItemMgr->AddItem(pRet) != S_OK)
 	{
-		_pLangBarItem->Release();
-		_pLangBarItem = NULL;
+		pRet->Release();
+		pRet = NULL;
 		goto Exit;
 	}
 
-	fRet = TRUE;
-
 Exit:
 	pLangBarItemMgr->Release();
-	return fRet;
+	return pRet;
 }
 
 //+---------------------------------------------------------------------------
@@ -276,19 +273,18 @@ Exit:
 //
 //----------------------------------------------------------------------------
 
-void CSinstar3Tsf::_UninitLanguageBar()
+bool CLangBarItemButton::_UninitLanguageBar(ITfThreadMgr *pThreadMgr,CLangBarItemButton *pLangBarItem)
 {
 	ITfLangBarItemMgr *pLangBarItemMgr;
 
-	if (_pLangBarItem == NULL)
-		return;
+	if (pLangBarItem == NULL)
+		return false;
 
-	if (_pThreadMgr->QueryInterface(IID_ITfLangBarItemMgr, (void **)&pLangBarItemMgr) == S_OK)
+	if (pThreadMgr->QueryInterface(IID_ITfLangBarItemMgr, (void **)&pLangBarItemMgr) == S_OK)
 	{
-		pLangBarItemMgr->RemoveItem(_pLangBarItem);
+		pLangBarItemMgr->RemoveItem(pLangBarItem);
 		pLangBarItemMgr->Release();
+		return true;
 	}
-
-	_pLangBarItem->Release();
-	_pLangBarItem = NULL;
+	return false;
 }

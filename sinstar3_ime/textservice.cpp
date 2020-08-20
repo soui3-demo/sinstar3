@@ -161,63 +161,12 @@ void  CUiWnd::ReleaseImeContext(CImeContext * imeContext) const
 
 void  CUiWnd::SetConversionMode(EInputMethod mode)
 {
-	CImeContext *pCtx=GetImeContext();
-	if(pCtx)
-	{
-		DWORD dwMode=0;
-		switch( mode)
-		{
-		case HalfAlphanumeric:
-			dwMode = IME_CMODE_ROMAN;						
-			break;
-
-		case HalfNative:
-			dwMode = IME_CMODE_ROMAN | IME_CMODE_NATIVE;	
-			break;
-
-		case FullNative:
-			dwMode = IME_CMODE_ROMAN | IME_CMODE_FULLSHAPE | IME_CMODE_NATIVE;
-			break;
-
-		}
-		//首先保证键盘状态同步
-		if(mode != HalfAlphanumeric)
-		{
-			SetOpenStatus(pCtx,TRUE);
-			ImmSetConversionStatus(pCtx->_hIMC,dwMode,0);
-		}else
-		{
-			SetOpenStatus(pCtx,FALSE);
-		}
-	}
-	ReleaseImeContext(pCtx);
+	//todo:hjx
 }
 
 EInputMethod CUiWnd::GetConversionMode()
 {
-	EInputMethod eInputMode =m_pSinstar3?m_pSinstar3->GetDefInputMode():FullNative;
-
-	CImeContext *pCtx=GetImeContext();
-	if(!pCtx) return HalfAlphanumeric;
-	DWORD dwMode=0,dwSent=0;
-	ImmGetConversionStatus(pCtx->_hIMC,&dwMode,&dwSent);
-	ReleaseImeContext(pCtx);
-
-	switch( dwMode)
-	{
-	case IME_CMODE_ROMAN | IME_CMODE_FULLSHAPE| IME_CMODE_NATIVE:	
-		eInputMode = FullNative;
-		break;
-
-	case IME_CMODE_ROMAN| IME_CMODE_NATIVE:	
-		eInputMode = HalfNative;
-		break;
-
-	case IME_CMODE_ROMAN:// 0x10
-		eInputMode = HalfAlphanumeric;
-		break;
-	}
-	return eInputMode;
+	return FullNative;
 }
 
 void CUiWnd::SetOpenStatus(CImeContext * imeContext,BOOL bOpen)

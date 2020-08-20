@@ -648,3 +648,18 @@ BOOL CSinstar3Tsf::_SetCompositionDisplayAttributes(TfEditCookie ec, _In_ ITfCon
 
 	return (hr == S_OK);
 }
+
+BOOL CSinstar3Tsf::_InitLanguageBar()
+{
+	_pLangBarItem = CLangBarItemButton::_InitLanguageBar(_pThreadMgr);
+	return _pLangBarItem!=NULL;
+}
+
+void CSinstar3Tsf::_UninitLanguageBar()
+{
+	if(CLangBarItemButton::_UninitLanguageBar(_pThreadMgr,_pLangBarItem))
+	{
+		_pLangBarItem->Release();
+		_pLangBarItem = NULL;
+	}
+}
