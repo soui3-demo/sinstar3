@@ -375,6 +375,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\LanguageBar.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Minidump.cpp"
 				>
 			</File>
@@ -437,6 +441,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\LanguageBar.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Minidump.h"
 				>
 			</File>
@@ -470,6 +478,14 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
+			<File
+				RelativePath=".\res\ImeModeOff.ico"
+				>
+			</File>
+			<File
+				RelativePath=".\res\ImeModeOn.ico"
+				>
+			</File>
 			<File
 				RelativePath=".\res\sinstar3.ICO"
 				>

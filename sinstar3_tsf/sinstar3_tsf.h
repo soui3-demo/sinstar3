@@ -3,6 +3,7 @@
 #include <Ctffunc.h>
 #include "../sinstar3_proxy/SimpleWnd.h"
 #include "../sinstar3_proxy/SinstarProxy.h"
+#include "LanguageBar.h"
 
 #define  UICLASSNAME _T("sinstar3_tsfwnd")
 
@@ -137,6 +138,9 @@ private:
     BOOL _InitKeyEventSink();
     void _UninitKeyEventSink();
 
+	BOOL _InitLanguageBar();
+	void _UninitLanguageBar();
+
 	BOOL _InitDisplayAttributeGuidAtom();
 
 	// 
@@ -165,6 +169,8 @@ private:
 
 	SOUI::SComPtr<ITfComposition> _pComposition;	//save composition ptr, indicator.
 	BOOL         _bCompositing;                     //save startComposition and endComposition call
+
+	CLangBarItemButton* _pLangBarItem;
 
 	DWORD _dwCookieTextLayoutSink;					// Cookie for ITfContextKeyEventSink
 

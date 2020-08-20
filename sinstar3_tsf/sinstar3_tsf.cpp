@@ -159,6 +159,12 @@ STDAPI CSinstar3Tsf::ActivateEx(ITfThreadMgr *pThreadMgr, TfClientId tfClientId,
 	if (!_InitDisplayAttributeGuidAtom())
 		goto ExitError;
 
+	//
+	// Initialize Language Bar.
+	//
+	if (!_InitLanguageBar())
+		goto ExitError;
+
 	OnSetThreadFocus();
 
 	Helper_ChangeWindowMessageFilter(SOUI::UM_CALL_FUN, MSGFLT_ADD);
@@ -246,6 +252,7 @@ STDAPI CSinstar3Tsf::Deactivate()
 		_UninitThreadCompartment();
 		_UninitThreadMgrEventSink();
 		_UninitKeyEventSink();
+		_UninitLanguageBar();
 	}
 
     if (_pThreadMgr)
