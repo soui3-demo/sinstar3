@@ -69,7 +69,7 @@ public:
 	BYTE	by2CandVK;			// 2 Cand key
 	BYTE	by3CandVK;			// 3 Cand Key
 	BYTE	byForecast;			// forecast mask
-	TCHAR	byLineKey[6];		// 笔画输入法转换键值
+	WORD	byLineKey[6];		// 笔画输入法转换键值
 	BOOL	bShowOpTip;			// 显示操作提示开关
 	GbkMode		nGbkMode;			// GBK Show Mode
 

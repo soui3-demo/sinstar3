@@ -13,14 +13,14 @@
       <hotkey name="hk_3_cand" width="50dp" invalidComb="ctrl+shift+alt" invalidModifier=""/>
     </window>
     <check  name="chk_disable_number_to_select_cand" text="禁止数字键选择重码"/>
-    <text >重码翻页</text>
+    <text  text="重码翻页"/>
     <window  extend_left="5" layout="gridlayout" xInterval="10dp" yInterval="10dp" columnCount="2">
       <text text="前翻页"/>
       <hotkey name="hk_turn_prev" width="50dp" invalidComb="ctrl+shift+alt" invalidModifier=""/>
       <text text="后翻页"/>
       <hotkey name="hk_turn_next" width="50dp" invalidComb="ctrl+shift+alt" invalidModifier=""/>
     </window>
-    <text >GBK重码显示方式</text>
+    <text  text="GBK重码显示方式"/>
     <window  layout="vbox" interval="10" >
       <radio name="gbk_show_only" id="700" text="无GB重码时显示"/>
       <radio name="gbk_show_manual" id="701" text="显示仅手动上屏"/>

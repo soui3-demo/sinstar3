@@ -454,7 +454,7 @@ namespace SOUI
 
 		for (int i = 0; i < 6; i++)
 		{
-			FindAndSetHotKey(R.id.hk_bihua_heng+i, Char2VKey(g_SettingsG->byLineKey[i]));
+			FindAndSetHotKey(R.id.hk_bihua_heng+i, g_SettingsG->byLineKey[i]);
 		}
 
 		FindAndSetText(R.id.edit_backup,g_SettingsG->szBackupDir);
@@ -890,7 +890,7 @@ SWindow *pCtrl = FindChildByID(id);\
 		case R.id.hk_bihua_na:
 		case R.id.hk_bihua_zhe:
 		case R.id.hk_bihua_wild:
-			g_SettingsG->byLineKey[pHotKeyCtrl->GetID() - R.id.hk_bihua_heng] = Vkey2Char(pHotKeyEvt->vKey);
+			g_SettingsG->byLineKey[pHotKeyCtrl->GetID() - R.id.hk_bihua_heng] = pHotKeyEvt->vKey;
 			break;
 			break;
 		case R.id.hk_to_sentmode:

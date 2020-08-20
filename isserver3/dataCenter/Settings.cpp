@@ -76,18 +76,12 @@ void CSettingsGlobal::Save(const SStringT & strDataPath)
 	WritePrivateProfileInt(KSession,_T("ShowTip"),bShowOpTip,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("AutoMatch"),bAutoMatch,strConfigIni);
 
-	szBuf[0]=byLineKey[0];
-	WritePrivateProfileString(KSession,_T("LineKey1"),szBuf,strConfigIni);
-	szBuf[0]=byLineKey[1];
-	WritePrivateProfileString(KSession,_T("LineKey2"),szBuf,strConfigIni);
-	szBuf[0]=byLineKey[2];
-	WritePrivateProfileString(KSession,_T("LineKey3"),szBuf,strConfigIni);
-	szBuf[0]=byLineKey[3];
-	WritePrivateProfileString(KSession,_T("LineKey4"),szBuf,strConfigIni);
-	szBuf[0]=byLineKey[4];
-	WritePrivateProfileString(KSession,_T("LineKey5"),szBuf,strConfigIni);
-	szBuf[0]=byLineKey[5];
-	WritePrivateProfileString(KSession,_T("LineKey6"),szBuf,strConfigIni);
+	WritePrivateProfileString(KSession,_T("LineKey1"),SAccelerator::GetKeyName(byLineKey[0]),strConfigIni);
+	WritePrivateProfileString(KSession,_T("LineKey2"),SAccelerator::GetKeyName(byLineKey[1]),strConfigIni);
+	WritePrivateProfileString(KSession,_T("LineKey3"),SAccelerator::GetKeyName(byLineKey[2]),strConfigIni);
+	WritePrivateProfileString(KSession,_T("LineKey4"),SAccelerator::GetKeyName(byLineKey[3]),strConfigIni);
+	WritePrivateProfileString(KSession,_T("LineKey5"),SAccelerator::GetKeyName(byLineKey[4]),strConfigIni);
+	WritePrivateProfileString(KSession,_T("LineKey6"),SAccelerator::GetKeyName(byLineKey[5]),strConfigIni);
 
 	WritePrivateProfileInt(KSession,_T("GBKMODE"),nGbkMode,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("BlendUD"),bBlendUD,strConfigIni);
@@ -172,18 +166,18 @@ void CSettingsGlobal::Load(const SStringT & strDataPath)
 	}
 
 	byAstMode=GetPrivateProfileInt(KSession,_T("Associate"),2,strConfigIni);//2=english
-	GetPrivateProfileString(KSession,_T("LineKey1"),_T("g"),szBuf,2,strConfigIni);
-	byLineKey[0]=szBuf[0];
-	GetPrivateProfileString(KSession,_T("LineKey2"),_T("h"),szBuf,2,strConfigIni);
-	byLineKey[1]=szBuf[0];
-	GetPrivateProfileString(KSession,_T("LineKey3"),_T("t"),szBuf,2,strConfigIni);
-	byLineKey[2]=szBuf[0];
-	GetPrivateProfileString(KSession,_T("LineKey4"),_T("y"),szBuf,2,strConfigIni);
-	byLineKey[3]=szBuf[0];
-	GetPrivateProfileString(KSession,_T("LineKey5"),_T("n"),szBuf,2,strConfigIni);
-	byLineKey[4]=szBuf[0];
-	GetPrivateProfileString(KSession,_T("LineKey6"),_T("z"),szBuf,2,strConfigIni);
-	byLineKey[5]=szBuf[0];
+	GetPrivateProfileString(KSession,_T("LineKey1"),_T("g"),szBuf,20,strConfigIni);
+	byLineKey[0]=SAccelerator::VkFromString(szBuf);
+	GetPrivateProfileString(KSession,_T("LineKey2"),_T("h"),szBuf,20,strConfigIni);
+	byLineKey[1]=SAccelerator::VkFromString(szBuf);
+	GetPrivateProfileString(KSession,_T("LineKey3"),_T("t"),szBuf,20,strConfigIni);
+	byLineKey[2]=SAccelerator::VkFromString(szBuf);
+	GetPrivateProfileString(KSession,_T("LineKey4"),_T("y"),szBuf,20,strConfigIni);
+	byLineKey[3]=SAccelerator::VkFromString(szBuf);
+	GetPrivateProfileString(KSession,_T("LineKey5"),_T("n"),szBuf,20,strConfigIni);
+	byLineKey[4]=SAccelerator::VkFromString(szBuf);
+	GetPrivateProfileString(KSession,_T("LineKey6"),_T("z"),szBuf,20,strConfigIni);
+	byLineKey[5]=SAccelerator::VkFromString(szBuf);
 	byForecast=GetPrivateProfileInt(KSession,_T("Forecast"),MQC_FORECAST,strConfigIni);
 
 	bShowOpTip=GetPrivateProfileInt(KSession,_T("ShowTip"),1,strConfigIni);
