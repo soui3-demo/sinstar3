@@ -437,7 +437,7 @@ void CInputState::InputStart()
 	}
 }
 
-void CInputState::InputResult(const SStringW &strResult,BYTE byAstMask)
+BOOL CInputState::InputResult(const SStringW &strResult,BYTE byAstMask)
 {
 	SLOG_INFO("result:"<<strResult<<" astMask:"<<byAstMask);
 
@@ -457,18 +457,18 @@ void CInputState::InputResult(const SStringW &strResult,BYTE byAstMask)
 		m_ctx.cInput = strTemp.GetLength();
 	}
 
+	BOOL bRet = FALSE;
 	if(byAstMask!=0)
 	{
 		SStringW strResult = strTemp;
 		KeyIn_InputAndAssociate(&m_ctx,strResult,(short)strResult.GetLength(),byAstMask);
-	}else
-	{
-		InputHide(FALSE);
+		bRet = TRUE;
 	}
 
 	m_tmInputEnd = GetTickCount();
 	CDataCenter::getSingletonPtr()->GetData().m_tmInputSpan += m_tmInputEnd - m_tmInputStart;
 	CDataCenter::getSingletonPtr()->GetData().m_cInputCount+= strTemp.GetLength();
+	return bRet;
 }
 
 
@@ -1318,10 +1318,6 @@ BOOL CInputState::KeyIn_Spell_InputText(InputContext* lpCntxtPriv,UINT byInput,
 			strResult = SStringW(lpCntxtPriv->szComp,lpCntxtPriv->cComp);
 		}
 		ClearContext(CPC_ALL);
-		InputResult(strResult,GetKeyinMask(!IsTempSpell(),MKI_RECORD|MKI_TTSINPUT));
-		InputEnd();
-		InputHide(TRUE);
-
 		if (IsTempSpell())
 		{//临时拼音模式自动获得输入拼音的编码
 			lpCntxtPriv->bShowTip = TRUE;
@@ -1330,6 +1326,10 @@ BOOL CInputState::KeyIn_Spell_InputText(InputContext* lpCntxtPriv,UINT byInput,
 			lpCntxtPriv->compMode = IM_SHAPECODE;
 			StatusbarUpdate();
 		}
+
+		BOOL bDelay = InputResult(strResult,GetKeyinMask(!IsTempSpell(),MKI_RECORD|MKI_TTSINPUT));
+		InputEnd();
+		InputHide(bDelay||lpCntxtPriv->bShowTip);
 
 		//将用户输入提交给服务器保存
 		if(bGetSpID) CIsSvrProxy::GetSvrCore()->ReqSpellMemEx(strResult,strResult.GetLength(),bySpellID);
@@ -1471,7 +1471,7 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 						BOOL isTempSpell = IsTempSpell();
 
 						ClearContext(CPC_ALL);
-						InputResult(strResult,GetKeyinMask(!isTempSpell,MKI_ALL));
+						BOOL bDelay = InputResult(strResult,GetKeyinMask(!isTempSpell,MKI_ALL));
 						InputEnd();
 
 						if(isTempSpell) 
@@ -1480,6 +1480,7 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 							lpCntxtPriv->iTip = -1;
 							GetShapeComp(strResult,strResult.GetLength());
 						}
+						InputHide(bDelay || isTempSpell);
 						if(isTempSpell)
 						{//退出临时拼音
 							lpCntxtPriv->compMode=IM_SHAPECODE;
@@ -1600,13 +1601,13 @@ BOOL CInputState::KeyIn_All_SelectCand(InputContext * lpCntxtPriv,UINT byInput,c
 			strResult=SStringW((WCHAR*)(pCandInfo+3),pCandInfo[2]);
 		}
 		ClearContext(CPC_ALL);
-		InputResult(strResult,byMask);
+		BOOL bDelay = InputResult(strResult,byMask);
 		InputEnd();
 
 		InputUpdate();
 		if (!bKeepVisible)
 		{
-			InputHide(byMask &(MKI_ASTENGLISH | MKI_ASTCAND | MKI_ASTSENT | MKI_PHRASEREMIND) || lpCntxtPriv->bShowTip);
+			InputHide(bDelay || lpCntxtPriv->bShowTip);
 		}
 	}else{
 		CUtils::SoundPlay(_T("error"));
@@ -1758,7 +1759,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 			ClearContext(CPC_ALL);
 			InputResult(strResult,GetKeyinMask(FALSE,MKI_ALL));
 			InputEnd();
-			InputHide(TRUE);
+			InputHide(FALSE);
 			bRet = TRUE;
 		}
 	}else if(lpCntxtPriv->cComp < MAX_COMP
@@ -2225,6 +2226,7 @@ void CInputState::SetOpenStatus(BOOL bOpen)
 		}
 		InputUpdate();
 		InputEnd();
+		InputHide(FALSE);
 		m_pListener->EnableInput(FALSE);
 	}
 }

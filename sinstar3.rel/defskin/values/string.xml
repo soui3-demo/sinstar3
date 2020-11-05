@@ -33,7 +33,7 @@
   <txt_edit_userdict value="编辑用户词库"/>
   
   <tip_edit_userdef value="格式:编码+“=”+候选，候选词有多个时用“|”分割"/>
-  <tip_edit_symbol  value="格式:符号+类型+输出，类型有1,2,3。1代表奇数次数，2代表偶数次数，3代表不区分奇偶。"/>
+  <tip_edit_symbol  value="格式:符号+类型+输出，类型有1,2,3。1代表奇数次数，2代表偶数次数，3代表不区分奇偶。半角状态下的符号转换在符号后加H，例如&quot;.H	3	。&quot;代表在半角状态下输入.时输出中文句号"/>
   <tip_edit_usercmd value="格式:编码+“=”+[显示文字]命令行"/>
   <tip_edit_userjm  value="格式:编码+“=”+候选，候选词有多个时用“|”分割"/>
   <tip_edit_userdict value="格式:词条+tab+词频,词频为0-255的整数，可以只有词条"/>

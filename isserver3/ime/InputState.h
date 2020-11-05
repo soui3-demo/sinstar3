@@ -54,7 +54,7 @@ protected:
 	void SetOpenStatus(BOOL bOpen);
 protected:
 	void InputStart();
-	void InputResult(const SStringW &strResult,BYTE byAstMask);
+	BOOL InputResult(const SStringW &strResult,BYTE byAstMask);
 	void InputEnd();
 	void InputUpdate();
 	void InputOpen();

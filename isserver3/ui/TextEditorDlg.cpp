@@ -62,19 +62,7 @@ void CTextEditorDlg::OnBtnClose()
 
 void CTextEditorDlg::OnBtnSave()
 {
-	LONG nLen = m_pSciter->SendMessage(SCI_GETTEXTLENGTH, 0,0);
-	char *buf = new char[nLen + 1];
-	m_pSciter->SendMessage(SCI_GETTEXT, nLen+1, (LPARAM)buf);
-	buf[nLen] = 0;
-	SStringW str = S_CA2W(SStringA(buf, nLen), CP_UTF8);
-	delete[]buf;
-	FILE *f = _tfopen(m_strFileName, _T("wb"));
-	if (f)
-	{
-		fwrite("\xff\xfe",1,2,f);
-		fwrite(str.c_str(), 2,str.GetLength(), f);
-		fclose(f);
-	}
+	m_pSciter->SaveFile(m_strFileName);
 	EndDialog(IDOK);
 }
 
@@ -124,17 +112,6 @@ void CTextEditorDlg::OnBtnExport()
 	CFileDialogEx saveDlg(FALSE, _T("txt"), NULL, 6, _T("文本文件(*.txt)\0*.txt\0All files (*.*)\0*.*\0\0"));
 	if(saveDlg.DoModal()==IDOK)
 	{
-		LONG nLen = m_pSciter->SendMessage(SCI_GETTEXTLENGTH, 0,0);
-		char *buf = new char[nLen + 1];
-		m_pSciter->SendMessage(SCI_GETTEXT, nLen+1, (LPARAM)buf);
-		buf[nLen] = 0;
-		SStringA str = S_CA2A(SStringA(buf, nLen), CP_UTF8, CP_ACP);
-		delete[]buf;
-		FILE *f = _tfopen(saveDlg.m_szFileName, _T("wb"));
-		if (f)
-		{
-			fwrite(str.c_str(), 1,str.GetLength(), f);
-			fclose(f);
-		}
+		m_pSciter->SaveFile(saveDlg.m_szFileName);
 	}
 }
