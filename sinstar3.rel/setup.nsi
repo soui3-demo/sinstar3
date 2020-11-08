@@ -139,8 +139,8 @@ Section "郑码" COMP_ZM
    SetOutPath "$INSTDIR\server"
    File /a "server\Windows XP系统郑码.cit"
    File /a "server\Windows XP系统郑码.scm"
-   File /a "大字集郑码,收字27533.cit"
-   File /a "大字集郑码,收字27533.scm"
+   File /a "server\大字集郑码_收字27533.cit"
+   File /a "server\大字集郑码_收字27533.scm"
 SectionEnd
 Section "权氏两笔" COMP_QS2B
    SetOverwrite ifnewer
