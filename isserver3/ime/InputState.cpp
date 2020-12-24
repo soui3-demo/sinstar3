@@ -555,9 +555,14 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 				)
 			{//获得输入数字的ASCII码
 				if((uVKey>=VK_NUMPAD0 && uVKey<=VK_NUMPAD9))
-					byCandIndex=uVKey-VK_NUMPAD0+'0';
+				{
+					if(lpCntxtPriv->inState != INST_LINEIME) 
+						byCandIndex=uVKey-VK_NUMPAD0+'0';
+				}
 				else
+				{
 					byCandIndex=uVKey;
+				}
 			}
 		}else if(g_SettingsG->b23CandKey && !(lpbKeyState[VK_SHIFT]&0x80))
 		{//SHIFT 模式下不进入
@@ -590,7 +595,6 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 
 	if(!bHandle && uVKey && test!=0)
 	{
-		uVKey = wChar;
 		if(lpCntxtPriv->inState==INST_CODING)
 		{//先做状态转换前处理
 			BOOL bReadyEn=FALSE;
@@ -619,14 +623,14 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 				if((g_SettingsG->byAstMode==AST_CAND ||(g_SettingsG->byAstMode==AST_ENGLISH &&(lpbKeyState[VK_CONTROL]&0x80))) && lpCntxtPriv->sCandCount)
 					bReadyDgt=FALSE;
 			}
-			if(IsTempSpell() && (bReadyEn || bReadyDgt) && (isdigit(uVKey) || isupper(uVKey)))
+			if(IsTempSpell() && (bReadyEn || bReadyDgt) && (isdigit(wChar) || isupper(wChar)))
 			{//temp spell mode
 				CUtils::SoundPlay(_T("error"));
 				return FALSE;
 			}
 			if((bReadyEn || bReadyDgt) && lpCntxtPriv->bShowTip) //关闭tip
 				lpCntxtPriv->bShowTip=FALSE;
-			if(bReadyEn && uVKey>='A' && uVKey<='Z' && (lpbKeyState[VK_CAPITAL]&0x01)== 0)
+			if(bReadyEn && wChar>='A' && wChar<='Z' && (lpbKeyState[VK_CAPITAL]&0x01)== 0)
 			{//大写输入，则切换到英文状态
 				ClearContext(CPC_ALL);
 				if(g_SettingsUI->bEnglish)
@@ -636,7 +640,7 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 					InputStart();
 					InputOpen();
 				}
-			}else if(bReadyDgt && uVKey>='0' && uVKey<='9')
+			}else if(bReadyDgt && wChar>='0' && wChar<='9')
 			{//数字输入，进入数字输入状态
 				ClearContext(CPC_ALL);
 				lpCntxtPriv->inState=INST_DIGITAL;
@@ -649,28 +653,28 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 			{//编码输入
 				if(lpCntxtPriv->compMode==IM_SPELL)
 				{//拼音状态
-					bHandle=KeyIn_Spell_Normal(lpCntxtPriv,uVKey,lpbKeyState);
+					bHandle=KeyIn_Spell_Normal(lpCntxtPriv,wChar,lpbKeyState);
 				}else
 				{
-					bHandle=KeyIn_Code_Normal(lpCntxtPriv,uVKey,lpbKeyState);
+					bHandle=KeyIn_Code_Normal(lpCntxtPriv,wChar,lpbKeyState);
 				}
 			}else if(lpCntxtPriv->sbState==SBST_ASSOCIATE)
 			{//联想状态
-				bHandle=KeyIn_All_Associate(lpCntxtPriv,uVKey,lpbKeyState);
+				bHandle=KeyIn_All_Associate(lpCntxtPriv,wChar,lpbKeyState);
 			}else if(lpCntxtPriv->sbState==SBST_SENTENCE)
 			{//句子状态
-				bHandle=KeyIn_All_Sentence(lpCntxtPriv,uVKey,lpbKeyState);
-				if(!bHandle) KeyIn_Code_Symbol(lpCntxtPriv,uVKey,lpbKeyState);
+				bHandle=KeyIn_All_Sentence(lpCntxtPriv,wChar,lpbKeyState);
+				if(!bHandle) KeyIn_Code_Symbol(lpCntxtPriv,wChar,lpbKeyState);
 			}
 		}else if(lpCntxtPriv->inState==INST_ENGLISH)
 		{//英文单词状态
-			bHandle=KeyIn_Code_English(lpCntxtPriv,uVKey,lpbKeyState);
+			bHandle=KeyIn_Code_English(lpCntxtPriv,wChar,lpbKeyState);
 		}else if(lpCntxtPriv->inState==INST_DIGITAL)
 		{//数字输入状态
-			bHandle=KeyIn_Digital_ChangeComp(lpCntxtPriv,uVKey,lpbKeyState);
+			bHandle=KeyIn_Digital_ChangeComp(lpCntxtPriv,wChar,lpbKeyState);
 		}else if(lpCntxtPriv->inState==INST_USERDEF)
 		{//用户自定义输入状态
-			bHandle=KeyIn_UserDef_ChangeComp(lpCntxtPriv,uVKey,lpbKeyState);
+			bHandle=KeyIn_UserDef_ChangeComp(lpCntxtPriv,wChar,lpbKeyState);
 		}else if(lpCntxtPriv->inState==INST_LINEIME)
 		{//笔画输入状态
 			BOOL bInputKey=FALSE;
@@ -680,9 +684,10 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 			}else
 			{//设置的转换键
 				int i;
+				WCHAR cKey = MapVirtualKey(uVKey,MAPVK_VK_TO_CHAR);
 				for( i=0;i<6;i++)
 				{
-					if(g_SettingsG->byLineKey[i]==uVKey)
+					if(g_SettingsG->byLineKey[i]==cKey)
 					{
 						uVKey=VK_NUMPAD1+i;
 						bInputKey=TRUE;
@@ -2287,7 +2292,7 @@ BOOL CInputState::KeyIn_Test_FuncKey(UINT uKey,LPARAM lKeyData,const BYTE * lpbK
 				fun = g_SettingsG->m_funLeftCtrl;
 		}
 	}
-	
+
 	BOOL bRet=FALSE;
 	if(fun == Fun_Ime_Switch)
 	{
@@ -2481,6 +2486,8 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 				}else if(uKey>=VK_NUMPAD0 && uKey<=VK_NUMPAD9)
 				{//小键盘数字输入
 					bRet=KeyIn_IsNumCode(&m_ctx) || m_ctx.sCandCount;
+					if(m_ctx.inState == INST_LINEIME && uKey>=VK_NUMPAD1 && uKey<=VK_NUMPAD6)
+						bRet = TRUE;
 				}else if(uKey>=VK_MULTIPLY && uKey<=VK_DIVIDE)
 				{//小键盘公式输入
 					bRet=KeyIn_IsNumCode(&m_ctx);
