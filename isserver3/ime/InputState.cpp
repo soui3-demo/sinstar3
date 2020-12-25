@@ -527,7 +527,18 @@ BOOL CInputState::HandleKeyDown(UINT uVKey,UINT uScanCode,const BYTE * lpbKeySta
 				InputOpen();
 			}
 			InputUpdate();
-		}else if(iHotKey == HKI_Repeat)
+		}else if(iHotKey == HKI_LineMode)
+		{
+			ClearContext(CPC_ALL);
+			m_ctx.inState=INST_LINEIME;
+			if (!m_pListener->IsCompositing())
+			{
+				InputStart();
+				InputOpen();
+			}
+			InputUpdate();
+		}
+		else if(iHotKey == HKI_Repeat)
 		{
 			return KeyIn_RepeatInput(&m_ctx,lpbKeyState);
 		}

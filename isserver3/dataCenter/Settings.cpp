@@ -24,6 +24,7 @@ const static HotKeyEntry KHotKeyEntryMap[] = {
 	{ HKI_TTS,_T("HotKey_TTS"),_T("ctrl+alt+t") },
 	{ HKI_TempSpell,_T("HotKey_TempSpell"),_T("")},
 	{ HKI_Repeat,_T("HotKey_Repeat"),_T("shift+enter")},
+	{ HKI_LineMode,_T("HotKey_LineMode"),_T("ctrl+alt+l")},
 };
 
 

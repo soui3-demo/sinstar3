@@ -11,6 +11,8 @@
     <hotkey name="hk_switch_tempspell" weight="1" width="120dp" height="30dp"/>
     <text text="自定义模式"/>
     <hotkey name="hk_to_umode" width="120dp" height="30dp"/>
+    <text text="笔画输入模式"/>
+    <hotkey name="hk_to_linemode" width="120dp" height="30dp"/>
     <text text="重复上次输入\n&&编码上屏" multiLines="1"/>
     <hotkey name="hk_repeat" width="120dp" height="30dp"/>
     <text text="造词"/>

@@ -387,6 +387,7 @@ namespace SOUI
 		FindAndSetHotKey(R.id.hk_tts, g_SettingsG->dwHotkeys[HKI_TTS]);
 		FindAndSetHotKey(R.id.hk_record, g_SettingsG->dwHotkeys[HKI_Record]);
 		FindAndSetHotKey(R.id.hk_to_umode, g_SettingsG->dwHotkeys[HKI_UDMode]);
+		FindAndSetHotKey(R.id.hk_to_linemode,g_SettingsG->dwHotkeys[HKI_LineMode]);
 		FindAndSetHotKey(R.id.hk_switch_tempspell,g_SettingsG->dwHotkeys[HKI_TempSpell]);
 	}
 
@@ -876,6 +877,8 @@ SWindow *pCtrl = FindChildByID(id);\
 			g_SettingsG->dwHotkeys[HKI_Record] = dwAccel; break;
 		case R.id.hk_to_umode:
 			g_SettingsG->dwHotkeys[HKI_UDMode] = dwAccel;break;
+		case R.id.hk_to_linemode:
+			g_SettingsG->dwHotkeys[HKI_LineMode] = dwAccel;break;
 		case R.id.hk_2_cand:
 			g_SettingsG->by2CandVK = pHotKeyEvt->vKey; break;
 		case R.id.hk_3_cand:

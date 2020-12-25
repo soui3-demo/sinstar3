@@ -15,6 +15,7 @@ enum HotKeyIndex{
 	HKI_UDMode,			// user define mode
 	HKI_TempSpell,		// temp spell
 	HKI_Repeat,			// repeat input
+	HKI_LineMode,		// line mode
 	HKI_COUNT,
 
 	HKI_AdjustRate,		// 快速调频: ctrl+重码号 
