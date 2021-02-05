@@ -14,7 +14,7 @@
     <item text="输出繁体" name="switch_input_big5" id="103"/>
     <item text="语音校对" name="switch_read_input" id="104"/>
     <item text="单词补全" name="switch_word_input" id="106"/>
-    <item text="GBK过滤" name="switch_filter_gbk" id="107"/>
+    <item text="隐藏GBK重码" name="switch_filter_gbk" id="107"/>
     <item text="中文标点" name="switch_char_mode" id="108"/>
   </item>
   <item text="智能语句" name="menu_sent" contextHelpId="10">

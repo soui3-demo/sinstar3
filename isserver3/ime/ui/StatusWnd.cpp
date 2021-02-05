@@ -450,8 +450,8 @@ namespace SOUI
 			bool bUpdated = SwitchToggle(R.id.btn_filter_gbk,!g_SettingsUI->bFilterGbk);
 			if (m_pInputListener && !bInit && !bUpdated)
 			{
-				TIPINFO ti(_T("GBK过滤策略改变"));
-				ti.strTip.Format(_T("当前GBK过滤:%s"), g_SettingsUI->bFilterGbk ? _T("启用") : _T("关闭"));
+				TIPINFO ti(_T("GBK隐藏策略改变"));
+				ti.strTip.Format(_T("隐藏GBK重码:%s"), g_SettingsUI->bFilterGbk ? _T("启用") : _T("关闭"));
 				m_pInputListener->OnCommand(CMD_SHOWTIP, (LPARAM)&ti);
 			}
 
@@ -575,7 +575,7 @@ namespace SOUI
 		case R.id.btn_filter_gbk:
 			e2->bUpdated = TRUE;
 			strAccel = SAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_FilterGbk]);
-			e2->strToolTip = SStringT().Format(_T("过滤GBK重码:%s"), g_SettingsUI->bFilterGbk ? _T("启用") : _T("禁用"));
+			e2->strToolTip = SStringT().Format(_T("隐藏GBK重码:%s"), g_SettingsUI->bFilterGbk ? _T("启用") : _T("禁用"));
 			break;
 		case R.id.btn_menu:
 			{
