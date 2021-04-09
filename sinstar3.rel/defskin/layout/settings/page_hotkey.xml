@@ -25,11 +25,11 @@
     <hotkey name="hk_show_statusbar" width="120dp" height="30dp"/>
     <text text="单词补全"/>
     <hotkey name="hk_input_en" width="120dp" height="30dp"/>
-    <text text="过滤GBK"/>
+    <text text="隐藏GBK重码"/>
     <hotkey name="hk_filter_gbk" width="120dp" height="30dp"/>
-    <text text="语音较对(TTS)"/>
+    <text text="语音校对(TTS)"/>
     <hotkey name="hk_tts" width="120dp" height="30dp"/>
-    <text text="输入记忆"/>
+    <text text="记录输入历史"/>
     <hotkey name="hk_record" width="120dp" height="30dp"/>
   </window>
 </window>

@@ -617,3 +617,9 @@ void CSinstar3Impl::OnTimer(UINT_PTR id)
 
 }
 
+void CSinstar3Impl::OnCapital(BOOL bCap)
+{
+	DWORD dwData = CStatusWnd::BTN_CAPITAL;
+	Broadcast(CMD_SYNCUI, &dwData,sizeof(dwData));
+}
+

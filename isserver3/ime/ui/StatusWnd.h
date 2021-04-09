@@ -19,6 +19,7 @@ namespace SOUI
 			BTN_ENGLISHMODE = 1<<3,
 			BTN_FILTERGBK = 1<<4,
 			BTN_STATUSMODE = 1<<5,
+			BTN_CAPITAL = 1<<6,
 			BTN_ALL=0xffffffff,
 		};
 
@@ -45,6 +46,7 @@ namespace SOUI
 		void UpdateCompInfo();
 		void UpdateToggleStatus(DWORD flags,BOOL bInit=FALSE);
 		void UpdateMode();
+		void UpdateCaptialMode();
 	protected:
 		virtual void OnReposition(CPoint pt);
 		virtual bool onRootResize(EventArgs *e);

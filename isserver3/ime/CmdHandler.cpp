@@ -83,7 +83,8 @@ void CCmdHandler::OnHotKeyQueryInfo(LPARAM lp)
 			if (CIsSvrProxy::GetSvrCore()->ReqQueryComp(strBuf, strBuf.GetLength()) == ISACK_SUCCESS)
 			{
 				PMSGDATA pData = CIsSvrProxy::GetSvrCore()->GetAck();
-				SStringW str((WCHAR*)pData->byData,pData->sSize/2);
+				SStringW strW((WCHAR*)pData->byData,pData->sSize/2);
+				SStringT str=S_CW2T(strW);
 				p += _stprintf(p, _T("\n%s=%s"),CDataCenter::getSingleton().GetData().m_compInfo.strCompName, str.c_str());
 			}
 			else

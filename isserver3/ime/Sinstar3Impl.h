@@ -53,6 +53,7 @@ protected://IInputListener
 	virtual void OnInputResult(const SStringT & strResult,const SStringT & strComp=SStringT() );
 	virtual void OnInputEnd();
 	virtual void UpdateInputWnd();
+	virtual void OnCapital(BOOL bCap);
 
 	virtual BOOL GoNextCandidatePage();
 	virtual BOOL GoPrevCandidatePage();

@@ -12,8 +12,11 @@ namespace SOUI
 		void SetImeFlagData(LPBYTE pData,DWORD dwLen);
 		void ShowSpellFlag(BOOL bSpell);
 
+		void UpdateCapitalMode(BOOL bCap);
+
 		SOUI_ATTRS_BEGIN()
 			ATTR_SKIN(L"defaultFlag",m_defFlag,TRUE)
+			ATTR_SKIN(L"capFlag",m_capFlag,TRUE)
 			ATTR_COLOR(L"colorTheme",m_crTheme,TRUE)
 		SOUI_ATTRS_END()
 
@@ -24,9 +27,11 @@ namespace SOUI
 		SOUI_MSG_MAP_END()
 
 	private:
-		CAutoRefPtr<ISkinObj> m_defFlag;
-		CAutoRefPtr<IBitmap>  m_imeFlag;
+		SAutoRefPtr<ISkinObj> m_defFlag;
+		SAutoRefPtr<ISkinObj> m_capFlag;
+		SAutoRefPtr<IBitmap>  m_imeFlag;
 		BOOL				  m_bSpellFlag;
 		COLORREF			  m_crTheme;
+		BOOL				  m_bCapMode;
 	};
 }

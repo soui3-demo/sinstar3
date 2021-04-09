@@ -3,7 +3,7 @@
 #include <helper/SDIBHelper.h>
 
 namespace SOUI {
-	SFlagView::SFlagView():m_bSpellFlag(FALSE),m_crTheme(CR_INVALID)
+	SFlagView::SFlagView():m_bSpellFlag(FALSE),m_crTheme(CR_INVALID),m_bCapMode(FALSE)
 	{
 		m_bMsgTransparent = FALSE;
 	}
@@ -36,6 +36,11 @@ namespace SOUI {
 	void SFlagView::OnPaint(IRenderTarget *pRT)
 	{
 		CRect rcClient = GetClientRect();
+		if(m_bCapMode && m_capFlag)
+		{
+			m_capFlag->DrawByIndex(pRT, rcClient, 0);
+			return;
+		}
 		if (m_bSpellFlag)
 		{//拼音状态
 			if (m_defFlag)
@@ -54,5 +59,15 @@ namespace SOUI {
 			m_defFlag->DrawByIndex(pRT, rcClient, 0);//绘制默认图中的第一个子图.
 		}
 	}
+
+	void SFlagView::UpdateCapitalMode(BOOL bCap)
+	{
+		if(m_bCapMode != bCap)
+		{
+			m_bCapMode = bCap;
+			Invalidate();
+		}
+	}
+
 }
 

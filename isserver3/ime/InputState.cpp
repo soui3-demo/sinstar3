@@ -2467,6 +2467,7 @@ BOOL CInputState::TestKeyDown(UINT uKey,LPARAM lKeyData,const BYTE * lpbKeyState
 			InputEnd();
 			InputHide(FALSE);
 		}
+		m_pListener->OnCapital(lpbKeyState[VK_CAPITAL]&0x01);
 		return FALSE;
 	}
 	else if(uKey==VK_SHIFT || uKey == VK_CONTROL)

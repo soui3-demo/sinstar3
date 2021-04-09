@@ -9,6 +9,7 @@
   <skin>
     <imglist name="bg_status_bar" src="img:png_status_bar"/>
     <imglist name="logo"	src="img:logo_32" states="2"/>
+    <imglist name="cap_flag" src="img:png_capital"/>
     <imglist name="charmode" src="img:png_charmode" states="2"/>
     <imglist name="charmode_full" src="img:png_charmode_full" states="3"/>
     <imglist name="charmode_half" src="img:png_charmode_half" states="3"/>
@@ -25,7 +26,7 @@
     <!--default must have both status_shrink and status_extend status and all of buttons name -->
     <status_bg size="-1,-1" name="status_shrink" layout="hbox" skin="bg_status_bar" gravity="center"  padding="@dim/extend_padding_left,@dim/extend_padding_top,@dim/extend_padding_right,@dim/extend_padding_bottom">
       <caption2 size="75,-2" weight="1" extend_left="32" name="txt_comp" cursor="sizeall" dotted="1"/>
-      <flagView size="20,20" tip="拼音五笔切换" colorTheme="@color/theme" name="img_logo" extend_left="4" defaultFlag="logo" cursor="hand"/>
+      <flagView size="20,20" tip="拼音五笔切换" colorTheme="@color/theme" name="img_logo" extend_left="4" defaultFlag="logo" cursor="hand" capFlag="cap_flag"/>
       <toggle2 size="-1,-1" skin1="charmode_half" extend_left="2" skin2="charmode_full" name="btn_charmode" tip="change mode"/>
       <imgbtn size="-1,-1" skin="btn_makeword" extend_left="2" name="btn_make_phrase"/>
       <toggle2 size="-1,-1" skin1="btn_record_enable" extend_left="2" skin2="btn_record_disable" name="btn_record"/>
@@ -34,7 +35,7 @@
     </status_bg>
     <status_bg size="-1,-1" name="status_extend" layout="hbox" skin="bg_status_bar" gravity="center"  padding="@dim/extend_padding_left,@dim/extend_padding_top,@dim/extend_padding_right,@dim/extend_padding_bottom">
       <caption2 size="75,-2" weight="1" extend_left="32" name="txt_comp" cursor="sizeall" dotted="1"/>
-      <flagView size="20,20" tip="拼音五笔切换" colorTheme="@color/theme" name="img_logo" extend_left="4" defaultFlag="logo" cursor="hand"/>
+      <flagView size="20,20" tip="拼音五笔切换" colorTheme="@color/theme" name="img_logo" extend_left="4" defaultFlag="logo" cursor="hand" capFlag="cap_flag"/>
       <toggle2 size="-1,-1" skin1="charmode_half" extend_left="2" skin2="charmode_full" name="btn_charmode" tip="change mode"/>
       <imgbtn size="-1,-1" skin="btn_makeword" extend_left="2" name="btn_make_phrase"/>
       <toggle2 size="-1,-1" skin1="btn_record_enable" extend_left="2" skin2="btn_record_disable" name="btn_record"/>

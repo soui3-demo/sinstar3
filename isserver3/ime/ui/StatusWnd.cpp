@@ -407,6 +407,11 @@ namespace SOUI
 		{
 			UpdateMode();
 		}
+		if(flags & BTN_CAPITAL)
+		{
+			UpdateCaptialMode();
+		}
+
 		if(flags & BTN_CHARMODE){
 			bool bUpdated = SwitchToggle(R.id.btn_charmode,g_SettingsUI->bCharMode);
 			if (m_pInputListener && !bInit && !bUpdated)
@@ -420,8 +425,8 @@ namespace SOUI
 			bool bUpdated = SwitchToggle(R.id.btn_sound,!g_SettingsUI->bSound);
 			if (m_pInputListener && !bInit && !bUpdated)
 			{
-				TIPINFO ti(_T("语音较对改变"));
-				ti.strTip.Format(_T("当前语音较对:%s"), g_SettingsUI->bSound ? _T("打开") : _T("关闭"));
+				TIPINFO ti(_T("语音校对改变"));
+				ti.strTip.Format(_T("当前语音校对:%s"), g_SettingsUI->bSound ? _T("打开") : _T("关闭"));
 				m_pInputListener->OnCommand(CMD_SHOWTIP, (LPARAM)&ti);
 			}
 		}
@@ -454,7 +459,6 @@ namespace SOUI
 				ti.strTip.Format(_T("隐藏GBK重码:%s"), g_SettingsUI->bFilterGbk ? _T("启用") : _T("关闭"));
 				m_pInputListener->OnCommand(CMD_SHOWTIP, (LPARAM)&ti);
 			}
-
 		}
 	}
 
@@ -555,12 +559,12 @@ namespace SOUI
 		case R.id.btn_record:
 			e2->bUpdated = TRUE;
 			strAccel = SAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_Record]);
-			e2->strToolTip = SStringT().Format(_T("记忆历史记录:%s"), g_SettingsUI->bRecord ? _T("启用") : _T("禁用"));
+			e2->strToolTip = SStringT().Format(_T("记录输入历史:%s"), g_SettingsUI->bRecord ? _T("启用") : _T("禁用"));
 			break;
 		case R.id.btn_sound:
 			e2->bUpdated = TRUE;
 			strAccel = SAccelerator::FormatAccelKey(g_SettingsG->dwHotkeys[HKI_TTS]);
-			e2->strToolTip = SStringT().Format(_T("语音较对:%s"), g_SettingsUI->bSound ? _T("启用") : _T("禁用"));
+			e2->strToolTip = SStringT().Format(_T("语音校对:%s"), g_SettingsUI->bSound ? _T("启用") : _T("禁用"));
 			break;
 		case R.id.btn_english:
 			e2->bUpdated = TRUE;
@@ -857,6 +861,31 @@ namespace SOUI
 		{
 			CWorker::getSingletonPtr()->PlaySoundFromResource(strSound);
 		}
+	}
+
+	void CStatusWnd::UpdateCaptialMode()
+	{
+		BOOL bCap = GetKeyState(VK_CAPITAL)&0x01;
+		{
+			SWindow *pStatus = FindChildByID(R.id.status_shrink);
+			SASSERT(pStatus);
+			SFlagView * pFlagView = pStatus->FindChildByID2<SFlagView>(R.id.img_logo);
+			if(pFlagView)
+			{
+				pFlagView->UpdateCapitalMode(bCap);
+			}
+		}
+		{
+			SWindow *pStatus = FindChildByID(R.id.status_extend);
+			SASSERT(pStatus);
+			SFlagView * pFlagView = pStatus->FindChildByID2<SFlagView>(R.id.img_logo);
+			if(pFlagView)
+			{
+				pFlagView->UpdateCapitalMode(bCap);
+			}
+
+		}
+
 	}
 
 

@@ -14,7 +14,7 @@ interface IInputListener: public ICmdListener {
 	virtual void OnInputResult(const SStringT & strResult,const SStringT & strComp=SStringT())=0;
 	virtual void OnInputEnd() = 0;
 	virtual void UpdateInputWnd() = 0;
-
+	virtual void OnCapital(BOOL bCap) = 0;
 	virtual BOOL GoNextCandidatePage() = 0;
 	virtual BOOL GoPrevCandidatePage() = 0;
 	virtual short SelectCandidate(short iCand)=0;

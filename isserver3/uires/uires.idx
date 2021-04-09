@@ -39,6 +39,7 @@
 
   <IMG>
     <file name="logo_32" path="image\logo_32.png"/>
+    <file name="png_capital" path="image\capital.png"/>
     <file name="png_charmode" path="image\charmode.png"/>
     <file name="png_charmode_full" path="image\charmode_full.png"/>
     <file name="png_charmode_half" path="image\charmode_half.png"/>
