@@ -7,50 +7,51 @@
 #include "EnumDisplayAttributeInfo.h"
 #include "DisplayAttributeInfo.h"
 #include "Shlwapi.h"
+#include "UILess.h"
 
 static bool g_bInstallDump = false;
 #define UM_ASYNC_FOCUS	(WM_USER+8000)
 
 /* static */
-HRESULT CSinstar3Tsf::CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj)
+HRESULT CSinstar3Tsf::CreateInstance(IUnknown* pUnkOuter, REFIID riid, void** ppvObj)
 {
-    CSinstar3Tsf *pCase;
-    HRESULT hr;
+	CSinstar3Tsf* pCase;
+	HRESULT hr;
 
-	if(!g_bInstallDump)
+	if (!g_bInstallDump)
 	{
 		g_bInstallDump = true;
-		
+
 		TCHAR szModule[MAX_PATH];
-		GetModuleFileName(NULL,szModule,MAX_PATH);
-		LPCTSTR pName=_tcsrchr(szModule,'\\');
-		if(pName)
+		GetModuleFileName(NULL, szModule, MAX_PATH);
+		LPCTSTR pName = _tcsrchr(szModule, '\\');
+		if (pName)
 			pName++;
 		else
-			pName=szModule;
+			pName = szModule;
 
 		TCHAR szPath[MAX_PATH];
-		_stprintf_s(szPath,MAX_PATH,_T("%s\\log\\%s.dmp"),theModule->GetInstallPath(),pName);
+		_stprintf_s(szPath, MAX_PATH, _T("%s\\log\\%s.dmp"), theModule->GetInstallPath(), pName);
 		CMinidump::SetDumpFile(szPath);
 		CMinidump::Enable();
 	}
 
-    if (ppvObj == NULL)
-        return E_INVALIDARG;
+	if (ppvObj == NULL)
+		return E_INVALIDARG;
 
-    *ppvObj = NULL;
+	*ppvObj = NULL;
 
-    if (NULL != pUnkOuter)
-        return CLASS_E_NOAGGREGATION;
+	if (NULL != pUnkOuter)
+		return CLASS_E_NOAGGREGATION;
 
-    if ((pCase = new CSinstar3Tsf) == NULL)
-        return E_OUTOFMEMORY;
+	if ((pCase = new CSinstar3Tsf) == NULL)
+		return E_OUTOFMEMORY;
 
-    hr = pCase->QueryInterface(riid, ppvObj);
+	hr = pCase->QueryInterface(riid, ppvObj);
 
-    pCase->Release(); // caller still holds ref if hr == S_OK
+	pCase->Release(); // caller still holds ref if hr == S_OK
 
-    return hr;
+	return hr;
 }
 
 //+---------------------------------------------------------------------------
@@ -59,45 +60,45 @@ HRESULT CSinstar3Tsf::CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **pp
 //
 //----------------------------------------------------------------------------
 
-CSinstar3Tsf::CSinstar3Tsf()
+CSinstar3Tsf::CSinstar3Tsf():_pcand(NULL)
 {
-    theModule->AddRef();
+	theModule->AddRef();
 
-    //
-    // Initialize the thread manager pointer.
-    //
-    _pThreadMgr = NULL;
+	//
+	// Initialize the thread manager pointer.
+	//
+	_pThreadMgr = NULL;
 
-    //
-    // Initialize the numbers for ThreadMgrEventSink.
-    //
-    _dwThreadMgrEventSinkCookie = TF_INVALID_COOKIE;
+	//
+	// Initialize the numbers for ThreadMgrEventSink.
+	//
+	_dwThreadMgrEventSinkCookie = TF_INVALID_COOKIE;
 	_dwThreadFocusSinkCookie = TF_INVALID_COOKIE;
 
-    //
-    // Initialize the numbers for TextEditSink.
-    //
-    _pTextEditSinkContext = NULL;
-    _dwTextEditSinkCookie = TF_INVALID_COOKIE;
+	//
+	// Initialize the numbers for TextEditSink.
+	//
+	_pTextEditSinkContext = NULL;
+	_dwTextEditSinkCookie = TF_INVALID_COOKIE;
 	//
 	// for input mode cookie
 	//
 	_dwThreadInputModeSinkCookie = TF_INVALID_COOKIE;
 	_dwThreadKeyboardSinkCookie = TF_INVALID_COOKIE;
 
-    //
-    // Initialize the composition object pointer.
-    //
+	//
+	// Initialize the composition object pointer.
+	//
 
 	_dwCookieTextLayoutSink = TF_INVALID_COOKIE;
 
-	m_pSinstar3=NULL;
+	m_pSinstar3 = NULL;
 
-	_bHasFocus=FALSE;
+	_bHasFocus = FALSE;
 
-	_bInKeyProc=FALSE;
-	_bInEditDocument = FALSE;	
-	
+	_bInKeyProc = FALSE;
+	_bInEditDocument = FALSE;
+
 	_bCompositing = FALSE;
 
 	_gaDisplayAttributeInput = 0;
@@ -115,10 +116,25 @@ CSinstar3Tsf::~CSinstar3Tsf()
 {
 	Destroy();
 	Deactivate();
-    theModule->Release();
+	theModule->Release();
 }
 
-STDAPI CSinstar3Tsf::ActivateEx(ITfThreadMgr *pThreadMgr, TfClientId tfClientId, DWORD dwFlags)
+void CSinstar3Tsf::UpdateUI(ITfContext* pContext)
+{
+	if (_bUILess) {
+		m_pSinstar3->GetCandidateListInfo(_pcand->_ctx);
+		UILess::_ShowInlinePreedit(this, _tfClientId, pContext);
+		_pcand->UpdateUIElement();
+	}
+}
+
+
+void CSinstar3Tsf::UpdateUI(UINT64 imeContext)
+{
+	UpdateUI((ITfContext*)imeContext);
+}
+
+STDAPI CSinstar3Tsf::ActivateEx(ITfThreadMgr* pThreadMgr, TfClientId tfClientId, DWORD dwFlags)
 {
 	SLOGFMTI("Activate %p %d", pThreadMgr, (int)tfClientId);
 
@@ -139,7 +155,7 @@ STDAPI CSinstar3Tsf::ActivateEx(ITfThreadMgr *pThreadMgr, TfClientId tfClientId,
 	//  If there is the focus document manager already,
 	//  advise the TextEditSink.
 	// 
-	ITfDocumentMgr *pDocMgrFocus;
+	ITfDocumentMgr* pDocMgrFocus;
 	if ((_pThreadMgr->GetFocus(&pDocMgrFocus) == S_OK) &&
 		(pDocMgrFocus != NULL))
 	{
@@ -171,12 +187,16 @@ STDAPI CSinstar3Tsf::ActivateEx(ITfThreadMgr *pThreadMgr, TfClientId tfClientId,
 	Helper_ChangeWindowMessageFilter(UM_GETPROCPATH, MSGFLT_ADD);
 	Helper_ChangeWindowMessageFilter(UM_RECONN, MSGFLT_ADD);
 
-	if(!_InitSinstar3((HWND)GetActiveWnd()))
+	if (!_InitSinstar3((HWND)GetActiveWnd()))
 	{
-		SetTimer(m_hWnd,TID_INIT,200,NULL);
+		SetTimer(m_hWnd, TID_INIT, 200, NULL);
 	}
 
-
+	_bUILess = _dwActivateFlag & TF_TMAE_UIELEMENTENABLEDONLY;
+	//_bUILess = true;
+	SLOGFMTI("UILess Mode:%s", _bUILess ? "true" : "false");
+	if (_bUILess)
+		_pcand = new CCandidateList(this);
 	return S_OK;
 
 ExitError:
@@ -190,12 +210,12 @@ DWORD CSinstar3Tsf::GetActiveWnd() const
 	SOUI::SComPtr<ITfDocumentMgr> pDocumentMgr;
 	SOUI::SComPtr<ITfContext> pContext;
 	SOUI::SComPtr<ITfContextView> pContextView;
-	
-	if(!_pThreadMgr) return NULL;
+
+	if (!_pThreadMgr) return NULL;
 	HRESULT hr = _pThreadMgr->GetFocus(&pDocumentMgr);
-	if(hr == S_OK) hr = pDocumentMgr->GetTop(&pContext);
-	if(hr == S_OK) hr = pContext->GetActiveView(&pContextView);
-	if(hr == S_OK) hr = pContextView->GetWnd(&hWnd);
+	if (hr == S_OK) hr = pDocumentMgr->GetTop(&pContext);
+	if (hr == S_OK) hr = pContext->GetActiveView(&pContextView);
+	if (hr == S_OK) hr = pContextView->GetWnd(&hWnd);
 
 	if (hWnd == NULL) hWnd = ::GetFocus();
 	return (DWORD)(ULONG_PTR)hWnd;
@@ -203,26 +223,26 @@ DWORD CSinstar3Tsf::GetActiveWnd() const
 
 void CSinstar3Tsf::_SyncFocus(BOOL bFocus)
 {
-	_bHasFocus=bFocus;
-	PostMessage(UM_ASYNC_FOCUS,0,0);
+	_bHasFocus = bFocus;
+	PostMessage(UM_ASYNC_FOCUS, 0, 0);
 }
 
 void CSinstar3Tsf::OnAsyncFocus()
 {
-	if(m_pSinstar3)
+	if (m_pSinstar3)
 	{
 		BOOL bFocus = _bHasFocus && _bInEditDocument;
-		SLOG_INFO("OnAsyncFocus,hasFocus:"<<_bHasFocus<<" inEdit:"<<_bInEditDocument);
-		if(bFocus)
-			m_pSinstar3->OnSetFocus(TRUE,GetActiveWnd());
+		SLOG_INFO("OnAsyncFocus,hasFocus:" << _bHasFocus << " inEdit:" << _bInEditDocument);
+		if (bFocus)
+			m_pSinstar3->OnSetFocus(TRUE, GetActiveWnd());
 		else
-			m_pSinstar3->OnSetFocus(FALSE,0);
+			m_pSinstar3->OnSetFocus(FALSE, 0);
 	}
 }
 
-STDAPI CSinstar3Tsf::Activate(ITfThreadMgr *pThreadMgr, TfClientId tfClientId)
+STDAPI CSinstar3Tsf::Activate(ITfThreadMgr* pThreadMgr, TfClientId tfClientId)
 {
-	return ActivateEx(pThreadMgr, tfClientId,0);
+	return ActivateEx(pThreadMgr, tfClientId, 0);
 }
 
 //+---------------------------------------------------------------------------
@@ -234,14 +254,14 @@ STDAPI CSinstar3Tsf::Activate(ITfThreadMgr *pThreadMgr, TfClientId tfClientId)
 STDAPI CSinstar3Tsf::Deactivate()
 {
 	SLOGFMTI("Deactivate");
-	KillTimer(m_hWnd,TID_INIT);
+	KillTimer(m_hWnd, TID_INIT);
 	//确保输入过程结束
-	if(_IsCompositing())
+	if (_IsCompositing())
 	{
 		SASSERT(_pThreadMgr);
-		ITfContext * pCtx = GetImeContext();
-		if(pCtx) 
-		{	
+		ITfContext* pCtx = GetImeContext();
+		if (pCtx)
+		{
 			_EndComposition(pCtx);
 			ReleaseImeContext(pCtx);
 		}
@@ -255,91 +275,95 @@ STDAPI CSinstar3Tsf::Deactivate()
 		_UninitLanguageBar();
 	}
 
-    if (_pThreadMgr)
-    {
+	if (_pThreadMgr)
+	{
 		OnKillThreadFocus();
 		_UninitSinstar3();
 		_pThreadMgr->Release();
 		_pThreadMgr = NULL;
 	}
-
-    _tfClientId = TF_CLIENTID_NULL;
+	if (_pcand)
+	{
+		delete _pcand;
+		_pcand = NULL;
+	}
+	_tfClientId = TF_CLIENTID_NULL;
 	_bInEditDocument = FALSE;
 
-    return S_OK;
+	return S_OK;
 }
 
-STDMETHODIMP CSinstar3Tsf::OnLayoutChange(ITfContext *pContext, TfLayoutCode lcode, ITfContextView *pContextView)
+STDMETHODIMP CSinstar3Tsf::OnLayoutChange(ITfContext* pContext, TfLayoutCode lcode, ITfContextView* pContextView)
 {
-	SLOG_INFO("OnLayoutChange _pComposition:"<<_pComposition);
+	SLOG_INFO("OnLayoutChange _pComposition:" << _pComposition);
 	switch (lcode)
 	{
-	case TF_LC_CHANGE:
-		{
-			SLOGFMTI("TF_LC_CHANGE");
-			CEsGetTextExtent *pEditSession  = new CEsGetTextExtent(this, pContext, pContextView);
-			HRESULT hrSession;
-			pContext->RequestEditSession(_tfClientId, pEditSession, TF_ES_SYNC | TF_ES_READ, &hrSession);
-			pEditSession->Release();
-		}
+		case TF_LC_CHANGE:
+			{
+				SLOGFMTI("TF_LC_CHANGE");
+				CEsGetTextExtent* pEditSession = new CEsGetTextExtent(this, pContext, pContextView);
+				HRESULT hrSession;
+				pContext->RequestEditSession(_tfClientId, pEditSession, TF_ES_SYNC | TF_ES_READ, &hrSession);
+				pEditSession->Release();
+			}
 
-		break;
+			break;
 
-	case TF_LC_DESTROY:
-		{
-			SLOGFMTI("TF_LC_DESTROY");
-		}
-		break;
+		case TF_LC_DESTROY:
+			{
+				SLOGFMTI("TF_LC_DESTROY");
+			}
+			break;
 
-	case TF_LC_CREATE:
-		{
-			SLOGFMTI("TF_LC_CREATE");
-		}
-		break;
+		case TF_LC_CREATE:
+			{
+				SLOGFMTI("TF_LC_CREATE");
+			}
+			break;
 
-	default:
-		break;
+		default:
+			break;
 	}
 
 	return S_OK;
 }
 
-STDMETHODIMP CSinstar3Tsf::Show(	HWND hwndParent,LANGID langid,REFGUID rguidProfile)
+STDMETHODIMP CSinstar3Tsf::Show(HWND hwndParent, LANGID langid, REFGUID rguidProfile)
 {
 	return S_OK;
 }
 
 STDMETHODIMP CSinstar3Tsf::GetDisplayName(BSTR* pbstrName)
 {
-	*pbstrName=SysAllocString(L"Sinstar3");
+	*pbstrName = SysAllocString(L"Sinstar3");
 	return S_OK;
 }
 
 
-HRESULT CSinstar3Tsf::_AdviseTextLayoutSink(ITfContext *pContext)
+HRESULT CSinstar3Tsf::_AdviseTextLayoutSink(ITfContext* pContext)
 {
 	if (_dwCookieTextLayoutSink != TF_INVALID_COOKIE)
 		return S_OK;
 
 	SOUI::SComPtr<ITfSource> pSource;
 
-	if (FAILED(pContext->QueryInterface(IID_ITfSource, (void **)&pSource)))
+	if (FAILED(pContext->QueryInterface(IID_ITfSource, (void**)&pSource)))
 		return E_FAIL;
 
-	if (FAILED(pSource->AdviseSink(IID_ITfTextLayoutSink, (ITfTextLayoutSink *)this, &_dwCookieTextLayoutSink)))
+	if (FAILED(pSource->AdviseSink(IID_ITfTextLayoutSink, (ITfTextLayoutSink*)this, &_dwCookieTextLayoutSink)))
 		return E_FAIL;
 
 	return S_OK;
 }
 
-HRESULT CSinstar3Tsf::_UnadviseTextLayoutSink(ITfContext *pContext)
+HRESULT CSinstar3Tsf::_UnadviseTextLayoutSink(ITfContext* pContext)
 {
 	SOUI::SComPtr<ITfSource> pSource;
 
 	if (_dwCookieTextLayoutSink == TF_INVALID_COOKIE)
 		return S_FALSE;
 
-	if (FAILED(pContext->QueryInterface(IID_ITfSource, (void **)&pSource)))
+	if (FAILED(pContext->QueryInterface(IID_ITfSource, (void**)&pSource)))
 		return E_FAIL;
 
 	if (FAILED(pSource->UnadviseSink(_dwCookieTextLayoutSink)))
@@ -364,7 +388,7 @@ BOOL CSinstar3Tsf::_UninitSinstar3()
 BOOL CSinstar3Tsf::_InitSinstar3(HWND hWnd)
 {
 	SASSERT(!m_pSinstar3);
-	if(!PathFileExists(theModule->GetSvrPath()) && GetLastError()!=5)//last error 5 is access deny
+	if (!PathFileExists(theModule->GetSvrPath()) && GetLastError() != 5)//last error 5 is access deny
 		return FALSE;
 	m_pSinstar3 = new CSinstarProxy(this);
 
@@ -386,7 +410,7 @@ BOOL CSinstar3Tsf::_InitSinstar3(HWND hWnd)
 
 void CSinstar3Tsf::OnReconnReady()
 {
-	if(_pThreadMgr)
+	if (_pThreadMgr)
 	{
 		_UninitSinstar3();
 		_InitSinstar3((HWND)GetActiveWnd());
@@ -397,17 +421,18 @@ void CSinstar3Tsf::OnReconnReady()
 LRESULT CSinstar3Tsf::WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	LRESULT result = 0;
-	if(uMsg == WM_TIMER)
+	if (uMsg == WM_TIMER)
 	{
-		if(wParam == TID_INIT)
+		if (wParam == TID_INIT)
 		{
-			if(_InitSinstar3((HWND)GetActiveWnd()))
+			if (_InitSinstar3((HWND)GetActiveWnd()))
 			{
-				KillTimer(m_hWnd,wParam);
+				KillTimer(m_hWnd, wParam);
 			}
 			return 0;
 		}
-	}else if(uMsg == UM_ASYNC_FOCUS)
+	}
+	else if (uMsg == UM_ASYNC_FOCUS)
 	{
 		OnAsyncFocus();
 		return 0;
@@ -422,18 +447,19 @@ LRESULT CSinstar3Tsf::WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 //ITextService
 
 BOOL CSinstar3Tsf::InputStringW(LPCWSTR pszBuf, int nLen) {
-	if(IsCompositing())
+	if (IsCompositing())
 	{
 		SLOG_WARN("not in compositing!!!");
 		return FALSE;
-	}else 
+	}
+	else
 	{
-		ITfContext * pCtx = GetImeContext();
-		SLOG_INFO("imeContext:"<<pCtx);
-		if(pCtx)
+		ITfContext* pCtx = GetImeContext();
+		SLOG_INFO("imeContext:" << pCtx);
+		if (pCtx)
 		{
 			_StartComposition(pCtx);
-			_UpdateResultAndCompositionStringW(pCtx,pszBuf,nLen,NULL,0);
+			_UpdateResultAndCompositionStringW(pCtx, pszBuf, nLen, NULL, 0);
 			_EndComposition(pCtx);
 			ReleaseImeContext(pCtx);
 			return TRUE;
@@ -444,7 +470,7 @@ BOOL CSinstar3Tsf::InputStringW(LPCWSTR pszBuf, int nLen) {
 
 BOOL CSinstar3Tsf::IsCompositing() const
 {
-	SLOG_INFO("bCompositing:"<< _bCompositing);
+	SLOG_INFO("bCompositing:" << _bCompositing);
 	return _bCompositing;
 }
 
@@ -462,20 +488,20 @@ void CSinstar3Tsf::EndComposition(UINT64 imeContext)
 }
 
 
-void CSinstar3Tsf::ReplaceSelCompositionW(UINT64 imeContext,int nLeft,int nRight,const WCHAR* wszComp,int nLen)
+void CSinstar3Tsf::ReplaceSelCompositionW(UINT64 imeContext, int nLeft, int nRight, const WCHAR* wszComp, int nLen)
 {
 	SLOG_INFO("imeContext:" << imeContext);
-	_ChangeComposition((ITfContext*)imeContext,nLeft,nRight,NULL,0);
+	_ChangeComposition((ITfContext*)imeContext, nLeft, nRight, NULL, 0);
 }
 
-void CSinstar3Tsf::UpdateResultAndCompositionStringW(UINT64 imeContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen)
+void CSinstar3Tsf::UpdateResultAndCompositionStringW(UINT64 imeContext, const WCHAR* wszResultStr, int nResStrLen, const WCHAR* wszCompStr, int nCompStrLen)
 {
-	SLOG_INFO("imeContext:" << imeContext<<" resultStr:"<<wszResultStr);
-	_UpdateResultAndCompositionStringW((ITfContext*)imeContext,wszResultStr,nResStrLen,wszCompStr,nCompStrLen);
+	SLOG_INFO("imeContext:" << imeContext << " resultStr:" << wszResultStr);
+	_UpdateResultAndCompositionStringW((ITfContext*)imeContext, wszResultStr, nResStrLen, wszCompStr, nCompStrLen);
 }
 
 
-ITfContext * CSinstar3Tsf::GetImeContext()
+ITfContext* CSinstar3Tsf::GetImeContext()
 {
 	if (!_pThreadMgr)
 	{
@@ -484,47 +510,48 @@ ITfContext * CSinstar3Tsf::GetImeContext()
 	}
 	HRESULT         hr;
 
-	ITfContext * imeCtx = 0;
-	if(_pComposition)
+	ITfContext* imeCtx = 0;
+	if (_pComposition)
 	{
 		SOUI::SComPtr<ITfRange> pRange;
-		hr=_pComposition->GetRange(&pRange);
-		if(SUCCEEDED(hr) && pRange)
+		hr = _pComposition->GetRange(&pRange);
+		if (SUCCEEDED(hr) && pRange)
 		{
-			ITfContext * pContext=NULL;
-			hr=pRange->GetContext(&pContext);
-			if(SUCCEEDED(hr) && pContext)	
-			{
-				imeCtx = pContext;
-			}
-		}
-	}else
-	{
-		SOUI::SComPtr<ITfDocumentMgr>  pFocusDoc;
-		hr = _pThreadMgr->GetFocus(&pFocusDoc);
-		if(SUCCEEDED(hr) && pFocusDoc)
-		{
-			ITfContext *pContext=NULL;
-			hr = pFocusDoc->GetTop(&pContext);
-			if(SUCCEEDED(hr) && pContext)
+			ITfContext* pContext = NULL;
+			hr = pRange->GetContext(&pContext);
+			if (SUCCEEDED(hr) && pContext)
 			{
 				imeCtx = pContext;
 			}
 		}
 	}
-	SLOG_INFO("CSinstar3Tsf::GetImeContext, imeCtx:"<<imeCtx);
+	else
+	{
+		SOUI::SComPtr<ITfDocumentMgr>  pFocusDoc;
+		hr = _pThreadMgr->GetFocus(&pFocusDoc);
+		if (SUCCEEDED(hr) && pFocusDoc)
+		{
+			ITfContext* pContext = NULL;
+			hr = pFocusDoc->GetTop(&pContext);
+			if (SUCCEEDED(hr) && pContext)
+			{
+				imeCtx = pContext;
+			}
+		}
+	}
+	SLOG_INFO("CSinstar3Tsf::GetImeContext, imeCtx:" << imeCtx);
 	return imeCtx;
 }
 
-void   CSinstar3Tsf::ReleaseImeContext(ITfContext * imeContext)
+void   CSinstar3Tsf::ReleaseImeContext(ITfContext* imeContext)
 {
 	if (!imeContext)
 	{
 		SLOG_WARN("imeContext is 0");
 		return;
 	}
-	SLOG_INFO("CSinstar3Tsf::ReleaseImeContext, imeCtx:"<<imeContext);
-	ITfContext *pContext=(ITfContext*)imeContext;
+	SLOG_INFO("CSinstar3Tsf::ReleaseImeContext, imeCtx:" << imeContext);
+	ITfContext* pContext = (ITfContext*)imeContext;
 	pContext->Release();
 }
 
@@ -537,20 +564,33 @@ void CSinstar3Tsf::SetOpenStatus(BOOL bOpen)
 BOOL CSinstar3Tsf::GetOpenStatus() const
 {
 	BOOL bRet = _IsKeyboardOpen();
-	SLOG_INFO("GetOpenStatus isOpen:"<< bRet);
+	SLOG_INFO("GetOpenStatus isOpen:" << bRet);
 	return bRet;
 }
 
-void CSinstar3Tsf::OnStartComposition(TfEditCookie ec,ITfComposition *pComposition)
+void CSinstar3Tsf::OnStartComposition(TfEditCookie ec, ITfComposition* pComposition)
 {
-	SLOG_INFO("TfEditCookie:"<<ec<<" ITfComposition:"<< pComposition);
+	SLOG_INFO("TfEditCookie:" << ec << " ITfComposition:" << pComposition);
 	SASSERT(!_pComposition);
 	_pComposition = pComposition;
-	if(m_pSinstar3) m_pSinstar3->OnCompositionStarted();
+	if (m_pSinstar3) m_pSinstar3->OnCompositionStarted();
 }
 
+void CSinstar3Tsf::OnStartComposition(TfEditCookie ec, ITfComposition* pComposition, ITfContext* pContext)
+{
+	SLOG_INFO("TfEditCookie:" << ec << " ITfComposition:" << pComposition);
+	SASSERT(!_pComposition);
+	_pComposition = pComposition;
+	if (_bUILess)_pcand->BeginUIElement();
+	if (m_pSinstar3) m_pSinstar3->OnCompositionStarted(!_bUILess);
+	/*if (_bUILess)
+	{
+		_pcand->BeginUIElement();
+		UpdateUI(pContext);
+	}*/
+}
 
-STDAPI CSinstar3Tsf::EnumDisplayAttributeInfo(IEnumTfDisplayAttributeInfo **ppEnum)
+STDAPI CSinstar3Tsf::EnumDisplayAttributeInfo(IEnumTfDisplayAttributeInfo** ppEnum)
 {
 	CEnumDisplayAttributeInfo* pAttributeEnum = NULL;
 
@@ -578,7 +618,7 @@ STDAPI CSinstar3Tsf::EnumDisplayAttributeInfo(IEnumTfDisplayAttributeInfo **ppEn
 //
 //----------------------------------------------------------------------------
 
-STDAPI CSinstar3Tsf::GetDisplayAttributeInfo( REFGUID guidInfo, ITfDisplayAttributeInfo **ppInfo)
+STDAPI CSinstar3Tsf::GetDisplayAttributeInfo(REFGUID guidInfo, ITfDisplayAttributeInfo** ppInfo)
 {
 	if (ppInfo == NULL)
 	{
@@ -628,7 +668,7 @@ Exit:
 	return (hr == S_OK);
 }
 
-BOOL CSinstar3Tsf::_SetCompositionDisplayAttributes(TfEditCookie ec, _In_ ITfContext *pContext, ITfRange* pRangeComposition)
+BOOL CSinstar3Tsf::_SetCompositionDisplayAttributes(TfEditCookie ec, _In_ ITfContext* pContext, ITfRange* pRangeComposition)
 {
 	ITfProperty* pDisplayAttributeProperty = NULL;
 	HRESULT hr = S_OK;
@@ -639,7 +679,7 @@ BOOL CSinstar3Tsf::_SetCompositionDisplayAttributes(TfEditCookie ec, _In_ ITfCon
 		// set the value over the range
 		// the application will use this guid atom to lookup the acutal rendering information
 		var.vt = VT_I4; // we're going to set a TfGuidAtom
-		var.lVal = _gaDisplayAttributeInput; 
+		var.lVal = _gaDisplayAttributeInput;
 
 		hr = pDisplayAttributeProperty->SetValue(ec, pRangeComposition, &var);
 
@@ -652,12 +692,12 @@ BOOL CSinstar3Tsf::_SetCompositionDisplayAttributes(TfEditCookie ec, _In_ ITfCon
 BOOL CSinstar3Tsf::_InitLanguageBar()
 {
 	_pLangBarItem = CLangBarItemButton::_InitLanguageBar(_pThreadMgr);
-	return _pLangBarItem!=NULL;
+	return _pLangBarItem != NULL;
 }
 
 void CSinstar3Tsf::_UninitLanguageBar()
 {
-	if(CLangBarItemButton::_UninitLanguageBar(_pThreadMgr,_pLangBarItem))
+	if (CLangBarItemButton::_UninitLanguageBar(_pThreadMgr, _pLangBarItem))
 	{
 		_pLangBarItem->Release();
 		_pLangBarItem = NULL;

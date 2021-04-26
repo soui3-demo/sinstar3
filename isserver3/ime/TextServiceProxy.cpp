@@ -146,7 +146,7 @@ void CSvrConnection::HandleOnImeSelect(Param_OnImeSelect & param)
 
 void CSvrConnection::HandleOnCompositionStarted(Param_OnCompositionStarted &param)
 {
-	m_pSinstar->OnCompositionStarted();
+	m_pSinstar->OnCompositionStarted(param.bShowUI);
 
 }
 
@@ -244,6 +244,12 @@ void CSvrConnection::HandleGetDefInputMode(Param_GetDefInputMode &param)
 {
 	param.uMode = m_pSinstar->GetDefInputMode();
 
+}
+
+void CSvrConnection::HandleGetCadidateListInfo(Param_CandidateListInfo& param)
+{
+	CSinstar3Impl* pSinstar3 = (CSinstar3Impl*)(ISinstar*)m_pSinstar;
+	pSinstar3->GetCandidateListInfo(param.ctx);
 }
 
 IIpcHandle * CSvrConnection::GetIpcHandle()

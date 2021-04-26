@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "sinstar3_tsf.h"
 #include "EditSession.h"
-
+#include "UILess.h"
 
 
 BOOL CSinstar3Tsf::_IsCompositing() const
@@ -66,6 +66,9 @@ void CSinstar3Tsf::_EndComposition(ITfContext *pContext,bool bClearCtx)
 	pContext->RequestEditSession(_tfClientId, pEditSession, (_bInKeyProc?TF_ES_SYNC:TF_ES_ASYNCDONTCARE) | TF_ES_READWRITE, &hr);
 	pEditSession->Release();
 	_bCompositing = FALSE;
+	if (_bUILess) {
+		_pcand->EndUI();
+	}
 }
 
 void CSinstar3Tsf::_ChangeComposition(ITfContext *pContext,int nLeft,int nRight,const WCHAR* wszComp,int nLen)
@@ -78,6 +81,7 @@ void CSinstar3Tsf::_ChangeComposition(ITfContext *pContext,int nLeft,int nRight,
 		pContext->RequestEditSession(_tfClientId, pEditSession, (_bInKeyProc?TF_ES_SYNC:TF_ES_ASYNCDONTCARE) | TF_ES_READWRITE, &hr);
 		pEditSession->Release();
 	}
+	UpdateUI(pContext);
 }
 
 void CSinstar3Tsf::_UpdateResultAndCompositionStringW(ITfContext * pContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen)
@@ -90,6 +94,7 @@ void CSinstar3Tsf::_UpdateResultAndCompositionStringW(ITfContext * pContext,cons
 		pContext->RequestEditSession(_tfClientId, pEditSession, (_bInKeyProc?TF_ES_SYNC:TF_ES_ASYNCDONTCARE) | TF_ES_READWRITE, &hr);
 		pEditSession->Release();
 	}
+	UpdateUI(pContext);
 }
 
 void CSinstar3Tsf::_TerminateComposition(TfEditCookie ecWrite,ITfContext *pCtx, bool bClearCtx)
@@ -104,5 +109,8 @@ void CSinstar3Tsf::_TerminateComposition(TfEditCookie ecWrite,ITfContext *pCtx, 
 	if(m_pSinstar3) 
 	{
 		m_pSinstar3->OnCompositionTerminated(bClearCtx);
+	}
+	if (_bUILess) {
+		_pcand->EndUI();
 	}
 }

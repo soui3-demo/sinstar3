@@ -99,7 +99,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>helperd.lib;sipcobjectd.lib;sinstar3_proxyd.lib;slog4zd.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>sinstar3_tsf.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -126,7 +126,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>helperd.lib;sipcobjectd.lib;sinstar3_proxyd.lib;slog4zd.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib\$(Platform)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>sinstar3_tsf.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -189,10 +189,13 @@
     <ClCompile Include="ClassFactory.cpp" />
     <ClCompile Include="compartment.cpp" />
     <ClCompile Include="composition.cpp" />
+    <ClCompile Include="DisplayAttributeInfo.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="editsession.cpp" />
+    <ClCompile Include="EnumDisplayAttributeInfo.cpp" />
     <ClCompile Include="globals.cpp" />
     <ClCompile Include="keyeventsink.cpp" />
+    <ClCompile Include="LanguageBar.cpp" />
     <ClCompile Include="Minidump.cpp" />
     <ClCompile Include="register.cpp" />
     <ClCompile Include="server.cpp" />
@@ -201,6 +204,7 @@
     <ClCompile Include="texteditsink.cpp" />
     <ClCompile Include="threadmgreventsink.cpp" />
     <ClCompile Include="TsfModule.cpp" />
+    <ClCompile Include="UILess.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\version.rc2" />
@@ -217,6 +221,7 @@
     <ClInclude Include="sinstar3_tsf.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TsfModule.h" />
+    <ClInclude Include="UILess.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\sinstar3.ICO" />

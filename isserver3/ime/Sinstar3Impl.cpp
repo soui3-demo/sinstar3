@@ -43,6 +43,7 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HWND hSvr)
 , m_hOwner(NULL)
 , m_bInputEnable(TRUE)
 , m_bOpen(FALSE)
+, m_bShowUI(false)
 {
 	addEvent(EVENTID(EventSvrNotify));
 	addEvent(EVENTID(EventSetSkin));
@@ -107,7 +108,25 @@ void CSinstar3Impl:: TranslateKey(UINT64 imeContext,UINT vkCode,UINT uScanCode,B
 
 	if(m_inputState.HandleKeyDown(vkCode,uScanCode, byKeyState))
 	{
+		UpdateUI();
+	}
+}
+
+void CSinstar3Impl::UpdateUI()
+{
+	if (m_bShowUI) {
 		m_pInputWnd->UpdateUI();
+	}
+	else {
+		if (m_curImeContext == 0)return;
+		//通知TSF刷新
+		auto focusConn= CIsSvrProxy::GetInstance()->GetFocusConn();
+		if (focusConn)
+		{
+			Param_UpdateUI param;
+			param.imeContext = m_curImeContext;
+			focusConn->CallFun(&param);
+		}
 	}
 }
 
@@ -132,6 +151,12 @@ void CSinstar3Impl::OnSetFocusSegmentPosition(POINT pt,int nHei)
 void CSinstar3Impl::OnCompositionStarted()
 {
 	SLOG_INFO("bTyping:"<<m_bTyping);
+}
+
+void CSinstar3Impl::OnCompositionStarted(bool bShowUI)
+{
+	SLOG_INFO("bTyping:" << m_bTyping);
+	m_bShowUI = bShowUI;
 }
 
 void CSinstar3Impl::OnCompositionChanged()
@@ -224,6 +249,100 @@ void CSinstar3Impl::NotifyScaleInfo(HWND hRefWnd)
 {
 
 }
+
+void UpdateCandidateListInfo(InputContext* inputContext, Context& _ctx)
+{
+	//update composition string
+	switch (inputContext->inState)
+	{
+		case INST_CODING:
+			{
+				if (inputContext->sbState == SBST_NORMALSTATE)
+				{
+					SWindow* pMutexView = NULL;
+					if (inputContext->compMode == IM_SPELL)
+					{
+						const SPELLINFO* lpSpi = inputContext->spellData + inputContext->byCaret;
+						_ctx.preedit.str= std::wstring(lpSpi->szSpell, inputContext->bySyCaret);
+					}
+					else{
+						_ctx.preedit.str=std::wstring(inputContext->szComp, inputContext->cComp);
+					}
+				}
+				else
+				{//update sentence input state
+					_ctx.preedit.str = std::wstring(inputContext->szInput, inputContext->cInput);
+				}
+				break;
+			}
+		case INST_USERDEF:
+			{				
+				_ctx.preedit.str = std::wstring(inputContext->szComp, inputContext->cComp);
+			}
+			break;
+		case INST_LINEIME:
+			{
+				_ctx.preedit.str = std::wstring(inputContext->szComp, inputContext->cComp);
+			}
+			break;
+		case INST_ENGLISH:
+			{
+				_ctx.preedit.str = std::wstring(inputContext->szComp, inputContext->cComp);				
+			}
+			break;
+
+	}
+	//update candidate
+	if (inputContext->inState == INST_ENGLISH)
+	{		
+		int nPageSize = 5;
+		int iBegin = inputContext->iCandBegin;
+		int iEnd = smin(iBegin + nPageSize, inputContext->sCandCount);
+		inputContext->iCandLast = iEnd;		
+		int iCand = iBegin;
+		while (iCand < iEnd)
+		{
+			const BYTE* p = inputContext->ppbyCandInfo[iCand];
+			std::wstring m_strCand = std::wstring((const WCHAR*)(p + 1), p[0]);
+			p += p[0] * 2 + 1;
+			if (p[0] > 0)
+				_ctx.cinfo.candies.push_back(std::wstring((const WCHAR*)(p + 1), p[0]));
+			
+			iCand++;
+		}
+	}
+	else if (inputContext->sbState == SBST_NORMALSTATE)
+	{//正在输入状态下的重码.
+		int nPageSize = 5;
+		int iBegin = inputContext->iCandBegin;
+		int iEnd = smin(iBegin + nPageSize, inputContext->sCandCount);
+		inputContext->iCandLast = iEnd;		
+		int iCand = iBegin;
+		TCHAR cWild = inputContext->compMode == IM_SHAPECODE ? (CDataCenter::getSingletonPtr()->GetData().m_compInfo.cWild) : 0;
+		while (iCand < iEnd)
+		{
+			BYTE m_byRate = inputContext->ppbyCandInfo[iCand][0];
+			bool m_bGbk = inputContext->ppbyCandInfo[iCand][1] != 0;
+			const BYTE* p = inputContext->ppbyCandInfo[iCand] + 2;
+			_ctx.cinfo.candies.push_back(std::wstring((const wchar_t*)(p + 1), p[0]));			
+			iCand++;
+		}
+	}
+	else
+	{//联想状态下的重码
+		
+	}
+	
+}
+
+void CSinstar3Impl::GetCandidateListInfo(Context& _ctx)
+{
+	auto inputContext=m_inputState.GetInputContext();
+	_ctx.cinfo.clear();
+	UpdateCandidateListInfo(inputContext, _ctx);
+}
+
+
 
 LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 {
@@ -553,15 +672,15 @@ void CSinstar3Impl::UpdateInputWnd()
 			}
 			SLOG_ERROR("update input but window is invisible!!!, focus:"<<m_hasFocus<<" inputEnable:"<<m_bInputEnable<<" fOpen:"<<m_bOpen<<" hideStatus:"<<g_SettingsUI->bHideStatus);
 		}
-		m_pInputWnd->Show(TRUE,FALSE);
+		m_pInputWnd->Show(IsInputVisible(),FALSE);
 		m_pStatusWnd->Show(IsStatusVisible());
 	}
-	m_pInputWnd->UpdateUI();
+	UpdateUI();
 }
 
 BOOL CSinstar3Impl::IsInputVisible() const
 {
-	return m_hasFocus && m_bOpen && m_bInputEnable;
+	return m_hasFocus && m_bOpen && m_bInputEnable&& m_bShowUI;
 }
 
 BOOL CSinstar3Impl::IsStatusVisible() const
@@ -622,4 +741,3 @@ void CSinstar3Impl::OnCapital(BOOL bCap)
 	DWORD dwData = CStatusWnd::BTN_CAPITAL;
 	Broadcast(CMD_SYNCUI, &dwData,sizeof(dwData));
 }
-

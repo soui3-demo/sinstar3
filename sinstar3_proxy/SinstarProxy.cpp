@@ -164,6 +164,13 @@ void CSinstarProxy::NotifyScaleInfo(HWND hRefWnd)
 	m_conn.CallFun(&param);
 }
 
+void CSinstarProxy::GetCandidateListInfo(Context &_ctx)
+{
+	Param_CandidateListInfo param;
+	m_conn.CallFun(&param);
+	_ctx = param.ctx;
+}
+
 void CSinstarProxy::OnIMESelect(BOOL bSelect)
 {
 	Param_OnImeSelect param;
@@ -171,9 +178,17 @@ void CSinstarProxy::OnIMESelect(BOOL bSelect)
 	m_conn.CallFun(&param);
 }
 
+void CSinstarProxy::OnCompositionStarted(bool bCanShowUI)
+{
+	Param_OnCompositionStarted param;
+	param.bShowUI = bCanShowUI;
+	m_conn.CallFun(&param);
+}
+
 void CSinstarProxy::OnCompositionStarted()
 {
 	Param_OnCompositionStarted param;
+	param.bShowUI = true;
 	m_conn.CallFun(&param);
 }
 
@@ -349,6 +364,11 @@ void CClientConnection::OnGetOpenStatus( Param_GetOpenStatus & param)
 void CClientConnection::OnGetActiveWnd(Param_GetActiveWnd &param)
 {
 	param.hActive = m_pTxtService->GetActiveWnd();
+}
+
+void CClientConnection::OnUpdateUI(Param_UpdateUI& param)
+{
+	m_pTxtService->UpdateUI(param.imeContext);
 }
 
 SOUI::IIpcHandle * CClientConnection::GetIpcHandle()

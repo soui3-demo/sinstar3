@@ -7,6 +7,8 @@
 
 #define  UICLASSNAME _T("sinstar3_tsfwnd")
 
+class CCandidateList;
+
 class CSinstar3Tsf : public CUnknown,
 					 public ITfTextInputProcessorEx,
                      public ITfThreadMgrEventSink,
@@ -21,6 +23,9 @@ class CSinstar3Tsf : public CUnknown,
 					 public ITextService,
 					 public CSimpleWnd
 {
+
+	friend class CCandidateList;
+
 	enum{
 		TID_INIT=100,
 	};
@@ -31,8 +36,16 @@ public:
 public:
     CSinstar3Tsf();
     virtual ~CSinstar3Tsf();
-
-
+	std::wstring GetPeeditString()
+	{
+		if (_pcand)
+		{
+			return _pcand->_ctx.preedit.str;
+		}
+		return std::wstring();
+	}
+	void UpdateUI(ITfContext* pContext);
+	virtual void UpdateUI(UINT64)override;
     // ITfTextInputProcessor
     STDMETHODIMP Activate(ITfThreadMgr *pThreadMgr, TfClientId tfClientId);
     STDMETHODIMP Deactivate();
@@ -87,8 +100,7 @@ public:
 	void EndComposition(UINT64 imeContext) override;
 	EInputMethod GetConversionMode() override;
 	void SetConversionMode( EInputMethod eInputMode) override;
-	DWORD GetActiveWnd() const override;
-
+	DWORD GetActiveWnd() const override;	
 
     ITfThreadMgr *_GetThreadMgr() { return _pThreadMgr; }
 
@@ -99,6 +111,7 @@ public:
 
 
     // functions for the composition object.
+	void OnStartComposition(TfEditCookie ec, ITfComposition* pComposition, ITfContext* pContext);
 	void OnStartComposition(TfEditCookie ec,ITfComposition *pComposition);
 	ITfComposition* GetITfComposition(){return _pComposition;}
 
@@ -178,12 +191,13 @@ private:
 	BOOL _bInEditDocument;	
 	BOOL _bKeyDownTested;
 	BOOL _bKeyUpTested;
-
+	CCandidateList* _pcand;
 	TfGuidAtom _gaDisplayAttributeInput;
 public:
 	CSinstarProxy*   m_pSinstar3;
 	BOOL		_bHasFocus;
 	BOOL		_bInKeyProc;
+	bool		_bUILess;
 public:
 	IUNKNOWN_BEGIN(ITfTextInputProcessorEx)
 		IUNKNOWN_ADD_IID(ITfTextInputProcessor)

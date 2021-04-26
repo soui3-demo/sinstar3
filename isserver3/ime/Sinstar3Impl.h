@@ -7,6 +7,7 @@
 
 #include "InputState.h"
 #include "CmdHandler.h"
+#include "../../sinstar3_tsf/UILess.h"
 
 class CSinstar3Impl:
 	public CUnknown,
@@ -29,6 +30,7 @@ public:
 
 	virtual void OnIMESelect(BOOL bSelect);
 	virtual void OnCompositionStarted();
+	virtual void OnCompositionStarted(bool bShowUI);
 	virtual void OnCompositionChanged();
 	virtual void OnCompositionTerminated(bool bClearCtx);
 	virtual void OnSetCaretPosition(POINT pt,int nHei);
@@ -44,6 +46,7 @@ public:
 	virtual void ShowHelp();
 	virtual EInputMethod GetDefInputMode();
 	virtual void NotifyScaleInfo(HWND hRefWnd);
+	virtual void GetCandidateListInfo(Context& _ctx);
 public:
 	virtual int GetID() const {	return SENDER_SINSTSR3;}
 protected://IInputListener
@@ -54,7 +57,6 @@ protected://IInputListener
 	virtual void OnInputEnd();
 	virtual void UpdateInputWnd();
 	virtual void OnCapital(BOOL bCap);
-
 	virtual BOOL GoNextCandidatePage();
 	virtual BOOL GoPrevCandidatePage();
 	virtual short SelectCandidate(short iCand);
@@ -62,10 +64,8 @@ protected://IInputListener
 	virtual void CloseInputWnd(BOOL bDelay);
 	virtual void SetOpenStatus(BOOL bOpen);
 	virtual BOOL GetOpenStatus() const;
-
 	virtual void EnableInput(BOOL bEnable);
 	virtual BOOL IsInputEnable() const;
-
 	virtual void DelayCaretLeft();
 protected://ICmdListener
 	virtual void OnCommand(WORD cmd, LPARAM lp);
@@ -78,6 +78,7 @@ protected://IInputWndListener
 public:
 	BOOL ChangeSkin(const SStringT & strSkin);
 	void OnSkinChanged();
+	void UpdateUI();
 
 	void OpenConfig();
 	void ShowTip(LPCTSTR pszTitle, LPCTSTR pszContent,LPCTSTR pszKey);
@@ -124,6 +125,7 @@ private:
 	HWND			m_hOwner;
 	BOOL			m_bInputEnable;
 	BOOL			m_bOpen;
+	bool			m_bShowUI;
 };
 
 

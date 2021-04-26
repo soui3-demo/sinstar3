@@ -29,7 +29,7 @@ protected:
 	void OnSetOpenStatus( Param_SetOpenStatus &param);
 	void OnGetOpenStatus( Param_GetOpenStatus &param);
 	void OnGetActiveWnd( Param_GetActiveWnd &param);
-
+	void OnUpdateUI(Param_UpdateUI&);
 	FUN_BEGIN
 		FUN_HANDLER(Param_InputStringW, OnInputStringW)
 		FUN_HANDLER(Param_IsCompositing, OnIsCompositing)
@@ -42,6 +42,7 @@ protected:
 		FUN_HANDLER(Param_SetOpenStatus, OnSetOpenStatus)
 		FUN_HANDLER(Param_GetOpenStatus, OnGetOpenStatus)
 		FUN_HANDLER(Param_GetActiveWnd, OnGetActiveWnd)
+		FUN_HANDLER(Param_UpdateUI,OnUpdateUI)
 	FUN_END
 
 private:
@@ -73,6 +74,7 @@ public:
 public:
 	// Í¨¹ý ISinstar ¼Ì³Ð
 	virtual void OnIMESelect(BOOL bSelect) override;
+	virtual void OnCompositionStarted(bool bShowUI) override;
 	virtual void OnCompositionStarted() override;
 	virtual void OnCompositionChanged() override;
 	virtual void OnCompositionTerminated(bool bClearCtx) override;
@@ -89,6 +91,8 @@ public:
 	virtual void ShowHelp() override;
 	virtual EInputMethod GetDefInputMode() override;
 	virtual void NotifyScaleInfo(HWND hRefWnd) override;
+	//UILESS
+	virtual void GetCandidateListInfo(Context& _ctx);
 
 public:
 	IUNKNOWN_BEGIN(IUnknown)
