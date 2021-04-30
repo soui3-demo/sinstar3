@@ -368,7 +368,7 @@ void CClientConnection::OnGetActiveWnd(Param_GetActiveWnd &param)
 
 void CClientConnection::OnUpdateUI(Param_UpdateUI& param)
 {
-	m_pTxtService->UpdateUI(param.imeContext);
+	m_pTxtService->UpdateUI(param.imeContext,param.bPageChanged,param.curPage);
 }
 
 SOUI::IIpcHandle * CClientConnection::GetIpcHandle()

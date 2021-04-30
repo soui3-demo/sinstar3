@@ -119,19 +119,22 @@ CSinstar3Tsf::~CSinstar3Tsf()
 	theModule->Release();
 }
 
-void CSinstar3Tsf::UpdateUI(ITfContext* pContext)
+void CSinstar3Tsf::UpdateUI(ITfContext* pContext,bool bPageChanged,int curPage)
 {
 	if (_bUILess) {
-		m_pSinstar3->GetCandidateListInfo(_pcand->_ctx);
+		if (bPageChanged)
+			_pcand->_ctx.cinfo.currentPage = curPage;
+		else
+			m_pSinstar3->GetCandidateListInfo(_pcand->_ctx);
 		UILess::_ShowInlinePreedit(this, _tfClientId, pContext);
-		_pcand->UpdateUIElement();
+		_pcand->UpdateUIElement(bPageChanged);
 	}
 }
 
 
-void CSinstar3Tsf::UpdateUI(UINT64 imeContext)
+void CSinstar3Tsf::UpdateUI(UINT64 imeContext, bool bPageChanged, int curPage)
 {
-	UpdateUI((ITfContext*)imeContext);
+	UpdateUI((ITfContext*)imeContext, bPageChanged, curPage);
 }
 
 STDAPI CSinstar3Tsf::ActivateEx(ITfThreadMgr* pThreadMgr, TfClientId tfClientId, DWORD dwFlags)
@@ -573,6 +576,7 @@ void CSinstar3Tsf::OnStartComposition(TfEditCookie ec, ITfComposition* pComposit
 	SLOG_INFO("TfEditCookie:" << ec << " ITfComposition:" << pComposition);
 	SASSERT(!_pComposition);
 	_pComposition = pComposition;
+	if (_bUILess)_pcand->BeginUIElement();
 	if (m_pSinstar3) m_pSinstar3->OnCompositionStarted();
 }
 

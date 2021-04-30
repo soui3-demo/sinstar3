@@ -163,8 +163,10 @@ void FromStream4##type(SOUI::SParamStream &  ps){ctxformParamStream(ps,p1);}\
 struct Param_UpdateUI : FunParams_Base
 {
 	UINT64 imeContext;
+	bool bPageChanged;
+	int curPage;
 	FUNID(ITextService_UpdateUI)		
-	PARAMS1(Input, imeContext)
+	PARAMS3(Input, imeContext,bPageChanged,curPage)
 };
 
 struct Param_Destroy : FunParams_Base

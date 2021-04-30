@@ -143,7 +143,8 @@ public:
 	STDMETHODIMP FinalizeExactCompositionString();
 
 	HRESULT BeginUIElement();
-	HRESULT UpdateUIElement();
+	//添加一个参数告诉它是否是翻页，其它时候都先统一认为全改变。
+	HRESULT UpdateUIElement(bool bPageChanged);
 	HRESULT EndUI();
 	SOUI::SComPtr<ITfContext> GetContextDocument();
 	bool CanShowUI() {

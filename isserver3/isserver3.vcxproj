@@ -61,6 +61,7 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <AdditionalDependencies>imm32.lib;utilitiesd.lib;soui3d.lib;helperd.lib;Scintillad.lib;iscommd.lib;sipcobjectd.lib;slog4zd.lib;%(AdditionalDependencies)</AdditionalDependencies>

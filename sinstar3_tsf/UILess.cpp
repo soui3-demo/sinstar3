@@ -427,16 +427,11 @@ HRESULT CCandidateList::BeginUIElement()
 	if (_pbShow)
 	{
 		return pUIElementMgr->EndUIElement(_ui_id);
-	}/*
-	else
-		return pUIElementMgr->UpdateUIElement(_ui_id);*/
-	return S_OK;
-
-
-	
+	}	
+	return S_OK;	
 }
 
-HRESULT CCandidateList::UpdateUIElement()
+HRESULT CCandidateList::UpdateUIElement(bool bPageChanged)
 {
 	//可以显示UI则不再调用 UpdateUIElement
 	if (_pbShow)
@@ -458,7 +453,9 @@ HRESULT CCandidateList::UpdateUIElement()
 
 	if (hr == S_OK)
 	{
-		_changed_flags = TF_CLUIE_DOCUMENTMGR |
+		//第一次
+		bPageChanged? _changed_flags = TF_CLUIE_SELECTION |	TF_CLUIE_CURRENTPAGE
+			:_changed_flags = TF_CLUIE_DOCUMENTMGR |
 			TF_CLUIE_STRING |
 			TF_CLUIE_SELECTION |
 			TF_CLUIE_CURRENTPAGE |

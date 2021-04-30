@@ -81,7 +81,7 @@ void CSinstar3Tsf::_ChangeComposition(ITfContext *pContext,int nLeft,int nRight,
 		pContext->RequestEditSession(_tfClientId, pEditSession, (_bInKeyProc?TF_ES_SYNC:TF_ES_ASYNCDONTCARE) | TF_ES_READWRITE, &hr);
 		pEditSession->Release();
 	}
-	UpdateUI(pContext);
+	//UpdateUI(pContext);
 }
 
 void CSinstar3Tsf::_UpdateResultAndCompositionStringW(ITfContext * pContext,const WCHAR *wszResultStr,int nResStrLen,const WCHAR *wszCompStr,int nCompStrLen)
@@ -94,7 +94,7 @@ void CSinstar3Tsf::_UpdateResultAndCompositionStringW(ITfContext * pContext,cons
 		pContext->RequestEditSession(_tfClientId, pEditSession, (_bInKeyProc?TF_ES_SYNC:TF_ES_ASYNCDONTCARE) | TF_ES_READWRITE, &hr);
 		pEditSession->Release();
 	}
-	UpdateUI(pContext);
+	//UpdateUI(pContext);
 }
 
 void CSinstar3Tsf::_TerminateComposition(TfEditCookie ecWrite,ITfContext *pCtx, bool bClearCtx)

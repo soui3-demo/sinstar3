@@ -125,6 +125,7 @@ void CSinstar3Impl::UpdateUI()
 		{
 			Param_UpdateUI param;
 			param.imeContext = m_curImeContext;
+			param.bPageChanged = false;
 			focusConn->CallFun(&param);
 		}
 	}
@@ -275,30 +276,24 @@ void UpdateCandidateListInfo(InputContext* inputContext, Context& _ctx)
 				}
 				break;
 			}
-		case INST_USERDEF:
-			{				
-				_ctx.preedit.str = std::wstring(inputContext->szComp, inputContext->cComp);
-			}
-			break;
-		case INST_LINEIME:
+		default :
 			{
 				_ctx.preedit.str = std::wstring(inputContext->szComp, inputContext->cComp);
 			}
-			break;
-		case INST_ENGLISH:
-			{
-				_ctx.preedit.str = std::wstring(inputContext->szComp, inputContext->cComp);				
-			}
-			break;
-
 	}
 	//update candidate
+	int nPageSize = 5;
+	_ctx.cinfo.currentPage = inputContext->iCandBegin / nPageSize;
+
+	int iBegin = 0;// inputContext->iCandBegin;
+	int iEnd = inputContext->sCandCount;// smin(iBegin + nPageSize, inputContext->sCandCount);
+
 	if (inputContext->inState == INST_ENGLISH)
 	{		
-		int nPageSize = 5;
+		/*int nPageSize = 5;
 		int iBegin = inputContext->iCandBegin;
-		int iEnd = smin(iBegin + nPageSize, inputContext->sCandCount);
-		inputContext->iCandLast = iEnd;		
+		int iEnd = smin(iBegin + nPageSize, inputContext->sCandCount);*/
+		//inputContext->iCandLast = iEnd;		
 		int iCand = iBegin;
 		while (iCand < iEnd)
 		{
@@ -313,24 +308,52 @@ void UpdateCandidateListInfo(InputContext* inputContext, Context& _ctx)
 	}
 	else if (inputContext->sbState == SBST_NORMALSTATE)
 	{//正在输入状态下的重码.
-		int nPageSize = 5;
+		/*int nPageSize = 5;
 		int iBegin = inputContext->iCandBegin;
-		int iEnd = smin(iBegin + nPageSize, inputContext->sCandCount);
-		inputContext->iCandLast = iEnd;		
+		int iEnd = smin(iBegin + nPageSize, inputContext->sCandCount);*/
+		//inputContext->iCandLast = iEnd;		
 		int iCand = iBegin;
-		TCHAR cWild = inputContext->compMode == IM_SHAPECODE ? (CDataCenter::getSingletonPtr()->GetData().m_compInfo.cWild) : 0;
+		//TCHAR cWild = inputContext->compMode == IM_SHAPECODE ? (CDataCenter::getSingletonPtr()->GetData().m_compInfo.cWild) : 0;
 		while (iCand < iEnd)
-		{
-			BYTE m_byRate = inputContext->ppbyCandInfo[iCand][0];
-			bool m_bGbk = inputContext->ppbyCandInfo[iCand][1] != 0;
+		{			
 			const BYTE* p = inputContext->ppbyCandInfo[iCand] + 2;
-			_ctx.cinfo.candies.push_back(std::wstring((const wchar_t*)(p + 1), p[0]));			
+			_ctx.cinfo.candies.push_back(std::wstring((const wchar_t*)(p + 1), p[0]));
 			iCand++;
 		}
 	}
 	else
 	{//联想状态下的重码
+		//if (g_SettingsG->byAstMode == AST_ENGLISH)
+		//{//单词联想			
+			/*int nPageSize = 5;
+			int iBegin = inputContext->iCandBegin;
+			int iEnd = smin(iBegin + nPageSize, inputContext->sCandCount);*/
+			//inputContext->iCandLast = iEnd;			
 		
+			int iCand = iBegin;
+			while (iCand < iEnd)
+			{
+				const BYTE* pbyCandData = inputContext->ppbyCandInfo[iCand];
+				const char* p = (const char*)pbyCandData;
+				_ctx.cinfo.candies.push_back(std::wstring((WCHAR*)(p + 3) + p[0], p[2] - p[0]));				
+				iCand++;
+			}
+		//}
+		//else if (g_SettingsG->byAstMode == AST_CAND)
+		//{//词组联想			
+		//	/*int nPageSize =5;
+		//	int iBegin = inputContext->iCandBegin;
+		//	int iEnd = smin(iBegin + nPageSize, inputContext->sCandCount);*/
+		//	inputContext->iCandLast = iEnd;	
+		//	int iCand = iBegin;
+		//	while (iCand < iEnd)
+		//	{
+		//		const BYTE* pbyCandData = inputContext->ppbyCandInfo[iCand];
+		//		const char* p = (const char*)pbyCandData;
+		//		_ctx.cinfo.candies.push_back(std::wstring((WCHAR*)(p + 3) + p[0], p[2] - p[0]));
+		//		iCand++;				
+		//	}
+		//}
 	}
 	
 }
