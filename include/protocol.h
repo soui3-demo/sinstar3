@@ -164,7 +164,7 @@ struct Param_UpdateUI : FunParams_Base
 {
 	UINT64 imeContext;
 	bool bPageChanged;
-	int curPage;
+	UINT curPage;
 	FUNID(ITextService_UpdateUI)		
 	PARAMS3(Input, imeContext,bPageChanged,curPage)
 };

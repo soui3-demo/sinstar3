@@ -56,7 +56,7 @@ protected://IInputListener
 	virtual void OnInputResult(const SStringT & strResult,const SStringT & strComp=SStringT() );
 	virtual void OnInputEnd();
 	virtual void UpdateInputWnd();
-	virtual void OnCapital(BOOL bCap);
+	virtual void OnCapital(BOOL bCap);	
 	virtual BOOL GoNextCandidatePage();
 	virtual BOOL GoPrevCandidatePage();
 	virtual short SelectCandidate(short iCand);
@@ -67,6 +67,9 @@ protected://IInputListener
 	virtual void EnableInput(BOOL bEnable);
 	virtual BOOL IsInputEnable() const;
 	virtual void DelayCaretLeft();
+protected:
+	BOOL GoPrevPage();
+	BOOL GoNextPage();
 protected://ICmdListener
 	virtual void OnCommand(WORD cmd, LPARAM lp);
 	virtual InputContext * GetInputContext();
@@ -126,6 +129,7 @@ private:
 	BOOL			m_bInputEnable;
 	BOOL			m_bOpen;
 	bool			m_bShowUI;
+	bool			m_bPageChanged;
 };
 
 

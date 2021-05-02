@@ -70,9 +70,9 @@ struct CandidateInfo
 	{
 		return candies.empty();
 	}
-	int currentPage;//当前页
-	int totalPages;//总数
-	int highlighted;//选中项
+	UINT currentPage;//当前页
+	UINT totalPages;//总数
+	UINT highlighted;//选中项
 	std::vector<Text> candies;
 	std::vector<Text> comments;
 	std::vector<Text> labels;

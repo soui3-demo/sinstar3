@@ -54,5 +54,5 @@ interface ITextService
 	virtual void SetOpenStatus(BOOL bOpen)=NULL;
 	virtual BOOL GetOpenStatus() const =NULL;
 	virtual DWORD GetActiveWnd() const = NULL;
-	virtual void UpdateUI(UINT64 imeContext, bool bPageChanged, int curPage) {}
+	virtual void UpdateUI(UINT64 imeContext, bool bPageChanged, UINT curPage) {}
 };

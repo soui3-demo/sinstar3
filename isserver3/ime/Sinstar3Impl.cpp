@@ -44,6 +44,7 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HWND hSvr)
 , m_bInputEnable(TRUE)
 , m_bOpen(FALSE)
 , m_bShowUI(false)
+, m_bPageChanged(false)
 {
 	addEvent(EVENTID(EventSvrNotify));
 	addEvent(EVENTID(EventSetSkin));
@@ -108,7 +109,11 @@ void CSinstar3Impl:: TranslateKey(UINT64 imeContext,UINT vkCode,UINT uScanCode,B
 
 	if(m_inputState.HandleKeyDown(vkCode,uScanCode, byKeyState))
 	{
-		UpdateUI();
+		if (!m_bPageChanged)
+		{
+			UpdateUI();
+		}
+		m_bPageChanged = false;
 	}
 }
 
@@ -283,17 +288,13 @@ void UpdateCandidateListInfo(InputContext* inputContext, Context& _ctx)
 	}
 	//update candidate
 	int nPageSize = 5;
+	inputContext->iCandBegin = 0;
 	_ctx.cinfo.currentPage = inputContext->iCandBegin / nPageSize;
-
 	int iBegin = 0;// inputContext->iCandBegin;
 	int iEnd = inputContext->sCandCount;// smin(iBegin + nPageSize, inputContext->sCandCount);
-
+	inputContext->iCandLast = smin(iBegin + nPageSize, inputContext->sCandCount);
 	if (inputContext->inState == INST_ENGLISH)
-	{		
-		/*int nPageSize = 5;
-		int iBegin = inputContext->iCandBegin;
-		int iEnd = smin(iBegin + nPageSize, inputContext->sCandCount);*/
-		//inputContext->iCandLast = iEnd;		
+	{
 		int iCand = iBegin;
 		while (iCand < iEnd)
 		{
@@ -301,19 +302,13 @@ void UpdateCandidateListInfo(InputContext* inputContext, Context& _ctx)
 			std::wstring m_strCand = std::wstring((const WCHAR*)(p + 1), p[0]);
 			p += p[0] * 2 + 1;
 			if (p[0] > 0)
-				_ctx.cinfo.candies.push_back(std::wstring((const WCHAR*)(p + 1), p[0]));
-			
+				_ctx.cinfo.candies.push_back(std::wstring((const WCHAR*)(p + 1), p[0]));			
 			iCand++;
 		}
 	}
 	else if (inputContext->sbState == SBST_NORMALSTATE)
-	{//正在输入状态下的重码.
-		/*int nPageSize = 5;
-		int iBegin = inputContext->iCandBegin;
-		int iEnd = smin(iBegin + nPageSize, inputContext->sCandCount);*/
-		//inputContext->iCandLast = iEnd;		
+	{		
 		int iCand = iBegin;
-		//TCHAR cWild = inputContext->compMode == IM_SHAPECODE ? (CDataCenter::getSingletonPtr()->GetData().m_compInfo.cWild) : 0;
 		while (iCand < iEnd)
 		{			
 			const BYTE* p = inputContext->ppbyCandInfo[iCand] + 2;
@@ -322,38 +317,15 @@ void UpdateCandidateListInfo(InputContext* inputContext, Context& _ctx)
 		}
 	}
 	else
-	{//联想状态下的重码
-		//if (g_SettingsG->byAstMode == AST_ENGLISH)
-		//{//单词联想			
-			/*int nPageSize = 5;
-			int iBegin = inputContext->iCandBegin;
-			int iEnd = smin(iBegin + nPageSize, inputContext->sCandCount);*/
-			//inputContext->iCandLast = iEnd;			
-		
-			int iCand = iBegin;
-			while (iCand < iEnd)
-			{
-				const BYTE* pbyCandData = inputContext->ppbyCandInfo[iCand];
-				const char* p = (const char*)pbyCandData;
-				_ctx.cinfo.candies.push_back(std::wstring((WCHAR*)(p + 3) + p[0], p[2] - p[0]));				
-				iCand++;
-			}
-		//}
-		//else if (g_SettingsG->byAstMode == AST_CAND)
-		//{//词组联想			
-		//	/*int nPageSize =5;
-		//	int iBegin = inputContext->iCandBegin;
-		//	int iEnd = smin(iBegin + nPageSize, inputContext->sCandCount);*/
-		//	inputContext->iCandLast = iEnd;	
-		//	int iCand = iBegin;
-		//	while (iCand < iEnd)
-		//	{
-		//		const BYTE* pbyCandData = inputContext->ppbyCandInfo[iCand];
-		//		const char* p = (const char*)pbyCandData;
-		//		_ctx.cinfo.candies.push_back(std::wstring((WCHAR*)(p + 3) + p[0], p[2] - p[0]));
-		//		iCand++;				
-		//	}
-		//}
+	{
+		int iCand = iBegin;
+		while (iCand < iEnd)
+		{
+			const BYTE* pbyCandData = inputContext->ppbyCandInfo[iCand];
+			const char* p = (const char*)pbyCandData;
+			_ctx.cinfo.candies.push_back(std::wstring((WCHAR*)(p + 3) + p[0], p[2] - p[0]));				
+			iCand++;
+		}
 	}
 	
 }
@@ -364,8 +336,6 @@ void CSinstar3Impl::GetCandidateListInfo(Context& _ctx)
 	_ctx.cinfo.clear();
 	UpdateCandidateListInfo(inputContext, _ctx);
 }
-
-
 
 LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 {
@@ -526,14 +496,86 @@ void CSinstar3Impl::OnInputResult(const SStringT & strResult, const SStringT & s
 	m_pTxtSvr->UpdateResultAndCompositionStringW(m_curImeContext, strResult, strResult.GetLength(), strCompW, strCompW.GetLength());
 }
 
+BOOL CSinstar3Impl::GoNextPage()
+{
+	if (m_curImeContext == 0)return FALSE;
+	InputContext* pInputContext = m_inputState.GetInputContext();
+	if (pInputContext->sCandCount <= 5) return FALSE;
+	if (pInputContext->iCandLast < pInputContext->sCandCount)
+	{
+		pInputContext->iCandBegin = pInputContext->iCandLast;
+		pInputContext->iCandLast = smin(pInputContext->iCandBegin + 5, pInputContext->sCandCount);;
+	}
+	else
+	{
+		CUtils::SoundPlay(_T("error"));
+		return TRUE;
+	}
+
+	//通知TSF刷新
+	auto focusConn = CIsSvrProxy::GetInstance()->GetFocusConn();
+	if (focusConn)
+	{
+		Param_UpdateUI param;
+		param.imeContext = m_curImeContext;
+		param.bPageChanged = true;
+		param.curPage = pInputContext->iCandBegin / 5;
+		focusConn->CallFun(&param);
+		return TRUE;
+	}
+	return TRUE;
+}
+
 BOOL CSinstar3Impl::GoNextCandidatePage()
 {
-	return m_pInputWnd->GoNextCandidatePage();
+	BOOL bRet = FALSE;
+	if (m_bShowUI)
+		bRet= m_pInputWnd->GoNextCandidatePage();
+	else
+		bRet= GoNextPage();
+	m_bPageChanged = (TRUE==bRet);
+	return bRet;
+}
+
+BOOL CSinstar3Impl::GoPrevPage()
+{
+	if (m_curImeContext == 0)return FALSE;
+	//通知TSF刷新
+	InputContext* pInputContext = m_inputState.GetInputContext();
+	if (pInputContext->sCandCount <= 5) return FALSE;
+	if (pInputContext->iCandBegin < 5)
+	{
+		CUtils::SoundPlay(_T("error"));
+		return TRUE;
+	}
+	else
+	{
+		pInputContext->iCandBegin -= 5;
+		pInputContext->iCandLast=smin(pInputContext->iCandBegin + 5, pInputContext->sCandCount);
+	}
+
+	auto focusConn = CIsSvrProxy::GetInstance()->GetFocusConn();
+	if (focusConn)
+	{
+		Param_UpdateUI param;
+		param.imeContext = m_curImeContext;
+		param.bPageChanged = true;
+		param.curPage = pInputContext->iCandBegin / 5;
+		focusConn->CallFun(&param);
+		return TRUE;
+	}
+	return FALSE;
 }
 
 BOOL CSinstar3Impl::GoPrevCandidatePage()
 {
-	return m_pInputWnd->GoPrevCandidatePage();
+	BOOL bRet = FALSE;
+	if (m_bShowUI)
+		bRet = m_pInputWnd->GoPrevCandidatePage();
+	else
+		bRet = GoPrevPage();
+	m_bPageChanged = (TRUE == bRet);
+	return bRet;
 }
 
 short CSinstar3Impl::SelectCandidate(short iCand)

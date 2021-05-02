@@ -44,8 +44,8 @@ public:
 		}
 		return std::wstring();
 	}
-	void UpdateUI(ITfContext* pContext, bool bPageChanged,int curPage);
-	virtual void UpdateUI(UINT64 imeContext, bool bPageChanged, int curPage)override;
+	void UpdateUI(ITfContext* pContext, bool bPageChanged, UINT curPage);
+	virtual void UpdateUI(UINT64 imeContext, bool bPageChanged, UINT curPage)override;
     // ITfTextInputProcessor
     STDMETHODIMP Activate(ITfThreadMgr *pThreadMgr, TfClientId tfClientId);
     STDMETHODIMP Deactivate();

@@ -280,7 +280,7 @@ STDMETHODIMP CCandidateList::GetCount(UINT* pCandidateCount)
 	SLOGFMTI("UILess::GetCount Current Count:%d", _ctx.cinfo.candies.size());
 	if (!pCandidateCount)
 		return E_INVALIDARG;
-	*pCandidateCount = _ctx.cinfo.candies.size();
+	*pCandidateCount =(UINT) _ctx.cinfo.candies.size();
 	return S_OK;
 }
 
@@ -318,8 +318,8 @@ STDMETHODIMP CCandidateList::GetPageIndex(UINT* pIndex, UINT uSize, UINT* puPage
 	SLOGFMTI("UILess::GetPageIndex uSize:%d",uSize);
 	if (!puPageCnt)
 		return E_INVALIDARG;
-	auto& cinfo = _ctx.cinfo;	
-	*puPageCnt = cinfo.candies.size() / PAGESIZE + cinfo.candies.size()% PAGESIZE ?1:0;
+	auto& cinfo = _ctx.cinfo;
+	*puPageCnt = cinfo.candies.size() / PAGESIZE + (cinfo.candies.size()% PAGESIZE ?1:0);
 	if (pIndex) {
 		if (uSize < *puPageCnt) {
 			return E_INVALIDARG;
@@ -345,7 +345,7 @@ STDMETHODIMP CCandidateList::GetCurrentPage(UINT* puPage)
 	SLOGFMTI("UILess::GetCurrentPage");
 	if(!puPage)
 		return E_INVALIDARG; 
-	*puPage = 0;
+	*puPage = _ctx.cinfo.currentPage;
 	return S_OK;
 }
 
@@ -439,10 +439,6 @@ HRESULT CCandidateList::UpdateUIElement(bool bPageChanged)
 	if (_ui_id == TF_INVALID_UIELEMENTID) return E_UNEXPECTED;
 
 	HRESULT hr = S_OK;
-	//测试更新一次加一个词组
-	/*TCHAR inststr[100] = {0};
-	swprintf_s(inststr, L"启程输入法%d", _idx++);
-	_ctx.cinfo.candies.push_back(Text(inststr));*/
 	SOUI::SComPtr<ITfUIElementMgr> pUIElementMgr;
 	SOUI::SComPtr<ITfThreadMgr> pThreadMgr = _tsf->_GetThreadMgr();
 	if (nullptr == pThreadMgr)
@@ -452,15 +448,20 @@ HRESULT CCandidateList::UpdateUIElement(bool bPageChanged)
 	hr = pThreadMgr->QueryInterface(IID_ITfUIElementMgr, (void**)&pUIElementMgr);
 
 	if (hr == S_OK)
-	{
-		//第一次
-		bPageChanged? _changed_flags = TF_CLUIE_SELECTION |	TF_CLUIE_CURRENTPAGE
-			:_changed_flags = TF_CLUIE_DOCUMENTMGR |
+	{		
+		bPageChanged? (_changed_flags = TF_CLUIE_CURRENTPAGE)
+			:(_changed_flags = TF_CLUIE_DOCUMENTMGR |
 			TF_CLUIE_STRING |
 			TF_CLUIE_SELECTION |
 			TF_CLUIE_CURRENTPAGE |
 			TF_CLUIE_PAGEINDEX |
-			TF_CLUIE_COUNT;
+			TF_CLUIE_COUNT);
+		/*_changed_flags = TF_CLUIE_DOCUMENTMGR |
+			TF_CLUIE_STRING |
+			TF_CLUIE_SELECTION |
+			TF_CLUIE_CURRENTPAGE |
+			TF_CLUIE_PAGEINDEX |
+			TF_CLUIE_COUNT;*/
 		return pUIElementMgr->UpdateUIElement(_ui_id);
 	}
 

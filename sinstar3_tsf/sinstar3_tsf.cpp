@@ -119,7 +119,7 @@ CSinstar3Tsf::~CSinstar3Tsf()
 	theModule->Release();
 }
 
-void CSinstar3Tsf::UpdateUI(ITfContext* pContext,bool bPageChanged,int curPage)
+void CSinstar3Tsf::UpdateUI(ITfContext* pContext,bool bPageChanged, UINT curPage)
 {
 	if (_bUILess) {
 		if (bPageChanged)
@@ -132,7 +132,7 @@ void CSinstar3Tsf::UpdateUI(ITfContext* pContext,bool bPageChanged,int curPage)
 }
 
 
-void CSinstar3Tsf::UpdateUI(UINT64 imeContext, bool bPageChanged, int curPage)
+void CSinstar3Tsf::UpdateUI(UINT64 imeContext, bool bPageChanged, UINT curPage)
 {
 	UpdateUI((ITfContext*)imeContext, bPageChanged, curPage);
 }
@@ -586,12 +586,7 @@ void CSinstar3Tsf::OnStartComposition(TfEditCookie ec, ITfComposition* pComposit
 	SASSERT(!_pComposition);
 	_pComposition = pComposition;
 	if (_bUILess)_pcand->BeginUIElement();
-	if (m_pSinstar3) m_pSinstar3->OnCompositionStarted(!_bUILess);
-	/*if (_bUILess)
-	{
-		_pcand->BeginUIElement();
-		UpdateUI(pContext);
-	}*/
+	if (m_pSinstar3) m_pSinstar3->OnCompositionStarted(_pcand?_pcand->CanShowUI():true);
 }
 
 STDAPI CSinstar3Tsf::EnumDisplayAttributeInfo(IEnumTfDisplayAttributeInfo** ppEnum)
