@@ -35,7 +35,7 @@ STDMETHODIMP CInlinePreeditEditSession::DoEditSession(TfEditCookie ec)
 	SOUI::SComPtr<ITfRange> pRangeComposition;
 	SOUI::SComPtr<ITfComposition> _pComposition = _pTextService->GetITfComposition();
 
-	if(_pComposition==NULL) return E_FAIL;
+	if (_pComposition == NULL) return E_FAIL;
 	if ((_pComposition->GetRange(&pRangeComposition)) != S_OK)
 		return E_FAIL;
 
@@ -65,7 +65,7 @@ SOUI::SComPtr<ITfContext> CCandidateList::GetContextDocument()
 
 HRESULT __stdcall CCandidateList::GetDisplayName(BSTR* pbstrName)
 {
-
+	*pbstrName = SysAllocString(L"启程之星");
 	return S_OK;
 }
 
@@ -119,10 +119,10 @@ HRESULT __stdcall CCandidateList::SetResult(BSTR bstrQuery, BSTR bstrApplication
 //	return S_OK;
 //}
 
-CCandidateList::CCandidateList(CSinstar3Tsf* pTextService):
-	_tsf(pTextService), 
-	_ui_id(TF_INVALID_UIELEMENTID), 
-	_pbShow(FALSE), 
+CCandidateList::CCandidateList(CSinstar3Tsf* pTextService) :
+	_tsf(pTextService),
+	_ui_id(TF_INVALID_UIELEMENTID),
+	_pbShow(FALSE),
 	_changed_flags(0)
 {
 	_ctx.cinfo.highlighted = 0;
@@ -174,7 +174,7 @@ STDMETHODIMP CCandidateList::QueryInterface(REFIID riid, void** ppvObj)
 	{
 		*ppvObj = (ITfIntegratableCandidateListUIElement*)this;
 	}
-	
+
 	if (*ppvObj)
 	{
 		std::wstring outlogstr = _T("UILess::QueryInterface INTERFACE GUID------");
@@ -184,7 +184,7 @@ STDMETHODIMP CCandidateList::QueryInterface(REFIID riid, void** ppvObj)
 		return S_OK;
 	}
 	else//请求了不支持的IID。记录下来。
-	{				
+	{
 		std::wstring outlogstr = _T("UILess::QueryInterface NOINTERFACE GUID------");
 		outlogstr += GuidToString(riid);
 		SLOGFMTI(outlogstr.c_str());
@@ -225,7 +225,7 @@ STDMETHODIMP CCandidateList::GetDescription(BSTR* pbstr)
 STDMETHODIMP CCandidateList::GetGUID(GUID* pguid)
 {
 	// {0EEC72CF-711A-443A-A403-FF8CAFCD9AC0}
-	*pguid ={ 0xeec72cf, 0x711a, 0x443a, { 0xa4, 0x3, 0xff, 0x8c, 0xaf, 0xcd, 0x9a, 0xc0 } };	
+	*pguid = { 0xeec72cf, 0x711a, 0x443a, { 0xa4, 0x3, 0xff, 0x8c, 0xaf, 0xcd, 0x9a, 0xc0 } };
 	return S_OK;
 }
 
@@ -280,7 +280,7 @@ STDMETHODIMP CCandidateList::GetCount(UINT* pCandidateCount)
 	SLOGFMTI("UILess::GetCount Current Count:%d", _ctx.cinfo.candies.size());
 	if (!pCandidateCount)
 		return E_INVALIDARG;
-	*pCandidateCount =(UINT) _ctx.cinfo.candies.size();
+	*pCandidateCount = (UINT)_ctx.cinfo.candies.size();
 	return S_OK;
 }
 
@@ -295,7 +295,7 @@ STDMETHODIMP CCandidateList::GetSelection(UINT* pSelectedCandidateIndex)
 
 STDMETHODIMP CCandidateList::GetString(UINT uIndex, BSTR* pbstr)
 {
-	SLOGFMTI("UILess::GetString uIndex:%d",uIndex);
+	SLOGFMTI("UILess::GetString uIndex:%d", uIndex);
 	if (!pbstr)
 		return E_INVALIDARG;
 
@@ -305,7 +305,7 @@ STDMETHODIMP CCandidateList::GetString(UINT uIndex, BSTR* pbstr)
 		return E_INVALIDARG;
 	auto& str = cinfo.candies[uIndex].str;
 	*pbstr = SysAllocString(str.c_str());
-    SLOGFMTI(L"UILess::GetString uIndex:%d,bstr:%s", uIndex, *pbstr);
+	SLOGFMTI(L"UILess::GetString uIndex:%d,bstr:%s", uIndex, *pbstr);
 	return S_OK;
 }
 
@@ -315,18 +315,18 @@ STDMETHODIMP CCandidateList::GetPageIndex(UINT* pIndex, UINT uSize, UINT* puPage
 	//每页大小
 #define PAGESIZE 5
 
-	SLOGFMTI("UILess::GetPageIndex uSize:%d",uSize);
+	SLOGFMTI("UILess::GetPageIndex uSize:%d", uSize);
 	if (!puPageCnt)
 		return E_INVALIDARG;
 	auto& cinfo = _ctx.cinfo;
-	*puPageCnt = cinfo.candies.size() / PAGESIZE + (cinfo.candies.size()% PAGESIZE ?1:0);
+	*puPageCnt = cinfo.candies.size() / PAGESIZE + (cinfo.candies.size() % PAGESIZE ? 1 : 0);
 	if (pIndex) {
 		if (uSize < *puPageCnt) {
 			return E_INVALIDARG;
 		}
 		for (UINT i = 0; i < uSize; i++)
 		{
-			pIndex[i] = i* PAGESIZE;
+			pIndex[i] = i * PAGESIZE;
 		}
 	}
 	return S_OK;
@@ -343,8 +343,8 @@ STDMETHODIMP CCandidateList::SetPageIndex(UINT* pIndex, UINT uPageCnt)
 STDMETHODIMP CCandidateList::GetCurrentPage(UINT* puPage)
 {
 	SLOGFMTI("UILess::GetCurrentPage");
-	if(!puPage)
-		return E_INVALIDARG; 
+	if (!puPage)
+		return E_INVALIDARG;
 	*puPage = _ctx.cinfo.currentPage;
 	return S_OK;
 }
@@ -361,13 +361,13 @@ STDMETHODIMP CCandidateList::Finalize(void)
 	ITfContext* pCtx = _tsf->GetImeContext();
 	if (pCtx)
 	{
-		_tsf->_EndComposition(pCtx,true);		
+		_tsf->_EndComposition(pCtx, true);
 	}
 	return S_OK;
 }
 
 STDMETHODIMP CCandidateList::Abort(void)
-{	
+{
 	SLOGFMTI("UILess::Abort");
 	ITfContext* pCtx = _tsf->GetImeContext();
 	if (pCtx)
@@ -392,7 +392,7 @@ STDMETHODIMP CCandidateList::GetSelectionStyle(_Out_ TfIntegratableCandidateList
 STDMETHODIMP CCandidateList::OnKeyDown(_In_ WPARAM wParam, _In_ LPARAM lParam, _Out_ BOOL* pIsEaten)
 {
 	SLOGFMTI("UILess::OnKeyDown");
-	*pIsEaten =TRUE;
+	*pIsEaten = TRUE;
 	return S_OK;
 }
 
@@ -410,15 +410,15 @@ STDMETHODIMP CCandidateList::FinalizeExactCompositionString()
 }
 
 HRESULT CCandidateList::BeginUIElement()
-{	
+{
 	SOUI::SComPtr<ITfThreadMgr> pThreadMgr = _tsf->_GetThreadMgr();
 	SOUI::SComPtr<ITfUIElementMgr> pUIElementMgr;
 	auto hr = pThreadMgr->QueryInterface(&pUIElementMgr);
 	_pbShow = TRUE;
 
-	if (FAILED(hr)||(pUIElementMgr == NULL))
+	if (FAILED(hr) || (pUIElementMgr == NULL))
 		return S_OK;
-	
+
 	if (FAILED(pUIElementMgr->BeginUIElement(this, &_pbShow, &_ui_id))) {
 		_pbShow = TRUE;
 		_ui_id = TF_INVALID_UIELEMENTID;
@@ -427,8 +427,8 @@ HRESULT CCandidateList::BeginUIElement()
 	if (_pbShow)
 	{
 		return pUIElementMgr->EndUIElement(_ui_id);
-	}	
-	return S_OK;	
+	}
+	return S_OK;
 }
 
 HRESULT CCandidateList::UpdateUIElement(bool bPageChanged)
@@ -448,23 +448,16 @@ HRESULT CCandidateList::UpdateUIElement(bool bPageChanged)
 	hr = pThreadMgr->QueryInterface(IID_ITfUIElementMgr, (void**)&pUIElementMgr);
 
 	if (hr == S_OK)
-	{		
-		bPageChanged? (_changed_flags = TF_CLUIE_CURRENTPAGE)
-			:(_changed_flags = TF_CLUIE_DOCUMENTMGR |
-			TF_CLUIE_STRING |
-			TF_CLUIE_SELECTION |
-			TF_CLUIE_CURRENTPAGE |
-			TF_CLUIE_PAGEINDEX |
-			TF_CLUIE_COUNT);
-		/*_changed_flags = TF_CLUIE_DOCUMENTMGR |
-			TF_CLUIE_STRING |
-			TF_CLUIE_SELECTION |
-			TF_CLUIE_CURRENTPAGE |
-			TF_CLUIE_PAGEINDEX |
-			TF_CLUIE_COUNT;*/
+	{
+		bPageChanged ? (_changed_flags = TF_CLUIE_CURRENTPAGE)
+			: (_changed_flags = TF_CLUIE_DOCUMENTMGR |
+				TF_CLUIE_STRING |
+				TF_CLUIE_SELECTION |
+				TF_CLUIE_CURRENTPAGE |
+				TF_CLUIE_PAGEINDEX |
+				TF_CLUIE_COUNT);
 		return pUIElementMgr->UpdateUIElement(_ui_id);
 	}
-
 	return S_OK;
 }
 
@@ -479,7 +472,7 @@ HRESULT CCandidateList::EndUI()
 	SOUI::SComPtr<ITfThreadMgr> pThreadMgr = _tsf->_GetThreadMgr();
 	SOUI::SComPtr<ITfUIElementMgr> pUIElementMgr;
 	auto hr = pThreadMgr->QueryInterface(&pUIElementMgr);
-	
+
 	if (pUIElementMgr != NULL)
 		return pUIElementMgr->EndUIElement(_ui_id);
 	return S_OK;

@@ -43,7 +43,7 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HWND hSvr)
 , m_hOwner(NULL)
 , m_bInputEnable(TRUE)
 , m_bOpen(FALSE)
-, m_bShowUI(false)
+, m_bShowUI(true)
 , m_bPageChanged(false)
 {
 	addEvent(EVENTID(EventSvrNotify));

@@ -154,7 +154,7 @@ private:
 	DWORD _cRef;
 	Context _ctx;
 	DWORD _ui_id;
-	int _idx=1;
+	int _idx = 1;
 	BOOL _pbShow;
 	/*SOUI::SComPtr<ITfUIElementMgr> ui_element_mgr_;
 	SOUI::SComPtr<ITfDocumentMgr> document_mgr_;*/
