@@ -43,7 +43,7 @@ CSinstar3Impl::CSinstar3Impl(ITextService *pTxtSvr,HWND hSvr)
 , m_hOwner(NULL)
 , m_bInputEnable(TRUE)
 , m_bOpen(FALSE)
-, m_bShowUI(true)
+, m_bShowUI(false)
 , m_bPageChanged(false)
 {
 	addEvent(EVENTID(EventSvrNotify));
@@ -750,7 +750,7 @@ BOOL CSinstar3Impl::IsInputVisible() const
 
 BOOL CSinstar3Impl::IsStatusVisible() const
 {
-	return !g_SettingsUI->bHideStatus && m_bOpen && m_hasFocus;
+	return !g_SettingsUI->bHideStatus && m_bOpen && m_hasFocus&&(m_bShowUI||!g_SettingsUI->bUILessHideStatus);
 }
 
 void CSinstar3Impl::DelayCaretLeft()

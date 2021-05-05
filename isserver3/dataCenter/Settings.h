@@ -149,7 +149,7 @@ public:
 	BOOL	bSentAssocite;		// 语句联想开关
 	BOOL	bInputBig5;			// 繁体输出标志
 	BOOL    bFilterGbk;			// filter gbk
-
+	BOOL	bUILessHideStatus;	// 在UILess模式下自动隐藏状态栏
 };
 
 extern CSettingsGlobal	*g_SettingsG;

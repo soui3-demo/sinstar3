@@ -73,6 +73,7 @@
     <check  text="禁用首码万能键" name="chk_disable_first_wild"/>
     <check  text="中文标点时使用全角空格" name="chk_full_space"/>
     <check  text="显示使用技巧" name="chk_show_op_tip"/>
+    <check  text="UILess模式自动隐藏任务栏" name="chk_autoHideStatusForUILess"/>
     <window  layout="hbox" gravity="center">
       <text text="提示等待时间(秒)："/>
       <window size="-1,-1" class="edit_border" trackMouseEvent="1" layout="hbox" gravity="center">

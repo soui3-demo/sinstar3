@@ -285,6 +285,7 @@ void CSettingsUI::Load(const SStringT & strDataPath)
 	bHideStatus=GetPrivateProfileInt(KSession,_T("HideStatus"),0,strConfigIni);
 	bInputBig5=GetPrivateProfileInt(KSession,_T("InputBig5"),0,strConfigIni);
 	bFilterGbk = GetPrivateProfileInt(KSession, _T("FilterGbk"), 0, strConfigIni);
+	bUILessHideStatus = GetPrivateProfileInt(KSession, _T("AutoHideStatusForUILess"), 0, strConfigIni);
 	SetModified(false);
 }
 
@@ -303,5 +304,6 @@ void CSettingsUI::Save(const SStringT & strDataPath)
 	WritePrivateProfileInt(KSession,_T("HideStatus"),bHideStatus,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("InputBig5"),bInputBig5,strConfigIni);
 	WritePrivateProfileInt(KSession, _T("FilterGbk"), bFilterGbk, strConfigIni);
+	WritePrivateProfileInt(KSession, _T("AutoHideStatusForUILess"), bUILessHideStatus, strConfigIni);
 	SetModified(false);
 }

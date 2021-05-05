@@ -356,6 +356,9 @@ namespace SOUI
 		//op tip
 		FindAndSetCheck(R.id.chk_show_op_tip, g_SettingsG->bShowOpTip);
 
+		//UILessÊ±×Ô¶¯Òþ²Ø×´Ì¬À¸
+		FindAndSetCheck(R.id.chk_autoHideStatusForUILess,g_SettingsUI->bUILessHideStatus);
+
 		FindAndSetCheck(R.id.chk_disable_first_wild,g_SettingsG->bDisableFirstWild);
 
 		FindAndSetCheck(R.id.chk_full_space,g_SettingsG->bFullSpace);
@@ -767,6 +770,13 @@ SWindow *pCtrl = FindChildByID(id);\
 		SASSERT(pCheck);
 		g_SettingsG->bShowOpTip = pCheck->IsChecked();
 	}
+
+	void CConfigDlg::OnChkAutoHideStausForUILess(EventArgs* e)
+	{
+		SCheckBox* pCheck = sobj_cast<SCheckBox>(e->sender);
+		SASSERT(pCheck);
+		g_SettingsUI->bUILessHideStatus = pCheck->IsChecked();
+	}	
 
 	void CConfigDlg::OnClickAssMode(int id)
 	{
