@@ -63,23 +63,6 @@ SOUI::SComPtr<ITfContext> CCandidateList::GetContextDocument()
 	return SOUI::SComPtr<ITfContext>();
 }
 
-HRESULT __stdcall CCandidateList::GetDisplayName(BSTR* pbstrName)
-{
-	*pbstrName = SysAllocString(L"启程之星");
-	return S_OK;
-}
-
-HRESULT __stdcall CCandidateList::GetSearchCandidates(BSTR bstrQuery, BSTR bstrApplicationId, ITfCandidateList** pplist)
-{
-	*pplist = NULL;
-	return S_FALSE;
-}
-
-HRESULT __stdcall CCandidateList::SetResult(BSTR bstrQuery, BSTR bstrApplicationID, BSTR bstrResult)
-{
-	return S_OK;
-}
-
 //HRESULT __stdcall CCandidateList::GetContext(ITfContext** ppic)
 //{
 //	return E_NOTIMPL;
@@ -165,6 +148,7 @@ STDMETHODIMP CCandidateList::QueryInterface(REFIID riid, void** ppvObj)
 	{
 		*ppvObj = (ITfCandidateListUIElementBehavior*)this;
 	}
+#if WINVER>= 0x0602
 	else if (IsEqualIID(riid, __uuidof(ITfFnSearchCandidateProvider)))
 	{
 		*ppvObj = (ITfFnSearchCandidateProvider*)this;
@@ -174,7 +158,7 @@ STDMETHODIMP CCandidateList::QueryInterface(REFIID riid, void** ppvObj)
 	{
 		*ppvObj = (ITfIntegratableCandidateListUIElement*)this;
 	}
-
+#endif
 	if (*ppvObj)
 	{
 		std::wstring outlogstr = _T("UILess::QueryInterface INTERFACE GUID------");
@@ -377,11 +361,14 @@ STDMETHODIMP CCandidateList::Abort(void)
 	return S_OK;
 }
 
+#if WINVER>= 0x0602
+
 STDMETHODIMP CCandidateList::SetIntegrationStyle(GUID guidIntegrationStyle)
 {
 	SLOGFMTI("UILess::SetIntegrationStyle");
 	return S_OK;
 }
+
 STDMETHODIMP CCandidateList::GetSelectionStyle(_Out_ TfIntegratableCandidateListSelectionStyle* ptfSelectionStyle)
 {
 	SLOGFMTI("UILess::GetSelectionStyle");
@@ -408,6 +395,25 @@ STDMETHODIMP CCandidateList::FinalizeExactCompositionString()
 	SLOGFMTI("UILess::FinalizeExactCompositionString");
 	return E_NOTIMPL;
 }
+
+HRESULT __stdcall CCandidateList::GetDisplayName(BSTR* pbstrName)
+{
+	*pbstrName = SysAllocString(L"启程之星");
+	return S_OK;
+}
+
+HRESULT __stdcall CCandidateList::GetSearchCandidates(BSTR bstrQuery, BSTR bstrApplicationId, ITfCandidateList** pplist)
+{
+	*pplist = NULL;
+	return S_FALSE;
+}
+
+HRESULT __stdcall CCandidateList::SetResult(BSTR bstrQuery, BSTR bstrApplicationID, BSTR bstrResult)
+{
+	return S_OK;
+}
+
+#endif
 
 HRESULT CCandidateList::BeginUIElement()
 {

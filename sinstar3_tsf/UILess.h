@@ -95,10 +95,14 @@ struct Context
 	Text aux;
 	CandidateInfo cinfo;
 };
+
+
 class CCandidateList :
+#if WINVER>= 0x0602
 	public ITfIntegratableCandidateListUIElement,
-	public ITfCandidateListUIElementBehavior,
-	public ITfFnSearchCandidateProvider//集成搜索栏还要实现它
+	public ITfFnSearchCandidateProvider,//集成搜索栏还要实现它
+#endif // 0x0602
+	public ITfCandidateListUIElementBehavior	
 	//public ITfReadingInformationUIElement
 {
 	friend class CSinstar3Tsf;
@@ -135,13 +139,14 @@ public:
 	STDMETHODIMP Finalize(void);
 	STDMETHODIMP Abort(void);
 
+#if WINVER>= 0x0602
 	// ITfIntegratableCandidateListUIElement methods
 	STDMETHODIMP SetIntegrationStyle(GUID guidIntegrationStyle);
 	STDMETHODIMP GetSelectionStyle(_Out_ TfIntegratableCandidateListSelectionStyle* ptfSelectionStyle);
 	STDMETHODIMP OnKeyDown(_In_ WPARAM wParam, _In_ LPARAM lParam, _Out_ BOOL* pIsEaten);
 	STDMETHODIMP ShowCandidateNumbers(_Out_ BOOL* pIsShow);
 	STDMETHODIMP FinalizeExactCompositionString();
-
+#endif
 
 	void SetUpdatedFlags(DWORD newflags)
 	{
@@ -163,12 +168,13 @@ private:
 	/*SOUI::SComPtr<ITfUIElementMgr> ui_element_mgr_;
 	SOUI::SComPtr<ITfDocumentMgr> document_mgr_;*/
 	DWORD _changed_flags;
+#if WINVER>= 0x0602
 	TfIntegratableCandidateListSelectionStyle _selectionStyle = STYLE_IMPLIED_SELECTION;
-
 	// 通过 ITfFnSearchCandidateProvider 继承
 	virtual HRESULT __stdcall GetDisplayName(BSTR* pbstrName) override;
 	virtual HRESULT __stdcall GetSearchCandidates(BSTR bstrQuery, BSTR bstrApplicationId, ITfCandidateList** pplist) override;
 	virtual HRESULT __stdcall SetResult(BSTR bstrQuery, BSTR bstrApplicationID, BSTR bstrResult) override;
+#endif
 
 	// 通过 ITfReadingInformationUIElement 继承
 	/*virtual HRESULT __stdcall GetContext(ITfContext** ppic) override;

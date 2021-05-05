@@ -18,7 +18,7 @@ static const WCHAR RegInfo_Key_ThreadModel[] = L"ThreadingModel";
 #define TEXTSERVICE_ICON_INDEX  0
 #define	SINSTAR3_IME_FILE_NAME	_T("sinstar3_ime.ime")
 
-#if _MSC_VER < 1600
+#if WINVER<0x0602
 /* For Windows 8 */
 const GUID GUID_TFCAT_TIPCAP_IMMERSIVESUPPORT =
 { 0x13A016DF, 0x560B, 0x46CD, { 0x94, 0x7A, 0x4C, 0x3A, 0xF1, 0xE0, 0xE3, 0x5D } };
