@@ -182,7 +182,7 @@ private:
 
 	SOUI::SComPtr<ITfComposition> _pComposition;	//save composition ptr, indicator.
 	BOOL         _bCompositing;                     //save startComposition and endComposition call
-
+	bool		 _bChangedDocMgr;
 	CLangBarItemButton* _pLangBarItem;
 
 	DWORD _dwCookieTextLayoutSink;					// Cookie for ITfContextKeyEventSink

@@ -17,6 +17,7 @@ void CSinstar3Tsf::_StartComposition(ITfContext *pContext)
 	SLOG_INFO("pContext:"<<pContext);
 
 	_bCompositing = TRUE;
+	_bChangedDocMgr = true;
 	_AdviseTextLayoutSink(pContext);
 	HRESULT hr;
 	pContext->RequestEditSession(_tfClientId, pStartCompositionEditSession, TF_ES_SYNC | TF_ES_READWRITE, &hr);
@@ -65,7 +66,7 @@ void CSinstar3Tsf::_EndComposition(ITfContext *pContext,bool bClearCtx)
     HRESULT hr;
 	pContext->RequestEditSession(_tfClientId, pEditSession, (_bInKeyProc?TF_ES_SYNC:TF_ES_ASYNCDONTCARE) | TF_ES_READWRITE, &hr);
 	pEditSession->Release();
-	_bCompositing = FALSE;
+	_bCompositing = FALSE;	
 	if (_bUILess) {
 		_pcand->EndUI();
 	}

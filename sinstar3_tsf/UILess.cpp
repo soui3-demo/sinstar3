@@ -431,7 +431,7 @@ HRESULT CCandidateList::BeginUIElement()
 	return S_OK;
 }
 
-HRESULT CCandidateList::UpdateUIElement(bool bPageChanged)
+HRESULT CCandidateList::UpdateUIElement()
 {
 	//可以显示UI则不再调用 UpdateUIElement
 	if (_pbShow)
@@ -448,14 +448,7 @@ HRESULT CCandidateList::UpdateUIElement(bool bPageChanged)
 	hr = pThreadMgr->QueryInterface(IID_ITfUIElementMgr, (void**)&pUIElementMgr);
 
 	if (hr == S_OK)
-	{
-		bPageChanged ? (_changed_flags = TF_CLUIE_CURRENTPAGE)
-			: (_changed_flags = TF_CLUIE_DOCUMENTMGR |
-				TF_CLUIE_STRING |
-				TF_CLUIE_SELECTION |
-				TF_CLUIE_CURRENTPAGE |
-				TF_CLUIE_PAGEINDEX |
-				TF_CLUIE_COUNT);
+	{		
 		return pUIElementMgr->UpdateUIElement(_ui_id);
 	}
 	return S_OK;

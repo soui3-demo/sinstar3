@@ -100,7 +100,7 @@ CSinstar3Tsf::CSinstar3Tsf():_pcand(NULL)
 	_bInEditDocument = FALSE;
 
 	_bCompositing = FALSE;
-
+	_bChangedDocMgr = true;
 	_gaDisplayAttributeInput = 0;
 
 	Create(theModule->GetModule());
@@ -127,7 +127,26 @@ void CSinstar3Tsf::UpdateUI(ITfContext* pContext,bool bPageChanged, UINT curPage
 		else
 			m_pSinstar3->GetCandidateListInfo(_pcand->_ctx);
 		UILess::_ShowInlinePreedit(this, _tfClientId, pContext);
-		_pcand->UpdateUIElement(bPageChanged);
+
+		static bool _bReBegin=false;
+		//说明已经StartComposition则不需要再调用BeginUIElement因为StartComposition会调用BeginUIElement
+		if (_bChangedDocMgr&& _bReBegin)
+			_bReBegin = false;
+		//EndUI但是没有EndComposition需要重新BeginUIElement
+		if (_bReBegin&&(_pcand->_ctx.cinfo.candies.size()>0)) {
+			_bReBegin = false;
+			_pcand->BeginUIElement();
+		}
+
+		_pcand->SetUpdatedFlags(_bChangedDocMgr?(_bChangedDocMgr=false,15):12);
+		
+		if (_pcand->_ctx.cinfo.candies.size() == 0)
+		{
+			_bReBegin = true;
+			_pcand->EndUI();
+		}
+		else
+			_pcand->UpdateUIElement();
 	}
 }
 

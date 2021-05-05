@@ -142,9 +142,13 @@ public:
 	STDMETHODIMP ShowCandidateNumbers(_Out_ BOOL* pIsShow);
 	STDMETHODIMP FinalizeExactCompositionString();
 
+
+	void SetUpdatedFlags(DWORD newflags)
+	{
+		_changed_flags = newflags;
+	}
 	HRESULT BeginUIElement();
-	//添加一个参数告诉它是否是翻页，其它时候都先统一认为全改变。
-	HRESULT UpdateUIElement(bool bPageChanged);
+	HRESULT UpdateUIElement();
 	HRESULT EndUI();
 	SOUI::SComPtr<ITfContext> GetContextDocument();
 	bool CanShowUI() {
