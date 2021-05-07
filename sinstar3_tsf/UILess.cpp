@@ -127,9 +127,7 @@ CCandidateList::CCandidateList(CSinstar3Tsf* pTextService) :
 	_changed_flags(0)
 {
 	_ctx.cinfo.highlighted = 0;
-	_ctx.cinfo.currentPage = 0;
-	_ctx.cinfo.candies.push_back(Text(L"∆Ù≥Ã ‰»Î∑®0"));
-	_ctx.preedit = Text(L"qic");
+	_ctx.cinfo.currentPage = 0;	
 }
 
 CCandidateList::~CCandidateList()

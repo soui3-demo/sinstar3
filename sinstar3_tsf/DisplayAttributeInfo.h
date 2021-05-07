@@ -53,3 +53,13 @@ public:
     static const WCHAR _s_szDescription[];
     static const WCHAR _s_szValueName[];
 };
+
+class CDisplayAttributeInfoConverted : public CDisplayAttributeInfo
+{
+public:
+    CDisplayAttributeInfoConverted();
+
+    static const TF_DISPLAYATTRIBUTE _s_DisplayAttribute;
+    static const WCHAR _s_szDescription[];
+    static const WCHAR _s_szValueName[];
+};

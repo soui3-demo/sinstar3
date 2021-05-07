@@ -152,7 +152,11 @@ void CSinstar3Tsf::UpdateUI(ITfContext* pContext,bool bPageChanged, UINT curPage
 
 void CSinstar3Tsf::UpdatePreedit(UINT64 pContext, const std::wstring& strPreedit)
 {
-	_strPreedit = strPreedit;
+	//UILESS模式可能会让显示界面的情况则使用_pcand->_ctx.preedit来保存strPreedit
+	if (_pcand)
+		_pcand->_ctx.preedit.str = strPreedit;
+	else
+		_strPreedit = strPreedit;
 	UILess::_ShowInlinePreedit(this, _tfClientId,(ITfContext*)pContext);
 }
 
@@ -659,12 +663,18 @@ STDAPI CSinstar3Tsf::GetDisplayAttributeInfo(REFGUID guidInfo, ITfDisplayAttribu
 			return E_OUTOFMEMORY;
 		}
 	}
+	else if (IsEqualGUID(guidInfo, c_guidDispAttrConverted))
+	{
+		*ppInfo = new  CDisplayAttributeInfoConverted();
+		if ((*ppInfo) == NULL)
+		{
+			return E_OUTOFMEMORY;
+		}
+	}
 	else
 	{
 		return E_INVALIDARG;
 	}
-
-
 	return S_OK;
 }
 
@@ -684,7 +694,12 @@ BOOL CSinstar3Tsf::_InitDisplayAttributeGuidAtom()
 	{
 		goto Exit;
 	}
-
+	// register the display attribute for input text.
+	hr = pCategoryMgr->RegisterGUID(c_guidDispAttrConverted, &_gaDisplayAttributeConverted);
+	if (FAILED(hr))
+	{
+		goto Exit;
+	}
 Exit:
 	pCategoryMgr->Release();
 

@@ -198,6 +198,7 @@ private:
 	BOOL _bKeyUpTested;
 	CCandidateList* _pcand;
 	TfGuidAtom _gaDisplayAttributeInput;
+	TfGuidAtom _gaDisplayAttributeConverted;
 	//非uiless模式下保存inline字符串
 	std::wstring _strPreedit;
 public:

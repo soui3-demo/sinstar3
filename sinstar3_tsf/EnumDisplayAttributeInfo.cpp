@@ -102,6 +102,15 @@ STDAPI CEnumDisplayAttributeInfo::Next(ULONG ulCount, ITfDisplayAttributeInfo **
                 return E_OUTOFMEMORY;
             }
         }
+        else if (_index == 1)
+        {
+            pDisplayAttributeInfo = new CDisplayAttributeInfoConverted();
+            if ((pDisplayAttributeInfo) == nullptr)
+            {
+                return E_OUTOFMEMORY;
+            }
+
+        }
         else
         {
             break;
