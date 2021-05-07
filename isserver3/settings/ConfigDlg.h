@@ -87,6 +87,8 @@ namespace SOUI
 		void OnClickRateAdjust(int id);
 		void OnInitMode(int id);
 
+		void OnClickInlineMode(int id);
+
 		void OnClickAutoCompPromp();
 		void OnClickAutoDot();
 		void OnClickAutoSelectCand();
@@ -126,6 +128,8 @@ namespace SOUI
 
 		void OnBlendForSpell();
 		void OnBlendForUD();
+		void OnQuitUMode();
+		void OnQuitCAP();
 
 		EVENT_MAP_BEGIN()
 			EVENT_ID_COMMAND(R.id.chk_blend_for_spell,OnBlendForSpell)
@@ -137,7 +141,8 @@ namespace SOUI
 			EVENT_ID_HANDLER(R.id.cbx_update_interval, EventCBSelChange::EventID, OnCbUpdateIntervalSelChange)
 			EVENT_ID_COMMAND(R.id.chk_auto_update, OnAutoUpdateClick)
 			EVENT_ID_COMMAND(R.id.btn_update_now, OnUpdateNow)
-
+			EVENT_ID_COMMAND(R.id.chk_autoQuitUMode,OnQuitUMode)
+			EVENT_ID_COMMAND(R.id.chk_autoQuitCAP, OnQuitCAP)
 			EVENT_ID_COMMAND(R.id.btn_add_blur,OnAddBlur)
 			EVENT_ID_COMMAND(R.id.btn_del_blur, OnDelBlur)
 			EVENT_ID_COMMAND(R.id.btn_install_sys_phrase,OnInstallSysPhraseLib)
@@ -182,6 +187,7 @@ namespace SOUI
 			EVENT_ID_COMMAND(R.id.btn_restore,OnRestore)
 			EVENT_ID_HANDLER(R.id.cbx_search_engine,EventCBSelChange::EventID,OnSearchEngineChange)
 			EVENT_ID_COMMAND_RANGE(R.id.radio_init_ch, R.id.radio_init_en, OnInitMode)
+			EVENT_ID_COMMAND_RANGE(220, 223, OnClickInlineMode)
 		EVENT_MAP_END()
 
 

@@ -81,6 +81,7 @@ protected://IInputWndListener
 public:
 	BOOL ChangeSkin(const SStringT & strSkin);
 	void OnSkinChanged();
+	void UpdateInline();
 	void UpdateUI();
 
 	void OpenConfig();

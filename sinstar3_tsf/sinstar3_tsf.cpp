@@ -150,6 +150,11 @@ void CSinstar3Tsf::UpdateUI(ITfContext* pContext,bool bPageChanged, UINT curPage
 	}
 }
 
+void CSinstar3Tsf::UpdatePreedit(UINT64 pContext, const std::wstring& strPreedit)
+{
+	_strPreedit = strPreedit;
+	UILess::_ShowInlinePreedit(this, _tfClientId,(ITfContext*)pContext);
+}
 
 void CSinstar3Tsf::UpdateUI(UINT64 imeContext, bool bPageChanged, UINT curPage)
 {

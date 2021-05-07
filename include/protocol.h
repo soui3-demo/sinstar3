@@ -106,6 +106,7 @@ enum {
 	ITextService_GetActiveWnd,
 	ITextService_CandidateListInfo,
 	ITextService_UpdateUI,
+	ITextService_UpdatePreedit,
 };
 
 
@@ -167,6 +168,14 @@ struct Param_UpdateUI : FunParams_Base
 	UINT curPage;
 	FUNID(ITextService_UpdateUI)		
 	PARAMS3(Input, imeContext,bPageChanged,curPage)
+};
+
+struct Param_UpdatePreedit : FunParams_Base
+{
+	UINT64 imeContext;
+	std::wstring strPreedit;
+	FUNID(ITextService_UpdatePreedit)
+	PARAMS2(Input, imeContext, strPreedit)
 };
 
 struct Param_Destroy : FunParams_Base

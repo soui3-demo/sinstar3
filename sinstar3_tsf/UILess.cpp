@@ -44,7 +44,7 @@ STDMETHODIMP CInlinePreeditEditSession::DoEditSession(TfEditCookie ec)
 
 	int sel_start = 0, sel_end = preedit.length(); /* TODO: Check the availability and correctness of these values */
 
-									/* Set caret */
+	/* Set caret */
 	LONG cch;
 	TF_SELECTION tfSelection;
 	pRangeComposition->Collapse(ec, TF_ANCHOR_START);
@@ -53,6 +53,24 @@ STDMETHODIMP CInlinePreeditEditSession::DoEditSession(TfEditCookie ec)
 	tfSelection.range = pRangeComposition;
 	tfSelection.style.ase = TF_AE_NONE;
 	tfSelection.style.fInterimChar = FALSE;
+
+	
+	TfGuidAtom  gaDisplayAttribute = _pTextService->GetDisplayAttribInfo();	
+	if (TF_INVALID_GUIDATOM != gaDisplayAttribute)
+	{
+		SOUI::SComPtr<ITfProperty> pDisplayAttributeProperty;
+		if (SUCCEEDED(_pContext->GetProperty(GUID_PROP_ATTRIBUTE, &pDisplayAttributeProperty)))
+		{
+			VARIANT var;
+			VariantInit(&var);
+			//All display attributes are TfGuidAtoms and TfGuidAtoms are VT_I4. 
+			var.vt = VT_I4;
+			var.lVal = gaDisplayAttribute;
+			//Set the display attribute value over the range. 
+			pDisplayAttributeProperty->SetValue(ec, tfSelection.range, &var);
+		}
+	}
+
 	_pContext->SetSelection(ec, 1, &tfSelection);
 
 	return S_OK;

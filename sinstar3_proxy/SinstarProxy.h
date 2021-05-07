@@ -30,6 +30,7 @@ protected:
 	void OnGetOpenStatus( Param_GetOpenStatus &param);
 	void OnGetActiveWnd( Param_GetActiveWnd &param);
 	void OnUpdateUI(Param_UpdateUI&);
+	void OnUpdatePreedit(Param_UpdatePreedit&);
 	FUN_BEGIN
 		FUN_HANDLER(Param_InputStringW, OnInputStringW)
 		FUN_HANDLER(Param_IsCompositing, OnIsCompositing)
@@ -43,6 +44,7 @@ protected:
 		FUN_HANDLER(Param_GetOpenStatus, OnGetOpenStatus)
 		FUN_HANDLER(Param_GetActiveWnd, OnGetActiveWnd)
 		FUN_HANDLER(Param_UpdateUI,OnUpdateUI)
+		FUN_HANDLER(Param_UpdatePreedit, OnUpdatePreedit)
 	FUN_END
 
 private:

@@ -4,7 +4,7 @@
 #ifdef ENABLE_LANGUAGEBAR
 #include <msctf.h>
 #endif//ENABLE_LANGUAGEBAR
-
+#include <string>
 //定义Composition String一个Range的属性，与TSF定义类型一致
 #define RG_ATTR_INPUT  0 
 #define RG_ATTR_TARGET_CONVERTED  1 
@@ -55,4 +55,5 @@ interface ITextService
 	virtual BOOL GetOpenStatus() const =NULL;
 	virtual DWORD GetActiveWnd() const = NULL;
 	virtual void UpdateUI(UINT64 imeContext, bool bPageChanged, UINT curPage) {}
+	virtual void UpdatePreedit(UINT64 pContext, const std::wstring& strPreedit) {};
 };

@@ -30,8 +30,8 @@ const TF_DISPLAYATTRIBUTE CDisplayAttributeInfoInput::_s_DisplayAttribute =
 {
 	{ TF_CT_NONE, 0 },    // text color
 	{ TF_CT_NONE, 0 },                      // background color (TF_CT_NONE => app default)
-	TF_LS_NONE,								// underline style
-	FALSE,                                  // underline boldness
+    TF_LS_DASH,								// underline style
+	TRUE,                                  // underline boldness
 	{ TF_CT_NONE, 0 },    // underline color
 	TF_ATTR_INPUT                           // attribute info
 };

@@ -371,6 +371,11 @@ void CClientConnection::OnUpdateUI(Param_UpdateUI& param)
 	m_pTxtService->UpdateUI(param.imeContext,param.bPageChanged,param.curPage);
 }
 
+void CClientConnection::OnUpdatePreedit(Param_UpdatePreedit& param)
+{
+	m_pTxtService->UpdatePreedit(param.imeContext,param.strPreedit);
+}
+
 SOUI::IIpcHandle * CClientConnection::GetIpcHandle()
 {
 	return m_ipcHandle;

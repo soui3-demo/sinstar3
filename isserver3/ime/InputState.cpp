@@ -2081,7 +2081,13 @@ BOOL CInputState::KeyIn_UserDef_ChangeComp(InputContext * lpCntxtPriv,UINT byInp
 {
 	if(byInput==VK_BACK)
 	{
-		if(lpCntxtPriv->cComp>0)	lpCntxtPriv->cComp--;
+		if(lpCntxtPriv->cComp>0)
+			lpCntxtPriv->cComp--;
+		else if(g_SettingsG->bBackQuitUMode){//没有候选时退格退出U模式
+			ClearContext(CPC_ALL);
+			InputEnd();
+			InputHide(FALSE);
+		}
 	}else if(byInput==VK_ESCAPE)
 	{
 		ClearContext(CPC_ALL);
@@ -2217,11 +2223,30 @@ void CInputState::TurnToTempSpell()
 	} 
 }
 
+void KeyDown(BYTE bVk)
+{
+	keybd_event(bVk, MapVirtualKey(bVk, 0), 0, 0);
+}
+void KeyUp(BYTE bVk)
+{
+	keybd_event(bVk, MapVirtualKey(bVk, 0), KEYEVENTF_KEYUP, 0);
+}
+
+void DoCaps()
+{
+	if (GetKeyState(VK_CAPITAL) & 0x01)
+	{
+		KeyDown(VK_CAPITAL);
+		KeyUp(VK_CAPITAL);
+	}
+}
 
 void CInputState::SetOpenStatus(BOOL bOpen)
 {
 	if(bOpen)
 	{
+		if(g_SettingsG->bQuitEnCancelCAP)
+			DoCaps();
 		m_pListener->EnableInput(TRUE);
 		if (KeyIn_IsCoding(&m_ctx))
 		{

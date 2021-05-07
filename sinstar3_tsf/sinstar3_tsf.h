@@ -42,9 +42,14 @@ public:
 		{
 			return _pcand->_ctx.preedit.str;
 		}
-		return std::wstring();
+		return _strPreedit;
 	}
 	void UpdateUI(ITfContext* pContext, bool bPageChanged, UINT curPage);
+	void UpdatePreedit(UINT64 pContext,const std::wstring &strPreedit);
+	TfGuidAtom GetDisplayAttribInfo()const
+	{
+		return _gaDisplayAttributeInput;
+	}
 	virtual void UpdateUI(UINT64 imeContext, bool bPageChanged, UINT curPage)override;
     // ITfTextInputProcessor
     STDMETHODIMP Activate(ITfThreadMgr *pThreadMgr, TfClientId tfClientId);
@@ -193,6 +198,8 @@ private:
 	BOOL _bKeyUpTested;
 	CCandidateList* _pcand;
 	TfGuidAtom _gaDisplayAttributeInput;
+	//非uiless模式下保存inline字符串
+	std::wstring _strPreedit;
 public:
 	CSinstarProxy*   m_pSinstar3;
 	BOOL		_bHasFocus;
