@@ -70,7 +70,7 @@ STDMETHODIMP CInlinePreeditEditSession::DoEditSession(TfEditCookie ec)
 			pDisplayAttributeProperty->SetValue(ec, tfSelection.range, &var);
 		}
 	}
-
+	tfSelection.range->ShiftStart(ec, sel_end, &cch, NULL);
 	_pContext->SetSelection(ec, 1, &tfSelection);
 
 	return S_OK;
