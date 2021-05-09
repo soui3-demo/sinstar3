@@ -9,8 +9,8 @@
 #define COPYRIGHT_STR "Copy right (C) 2003-2020"
 #define _sinstar3_ime_version_a		3
 #define _sinstar3_ime_version_b		1
-#define _sinstar3_ime_version_c		5
-#define _sinstar3_ime_version_d		9
+#define _sinstar3_ime_version_c		6
+#define _sinstar3_ime_version_d		6
 
 #define _sinstar3_ime_name			启程输入法
 #define _sinstar3_ime		 		启程输入法IME

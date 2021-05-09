@@ -235,17 +235,17 @@ void CSinstar3Impl::UpdateInline()
 
 		switch (g_SettingsUI->enumInlineMode)
 		{
-			case CSettingsUI::EInlineMode::INLINE_Coms:
+			case CSettingsUI::INLINE_Coms:
 				{
 					GetCompString(m_inputState.GetInputContext(), param.strPreedit);
 				}
 				break;
-			case CSettingsUI::EInlineMode::INLINE_NUMONE:
+			case CSettingsUI::INLINE_NUMONE:
 				{
 					GetFirst(m_inputState.GetInputContext(), param.strPreedit);
 				}
 				break;
-			case CSettingsUI::EInlineMode::INLINE_ONLYONE:
+			case CSettingsUI::INLINE_ONLYONE:
 				{
 					GetFirst(m_inputState.GetInputContext(), param.strPreedit, true);
 				}
@@ -261,7 +261,7 @@ void CSinstar3Impl::UpdateUI()
 {
 	if (m_bShowUI) {
 		m_pInputWnd->UpdateUI();
-		if (g_SettingsUI->enumInlineMode != CSettingsUI::EInlineMode::INLINE_NO)
+		if (g_SettingsUI->enumInlineMode != CSettingsUI::INLINE_NO)
 			UpdateInline();
 	}
 	else {
