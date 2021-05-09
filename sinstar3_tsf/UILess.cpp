@@ -124,7 +124,8 @@ CCandidateList::CCandidateList(CSinstar3Tsf* pTextService) :
 	_tsf(pTextService),
 	_ui_id(TF_INVALID_UIELEMENTID),
 	_pbShow(FALSE),
-	_changed_flags(0)
+	_changed_flags(0),
+	_idx(0)
 {
 	_ctx.cinfo.highlighted = 0;
 	_ctx.cinfo.currentPage = 0;	
@@ -139,7 +140,7 @@ std::wstring GuidToString(const GUID& guid)
 	wchar_t buf[64] = { 0 };
 	swprintf_s(
 		buf,
-		LR"({%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X})",
+		L"({%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X})",
 		guid.Data1, guid.Data2, guid.Data3,
 		guid.Data4[0], guid.Data4[1],
 		guid.Data4[2], guid.Data4[3],
@@ -150,12 +151,12 @@ std::wstring GuidToString(const GUID& guid)
 
 STDMETHODIMP CCandidateList::QueryInterface(REFIID riid, void** ppvObj)
 {
-	if (ppvObj == nullptr)
+	if (ppvObj == NULL)
 	{
 		return E_INVALIDARG;
 	}
 
-	*ppvObj = nullptr;
+	*ppvObj = NULL;
 
 	if (IsEqualIID(riid, IID_ITfUIElement) ||
 		IsEqualIID(riid, IID_ITfCandidateListUIElement) ||
@@ -214,7 +215,7 @@ STDMETHODIMP_(ULONG) CCandidateList::Release(void)
 
 STDMETHODIMP CCandidateList::GetDescription(BSTR* pbstr)
 {
-	static auto str = SysAllocString(L"Sinstar Candidate List");
+	static BSTR str = SysAllocString(L"Sinstar Candidate List");
 	if (pbstr)
 	{
 		*pbstr = str;
@@ -225,7 +226,24 @@ STDMETHODIMP CCandidateList::GetDescription(BSTR* pbstr)
 STDMETHODIMP CCandidateList::GetGUID(GUID* pguid)
 {
 	// {0EEC72CF-711A-443A-A403-FF8CAFCD9AC0}
-	*pguid = { 0xeec72cf, 0x711a, 0x443a, { 0xa4, 0x3, 0xff, 0x8c, 0xaf, 0xcd, 0x9a, 0xc0 } };
+	/*typedef struct _GUID {
+    unsigned long  Data1;
+    unsigned short Data2;
+    unsigned short Data3;
+    unsigned char  Data4[ 8 ];
+	} GUID;*/
+	pguid->Data1=0xeec72cf;
+	pguid->Data2=0x711a;
+	pguid->Data3=0x443a;
+	pguid->Data4[0]=0xa4;
+	pguid->Data4[1]=0x3;
+	pguid->Data4[2]=0xff;
+	pguid->Data4[3]=0x8c;
+	pguid->Data4[4]=0xaf;
+	pguid->Data4[5]=0xcd;
+	pguid->Data4[6]=0x9a;
+	pguid->Data4[7]=0xc0;
+	//*pguid = { 0xeec72cf, 0x711a, 0x443a, { 0xa4, 0x3, 0xff, 0x8c, 0xaf, 0xcd, 0x9a, 0xc0 } };
 	return S_OK;
 }
 
@@ -262,13 +280,13 @@ STDMETHODIMP CCandidateList::GetUpdatedFlags(DWORD* pdwFlags)
 
 STDMETHODIMP CCandidateList::GetDocumentMgr(ITfDocumentMgr** ppdim)
 {
-	*ppdim = nullptr;
+	*ppdim = NULL;
 	ITfThreadMgr* pThreadMgr = _tsf->_GetThreadMgr();
-	if (pThreadMgr == nullptr)
+	if (pThreadMgr == NULL)
 	{
 		return E_FAIL;
 	}
-	if (FAILED(pThreadMgr->GetFocus(ppdim)) || (*ppdim == nullptr))
+	if (FAILED(pThreadMgr->GetFocus(ppdim)) || (*ppdim == NULL))
 	{
 		return E_FAIL;
 	}
@@ -299,11 +317,11 @@ STDMETHODIMP CCandidateList::GetString(UINT uIndex, BSTR* pbstr)
 	if (!pbstr)
 		return E_INVALIDARG;
 
-	*pbstr = nullptr;
-	auto& cinfo = _ctx.cinfo;
+	*pbstr = NULL;
+	CandidateInfo& cinfo = _ctx.cinfo;
 	if (uIndex >= cinfo.candies.size())
 		return E_INVALIDARG;
-	auto& str = cinfo.candies[uIndex].str;
+	std::wstring& str = cinfo.candies[uIndex].str;
 	*pbstr = SysAllocString(str.c_str());
 	SLOGFMTI(L"UILess::GetString uIndex:%d,bstr:%s", uIndex, *pbstr);
 	return S_OK;
@@ -318,7 +336,7 @@ STDMETHODIMP CCandidateList::GetPageIndex(UINT* pIndex, UINT uSize, UINT* puPage
 	SLOGFMTI("UILess::GetPageIndex uSize:%d", uSize);
 	if (!puPageCnt)
 		return E_INVALIDARG;
-	auto& cinfo = _ctx.cinfo;
+	CandidateInfo& cinfo = _ctx.cinfo;
 	*puPageCnt = cinfo.candies.size() / PAGESIZE + (cinfo.candies.size() % PAGESIZE ? 1 : 0);
 	if (pIndex) {
 		if (uSize < *puPageCnt) {
@@ -435,7 +453,7 @@ HRESULT CCandidateList::BeginUIElement()
 {
 	SOUI::SComPtr<ITfThreadMgr> pThreadMgr = _tsf->_GetThreadMgr();
 	SOUI::SComPtr<ITfUIElementMgr> pUIElementMgr;
-	auto hr = pThreadMgr->QueryInterface(&pUIElementMgr);
+	HRESULT hr = pThreadMgr->QueryInterface(&pUIElementMgr);
 	_pbShow = TRUE;
 
 	if (FAILED(hr) || (pUIElementMgr == NULL))
@@ -463,7 +481,7 @@ HRESULT CCandidateList::UpdateUIElement()
 	HRESULT hr = S_OK;
 	SOUI::SComPtr<ITfUIElementMgr> pUIElementMgr;
 	SOUI::SComPtr<ITfThreadMgr> pThreadMgr = _tsf->_GetThreadMgr();
-	if (nullptr == pThreadMgr)
+	if (NULL == pThreadMgr)
 	{
 		return S_OK;
 	}
@@ -486,7 +504,7 @@ HRESULT CCandidateList::EndUI()
 
 	SOUI::SComPtr<ITfThreadMgr> pThreadMgr = _tsf->_GetThreadMgr();
 	SOUI::SComPtr<ITfUIElementMgr> pUIElementMgr;
-	auto hr = pThreadMgr->QueryInterface(&pUIElementMgr);
+	HRESULT hr = pThreadMgr->QueryInterface(&pUIElementMgr);
 
 	if (pUIElementMgr != NULL)
 		return pUIElementMgr->EndUIElement(_ui_id);

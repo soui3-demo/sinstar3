@@ -112,7 +112,9 @@ private:
 public:
 	CCandidateList(CSinstar3Tsf* pTextService);
 	~CCandidateList();
-
+#ifndef _Outptr_
+#define _Outptr_
+#endif
 	// IUnknown
 	STDMETHODIMP QueryInterface(REFIID riid, _Outptr_ void** ppvObj);
 	STDMETHODIMP_(ULONG) AddRef(void);
@@ -163,7 +165,7 @@ private:
 	DWORD _cRef;
 	Context _ctx;
 	DWORD _ui_id;
-	int _idx = 1;
+	int _idx;
 	BOOL _pbShow;
 	/*SOUI::SComPtr<ITfUIElementMgr> ui_element_mgr_;
 	SOUI::SComPtr<ITfDocumentMgr> document_mgr_;*/

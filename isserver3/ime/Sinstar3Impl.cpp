@@ -227,7 +227,7 @@ void CSinstar3Impl::UpdateInline()
 {
 	if (m_curImeContext == 0)return;
 	//通知TSF刷新
-	auto focusConn = CIsSvrProxy::GetInstance()->GetFocusConn();
+	CSvrConnection* focusConn = CIsSvrProxy::GetInstance()->GetFocusConn();
 	if (focusConn)
 	{
 		Param_UpdatePreedit param;
@@ -267,7 +267,7 @@ void CSinstar3Impl::UpdateUI()
 	else {
 		if (m_curImeContext == 0)return;
 		//通知TSF刷新
-		auto focusConn = CIsSvrProxy::GetInstance()->GetFocusConn();
+		CSvrConnection* focusConn = CIsSvrProxy::GetInstance()->GetFocusConn();
 		if (focusConn)
 		{
 			Param_UpdateUI param;
@@ -400,7 +400,7 @@ void CSinstar3Impl::NotifyScaleInfo(HWND hRefWnd)
 
 void CSinstar3Impl::GetCandidateListInfo(Context& _ctx)
 {
-	auto inputContext = m_inputState.GetInputContext();
+	InputContext* inputContext = m_inputState.GetInputContext();
 	_ctx.cinfo.clear();
 	UpdateCandidateListInfo(inputContext, _ctx);
 }
@@ -582,7 +582,7 @@ BOOL CSinstar3Impl::GoNextPage()
 	}
 
 	//通知TSF刷新
-	auto focusConn = CIsSvrProxy::GetInstance()->GetFocusConn();
+	CSvrConnection* focusConn = CIsSvrProxy::GetInstance()->GetFocusConn();
 	if (focusConn)
 	{
 		Param_UpdateUI param;
@@ -623,7 +623,7 @@ BOOL CSinstar3Impl::GoPrevPage()
 		pInputContext->iCandLast = smin(pInputContext->iCandBegin + 5, pInputContext->sCandCount);
 	}
 
-	auto focusConn = CIsSvrProxy::GetInstance()->GetFocusConn();
+	CSvrConnection* focusConn = CIsSvrProxy::GetInstance()->GetFocusConn();
 	if (focusConn)
 	{
 		Param_UpdateUI param;

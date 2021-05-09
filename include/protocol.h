@@ -134,9 +134,14 @@ struct Param_CandidateListInfo : FunParams_Base
 		ps << ctx.preedit.str;
 		size_t size = ctx.cinfo.candies.size();
 		ps.Write(&size,sizeof(size_t));
-		for (const auto &ite : ctx.cinfo.candies)
+		/*for (const auto &ite : ctx.cinfo.candies)
 		{
 			ps << ite.str;
+		}
+		*/
+		for (std::vector<Text>::const_iterator ite=ctx.cinfo.candies.begin();ite!=ctx.cinfo.candies.end();ite++)
+		{
+			ps << ite->str;
 		}
 	}
 	void ctxformParamStream(SOUI::SParamStream& ps, Context& ctx)

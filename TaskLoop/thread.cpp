@@ -1,3 +1,5 @@
+
+#include "..\targetver.h"
 #include <windows.h>
 #include <cassert>
 #include "thread.h"

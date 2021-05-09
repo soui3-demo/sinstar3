@@ -73,6 +73,15 @@
     <check  text="禁用首码万能键" name="chk_disable_first_wild"/>
     <check  text="中文标点时使用全角空格" name="chk_full_space"/>
     <check  text="显示使用技巧" name="chk_show_op_tip"/>
+    <check  text="UILess模式自动隐藏任务栏" name="chk_autoHideStatusForUILess"/>
+    <check  text="当U模式输入为空时Back键退出U模式" name="chk_autoQuitUMode"/>
+    <check  text="退出英文模式时自动退出大写状态" name="chk_autoQuitCAP"/>
+    <group size="-2,-1" layout="vbox">嵌入编码设置
+      <radio id="220" text="不使用Inline模式"/>
+      <radio id="221" text="嵌入输入字符串"/>
+      <radio id="222" text="嵌入第一个候选词"/>
+      <radio id="223" text="候选唯一时嵌入候选词"/>
+    </group>
     <window  layout="hbox" gravity="center">
       <text text="提示等待时间(秒)："/>
       <window size="-1,-1" class="edit_border" trackMouseEvent="1" layout="hbox" gravity="center">

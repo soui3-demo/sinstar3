@@ -1,5 +1,5 @@
 ﻿#pragma once
-
+#include "..\targetver.h"
 #include <interface/STaskLoop-i.h>
 #include <windows.h>
 #include "thread.h"

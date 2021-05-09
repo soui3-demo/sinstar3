@@ -7,6 +7,7 @@
 #define ENABLE_LANGUAGEBAR
 
 #define LIB_SOUI_COM		//using lib to import soui com objects.
+#include "..\targetver.h"
 
 #include <windows.h>
 #include <ole2.h>

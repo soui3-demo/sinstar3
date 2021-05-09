@@ -1,4 +1,5 @@
 #pragma warning (disable:4996)
+#include "..\targetver.h"
 #include <windows.h>
 #include <stdarg.h>
 #include <wingdi.h>
