@@ -25,8 +25,8 @@ namespace SOUI
 			ATTR_SKIN(L"skin2",m_pSkin2,TRUE)
 		SOUI_ATTRS_END()
 
-		ISkinObj * m_pSkin1;
-		ISkinObj * m_pSkin2;
+		SAutoRefPtr<ISkinObj> m_pSkin1;
+		SAutoRefPtr<ISkinObj> m_pSkin2;
 	};
 
 }

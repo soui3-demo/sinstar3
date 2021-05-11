@@ -177,10 +177,10 @@ namespace SOUI
 
 	bool CMyData::changeSkin(const SStringT &strSkin)
 	{
+		DWORD dwBegin = GetTickCount();
 		if (!strSkin.IsEmpty())
 		{//加载外部皮肤
-			SLOG_INFO("step2, prepare for load skin");
-			CAutoRefPtr<IResProvider> pResProvider;
+			SAutoRefPtr<IResProvider> pResProvider;
 			if(strSkin.EndsWith(_T("sskn"),true))
 			{
 				g_ComMgr2->CreateResProvider_ZIP((IObjRef**)&pResProvider);
@@ -195,56 +195,59 @@ namespace SOUI
 					return false;
 			}
 
+			SApplication::getSingleton().AddResProvider(pResProvider, NULL);
 			IUiDefInfo * pUiDef = SUiDef::CreateUiDefInfo2(pResProvider, _T("uidef:xml_init"));
-			if (pUiDef->GetSkinPool() || pUiDef->GetStylePool() || pUiDef->GetObjDefAttr())
-			{//不允许皮肤中存在全局的skin and style data
+			SApplication::getSingleton().RemoveResProvider(pResProvider);
+			if (pUiDef->GetObjDefAttr())
+			{//不允许皮肤中存在全局的object default attribute
 				pUiDef->Release();
 				return false;
 			}
 
-			SLOG_INFO("step3, load external skin ok");
-
 			if (!g_SettingsG->strSkin.IsEmpty() && g_SettingsG->strSkin!= strSkin)
 			{//清除正在使用的外置皮肤。
-				SLOG_INFO("step4, remove current in using external skin");
-
 				IResProvider *pLastRes = SApplication::getSingleton().GetTailResProvider();
 				SApplication::getSingleton().RemoveResProvider(pLastRes);
+
+				//remove skin pool and style pool created from this resource package.
+				IUiDefInfo *pCurUiDef = SUiDef::getSingleton().GetUiDef();
+				if(pCurUiDef->GetSkinPool())
+					SSkinPoolMgr::getSingleton().PopSkinPool(pCurUiDef->GetSkinPool());
+				if(pCurUiDef->GetStylePool())
+					SStylePoolMgr::getSingleton().PopStylePool(pCurUiDef->GetStylePool());
 			}
 
-			SLOG_INFO("step6, extract skin defined offset");
+			SApplication::getSingleton().AddResProvider(pResProvider, NULL);
 			m_ptSkinOffset = CSkinMananger::ExtractSkinOffset(pResProvider);
 
-			SLOG_INFO("step7, add new skin to sinstar3");
-			SApplication::getSingleton().AddResProvider(pResProvider, NULL);
-
-			SLOG_INFO("step8, set uidef");
+			if(pUiDef->GetSkinPool())
+				SSkinPoolMgr::getSingleton().PushSkinPool(pUiDef->GetSkinPool());
+			if(pUiDef->GetStylePool())
+				SStylePoolMgr::getSingleton().PushStylePool(pUiDef->GetStylePool());
 			pUiDef->GetNamedColor().Merge(m_defUiDefine->GetNamedColor());
 			pUiDef->GetNamedString().Merge(m_defUiDefine->GetNamedString());
 			pUiDef->GetNamedDimension().Merge(m_defUiDefine->GetNamedDimension());
+			pUiDef->SetObjDefAttr(m_defUiDefine->GetObjDefAttr());
 			SUiDef::getSingleton().SetUiDef(pUiDef,g_SettingsG->strFontDesc.IsEmpty());
 			pUiDef->Release();
-
-			//还原skinpool and stylepool.
-			SLOG_INFO("step9, restore builtin skin, style and object default pools.");
-			SUiDef::getSingleton().GetUiDef()->SetSkinPool(m_defUiDefine->GetSkinPool());
-			SUiDef::getSingleton().GetUiDef()->SetStylePool(m_defUiDefine->GetStylePool());
-			SUiDef::getSingleton().GetUiDef()->SetObjDefAttr(m_defUiDefine->GetObjDefAttr());
-			SLOG_INFO("step10, set external skin ok");
 		}
 		else if (!g_SettingsG->strSkin.IsEmpty())
 		{//清除正在使用的外置皮肤,还原使用系统内置皮肤
-			SLOG_INFO("step11, remove external skin");
 			IResProvider *pLastRes = SApplication::getSingleton().GetTailResProvider();
 			SApplication::getSingleton().RemoveResProvider(pLastRes);
+			IUiDefInfo *pCurUiDef = SUiDef::getSingleton().GetUiDef();
+			if(pCurUiDef->GetSkinPool())
+				SSkinPoolMgr::getSingleton().PopSkinPool(pCurUiDef->GetSkinPool());
+			if(pCurUiDef->GetStylePool())
+				SStylePoolMgr::getSingleton().PopStylePool(pCurUiDef->GetStylePool());
 
-			SLOG_INFO("step12, restore uidef");
 			SUiDef::getSingleton().SetUiDef(m_defUiDefine,g_SettingsG->strFontDesc.IsEmpty());
 
-			SLOG_INFO("step13, extract builtin skin defined offset");
 			IResProvider *pCurRes = SApplication::getSingleton().GetHeadResProvider();
 			CDataCenter::getSingleton().GetData().m_ptSkinOffset = CSkinMananger::ExtractSkinOffset(pCurRes);
 		}
+		SLOG_INFO("change skin "<<strSkin<< " cost " << GetTickCount()-dwBegin);
+
 		return true;
 	}
 

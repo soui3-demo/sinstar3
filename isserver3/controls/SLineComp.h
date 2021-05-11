@@ -24,7 +24,7 @@ namespace SOUI {
 
 		SStringT GetMappedComp();
 	private:
-		CAutoRefPtr<ISkinObj> m_lines;
+		SAutoRefPtr<ISkinObj> m_lines;
 	};
 
 }
