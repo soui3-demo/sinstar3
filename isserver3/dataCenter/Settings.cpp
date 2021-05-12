@@ -105,6 +105,8 @@ void CSettingsGlobal::Save(const SStringT & strDataPath)
 	WritePrivateProfileInt(KSession,L"right_shift",m_funRightShift,strConfigIni);
 	WritePrivateProfileInt(KSession,L"left_ctrl",m_funLeftCtrl,strConfigIni);
 	WritePrivateProfileInt(KSession,L"right_ctrl",m_funRightCtrl,strConfigIni);
+	WritePrivateProfileInt(KSession, L"BackQuitUMode", bBackQuitUMode, strConfigIni); 
+	WritePrivateProfileInt(KSession, L"QuitEnCancelCAP", bQuitEnCancelCAP, strConfigIni);
 
 	SStringT strSkinDir = strDataPath + _T("\\skins\\");
 	SStringT strSkin2;
@@ -207,6 +209,9 @@ void CSettingsGlobal::Load(const SStringT & strDataPath)
 	m_funLeftCtrl = (KeyFunction)GetPrivateProfileInt(KSession,L"left_ctrl",Fun_None,strConfigIni);
 	m_funRightCtrl =(KeyFunction)GetPrivateProfileInt(KSession,L"right_ctrl",Fun_Tmpsp_Switch,strConfigIni);
 
+	bBackQuitUMode= GetPrivateProfileInt(KSession, L"BackQuitUMode", 0, strConfigIni);
+	bQuitEnCancelCAP= GetPrivateProfileInt(KSession, L"QuitEnCancelCAP", 0, strConfigIni);
+
 	bOnlySimpleCode=GetPrivateProfileInt(KSession,_T("OnlySimpleCode"),0,strConfigIni);
 	nDelayTime = GetPrivateProfileInt(KSession,_T("delayTime"),5,strConfigIni);
 	if(nDelayTime<1) nDelayTime = 1;
@@ -285,6 +290,8 @@ void CSettingsUI::Load(const SStringT & strDataPath)
 	bHideStatus=GetPrivateProfileInt(KSession,_T("HideStatus"),0,strConfigIni);
 	bInputBig5=GetPrivateProfileInt(KSession,_T("InputBig5"),0,strConfigIni);
 	bFilterGbk = GetPrivateProfileInt(KSession, _T("FilterGbk"), 0, strConfigIni);
+	bUILessHideStatus = GetPrivateProfileInt(KSession, _T("AutoHideStatusForUILess"), 0, strConfigIni);
+	enumInlineMode = (EInlineMode)GetPrivateProfileInt(KSession, _T("InlineMode"),0, strConfigIni);
 	SetModified(false);
 }
 
@@ -303,5 +310,8 @@ void CSettingsUI::Save(const SStringT & strDataPath)
 	WritePrivateProfileInt(KSession,_T("HideStatus"),bHideStatus,strConfigIni);
 	WritePrivateProfileInt(KSession,_T("InputBig5"),bInputBig5,strConfigIni);
 	WritePrivateProfileInt(KSession, _T("FilterGbk"), bFilterGbk, strConfigIni);
+	WritePrivateProfileInt(KSession, _T("AutoHideStatusForUILess"), bUILessHideStatus, strConfigIni);
+	WritePrivateProfileInt(KSession, _T("InlineMode"), (int)enumInlineMode, strConfigIni);
+
 	SetModified(false);
 }

@@ -81,8 +81,8 @@ STDMETHODIMP CEsStartComposition::DoEditSession(TfEditCookie ec)
 	// Store the pointer of this new composition object in the instance 
 	// of the CTextService class. So this instance of the CTextService 
 	// class can know now it is in the composition stage.
-	_pTextService->OnStartComposition(ec,pComposition);
-
+	//_pTextService->OnStartComposition(ec,pComposition);
+	_pTextService->OnStartComposition(ec, pComposition, _pContext);
 	//trigger layout changed
 	SOUI::SComPtr<ITfContextView> pCtxView;
 	hr = _pContext->GetActiveView(&pCtxView);

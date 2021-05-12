@@ -356,6 +356,9 @@ namespace SOUI
 		//op tip
 		FindAndSetCheck(R.id.chk_show_op_tip, g_SettingsG->bShowOpTip);
 
+		//UILessÊ±×Ô¶¯Òþ²Ø×´Ì¬À¸
+		FindAndSetCheck(R.id.chk_autoHideStatusForUILess,g_SettingsUI->bUILessHideStatus);
+
 		FindAndSetCheck(R.id.chk_disable_first_wild,g_SettingsG->bDisableFirstWild);
 
 		FindAndSetCheck(R.id.chk_full_space,g_SettingsG->bFullSpace);
@@ -372,6 +375,12 @@ namespace SOUI
 		FindAndSetText(R.id.edit_font,strFontDesc);
 
 		FindAndSetCheck(R.id.radio_init_ch+g_SettingsG->bInitEnglish,TRUE);
+
+		FindAndSetCheck(220 + g_SettingsUI->enumInlineMode, TRUE);
+
+		FindAndSetCheck(R.id.chk_autoQuitCAP, g_SettingsG->bQuitEnCancelCAP);
+
+		FindAndSetCheck(R.id.chk_autoQuitUMode, g_SettingsG->bBackQuitUMode);
 	}
 
 	void CConfigDlg::InitPageHotKey()
@@ -767,6 +776,13 @@ SWindow *pCtrl = FindChildByID(id);\
 		SASSERT(pCheck);
 		g_SettingsG->bShowOpTip = pCheck->IsChecked();
 	}
+
+	void CConfigDlg::OnChkAutoHideStausForUILess(EventArgs* e)
+	{
+		SCheckBox* pCheck = sobj_cast<SCheckBox>(e->sender);
+		SASSERT(pCheck);
+		g_SettingsUI->bUILessHideStatus = pCheck->IsChecked();
+	}	
 
 	void CConfigDlg::OnClickAssMode(int id)
 	{
@@ -1249,9 +1265,23 @@ SWindow *pCtrl = FindChildByID(id);\
 		g_SettingsG->bBlendUD = FindChildByID(R.id.chk_blend_for_userdef)->IsChecked();
 	}
 
+	void CConfigDlg::OnQuitUMode()
+	{
+		g_SettingsG->bBackQuitUMode=  FindChildByID(R.id.chk_autoQuitUMode)->IsChecked();
+	}
+
+	void CConfigDlg::OnQuitCAP()
+	{
+		g_SettingsG->bQuitEnCancelCAP= FindChildByID(R.id.chk_autoQuitCAP)->IsChecked();
+	}
+
 	void CConfigDlg::OnInitMode(int id)
 	{
 		g_SettingsG->bInitEnglish = id==R.id.radio_init_en;
 	}
 
+	void CConfigDlg::OnClickInlineMode(int id)
+	{
+		g_SettingsUI->enumInlineMode =(CSettingsUI::EInlineMode)(id - 220);
+	}
 }

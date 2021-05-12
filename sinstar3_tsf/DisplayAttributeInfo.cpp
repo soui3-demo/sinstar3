@@ -20,6 +20,13 @@ const WCHAR CDisplayAttributeInfoInput::_s_szValueName[] = L"DisplayAttributeInp
 // The descriptions
 const WCHAR CDisplayAttributeInfoInput::_s_szDescription[] = L"Sinstar3 Display Attribute Input";
 
+// the registry values of the custmized display attributes
+const WCHAR CDisplayAttributeInfoConverted::_s_szValueName[] = L"DisplayAttributeConverted";
+
+// The descriptions
+const WCHAR CDisplayAttributeInfoConverted::_s_szDescription[] = L"Sinstar3 Display Attribute Converted";
+
+
 //+---------------------------------------------------------------------------
 //
 // DisplayAttribute
@@ -30,10 +37,20 @@ const TF_DISPLAYATTRIBUTE CDisplayAttributeInfoInput::_s_DisplayAttribute =
 {
 	{ TF_CT_NONE, 0 },    // text color
 	{ TF_CT_NONE, 0 },                      // background color (TF_CT_NONE => app default)
-	TF_LS_NONE,								// underline style
+    TF_LS_DASH,								// underline style
 	FALSE,                                  // underline boldness
 	{ TF_CT_NONE, 0 },    // underline color
-	TF_ATTR_INPUT                           // attribute info
+    TF_ATTR_INPUT                           // attribute info
+};
+
+const TF_DISPLAYATTRIBUTE CDisplayAttributeInfoConverted::_s_DisplayAttribute =
+{
+    { TF_CT_COLORREF, RGB(255, 255, 255) }, // text color
+    { TF_CT_COLORREF, RGB(0, 255, 255) },  // background color (TF_CT_NONE => app default)
+    TF_LS_NONE,                             // underline style
+    FALSE,                                  // underline boldness
+    { TF_CT_NONE, 0 },                      // underline color
+    TF_ATTR_TARGET_CONVERTED                // attribute info
 };
 
 CDisplayAttributeInfoInput::CDisplayAttributeInfoInput()
@@ -43,6 +60,15 @@ CDisplayAttributeInfoInput::CDisplayAttributeInfoInput()
 	_pDescription = _s_szDescription;
 	_pValueName = _s_szValueName;
 }
+
+CDisplayAttributeInfoConverted::CDisplayAttributeInfoConverted()
+{
+    _pguid = &c_guidDispAttrConverted;
+    _pDisplayAttribute = &_s_DisplayAttribute;
+    _pDescription = _s_szDescription;
+    _pValueName = _s_szValueName;
+}
+
 
 //+---------------------------------------------------------------------------
 //

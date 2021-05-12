@@ -74,6 +74,8 @@ namespace SOUI
 		//show op tip
 		void OnChkOpTip(EventArgs *e);
 
+		void OnChkAutoHideStausForUILess(EventArgs* e);
+
 		//联想类型
 		void OnClickAssMode(int id);
 		void OnClickForcast(int id);
@@ -84,6 +86,8 @@ namespace SOUI
 		//词频调整
 		void OnClickRateAdjust(int id);
 		void OnInitMode(int id);
+
+		void OnClickInlineMode(int id);
 
 		void OnClickAutoCompPromp();
 		void OnClickAutoDot();
@@ -124,6 +128,8 @@ namespace SOUI
 
 		void OnBlendForSpell();
 		void OnBlendForUD();
+		void OnQuitUMode();
+		void OnQuitCAP();
 
 		EVENT_MAP_BEGIN()
 			EVENT_ID_COMMAND(R.id.chk_blend_for_spell,OnBlendForSpell)
@@ -135,7 +141,8 @@ namespace SOUI
 			EVENT_ID_HANDLER(R.id.cbx_update_interval, EventCBSelChange::EventID, OnCbUpdateIntervalSelChange)
 			EVENT_ID_COMMAND(R.id.chk_auto_update, OnAutoUpdateClick)
 			EVENT_ID_COMMAND(R.id.btn_update_now, OnUpdateNow)
-
+			EVENT_ID_COMMAND(R.id.chk_autoQuitUMode,OnQuitUMode)
+			EVENT_ID_COMMAND(R.id.chk_autoQuitCAP, OnQuitCAP)
 			EVENT_ID_COMMAND(R.id.btn_add_blur,OnAddBlur)
 			EVENT_ID_COMMAND(R.id.btn_del_blur, OnDelBlur)
 			EVENT_ID_COMMAND(R.id.btn_install_sys_phrase,OnInstallSysPhraseLib)
@@ -149,6 +156,7 @@ namespace SOUI
 			EVENT_ID_COMMAND(R.id.chk_disable_first_wild,OnDislabeFirstWild)
 			EVENT_ID_COMMAND(R.id.chk_full_space,OnFullSpace)
 			EVENT_ID_HANDLER(R.id.chk_show_op_tip,EventCmd::EventID, OnChkOpTip)
+			EVENT_ID_HANDLER(R.id.chk_autoHideStatusForUILess, EventCmd::EventID, OnChkAutoHideStausForUILess)
 			EVENT_ID_COMMAND_RANGE(400, 403, OnClickAssMode)
 			EVENT_ID_COMMAND_RANGE(600, 602, OnClickForcast)
 			EVENT_ID_COMMAND_RANGE(700, 702, OnClickGBK)
@@ -179,6 +187,7 @@ namespace SOUI
 			EVENT_ID_COMMAND(R.id.btn_restore,OnRestore)
 			EVENT_ID_HANDLER(R.id.cbx_search_engine,EventCBSelChange::EventID,OnSearchEngineChange)
 			EVENT_ID_COMMAND_RANGE(R.id.radio_init_ch, R.id.radio_init_en, OnInitMode)
+			EVENT_ID_COMMAND_RANGE(220, 223, OnClickInlineMode)
 		EVENT_MAP_END()
 
 

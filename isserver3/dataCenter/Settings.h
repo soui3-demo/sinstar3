@@ -72,7 +72,7 @@ public:
 	BYTE	byForecast;			// forecast mask
 	WORD	byLineKey[6];		// 笔画输入法转换键值
 	BOOL	bShowOpTip;			// 显示操作提示开关
-	GbkMode		nGbkMode;			// GBK Show Mode
+	GbkMode	nGbkMode;			// GBK Show Mode
 
 	BYTE	byRateAdjust;		// 词频调整类型 0-不使用，１－智能调频，２－快速调频
 	BYTE	byAstMode;			// 联想类型 (ASTMODE)
@@ -101,7 +101,9 @@ public:
 	BYTE    bySentMode;
 	int		nMaxCands;			// max candidate number.
 	int		nDelayTime;			//delay timer for closing composition window in seconds.
-	
+	BOOL	bBackQuitUMode;		// 当U模式输入为空时回退退出U模式
+	BOOL	bQuitEnCancelCAP;	// 退出英文模式时自动退出大写状态
+
 	KeyFunction m_funLeftShift;
 	KeyFunction m_funRightShift;
 
@@ -149,7 +151,14 @@ public:
 	BOOL	bSentAssocite;		// 语句联想开关
 	BOOL	bInputBig5;			// 繁体输出标志
 	BOOL    bFilterGbk;			// filter gbk
-
+	BOOL	bUILessHideStatus;	// 在UILess模式下自动隐藏状态栏
+	enum EInlineMode
+	{
+		INLINE_NO = 0,	//不显示Inline
+		INLINE_Coms,	//显示输入字符串
+		INLINE_NUMONE,	//候选第一个候选词
+		INLINE_ONLYONE,	//候选唯一时显示候选词否则为输入字符串
+	}enumInlineMode;
 };
 
 extern CSettingsGlobal	*g_SettingsG;

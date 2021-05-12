@@ -13,6 +13,8 @@
 #define  _CRT_SECURE_NO_WARNINGS
 #define _CRT_NON_CONFORMING_SWPRINTFS
 
+
+#include "..\targetver.h"
 // Windows м╥нд╪Ч:
 #include <windows.h>
 #include <BaseTyps.h>

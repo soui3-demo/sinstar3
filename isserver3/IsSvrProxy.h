@@ -37,6 +37,11 @@ public:
 
 	static IServerCore * GetSvrCore();
 	static CIsSvrProxy * GetInstance();
+
+	CSvrConnection* GetFocusConn()const
+	{
+		return m_pFocusConn;
+	}
 protected:
 	virtual ULONG_PTR OnNewConnection(IIpcHandle * pIpcHandle, IIpcConnection ** ppConn);
 

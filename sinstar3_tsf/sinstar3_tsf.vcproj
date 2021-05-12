@@ -178,7 +178,6 @@
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
-			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -226,7 +225,6 @@
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -414,6 +412,10 @@
 				RelativePath=".\TsfModule.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\UILess.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Í·ÎÄ¼þ"
@@ -470,6 +472,10 @@
 			</File>
 			<File
 				RelativePath=".\TsfModule.h"
+				>
+			</File>
+			<File
+				RelativePath=".\UILess.h"
 				>
 			</File>
 		</Filter>

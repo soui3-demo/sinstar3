@@ -2,9 +2,12 @@
 
 #include "TextService-i.h"
 
+//struct Context;
+
 interface ISinstar : public IUnknown
 {
 	virtual void OnIMESelect(BOOL bSelect)=NULL;
+	virtual void OnCompositionStarted(bool bShowUI) = NULL;
 	virtual void OnCompositionStarted()=NULL;
 	virtual void OnCompositionChanged()=NULL;
 	virtual void OnCompositionTerminated(bool bClearCtx)=NULL;
@@ -21,5 +24,6 @@ interface ISinstar : public IUnknown
 	virtual void ShowHelp()=NULL;
 	virtual EInputMethod GetDefInputMode() = NULL;
 	virtual void NotifyScaleInfo(HWND hRefWnd) = NULL;
+	//virtual void CandidateListInfo(Context& _ctx)=NULL;
 };
 

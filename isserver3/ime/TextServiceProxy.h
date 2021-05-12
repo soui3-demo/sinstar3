@@ -78,7 +78,7 @@ protected:
 	void HandleOnConversionModeChanged(Param_OnConversionModeChanged &param);
 	void HandleShowHelp(Param_ShowHelp &param);
 	void HandleGetDefInputMode(Param_GetDefInputMode &param);
-
+	void HandleGetCadidateListInfo(Param_CandidateListInfo& param);
 	FUN_BEGIN
 		FUN_HANDLER(Param_Create,HandleCreate)
 		FUN_HANDLER(Param_ScaleInfo,HandleScaleInfo)
@@ -99,6 +99,7 @@ protected:
 		FUN_HANDLER(Param_OnConversionModeChanged, HandleOnConversionModeChanged)
 		FUN_HANDLER(Param_ShowHelp, HandleShowHelp)
 		FUN_HANDLER(Param_GetDefInputMode, HandleGetDefInputMode)
+		FUN_HANDLER(Param_CandidateListInfo, HandleGetCadidateListInfo)
 	FUN_END
 private:
 	SComPtr<ISinstar>	m_pSinstar;

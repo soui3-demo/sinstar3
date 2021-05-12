@@ -5,6 +5,7 @@
 #include "TextService-i.h"
 #include <interface/SIpcObj-i.h>
 #include <helper/sipcparamhelper.hpp>
+#include "../sinstar3_tsf/UILess.h"
 
 #ifdef TESTID
 #define SINSTAR3_SERVER_HWND _T("sinstar4_server_wnd_{85B55CBC-7D48-4860-BA88-0BE4B073A94F}")
@@ -103,6 +104,9 @@ enum {
 	ITextService_SetOpenStatus,
 	ITextService_GetOpenStatus,
 	ITextService_GetActiveWnd,
+	ITextService_CandidateListInfo,
+	ITextService_UpdateUI,
+	ITextService_UpdatePreedit,
 };
 
 
@@ -122,6 +126,63 @@ struct Param_ScaleInfo : FunParams_Base
 		PARAMS2(Input, hRefWnd,szWnd)
 };
 
+
+struct Param_CandidateListInfo : FunParams_Base
+{
+	void ctxtoParamStream(SOUI::SParamStream& ps, Context& ctx)
+	{
+		ps << ctx.preedit.str;
+		size_t size = ctx.cinfo.candies.size();
+		ps.Write(&size,sizeof(size_t));
+		/*for (const auto &ite : ctx.cinfo.candies)
+		{
+			ps << ite.str;
+		}
+		*/
+		for (std::vector<Text>::const_iterator ite=ctx.cinfo.candies.begin();ite!=ctx.cinfo.candies.end();ite++)
+		{
+			ps << ite->str;
+		}
+	}
+	void ctxformParamStream(SOUI::SParamStream& ps, Context& ctx)
+	{
+		ps >> ctx.preedit.str;
+		size_t size = 0;
+		ps.Read(&size, sizeof(size_t));		
+		while (size)
+		{
+			std::wstring word;
+			ps >> word;
+			ctx.cinfo.candies.push_back(word);
+			--size;
+		}
+	}
+#define PARAMS2CTX(type,p1) \
+void ToStream4##type(SOUI::SParamStream &  ps){ ctxtoParamStream(ps,p1);}\
+void FromStream4##type(SOUI::SParamStream &  ps){ctxformParamStream(ps,p1);}\
+
+	Context ctx;
+	FUNID(ITextService_CandidateListInfo)
+	PARAMS2CTX(Output, ctx)
+};
+
+struct Param_UpdateUI : FunParams_Base
+{
+	UINT64 imeContext;
+	bool bPageChanged;
+	UINT curPage;
+	FUNID(ITextService_UpdateUI)		
+	PARAMS3(Input, imeContext,bPageChanged,curPage)
+};
+
+struct Param_UpdatePreedit : FunParams_Base
+{
+	UINT64 imeContext;
+	std::wstring strPreedit;
+	FUNID(ITextService_UpdatePreedit)
+	PARAMS2(Input, imeContext, strPreedit)
+};
+
 struct Param_Destroy : FunParams_Base
 {
 	FUNID(ISinstar_Destroy)
@@ -136,7 +197,9 @@ struct Param_OnImeSelect : FunParams_Base
 
 struct Param_OnCompositionStarted : FunParams_Base
 {
+	bool bShowUI;
 	FUNID(ISinstar_OnCompositionStarted)
+		PARAMS1(Input, bShowUI)
 };
 
 
