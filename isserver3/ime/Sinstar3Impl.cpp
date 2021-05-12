@@ -127,9 +127,8 @@ void GetCompString(InputContext* inputContext, std::wstring& _outstr)
 				{
 					SWindow* pMutexView = NULL;
 					if (inputContext->compMode == IM_SPELL)
-					{
-						const SPELLINFO* lpSpi = inputContext->spellData + inputContext->byCaret;
-						_outstr = std::wstring(lpSpi->szSpell, inputContext->bySyCaret);
+					{						
+						_outstr = std::wstring(inputContext->spellData[inputContext->byCaret].szSpell, inputContext->spellData[inputContext->byCaret].bySpellLen);
 					}
 					else {
 						_outstr = std::wstring(inputContext->szComp, inputContext->cComp);
