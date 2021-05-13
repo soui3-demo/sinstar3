@@ -18,7 +18,7 @@
     <item text="中文标点" name="switch_char_mode" id="108"/>
   </item>
   <item text="智能语句" name="menu_sent" contextHelpId="10">
-    <item text="记忆历史记录" name="sent_record" id="1001"/>
+    <item text="记录输入历史" name="sent_record" id="1001"/>
     <item text="语句联想" name="sent_associate" id="1002"/>
     <sep/>
     <item text="清空历史记录" name="sent_record_clear_all" id="1003"/>

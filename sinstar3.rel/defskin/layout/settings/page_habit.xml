@@ -57,10 +57,10 @@
       <radio name="radio_init_en" text="英文输入" tip="启程是默认输入法适用"/>
     </window> 
     <window size="-2,-1" layout="gridlayout" xInterval="10" yInterval="10" columnCount="2" gravity="left">
-      <text columnSpan="2" layout_gravity="left">形码状态回车:</text>
+      <text columnSpan="2" layout_gravity="left" text="形码状态回车:"/>
       <radio text="清除编码" id="120" name="enter_for_clear"/>
       <radio text="编码上屏" id="121" name="enter_for_input"/>
-      <text columnSpan="2" layout_gravity="left">形码混合输入:</text>
+      <text columnSpan="2" layout_gravity="left" text="形码混合输入:"/>
       <check text="拼音" name="chk_blend_for_spell"/>
       <check text="自定义" name="chk_blend_for_userdef"/>
     </window>
@@ -76,7 +76,7 @@
     <check  text="UILess模式自动隐藏任务栏" name="chk_autoHideStatusForUILess"/>
     <check  text="当U模式输入为空时Back键退出U模式" name="chk_autoQuitUMode"/>
     <check  text="退出英文模式时自动退出大写状态" name="chk_autoQuitCAP"/>
-    <group size="-2,-1" layout="vbox">嵌入编码设置
+    <group size="-2,-1" layout="vbox" text="嵌入编码设置" interval="10" align="left">
       <radio id="220" text="不使用Inline模式"/>
       <radio id="221" text="嵌入输入字符串"/>
       <radio id="222" text="嵌入第一个候选词"/>

@@ -155,12 +155,12 @@ namespace SOUI
 		case R.id.btn_prevpage:
 			e2->bUpdated = TRUE;
 			strAccel = SAccelerator::FormatAccelKey(g_SettingsG->byTurnPageUpVK);
-			e2->strToolTip = SStringT().Format(_T("重码上翻页,翻页键:%s"), strAccel);
+			e2->strToolTip = SStringT().Format(_T("重码前翻页,翻页键:%s"), strAccel);
 			break;
 		case R.id.btn_nextpage:
 			e2->bUpdated = TRUE;
 			strAccel = SAccelerator::FormatAccelKey(g_SettingsG->byTurnPageDownVK);
-			e2->strToolTip = SStringT().Format(_T("重码下翻页,翻页键:%s"),strAccel);
+			e2->strToolTip = SStringT().Format(_T("重码后翻页,翻页键:%s"),strAccel);
 			break;
 		}
 	}

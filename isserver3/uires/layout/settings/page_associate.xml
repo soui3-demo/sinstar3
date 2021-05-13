@@ -5,11 +5,11 @@
     <hr width="-2" height="1"/>
   </window>
   <window size="-2,-1" padding_left="50" layout="vbox" interval="10">
-    <text >联想类型:</text>
+    <text text="联想类型:"/>
     <window layout="hbox" interval="5">
       <radio name="ass_mode_none" id="400" text="禁用"/>
       <radio name="ass_mode_phrase" id="401" text="词组联想" tip="普通的词组联想功能，适合初级用户"/>
-      <radio name="ass_mode_english_prompt" id="402" text="单词提示" tip="提示外文词库中与输入的文字最匹配的结果"/>
+      <radio name="ass_mode_english_prompt" id="402" text="英语单词" tip="提示外文词库中与输入的文字最匹配的结果"/>
       <radio name="ass_mode_phrase_prompt" id="403" text="词组提示" tip="如果您连续输入的内容在词库中，则提示是一个词"/>
     </window>
     <window layout="hbox" gravity="center">
