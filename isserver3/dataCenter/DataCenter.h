@@ -23,6 +23,14 @@ namespace SOUI
 		SStringT strTitle;
 		SStringT strName;
 	};
+
+	struct SkinInfo
+	{
+		CPoint		ptOffset;
+		SStringW    vertLayout;
+		SStringW	horzLayout;
+	};
+
 	class CMyData{
 	public:
 		CMyData(const SStringT & strDataPath);
@@ -41,7 +49,7 @@ namespace SOUI
 		DWORD getTotalInput() const;
 		DWORD getTotalSpan() const;
 
-		CPoint		m_ptSkinOffset;
+		SkinInfo	m_skinInfo;
 
 		DWORD		m_cTotalInput;
 		DWORD		m_tmTotalSpan;

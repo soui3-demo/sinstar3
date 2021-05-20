@@ -10,7 +10,8 @@
     <file name="dlg_update_info" path="layout\server\dlg_update_info.xml"/>
     <file name="dlg_donate" path="layout\server\dlg_donate.xml"/>
     
-    <file name="wnd_composition" path="layout\ime\wnd_composition.xml"/>
+    <file name="wnd_comp_horz" path="layout\ime\wnd_comp_horz.xml"/>
+    <file name="wnd_comp_vert" path="layout\ime\wnd_comp_vert.xml"/>
     <file name="wnd_status_bar" path="layout\ime\wnd_status_bar.xml"/>
     <file name="wnd_tip" path="layout\ime\wnd_tip.xml"/>
     <file name="wnd_tooltip" path="layout\ime\wnd_tooltip.xml"/>
@@ -45,6 +46,8 @@
     <file name="png_charmode_half" path="image\charmode_half.png"/>
     <file name="png_status_bar" path="image\status_bar.png"/>
     <file name="png_composition" path="image\composition.png"/>
+    <file name="png_bg_comp" path="image\bg_comp.png"/>
+    <file name="png_bg_cand" path="image\bg_cand.png"/>
     <file name="btn_extend" path="image\btn_extend.png"/>
     <file name="btn_shrink" path="image\btn_shrink.png"/>
     <file name="btn_makeword" path="image\btn_makeword.png"/>

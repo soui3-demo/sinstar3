@@ -8,7 +8,8 @@
   <color src="values:color"/>
   <skin src="values:skin"/>
   <dim src="values:dim"/>
-  
+
+  <comp_layout vertical="layout:wnd_comp_vert" horizontal="layout:wnd_comp_horz"/>
   <style>
     <class name="edit_border" margin="2,2,2,2" ncSkin="_skin.sys.border"/>
     <class name="normalbtn" font="" colorText="#385e8b" colorTextDisable="#91a7c0" textMode="0x25" cursor="hand" margin-x="0"/>

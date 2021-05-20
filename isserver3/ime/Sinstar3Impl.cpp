@@ -487,6 +487,9 @@ LRESULT CSinstar3Impl::OnAsyncCopyData(UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		DWORD dwFlag = *(DWORD*)pCds->lpData;
 		m_pStatusWnd->UpdateToggleStatus(dwFlag);
+	}else if(pCds->dwData == CMD_UPDATECOMPLAYOUT)
+	{//reload comp layout.		
+		m_pInputWnd->ReloadLayout();
 	}
 
 	if (pCds->lpData) free(pCds->lpData);

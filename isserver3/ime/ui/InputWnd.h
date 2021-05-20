@@ -30,9 +30,11 @@ namespace SOUI
 		BOOL GoPrevCandidatePage();
 		short SelectCandidate(short iCand);
 		void OnFlmInfo(PFLMINFO pFlmInfo);
+		void ReloadLayout();
 	protected:
 		virtual void OnSetSkin(EventArgs * e);
 		virtual int OnRecreateUI(LPCREATESTRUCT lpCreateStruct);
+		virtual BOOL OnLoadLayoutFromResourceID(const SStringT &resId);
 
 		void UpdateAnchorPosition();
 		CPoint UpdatePosition(CPoint pt,int wid,int hei);

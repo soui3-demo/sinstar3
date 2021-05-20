@@ -13,7 +13,7 @@
 namespace SOUI
 {
 	CInputWnd::CInputWnd(SEventSet *pEvtSets, InputContext *pCtx, IInputWndListener *pListener)
-		:CImeWnd(pEvtSets,UIRES.LAYOUT.wnd_composition)
+		:CImeWnd(pEvtSets,NULL)
 		,m_bLocated(FALSE)
 		,m_nCaretHeight(30)
 		,m_pInputContext(pCtx)
@@ -42,7 +42,7 @@ namespace SOUI
 
 	CPoint CInputWnd::UpdatePosition(CPoint pt,int wid,int hei)
 	{
-		CPoint pos = pt - CDataCenter::getSingleton().GetData().m_ptSkinOffset;
+		CPoint pos = pt - CDataCenter::getSingleton().GetData().m_skinInfo.ptOffset;
 
 		CRect rcWorkArea;
 		if(::IsWindow(m_hOwner))
@@ -720,6 +720,19 @@ namespace SOUI
 		{
 			e2->strTip = e2->strText;
 		}
+	}
+
+	BOOL CInputWnd::OnLoadLayoutFromResourceID(const SStringT &resId)
+	{
+		const SkinInfo & skinInfo = CDataCenter::getSingletonPtr()->GetData().m_skinInfo;
+		SStringT resId2 = g_SettingsG->bUsingVertLayout? skinInfo.vertLayout:skinInfo.horzLayout;
+		return __super::OnLoadLayoutFromResourceID(resId2);
+	}
+
+	void CInputWnd::ReloadLayout()
+	{
+		EventSetSkin evt(this);
+		OnSetSkin(&evt);
 	}
 
 }

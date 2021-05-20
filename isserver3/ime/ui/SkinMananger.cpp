@@ -136,7 +136,7 @@ SOUI::SStringT CSkinMananger::SkinPathFromCtxID(int nCtxID) const
 	return strSkinPath;
 }
 
-CPoint CSkinMananger::ExtractSkinOffset(IResProvider * pResProvider)
+bool CSkinMananger::ExtractSkinOffset(IResProvider * pResProvider,SkinInfo & info)
 {
 	int nSize = (int)pResProvider->GetRawBufferSize(_T("uidef"), _T("xml_init"));
 
@@ -146,10 +146,15 @@ CPoint CSkinMananger::ExtractSkinOffset(IResProvider * pResProvider)
 	pugi::xml_document xmlDoc;
 	xmlDoc.load_buffer_inplace(buffer, nSize);
 	pugi::xml_node xmlOffset = xmlDoc.child(L"uidef").child(L"offset");
-	CPoint pt;
-	pt.x = xmlOffset.attribute(L"x").as_int();
-	pt.y = xmlOffset.attribute(L"y").as_int();
-	return pt;
+	info.ptOffset.x = xmlOffset.attribute(L"x").as_int();
+	info.ptOffset.y = xmlOffset.attribute(L"y").as_int();
+
+	pugi::xml_node comp_layout= xmlDoc.child(L"uidef").child(L"comp_layout");
+
+	const LPCWSTR kDefCompLayout = L"LAYOUT:wnd_composition";
+	info.horzLayout = comp_layout.attribute(L"horizontal").as_string(kDefCompLayout);
+	info.vertLayout = comp_layout.attribute(L"vertical").as_string(kDefCompLayout);
+	return true;
 }
 
 void CSkinMananger::ClearMap()

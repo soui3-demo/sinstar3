@@ -133,6 +133,7 @@ public:
 	int		nTtsSpeed;
 	int		iTtsChVoice, iTtsEnVoice;
 
+	BOOL	bUsingVertLayout;
 };
 
 class CSettingsUI: public CModifiedMark

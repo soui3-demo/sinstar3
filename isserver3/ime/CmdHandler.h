@@ -31,6 +31,7 @@ enum {
 	CMD_SHOWTIP,
 	CMD_EXECUTETOOL,
 	CMD_SYNCUI,
+	CMD_UPDATECOMPLAYOUT,
 	CMD_OPENHELP,
 };
 
@@ -75,6 +76,7 @@ protected:
 	void OnExecuteTool(LPARAM lp);
 	void OnSyncUI(LPARAM lp);
 	void OnOpenHelp(LPARAM lp);
+	void OnUpdateCompLayout(LPARAM lp);
 
 	BEGIN_MSG_MAP_EX(CCmdHandler)
 		MSG_WM_COMMAND_EX(CMD_HOTKEY_TTS,OnHotkeyTTS)
@@ -97,6 +99,7 @@ protected:
 		MSG_WM_COMMAND_EX(CMD_EXECUTETOOL,OnExecuteTool)
 		MSG_WM_COMMAND_EX(CMD_SYNCUI,OnSyncUI)
 		MSG_WM_COMMAND_EX(CMD_OPENHELP,OnOpenHelp)
+		MSG_WM_COMMAND_EX(CMD_UPDATECOMPLAYOUT,OnUpdateCompLayout)
 	END_MSG_MAP()
 
 private:

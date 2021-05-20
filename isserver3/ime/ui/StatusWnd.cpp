@@ -192,6 +192,7 @@ namespace SOUI
 				{
 					smenuPopup.CheckMenuItem(R.id.skin_def, MF_BYCOMMAND|MF_CHECKED);
 				}
+				smenuPopup.CheckMenuItem(R.id.skin_using_vert,MF_BYCOMMAND|(g_SettingsG->bUsingVertLayout?MF_CHECKED:0));
 				m_skinManager.InitSkinMenu(menuPopup, CDataCenter::getSingletonPtr()->GetDataPath() + _T("\\skins"), R.id.skin_def, strCurSkin);
 				break;
 			}
@@ -787,7 +788,13 @@ namespace SOUI
 		else if(nRet == R.id.skin_def)
 		{
 			m_pInputListener->OnCommand(CMD_CHANGESKIN, (LPARAM)&SStringT());
-		}else if(nRet == R.id.menu_forum)
+		}else if(nRet == R.id.skin_using_vert)
+		{
+			g_SettingsG->bUsingVertLayout = !g_SettingsG->bUsingVertLayout;
+			//reload composition layout
+			m_pInputListener->OnCommand(CMD_UPDATECOMPLAYOUT, 0);
+		}
+		else if(nRet == R.id.menu_forum)
 		{
 			ShellExecute(NULL, _T("open"), g_SettingsG->urlForum, NULL, NULL, SW_SHOWNORMAL);
 		}else if(nRet == R.id.menu_flm_close)

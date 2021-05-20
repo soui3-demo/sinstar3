@@ -140,24 +140,28 @@ void CSvrConnection::HandleDestroy(Param_Destroy & param)
 
 void CSvrConnection::HandleOnImeSelect(Param_OnImeSelect & param)
 {
+	if(!m_pSinstar) return;
 	m_pSinstar->OnIMESelect(param.bSelect);
 
 }
 
 void CSvrConnection::HandleOnCompositionStarted(Param_OnCompositionStarted &param)
 {
+	if(!m_pSinstar) return;
 	m_pSinstar->OnCompositionStarted(param.bShowUI);
 
 }
 
 void CSvrConnection::HandleOnCompositionChanged(Param_OnCompositionChanged &param)
 {
+	if(!m_pSinstar) return;
 	m_pSinstar->OnCompositionChanged();
 
 }
 
 void CSvrConnection::HandleOnCompositionTerminated(Param_OnCompositionTerminated &param)
 {
+	if(!m_pSinstar) return;
 	m_pSinstar->OnCompositionTerminated(param.bClearCtx);
 
 }
@@ -170,23 +174,27 @@ void CSvrConnection::HandleOnSetCaretPosition(Param_OnSetCaretPosition &param)
 	pt.y = (int)(pt.y*m_yScale);
 	nHei = (int)(nHei*m_yScale);
 
+	if(!m_pSinstar) return;
 	m_pSinstar->OnSetCaretPosition(pt,nHei);
 
 }
 
 void CSvrConnection::HandleOnSetFocusSegmentPosition(Param_OnSetFocusSegmentPosition &param)
 {
+	if(!m_pSinstar) return;
 	m_pSinstar->OnSetFocusSegmentPosition(param.pt,param.nHei);
 
 }
 
 void CSvrConnection::HandleProcessKeyStoke(Param_ProcessKeyStoke &param)
 {
+	if(!m_pSinstar) return;
 	m_pSinstar->ProcessKeyStoke(param.lpImeContext,param.vkCode,param.lParam,param.bKeyDown, param.byKeyState,&param.bEaten);
 }
 
 void CSvrConnection::HandleTranslateKey(Param_TranslateKey &param)
 {
+	if(!m_pSinstar) return;
 	m_pSinstar->TranslateKey(param.lpImeContext,param.vkCode,param.uScanCode,param.bKeyDown, param.byKeyState,&param.bEaten);
 }
 
@@ -206,48 +214,56 @@ void CSvrConnection::HandleOnSetFocus(Param_OnSetFocus &param)
 
 void CSvrConnection::HandleGetCompositionSegments(Param_GetCompositionSegments &param)
 {
+	if(!m_pSinstar) return;
 	param.nSegs = m_pSinstar->GetCompositionSegments();
 
 }
 
 void CSvrConnection::HandleGetCompositionSegmentEnd(Param_GetCompositionSegmentEnd &param)
 {
+	if(!m_pSinstar) return;
 	param.iEnd = m_pSinstar->GetCompositionSegmentEnd(param.iSeg);
 
 }
 
 void CSvrConnection::HandleGetCompositionSegmentAttr(Param_GetCompositionSegmentAttr &param)
 {
+	if(!m_pSinstar) return;
 	param.nAttr = m_pSinstar->GetCompositionSegmentAttr(param.iSeg);
 
 }
 
 void CSvrConnection::HandleOnOpenStatusChanged(Param_OnOpenStatusChanged &param)
 {
+	if(!m_pSinstar) return;
 	m_pSinstar->OnOpenStatusChanged(param.bOpen);
 
 }
 
 void CSvrConnection::HandleOnConversionModeChanged(Param_OnConversionModeChanged &param)
 {
+	if(!m_pSinstar) return;
 	m_pSinstar->OnConversionModeChanged(param.uMode);
 
 }
 
 void CSvrConnection::HandleShowHelp(Param_ShowHelp &param)
 {
+	if(!m_pSinstar) return;
 	m_pSinstar->ShowHelp();
 
 }
 
 void CSvrConnection::HandleGetDefInputMode(Param_GetDefInputMode &param)
 {
+	if(!m_pSinstar) return;
 	param.uMode = m_pSinstar->GetDefInputMode();
 
 }
 
 void CSvrConnection::HandleGetCadidateListInfo(Param_CandidateListInfo& param)
 {
+	if(!m_pSinstar) return;
 	CSinstar3Impl* pSinstar3 = (CSinstar3Impl*)(ISinstar*)m_pSinstar;
 	pSinstar3->GetCandidateListInfo(param.ctx);
 }
@@ -269,6 +285,7 @@ bool CSvrConnection::CallFun(IFunParams * params) const
 
 void CSvrConnection::OnSkinChanged()
 {
+	if(!m_pSinstar) return;
 	CSinstar3Impl *pSinstar3 =(CSinstar3Impl*)(ISinstar*)m_pSinstar;
 	pSinstar3->OnSkinChanged();
 }

@@ -279,3 +279,8 @@ void CCmdHandler::OnOpenConfig(LPARAM lp)
 {
 	m_pSinstar3->OpenConfig();
 }
+
+void CCmdHandler::OnUpdateCompLayout(LPARAM lp)
+{
+	m_pSinstar3->Broadcast(CMD_UPDATECOMPLAYOUT, NULL, 0);
+}

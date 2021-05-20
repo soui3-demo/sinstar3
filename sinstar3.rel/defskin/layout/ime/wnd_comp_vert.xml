@@ -1,0 +1,127 @@
+﻿<SOUI 
+  name="wnd_composition" 
+  width="-1" 
+  height="-1"   
+  resizable="0" 
+  wndType="normal"
+  translucent="1"
+  toolwindow="1"
+>
+  <skin>
+    <imgframe name="bg_comp" src="img:png_bg_comp" margin2="@dim/comp_margin_left,@dim/comp_margin_top,@dim/comp_margin_right,@dim/comp_margin_bottom"/>
+    <imgframe name="bg_cand" src="img:png_bg_cand" margin2="@dim/cand_margin_left,@dim/cand_margin_top,@dim/cand_margin_right,@dim/cand_margin_bottom"/>
+    <imglist name="btn_prevpage" src="img:btn_prevpage" states="4"/>
+    <imglist name="btn_nextpage" src="img:btn_nextpage" states="4"/>
+  </skin>
+  
+  <style>
+    <class name="cls_cand_first"  colorIndex="@color/cand_first" 
+    	colorCand="@color/cand_first" 
+    	colorComp="@color/cand_first" 
+    	colorWild="@color/cand_wild"
+    	colorCandForecast="@color/cand_forecast"
+    	colorCandGbk="@color/cand_gbk"   />
+    <class name="cls_cand"   colorIndex="@color/cand_index" 
+	    colorCand="@color/cand_text" 
+	    colorCandUserDef="@color/cand_user_def" 
+	    colorCandUserCmd="@color/cand_user_cmd"  
+	    colorCandForecast="@color/cand_forecast"  
+	    colorCandBlendPy="@color/cand_blend_py"  
+	    colorCandGbk="@color/cand_gbk"  
+	    colorComp="@color/cand_comp" 
+	    colorWild="@color/cand_wild"/>
+	    
+	    <class name="cls_comp"  caret_width="2"  caret_animate="@dim/comp_caret_animate" 
+	 caret_color="@color/comp_caret_color" caret_fade_time="20" caret_show_time="20" />
+  </style>
+  
+  <root  layout="vbox" size="-1,-1">
+      <comp_bg size="-2,-1" skin="bg_comp" layout="hbox" padding="@dim/comp_padding_left,@dim/comp_padding_top,@dim/comp_padding_right,@dim/comp_padding_bottom">
+        <mutexView size="-1,-2" name="comp_normal" layout="hbox" visible="1">
+          <compView size="-1,-2" name="txt_comps" colorText="@color/txt_comps" class="cls_comp"/>
+          <tipview size="-1,-2" name="txt_tip" colorText="@color/tip_comp" extend_left="@dim/interval_comp"/>
+        </mutexView>
+        <mutexView size="-1,-2" name="comp_spell" layout="hbox">
+          <text size="-1,-2" text="t:" name="txt_temp_spell_flag" colorText="@color/temp_spell_flag" padding_right="@dim/interval_comp_prefix" display="0"/>
+          <spellView size="-1,-2" name="txt_comps" colorSpell="@color/spell_comp" colorResult="@color/spell_result" colorEdit="@color/spell_comp" colorCaret="@color/spell_caret"/>
+          <tipview size="-1,-2" name="txt_tip" colorText="@color/tip_comp" extend_left="@dim/interval_comp"/>
+        </mutexView>
+        <mutexView size="-1,-2" name="comp_umode"  layout="hbox">
+          <text size="-1,-2" text="u:" colorText="@color/comp_umode_prefix" padding_right="@dim/interval_comp_prefix"/>
+          <compView size="-1,-2" name="txt_comps" colorText="@color/txt_comps" class="cls_comp"/>
+          <text size="-1,-2" name="txt_auto_complete" colorText="@color/comp_auto_complete"/>
+        </mutexView>
+        <mutexView size="-1,-2" name="comp_lineime"  layout="hbox">
+          <text size="-1,-2" text="i:" colorText="@color/comp_umode_prefix" padding_right="@dim/interval_comp_prefix"/>
+          <lineComp size="-1,-2" name="txt_comps" />
+        </mutexView>
+        <mutexView size="-1,-2" name="comp_english"  layout="hbox">
+          <compView size="-1,-2" name="txt_comps" colorText="@color/english_word" class="cls_comp"/>
+          <text size="-1,-2" name="txt_auto_complete" colorText="@color/comp_auto_complete"/>
+        </mutexView>
+        <mutexView size="-1,-2" name="comp_sent" layout="hbox" gravity="center">
+          <sentView name="stv_sent" colorRemain="@color/sent_right" colorInactive="@color/sent_inactive" colorInput="@color/sent_input" colorSelected="@color/sent_left" multiLines="1" maxWidth="160"/>
+        </mutexView>
+      </comp_bg>
+      <comp_bg size="-2,-1" skin="bg_cand" padding="@dim/cand_padding_left,@dim/cand_padding_top,@dim/cand_padding_right,@dim/cand_padding_bottom" clipClient="1">
+        <window pos="0,0" layout="vbox">
+          <mutexView size="-1,-1" layout="vbox" name="cand_normal" gravity="right">
+            <window size="-1,-1" layout="vbox" name="cand_container">
+              <candidate size="-1,-1" index="1:" class="cls_cand_first"/>
+              <candidate size="-1,-1" extend_top="@dim/interval_cand" index="2:"  class="cls_cand"/>
+              <candidate size="-1,-1" extend_top="@dim/interval_cand" index="3:" class="cls_cand"/>
+              <candidate size="-1,-1" extend_top="@dim/interval_cand" index="4:"  class="cls_cand"/>
+              <candidate size="-1,-1" extend_top="@dim/interval_cand" index="5:"  class="cls_cand"/>
+            </window>
+            <window size="-1,-1" layout="hbox">
+              <imgbtn size="-1,-1" display="0" skin="btn_prevpage" name="btn_prevpage"/>
+              <imgbtn size="-1,-1" display="0" skin="btn_nextpage" name="btn_nextpage"/>
+            </window>
+          </mutexView>
+          <mutexView size="-1,-1" layout="vbox" name="cand_english"  >
+            <text size="-1,-1" colorText="@color/associate_english_prefix" name="txt_en_header" extend_right="@dim/interval_cand_prefix"/>
+            <window size="-1,-1" layout="vbox" name="cand_container">
+              <EnCand size="-1,-1" index="1:" colorCand="@color/cand_text" colorPhonetic="@color/cand_phonetic"/>
+              <EnCand size="-1,-1" extend_top="@dim/interval_cand" index="2:" colorCand="@color/cand_text" colorPhonetic="@color/cand_phonetic"/>
+              <EnCand size="-1,-1" extend_top="@dim/interval_cand" index="3:" colorCand="@color/cand_text" colorPhonetic="@color/cand_phonetic"/>
+              <EnCand size="-1,-1" extend_top="@dim/interval_cand" index="4:" colorCand="@color/cand_text" colorPhonetic="@color/cand_phonetic"/>
+              <EnCand size="-1,-1" extend_top="@dim/interval_cand" index="5:" colorCand="@color/cand_text" colorPhonetic="@color/cand_phonetic"/>
+            </window>
+            <window size="-1,-1" layout="hbox">
+              <imgbtn size="-1,-1" display="0" skin="btn_prevpage" name="btn_prevpage"/>
+              <imgbtn size="-1,-1" display="0" skin="btn_nextpage" name="btn_nextpage"/>
+            </window>
+          </mutexView>
+          <mutexView size="-1,-1" layout="vbox" name="cand_phrase" >
+            <window size="-1,-1" layout="vbox" name="cand_container">
+              <PhraseCand size="-1,-1" index="1:" colorCand="@color/cand_text"/>
+              <PhraseCand size="-1,-1" extend_top="@dim/interval_cand" index="2:" colorCand="@color/cand_text"/>
+              <PhraseCand size="-1,-1" extend_top="@dim/interval_cand" index="3:" colorCand="@color/cand_text"/>
+              <PhraseCand size="-1,-1" extend_top="@dim/interval_cand" index="4:" colorCand="@color/cand_text"/>
+              <PhraseCand size="-1,-1" extend_top="@dim/interval_cand" index="5:" colorCand="@color/cand_text"/>
+            </window>
+            <window size="-1,-1" layout="hbox">
+              <imgbtn size="-1,-1" display="0" skin="btn_prevpage" name="btn_prevpage"/>
+              <imgbtn size="-1,-1" display="0" skin="btn_nextpage" name="btn_nextpage"/>
+            </window>
+          </mutexView>
+          <mutexView size="-1,-1" layout="vbox" name="cand_english_input" >
+            <window size="-1,-1" layout="vbox" name="cand_container">
+              <EnCand size="-1,-1" index="1:" colorCand="@color/cand_text" showPhonetic="0"/>
+              <EnCand size="-1,-1" extend_top="@dim/interval_cand" index="2:" colorCand="@color/cand_text" showPhonetic="0"/>
+              <EnCand size="-1,-1" extend_top="@dim/interval_cand" index="3:" colorCand="@color/cand_text" showPhonetic="0"/>
+              <EnCand size="-1,-1" extend_top="@dim/interval_cand" index="4:" colorCand="@color/cand_text" showPhonetic="0"/>
+              <EnCand size="-1,-1" extend_top="@dim/interval_cand" index="5:" colorCand="@color/cand_text" showPhonetic="0"/>
+            </window>
+            <window size="-1,-1" layout="hbox">
+              <imgbtn size="-1,-1" display="0" skin="btn_prevpage" name="btn_prevpage"/>
+              <imgbtn size="-1,-1" display="0" skin="btn_nextpage" name="btn_nextpage"/>
+            </window>
+          </mutexView>
+          <mutexView size="-1,-1" layout="hbox" name="cand_tip">
+            <tipview size="-1,-1" name="txt_tip" colorText="@color/tip_cand"/>
+          </mutexView>
+        </window>
+      </comp_bg>
+  </root>
+</SOUI>

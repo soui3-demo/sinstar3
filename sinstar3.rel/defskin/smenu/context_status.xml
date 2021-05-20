@@ -28,6 +28,7 @@
   <item text="皮      肤" name="menu_skin" id="2000" contextHelpId="2" icon="2">
     <item text="皮肤目录" name="skin_mgr" id="2001"/>
     <item text="皮肤下载" name="skin_cloud" id="2002"/>
+    <item text="竖排优先" name="skin_using_vert" id="2003"/>
     <sep/>
     <item text="默认皮肤" name="skin_def" id="2220"/>
     <sep/>

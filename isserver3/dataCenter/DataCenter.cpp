@@ -218,7 +218,7 @@ namespace SOUI
 			}
 
 			SApplication::getSingleton().AddResProvider(pResProvider, NULL);
-			m_ptSkinOffset = CSkinMananger::ExtractSkinOffset(pResProvider);
+			CSkinMananger::ExtractSkinOffset(pResProvider,m_skinInfo);
 
 			if(pUiDef->GetSkinPool())
 				SSkinPoolMgr::getSingleton().PushSkinPool(pUiDef->GetSkinPool());
@@ -244,7 +244,7 @@ namespace SOUI
 			SUiDef::getSingleton().SetUiDef(m_defUiDefine,g_SettingsG->strFontDesc.IsEmpty());
 
 			IResProvider *pCurRes = SApplication::getSingleton().GetHeadResProvider();
-			CDataCenter::getSingleton().GetData().m_ptSkinOffset = CSkinMananger::ExtractSkinOffset(pCurRes);
+			CSkinMananger::ExtractSkinOffset(pCurRes,m_skinInfo);
 		}
 		SLOG_INFO("change skin "<<strSkin<< " cost " << GetTickCount()-dwBegin);
 
