@@ -359,6 +359,8 @@ namespace SOUI
 		//UILessÊ±×Ô¶¯Òþ²Ø×´Ì¬À¸
 		FindAndSetCheck(R.id.chk_autoHideStatusForUILess,g_SettingsUI->bUILessHideStatus);
 
+		FindAndSetCheck(R.id.chk_autoHideStatusForFullScreen, g_SettingsUI->bFullScreenHideStatus);
+
 		FindAndSetCheck(R.id.chk_disable_first_wild,g_SettingsG->bDisableFirstWild);
 
 		FindAndSetCheck(R.id.chk_full_space,g_SettingsG->bFullSpace);
@@ -782,8 +784,15 @@ SWindow *pCtrl = FindChildByID(id);\
 		SCheckBox* pCheck = sobj_cast<SCheckBox>(e->sender);
 		SASSERT(pCheck);
 		g_SettingsUI->bUILessHideStatus = pCheck->IsChecked();
-	}	
+	}
 
+	void CConfigDlg::OnChkAutoHideStausForFullScreen(EventArgs* e)
+	{
+		SCheckBox* pCheck = sobj_cast<SCheckBox>(e->sender);
+		SASSERT(pCheck);
+		g_SettingsUI->bFullScreenHideStatus = pCheck->IsChecked();
+	}
+	
 	void CConfigDlg::OnClickAssMode(int id)
 	{
 		GetGroupCheck(id);
