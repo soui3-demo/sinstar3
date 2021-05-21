@@ -43,9 +43,9 @@ public:
 	BOOL HandleKeyDown(UINT vKey,UINT uScanCode,const BYTE * lpbKeyState);
 
 	void OnImeSelect(BOOL bSelect);
-
+	void OnSetFocus(BOOL bFocus);
 	BOOL OnSvrNotify(UINT wp, PMSGDATA pMsgData);
-
+	
 	BOOL IsTempSpell() const;
 
 	void ClearContext(UINT ccMask);

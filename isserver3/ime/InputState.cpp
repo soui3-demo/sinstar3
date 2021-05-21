@@ -2675,3 +2675,10 @@ BOOL CInputState::OnSvrNotify(UINT wp, PMSGDATA pMsg)
 	}
 	return FALSE;
 }
+
+void CInputState::OnSetFocus(BOOL bFocus)
+{
+	m_bPressOther = FALSE;
+	m_bPressShift = FALSE;
+	m_bPressCtrl = FALSE;
+}

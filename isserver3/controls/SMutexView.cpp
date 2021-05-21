@@ -24,7 +24,7 @@ namespace SOUI
 			SWindow *pSib= pParent->GetWindow(GSW_FIRSTCHILD);
 			while(pSib)
 			{
-				if(pSib != this && pSib->IsVisible(FALSE))
+				if(pSib != this && pSib->IsVisible(FALSE) && pSib->IsClass(SMutexView::GetClassName()))
 				{
 					pSib->SetVisible(FALSE,TRUE);
 				}

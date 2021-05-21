@@ -6,4 +6,16 @@
   <imglist name="skin_menu_icons" src="img2:png_menu_icons" states="12"/>
   <scrollbar name="skin_scrollbar" src="img2:png_scrollbar" margin="5" hasgripper="0"/>
   <imglist name="skin_btn_help" src="img2:png_btn_help" states="3"/>
+  
+      <imglist name="skin_bk" src="img:png_composition" tile="1"/>
+    <imgframe name="bg_comp" src="img:png_bg_comp" margin="1,0,1,4" tile="1"/>
+    <imgframe name="bg_cand" src="img:png_bg_cand" margin="1,1,1,1"/>
+
+     <imglist name="btn_prevpage" src="img:btn_prevpage" states="4"/>
+    <imglist name="btn_nextpage" src="img:btn_nextpage" states="4"/>
+    <imglist name="lines" src="img:png_lines" states="6"/>
+    <imglist name="comp_logo" src="img:png_comp_logo" scale="100"/>
+    <imglist name="comp_logo" src="img:png_comp_logo.150" scale="150"/>
+    <imglist name="comp_logo" src="img:png_comp_logo.200" scale="200"/>
+
 </skin>

@@ -330,6 +330,7 @@ void CSinstar3Impl::OnSetFocus(BOOL bFocus, DWORD dwActiveWnd)
 {
 	SLOG_INFO("focus=" << bFocus);
 	m_hasFocus = bFocus;
+	m_inputState.OnSetFocus(bFocus);
 	m_hOwner = (HWND)dwActiveWnd;
 	SetTimer(TIMER_DELAYFOCUS, 50, NULL);
 }

@@ -6,15 +6,6 @@
   toolwindow="1"
 >
   <user autoScale="true"/>
-  <skin>
-    <imglist name="skin_bk" src="img:png_composition" tile="1"/>
-    <imglist name="btn_prevpage" src="img:btn_prevpage" states="4"/>
-    <imglist name="btn_nextpage" src="img:btn_nextpage" states="4"/>
-    <imglist name="lines" src="img:png_lines" states="6"/>
-    <imglist name="comp_logo" src="img:png_comp_logo" scale="100"/>
-    <imglist name="comp_logo" src="img:png_comp_logo.150" scale="150"/>
-    <imglist name="comp_logo" src="img:png_comp_logo.200" scale="200"/>
-  </skin>
   <style>
     <class name="cls_cand_first"  colorIndex="@color/cand_first"
 	     colorCand="@color/cand_first"
