@@ -192,6 +192,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ui\CAppBarUtils.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ime\CmdHandler.cpp"
 				>
 			</File>
@@ -431,6 +435,10 @@
 			</File>
 			<File
 				RelativePath=".\ui\BuildIndexProgWnd.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ui\CAppBarUtils.h"
 				>
 			</File>
 			<File

@@ -5,6 +5,7 @@
 #include "ui/SkinMananger.h"
 #include <shellapi.h>
 #include "IsSvrProxy.h"
+#include <ui/CAppBarUtils.h>
 
 class CAutoContext
 {
@@ -822,7 +823,20 @@ BOOL CSinstar3Impl::IsInputVisible() const
 
 BOOL CSinstar3Impl::IsStatusVisible() const
 {
-	return !g_SettingsUI->bHideStatus && m_bOpen && m_hasFocus && (m_bShowUI || !g_SettingsUI->bUILessHideStatus);
+	BOOL canShow = !g_SettingsUI->bHideStatus && m_bOpen && m_hasFocus;
+	if (canShow)
+	{
+		//检查是否设置了全屏时自动隐藏或UILess模式下隐藏
+		if (g_SettingsUI->bFullScreenHideStatus && g_AppBar->IsFullScreen())
+		{
+			canShow = FALSE;
+		}
+		else if (g_SettingsUI->bUILessHideStatus&&!m_bShowUI)
+		{
+			canShow = FALSE;
+		}
+	}
+	return canShow;	
 }
 
 void CSinstar3Impl::DelayCaretLeft()

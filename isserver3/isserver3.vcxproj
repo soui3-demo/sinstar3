@@ -95,6 +95,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Base64.cpp" />
+    <ClCompile Include="ui\CAppBarUtils.cpp" />
     <ClCompile Include="controls\QR_Encode.cpp" />
     <ClCompile Include="controls\SApngPlayer.cpp" />
     <ClCompile Include="controls\SCandView.cpp" />
@@ -156,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Base64.h" />
+    <ClInclude Include="ui\CAppBarUtils.h" />
     <ClInclude Include="controls\QR_Encode.h" />
     <ClInclude Include="controls\SAniImgFrame.h" />
     <ClInclude Include="controls\SApngPlayer.h" />

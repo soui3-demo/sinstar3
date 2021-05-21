@@ -73,6 +73,7 @@
     <check  text="禁用首码万能键" name="chk_disable_first_wild"/>
     <check  text="中文标点时使用全角空格" name="chk_full_space"/>
     <check  text="显示使用技巧" name="chk_show_op_tip"/>
+    <check  text="运行全屏程序时自动隐藏任务栏" name="chk_autoHideStatusForFullScreen"/>
     <check  text="UILess模式自动隐藏任务栏" name="chk_autoHideStatusForUILess"/>
     <check  text="当U模式输入为空时Back键退出U模式" name="chk_autoQuitUMode"/>
     <check  text="退出英文模式时自动退出大写状态" name="chk_autoQuitCAP"/>

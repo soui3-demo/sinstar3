@@ -76,6 +76,8 @@ namespace SOUI
 
 		void OnChkAutoHideStausForUILess(EventArgs* e);
 
+		void OnChkAutoHideStausForFullScreen(EventArgs* e);
+
 		//联想类型
 		void OnClickAssMode(int id);
 		void OnClickForcast(int id);
@@ -157,6 +159,7 @@ namespace SOUI
 			EVENT_ID_COMMAND(R.id.chk_full_space,OnFullSpace)
 			EVENT_ID_HANDLER(R.id.chk_show_op_tip,EventCmd::EventID, OnChkOpTip)
 			EVENT_ID_HANDLER(R.id.chk_autoHideStatusForUILess, EventCmd::EventID, OnChkAutoHideStausForUILess)
+			EVENT_ID_HANDLER(R.id.chk_autoHideStatusForFullScreen, EventCmd::EventID, OnChkAutoHideStausForFullScreen)			
 			EVENT_ID_COMMAND_RANGE(400, 403, OnClickAssMode)
 			EVENT_ID_COMMAND_RANGE(600, 602, OnClickForcast)
 			EVENT_ID_COMMAND_RANGE(700, 702, OnClickGBK)
