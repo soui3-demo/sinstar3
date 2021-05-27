@@ -141,9 +141,15 @@ void GetCompString(InputContext* inputContext, std::wstring& _outstr)
 				}
 				break;
 			}
+		case INST_ENGLISH:
+			{
+				_outstr = std::wstring(inputContext->szComp, inputContext->cComp);
+				break;
+			}
 		default:
 			{
 				_outstr = std::wstring(inputContext->szComp, inputContext->cComp);
+				break;
 			}
 	}
 }
@@ -156,10 +162,7 @@ void GetFirst(InputContext* inputContext, std::wstring& _outstr, bool bOnlyOne =
 		if (inputContext->inState == INST_ENGLISH)
 		{
 			const BYTE* p = inputContext->ppbyCandInfo[0];
-			std::wstring m_strCand = std::wstring((const WCHAR*)(p + 1), p[0]);
-			p += p[0] * 2 + 1;
-			if (p[0] > 0)
-				_outstr = std::wstring((const WCHAR*)(p + 1), p[0]);
+			_outstr = std::wstring((const WCHAR*)(p + 1), p[0]);
 		}
 		else if (inputContext->sbState == SBST_NORMALSTATE)
 		{
