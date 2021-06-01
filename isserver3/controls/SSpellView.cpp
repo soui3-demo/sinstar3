@@ -89,7 +89,9 @@ namespace SOUI
 		SAutoRefPtr<IPen> pen,oldPen;
 		pRT->CreatePen(PS_SOLID,m_crCaret,1,&pen);
 		pRT->SelectObject(pen,(IRenderObj**)&oldPen);
+		BOOL bAntiAlias = pRT->SetAntiAlias(FALSE);
 		pRT->DrawLines(pts,2);
+		pRT->SetAntiAlias(bAntiAlias);
 		pRT->SelectObject(oldPen);
 
 		AfterPaint(pRT,painter);

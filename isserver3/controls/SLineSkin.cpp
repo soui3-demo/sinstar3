@@ -65,7 +65,9 @@ void SLineSkin::_DrawByIndex(IRenderTarget * pRT, LPCRECT prcDraw, int dwState, 
 			break;
 		}
 
+		BOOL bAntiAlias = pRT->SetAntiAlias(FALSE);
 		pRT->DrawLines(point, 2);
+		pRT->SetAntiAlias(bAntiAlias);
 		pRT->SelectObject(oldpen);
 	}
 }
