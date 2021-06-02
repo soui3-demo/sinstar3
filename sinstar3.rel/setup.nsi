@@ -8,6 +8,20 @@ Unicode true
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
 
+;Adds the Product Version on top of the Version Tab in the Properties of the file.
+VIProductVersion "${PRODUCT_VERSION}.0.0"
+
+!define LANG_ENGLISH "0408"
+;Adds a field in the Version Tab of the File Properties.
+VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductName" "${PRODUCT_NAME}"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "CompanyName" "${PRODUCT_PUBLISHER}"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "Copyright (c) ${PRODUCT_PUBLISHER}"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "FileDescription" "${PRODUCT_NAME} "
+VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductVersion" "${PRODUCT_VERSION}"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "FileVersion" "${PRODUCT_VERSION}"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "OriginalFilename" "sinstar3_Setup.exe"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "Package Build Date" "${__DATE__}"
+
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
 
