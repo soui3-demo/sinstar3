@@ -48,14 +48,22 @@ translucent="1"
           </window>
         </template>
       </mclistview>
-      <group size="-1,-1" layout="gridLayout" padding="10" text="词频导入范围" columnCount="2" xInterval="5" yInterval="5" xGravity="right" yGravity="fill">
-        <text text="最小值:"/>
-        <edit name="edit_rate_min" size="50,30" text="0"/>
-        <text text="最大值:"/>
-        <edit name="edit_rate_max" size="50,30" text="250"/>
-        <text text="默认值:"/>
-        <edit name="edit_rate_default" size="50,30" text="0"/>
-      </group>
+      <window size="-1,-2" layout="vbox">
+        <group size="-1,-1" layout="gridLayout" padding="10" text="词频导入范围" columnCount="2" xInterval="5" yInterval="5" xGravity="right" yGravity="fill">
+          <text text="最小值:"/>
+          <edit name="edit_rate_min" size="50,30" text="0"/>
+          <text text="最大值:"/>
+          <edit name="edit_rate_max" size="50,30" text="250"/>
+          <text text="默认值:"/>
+          <edit name="edit_rate_default" size="50,30" text="0"/>
+        </group>
+        <group size="-2,-1" text="字频表编辑" layout="vbox" gravity="center" interval="10" padding="0,0,0,10">
+          <button name="btn_load_wordrate" text="加载字频表" size="100,30"/>
+          <button name="btn_import_wordrate" text="导入字频表" size="100,30"/>
+          <button name="btn_saveas_txt" text="保存为文本" size="100,30"/>
+          <button name="btn_saveas_wordrate" text="保存字频表" size="100,30"/>
+        </group> 
+      </window>
     </window>
     <progress name="prog_import" size="-2,10" min="0" max="100" value="0" display="0" visible="0"/>
   </root>

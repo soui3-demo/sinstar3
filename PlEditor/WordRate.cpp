@@ -45,6 +45,7 @@ BOOL CWordRate::_LoadFromFile(LPCTSTR pszRateFile)
 		fclose(f);
 		return FALSE;
 	}
+	m_mapRate.clear();
 	//read count
 	DWORD dwCount=0;
 	fread(&dwCount,sizeof(DWORD),1,f);
@@ -193,6 +194,26 @@ void CWordRate::UpdateWordRate(WCHAR wIndex,int change)
 	if(sRate<0)
 		sRate=0;
 	SetWordRate(wIndex,(BYTE)sRate);
+}
+
+void CWordRate::Clear()
+{
+	GetInstance()._Clear();
+}
+
+void CWordRate::_Clear()
+{
+	m_mapRate.clear();
+}
+
+int CWordRate::GetSize()
+{
+	return GetInstance()._GetSize();
+}
+
+int CWordRate::_GetSize() const
+{
+	return m_mapRate.size();
 }
 
 /*

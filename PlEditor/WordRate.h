@@ -20,6 +20,8 @@ private:
 	BYTE _GetWordRate(wchar_t wIndex) const;
 	BOOL _Export(LPCTSTR pszTxtFile) const;
 	int  _Import(LPCTSTR pszTxtFile);
+	void _Clear();
+	int  _GetSize() const;
 public:
 	static BOOL LoadFromFile(LPCTSTR pszRateFile);
 	static BOOL SaveToFile(LPCTSTR pszRateFile);
@@ -28,6 +30,8 @@ public:
 	static void UpdateWordRate(WCHAR wIndex,int change);
 	static BOOL Export(LPCTSTR pszTxtFile);
 	static int  Import(LPCTSTR pszTxtFile);
+	static void Clear();
+	static int  GetSize();
 };
 
 enum {
