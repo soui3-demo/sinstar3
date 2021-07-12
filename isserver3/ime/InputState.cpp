@@ -83,7 +83,7 @@ SStringW CInputState::Symbol_Convert(InputContext * lpCntxtPriv,UINT byInput,con
 BOOL IsDigitEx(WCHAR c)
 {
 	if(isdigit(c)) return TRUE;
-	return c=='.' || c=='-';
+	return c=='.' || c=='-' || c=='(';
 }
 
 //判断当前状态下数字键区是不是有较编码,自定义状态及笔画输入状态下支持数字键盘当作编码
