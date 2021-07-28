@@ -11,6 +11,8 @@ translucent="1"
       <window size="-1,-1" layout="hbox" gravity="center">
         <text name="txt_comp_name"/>
         <link name="link_comp_website"/>
+        <text text="透明度" extend_left="10"/>
+        <sliderbar size="100,30" name="sbar_transparent" min="20" max="100" showPercent="1" value="100"/>
       </window>
       <caption size="0,-1" weight="1" layout="vbox" gravity="right" layout_gravity="top">
         <imgbtn pos ="-0,|0" offset="-1,-0.5" name="btn_close" skin="_skin.sys.btn.close"  id="IDCANCEL" tip="close" animate="1"/>

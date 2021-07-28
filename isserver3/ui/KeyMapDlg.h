@@ -20,9 +20,11 @@ namespace SOUI
 		virtual void OnFinalMessage(HWND hWnd);
 	protected:
 		void OnClose();
+		void OnSBarTransparent(EventArgs *e);
 		//souiœ˚œ¢
 		EVENT_MAP_BEGIN()
 			EVENT_NAME_COMMAND(L"btn_close", OnClose)
+			EVENT_NAME_HANDLER(L"sbar_transparent",EventSliderPos::EventID,OnSBarTransparent)
 		EVENT_MAP_END()
 
 	protected:
@@ -32,7 +34,7 @@ namespace SOUI
 			CHAIN_MSG_MAP(__super)
 		END_MSG_MAP()
 
-		CAutoRefPtr<IBitmap> m_pBmp;
+		SAutoRefPtr<IBitmap> m_pBmp;
 		SStringT m_strName;
 		SStringT m_strUrl;
 

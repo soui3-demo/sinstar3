@@ -44,4 +44,10 @@ namespace SOUI
 		return 0;
 	}
 
+	void CKeyMapDlg::OnSBarTransparent(EventArgs *e)
+	{
+		EventSliderPos *e2 = sobj_cast<EventSliderPos>(e);
+		GetRoot()->SetAlpha(e2->nPos*255/100);
+	}
+
 }
