@@ -11,7 +11,16 @@
 
 static bool g_bInstallDump = false;
 #define UM_ASYNC_FOCUS	(WM_USER+8000)
+BOOL CSinstar3Tsf::_bIsActivate=FALSE;
 
+STDAPI_(BOOL) Tsf_Is_Activate()
+{
+	return CSinstar3Tsf::Tsf_Is_Activate();
+}
+
+BOOL CSinstar3Tsf::Tsf_Is_Activate(){
+	return _bIsActivate;
+}
 /* static */
 HRESULT CSinstar3Tsf::CreateInstance(IUnknown* pUnkOuter, REFIID riid, void** ppvObj)
 {
@@ -228,6 +237,8 @@ STDAPI CSinstar3Tsf::ActivateEx(ITfThreadMgr* pThreadMgr, TfClientId tfClientId,
 	SLOGFMTI("UILess Mode:%s", _bUILess ? "true" : "false");
 	if (_bUILess)
 		_pcand = new CCandidateList(this);
+
+	_bIsActivate=TRUE;
 	return S_OK;
 
 ExitError:
@@ -320,7 +331,7 @@ STDAPI CSinstar3Tsf::Deactivate()
 	}
 	_tfClientId = TF_CLIENTID_NULL;
 	_bInEditDocument = FALSE;
-
+	_bIsActivate=FALSE;
 	return S_OK;
 }
 

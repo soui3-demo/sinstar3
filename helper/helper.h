@@ -9,7 +9,7 @@ extern "C"{
 
 extern char * g_pszLogFile;
 extern BOOL	g_bRecordLog;
-
+BOOL Helper_ProcessHasLoadDll(const TCHAR* dllname);
 BOOL Helper_SetFileACL(LPCTSTR pszPath);
 BOOL Helper_SetFileACLEx(LPCTSTR pszPath, BOOL bSubFile);
 BOOL Helper_SetObjectToLowIntegrity(HANDLE hObject, SE_OBJECT_TYPE type);

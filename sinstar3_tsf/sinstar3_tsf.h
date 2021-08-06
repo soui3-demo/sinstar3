@@ -32,7 +32,7 @@ class CSinstar3Tsf : public CUnknown,
 public:
 	// CClassFactory factory callback
 	static HRESULT CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj);
-
+	static BOOL Tsf_Is_Activate();
 public:
     CSinstar3Tsf();
     virtual ~CSinstar3Tsf();
@@ -206,6 +206,7 @@ public:
 	BOOL		_bHasFocus;
 	BOOL		_bInKeyProc;
 	bool		_bUILess;
+	static BOOL	_bIsActivate;
 public:
 	IUNKNOWN_BEGIN(ITfTextInputProcessorEx)
 		IUNKNOWN_ADD_IID(ITfTextInputProcessor)

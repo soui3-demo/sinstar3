@@ -2,10 +2,29 @@
 #include "CompStrEx.h"
 #include "uiwnd.h"
 #include "../include/global.h"
+#include "../helper/helper.h"
+
+#define	SINSTAR3_TSF_FILE_NAME	_T("sinstar3_tsf.dll")
+typedef  BOOL(STDAPICALLTYPE* Tsf_Is_Activate)();
 
 BOOL WINAPI ImeInquire(LPIMEINFO lpIMEInfo,LPTSTR lpszUIClass,DWORD dwSystemInfoFlags)
 {
 	if(!lpIMEInfo) return FALSE;
+	//检测TSF是否处理活动状态，如果处理活动状态禁用IME
+	if (Helper_ProcessHasLoadDll(SINSTAR3_TSF_FILE_NAME))
+	{
+		HMODULE hModule = LoadLibrary(SINSTAR3_TSF_FILE_NAME);
+		if (hModule) {
+			Tsf_Is_Activate pTsf_Is_Activate = (Tsf_Is_Activate)GetProcAddress(hModule, "Tsf_Is_Activate");
+			if (pTsf_Is_Activate && pTsf_Is_Activate())
+			{
+				FreeLibrary(hModule);
+				return FALSE;
+			}
+			FreeLibrary(hModule);
+		}
+	}
+
 
 	lpIMEInfo->dwPrivateDataSize = sizeof(LPVOID); 
 	theModule->SetSysInfoFlags(dwSystemInfoFlags);
