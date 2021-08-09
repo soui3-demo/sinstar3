@@ -11,17 +11,12 @@ BOOL WINAPI ImeInquire(LPIMEINFO lpIMEInfo,LPTSTR lpszUIClass,DWORD dwSystemInfo
 {
 	if(!lpIMEInfo) return FALSE;
 	//检测TSF是否处理活动状态，如果处理活动状态禁用IME
-	if (Helper_ProcessHasLoadDll(SINSTAR3_TSF_FILE_NAME))
-	{
-		HMODULE hModule = LoadLibrary(SINSTAR3_TSF_FILE_NAME);
-		if (hModule) {
-			Tsf_Is_Activate pTsf_Is_Activate = (Tsf_Is_Activate)GetProcAddress(hModule, "Tsf_Is_Activate");
-			if (pTsf_Is_Activate && pTsf_Is_Activate())
-			{
-				FreeLibrary(hModule);
-				return FALSE;
-			}
-			FreeLibrary(hModule);
+	HMODULE hModule = GetModuleHandle(SINSTAR3_TSF_FILE_NAME);
+	if (hModule) {
+		Tsf_Is_Activate pTsf_Is_Activate = (Tsf_Is_Activate)GetProcAddress(hModule, "Tsf_Is_Activate");
+		if (pTsf_Is_Activate && pTsf_Is_Activate())
+		{
+			return FALSE;
 		}
 	}
 

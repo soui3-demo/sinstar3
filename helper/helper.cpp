@@ -5,50 +5,11 @@
 #include <stdio.h>
 #include <tchar.h>
 #include <AclAPI.h>
-#include <tlhelp32.h>
+
 #include "helper.h"
 
 char * g_pszLogFile=NULL;
 BOOL	g_bRecordLog=TRUE;
-
-BOOL Helper_ProcessHasLoadDll(const TCHAR* dllname) {
-	/*
-	* 参数为TH32CS_SNAPMODULE 或 TH32CS_SNAPMODULE32时,如果函数失败并返回ERROR_BAD_LENGTH，则重试该函数直至成功
-	* 进程创建未初始化完成时，CreateToolhelp32Snapshot会返回error 299，但其它情况下不会
-	*/
-	if (dllname == NULL)
-		return FALSE;
-
-	HANDLE hModuleSnap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, GetCurrentProcessId());
-	while (INVALID_HANDLE_VALUE == hModuleSnap) {
-		DWORD dwError = GetLastError();
-		if (dwError == ERROR_BAD_LENGTH) {
-			hModuleSnap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, GetCurrentProcessId());
-			continue;
-		}
-		else {
-			return FALSE;
-		}
-	}
-	MODULEENTRY32 me32;
-	me32.dwSize = sizeof(MODULEENTRY32);
-
-	if (!Module32First(hModuleSnap, &me32))
-	{
-		CloseHandle(hModuleSnap);     // Must clean up the snapshot object! 
-		return(FALSE);
-	}
-	do
-	{
-		if (_tcscmp(me32.szModule, dllname) == 0) {
-			CloseHandle(hModuleSnap);
-			return TRUE;
-		}
-	} while (Module32Next(hModuleSnap, &me32));
-
-	CloseHandle(hModuleSnap);
-	return FALSE;
-}
 
 BOOL Helper_SetFileACL(LPCTSTR pszPath)
 {
