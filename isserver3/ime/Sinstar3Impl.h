@@ -47,6 +47,8 @@ public:
 	virtual EInputMethod GetDefInputMode();
 	virtual void NotifyScaleInfo(HWND hRefWnd);
 	virtual void GetCandidateListInfo(Context& _ctx);
+
+	void OnLanguageBarClick(TfLBIClick click, POINT &pt, RECT &prcArea);
 public:
 	virtual int GetID() const {	return SENDER_SINSTSR3;}
 protected://IInputListener

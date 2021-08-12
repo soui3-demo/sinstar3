@@ -409,6 +409,21 @@ void CSinstar3Impl::GetCandidateListInfo(Context& _ctx)
 	UpdateCandidateListInfo(inputContext, _ctx);
 }
 
+void CSinstar3Impl::OnLanguageBarClick(TfLBIClick click, POINT &pt, RECT &prcArea)
+{	
+	switch(click){
+		case TF_LBI_CLK_LEFT:
+			EnableInput(!m_bInputEnable);
+			break;
+
+		case TF_LBI_CLK_RIGHT:
+			if(m_pStatusWnd){
+				m_pStatusWnd->OnMenuClick();
+			}
+			break;
+	}
+}
+
 LRESULT CSinstar3Impl::OnSvrNotify(UINT uMsg, WPARAM wp, LPARAM lp)
 {
 	PMSGDATA pMsg = CIsSvrProxy::GetSvrCore()->GetAck();

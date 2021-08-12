@@ -79,6 +79,8 @@ protected:
 	void HandleShowHelp(Param_ShowHelp &param);
 	void HandleGetDefInputMode(Param_GetDefInputMode &param);
 	void HandleGetCadidateListInfo(Param_CandidateListInfo& param);
+	void HandleOnLanguageBarClick(Param_ClickLanguageBarIcon& param);
+
 	FUN_BEGIN
 		FUN_HANDLER(Param_Create,HandleCreate)
 		FUN_HANDLER(Param_ScaleInfo,HandleScaleInfo)
@@ -100,6 +102,7 @@ protected:
 		FUN_HANDLER(Param_ShowHelp, HandleShowHelp)
 		FUN_HANDLER(Param_GetDefInputMode, HandleGetDefInputMode)
 		FUN_HANDLER(Param_CandidateListInfo, HandleGetCadidateListInfo)
+		FUN_HANDLER(Param_ClickLanguageBarIcon, HandleOnLanguageBarClick)
 	FUN_END
 private:
 	SComPtr<ISinstar>	m_pSinstar;

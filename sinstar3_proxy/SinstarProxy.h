@@ -95,7 +95,7 @@ public:
 	virtual void NotifyScaleInfo(HWND hRefWnd) override;
 	//UILESS
 	virtual void GetCandidateListInfo(Context& _ctx);
-
+	void OnLanguageBarClick(TfLBIClick click,POINT pt,const RECT *prcArea);
 public:
 	IUNKNOWN_BEGIN(IUnknown)
 	IUNKNOWN_END()

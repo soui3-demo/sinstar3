@@ -268,6 +268,13 @@ void CSvrConnection::HandleGetCadidateListInfo(Param_CandidateListInfo& param)
 	pSinstar3->GetCandidateListInfo(param.ctx);
 }
 
+void CSvrConnection::HandleOnLanguageBarClick(Param_ClickLanguageBarIcon& param)
+{
+	if(!m_pSinstar) return;
+	CSinstar3Impl* pSinstar3 = (CSinstar3Impl*)(ISinstar*)m_pSinstar;
+	pSinstar3->OnLanguageBarClick(param.click,param.pt,param.rc);
+}
+
 IIpcHandle * CSvrConnection::GetIpcHandle()
 {
 	return m_ipcHandle;

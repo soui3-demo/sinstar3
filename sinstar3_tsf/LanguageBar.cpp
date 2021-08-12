@@ -5,7 +5,7 @@
 //
 // Copyright (c) Microsoft Corporation. All rights reserved
 #include "stdafx.h"
-//#include "sinstar3_tsf.h"
+#include "sinstar3_tsf.h"
 #include "LanguageBar.h"
 #include "Globals.h"
 #include "TsfModule.h"
@@ -20,8 +20,9 @@ const GUID GUID_LBI_INPUTMODE =
 //
 //----------------------------------------------------------------------------
 
-CLangBarItemButton::CLangBarItemButton(int iconOn,int iconOff,LPCWSTR pszIconDesc)
+CLangBarItemButton::CLangBarItemButton(CSinstar3Tsf* tsf,int iconOn,int iconOff,LPCWSTR pszIconDesc)
 :_status(false)
+,_pTextService(tsf)
 ,_iconIdOn(iconOn)
 ,_iconIdOff(iconOff)
 {
@@ -107,7 +108,9 @@ STDAPI CLangBarItemButton::GetTooltipString(BSTR *pbstrToolTip)
 //----------------------------------------------------------------------------
 
 STDAPI CLangBarItemButton::OnClick(TfLBIClick click, POINT pt, const RECT *prcArea)
-{
+{	
+	if(_pTextService)
+		_pTextService->m_pSinstar3->OnLanguageBarClick(click,pt,prcArea);
 	return S_OK;
 }
 
@@ -244,7 +247,7 @@ void CLangBarItemButton::SetStatus(bool bOn)
 //
 //----------------------------------------------------------------------------
 
-CLangBarItemButton* CLangBarItemButton::_InitLanguageBar(ITfThreadMgr *pThreadMgr)
+CLangBarItemButton* CLangBarItemButton::_InitLanguageBar(CSinstar3Tsf *pTsf,ITfThreadMgr *pThreadMgr)
 {
 	ITfLangBarItemMgr *pLangBarItemMgr;
 	CLangBarItemButton *pRet=NULL;
@@ -252,7 +255,7 @@ CLangBarItemButton* CLangBarItemButton::_InitLanguageBar(ITfThreadMgr *pThreadMg
 	if (pThreadMgr->QueryInterface(IID_ITfLangBarItemMgr, (void **)&pLangBarItemMgr) != S_OK)
 		return pRet;
 
-	if ((pRet = new CLangBarItemButton(IDI_IME_ON,IDI_IME_OFF,L"input state")) == NULL)
+	if ((pRet = new CLangBarItemButton(pTsf,IDI_IME_ON,IDI_IME_OFF,L"×ó¼üÇÐ»»£¬ÓÒ¼ü²Ëµ¥")) == NULL)
 		goto Exit;
 
 	if (pLangBarItemMgr->AddItem(pRet) != S_OK)

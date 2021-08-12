@@ -309,6 +309,14 @@ EInputMethod CSinstarProxy::GetDefInputMode()
 	return param.uMode;
 }
 
+void CSinstarProxy::OnLanguageBarClick(TfLBIClick click,POINT pt,const RECT *prcArea)
+{
+	Param_ClickLanguageBarIcon param;
+	param.click=click;
+	param.pt=pt;
+	param.rc=*prcArea;
+	m_conn.CallFun(&param);
+}
 ////////////////////////////////////////////////////////////////////////////////
 void CClientConnection::OnInputStringW( Param_InputStringW & param)
 {

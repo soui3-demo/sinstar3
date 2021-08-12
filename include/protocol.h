@@ -90,6 +90,7 @@ enum {
 	ISinstar_OnConversionModeChanged,
 	ISinstar_ShowHelp,
 	ISinstar_GetDefInputMode,
+	ISinstar_ClickLanguageBarIcon,
 
 	ITextService_InputStringW = ISinstar_GetDefInputMode + 100,
 	ITextService_IsCompositing,
@@ -109,7 +110,6 @@ enum {
 	ITextService_UpdatePreedit,
 };
 
-
 struct Param_Create : FunParams_Base
 {
 	std::string strHostPath;
@@ -125,7 +125,6 @@ struct Param_ScaleInfo : FunParams_Base
 	FUNID(ISinstar_ScaleInfo)
 		PARAMS2(Input, hRefWnd,szWnd)
 };
-
 
 struct Param_CandidateListInfo : FunParams_Base
 {
@@ -173,6 +172,15 @@ struct Param_UpdateUI : FunParams_Base
 	UINT curPage;
 	FUNID(ITextService_UpdateUI)		
 	PARAMS3(Input, imeContext,bPageChanged,curPage)
+};
+
+struct Param_ClickLanguageBarIcon : FunParams_Base
+{
+	TfLBIClick click;
+	POINT pt;
+	RECT rc;
+	FUNID(ISinstar_ClickLanguageBarIcon)		
+	PARAMS3(Input, click,pt,rc)
 };
 
 struct Param_UpdatePreedit : FunParams_Base

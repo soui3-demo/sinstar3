@@ -47,6 +47,7 @@ namespace SOUI
 		void UpdateToggleStatus(DWORD flags,BOOL bInit=FALSE);
 		void UpdateMode();
 		void UpdateCaptialMode();
+		void OnMenuClick();
 	protected:
 		virtual void OnReposition(CPoint pt);
 		virtual bool onRootResize(EventArgs *e);
@@ -88,7 +89,7 @@ namespace SOUI
 		void OnSwitchFilterGbk(EventArgs *e);
 		void OnLogoClick();
 		void OnUpdateBtnTooltip(EventArgs *e);
-		void OnMenuClick();
+		
 		void OnHelpClick();
 		void OnQueryClick();
 		void OnConfigClick();

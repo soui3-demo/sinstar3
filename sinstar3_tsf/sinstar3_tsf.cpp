@@ -740,7 +740,7 @@ BOOL CSinstar3Tsf::_SetCompositionDisplayAttributes(TfEditCookie ec, _In_ ITfCon
 
 BOOL CSinstar3Tsf::_InitLanguageBar()
 {
-	_pLangBarItem = CLangBarItemButton::_InitLanguageBar(_pThreadMgr);
+	_pLangBarItem = CLangBarItemButton::_InitLanguageBar(this,_pThreadMgr);
 	return _pLangBarItem != NULL;
 }
 

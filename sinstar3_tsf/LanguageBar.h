@@ -13,15 +13,15 @@
 // CLangBarItemButton class
 //
 //----------------------------------------------------------------------------
-
+class CSinstar3Tsf;
 class CLangBarItemButton : public ITfLangBarItemButton,
 	public ITfSource, public CUnknown
 {
 public:
-	CLangBarItemButton(int iconOn,int iconOff,LPCWSTR pszIconDesc);
+	CLangBarItemButton(CSinstar3Tsf* tsf,int iconOn,int iconOff,LPCWSTR pszIconDesc);
 	~CLangBarItemButton();
 
-	static CLangBarItemButton* _InitLanguageBar(ITfThreadMgr *pThreadMgr);
+	static CLangBarItemButton* _InitLanguageBar(CSinstar3Tsf*,ITfThreadMgr *pThreadMgr);
 	static bool _UninitLanguageBar(ITfThreadMgr *pThreadMgr,CLangBarItemButton *pLangBarItem);
 
 	void SetStatus(bool bOn);
@@ -46,7 +46,7 @@ public:
 private:
 	ITfLangBarItemSink *_pLangBarItemSink;
 	TF_LANGBARITEMINFO _tfLangBarItemInfo;
-
+	CSinstar3Tsf* _pTextService;
 	int				 _iconIdOn;
 	int				 _iconIdOff;
 	bool 			 _status;
