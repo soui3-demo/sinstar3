@@ -1287,7 +1287,8 @@ BOOL CInputState::KeyIn_Spell_GetSpellInput(InputContext * lpCntxtPriv,BYTE bySp
 	for(i=0,iWord=0;i<lpCntxtPriv->bySyllables;i++)
 	{
 		BOOL  bFind=FALSE;
-		if(lpCntxtPriv->spellData[i].bySpellLen==0) continue;
+		if(lpCntxtPriv->spellData[i].bySpellLen==0 || !lpCntxtPriv->pbyBlur[i]) 
+			continue;
 		//找到当前用户选择的汉字的拼音，通过多音字与模糊音两者匹配获得
 		CIsSvrProxy::GetSvrCore()->ReqQueryWordSpell(lpCntxtPriv->szWord[i]);//获得汉字的所有拼音的ID
 		pData=CIsSvrProxy::GetSvrCore()->GetAck();
