@@ -81,6 +81,7 @@ public:
 	BOOL	bBlendUD;			// 混合检索自定义编码表
 	BOOL	bBlendSpell;		// 混合输入拼音
 	BOOL	bAutoInput;			// 重码自动上屏
+	BOOL	bNextInput;			// 重码顶字上屏
 
 	BYTE	byTurnPageUpVK;		// 重码上翻键
 	BYTE	byTurnPageDownVK;	// 重码下翻键

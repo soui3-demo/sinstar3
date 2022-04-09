@@ -1716,7 +1716,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 		if(KeyIn_Code_IsMaxCode2(lpCntxtPriv)
 			&& !KeyIn_Code_IsValidComp(lpCntxtPriv,byInput))
 		{
-			if(lpCntxtPriv->sCandCount && g_SettingsG->bAutoInput)
+			if(lpCntxtPriv->sCandCount && g_SettingsG->bNextInput)
 			{
 				//防止符号输入时出现错误:标点不能做首编码,退出当前过程,进入标点顶字上屏过程
 				if((byInput<'a' || byInput>'z') && !CIsSvrProxy::GetSvrCore()->GetCompHead()->bSymbolFirst)
@@ -1852,7 +1852,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 		{
 			lpbyCand=lpCntxtPriv->ppbyCandInfo[0];
 		}
-		if((lpCntxtPriv->byCandType&MCR_AUTOSELECT ||(KeyIn_Code_IsMaxCode(lpCntxtPriv) && g_SettingsG->bAutoInput)))
+		if((lpCntxtPriv->byCandType&MCR_AUTOSELECT) ||(KeyIn_Code_IsMaxCode(lpCntxtPriv) && g_SettingsG->bAutoInput))
 		{
 			BYTE *pByCand = lpCntxtPriv->ppbyCandInfo[0];
 			if(lpCntxtPriv->sCandCount==1 && pByCand[0]!=RATE_FORECAST && (pByCand[0]!=RATE_GBK || g_SettingsG->nGbkMode!=CSettingsGlobal::GBK_SHOW_MANUAL))
