@@ -69,12 +69,13 @@
       <hotkey size="50dp,-1" name="hk_to_sentmode" extend_left="10" invalidComb="7" padding="5,0,5,0"/>
     </window>
     <check  text="重码自动上屏" name="cand_auto_input"/>
+    <check  text="重码项字上屏" name="cand_next_input"/>
     <check  text="拼音重码词组优先" name="cand_py_phrase_first"/>
     <check  text="禁用首码万能键" name="chk_disable_first_wild"/>
     <check  text="中文标点时使用全角空格" name="chk_full_space"/>
     <check  text="显示使用技巧" name="chk_show_op_tip"/>
-    <check  text="运行全屏程序时自动隐藏任务栏" name="chk_autoHideStatusForFullScreen"/>
-    <check  text="UILess模式自动隐藏任务栏" name="chk_autoHideStatusForUILess"/>
+    <check  text="运行全屏程序时自动隐藏状态栏" name="chk_autoHideStatusForFullScreen"/>
+    <check  text="UILess模式自动隐藏状态栏" name="chk_autoHideStatusForUILess"/>
     <check  text="当U模式输入为空时Back键退出U模式" name="chk_autoQuitUMode"/>
     <check  text="退出英文模式时自动退出大写状态" name="chk_autoQuitCAP"/>
     <group size="-2,-1" layout="vbox" text="嵌入编码设置" interval="10" align="left">
