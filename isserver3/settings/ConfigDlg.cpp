@@ -350,8 +350,7 @@ namespace SOUI
 		FindAndSetCheck(CtrlId, TRUE);
 
 		//重码自动上屏
-		FindAndSetCheck(R.id.cand_auto_input, g_SettingsG->bAutoInput);
-		FindAndSetCheck(R.id.cand_next_input, g_SettingsG->bNextInput);
+		FindAndSetCheck(R.id.cand_manul_input+g_SettingsG->inputMode,TRUE);
 		//拼音重码词组优先
 		FindAndSetCheck(R.id.cand_py_phrase_first, g_SettingsG->bPYPhraseFirst);
 		//op tip
@@ -755,12 +754,17 @@ SWindow *pCtrl = FindChildByID(id);\
 
 	void CConfigDlg::OnAutoInput()
 	{
-		g_SettingsG->bAutoInput=FindChildByID(R.id.cand_auto_input)->IsChecked();
+		g_SettingsG->inputMode=CSettingsGlobal::auto_input;
 	}
 
 	void CConfigDlg::OnNextInput()
 	{
-		g_SettingsG->bNextInput=FindChildByID(R.id.cand_next_input)->IsChecked();
+		g_SettingsG->inputMode=CSettingsGlobal::next_input;
+	}
+
+	void CConfigDlg::OnManulInput()
+	{
+		g_SettingsG->inputMode=CSettingsGlobal::manul_input;
 	}
 
 	void CConfigDlg::OnPyPhraseFirst()

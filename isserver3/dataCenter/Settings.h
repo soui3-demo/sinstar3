@@ -63,6 +63,12 @@ public:
 		GBK_SHOW_NORMAL,//显示正常上屏
 	};
 
+	enum InputMode
+	{
+	    manul_input=0,
+		auto_input =1,
+		next_input = 2,
+	};
 	void Load(const SStringT & strDataPath);
 	void Save(const SStringT & strDataPath);
 	int		compMode;		//当前输入类型
@@ -80,8 +86,7 @@ public:
 
 	BOOL	bBlendUD;			// 混合检索自定义编码表
 	BOOL	bBlendSpell;		// 混合输入拼音
-	BOOL	bAutoInput;			// 重码自动上屏
-	BOOL	bNextInput;			// 重码顶字上屏
+	InputMode	inputMode;		// 重码上屏模式
 
 	BYTE	byTurnPageUpVK;		// 重码上翻键
 	BYTE	byTurnPageDownVK;	// 重码下翻键
