@@ -1716,7 +1716,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 		if(KeyIn_Code_IsMaxCode2(lpCntxtPriv)
 			&& !KeyIn_Code_IsValidComp(lpCntxtPriv,byInput))
 		{
-			if(lpCntxtPriv->sCandCount && g_SettingsG->inputMode==CSettingsGlobal::next_input)
+			if(lpCntxtPriv->sCandCount && g_SettingsG->inputMode!=CSettingsGlobal::manul_input)
 			{
 				//防止符号输入时出现错误:标点不能做首编码,退出当前过程,进入标点顶字上屏过程
 				if((byInput<'a' || byInput>'z') && !CIsSvrProxy::GetSvrCore()->GetCompHead()->bSymbolFirst)
