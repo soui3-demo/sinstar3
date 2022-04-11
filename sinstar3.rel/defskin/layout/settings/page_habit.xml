@@ -71,9 +71,9 @@
     <window  layout="vbox">
       <text text="重码上屏模式:"/>
       <window  layout="hbox">
-        <check  text="手动上屏" name="cand_manul_input"/>
-        <check  text="自动上屏" name="cand_auto_input"/>
-        <check  text="项字上屏" name="cand_next_input"/>
+        <radio  text="手动上屏" name="cand_manul_input"/>
+        <radio  text="自动上屏" name="cand_auto_input"/>
+        <radio  text="顶字上屏" name="cand_next_input"/>
       </window>
     </window>
     <check  text="拼音重码词组优先" name="cand_py_phrase_first"/>
