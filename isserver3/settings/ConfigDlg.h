@@ -63,7 +63,9 @@ namespace SOUI
 		void OnClickAlertMode(int id);
 
 		//重码自动上屏
+		void OnManulInput();
 		void OnAutoInput();
+		void OnNextInput();
 		//拼音重码词组优先
 		void OnPyPhraseFirst();
 		
@@ -153,7 +155,9 @@ namespace SOUI
 			EVENT_ID_HANDLER(R.id.cbx_left_ctrl_func,EventCBSelChange::EventID,OnLeftCtrlFun)
 			EVENT_ID_HANDLER(R.id.cbx_right_ctrl_func,EventCBSelChange::EventID,OnRightCtrlFun)
 			EVENT_ID_COMMAND_RANGE(R.id.enter_for_clear, R.id.enter_for_input, OnClickEnter)
+			EVENT_ID_COMMAND(R.id.cand_manul_input, OnManulInput)
 			EVENT_ID_COMMAND(R.id.cand_auto_input, OnAutoInput)
+			EVENT_ID_COMMAND(R.id.cand_next_input, OnNextInput)
 			EVENT_ID_COMMAND(R.id.cand_py_phrase_first, OnPyPhraseFirst)
 			EVENT_ID_COMMAND(R.id.chk_disable_first_wild,OnDislabeFirstWild)
 			EVENT_ID_COMMAND(R.id.chk_full_space,OnFullSpace)
