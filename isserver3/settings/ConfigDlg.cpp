@@ -1268,6 +1268,12 @@ SWindow *pCtrl = FindChildByID(id);\
 		}
 	}
 
+	void CConfigDlg::OnCloseBackup()
+	{
+		CIsSvrProxy::GetInstance()->CloseBackup();
+		FindAndSetText(R.id.edit_backup,g_SettingsG->szBackupDir);
+	}
+
 	void CConfigDlg::OnSearchEngineChange(EventArgs *e)
 	{
 		EventCBSelChange *e2=sobj_cast<EventCBSelChange>(e);

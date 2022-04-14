@@ -865,6 +865,13 @@ bool CIsSvrProxy::IsBackupDirValid(const SStringT & strDir)
 	return true;
 }
 
+
+void CIsSvrProxy::CloseBackup()
+{
+	g_SettingsG->szBackupDir[0]=0;
+	KillTimer(TIMERID_BACKUP);
+}
+
 ULONG_PTR CIsSvrProxy::OnNewConnection(IIpcHandle * pIpcHandle, IIpcConnection ** ppConn)
 {
 	CSvrConnection *pConn = new CSvrConnection(pIpcHandle,m_hWnd,this);

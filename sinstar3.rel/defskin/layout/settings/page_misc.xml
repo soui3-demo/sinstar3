@@ -10,9 +10,10 @@
       <edit size="320,30"  name="edit_backup" readonly="1" cueText="每小时自动备份用户数据"/>
       <button size="80,30" name="btn_pick_backup_dir" text="..."/>
     </window>
-    <window size="-2,-1" layout="hbox" gravity="center" padding="50,0,50,0">
+    <window size="-2,-1" layout="hbox" gravity="center" padding="50,0,50,0" interval="20">
       <button size="80,30" name="btn_backup" text="立即备份"/>
-      <button size="100,30" extend_left="50" name="btn_restore" text="从备份恢复"/>
+      <button size="100,30" name="btn_restore" text="从备份恢复"/>
+      <button size="80,30" name="btn_close_backup" text="关闭备份"/>
     </window>
     <text text="搜索引擎:"/>
     <combobox size="300,30" name="cbx_search_engine" dropdown="1">
