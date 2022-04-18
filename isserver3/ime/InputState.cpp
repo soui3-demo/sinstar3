@@ -1824,7 +1824,7 @@ BOOL CInputState::KeyIn_Code_ChangeComp(InputContext * lpCntxtPriv,UINT byInput,
 				for(i=0;i<sCount;i++)
 				{
 					//format: rate+bGbk+candLen+cand+compLen+comp
-					if(pCandData[2]==1) sSingleWords++;
+					if(pCandData[2]==1 && pCandData[0]!=RATE_ASSOCIATE) sSingleWords++;
 					pCandData+=pCandData[2]*2+3;	//偏移词组信息
 					pCandData+=pCandData[0]*2+1;	//偏移编码信息					
 				}
