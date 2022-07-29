@@ -244,13 +244,9 @@ void CSettingsGlobal::Load(const SStringT & strDataPath)
 	}
 
 
-	GetPrivateProfileString(KUrl, _T("skin_cloud"), _T("http://www.soui.vip/forum.php?mod=forumdisplay&fid=53"), szBuf, MAX_PATH, strConfigIni);
-	urlSkin = szBuf;
-	GetPrivateProfileString(KUrl, _T("comp_cloud"), _T("http://www.soui.vip/forum.php?mod=forumdisplay&fid=54"), szBuf, MAX_PATH, strConfigIni);
-	urlComp = szBuf;
 	GetPrivateProfileString(KUrl, _T("statistics"), _T("https://soime.cn/tongji/skTjApi/api.php?soft_id=6&countype_id=4&ditch_id=100"), szBuf, MAX_PATH, strConfigIni);
 	urlStatistics = szBuf;
-	GetPrivateProfileString(KUrl, _T("forum"), _T("http://www.soui.vip/forum.php?gid=51"), szBuf, MAX_PATH, strConfigIni);
+	GetPrivateProfileString(KUrl, _T("forum"), _T("https://soime.cn/forum.html"), szBuf, MAX_PATH, strConfigIni);
 	urlForum = szBuf;
 
 	bShowTray = GetPrivateProfileInt(KSession,_T("showTray"),1,strConfigIni);

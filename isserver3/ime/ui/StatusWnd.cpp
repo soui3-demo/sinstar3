@@ -199,7 +199,7 @@ namespace SOUI
 		case 4://comp select
 			{
 				const SArray<CNameTypePair> &comps = CDataCenter::getSingleton().GetData().UpdateCompList();
-				int idStart = R.id.comp_cloud;
+				int idStart = R.id.comp_install;
 				TCHAR szCurComp[MAX_PATH]={0};
 				CIsSvrProxy::GetSvrCore()->GetCurrentComp(szCurComp);
 				SStringT strComp=szCurComp;
@@ -649,10 +649,6 @@ namespace SOUI
 		{
 			m_pInputListener->OnCommand(CMD_OPENSKINDIR, 0);
 		}
-		else if (nRet == R.id.skin_cloud)
-		{
-			ShellExecute(NULL, _T("open"), g_SettingsG->urlSkin, NULL, NULL, SW_SHOWNORMAL);
-		}
 		else if (nRet == R.id.comp_install)
 		{//install comp
 			CFileDialogEx openDlg(TRUE, _T("cit"), 0, 6, _T("Æô³ÌÂë±í(*.cit)\0*.cit\0All files (*.*)\0*.*\0\0"));
@@ -664,13 +660,9 @@ namespace SOUI
 				}
 			}
 		}
-		else if (nRet == R.id.comp_cloud)
-		{
-			ShellExecute(NULL, _T("open"), g_SettingsG->urlComp, NULL, NULL, SW_SHOWNORMAL);
-		}
-		else if (nRet > R.id.comp_cloud && nRet < PopupMenuEndID(R.id.comp_cloud))
+		else if (nRet > R.id.comp_install && nRet < PopupMenuEndID(R.id.comp_install))
 		{//comps
-			int iComp = nRet - (R.id.comp_cloud +1);
+			int iComp = nRet - (R.id.comp_install +1);
 			const SArray<CNameTypePair> & compList = CDataCenter::getSingleton().GetData().m_compList;
 			if (iComp < (int)compList.GetCount())
 			{

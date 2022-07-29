@@ -212,15 +212,13 @@ STDAPI CSinstar3Tsf::ActivateEx(ITfThreadMgr* pThreadMgr, TfClientId tfClientId,
 	if (!_InitThreadCompartment())
 		goto ExitError;
 
-	if (!_InitDisplayAttributeGuidAtom())
-		goto ExitError;
-
 	//
 	// Initialize Language Bar.
 	//
 	if (!_InitLanguageBar())
 		goto ExitError;
 
+	_InitDisplayAttributeGuidAtom();
 	OnSetThreadFocus();
 
 	Helper_ChangeWindowMessageFilter(SOUI::UM_CALL_FUN, MSGFLT_ADD);
@@ -273,9 +271,8 @@ void CSinstar3Tsf::OnAsyncFocus()
 {
 	if (m_pSinstar3)
 	{
-		BOOL bFocus = _bHasFocus && _bInEditDocument;
 		SLOG_INFO("OnAsyncFocus,hasFocus:" << _bHasFocus << " inEdit:" << _bInEditDocument);
-		if (bFocus)
+		if (_bHasFocus)
 			m_pSinstar3->OnSetFocus(TRUE, GetActiveWnd());
 		else
 			m_pSinstar3->OnSetFocus(FALSE, 0);
@@ -722,6 +719,8 @@ BOOL CSinstar3Tsf::_SetCompositionDisplayAttributes(TfEditCookie ec, _In_ ITfCon
 	ITfProperty* pDisplayAttributeProperty = NULL;
 	HRESULT hr = S_OK;
 	// get our the display attribute property
+	if(_gaDisplayAttributeInput == 0)
+		return TRUE;
 	if (SUCCEEDED(pContext->GetProperty(GUID_PROP_ATTRIBUTE, &pDisplayAttributeProperty)))
 	{
 		VARIANT var;

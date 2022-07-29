@@ -10,7 +10,7 @@
 #define _sinstar3_ime_version_a		3
 #define _sinstar3_ime_version_b		1
 #define _sinstar3_ime_version_c		7
-#define _sinstar3_ime_version_d		10
+#define _sinstar3_ime_version_d		17
 
 #define _sinstar3_ime_name			启程输入法
 #define _sinstar3_ime		 		启程输入法IME

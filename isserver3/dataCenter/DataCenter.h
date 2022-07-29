@@ -1,4 +1,5 @@
 #pragma once
+#include <res.mgr/SUiDef.h>
 
 namespace SOUI
 {

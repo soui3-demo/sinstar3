@@ -332,11 +332,15 @@ void CSinstar3Impl::OnCompositionTerminated(bool bClearCtx)
 
 void CSinstar3Impl::OnSetFocus(BOOL bFocus, DWORD dwActiveWnd)
 {
-	SLOG_INFO("focus=" << bFocus);
-	m_hasFocus = bFocus;
-	m_inputState.OnSetFocus(bFocus);
-	m_hOwner = (HWND)dwActiveWnd;
-	SetTimer(TIMER_DELAYFOCUS, 50, NULL);
+	SLOG_INFO("focus=" << bFocus<<" hasFocus="<<m_hasFocus);
+	if(m_hasFocus!=bFocus)
+	{
+		m_hasFocus = bFocus;
+		m_inputState.OnSetFocus(bFocus);
+		m_hOwner = (HWND)dwActiveWnd;
+		KillTimer(TIMER_DELAYFOCUS);
+		SetTimer(TIMER_DELAYFOCUS, 50, NULL);
+	}
 }
 
 int  CSinstar3Impl::GetCompositionSegments()

@@ -416,6 +416,7 @@ public:
     virtual bool setLoggerOutFile(LoggerId id, bool enable);
     virtual bool setLoggerLimitsize(LoggerId id, unsigned int limitsize);
     virtual void setOutputFileBuilder(IOutputFileBuilder *pOutputFileBuilder);
+	virtual bool setLoggerFileMaxNum(unsigned int maxnum);
 
     virtual bool setAutoUpdate(int interval);
     virtual bool updateConfig();
@@ -1909,6 +1910,11 @@ void LogerManager::run()
 void LogerManager::setOutputListener(IOutputListener *pListener){
 	AutoLock l(_hotLock);
 	m_pListener = pListener;
+}
+
+bool LogerManager::setLoggerFileMaxNum(unsigned int maxnum)
+{
+	return false;
 }
 
 namespace SOUI{
