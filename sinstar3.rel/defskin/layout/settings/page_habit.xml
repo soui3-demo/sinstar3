@@ -98,7 +98,7 @@
       </window>
 
     </window>
-    <window layout="hbox" font="adding:-2">
+    <window layout="hbox" font="size:14">
       <text text="注意:" colorText="@color/red"/>
       <text text="关闭“操作提示”，关闭“联想”，关闭“语句联想”\n可以禁用提示等待" multiLines="1"/>
     </window>
