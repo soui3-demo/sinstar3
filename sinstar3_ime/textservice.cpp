@@ -36,7 +36,7 @@ void CUiWnd::StartComposition(CImeContext * imeContext)
 		ImmUnlockIMCC(pCtx->_lpContext->hCompStr);
 		pCtx->GenerateMessage(WM_IME_STARTCOMPOSITION,0,0);
 		pCtx->GenerateMessage(WM_IME_NOTIFY,IMN_SETCOMPOSITIONWINDOW,0);
-		if(m_pSinstar3) m_pSinstar3->OnCompositionStarted();
+		if(m_pSinstar3) m_pSinstar3->OnCompositionStarted(true);
 		m_bCompositing = TRUE;
 	}
 }

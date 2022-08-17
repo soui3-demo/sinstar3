@@ -51,6 +51,7 @@ STDAPI CSinstar3Tsf::OnTestKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lPa
 STDAPI CSinstar3Tsf::OnKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {
 	HRESULT hr = E_FAIL;
+	m_contextSet.insert(pContext);
 	SLOGFMTI("OnKeyDown: %08x %08x", (DWORD)wParam, (DWORD)lParam);
 	if (!_bKeyDownTested)
 	{
@@ -80,6 +81,7 @@ STDAPI CSinstar3Tsf::OnKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lParam,
 	{
 		*pfEaten = FALSE;
 	}
+	m_contextSet.erase(pContext);
     return S_OK;
 }
 

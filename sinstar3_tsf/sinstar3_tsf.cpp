@@ -171,7 +171,9 @@ void CSinstar3Tsf::UpdatePreedit(UINT64 pContext, const std::wstring& strPreedit
 
 void CSinstar3Tsf::UpdateUI(UINT64 imeContext, bool bPageChanged, UINT curPage)
 {
-	UpdateUI((ITfContext*)imeContext, bPageChanged, curPage);
+	ITfContext *pItfContext = ImeContext2ItfContext(imeContext);
+	if(!pItfContext) return;
+	UpdateUI(pItfContext, bPageChanged, curPage);
 }
 
 STDAPI CSinstar3Tsf::ActivateEx(ITfThreadMgr* pThreadMgr, TfClientId tfClientId, DWORD dwFlags)
@@ -516,27 +518,35 @@ BOOL CSinstar3Tsf::IsCompositing() const
 void CSinstar3Tsf::StartComposition(UINT64 imeContext)
 {
 	SLOG_INFO("imeContext:" << imeContext);
-	_StartComposition((ITfContext*)imeContext);
+	ITfContext *pItfContext = ImeContext2ItfContext(imeContext);
+	if(!pItfContext) return;
+	_StartComposition(pItfContext);
 }
 
 
 void CSinstar3Tsf::EndComposition(UINT64 imeContext)
 {
 	SLOG_INFO("imeContext:" << imeContext);
-	_EndComposition((ITfContext*)imeContext);
+	ITfContext *pItfContext = ImeContext2ItfContext(imeContext);
+	if(!pItfContext) return;
+	_EndComposition(pItfContext);
 }
 
 
 void CSinstar3Tsf::ReplaceSelCompositionW(UINT64 imeContext, int nLeft, int nRight, const WCHAR* wszComp, int nLen)
 {
 	SLOG_INFO("imeContext:" << imeContext);
-	_ChangeComposition((ITfContext*)imeContext, nLeft, nRight, NULL, 0);
+	ITfContext *pItfContext = ImeContext2ItfContext(imeContext);
+	if(!pItfContext) return;
+	_ChangeComposition(pItfContext, nLeft, nRight, NULL, 0);
 }
 
 void CSinstar3Tsf::UpdateResultAndCompositionStringW(UINT64 imeContext, const WCHAR* wszResultStr, int nResStrLen, const WCHAR* wszCompStr, int nCompStrLen)
 {
 	SLOG_INFO("imeContext:" << imeContext << " resultStr:" << wszResultStr);
-	_UpdateResultAndCompositionStringW((ITfContext*)imeContext, wszResultStr, nResStrLen, wszCompStr, nCompStrLen);
+	ITfContext *pItfContext = ImeContext2ItfContext(imeContext);
+	if(!pItfContext) return;
+	_UpdateResultAndCompositionStringW(pItfContext, wszResultStr, nResStrLen, wszCompStr, nCompStrLen);
 }
 
 
@@ -579,6 +589,7 @@ ITfContext* CSinstar3Tsf::GetImeContext()
 		}
 	}
 	SLOG_INFO("CSinstar3Tsf::GetImeContext, imeCtx:" << imeCtx);
+	m_contextSet.insert(imeCtx);
 	return imeCtx;
 }
 
@@ -590,8 +601,8 @@ void   CSinstar3Tsf::ReleaseImeContext(ITfContext* imeContext)
 		return;
 	}
 	SLOG_INFO("CSinstar3Tsf::ReleaseImeContext, imeCtx:" << imeContext);
-	ITfContext* pContext = (ITfContext*)imeContext;
-	pContext->Release();
+	imeContext->Release();
+	m_contextSet.erase(imeContext);
 }
 
 void CSinstar3Tsf::SetOpenStatus(BOOL bOpen)
@@ -607,14 +618,6 @@ BOOL CSinstar3Tsf::GetOpenStatus() const
 	return bRet;
 }
 
-void CSinstar3Tsf::OnStartComposition(TfEditCookie ec, ITfComposition* pComposition)
-{
-	SLOG_INFO("TfEditCookie:" << ec << " ITfComposition:" << pComposition);
-	SASSERT(!_pComposition);
-	_pComposition = pComposition;
-	if (_bUILess)_pcand->BeginUIElement();
-	if (m_pSinstar3) m_pSinstar3->OnCompositionStarted();
-}
 
 void CSinstar3Tsf::OnStartComposition(TfEditCookie ec, ITfComposition* pComposition, ITfContext* pContext)
 {
@@ -750,4 +753,12 @@ void CSinstar3Tsf::_UninitLanguageBar()
 		_pLangBarItem->Release();
 		_pLangBarItem = NULL;
 	}
+}
+
+ITfContext * CSinstar3Tsf::ImeContext2ItfContext(UINT64 imeContext) const
+{
+	ITfContext *pCtx = (ITfContext*)imeContext;
+	if(m_contextSet.find(pCtx) == m_contextSet.end())
+		return NULL;
+	return pCtx;
 }

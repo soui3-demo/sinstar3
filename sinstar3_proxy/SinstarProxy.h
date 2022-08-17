@@ -77,7 +77,6 @@ public:
 	// Í¨¹ý ISinstar ¼Ì³Ð
 	virtual void OnIMESelect(BOOL bSelect) override;
 	virtual void OnCompositionStarted(bool bShowUI) override;
-	virtual void OnCompositionStarted() override;
 	virtual void OnCompositionChanged() override;
 	virtual void OnCompositionTerminated(bool bClearCtx) override;
 	virtual void OnSetCaretPosition(POINT pt, int nHei) override;

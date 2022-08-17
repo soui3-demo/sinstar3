@@ -185,13 +185,6 @@ void CSinstarProxy::OnCompositionStarted(bool bCanShowUI)
 	m_conn.CallFun(&param);
 }
 
-void CSinstarProxy::OnCompositionStarted()
-{
-	Param_OnCompositionStarted param;
-	param.bShowUI = true;
-	m_conn.CallFun(&param);
-}
-
 void CSinstarProxy::OnCompositionChanged()
 {
 	Param_OnCompositionChanged param;

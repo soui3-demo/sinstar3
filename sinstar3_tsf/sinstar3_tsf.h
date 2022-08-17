@@ -4,6 +4,7 @@
 #include "../sinstar3_proxy/SimpleWnd.h"
 #include "../sinstar3_proxy/SinstarProxy.h"
 #include "LanguageBar.h"
+#include <set>
 
 #define  UICLASSNAME _T("sinstar3_tsfwnd")
 
@@ -117,7 +118,6 @@ public:
 
     // functions for the composition object.
 	void OnStartComposition(TfEditCookie ec, ITfComposition* pComposition, ITfContext* pContext);
-	void OnStartComposition(TfEditCookie ec,ITfComposition *pComposition);
 	ITfComposition* GetITfComposition(){return _pComposition;}
 
 	void _StartComposition(ITfContext *pContext);
@@ -140,6 +140,7 @@ protected:
 	void SetOpenStatus(BOOL bOpen);
 	BOOL GetOpenStatus() const;
 
+	ITfContext * ImeContext2ItfContext(UINT64 imeContext) const;
 private:
 
 	BOOL _InitSinstar3(HWND hWnd);
@@ -201,6 +202,8 @@ private:
 	TfGuidAtom _gaDisplayAttributeConverted;
 	//非uiless模式下保存inline字符串
 	std::wstring _strPreedit;
+
+	std::set<ITfContext*> m_contextSet;
 public:
 	CSinstarProxy*   m_pSinstar3;
 	BOOL		_bHasFocus;
